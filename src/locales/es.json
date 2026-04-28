@@ -1,9 +1,21 @@
 {
   "appName": "IQ Rest",
   "auth": {
-    "loginTitle": "Iniciar sesión",
+    "title": "Inicia sesión en tu panel",
+    "subtitle": "Introduce tu email — te enviaremos un código de 6 dígitos.",
     "emailLabel": "Email",
-    "continue": "Continuar"
+    "continueEmail": "Continuar con email",
+    "consent": "Al continuar aceptas nuestros Términos y la Política de privacidad.",
+    "codeTitle": "Introduce tu código",
+    "codeSubtitle": "Hemos enviado un código de 6 dígitos a",
+    "verify": "Verificar",
+    "changeEmail": "Usar otro email",
+    "resend": "Reenviar código",
+    "resendIn": "Reenviar en {{sec}}s",
+    "errors": {
+      "sendFailed": "No se pudo enviar el código",
+      "invalid": "Código inválido"
+    }
   },
   "nav": {
     "menu": "Carta",

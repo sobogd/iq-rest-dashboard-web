@@ -1,9 +1,21 @@
 {
   "appName": "IQ Rest",
   "auth": {
-    "loginTitle": "Sign in",
+    "title": "Sign in to your dashboard",
+    "subtitle": "Enter your email — we'll send a 6-digit code.",
     "emailLabel": "Email",
-    "continue": "Continue"
+    "continueEmail": "Continue with email",
+    "consent": "By continuing you agree to our Terms and Privacy Policy.",
+    "codeTitle": "Enter your code",
+    "codeSubtitle": "We sent a 6-digit code to",
+    "verify": "Verify",
+    "changeEmail": "Use a different email",
+    "resend": "Resend code",
+    "resendIn": "Resend in {{sec}}s",
+    "errors": {
+      "sendFailed": "Failed to send code",
+      "invalid": "Invalid code"
+    }
   },
   "nav": {
     "menu": "Menu",
