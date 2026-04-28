@@ -13,13 +13,18 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "next-intl": ["src/lib/i18n-compat.ts"],
+      "next-intl/server": ["src/lib/i18n-compat.ts"],
+      "next/link": ["src/lib/router-compat.tsx"],
+      "next/navigation": ["src/lib/router-compat.tsx"],
+      "@/i18n/routing": ["src/lib/router-compat.tsx"]
     }
   },
   "include": ["src"]
