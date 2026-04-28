@@ -11,6 +11,7 @@ const PRESETS = [
     id: "dark-dining",
     label: "Dark dining",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/dark-dining-v2.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/dark-dining-v2-thumb.webp')",
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.35)",
     accentColor: "#2a2018",
   },
@@ -18,6 +19,7 @@ const PRESETS = [
     id: "fresh-plate",
     label: "Fresh plate",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/fresh-plate-v2.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/fresh-plate-v2-thumb.webp')",
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#6e5e4a",
   },
@@ -25,6 +27,7 @@ const PRESETS = [
     id: "warm-bakery",
     label: "Warm bakery",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/warm-bakery.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/warm-bakery-thumb.webp')",
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#7a6a52",
   },
@@ -32,6 +35,7 @@ const PRESETS = [
     id: "rustic-wood",
     label: "Rustic wood",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/rustic-wood.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/rustic-wood-thumb.webp')",
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#6a5040",
   },
@@ -39,6 +43,7 @@ const PRESETS = [
     id: "greenery",
     label: "Greenery",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/greenery-v2.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/greenery-v2-thumb.webp')",
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#4a5a38",
   },
@@ -46,6 +51,7 @@ const PRESETS = [
     id: "ocean-night",
     label: "Ocean night",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/ocean-night.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/ocean-night-thumb.webp')",
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.3)",
     accentColor: "#1a3858",
   },
@@ -53,6 +59,7 @@ const PRESETS = [
     id: "midnight",
     label: "Midnight",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/midnight.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/midnight-thumb.webp')",
     overlay: "rgba(0,0,0,0.1), rgba(0,0,0,0.25)",
     accentColor: "#18243e",
   },
@@ -60,6 +67,7 @@ const PRESETS = [
     id: "wine-dine",
     label: "Wine & dine",
     bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/wine-dine.jpeg')",
+    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/wine-dine-thumb.webp')",
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.3)",
     accentColor: "#5e2030",
   },
@@ -215,17 +223,12 @@ function Step2({
   onContinue: () => void;
   t: ReturnType<typeof useTranslations<"onboarding">>;
 }) {
-  useEffect(() => {
-    return () => {
-      if (state.dish.photoPreview?.startsWith("blob:")) {
-        URL.revokeObjectURL(state.dish.photoPreview);
-      }
-    };
-  }, [state.dish.photoPreview]);
-
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (state.dish.photoPreview?.startsWith("blob:")) {
+      URL.revokeObjectURL(state.dish.photoPreview);
+    }
     const preview = URL.createObjectURL(file);
     setState((s) => ({ ...s, dish: { ...s.dish, photoFile: file, photoPreview: preview } }));
   };
@@ -295,9 +298,9 @@ function Step2({
           <label className={labelClass}>{t("step2.photoLabel")}</label>
           <label
             htmlFor="dish-photo"
-            className={`relative flex items-center justify-center gap-1.5 h-10 px-3 border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden ${
+            className={`relative flex items-center justify-center gap-1.5 h-10 w-32 px-3 border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden ${
               state.dish.photoPreview
-                ? "border-foreground p-0 aspect-square"
+                ? "border-foreground p-0"
                 : "border-input bg-secondary text-muted-foreground hover:border-foreground hover:text-foreground hover:bg-card"
             }`}
           >
@@ -409,7 +412,7 @@ function Step3({
                 isActive ? "outline outline-2 outline-foreground outline-offset-2" : ""
               }`}
               style={{
-                background: `linear-gradient(${preset.overlay}), ${preset.bg}`,
+                background: `linear-gradient(${preset.overlay}), ${preset.thumb}`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
