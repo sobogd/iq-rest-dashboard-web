@@ -11,5 +11,27 @@
     "reservations": "Reservas",
     "analytics": "Analíticas",
     "settings": "Ajustes"
+  },
+  "settings": {
+    "about": "Sobre",
+    "aboutDesc": "Título, subtítulo y visibilidad del encabezado",
+    "contacts": "Contacto",
+    "contactsDesc": "Teléfono, dirección, redes sociales",
+    "branding": "Marca",
+    "brandingDesc": "Fondo, color de acento, estilo de carta",
+    "general": "General",
+    "generalDesc": "URL, moneda",
+    "tables": "Mesas",
+    "tablesDesc": "Plano de mesas y códigos QR por mesa",
+    "orders": "Pedidos",
+    "ordersDesc": "Pedidos online, integración WhatsApp",
+    "bookings": "Reservas",
+    "bookingsDesc": "Disponibilidad y reglas de reservas",
+    "languages": "Idiomas",
+    "languagesDesc": "Idiomas de la carta pública",
+    "billing": "Facturación",
+    "billingDesc": "Suscripción y facturas",
+    "support": "Soporte",
+    "supportDesc": "Chatea con el equipo"
   }
 }

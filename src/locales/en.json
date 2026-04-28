@@ -11,5 +11,27 @@
     "reservations": "Reservations",
     "analytics": "Analytics",
     "settings": "Settings"
+  },
+  "settings": {
+    "about": "About",
+    "aboutDesc": "Restaurant title, subtitle, header visibility",
+    "contacts": "Contacts",
+    "contactsDesc": "Phone, address, social links",
+    "branding": "Branding",
+    "brandingDesc": "Background, accent color, menu style",
+    "general": "General",
+    "generalDesc": "URL, currency",
+    "tables": "Tables",
+    "tablesDesc": "Floor plan, table QR codes",
+    "orders": "Orders",
+    "ordersDesc": "Online ordering, WhatsApp integration",
+    "bookings": "Bookings",
+    "bookingsDesc": "Reservation availability and rules",
+    "languages": "Languages",
+    "languagesDesc": "Public-menu languages",
+    "billing": "Billing",
+    "billingDesc": "Subscription and invoices",
+    "support": "Support",
+    "supportDesc": "Chat with the team"
   }
 }
