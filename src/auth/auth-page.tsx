@@ -394,7 +394,7 @@ export function AuthPage() {
           if (data.isNewUser) track(DashboardEvent.AUTH_SIGNUP);
           await analytics.linkSession(data.userId);
           // Full reload so server layout re-fetches restaurant + auth state.
-          window.location.assign(`/${locale}/dashboard${data.isNewUser ? "/onboarding" : ""}`);
+          window.location.assign(`/${locale}/${data.isNewUser ? "onboarding" : "dashboard"}`);
         } else {
           setErrorMessage(data.error || t("errors.sendFailed"));
           setStatus("error");
@@ -517,7 +517,7 @@ export function AuthPage() {
         if (isAdminEmail(email)) analytics.disableTracking();
         track(DashboardEvent.CLICKED_VERIFY_OTP);
         await analytics.linkSession(data.userId);
-        window.location.assign(`/${locale}/dashboard${data.onboardingStep < 3 ? "/onboarding" : ""}`);
+        window.location.assign(`/${locale}/${data.onboardingStep < 3 ? "onboarding" : "dashboard"}`);
       } else {
         track(DashboardEvent.ERROR_OTP_VERIFY);
         const key = ERROR_MAP[data.error];

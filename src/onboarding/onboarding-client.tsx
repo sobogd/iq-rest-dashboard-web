@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
 import { Loader2, ArrowRight } from "lucide-react";
@@ -570,6 +570,7 @@ function Step4({
 
 export function OnboardingClient() {
   const t = useTranslations("onboarding");
+  const locale = useLocale();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [menuSlug, setMenuSlug] = useState("");
@@ -690,7 +691,7 @@ export function OnboardingClient() {
           <Step4
             state={state}
             menuSlug={menuSlug}
-            onGoToDashboard={() => { window.location.assign("/dashboard"); }}
+            onGoToDashboard={() => { window.location.assign(`/${locale}/dashboard`); }}
             t={t}
           />
         )}
