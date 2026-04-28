@@ -78,9 +78,11 @@ export function DashboardHost() {
   const apiTables = (tablesQ.data || []) as ApiTable[];
   const tablesByNumber = new Map(apiTables.map((t) => [t.number, t.id]));
 
+  const rawItems = (itemsQ.data || []) as (Omit<ApiItem, "price"> & { price: number | string })[];
+  const items: ApiItem[] = rawItems.map((it) => ({ ...it, price: Number(it.price) }));
   const initialCategories = buildCategories(
     (catsQ.data || []) as ApiCategory[],
-    (itemsQ.data || []) as ApiItem[],
+    items,
     restaurant.defaultLanguage || "en",
   );
   const initialOrders = ((ordersQ.data || []) as ApiOrder[]).map((o) => apiOrderToOrder(o, tablesByNumber));
