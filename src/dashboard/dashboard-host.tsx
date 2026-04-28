@@ -27,6 +27,7 @@ interface AuthCheck {
   email?: string;
   userId?: string;
   companyId?: string;
+  onboardingStep?: number;
 }
 
 interface SubData {
@@ -48,12 +49,17 @@ export function DashboardHost() {
   const authData = auth.data;
 
   useEffect(() => {
-    if (!auth.isLoading && authData && !authData.authenticated) {
+    if (auth.isLoading || !authData) return;
+    if (!authData.authenticated) {
       navigate({ to: "/$locale/login", params: { locale: locale || "en" }, replace: true });
+      return;
+    }
+    if ((authData.onboardingStep ?? 0) < 3) {
+      navigate({ to: "/$locale/onboarding", params: { locale: locale || "en" }, replace: true });
     }
   }, [auth.isLoading, authData, navigate, locale]);
 
-  const enabled = !!authData?.authenticated;
+  const enabled = !!authData?.authenticated && (authData.onboardingStep ?? 0) >= 3;
 
   const data = useQueries({
     queries: [
