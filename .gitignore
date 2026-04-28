@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+.env
+.env.local
+*.log
+.DS_Store
+.idea
+.vscode
+
+# TanStack Router generated routes
+src/routeTree.gen.ts

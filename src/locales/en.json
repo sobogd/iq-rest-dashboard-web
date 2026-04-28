@@ -1,0 +1,15 @@
+{
+  "appName": "IQ Rest",
+  "auth": {
+    "loginTitle": "Sign in",
+    "emailLabel": "Email",
+    "continue": "Continue"
+  },
+  "nav": {
+    "menu": "Menu",
+    "orders": "Orders",
+    "reservations": "Reservations",
+    "analytics": "Analytics",
+    "settings": "Settings"
+  }
+}
