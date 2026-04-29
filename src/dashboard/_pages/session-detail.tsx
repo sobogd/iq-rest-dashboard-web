@@ -111,6 +111,8 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   const [pendingConv, setPendingConv] = useState<string | null>(null);
   const [alert, setAlert] = useState<{ title: string; message: string } | null>(null);
   const [convPrompt, setConvPrompt] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const eventsOffsetRef = useRef(0);
   const eventsLoadingRef = useRef(false);
@@ -233,6 +235,25 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       setAlert({ title: "Send failed", message: "Network error" });
     } finally {
       setPendingConv(null);
+    }
+  }
+
+  async function handleDelete() {
+    setDeleting(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/analytics/sessions"), {
+        credentials: "include",
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      });
+      if (res.ok) goBack();
+      else setAlert({ title: "Delete failed", message: "Could not delete session." });
+    } catch {
+      setAlert({ title: "Delete failed", message: "Could not delete session." });
+    } finally {
+      setDeleting(false);
+      setConfirmDelete(false);
     }
   }
 
@@ -518,6 +539,25 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
             <div ref={sentinelRef} className="h-1" />
           </div>
         )}
+
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-red-600 rounded-lg transition-colors"
+          >
+            Delete session
+          </button>
+        </div>
+
+        <ConfirmDialog
+          open={confirmDelete}
+          title="Delete session?"
+          message="This will permanently remove the session and all its events."
+          confirmLabel="Delete"
+          onCancel={() => (deleting ? null : setConfirmDelete(false))}
+          onConfirm={handleDelete}
+        />
 
         <ConfirmDialog
           open={convPrompt !== null}
