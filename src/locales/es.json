@@ -2006,9 +2006,9 @@
       "dayTooltip": "{day} · {scans} escaneos · {views} vistas"
     },
     "auth": {
-      "title": "Iniciar sesión en",
-      "titleAccent": "IQ Rest",
-      "subtitle": "Gestione su menú, reciba pedidos y haga crecer su negocio.",
+      "title": "Crea tu carta",
+      "titleAccent": "",
+      "subtitle": "Introduce tu correo para empezar. Te enviaremos un código de un solo uso — sin contraseña.",
       "emailLabel": "Correo electrónico",
       "emailPlaceholder": "usted@restaurante.com",
       "continueEmail": "Continuar con correo electrónico",

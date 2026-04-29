@@ -2006,9 +2006,9 @@
       "dayTooltip": "{day} · {scans} scans · {views} views"
     },
     "auth": {
-      "title": "Sign in to",
-      "titleAccent": "IQ Rest",
-      "subtitle": "Manage your menu, take orders, and grow your business.",
+      "title": "Create your menu",
+      "titleAccent": "",
+      "subtitle": "Enter your email to get started. We'll send you a one-time code — no password needed.",
       "emailLabel": "Email",
       "emailPlaceholder": "you@restaurant.com",
       "continueEmail": "Continue with email",
