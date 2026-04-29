@@ -42,7 +42,7 @@ type Screen = "email" | "verify";
 // ─── Theme-adaptive classes ──────────────────────────────────────────────────
 
 const inputClass =
-  "w-full h-10 px-3 text-[16px] md:text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors";
+  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors";
 
 const labelClass = "block text-xs font-medium text-foreground mb-1.5 tracking-tight";
 
