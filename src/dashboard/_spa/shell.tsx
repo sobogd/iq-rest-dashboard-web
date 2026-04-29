@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDashboardRouter } from "./router";
 import type { View } from "./types";
@@ -11,12 +11,8 @@ import { ReservationsPage } from "../_v2/reservations";
 import { TablesPage, TableFormPage } from "../_v2/tables";
 import { CategoryForm, DishForm, OptionForm } from "../_v2/forms";
 import { useRestaurant, useRestaurantOrNull } from "../_v2/restaurant-context";
-import { fetchCategories, fetchItems, fetchOrders, fetchReservations } from "../_v2/api";
-import {
-  apiOrderToOrder,
-  apiReservationToBooking,
-  buildCategories,
-} from "../_v2/mappers";
+import { fetchCategories, fetchItems } from "../_v2/api";
+import { buildCategories } from "../_v2/mappers";
 import { getMlWithFallback } from "../_v2/i18n";
 import type { ApiCategory, ApiItem } from "../_v2/api";
 import {
@@ -84,20 +80,8 @@ function ShellBody(props: ShellInitialData) {
     }
   }, [defaultLang]);
 
-  // Live polling — orders + reservations refresh every 30s.
-  useEffect(() => {
-    const id = setInterval(async () => {
-      try {
-        const tableMap = new Map(tables.map((t) => [t.number, t.id]));
-        const [os, rs] = await Promise.all([fetchOrders(), fetchReservations()]);
-        setOrders(os.map((o) => apiOrderToOrder(o, tableMap)));
-        setBookings(rs.map(apiReservationToBooking));
-      } catch {
-        // ignore transient failures
-      }
-    }, 30000);
-    return () => clearInterval(id);
-  }, [tables]);
+  // Orders + reservations are polled by TanStack queries in dashboard-host.
+  // Local setInterval was duplicating that polling — removed.
 
   if (isAuthView) {
     return view.name === "onboarding" ? <OnboardingClient /> : <AuthPage />;

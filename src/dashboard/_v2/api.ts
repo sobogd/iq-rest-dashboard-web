@@ -231,10 +231,15 @@ export async function deleteItem(id: string): Promise<void> {
  if (!res.ok) throw new Error("Failed to delete item");
 }
 
+export interface ReorderSwap {
+ id: string;
+ sortOrder: number;
+}
+
 export async function reorderItem(
  itemId: string,
  direction: "up" | "down",
-): Promise<ApiItem[] | null> {
+): Promise<ReorderSwap[]> {
  const res = await fetch(apiUrl("/api/items/reorder"), {
         credentials: "include",
  method: "POST",
@@ -243,7 +248,13 @@ export async function reorderItem(
  });
  if (!res.ok) throw new Error("Failed to reorder item");
  const data = await res.json();
- return Array.isArray(data) ? (data as ApiItem[]) : null;
+ // New API returns { swapped: [{id, sortOrder}, ...] }. Tolerate the legacy
+ // full-list shape too in case an old API is deployed.
+ if (Array.isArray(data)) {
+  return (data as ApiItem[]).map((it) => ({ id: it.id, sortOrder: it.sortOrder }));
+ }
+ if (data && Array.isArray(data.swapped)) return data.swapped as ReorderSwap[];
+ return [];
 }
 
 // ── Tables ──
@@ -374,8 +385,8 @@ export interface ApiOrder {
 }
 
 export async function fetchOrders(status?: string): Promise<ApiOrder[]> {
- const url = status ? `/api/orders?status=${encodeURIComponent(status)}` : "/api/orders";
- const res = await fetch(url, { cache: "no-store" });
+ const path = status ? `/api/orders?status=${encodeURIComponent(status)}` : "/api/orders";
+ const res = await fetch(apiUrl(path), { credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiOrder[];
 }

@@ -45,7 +45,7 @@ import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish, DishOption, Ml, OptionVariant } from "./types";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
 
-const OPTIONS_ENABLED = process.env.NEXT_PUBLIC_OPTIONS === "TRUE";
+const OPTIONS_ENABLED = import.meta.env.VITE_OPTIONS_ENABLED === "TRUE";
 
 // ── Category form ──
 
