@@ -182,26 +182,73 @@ export function LanguageSwitcher({
  onChange: (code: string) => void;
  languages: MiniLang[];
 }) {
+ const [open, setOpen] = useState(false);
+ const ref = useRef<HTMLDivElement | null>(null);
+
+ useEffect(() => {
+ if (!open) return;
+ function onDocClick(e: MouseEvent) {
+ if (!ref.current) return;
+ if (!ref.current.contains(e.target as Node)) setOpen(false);
+ }
+ function onEsc(e: KeyboardEvent) {
+ if (e.key === "Escape") setOpen(false);
+ }
+ document.addEventListener("mousedown", onDocClick);
+ document.addEventListener("keydown", onEsc);
+ return () => {
+ document.removeEventListener("mousedown", onDocClick);
+ document.removeEventListener("keydown", onEsc);
+ };
+ }, [open]);
+
  if (languages.length <= 1) return null;
+ const active = languages.find((l) => l.code === lang) || languages[0];
+
  return (
- <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
+ <div ref={ref} className="relative">
+ <button
+ type="button"
+ onClick={() => setOpen((v) => !v)}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium bg-secondary text-foreground rounded-md transition-colors"
+ title={active.label}
+ aria-haspopup="listbox"
+ aria-expanded={open}
+ >
+ <span className="uppercase">{active.short}</span>
+ <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+ <polyline points="6 9 12 15 18 9" />
+ </svg>
+ </button>
+ {open ? (
+ <div
+ role="listbox"
+ className="absolute right-0 mt-1 z-20 min-w-[180px] max-h-64 overflow-y-auto bg-card border border-border rounded-lg shadow-lg py-1"
+ >
  {languages.map((l) => {
- const isActive = lang === l.code;
- const cls = isActive
- ? "bg-card text-foreground shadow-sm"
- : "text-muted-foreground";
+ const isActive = l.code === lang;
  return (
  <button
  key={l.code}
  type="button"
- onClick={() => onChange(l.code)}
- className={"h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " + cls}
- title={l.label}
+ role="option"
+ aria-selected={isActive}
+ onClick={() => {
+ onChange(l.code);
+ setOpen(false);
+ }}
+ className={
+ "w-full flex items-center justify-between gap-3 px-3 h-8 text-[12px] text-left transition-colors " +
+ (isActive ? "text-foreground" : "text-muted-foreground")
+ }
  >
- {l.short}
+ <span className="truncate">{l.label}</span>
+ <span className="uppercase text-[10px] tabular-nums shrink-0">{l.short}</span>
  </button>
  );
  })}
+ </div>
+ ) : null}
  </div>
  );
 }
@@ -305,6 +352,30 @@ function AiTranslateButton({
  );
 }
 
+// Textarea that grows to fit its content. Starts at the height of a regular
+// input (h-10) and expands one line at a time. On md+ it keeps a min height
+// matching the dish photo column so the form stays balanced.
+function AutoGrowTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+ const ref = useRef<HTMLTextAreaElement | null>(null);
+
+ useEffect(() => {
+ const el = ref.current;
+ if (!el) return;
+ el.style.height = "auto";
+ el.style.height = el.scrollHeight + "px";
+ }, [props.value]);
+
+ const baseCls = inputClass + " h-10 md:min-h-[88px] py-2 resize-none overflow-hidden";
+ return (
+ <textarea
+ {...props}
+ ref={ref}
+ rows={1}
+ className={baseCls + (props.className ? " " + props.className : "")}
+ />
+ );
+}
+
 // TranslatedInput — text/textarea bound to a multilingual field.
 
 export function TranslatedInput({
@@ -373,7 +444,7 @@ export function TranslatedInput({
  </div>
  ) : null}
  {multiline ? (
- <textarea {...inputProps} rows={3} className={inputClass + " h-auto py-2 resize-none"} />
+ <AutoGrowTextarea {...inputProps} />
  ) : (
  <input
  {...inputProps}
