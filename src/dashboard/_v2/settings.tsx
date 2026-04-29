@@ -463,7 +463,16 @@ export function BrandingSettingsPage({
  ) : draft.backgroundUrl ? (
  <>
  {draft.backgroundType === "video" ? (
- <video src={draft.backgroundUrl} autoPlay loop muted playsInline className="w-full h-full object-cover" />
+ <video
+ key={draft.backgroundUrl}
+ src={draft.backgroundUrl}
+ autoPlay
+ loop
+ muted
+ playsInline
+ controls={false}
+ className="w-full h-full object-cover"
+ />
  ) : (
  <img src={draft.backgroundUrl} alt="" className="w-full h-full object-cover" />
  )}
