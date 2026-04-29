@@ -1,6 +1,7 @@
 // API client for the new dashboard. Thin wrappers over fetch with typed return shapes.
 
 import type { Ml, DishOption } from "./types";
+import { apiUrl } from "@/lib/api";
 // (Ml retained for OrderItem option snapshots even though categories/items use richer shapes.)
 
 // ── Restaurant ──
@@ -37,7 +38,7 @@ export interface ApiRestaurant {
 }
 
 export async function fetchRestaurant(): Promise<ApiRestaurant | null> {
- const res = await fetch("/api/restaurant", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/restaurant"), { cache: "no-store" });
  if (!res.ok) return null;
  return (await res.json()) as ApiRestaurant;
 }
@@ -45,7 +46,7 @@ export async function fetchRestaurant(): Promise<ApiRestaurant | null> {
 export async function updateRestaurant(
  patch: Partial<ApiRestaurant> & { source?: string | null },
 ): Promise<ApiRestaurant> {
- const res = await fetch("/api/restaurant", {
+ const res = await fetch(apiUrl("/api/restaurant"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(patch),
@@ -58,7 +59,7 @@ export async function updateRestaurantLanguages(
  languages: string[],
  defaultLanguage: string,
 ): Promise<ApiRestaurant> {
- const res = await fetch("/api/restaurant/languages", {
+ const res = await fetch(apiUrl("/api/restaurant/languages"), {
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ languages, defaultLanguage }),
@@ -81,7 +82,7 @@ export interface ApiCategory {
 }
 
 export async function fetchCategories(): Promise<ApiCategory[]> {
- const res = await fetch("/api/categories", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/categories"), { cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiCategory[];
 }
@@ -91,7 +92,7 @@ export async function createCategory(payload: {
  translations?: CategoryTranslations;
  isActive?: boolean;
 }): Promise<ApiCategory> {
- const res = await fetch("/api/categories", {
+ const res = await fetch(apiUrl("/api/categories"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -104,7 +105,7 @@ export async function updateCategory(
  id: string,
  payload: { name: string; translations?: CategoryTranslations; isActive?: boolean; sortOrder?: number },
 ): Promise<ApiCategory> {
- const res = await fetch(`/api/categories/${id}`, {
+ const res = await fetch(apiUrl(`/api/categories/${id}`), {
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -114,14 +115,14 @@ export async function updateCategory(
 }
 
 export async function deleteCategory(id: string): Promise<void> {
- const res = await fetch(`/api/categories/${id}`, { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/categories/${id}`), { method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete category");
 }
 
 export async function reorderCategories(
  items: { id: string; sortOrder: number }[],
 ): Promise<ApiCategory[]> {
- const res = await fetch("/api/categories/reorder", {
+ const res = await fetch(apiUrl("/api/categories/reorder"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ items }),
@@ -150,7 +151,7 @@ export interface ApiItem {
 }
 
 export async function fetchItems(): Promise<ApiItem[]> {
- const res = await fetch("/api/items", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/items"), { cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiItem[];
 }
@@ -166,7 +167,7 @@ export async function createItem(payload: {
  allergens?: string[];
  options?: DishOption[] | null;
 }): Promise<ApiItem> {
- const res = await fetch("/api/items", {
+ const res = await fetch(apiUrl("/api/items"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -190,7 +191,7 @@ export async function updateItem(
  sortOrder?: number;
  },
 ): Promise<ApiItem> {
- const res = await fetch(`/api/items/${id}`, {
+ const res = await fetch(apiUrl(`/api/items/${id}`), {
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -203,7 +204,7 @@ export async function patchItem(
  id: string,
  payload: { isActive?: boolean },
 ): Promise<ApiItem> {
- const res = await fetch(`/api/items/${id}`, {
+ const res = await fetch(apiUrl(`/api/items/${id}`), {
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -213,7 +214,7 @@ export async function patchItem(
 }
 
 export async function deleteItem(id: string): Promise<void> {
- const res = await fetch(`/api/items/${id}`, { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/items/${id}`), { method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete item");
 }
 
@@ -221,7 +222,7 @@ export async function reorderItem(
  itemId: string,
  direction: "up" | "down",
 ): Promise<ApiItem[] | null> {
- const res = await fetch("/api/items/reorder", {
+ const res = await fetch(apiUrl("/api/items/reorder"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ itemId, direction }),
@@ -246,7 +247,7 @@ export interface ApiTable {
 }
 
 export async function fetchTables(): Promise<ApiTable[]> {
- const res = await fetch("/api/tables", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/tables"), { cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiTable[];
 }
@@ -259,7 +260,7 @@ export async function createTable(payload: {
  x?: number | null;
  y?: number | null;
 }): Promise<ApiTable> {
- const res = await fetch("/api/tables", {
+ const res = await fetch(apiUrl("/api/tables"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -272,7 +273,7 @@ export async function updateTable(
  id: string,
  payload: Partial<ApiTable>,
 ): Promise<ApiTable> {
- const res = await fetch(`/api/tables/${id}`, {
+ const res = await fetch(apiUrl(`/api/tables/${id}`), {
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -282,7 +283,7 @@ export async function updateTable(
 }
 
 export async function deleteTable(id: string): Promise<void> {
- const res = await fetch(`/api/tables/${id}`, { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/tables/${id}`), { method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete table");
 }
 
@@ -304,7 +305,7 @@ export interface ApiReservation {
 }
 
 export async function fetchReservations(): Promise<ApiReservation[]> {
- const res = await fetch("/api/reservations", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/reservations"), { cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiReservation[];
 }
@@ -313,7 +314,7 @@ export async function patchReservation(
  id: string,
  payload: { status?: string; notes?: string | null },
 ): Promise<ApiReservation> {
- const res = await fetch(`/api/reservations/${id}`, {
+ const res = await fetch(apiUrl(`/api/reservations/${id}`), {
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -365,7 +366,7 @@ export async function createOrder(payload: {
  total?: number;
  customerName?: string | null;
 }): Promise<ApiOrder> {
- const res = await fetch("/api/orders", {
+ const res = await fetch(apiUrl("/api/orders"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -378,7 +379,7 @@ export async function patchOrder(
  id: string,
  payload: { status?: string; items?: ApiOrderItem[]; total?: number },
 ): Promise<ApiOrder> {
- const res = await fetch(`/api/orders/${id}`, {
+ const res = await fetch(apiUrl(`/api/orders/${id}`), {
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -388,7 +389,7 @@ export async function patchOrder(
 }
 
 export async function deleteOrder(id: string): Promise<void> {
- const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/orders/${id}`), { method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete order");
 }
 
@@ -402,13 +403,13 @@ export interface ApiSupportMessage {
 }
 
 export async function fetchSupportMessages(): Promise<ApiSupportMessage[]> {
- const res = await fetch("/api/support/messages", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/support/messages"), { cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiSupportMessage[];
 }
 
 export async function sendSupportMessage(message: string): Promise<ApiSupportMessage> {
- const res = await fetch("/api/support/messages", {
+ const res = await fetch(apiUrl("/api/support/messages"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ message }),
@@ -426,7 +427,7 @@ export async function fetchSubscriptionStatus(): Promise<{
  billingCycle: string | null;
  trialEndsAt: string | null;
 } | null> {
- const res = await fetch("/api/restaurant/subscription", { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/restaurant/subscription"), { cache: "no-store" });
  if (!res.ok) return null;
  return await res.json();
 }
@@ -438,7 +439,7 @@ export async function createCheckoutSession(
 ): Promise<string | null> {
  const priceLookupKey = cycle === "YEARLY" ? "basic_yearly" : "basic_monthly";
  const locale = typeof window !== "undefined" ? (window.location.pathname.match(/^\/([a-z]{2})\b/)?.[1] || "en") : "en";
- const res = await fetch("/api/stripe/checkout", {
+ const res = await fetch(apiUrl("/api/stripe/checkout"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ priceLookupKey, locale, currency }),
@@ -453,7 +454,7 @@ export async function createCheckoutSession(
 }
 
 export async function openBillingPortal(): Promise<string | null> {
- const res = await fetch("/api/stripe/portal", { method: "POST" });
+ const res = await fetch(apiUrl("/api/stripe/portal"), { method: "POST" });
  if (!res.ok) return null;
  const data = await res.json();
  return data.url || null;
@@ -462,7 +463,7 @@ export async function openBillingPortal(): Promise<string | null> {
 // ── Logout ──
 
 export async function logout(): Promise<void> {
- await fetch("/api/auth/logout", { method: "POST" });
+ await fetch(apiUrl("/api/auth/logout"), { method: "POST" });
 }
 
 // ── Order serialization helpers (kitchen + orders pages) ──

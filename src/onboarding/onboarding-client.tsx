@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
@@ -603,7 +604,7 @@ export function OnboardingClient() {
       if (state.dish.photoFile) {
         const fd = new FormData();
         fd.append("file", state.dish.photoFile);
-        const r = await fetch("/api/upload", { method: "POST", body: fd });
+        const r = await fetch(apiUrl("/api/upload"), { method: "POST", body: fd });
         if (r.ok) {
           const d = await r.json();
           dishImageUrl = d.url;
@@ -615,7 +616,7 @@ export function OnboardingClient() {
       if (state.cover.uploadedFile) {
         const fd = new FormData();
         fd.append("file", state.cover.uploadedFile);
-        const r = await fetch("/api/upload", { method: "POST", body: fd });
+        const r = await fetch(apiUrl("/api/upload"), { method: "POST", body: fd });
         if (r.ok) {
           const d = await r.json();
           coverSourceUrl = d.url;
@@ -632,7 +633,7 @@ export function OnboardingClient() {
       };
       if (coverSourceUrl) restaurantPayload.source = coverSourceUrl;
       else if (presetImageUrl) restaurantPayload.source = presetImageUrl;
-      const restaurantRes = await fetch("/api/restaurant", {
+      const restaurantRes = await fetch(apiUrl("/api/restaurant"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(restaurantPayload),
@@ -641,7 +642,7 @@ export function OnboardingClient() {
       const restaurant = await restaurantRes.json();
 
       // Create category
-      const catRes = await fetch("/api/categories", {
+      const catRes = await fetch(apiUrl("/api/categories"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: state.category.trim() }),
@@ -650,7 +651,7 @@ export function OnboardingClient() {
       const cat = await catRes.json();
 
       // Create item
-      await fetch("/api/items", {
+      await fetch(apiUrl("/api/items"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -662,7 +663,7 @@ export function OnboardingClient() {
       });
 
       // Always mark onboarding complete (restaurant POST only sets step=3 on create, not update)
-      await fetch("/api/onboarding/complete", { method: "POST" });
+      await fetch(apiUrl("/api/onboarding/complete"), { method: "POST" });
 
       setMenuSlug(restaurant.slug ?? "");
       setStep(4);

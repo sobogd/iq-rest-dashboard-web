@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { EmptyState, PageHeader } from "../_v2/ui";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
@@ -46,7 +47,7 @@ export function AnalyticsClient() {
  useEffect(() => {
  let cancelled = false;
  setLoading(true);
- fetch(`/api/analytics/stats?period=${period}`, { cache: "no-store" })
+ fetch(apiUrl(`/api/analytics/stats?period=${period}`), { cache: "no-store" })
  .then((r) => (r.ok ? r.json() : null))
  .then((data) => {
  if (!cancelled) {

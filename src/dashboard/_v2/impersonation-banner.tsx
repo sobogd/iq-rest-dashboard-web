@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 
 export function ImpersonationBanner({ currentEmail }: { currentEmail: string }) {
@@ -11,7 +12,7 @@ export function ImpersonationBanner({ currentEmail }: { currentEmail: string }) 
  if (exiting) return;
  setExiting(true);
  try {
- const res = await fetch("/api/admin/impersonate/exit", { method: "POST" });
+ const res = await fetch(apiUrl("/api/admin/impersonate/exit"), { method: "POST" });
  if (res.ok) {
  window.location.href = "/dashboard/settings/admin/companies";
  } else {

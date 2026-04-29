@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { countryToFlag, formatDateShort, formatDuration } from "./_admin-helpers";
@@ -42,7 +43,7 @@ export function SessionsPage() {
     setLoading(true);
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const res = await fetch(`/api/admin/analytics/sessions-list?period=${p}&tz=${encodeURIComponent(tz)}`);
+      const res = await fetch(apiUrl(`/api/admin/analytics/sessions-list?period=${p}&tz=${encodeURIComponent(tz)}`));
       if (!res.ok) return;
       const json = await res.json();
       setSessions(json.sessions || []);

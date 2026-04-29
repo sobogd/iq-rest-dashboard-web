@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { apiUrl } from "@/lib/api";
 import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
 import { EVENT_LABELS } from "@/lib/dashboard-events";
@@ -109,7 +110,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     setLoading(true);
     try {
       const params = new URLSearchParams({ sessionId });
-      const res = await fetch(`/api/admin/analytics/sessions?${params}`);
+      const res = await fetch(apiUrl(`/api/admin/analytics/sessions?${params}`));
       if (res.ok) {
         const data = await res.json();
         setSession(data.session || null);
@@ -127,7 +128,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   async function handleDelete() {
     setDeleting(true);
     try {
-      const res = await fetch("/api/admin/analytics/sessions", {
+      const res = await fetch(apiUrl("/api/admin/analytics/sessions"), {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId }),
@@ -147,7 +148,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     setPendingConv(eventType);
     setConvPrompt(null);
     try {
-      const res = await fetch("/api/admin/analytics/send-conversion", {
+      const res = await fetch(apiUrl("/api/admin/analytics/send-conversion"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

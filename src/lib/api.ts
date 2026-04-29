@@ -2,6 +2,14 @@
 
 const BASE = import.meta.env.VITE_API_URL || "/api";
 
+/** Build a full API URL from a path that may start with `/` or `/api/`.
+ *  Use this for raw fetch() calls that bypass the api() wrapper. */
+export function apiUrl(path: string): string {
+  const stripped = path.replace(/^\/api(\/|$)/, "/");
+  const clean = stripped.startsWith("/") ? stripped : `/${stripped}`;
+  return `${BASE}${clean}`;
+}
+
 export class ApiError extends Error {
   status: number;
   data: unknown;

@@ -1,5 +1,7 @@
 // Own analytics - sends events to our backend
 
+import { apiUrl } from "@/lib/api";
+
 const SESSION_ID_KEY = "analytics_session_id";
 
 function getSessionId(): string {
@@ -55,7 +57,7 @@ function trackEvent(event: string, meta?: Record<string, string>) {
   const sessionId = getSessionId();
   const adParams = getAdParams();
 
-  fetch("/api/analytics/event", {
+  fetch(apiUrl("/api/analytics/event"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -117,7 +119,7 @@ export function linkSession(userId: string): Promise<void> {
 
   const sessionId = getSessionId();
 
-  return fetch("/api/analytics/link-session", {
+  return fetch(apiUrl("/api/analytics/link-session"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId, userId }),
@@ -180,7 +182,7 @@ let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 function sendHeartbeat() {
   const sessionId = getSessionId();
   if (!sessionId) return;
-  fetch("/api/analytics/heartbeat", {
+  fetch(apiUrl("/api/analytics/heartbeat"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId }),

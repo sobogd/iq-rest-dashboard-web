@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, ReactNode } from "react";
+import { apiUrl } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import {
@@ -884,7 +885,7 @@ export function TableQrModal({
 export async function uploadFile(file: File): Promise<string> {
  const fd = new FormData();
  fd.append("file", file);
- const res = await fetch("/api/upload", { method: "POST", body: fd });
+ const res = await fetch(apiUrl("/api/upload"), { method: "POST", body: fd });
  if (!res.ok) throw new Error("Upload failed");
  const data = await res.json();
  return data.url as string;

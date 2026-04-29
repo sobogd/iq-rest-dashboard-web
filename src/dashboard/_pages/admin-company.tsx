@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { apiUrl } from "@/lib/api";
 import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
 import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
@@ -107,7 +108,7 @@ export function AdminCompanyPage({ companyId }: Props) {
 
   const fetchCompany = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/companies/${companyId}`);
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`));
       if (!res.ok) {
         if (res.status === 403) setError("Access denied");
         else if (res.status === 404) setError("Company not found");
@@ -131,7 +132,7 @@ export function AdminCompanyPage({ companyId }: Props) {
   const fetchMessages = useCallback(async (silent = false) => {
     if (!silent) setLoadingMessages(true);
     try {
-      const res = await fetch(`/api/admin/companies/${companyId}/messages`);
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`));
       if (res.ok) {
         const data = (await res.json()) as Message[];
         setMessages((prev) => {
@@ -176,7 +177,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     if (!company) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/companies/${company.id}`, { method: "DELETE" });
+      const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), { method: "DELETE" });
       if (res.ok) {
         goBack();
       } else {
@@ -197,7 +198,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     if (!user) return;
     setImpersonating(true);
     try {
-      const res = await fetch("/api/admin/impersonate", {
+      const res = await fetch(apiUrl("/api/admin/impersonate"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id }),
@@ -220,7 +221,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     if (!text || sending) return;
     setSending(true);
     try {
-      const res = await fetch(`/api/admin/companies/${companyId}/messages`, {
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),

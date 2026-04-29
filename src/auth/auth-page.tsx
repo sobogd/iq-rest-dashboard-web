@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Loader2 } from "lucide-react";
@@ -383,7 +384,7 @@ export function AuthPage() {
       setStatus("loading");
       setErrorMessage("");
       try {
-        const res = await fetch("/api/auth/google", {
+        const res = await fetch(apiUrl("/api/auth/google"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ credential: response.credential }),
@@ -464,7 +465,7 @@ export function AuthPage() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("/api/auth/send-otp", {
+      const res = await fetch(apiUrl("/api/auth/send-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmed, locale }),
@@ -507,7 +508,7 @@ export function AuthPage() {
     setErrorMessage("");
 
     try {
-      const res = await fetch("/api/auth/verify-otp", {
+      const res = await fetch(apiUrl("/api/auth/verify-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase(), code: otp }),
@@ -539,7 +540,7 @@ export function AuthPage() {
     setResendStatus("loading");
     setErrorMessage("");
     try {
-      const res = await fetch("/api/auth/send-otp", {
+      const res = await fetch(apiUrl("/api/auth/send-otp"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase(), locale }),

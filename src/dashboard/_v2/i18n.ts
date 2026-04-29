@@ -1,6 +1,7 @@
 // Language config and multilingual helpers.
 
 import type { Ml } from "./types";
+import { apiUrl } from "@/lib/api";
 
 export interface LanguageMeta {
  code: string;
@@ -111,7 +112,7 @@ export async function translateText(
  fromLang: string,
  toLang: string,
 ): Promise<string> {
- const res = await fetch("/api/translate", {
+ const res = await fetch(apiUrl("/api/translate"), {
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
@@ -38,7 +39,7 @@ export function AdminPage() {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const params = new URLSearchParams({ filter: f, tz });
-      const res = await fetch(`/api/admin/companies?${params}`);
+      const res = await fetch(apiUrl(`/api/admin/companies?${params}`));
       if (!res.ok) return;
       const data = await res.json();
       setCompanies(data.companies);

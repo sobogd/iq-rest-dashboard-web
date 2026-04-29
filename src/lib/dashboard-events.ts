@@ -2,6 +2,8 @@
 // Naming: showed_* (page view), clicked_* (button), focused_* (input),
 // changed_* (select), toggled_* (switch), error_* (failure path).
 
+import { apiUrl } from "@/lib/api";
+
 export enum DashboardEvent {
   // ── Auth ──
   SHOWED_LOGIN = "showed_login",
@@ -425,7 +427,7 @@ function trackReferral() {
   }
   deleteCookie("ref_from");
 
-  fetch("/api/analytics/event", {
+  fetch(apiUrl("/api/analytics/event"), {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -447,7 +449,7 @@ export function track(event: DashboardEvent, meta?: Record<string, string>) {
 
   const sessionId = getSessionId();
 
-  fetch("/api/analytics/event", {
+  fetch(apiUrl("/api/analytics/event"), {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -460,7 +462,7 @@ export function track(event: DashboardEvent, meta?: Record<string, string>) {
   }
 
   if (_userId && event.startsWith("showed_")) {
-    fetch("/api/analytics/link-session", {
+    fetch(apiUrl("/api/analytics/link-session"), {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
