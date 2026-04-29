@@ -371,6 +371,28 @@ export function AuthPage() {
   const [googleReady, setGoogleReady] = useState(false);
   const googleHiddenRef = useRef<HTMLDivElement>(null);
 
+  // Already-authenticated visitors get sent to the right dashboard.
+  // Legacy companies → old monolith; everyone else → /<locale>/dashboard
+  // (or /<locale>/onboarding if onboardingStep < 3).
+  useEffect(() => {
+    let cancelled = false;
+    fetch(apiUrl("/api/auth/check"), { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.authenticated) return;
+        if (data.legacyDashboard) {
+          window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+          return;
+        }
+        const next = (data.onboardingStep ?? 0) < 3 ? "onboarding" : "dashboard";
+        window.location.assign(`/${locale}/${next}`);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
+
   // Resend cooldown countdown
   useEffect(() => {
     if (cooldown <= 0) return;
