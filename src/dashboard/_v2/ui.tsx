@@ -17,7 +17,6 @@ import {
 import { inputClass, labelClass, primaryBtn, secondaryBtn } from "./tokens";
 import { getMl, setMl, translateText } from "./i18n";
 import { useAiImageAccess } from "./sub-context";
-import { useRestaurantOrNull } from "./restaurant-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 
@@ -715,17 +714,14 @@ export function EditPageHeader({
 
 export function PreviewButton({ url }: { url: string }) {
  const t = useTranslations("dashboard.preview");
- const restaurant = useRestaurantOrNull();
  const [open, setOpen] = useState(false);
  const fullUrl = url.startsWith("http") ? url : "https://" + url;
- const accent = restaurant?.accentColor;
  return (
  <>
  <button
  type="button"
  onClick={() => setOpen(true)}
- className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-white rounded-md transition-opacity hover:opacity-90"
- style={accent ? { backgroundColor: accent } : undefined}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors"
  >
  <EyeIcon size={14} />
  {t("preview")}
