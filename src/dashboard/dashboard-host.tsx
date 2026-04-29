@@ -21,6 +21,7 @@ import type {
   ApiRestaurant,
   ApiTable,
 } from "./_v2/api";
+import { isAdminEmail } from "@/lib/admin";
 
 interface AuthCheck {
   authenticated: boolean;
@@ -119,7 +120,7 @@ export function DashboardHost() {
           initialBookings={initialBookings}
           initialTables={initialTables}
           initialSub={initialSub}
-          isAdmin={false}
+          isAdmin={isAdminEmail(authData.email)}
         />
       </DashboardChrome>
     </DashboardSpaWrapper>
