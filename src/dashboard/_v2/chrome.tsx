@@ -94,7 +94,10 @@ export function DashboardChrome({
  <SubProvider sub={sub}>
 <div className="min-h-screen bg-secondary antialiased tracking-tight">
  <TopBar restaurant={restaurant} activeTab={activeTab} />
- <main className="px-4 md:px-6 py-5 md:py-4 pb-24 md:pb-10">{children}</main>
+ <main
+ className="px-4 md:px-6 py-5 md:py-4 md:pb-10"
+ style={{ paddingBottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+ >{children}</main>
  <BottomNav activeTab={activeTab} />
  </div>
  </SubProvider>
@@ -175,7 +178,10 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  const t = useTranslations("dashboard.nav");
  const router = useDashboardRouter();
  return (
- <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-card/95 backdrop-blur-md border-t border-border">
+ <nav
+ className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-card/95 backdrop-blur-md border-t border-border"
+ style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+ >
  <div className="flex items-stretch">
  {NAV_TABS.map((tab) => {
  const isActive = activeTab === tab.id;
