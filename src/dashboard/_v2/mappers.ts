@@ -164,7 +164,14 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  slug,
  currency: r.currency,
  backgroundUrl: r.source || null,
- backgroundType: (r.backgroundType as "image" | "video" | null) || (r.source ? "image" : null),
+ // Older rows have backgroundType=null even when source is a video. Sniff
+ // the URL extension before falling back to "image".
+ backgroundType: ((): "image" | "video" | null => {
+ const stored = r.backgroundType as "image" | "video" | null | undefined;
+ if (stored === "video" || stored === "image") return stored;
+ if (!r.source) return null;
+ return /\.(mp4|webm|mov|m4v|ogg|ogv)(\?|$)/i.test(r.source) ? "video" : "image";
+ })(),
  accentColor: r.accentColor || "#000000",
  contacts: {
  phone: r.phone || "",
