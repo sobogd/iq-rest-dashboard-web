@@ -113,6 +113,7 @@ export async function translateText(
  toLang: string,
 ): Promise<string> {
  const res = await fetch(apiUrl("/api/translate"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({

@@ -385,6 +385,7 @@ export function AuthPage() {
       setErrorMessage("");
       try {
         const res = await fetch(apiUrl("/api/auth/google"), {
+        credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ credential: response.credential }),
@@ -466,6 +467,7 @@ export function AuthPage() {
 
     try {
       const res = await fetch(apiUrl("/api/auth/send-otp"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmed, locale }),
@@ -509,6 +511,7 @@ export function AuthPage() {
 
     try {
       const res = await fetch(apiUrl("/api/auth/verify-otp"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase(), code: otp }),
@@ -541,6 +544,7 @@ export function AuthPage() {
     setErrorMessage("");
     try {
       const res = await fetch(apiUrl("/api/auth/send-otp"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase(), locale }),

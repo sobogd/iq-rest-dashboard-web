@@ -177,7 +177,8 @@ export function AdminCompanyPage({ companyId }: Props) {
     if (!company) return;
     setDeleting(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), { method: "DELETE" });
+      const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), {
+        credentials: "include", method: "DELETE" });
       if (res.ok) {
         goBack();
       } else {
@@ -199,6 +200,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     setImpersonating(true);
     try {
       const res = await fetch(apiUrl("/api/admin/impersonate"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId: user.id }),
@@ -222,6 +224,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     setSending(true);
     try {
       const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text }),

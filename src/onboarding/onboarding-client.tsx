@@ -604,7 +604,8 @@ export function OnboardingClient() {
       if (state.dish.photoFile) {
         const fd = new FormData();
         fd.append("file", state.dish.photoFile);
-        const r = await fetch(apiUrl("/api/upload"), { method: "POST", body: fd });
+        const r = await fetch(apiUrl("/api/upload"), {
+        credentials: "include", method: "POST", body: fd });
         if (r.ok) {
           const d = await r.json();
           dishImageUrl = d.url;
@@ -616,7 +617,8 @@ export function OnboardingClient() {
       if (state.cover.uploadedFile) {
         const fd = new FormData();
         fd.append("file", state.cover.uploadedFile);
-        const r = await fetch(apiUrl("/api/upload"), { method: "POST", body: fd });
+        const r = await fetch(apiUrl("/api/upload"), {
+        credentials: "include", method: "POST", body: fd });
         if (r.ok) {
           const d = await r.json();
           coverSourceUrl = d.url;
@@ -634,6 +636,7 @@ export function OnboardingClient() {
       if (coverSourceUrl) restaurantPayload.source = coverSourceUrl;
       else if (presetImageUrl) restaurantPayload.source = presetImageUrl;
       const restaurantRes = await fetch(apiUrl("/api/restaurant"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(restaurantPayload),
@@ -643,6 +646,7 @@ export function OnboardingClient() {
 
       // Create category
       const catRes = await fetch(apiUrl("/api/categories"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: state.category.trim() }),
@@ -652,6 +656,7 @@ export function OnboardingClient() {
 
       // Create item
       await fetch(apiUrl("/api/items"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -663,7 +668,8 @@ export function OnboardingClient() {
       });
 
       // Always mark onboarding complete (restaurant POST only sets step=3 on create, not update)
-      await fetch(apiUrl("/api/onboarding/complete"), { method: "POST" });
+      await fetch(apiUrl("/api/onboarding/complete"), {
+        credentials: "include", method: "POST" });
 
       setMenuSlug(restaurant.slug ?? "");
       setStep(4);

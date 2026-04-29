@@ -58,6 +58,7 @@ function trackEvent(event: string, meta?: Record<string, string>) {
   const adParams = getAdParams();
 
   fetch(apiUrl("/api/analytics/event"), {
+        credentials: "include",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -120,6 +121,7 @@ export function linkSession(userId: string): Promise<void> {
   const sessionId = getSessionId();
 
   return fetch(apiUrl("/api/analytics/link-session"), {
+        credentials: "include",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId, userId }),
@@ -183,6 +185,7 @@ function sendHeartbeat() {
   const sessionId = getSessionId();
   if (!sessionId) return;
   fetch(apiUrl("/api/analytics/heartbeat"), {
+        credentials: "include",
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId }),

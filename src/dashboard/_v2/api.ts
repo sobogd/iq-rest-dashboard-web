@@ -38,7 +38,8 @@ export interface ApiRestaurant {
 }
 
 export async function fetchRestaurant(): Promise<ApiRestaurant | null> {
- const res = await fetch(apiUrl("/api/restaurant"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/restaurant"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return null;
  return (await res.json()) as ApiRestaurant;
 }
@@ -47,6 +48,7 @@ export async function updateRestaurant(
  patch: Partial<ApiRestaurant> & { source?: string | null },
 ): Promise<ApiRestaurant> {
  const res = await fetch(apiUrl("/api/restaurant"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(patch),
@@ -60,6 +62,7 @@ export async function updateRestaurantLanguages(
  defaultLanguage: string,
 ): Promise<ApiRestaurant> {
  const res = await fetch(apiUrl("/api/restaurant/languages"), {
+        credentials: "include",
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ languages, defaultLanguage }),
@@ -82,7 +85,8 @@ export interface ApiCategory {
 }
 
 export async function fetchCategories(): Promise<ApiCategory[]> {
- const res = await fetch(apiUrl("/api/categories"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/categories"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiCategory[];
 }
@@ -93,6 +97,7 @@ export async function createCategory(payload: {
  isActive?: boolean;
 }): Promise<ApiCategory> {
  const res = await fetch(apiUrl("/api/categories"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -106,6 +111,7 @@ export async function updateCategory(
  payload: { name: string; translations?: CategoryTranslations; isActive?: boolean; sortOrder?: number },
 ): Promise<ApiCategory> {
  const res = await fetch(apiUrl(`/api/categories/${id}`), {
+        credentials: "include",
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -115,7 +121,8 @@ export async function updateCategory(
 }
 
 export async function deleteCategory(id: string): Promise<void> {
- const res = await fetch(apiUrl(`/api/categories/${id}`), { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/categories/${id}`), {
+        credentials: "include", method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete category");
 }
 
@@ -123,6 +130,7 @@ export async function reorderCategories(
  items: { id: string; sortOrder: number }[],
 ): Promise<ApiCategory[]> {
  const res = await fetch(apiUrl("/api/categories/reorder"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ items }),
@@ -151,7 +159,8 @@ export interface ApiItem {
 }
 
 export async function fetchItems(): Promise<ApiItem[]> {
- const res = await fetch(apiUrl("/api/items"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/items"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiItem[];
 }
@@ -168,6 +177,7 @@ export async function createItem(payload: {
  options?: DishOption[] | null;
 }): Promise<ApiItem> {
  const res = await fetch(apiUrl("/api/items"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -192,6 +202,7 @@ export async function updateItem(
  },
 ): Promise<ApiItem> {
  const res = await fetch(apiUrl(`/api/items/${id}`), {
+        credentials: "include",
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -205,6 +216,7 @@ export async function patchItem(
  payload: { isActive?: boolean },
 ): Promise<ApiItem> {
  const res = await fetch(apiUrl(`/api/items/${id}`), {
+        credentials: "include",
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -214,7 +226,8 @@ export async function patchItem(
 }
 
 export async function deleteItem(id: string): Promise<void> {
- const res = await fetch(apiUrl(`/api/items/${id}`), { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/items/${id}`), {
+        credentials: "include", method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete item");
 }
 
@@ -223,6 +236,7 @@ export async function reorderItem(
  direction: "up" | "down",
 ): Promise<ApiItem[] | null> {
  const res = await fetch(apiUrl("/api/items/reorder"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ itemId, direction }),
@@ -247,7 +261,8 @@ export interface ApiTable {
 }
 
 export async function fetchTables(): Promise<ApiTable[]> {
- const res = await fetch(apiUrl("/api/tables"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/tables"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiTable[];
 }
@@ -261,6 +276,7 @@ export async function createTable(payload: {
  y?: number | null;
 }): Promise<ApiTable> {
  const res = await fetch(apiUrl("/api/tables"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -274,6 +290,7 @@ export async function updateTable(
  payload: Partial<ApiTable>,
 ): Promise<ApiTable> {
  const res = await fetch(apiUrl(`/api/tables/${id}`), {
+        credentials: "include",
  method: "PUT",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -283,7 +300,8 @@ export async function updateTable(
 }
 
 export async function deleteTable(id: string): Promise<void> {
- const res = await fetch(apiUrl(`/api/tables/${id}`), { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/tables/${id}`), {
+        credentials: "include", method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete table");
 }
 
@@ -305,7 +323,8 @@ export interface ApiReservation {
 }
 
 export async function fetchReservations(): Promise<ApiReservation[]> {
- const res = await fetch(apiUrl("/api/reservations"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/reservations"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiReservation[];
 }
@@ -315,6 +334,7 @@ export async function patchReservation(
  payload: { status?: string; notes?: string | null },
 ): Promise<ApiReservation> {
  const res = await fetch(apiUrl(`/api/reservations/${id}`), {
+        credentials: "include",
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -367,6 +387,7 @@ export async function createOrder(payload: {
  customerName?: string | null;
 }): Promise<ApiOrder> {
  const res = await fetch(apiUrl("/api/orders"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -380,6 +401,7 @@ export async function patchOrder(
  payload: { status?: string; items?: ApiOrderItem[]; total?: number },
 ): Promise<ApiOrder> {
  const res = await fetch(apiUrl(`/api/orders/${id}`), {
+        credentials: "include",
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
@@ -389,7 +411,8 @@ export async function patchOrder(
 }
 
 export async function deleteOrder(id: string): Promise<void> {
- const res = await fetch(apiUrl(`/api/orders/${id}`), { method: "DELETE" });
+ const res = await fetch(apiUrl(`/api/orders/${id}`), {
+        credentials: "include", method: "DELETE" });
  if (!res.ok) throw new Error("Failed to delete order");
 }
 
@@ -403,13 +426,15 @@ export interface ApiSupportMessage {
 }
 
 export async function fetchSupportMessages(): Promise<ApiSupportMessage[]> {
- const res = await fetch(apiUrl("/api/support/messages"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/support/messages"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return [];
  return (await res.json()) as ApiSupportMessage[];
 }
 
 export async function sendSupportMessage(message: string): Promise<ApiSupportMessage> {
  const res = await fetch(apiUrl("/api/support/messages"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ message }),
@@ -427,7 +452,8 @@ export async function fetchSubscriptionStatus(): Promise<{
  billingCycle: string | null;
  trialEndsAt: string | null;
 } | null> {
- const res = await fetch(apiUrl("/api/restaurant/subscription"), { cache: "no-store" });
+ const res = await fetch(apiUrl("/api/restaurant/subscription"), {
+        credentials: "include", cache: "no-store" });
  if (!res.ok) return null;
  return await res.json();
 }
@@ -440,6 +466,7 @@ export async function createCheckoutSession(
  const priceLookupKey = cycle === "YEARLY" ? "basic_yearly" : "basic_monthly";
  const locale = typeof window !== "undefined" ? (window.location.pathname.match(/^\/([a-z]{2})\b/)?.[1] || "en") : "en";
  const res = await fetch(apiUrl("/api/stripe/checkout"), {
+        credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ priceLookupKey, locale, currency }),
@@ -454,7 +481,8 @@ export async function createCheckoutSession(
 }
 
 export async function openBillingPortal(): Promise<string | null> {
- const res = await fetch(apiUrl("/api/stripe/portal"), { method: "POST" });
+ const res = await fetch(apiUrl("/api/stripe/portal"), {
+        credentials: "include", method: "POST" });
  if (!res.ok) return null;
  const data = await res.json();
  return data.url || null;
@@ -463,7 +491,8 @@ export async function openBillingPortal(): Promise<string | null> {
 // ── Logout ──
 
 export async function logout(): Promise<void> {
- await fetch(apiUrl("/api/auth/logout"), { method: "POST" });
+ await fetch(apiUrl("/api/auth/logout"), {
+        credentials: "include", method: "POST" });
 }
 
 // ── Order serialization helpers (kitchen + orders pages) ──

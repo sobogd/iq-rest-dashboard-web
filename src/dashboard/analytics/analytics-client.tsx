@@ -47,7 +47,8 @@ export function AnalyticsClient() {
  useEffect(() => {
  let cancelled = false;
  setLoading(true);
- fetch(apiUrl(`/api/analytics/stats?period=${period}`), { cache: "no-store" })
+ fetch(apiUrl(`/api/analytics/stats?period=${period}`), {
+        credentials: "include", cache: "no-store" })
  .then((r) => (r.ok ? r.json() : null))
  .then((data) => {
  if (!cancelled) {

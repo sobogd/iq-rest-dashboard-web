@@ -129,6 +129,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     setDeleting(true);
     try {
       const res = await fetch(apiUrl("/api/admin/analytics/sessions"), {
+        credentials: "include",
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId }),
@@ -149,6 +150,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     setConvPrompt(null);
     try {
       const res = await fetch(apiUrl("/api/admin/analytics/send-conversion"), {
+        credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
