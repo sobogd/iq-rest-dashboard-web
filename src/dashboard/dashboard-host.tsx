@@ -30,6 +30,7 @@ interface AuthCheck {
   userId?: string;
   companyId?: string;
   onboardingStep?: number;
+  legacyDashboard?: boolean;
   impersonatedBy?: string | null;
 }
 
@@ -57,6 +58,13 @@ export function DashboardHost() {
     if (auth.isLoading || !authData) return;
     if (!authData.authenticated) {
       navigate({ to: "/$locale/login", params: { locale: locale || "en" }, replace: true });
+      return;
+    }
+    // Legacy companies (signed up before the new dashboard launch) keep
+    // using the old monolith. Cookies are shared on the apex domain so
+    // no re-login is required on the other side.
+    if (authData.legacyDashboard) {
+      window.location.assign(`https://iq-rest.com/${locale || "en"}/dashboard`);
       return;
     }
     if ((authData.onboardingStep ?? 0) < 3) {

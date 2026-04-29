@@ -396,6 +396,10 @@ export function AuthPage() {
           if (isAdminEmail(data.email)) analytics.disableTracking();
           if (data.isNewUser) track(DashboardEvent.AUTH_SIGNUP);
           await analytics.linkSession(data.userId);
+          if (data.legacyDashboard) {
+            window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+            return;
+          }
           // Full reload so server layout re-fetches restaurant + auth state.
           window.location.assign(`/${locale}/${data.isNewUser ? "onboarding" : "dashboard"}`);
         } else {
@@ -522,6 +526,10 @@ export function AuthPage() {
         if (isAdminEmail(email)) analytics.disableTracking();
         track(DashboardEvent.CLICKED_VERIFY_OTP);
         await analytics.linkSession(data.userId);
+        if (data.legacyDashboard) {
+          window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+          return;
+        }
         window.location.assign(`/${locale}/${data.onboardingStep < 3 ? "onboarding" : "dashboard"}`);
       } else {
         track(DashboardEvent.ERROR_OTP_VERIFY);
