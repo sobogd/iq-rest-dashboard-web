@@ -1,8 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { api } from "@/lib/api";
 
+const SUPPORTED = new Set(["en", "es"]);
+
 export const Route = createFileRoute("/$locale/")({
   beforeLoad: async ({ params }) => {
+    // Reject unsupported `locale` values (e.g. /login captured here as a param).
+    if (!SUPPORTED.has(params.locale)) {
+      throw redirect({ to: "/" });
+    }
     const auth = await api<{ authenticated: boolean; onboardingStep?: number }>("/auth/check").catch(
       () => ({ authenticated: false } as { authenticated: boolean; onboardingStep?: number }),
     );

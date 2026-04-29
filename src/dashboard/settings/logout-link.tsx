@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronRightIcon } from "../_v2/icons";
 import { logout } from "../_v2/api";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
 
 export function LogoutLink() {
  const t = useTranslations("dashboard.settingsHub");
+ const locale = useLocale();
  const [busy, setBusy] = useState(false);
 
  async function handle() {
@@ -16,7 +17,7 @@ export function LogoutLink() {
  setBusy(true);
  try {
  await logout();
- window.location.href = "/login";
+ window.location.href = `/${locale}/login`;
  } catch {
  setBusy(false);
  }
