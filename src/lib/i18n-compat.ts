@@ -18,7 +18,18 @@ export function useTranslations<_NS extends string = string>(namespace?: _NS): T
   return fn;
 }
 
-export function useLocale(): string {
+// Project-wide locale guarantee: only the short codes "en" or "es" leak
+// to consumers. i18next-browser-languagedetector can otherwise hand back
+// a regional tag like "en-US" / "es-419" depending on the browser, which
+// breaks our /<locale>/... URL contract.
+const SUPPORTED = ["en", "es"] as const;
+type SupportedLocale = (typeof SUPPORTED)[number];
+
+export function useLocale(): SupportedLocale {
   const { i18n } = useTranslation();
-  return i18n.language;
+  const raw = (i18n.language || "en").toLowerCase();
+  const short = raw.split(/[-_]/)[0];
+  return (SUPPORTED as readonly string[]).includes(short)
+    ? (short as SupportedLocale)
+    : "en";
 }
