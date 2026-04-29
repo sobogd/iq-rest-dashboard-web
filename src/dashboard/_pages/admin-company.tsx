@@ -206,7 +206,9 @@ export function AdminCompanyPage({ companyId }: Props) {
         body: JSON.stringify({ userId: user.id }),
       });
       if (res.ok) {
-        router.resetTo({ name: "menu" });
+        // Full reload so all queries (auth, restaurant, etc.) re-fetch with the
+        // target user's session cookies.
+        window.location.assign("/");
       } else {
         const data = await res.json().catch(() => ({}));
         setAlert({ title: "Login failed", message: data.error || "Could not impersonate user." });
