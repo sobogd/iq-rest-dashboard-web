@@ -341,11 +341,15 @@ export function BrandingSettingsPage({
  track(DashboardEvent.CLICKED_UPLOAD_BACKGROUND);
  const file = e.target.files?.[0];
  if (!file) return;
- const isVideo = file.type.startsWith("video/");
+ // file.type is sometimes empty (Safari/iOS, some Android cameras), so
+ // also check the filename extension before falling back to image.
+ const isVideo =
+ file.type.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogg|ogv)$/i.test(file.name);
  setUploading(true);
  try {
  const url = await uploadFile(file);
- setDraft((d) => ({ ...d, backgroundUrl: url, backgroundType: isVideo ? "video" : "image" }));
+ const isVideoUrl = isVideo || /\.(mp4|webm|mov|m4v|ogg|ogv)(\?|$)/i.test(url);
+ setDraft((d) => ({ ...d, backgroundUrl: url, backgroundType: isVideoUrl ? "video" : "image" }));
  } catch {
  track(DashboardEvent.ERROR_UPLOAD);
  } finally {
