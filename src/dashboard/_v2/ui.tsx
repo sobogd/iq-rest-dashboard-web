@@ -365,7 +365,7 @@ function AutoGrowTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElemen
  el.style.height = el.scrollHeight + "px";
  }, [props.value]);
 
- const baseCls = inputClass + " h-10 md:min-h-[88px] py-2 resize-none overflow-hidden";
+ const baseCls = inputClass + " h-10 py-2 resize-none overflow-hidden";
  return (
  <textarea
  {...props}
