@@ -1,7 +1,9 @@
 // Tailwind class tokens used across the new dashboard.
 
+// text-[16px] on mobile prevents iOS Safari from auto-zooming when an input
+// is focused. Desktop falls back to text-sm for a more compact look.
 export const inputClass =
- "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors";
+ "w-full h-10 px-3 text-[16px] md:text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors";
 
 export const labelClass =
  "block text-xs font-medium text-foreground mb-2.5";

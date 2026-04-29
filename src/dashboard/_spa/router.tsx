@@ -102,12 +102,21 @@ export function DashboardRouterProvider({ initialPath, locale, children }: Provi
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
+  // Forward navigation always reveals a fresh view — scroll the window back
+  // to the top so the new screen starts at its head, not where the previous
+  // one left off (matters most on iOS, where browsers don't auto-reset
+  // because the URL change is a single-page-app pushState, not a full nav).
+  const scrollTop = () => {
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  };
+
   const push = useCallback((v: View) => {
     setStack((prev) => {
       const next = [...prev, v];
       writeHistory("push", next, localeRef.current, v);
       return next;
     });
+    scrollTop();
   }, []);
 
   const replace = useCallback((v: View) => {
@@ -116,6 +125,7 @@ export function DashboardRouterProvider({ initialPath, locale, children }: Provi
       writeHistory("replace", next, localeRef.current, v);
       return next;
     });
+    scrollTop();
   }, []);
 
   const resetTo = useCallback((v: View) => {
@@ -124,6 +134,7 @@ export function DashboardRouterProvider({ initialPath, locale, children }: Provi
       writeHistory("push", next, localeRef.current, v);
       return next;
     });
+    scrollTop();
   }, []);
 
   const back = useCallback(() => {
