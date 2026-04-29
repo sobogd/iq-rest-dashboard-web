@@ -296,7 +296,7 @@ function CategoryAccordion({
  const router = useDashboardRouter();
  return (
  <div className="bg-card border border-border rounded-xl overflow-hidden">
- <div className="flex items-center gap-1 px-3 py-2.5">
+ <div className="flex items-center gap-1 pl-2 pr-3 py-2.5">
  <button
  type="button"
  onClick={onToggle}
@@ -375,7 +375,7 @@ function CategoryAccordion({
  track(DashboardEvent.CLICKED_ADD_ITEM);
  router.push({ name: "item.new", categoryId: category.id });
  }}
- className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
+ className="w-full flex items-center gap-2 pl-2 pr-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
  >
  <span className="w-8 h-8 flex items-center justify-center shrink-0">
  <PlusIcon size={14} />
@@ -411,7 +411,7 @@ function DishRow({
  const tc = useTranslations("dashboard.common");
  const router = useDashboardRouter();
  const rowCls =
- "flex items-center gap-2 px-3 py-2 transition-colors " +
+ "flex items-center gap-2 pl-2 pr-3 py-2 transition-colors " +
  (dish.visible ? "" : "opacity-50");
  return (
  <div className={rowCls}>
