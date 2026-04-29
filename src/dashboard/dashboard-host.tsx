@@ -22,6 +22,7 @@ import type {
   ApiTable,
 } from "./_v2/api";
 import { isAdminEmail } from "@/lib/admin";
+import { analytics } from "@/lib/analytics";
 
 interface AuthCheck {
   authenticated: boolean;
@@ -61,6 +62,11 @@ export function DashboardHost() {
       navigate({ to: "/$locale/onboarding", params: { locale: locale || "en" }, replace: true });
     }
   }, [auth.isLoading, authData, navigate, locale]);
+
+  // Start heartbeat once authenticated so admin can see who is online.
+  useEffect(() => {
+    if (authData?.authenticated) analytics.startHeartbeat();
+  }, [authData?.authenticated]);
 
   const enabled = !!authData?.authenticated && (authData.onboardingStep ?? 0) >= 3;
 

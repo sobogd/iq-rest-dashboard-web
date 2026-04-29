@@ -2048,6 +2048,7 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "sevenDays": "7 days",
+      "all": "All",
       "refresh": "Refresh",
       "noSessions": "No sessions",
       "events": "{count} ev.",
