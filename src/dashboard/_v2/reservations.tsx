@@ -84,7 +84,10 @@ export function ReservationsPage({
  }
  }
 
- const upcomingCount = bookings.filter((b) => b.status !== "cancelled").length;
+ // Count must match the grouped list — only today and future, non-cancelled.
+ // Otherwise the subtitle ("Tiene 2 reservas próximas") can disagree with
+ // the empty-state body when all reservations are in the past.
+ const upcomingCount = grouped.reduce((sum, g) => sum + g.items.length, 0);
 
  return (
  <>
