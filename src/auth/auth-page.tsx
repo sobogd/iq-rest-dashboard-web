@@ -22,6 +22,7 @@ declare global {
 }
 
 const GOOGLE_CLIENT_ID =
+  ((import.meta as { env?: Record<string, string | undefined> }).env?.VITE_GOOGLE_CLIENT_ID) ||
   "576149678945-vjqlc4sce6bsne3p0n63bqdvf33k43s0.apps.googleusercontent.com";
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN = 60;
