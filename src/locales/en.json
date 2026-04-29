@@ -2041,6 +2041,7 @@
     "admin": {
       "all": "All",
       "activeToday": "Active today",
+      "active": "Active",
       "companiesTitle": "Companies",
       "noCompanies": "No companies",
       "noName": "No name",

@@ -85,7 +85,7 @@ function formatDate(iso: string, withTime = false): string {
 
 export function AdminCompanyPage({ companyId }: Props) {
   const router = useDashboardRouter();
-  const goBack = () => router.back();
+  const goBack = () => router.push({ name: "settings.admin.companies" });
 
   const [tab, setTab] = useState<Tab>("info");
   const [company, setCompany] = useState<Company | null>(null);
@@ -180,7 +180,7 @@ export function AdminCompanyPage({ companyId }: Props) {
       const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), {
         credentials: "include", method: "DELETE" });
       if (res.ok) {
-        goBack();
+        router.push({ name: "settings.admin.companies" });
       } else {
         const data = await res.json().catch(() => ({}));
         setAlert({ title: "Delete failed", message: data.error || "Could not delete company." });

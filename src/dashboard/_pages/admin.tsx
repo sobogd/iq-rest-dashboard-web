@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
+import { BoxIcon, EyeIcon, FolderIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
+import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 
 interface Company {
@@ -15,42 +17,53 @@ interface Company {
   itemsCount: number;
   messagesCount: number;
   monthlyViews: number;
-  todayViews: number;
+  lastVisit: string | null;
   scanLimit: number | null;
 }
 
-type Filter = "all" | "today_active";
+type Filter = "active" | "all";
 
 export function AdminPage() {
   const t = useTranslations("dashboard.admin");
   const router = useDashboardRouter();
 
-  const TABS: { value: Filter; labelKey: "all" | "activeToday" }[] = [
+  const TABS: { value: Filter; labelKey: "active" | "all" }[] = [
     { value: "all", labelKey: "all" },
-    { value: "today_active", labelKey: "activeToday" },
+    { value: "active", labelKey: "active" },
   ];
 
   const [filter, setFilter] = useState<Filter>("all");
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchCompanies = useCallback(async (f: Filter) => {
-    setLoading(true);
-    try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const params = new URLSearchParams({ filter: f, tz });
-      const res = await fetch(apiUrl(`/api/admin/companies?${params}`), { credentials: "include" });
-      if (!res.ok) return;
-      const data = await res.json();
-      setCompanies(data.companies);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const fetchCompanies = useCallback(
+    async (f: Filter, mode: "initial" | "refresh") => {
+      if (mode === "initial") setLoading(true);
+      else setRefreshing(true);
+      try {
+        const res = await fetch(apiUrl(`/api/admin/companies?filter=${f}`), {
+          credentials: "include",
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        setCompanies(data.companies);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
-    fetchCompanies(filter);
+    void fetchCompanies(filter, "initial");
   }, [filter, fetchCompanies]);
+
+  function refresh() {
+    if (refreshing) return;
+    void fetchCompanies(filter, "refresh");
+  }
 
   function openCompany(id: string) {
     router.push({ name: "settings.admin.company", id });
@@ -79,65 +92,101 @@ export function AdminPage() {
         </div>
       </SubpageStickyBar>
       <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-        <div className="mb-5">
-          <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
-          <h2 className="text-xl font-medium text-foreground mt-1">{t("companiesTitle")}</h2>
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
+            <h2 className="text-xl font-medium text-foreground mt-1">{t("companiesTitle")}</h2>
+          </div>
+          <button
+            type="button"
+            onClick={refresh}
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-muted-foreground bg-secondary rounded-md transition-colors shrink-0 disabled:opacity-60"
+          >
+            {refreshing ? (
+              <span className="w-3.5 h-3.5 border-2 border-input border-t-foreground rounded-full animate-spin" />
+            ) : (
+              <RefreshIcon size={13} />
+            )}
+            {t("refresh")}
+          </button>
         </div>
 
-      {loading && companies.length === 0 ? (
-        <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
-          {t("loading")}
-        </div>
-      ) : companies.length === 0 ? (
-        <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
-          {t("noCompanies")}
-        </div>
-      ) : (
-        <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-          {companies.map((company) => {
-            const nameColor =
-              company.subscriptionStatus === "ACTIVE" && company.plan === "PRO"
-                ? "text-emerald-600"
-                : company.subscriptionStatus === "ACTIVE" && company.plan === "BASIC"
-                ? "text-blue-500"
-                : "";
-            const overLimit =
-              company.scanLimit !== null && company.monthlyViews >= (company.scanLimit ?? 0);
-            return (
-              <button
-                key={company.id}
-                type="button"
-                onClick={() => openCompany(company.id)}
-                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-left transition-colors"
-              >
-                <span
-                  className={
-                    "text-sm truncate flex-1 min-w-0 " +
-                    (nameColor || (company.name ? "text-foreground" : "text-muted-foreground italic"))
-                  }
+        {loading && companies.length === 0 ? (
+          <div className="bg-card border border-border rounded-2xl py-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <span className="w-4 h-4 border-2 border-input border-t-foreground rounded-full animate-spin" />
+            {t("loading")}
+          </div>
+        ) : companies.length === 0 ? (
+          <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
+            {t("noCompanies")}
+          </div>
+        ) : (
+          <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+            {companies.map((company) => {
+              const nameColor =
+                company.subscriptionStatus === "ACTIVE" && company.plan === "PRO"
+                  ? "text-emerald-600"
+                  : company.subscriptionStatus === "ACTIVE" && company.plan === "BASIC"
+                  ? "text-blue-500"
+                  : "";
+              const overLimit =
+                company.scanLimit !== null && company.monthlyViews >= (company.scanLimit ?? 0);
+              return (
+                <button
+                  key={company.id}
+                  type="button"
+                  onClick={() => openCompany(company.id)}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
                 >
-                  {company.name || t("noName")}
-                </span>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground shrink-0 tabular-nums">
-                  <span>📁{company.categoriesCount}</span>
-                  <span>📦{company.itemsCount}</span>
-                  {company.monthlyViews > 0 ? (
-                    <span className={overLimit ? "text-red-500" : "text-blue-500"}>
-                      👁{company.monthlyViews}
-                      {company.todayViews > 0 ? (
-                        <span className="text-muted-foreground">({company.todayViews})</span>
+                  <div className="min-w-0 flex-1">
+                    <div
+                      className={
+                        "text-sm font-medium truncate " +
+                        (nameColor ||
+                          (company.name ? "text-foreground" : "text-muted-foreground italic"))
+                      }
+                    >
+                      {company.name || t("noName")}
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 tabular-nums">
+                      <span className="inline-flex items-center gap-0.5">
+                        <FolderIcon size={11} />
+                        {company.categoriesCount}
+                      </span>
+                      <span className="inline-flex items-center gap-0.5">
+                        <BoxIcon size={11} />
+                        {company.itemsCount}
+                      </span>
+                      {company.monthlyViews > 0 ? (
+                        <span
+                          className={
+                            "inline-flex items-center gap-0.5 " +
+                            (overLimit ? "text-red-500" : "text-blue-500")
+                          }
+                        >
+                          <EyeIcon size={11} />
+                          {company.monthlyViews}
+                        </span>
                       ) : null}
+                      {company.messagesCount > 0 ? (
+                        <span className="inline-flex items-center gap-0.5 text-red-500 font-medium">
+                          <MessageIcon size={11} />
+                          {company.messagesCount}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  {company.lastVisit ? (
+                    <span className="text-[11px] text-muted-foreground tabular-nums shrink-0">
+                      {formatDateShort(company.lastVisit)}
                     </span>
                   ) : null}
-                  {company.messagesCount > 0 ? (
-                    <span className="text-red-500 font-medium">💬{company.messagesCount}</span>
-                  ) : null}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

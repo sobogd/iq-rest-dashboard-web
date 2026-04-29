@@ -54,6 +54,16 @@ export const RefreshIcon = (p: IconProps) => svg({ ...p, children: <>
  <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14" />
 </> });
 
+export const FolderIcon = (p: IconProps) => svg({ ...p, children: <>
+ <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+</> });
+
+export const BoxIcon = (p: IconProps) => svg({ ...p, children: <>
+ <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+ <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+ <line x1="12" y1="22.08" x2="12" y2="12" />
+</> });
+
 export const EditIcon = (p: IconProps) => svg({ ...p, children: <>
  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
