@@ -10,7 +10,7 @@ import {
  ReceiptIcon,
  SettingsIcon,
 } from "./icons";
-import { RestaurantProvider } from "./restaurant-context";
+import { RestaurantProvider, useRestaurantOrNull } from "./restaurant-context";
 import { SubProvider, type Sub } from "./sub-context";
 import type { Restaurant, TabId } from "./types";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
@@ -177,6 +177,8 @@ function TopNav({ activeTab, t }: { activeTab: TabId; t: (k: NavTab["labelKey"])
 function BottomNav({ activeTab }: { activeTab: TabId }) {
  const t = useTranslations("dashboard.nav");
  const router = useDashboardRouter();
+ const restaurant = useRestaurantOrNull();
+ const accent = restaurant?.accentColor;
  return (
  <nav
  className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-card/95 backdrop-blur-md border-t border-border"
@@ -186,7 +188,8 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  {NAV_TABS.map((tab) => {
  const isActive = activeTab === tab.id;
  const TabIcon = tab.icon;
- const cls = isActive ? "text-foreground" : "text-muted-foreground";
+ const cls = isActive ? "" : "text-muted-foreground";
+ const style = isActive && accent ? { color: accent } : undefined;
  return (
  <button
  key={tab.id}
@@ -196,6 +199,7 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  router.resetTo(tab.view);
  }}
  className={"flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 transition-colors " + cls}
+ style={style}
  >
  <TabIcon size={20} />
  <span className="text-[10px] font-medium">{t(tab.labelKey)}</span>

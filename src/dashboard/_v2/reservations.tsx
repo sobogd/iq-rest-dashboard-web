@@ -18,11 +18,11 @@ const BOOKING_STATUS_KEYS: Record<Booking["status"], "statusPending" | "statusCo
 };
 
 const BOOKING_STATUS_CLS: Record<Booking["status"], string> = {
- pending: "bg-amber-50 text-amber-700 border-amber-200",
- confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200",
+ pending: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/50",
+ confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/50",
  cancelled: "bg-secondary text-muted-foreground border-border",
  completed: "bg-secondary text-muted-foreground border-border",
- "no-show": "bg-red-50 text-red-700 border-red-200",
+ "no-show": "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/50",
 };
 
 export function ReservationsPage({
@@ -240,14 +240,14 @@ function BookingCard({
  <button
  type="button"
  onClick={() => onStatusChange(booking.id, "cancelled")}
- className="flex-1 h-8 text-xs font-medium text-red-700 bg-red-50 rounded-md transition-colors"
+ className="flex-1 h-8 text-xs font-medium text-red-700 bg-red-50 rounded-md transition-colors dark:bg-red-950/40 dark:text-red-400"
  >
  {t("reject")}
  </button>
  <button
  type="button"
  onClick={() => onStatusChange(booking.id, "confirmed")}
- className="flex-1 h-8 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-md transition-colors"
+ className="flex-1 h-8 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-md transition-colors dark:bg-emerald-950/40 dark:text-emerald-400"
  >
  {t("confirm")}
  </button>
