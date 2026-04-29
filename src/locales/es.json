@@ -11,7 +11,6 @@
     },
     "common": {
       "save": "Guardar",
-      "saving": "Guardando...",
       "cancel": "Cancelar",
       "delete": "Eliminar",
       "deleting": "Eliminando...",
@@ -19,9 +18,7 @@
       "confirm": "Confirmar",
       "back": "Volver",
       "edit": "Editar",
-      "add": "Añadir",
       "ok": "Aceptar",
-      "yes": "Sí",
       "no": "No",
       "loading": "Cargando…",
       "untitled": "Sin título",
@@ -39,11 +36,9 @@
       "open": "Abrir",
       "openMenu": "Abrir carta",
       "downloadQr": "Descargar QR",
-      "menuLink": "Enlace de la carta",
       "tableLink": "Enlace de la mesa",
       "selected": "seleccionado",
       "qrCode": "Código QR",
-      "noResults": "Sin resultados",
       "willUse": "Se usará"
     },
     "subscriptionChip": {
@@ -78,8 +73,6 @@
       "quotaExceededMessage": "Has usado las {limit} generaciones gratuitas de imágenes IA. Suscríbete a cualquier plan para imágenes IA ilimitadas."
     },
     "photo": {
-      "label": "Foto",
-      "addPhoto": "Añadir foto",
       "removePhoto": "Eliminar foto"
     },
     "menu": {
@@ -200,7 +193,6 @@
       "activeOrderOther": "{count} pedidos activos",
       "startOrder": "Iniciar pedido",
       "newOrder": "Nuevo pedido",
-      "allReady": "Todo listo",
       "cooking": "En preparación",
       "itemOne": "{count} artículo",
       "itemOther": "{count} artículos",
@@ -235,8 +227,7 @@
       "kitchenClearSub": "Los artículos aparecerán aquí a medida que los clientes hagan pedidos.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Aún no hay mesas",
-      "noTablesSub": "Añade mesas en ajustes para empezar a gestionar pedidos por mesa.",
-      "manageTables": "Gestionar mesas"
+      "noTablesSub": "Añade mesas en ajustes para empezar a gestionar pedidos por mesa."
     },
     "reservations": {
       "title": "Reservas",
@@ -267,8 +258,6 @@
       "showQr": "Mostrar código QR",
       "deleteTable": "Eliminar mesa",
       "tapTable": "Toque una mesa en el mapa para editarla.",
-      "positionX": "Posición X",
-      "positionY": "Posición Y",
       "name": "Nombre",
       "namePlaceholder": "Ej. Ventana, Barra, Terraza",
       "number": "Número",
@@ -449,23 +438,9 @@
       "subtitle": "Vistas de la carta y rendimiento.",
       "loading": "Cargando análisis…",
       "noData": "Aún no hay datos",
-      "noDataSub": "Una vez que los clientes escaneen su carta, verá las estadísticas aquí.",
-      "todayLabel": "Hoy",
-      "dayLabel": "Día",
-      "weekLabel": "Semana",
-      "monthLabel": "Mes",
-      "totalScans": "Escaneos totales",
-      "uniqueScans": "Sesiones únicas",
-      "totalViews": "Vistas de página",
-      "avgViews": "Páginas/escaneo prom.",
       "byDay": "Por día",
       "byLanguage": "Por idioma",
       "byPage": "Por página",
-      "noBreakdownData": "No hay datos para este período.",
-      "limit": "Límite mensual",
-      "limitUsed": "{used} de {limit}",
-      "limitOver": "Límite excedido",
-      "limitInfinite": "Ilimitado",
       "periodToday": "Hoy",
       "period7d": "7 días",
       "period30d": "30 días",
@@ -521,7 +496,6 @@
     },
     "admin": {
       "all": "Todas",
-      "activeToday": "Activos hoy",
       "active": "Activos",
       "companiesTitle": "Empresas",
       "noCompanies": "Ninguna empresa",
@@ -529,7 +503,6 @@
       "sessionsTitle": "Sesiones",
       "today": "Hoy",
       "yesterday": "Ayer",
-      "sevenDays": "7 días",
       "refresh": "Actualizar",
       "noSessions": "Ninguna sesión",
       "events": "{count} ev.",
@@ -543,10 +516,6 @@
       "subtitle": "Tarda menos de 2 minutos",
       "nameLabel": "Nombre del restaurante",
       "namePlaceholder": "Ej. La Bella Italia",
-      "nameRequired": "Por favor, introduzca el nombre de su restaurante",
-      "languageLabel": "Idioma",
-      "autoDetected": "Idioma y moneda rellenados automáticamente. Cámbielos si es necesario.",
-      "next": "Siguiente",
       "setupText": "Vamos a configurar su carta",
       "nameHint": "Esto aparecerá en la parte superior de su carta digital."
     },
@@ -557,10 +526,8 @@
       "categoryPlaceholder": "Ej. Platos principales, Bebidas",
       "dishNameLabel": "Nombre del plato",
       "dishNamePlaceholder": "Ej. Pizza Margarita",
-      "nameRequired": "Por favor, introduzca el nombre del plato",
       "priceLabel": "Precio",
       "priceRequired": "Por favor, introduzca un precio válido",
-      "createMenu": "¡Crear mi carta!",
       "photoLabel": "Foto",
       "addPhoto": "Añadir foto",
       "photoHint": "JPG o PNG, hasta 5 MB. Podrá añadir fotos más tarde."
@@ -572,7 +539,6 @@
     "step4": {
       "title": "¡Su carta está lista!",
       "subtitle": "Imprima este código QR y póngalo en sus mesas",
-      "viewMenu": "Ver carta",
       "goToDashboard": "Ir al panel de control y descargar QR",
       "copy": "Copiar",
       "tip": "Imprime y coloca en las mesas, o comparte en línea."
@@ -580,12 +546,8 @@
     "step3": {
       "title": "Elija su portada",
       "subtitle": "Esto es lo que verán los clientes cuando escaneen el QR.",
-      "pickStyle": "Elija un estilo",
       "upload": "Subir",
       "yourPhoto": "Su foto",
-      "menuLabel": "Carta",
-      "openNow": "Abierto ahora",
-      "oneCategory": "1 categoría",
       "changeLater": "Podrá cambiar esto más tarde en los ajustes."
     },
     "back": "Atrás",

@@ -11,7 +11,6 @@
     },
     "common": {
       "save": "Save",
-      "saving": "Saving...",
       "cancel": "Cancel",
       "delete": "Delete",
       "deleting": "Deleting...",
@@ -19,9 +18,7 @@
       "confirm": "Confirm",
       "back": "Back",
       "edit": "Edit",
-      "add": "Add",
       "ok": "OK",
-      "yes": "Yes",
       "no": "No",
       "loading": "Loading…",
       "untitled": "Untitled",
@@ -39,11 +36,9 @@
       "open": "Open",
       "openMenu": "Open menu",
       "downloadQr": "Download QR",
-      "menuLink": "Menu link",
       "tableLink": "Table link",
       "selected": "selected",
       "qrCode": "QR code",
-      "noResults": "No results",
       "willUse": "Will use"
     },
     "subscriptionChip": {
@@ -78,8 +73,6 @@
       "quotaExceededMessage": "You've used all {limit} free AI image generations. Subscribe to any plan for unlimited AI images."
     },
     "photo": {
-      "label": "Photo",
-      "addPhoto": "Add photo",
       "removePhoto": "Remove photo"
     },
     "menu": {
@@ -200,7 +193,6 @@
       "activeOrderOther": "{count} active orders",
       "startOrder": "Start order",
       "newOrder": "New order",
-      "allReady": "All ready",
       "cooking": "Cooking",
       "itemOne": "{count} item",
       "itemOther": "{count} items",
@@ -235,8 +227,7 @@
       "kitchenClearSub": "Items will appear here as guests place orders.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "No tables yet",
-      "noTablesSub": "Add tables in settings to start tracking orders by table.",
-      "manageTables": "Manage tables"
+      "noTablesSub": "Add tables in settings to start tracking orders by table."
     },
     "reservations": {
       "title": "Bookings",
@@ -267,8 +258,6 @@
       "showQr": "Show QR code",
       "deleteTable": "Delete table",
       "tapTable": "Tap a table on the map to edit it.",
-      "positionX": "Position X",
-      "positionY": "Position Y",
       "name": "Name",
       "namePlaceholder": "e.g. Window, Bar, Patio",
       "number": "Number",
@@ -449,23 +438,9 @@
       "subtitle": "Menu views and performance.",
       "loading": "Loading analytics…",
       "noData": "No data yet",
-      "noDataSub": "Once guests start scanning your menu, you'll see stats here.",
-      "todayLabel": "Today",
-      "dayLabel": "Day",
-      "weekLabel": "Week",
-      "monthLabel": "Month",
-      "totalScans": "Total scans",
-      "uniqueScans": "Unique sessions",
-      "totalViews": "Page views",
-      "avgViews": "Avg pages/scan",
       "byDay": "By day",
       "byLanguage": "By language",
       "byPage": "By page",
-      "noBreakdownData": "No data for this period.",
-      "limit": "Monthly limit",
-      "limitUsed": "{used} of {limit}",
-      "limitOver": "Over limit",
-      "limitInfinite": "Unlimited",
       "periodToday": "Today",
       "period7d": "7 days",
       "period30d": "30 days",
@@ -521,7 +496,6 @@
     },
     "admin": {
       "all": "All",
-      "activeToday": "Active today",
       "active": "Active",
       "companiesTitle": "Companies",
       "noCompanies": "No companies",
@@ -529,7 +503,6 @@
       "sessionsTitle": "Sessions",
       "today": "Today",
       "yesterday": "Yesterday",
-      "sevenDays": "7 days",
       "refresh": "Refresh",
       "noSessions": "No sessions",
       "events": "{count} ev.",
@@ -543,10 +516,6 @@
       "subtitle": "It takes less than 2 minutes",
       "nameLabel": "Restaurant name",
       "namePlaceholder": "E.g. La Bella Italia",
-      "nameRequired": "Please enter your restaurant name",
-      "languageLabel": "Language",
-      "autoDetected": "Language & currency filled in automatically. Change if needed.",
-      "next": "Next",
       "setupText": "Let's set up your menu",
       "nameHint": "This will appear at the top of your digital menu."
     },
@@ -557,10 +526,8 @@
       "categoryPlaceholder": "E.g. Main Menu, Drinks",
       "dishNameLabel": "Dish name",
       "dishNamePlaceholder": "E.g. Margherita Pizza",
-      "nameRequired": "Please enter a dish name",
       "priceLabel": "Price",
       "priceRequired": "Please enter a valid price",
-      "createMenu": "Create My Menu!",
       "photoLabel": "Photo",
       "addPhoto": "Add photo",
       "photoHint": "JPG or PNG, up to 5 MB. You can add photos later."
@@ -572,7 +539,6 @@
     "step4": {
       "title": "Your menu is ready!",
       "subtitle": "Print this QR code and put it on your tables",
-      "viewMenu": "Preview Menu",
       "goToDashboard": "Go to Dashboard & Download QR",
       "copy": "Copy",
       "tip": "Print and place on tables, or share online."
@@ -580,12 +546,8 @@
     "step3": {
       "title": "Choose your cover",
       "subtitle": "This is what guests see when they scan the QR.",
-      "pickStyle": "Pick a style",
       "upload": "Upload",
       "yourPhoto": "Your photo",
-      "menuLabel": "Menu",
-      "openNow": "Open now",
-      "oneCategory": "1 category",
       "changeLater": "You can change this later in settings."
     },
     "back": "Back",
