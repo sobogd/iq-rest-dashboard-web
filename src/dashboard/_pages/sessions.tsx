@@ -43,7 +43,7 @@ export function SessionsPage() {
     setLoading(true);
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const res = await fetch(apiUrl(`/api/admin/analytics/sessions-list?period=${p}&tz=${encodeURIComponent(tz)}`));
+      const res = await fetch(apiUrl(`/api/admin/analytics/sessions-list?period=${p}&tz=${encodeURIComponent(tz)}`), { credentials: "include" });
       if (!res.ok) return;
       const json = await res.json();
       setSessions(json.sessions || []);

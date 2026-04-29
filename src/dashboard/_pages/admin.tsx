@@ -39,7 +39,7 @@ export function AdminPage() {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const params = new URLSearchParams({ filter: f, tz });
-      const res = await fetch(apiUrl(`/api/admin/companies?${params}`));
+      const res = await fetch(apiUrl(`/api/admin/companies?${params}`), { credentials: "include" });
       if (!res.ok) return;
       const data = await res.json();
       setCompanies(data.companies);

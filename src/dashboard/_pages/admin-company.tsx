@@ -108,7 +108,7 @@ export function AdminCompanyPage({ companyId }: Props) {
 
   const fetchCompany = useCallback(async () => {
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`));
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`), { credentials: "include" });
       if (!res.ok) {
         if (res.status === 403) setError("Access denied");
         else if (res.status === 404) setError("Company not found");
@@ -132,7 +132,7 @@ export function AdminCompanyPage({ companyId }: Props) {
   const fetchMessages = useCallback(async (silent = false) => {
     if (!silent) setLoadingMessages(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`));
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`), { credentials: "include" });
       if (res.ok) {
         const data = (await res.json()) as Message[];
         setMessages((prev) => {

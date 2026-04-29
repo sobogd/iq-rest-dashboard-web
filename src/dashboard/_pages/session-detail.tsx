@@ -110,7 +110,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     setLoading(true);
     try {
       const params = new URLSearchParams({ sessionId });
-      const res = await fetch(apiUrl(`/api/admin/analytics/sessions?${params}`));
+      const res = await fetch(apiUrl(`/api/admin/analytics/sessions?${params}`), { credentials: "include" });
       if (res.ok) {
         const data = await res.json();
         setSession(data.session || null);
