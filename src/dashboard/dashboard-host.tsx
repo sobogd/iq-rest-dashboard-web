@@ -60,13 +60,10 @@ export function DashboardHost() {
       navigate({ to: "/$locale/login", params: { locale: locale || "en" }, replace: true });
       return;
     }
-    // Legacy companies (signed up before the new dashboard launch) keep
-    // using the old monolith. Cookies are shared on the apex domain so
-    // no re-login is required on the other side.
-    if (authData.legacyDashboard) {
-      window.location.assign(`https://iq-rest.com/${locale || "en"}/dashboard`);
-      return;
-    }
+    // The legacyDashboard flag is honoured only on /login (post-sign-in)
+    // and NOT here, otherwise users who clicked "Try new dashboard" from
+    // the old monolith would bounce straight back. Once they've reached
+    // the new SPA we let them stay.
     if ((authData.onboardingStep ?? 0) < 3) {
       navigate({ to: "/$locale/onboarding", params: { locale: locale || "en" }, replace: true });
     }
