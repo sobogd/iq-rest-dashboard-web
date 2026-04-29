@@ -3,9 +3,25 @@
 import { apiUrl } from "@/lib/api";
 
 const SESSION_ID_KEY = "analytics_session_id";
+// Apex-domain cookie set by the backend with Domain=.iq-rest.com so the
+// landing site and the new dashboard share the same sid. Reading this
+// first is what lets a visitor's events from iq-rest.com merge with
+// their dashboard activity on dashboard.iq-rest.com.
+const SHARED_COOKIE_KEY = "analytics_sid";
+
+function readCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return m ? decodeURIComponent(m[1]) : null;
+}
 
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
+
+  // Cross-origin shared session takes precedence — keeps the sid stable
+  // when the same browser visits the landing site and then the dashboard.
+  const cookieSid = readCookie(SHARED_COOKIE_KEY);
+  if (cookieSid) return cookieSid;
 
   // Registered users: localStorage (persistent, user accepted privacy policy)
   // Anonymous users: sessionStorage (per-tab, no consent needed)
