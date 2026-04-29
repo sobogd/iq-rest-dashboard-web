@@ -1931,6 +1931,8 @@
       "logout": "Cerrar sesión",
       "loggingOut": "Cerrando sesión...",
       "logoutDesc": "Cerrar sesión de esta cuenta.",
+      "exitImpersonation": "Salir de la suplantación",
+      "exitImpersonationDesc": "Volver a tu cuenta de administrador ({email}).",
       "rows": {
         "about": "Acerca de",
         "aboutDesc": "Nombre y subtítulo del restaurante.",

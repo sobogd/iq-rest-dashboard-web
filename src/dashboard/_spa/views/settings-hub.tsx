@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { apiUrl } from "@/lib/api";
 import { ChevronRightIcon } from "../../_v2/icons";
 import { PageHeader } from "../../_v2/ui";
 import { LogoutLink } from "../../settings/logout-link";
@@ -28,9 +29,34 @@ const CARDS: CardDef[] = [
   { view: { name: "settings.support" }, titleKey: "support", descKey: "supportDesc" },
 ];
 
-export function SettingsHubView({ isAdmin }: { isAdmin: boolean }) {
+export function SettingsHubView({
+  isAdmin,
+  impersonatedBy,
+}: {
+  isAdmin: boolean;
+  impersonatedBy?: string | null;
+}) {
   const t = useTranslations("dashboard.settingsHub");
   const router = useDashboardRouter();
+  const [exiting, setExiting] = useState(false);
+
+  async function handleExitImpersonation() {
+    if (exiting) return;
+    setExiting(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/impersonate/exit"), {
+        credentials: "include",
+        method: "POST",
+      });
+      if (res.ok) {
+        window.location.assign("/");
+      } else {
+        setExiting(false);
+      }
+    } catch {
+      setExiting(false);
+    }
+  }
 
   useEffect(() => {
     track(DashboardEvent.SHOWED_SETTINGS);
@@ -89,7 +115,24 @@ export function SettingsHubView({ isAdmin }: { isAdmin: boolean }) {
             </button>
           </>
         ) : null}
-        <LogoutLink />
+        {impersonatedBy ? (
+          <button
+            type="button"
+            onClick={handleExitImpersonation}
+            disabled={exiting}
+            className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3 disabled:opacity-60"
+          >
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-red-600">{t("exitImpersonation")}</div>
+              <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+                {t("exitImpersonationDesc", { email: impersonatedBy })}
+              </div>
+            </div>
+            <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
+          </button>
+        ) : (
+          <LogoutLink />
+        )}
       </div>
     </div>
   );

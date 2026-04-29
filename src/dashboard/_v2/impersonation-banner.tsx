@@ -15,7 +15,7 @@ export function ImpersonationBanner({ currentEmail }: { currentEmail: string }) 
  const res = await fetch(apiUrl("/api/admin/impersonate/exit"), {
         credentials: "include", method: "POST" });
  if (res.ok) {
- window.location.href = "/dashboard/settings/admin/companies";
+ window.location.assign("/");
  } else {
  setExiting(false);
  }

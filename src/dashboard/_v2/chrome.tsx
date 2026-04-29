@@ -83,7 +83,7 @@ export function DashboardChrome({
  return (
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>
- <div className="min-h-screen bg-background antialiased tracking-tight">{children}</div>
+<div className="min-h-screen bg-background antialiased tracking-tight">{children}</div>
  </SubProvider>
  </RestaurantProvider>
  );
@@ -92,7 +92,7 @@ export function DashboardChrome({
  return (
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>
- <div className="min-h-screen bg-secondary antialiased tracking-tight">
+<div className="min-h-screen bg-secondary antialiased tracking-tight">
  <TopBar restaurant={restaurant} activeTab={activeTab} />
  <main className="px-4 md:px-6 py-5 md:py-4 pb-24 md:pb-10">{children}</main>
  <BottomNav activeTab={activeTab} />

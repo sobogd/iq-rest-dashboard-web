@@ -48,6 +48,7 @@ export interface ShellInitialData {
   initialTables: TableEntity[];
   initialSub: { plan: string | null; subscriptionStatus: string | null; trialEndsAt: string | null } | null;
   isAdmin: boolean;
+  impersonatedBy?: string | null;
 }
 
 export function Shell(props: ShellInitialData) {
@@ -116,6 +117,7 @@ function ShellBody(props: ShellInitialData) {
       setTables={setTables}
       sub={props.initialSub}
       isAdmin={props.isAdmin}
+      impersonatedBy={props.impersonatedBy ?? null}
       backToSettings={backToSettings}
       backToMenu={backToMenu}
       refreshMenu={refreshMenu}
@@ -135,13 +137,14 @@ interface SwitchProps {
   setTables: React.Dispatch<React.SetStateAction<TableEntity[]>>;
   sub: ShellInitialData["initialSub"];
   isAdmin: boolean;
+  impersonatedBy: string | null;
   backToSettings: () => void;
   backToMenu: () => void;
   refreshMenu: () => Promise<void>;
 }
 
 function ViewSwitch(p: SwitchProps) {
-  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, backToSettings, backToMenu, refreshMenu } = p;
+  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, backToSettings, backToMenu, refreshMenu } = p;
   const router = useDashboardRouter();
 
   const onSavedMenu = async () => {
@@ -187,7 +190,7 @@ function ViewSwitch(p: SwitchProps) {
       return <AnalyticsClient />;
 
     case "settings":
-      return <SettingsHubView isAdmin={isAdmin} />;
+      return <SettingsHubView isAdmin={isAdmin} impersonatedBy={impersonatedBy} />;
     case "settings.about":
       return <SettingsAboutWrapper onBack={backToSettings} />;
     case "settings.contacts":

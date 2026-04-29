@@ -30,6 +30,7 @@ interface AuthCheck {
   userId?: string;
   companyId?: string;
   onboardingStep?: number;
+  impersonatedBy?: string | null;
 }
 
 interface SubData {
@@ -127,6 +128,7 @@ export function DashboardHost() {
           initialTables={initialTables}
           initialSub={initialSub}
           isAdmin={isAdminEmail(authData.email)}
+          impersonatedBy={authData.impersonatedBy ?? null}
         />
       </DashboardChrome>
     </DashboardSpaWrapper>

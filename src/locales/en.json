@@ -1931,6 +1931,8 @@
       "logout": "Log out",
       "loggingOut": "Logging out...",
       "logoutDesc": "Sign out of this account.",
+      "exitImpersonation": "Exit impersonation",
+      "exitImpersonationDesc": "Return to your admin account ({email}).",
       "rows": {
         "about": "About",
         "aboutDesc": "Restaurant name and subtitle.",
