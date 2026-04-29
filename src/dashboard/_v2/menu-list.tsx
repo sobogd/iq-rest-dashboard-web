@@ -86,7 +86,15 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  }
  function collapseAll() {
  track(DashboardEvent.CLICKED_COLLAPSE_ALL);
- setOpenIds({});
+ // Set false explicitly per id rather than {} — otherwise the
+ // initialCategories effect below treats missing ids as "new" and
+ // re-opens every category after the next data refresh
+ // (e.g. after moveCategory fires onPersisted).
+ const map: Record<string, boolean> = {};
+ categories.forEach((c) => {
+ map[c.id] = false;
+ });
+ setOpenIds(map);
  }
 
  async function moveCategory(idx: number, dir: number) {
