@@ -1,6 +1,6 @@
 /** Thin fetch wrapper. Sends cookies, prefixes with VITE_API_URL. */
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const BASE = import.meta.env.VITE_API_URL || "/api";
 
 export class ApiError extends Error {
   status: number;

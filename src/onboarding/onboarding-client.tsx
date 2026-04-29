@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
 import { Loader2, ArrowRight } from "lucide-react";
+import { getMenuUrl, getMenuUrlPrefix } from "@/lib/menu-url";
 
 const PRESETS = [
   {
@@ -503,8 +504,8 @@ function Step4({
   t: ReturnType<typeof useTranslations<"onboarding">>;
 }) {
   const [copied, setCopied] = useState(false);
-  const menuUrl = menuSlug ? `https://iq-rest.com/m/${menuSlug}` : "";
-  const displayUrl = menuSlug ? `iq-rest.com/m/${menuSlug}` : "";
+  const menuUrl = menuSlug ? getMenuUrl(menuSlug) : "";
+  const displayUrl = menuSlug ? getMenuUrlPrefix() + menuSlug : "";
 
   const handleCopy = async () => {
     try {
@@ -522,16 +523,17 @@ function Step4({
       <Header title={t("step4.title")} subtitle={t("step4.subtitle")} />
 
       {menuUrl && (
-        <div className="flex justify-center mb-6">
-          <div className="w-[160px] h-[160px] bg-card rounded-2xl p-3 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-[180px] h-[180px] bg-white rounded-2xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
             <QRCodeSVG
               value={menuUrl}
-              size={136}
+              size={140}
               bgColor="#ffffff"
               fgColor="#000000"
               level="M"
             />
           </div>
+          <p className="text-xs text-muted-foreground text-center mt-3">{t("step4.tip")}</p>
         </div>
       )}
 

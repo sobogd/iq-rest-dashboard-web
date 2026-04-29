@@ -19,6 +19,8 @@ export type View =
   | { name: "settings.branding" }
   | { name: "settings.general" }
   | { name: "settings.tables" }
+  | { name: "settings.tables.new" }
+  | { name: "settings.tables.edit"; id: string }
   | { name: "settings.orders" }
   | { name: "settings.bookings" }
   | { name: "settings.languages" }

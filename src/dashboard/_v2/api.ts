@@ -426,18 +426,22 @@ export async function fetchSubscriptionStatus(): Promise<{
  billingCycle: string | null;
  trialEndsAt: string | null;
 } | null> {
- const res = await fetch("/api/subscription/status", { cache: "no-store" });
+ const res = await fetch("/api/restaurant/subscription", { cache: "no-store" });
  if (!res.ok) return null;
  return await res.json();
 }
 
-export async function createCheckoutSession(plan: "BASIC" | "PRO", cycle: "MONTHLY" | "YEARLY"): Promise<string | null> {
+export async function createCheckoutSession(
+ plan: "BASIC" | "PRO",
+ cycle: "MONTHLY" | "YEARLY",
+ currency?: string,
+): Promise<string | null> {
  const priceLookupKey = cycle === "YEARLY" ? "basic_yearly" : "basic_monthly";
  const locale = typeof window !== "undefined" ? (window.location.pathname.match(/^\/([a-z]{2})\b/)?.[1] || "en") : "en";
  const res = await fetch("/api/stripe/checkout", {
  method: "POST",
  headers: { "Content-Type": "application/json" },
- body: JSON.stringify({ priceLookupKey, locale }),
+ body: JSON.stringify({ priceLookupKey, locale, currency }),
  });
  if (!res.ok) {
  const text = await res.text().catch(() => "");

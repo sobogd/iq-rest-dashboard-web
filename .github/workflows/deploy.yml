@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Create .env
+        run: |
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          echo "VITE_APP_URL=${{ secrets.VITE_APP_URL }}" >> .env
+          echo "VITE_PUBLIC_MENU_URL=${{ secrets.VITE_PUBLIC_MENU_URL }}" >> .env
+          echo "VITE_ADMIN_EMAIL_DOMAIN=${{ secrets.VITE_ADMIN_EMAIL_DOMAIN }}" >> .env
+          echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" >> .env
+
+      - name: Build
+        run: npm run build
+
+      - name: Stage build as dashboard/
+        run: |
+          rm -rf dashboard
+          mv dist dashboard
+
+      - name: Copy build to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: deployer
+          key: ${{ secrets.SSH_KEY }}
+          source: "dashboard/"
+          target: "/home/deploy/apps/iq-rest-dashboard"
+          rm: true
+          overwrite: true

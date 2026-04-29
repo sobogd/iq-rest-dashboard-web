@@ -11,6 +11,7 @@ import {
  SettingsIcon,
 } from "./icons";
 import { RestaurantProvider } from "./restaurant-context";
+import { SubProvider, type Sub } from "./sub-context";
 import type { Restaurant, TabId } from "./types";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
 import { useDashboardRouter } from "../_spa/router";
@@ -56,9 +57,11 @@ function viewToTab(viewName: string): TabId {
 
 export function DashboardChrome({
  restaurant,
+ sub,
  children,
 }: {
  restaurant: Restaurant;
+ sub: Sub;
  children: ReactNode;
 }) {
  // Always-on vertical scrollbar prevents layout shift on collapse/expand.
@@ -79,18 +82,22 @@ export function DashboardChrome({
  // Auth & onboarding render fullscreen — no top/bottom dashboard nav.
  return (
  <RestaurantProvider restaurant={restaurant}>
+ <SubProvider sub={sub}>
  <div className="min-h-screen bg-background antialiased tracking-tight">{children}</div>
+ </SubProvider>
  </RestaurantProvider>
  );
  }
 
  return (
  <RestaurantProvider restaurant={restaurant}>
+ <SubProvider sub={sub}>
  <div className="min-h-screen bg-secondary antialiased tracking-tight">
  <TopBar restaurant={restaurant} activeTab={activeTab} />
  <main className="px-4 md:px-6 py-5 md:py-4 pb-24 md:pb-10">{children}</main>
  <BottomNav activeTab={activeTab} />
  </div>
+ </SubProvider>
  </RestaurantProvider>
  );
 }

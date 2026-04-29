@@ -13,7 +13,7 @@ void i18n
     nonExplicitSupportedLngs: true,
     load: "languageOnly",
     debug: false,
-    interpolation: { escapeValue: false },
+    interpolation: { escapeValue: false, prefix: "{", suffix: "}" },
     resources: {
       en: { translation: en },
       es: { translation: es },

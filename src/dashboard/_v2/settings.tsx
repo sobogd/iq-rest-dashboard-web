@@ -26,6 +26,7 @@ import {
  updateRestaurantLanguages,
  type ApiSupportMessage,
 } from "./api";
+import { useRestaurant } from "./restaurant-context";
 import type { Booking, Order, Restaurant, TableEntity } from "./types";
 import { DashboardEvent, track } from "@/lib/dashboard-events";
 
@@ -91,7 +92,6 @@ export function AboutSettingsPage({
  const [draft, setDraft] = useState({
  name: restaurant.name,
  subtitle: restaurant.subtitle,
- showTitleOnHomepage: restaurant.showTitleOnHomepage,
  });
 
  useEffect(() => {
@@ -106,20 +106,18 @@ export function AboutSettingsPage({
  if (!canSave) return;
  try {
  await updateRestaurant({
- title: draft.name.trim(),
- subtitle: draft.subtitle.trim() || null,
- hideTitle: !draft.showTitleOnHomepage,
- });
+    title: draft.name.trim(),
+    subtitle: draft.subtitle.trim() || null,
+   });
  } catch {
  track(DashboardEvent.ERROR_SAVE);
  return;
  }
  setRestaurant((r) => ({
- ...r,
- name: draft.name.trim(),
- subtitle: draft.subtitle.trim(),
- showTitleOnHomepage: draft.showTitleOnHomepage,
- }));
+    ...r,
+    name: draft.name.trim(),
+    subtitle: draft.subtitle.trim(),
+   }));
  onBack();
  }
 
@@ -132,7 +130,7 @@ export function AboutSettingsPage({
  <h2 className="text-xl font-medium text-foreground mt-1">{ta("title")}</h2>
  </div>
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <label htmlFor="about-title" className="block text-sm font-medium text-foreground mb-1.5">{ta("titleLabel")}</label>
+ <label htmlFor="about-title" className="block text-sm font-medium text-foreground mb-2.5">{ta("titleLabel")}</label>
  <input
  id="about-title"
  type="text"
@@ -141,8 +139,7 @@ export function AboutSettingsPage({
  placeholder={ta("titlePlaceholder")}
  className={inputClass}
  />
- <Divider />
- <label htmlFor="about-subtitle" className="block text-sm font-medium text-foreground mb-1.5">{ta("subtitleLabel")}</label>
+ <label htmlFor="about-subtitle" className="block text-sm font-medium text-foreground mb-2.5 mt-4">{ta("subtitleLabel")}</label>
  <input
  id="about-subtitle"
  type="text"
@@ -152,20 +149,7 @@ export function AboutSettingsPage({
  className={inputClass}
  />
  </div>
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 mt-3">
- <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
- <div>
- <div className="text-sm font-medium text-foreground">{ta("showTitleLabel")}</div>
- <div className="text-xs text-muted-foreground leading-snug mt-0.5">
- {ta("showTitleTip")}
- </div>
- </div>
- <ToggleSwitch
- checked={draft.showTitleOnHomepage}
- onChange={() => setDraft((d) => ({ ...d, showTitleOnHomepage: !d.showTitleOnHomepage }))}
- />
- </label>
- </div>
+ 
  </div>
  </div>
  );
@@ -233,13 +217,14 @@ export function ContactsSettingsPage({
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tc("title")}</h2>
  </div>
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-start">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{tc("contactsHeader")}</div>
  <p className="text-xs text-muted-foreground mb-4 mt-0.5 leading-snug">
  {tc("contactsTip")}
  </p>
 
- <label htmlFor="con-phone" className="block text-sm font-medium text-foreground mb-1.5">{tc("phoneLabel")}</label>
+ <label htmlFor="con-phone" className="block text-sm font-medium text-foreground mb-2.5">{tc("phoneLabel")}</label>
  <input
  id="con-phone"
  type="tel"
@@ -249,7 +234,7 @@ export function ContactsSettingsPage({
  className={inputClass}
  />
 
- <label htmlFor="con-ig" className="block text-sm font-medium text-foreground mb-1.5 mt-3">{tc("instagramLabel")}</label>
+ <label htmlFor="con-ig" className="block text-sm font-medium text-foreground mb-2.5 mt-3">{tc("instagramLabel")}</label>
  <div className="relative">
  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">@</span>
  <input
@@ -267,7 +252,7 @@ export function ContactsSettingsPage({
  />
  </div>
 
- <label htmlFor="con-wa" className="block text-sm font-medium text-foreground mb-1.5 mt-3">{tc("whatsappLabel")}</label>
+ <label htmlFor="con-wa" className="block text-sm font-medium text-foreground mb-2.5 mt-3">{tc("whatsappLabel")}</label>
  <input
  id="con-wa"
  type="tel"
@@ -278,7 +263,7 @@ export function ContactsSettingsPage({
  />
  </div>
 
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 mt-3">
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{tc("locationHeader")}</div>
  <p className="text-xs text-muted-foreground mb-4 mt-0.5 leading-snug">
  {tc("locationTip")}
@@ -292,6 +277,7 @@ export function ContactsSettingsPage({
  setDraft((d) => ({ ...d, location: { ...d.location, lat, lng } }))
  }
  />
+ </div>
  </div>
  </div>
  </div>
@@ -316,6 +302,7 @@ export function BrandingSettingsPage({
  backgroundUrl: restaurant.backgroundUrl,
  backgroundType: restaurant.backgroundType,
  accentColor: restaurant.accentColor,
+ showTitleOnHomepage: restaurant.showTitleOnHomepage,
  });
  const fileInputRef = useRef<HTMLInputElement | null>(null);
  const colorPickerRef = useRef<HTMLInputElement | null>(null);
@@ -334,6 +321,7 @@ export function BrandingSettingsPage({
  source: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
+    hideTitle: !draft.showTitleOnHomepage,
  });
  } catch {
  track(DashboardEvent.ERROR_SAVE);
@@ -344,6 +332,7 @@ export function BrandingSettingsPage({
  backgroundUrl: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
+    showTitleOnHomepage: draft.showTitleOnHomepage,
  }));
  onBack();
  }
@@ -380,14 +369,15 @@ export function BrandingSettingsPage({
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tb("title")}</h2>
  </div>
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-start">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{tb("accentLabel")}</div>
  <p className="text-xs text-muted-foreground mb-3 mt-0.5 leading-snug">
  {tb("accentTip")}
  </p>
  <style>{`
- .accent-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.5rem; }
- @media (min-width: 768px) { .accent-grid { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 0.5rem; } }
+ .accent-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.5rem; }
+ @media (min-width: 768px) { .accent-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.5rem; } }
  `}</style>
  <div className="accent-grid">
  {ACCENT_COLORS.map((c) => {
@@ -433,9 +423,21 @@ export function BrandingSettingsPage({
  aria-hidden="true"
  />
  </div>
-
  <Divider />
-
+ <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
+ <div>
+ <div className="text-sm font-medium text-foreground">{tb("showTitleLabel")}</div>
+ <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+ {tb("showTitleTip")}
+ </div>
+ </div>
+ <ToggleSwitch
+ checked={draft.showTitleOnHomepage}
+ onChange={() => setDraft((d) => ({ ...d, showTitleOnHomepage: !d.showTitleOnHomepage }))}
+ />
+ </label>
+ </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="flex items-center justify-between gap-3 mb-2.5">
  <div className="text-sm font-medium text-foreground">{tb("backgroundLabel")}</div>
  <button
@@ -450,7 +452,7 @@ export function BrandingSettingsPage({
  <label
  htmlFor="brand-bg"
  className={
- "relative flex flex-col items-center justify-center gap-1.5 mx-auto aspect-[9/16] w-full max-w-xs border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden " +
+ "relative flex flex-col items-center justify-center gap-1.5 mx-auto my-3 aspect-[9/16] w-full max-w-[200px] md:max-w-[180px] border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden " +
  (draft.backgroundUrl
  ? "border-input p-0"
  : "border-input bg-secondary text-muted-foreground")
@@ -501,9 +503,10 @@ export function BrandingSettingsPage({
  onChange={handleBackground}
  />
  </label>
- <p className="text-xs text-muted-foreground mt-2 leading-snug text-center">
+ <p className="text-xs text-muted-foreground mt-2 leading-snug">
  {tb("backgroundTip")}
  </p>
+ </div>
  </div>
  </div>
 
@@ -587,9 +590,9 @@ export function GeneralSettingsPage({
  <h2 className="text-xl font-medium text-foreground mt-1">{tg("title")}</h2>
  </div>
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <label htmlFor="gen-slug" className="block text-sm font-medium text-foreground mb-1.5">{tg("menuLinkLabel")}</label>
- <div className="relative">
- <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
+ <label htmlFor="gen-slug" className="block text-sm font-medium text-foreground mb-2.5">{tg("menuLinkLabel")}</label>
+ <div className="relative flex items-center w-full h-10 bg-card border border-input rounded-lg overflow-hidden">
+ <span className="pl-3 text-sm text-muted-foreground whitespace-nowrap select-none">
  {getMenuUrlPrefix()}
  </span>
  <input
@@ -598,8 +601,7 @@ export function GeneralSettingsPage({
  value={draft.slug}
  onChange={(e) => setDraft((d) => ({ ...d, slug: slugify(e.target.value) }))}
  placeholder={tg("slugPlaceholder")}
- className={inputClass + " pr-10"}
- style={{ paddingLeft: `${getMenuUrlPrefix().length * 7.2 + 14}px` }}
+ className="flex-1 min-w-0 h-full px-0 text-sm text-foreground bg-transparent border-0 placeholder:text-muted-foreground focus:outline-none pr-10"
  />
  <button
  type="button"
@@ -620,7 +622,7 @@ export function GeneralSettingsPage({
 
  <Divider />
 
- <label htmlFor="gen-currency" className="block text-sm font-medium text-foreground mb-1.5">{tg("currencyLabel")}</label>
+ <label htmlFor="gen-currency" className="block text-sm font-medium text-foreground mb-2.5">{tg("currencyLabel")}</label>
  <select
  id="gen-currency"
  value={draft.currency}
@@ -719,7 +721,8 @@ export function OrderSettingsPage({
  </label>
  </div>
 
- <div className={"bg-card border border-border rounded-2xl p-5 md:p-6 mt-3 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-start mt-3">
+<div className={"bg-card border border-border rounded-2xl p-5 md:p-6 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
  <div>
  <div className="text-sm font-medium text-foreground">{to("modeLabel")}</div>
  <p className="text-xs text-muted-foreground mb-4 mt-0.5">
@@ -748,7 +751,7 @@ export function OrderSettingsPage({
  </div>
  </div>
 
- <div className={"bg-card border border-border rounded-2xl p-5 md:p-6 mt-3 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
+ <div className={"bg-card border border-border rounded-2xl p-5 md:p-6 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
  <div>
  <div className="text-sm font-medium text-foreground">{to("requiredFieldsLabel")}</div>
  <p className="text-xs text-muted-foreground mb-4 mt-0.5">
@@ -776,6 +779,7 @@ export function OrderSettingsPage({
  </div>
  </div>
  </div>
+</div>
  </div>
  );
 }
@@ -1002,19 +1006,19 @@ export function LanguagesSettingsPage({
  <div>
  <SubpageStickyBar onBack={onBack} onSave={save} canSave={canSave} />
  <div className="max-w-2xl mx-auto pt-5 md:pt-4">
- <div className="mb-5">
+ <div className="mb-5 flex items-start justify-between gap-3">
+ <div>
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tl("title")}</h2>
  </div>
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <div className="flex items-baseline justify-between gap-3 mb-0.5">
- <div className="text-sm font-medium text-foreground">{tl("availableLabel")}</div>
  {draft.languages.length > 0 ? (
- <span className="text-[11px] font-medium text-muted-foreground tabular-nums">
+ <span className="shrink-0 inline-flex items-center h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md tabular-nums">
  {draft.languages.length} {tc("selected")}
  </span>
  ) : null}
  </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
+ <div className="text-sm font-medium text-foreground mb-0.5">{tl("availableLabel")}</div>
  <p className="text-xs text-muted-foreground mb-3">
  {tl("availableTip")}
  </p>
@@ -1045,7 +1049,7 @@ export function LanguagesSettingsPage({
 
  <Divider />
 
- <label htmlFor="lang-default" className="block text-sm font-medium text-foreground mb-1.5">{tl("defaultLabel")}</label>
+ <label htmlFor="lang-default" className="block text-sm font-medium text-foreground mb-2.5">{tl("defaultLabel")}</label>
  <select
  id="lang-default"
  value={draft.defaultLang}
@@ -1088,6 +1092,7 @@ interface SubStatus {
 export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.billing");
+ const restaurant = useRestaurant();
  const [sub, setSub] = useState<SubStatus | null>(null);
  const [pendingPlan, setPendingPlan] = useState<{ plan: "BASIC" | "PRO"; cycle: "MONTHLY" | "YEARLY" } | null>(null);
 
@@ -1106,7 +1111,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  track(DashboardEvent.CLICKED_PLAN_UPGRADE, { plan, cycle });
  setPendingPlan({ plan, cycle });
  try {
- const url = await createCheckoutSession(plan, cycle);
+ const url = await createCheckoutSession(plan, cycle, restaurant.currency);
  if (url) window.location.href = url;
  else track(DashboardEvent.ERROR_CHECKOUT);
  } catch {
@@ -1337,7 +1342,7 @@ export function SupportPage({ onBack }: { onBack: () => void }) {
 
  <div
  ref={scrollRef}
- className="bg-card border border-border rounded-2xl overflow-y-auto p-4 space-y-3 flex-1 min-h-0"
+ className="bg-card border border-border rounded-2xl overflow-y-auto p-4 space-y-3 flex-1 min-h-0 hide-scrollbar"
  >
  {messages.length === 0 ? (
  <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4">
@@ -1348,24 +1353,20 @@ export function SupportPage({ onBack }: { onBack: () => void }) {
  )}
  </div>
 
- <div className="mt-3 shrink-0 flex items-start gap-2 h-[70px]">
+ <div className="mt-3 shrink-0 flex flex-col gap-3">
  <textarea
  ref={taRef}
  value={input}
- onChange={(e) => {
- setInput(e.target.value);
- autoresize(e.currentTarget);
- }}
+ onChange={(e) => setInput(e.target.value)}
  onKeyDown={onInputKeyDown}
  placeholder={ts("placeholder")}
- rows={1}
- className="flex-1 h-[40px] min-h-[40px] max-h-[70px] px-3 py-2 text-sm leading-5 text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors resize-none box-border"
+ className="w-full h-[90px] px-4 py-3 text-sm leading-5 text-foreground bg-card border border-border rounded-2xl placeholder:text-muted-foreground focus:outline-none transition-colors resize-none box-border"
  />
  <button
  type="button"
  onClick={send}
  disabled={!input.trim() || sending}
- className="shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
+ className="w-full shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
  >
  {sending ? (
  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />

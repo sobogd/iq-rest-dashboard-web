@@ -34,6 +34,8 @@ interface SubData {
   plan: string | null;
   subscriptionStatus: string | null;
   trialEndsAt: string | null;
+  aiImagesUsed?: number;
+  aiImagesLimit?: number | null;
 }
 
 export function DashboardHost() {
@@ -97,14 +99,20 @@ export function DashboardHost() {
 
   const sub = subQ.data;
   const initialSub = sub
-    ? { plan: sub.plan, subscriptionStatus: sub.subscriptionStatus, trialEndsAt: sub.trialEndsAt }
+    ? {
+        plan: sub.plan,
+        subscriptionStatus: sub.subscriptionStatus,
+        trialEndsAt: sub.trialEndsAt,
+        aiImagesUsed: sub.aiImagesUsed ?? 0,
+        aiImagesLimit: sub.aiImagesLimit ?? null,
+      }
     : null;
 
   const uiRestaurant = apiRestaurantToRestaurant(restaurant);
 
   return (
     <DashboardSpaWrapper locale={locale || "en"}>
-      <DashboardChrome restaurant={uiRestaurant}>
+      <DashboardChrome restaurant={uiRestaurant} sub={initialSub}>
         <Shell
           initialCategories={initialCategories}
           initialOrders={initialOrders}

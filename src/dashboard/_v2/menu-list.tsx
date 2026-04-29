@@ -29,7 +29,7 @@ interface SubData {
  trialEndsAt: string | null;
 }
 
-export function MenuList({ initialCategories, initialSub = null }: { initialCategories: Category[]; initialSub?: SubData | null }) {
+export function MenuList({ initialCategories, initialSub = null, onPersisted }: { initialCategories: Category[]; initialSub?: SubData | null; onPersisted?: () => void }) {
  const t = useTranslations("dashboard.menu");
  const restaurant = useRestaurant();
  const router = useDashboardRouter();
@@ -95,6 +95,7 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  setCategories(next);
  try {
  await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })));
+ onPersisted?.();
  } catch {
  track(DashboardEvent.ERROR_SORT);
  }
@@ -113,6 +114,7 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  );
  try {
  await reorderItem(dish.id, dir < 0 ? "up" : "down");
+ onPersisted?.();
  } catch {
  track(DashboardEvent.ERROR_SORT);
  }
@@ -136,6 +138,7 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  );
  try {
  await patchItem(dishId, { isActive: nextVisible });
+ onPersisted?.();
  } catch {
  track(DashboardEvent.ERROR_TOGGLE);
  setCategories((cats) =>
@@ -154,10 +157,10 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  return (
  <>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card/90 backdrop-blur-md border-b border-border"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {menuUrl ? (
  <span onClickCapture={() => track(DashboardEvent.CLICKED_PREVIEW_MENU)}>
@@ -173,16 +176,13 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  />
  ) : null}
  </div>
- {categories.length > 0 ? (
- <button
- type="button"
- onClick={allOpen ? collapseAll : expandAll}
- className="inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium text-muted-foreground rounded-lg transition-colors shrink-0"
- >
- {allOpen ? <CollapseIcon size={14} /> : <ExpandIcon size={14} />}
- {allOpen ? t("collapse") : t("expand")}
- </button>
- ) : null}
+ <SubscriptionChip
+ sub={sub}
+ onClick={() => {
+ track(DashboardEvent.CLICKED_SUBSCRIPTION_CHIP);
+ router.push({ name: "settings.billing" });
+ }}
+ />
  </div>
  </div>
 
@@ -191,13 +191,16 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  title={t("title")}
  subtitle={t("subtitle")}
  action={
- <SubscriptionChip
- sub={sub}
- onClick={() => {
- track(DashboardEvent.CLICKED_SUBSCRIPTION_CHIP);
- router.push({ name: "settings.billing" });
- }}
- />
+ categories.length > 0 ? (
+ <button
+ type="button"
+ onClick={allOpen ? collapseAll : expandAll}
+ className="inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium text-muted-foreground rounded-lg transition-colors shrink-0"
+ >
+ {allOpen ? <CollapseIcon size={14} /> : <ExpandIcon size={14} />}
+ {allOpen ? t("collapse") : t("expand")}
+ </button>
+ ) : null
  }
  />
 
@@ -245,7 +248,7 @@ export function MenuList({ initialCategories, initialSub = null }: { initialCate
  track(DashboardEvent.CLICKED_ADD_CATEGORY);
  router.push({ name: "category.new" });
  }}
- className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addCategory")}
@@ -372,7 +375,7 @@ function CategoryAccordion({
  track(DashboardEvent.CLICKED_ADD_ITEM);
  router.push({ name: "item.new", categoryId: category.id });
  }}
- className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground transition-colors border-t border-border"
+ className="w-full flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
  >
  <span className="w-8 h-8 flex items-center justify-center shrink-0">
  <PlusIcon size={14} />

@@ -39,6 +39,10 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/general";
     case "settings.tables":
       return "/dashboard/settings/tables";
+    case "settings.tables.new":
+      return "/dashboard/settings/tables/new";
+    case "settings.tables.edit":
+      return `/dashboard/settings/tables/${view.id}/edit`;
     case "settings.orders":
       return "/dashboard/settings/orders";
     case "settings.bookings":
@@ -96,6 +100,9 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/settings/branding") return { name: "settings.branding" };
   if (stripped === "/dashboard/settings/general") return { name: "settings.general" };
   if (stripped === "/dashboard/settings/tables") return { name: "settings.tables" };
+  if (stripped === "/dashboard/settings/tables/new") return { name: "settings.tables.new" };
+  const tableEdit = stripped.match(/^\/dashboard\/settings\/tables\/([^/]+)\/edit$/);
+  if (tableEdit) return { name: "settings.tables.edit", id: tableEdit[1] };
   if (stripped === "/dashboard/settings/orders") return { name: "settings.orders" };
   if (stripped === "/dashboard/settings/bookings") return { name: "settings.bookings" };
   if (stripped === "/dashboard/settings/languages") return { name: "settings.languages" };

@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useDashboardRouter } from "./router";
 import type { View } from "./types";
 
 import { MenuList } from "../_v2/menu-list";
 import { OrdersPage, KitchenPage } from "../_v2/orders";
 import { ReservationsPage } from "../_v2/reservations";
-import { TablesPage } from "../_v2/tables";
+import { TablesPage, TableFormPage } from "../_v2/tables";
 import { CategoryForm, DishForm, OptionForm } from "../_v2/forms";
 import { useRestaurant, useRestaurantOrNull } from "../_v2/restaurant-context";
 import { fetchCategories, fetchItems, fetchOrders, fetchReservations } from "../_v2/api";
@@ -38,7 +39,7 @@ import { SessionDetailPage } from "../_pages/session-detail";
 import { AuthPage } from "../../auth/auth-page";
 import { OnboardingClient } from "../../onboarding/onboarding-client";
 
-import type { Booking, Category, Dish, DishOption, Order, Restaurant, TableEntity } from "../_v2/types";
+import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
 
 export interface ShellInitialData {
   initialCategories: Category[];
@@ -72,7 +73,10 @@ function ShellBody(props: ShellInitialData) {
   const refreshMenu = useCallback(async () => {
     try {
       const [cats, its] = await Promise.all([fetchCategories(), fetchItems()]);
-      const built = buildCategories(cats as unknown as ApiCategory[], its as unknown as ApiItem[], defaultLang);
+      const items = ((its as unknown) as (Omit<ApiItem, "price"> & { price: number | string })[]).map(
+        (it) => ({ ...it, price: Number(it.price) }) as ApiItem,
+      );
+      const built = buildCategories(cats as unknown as ApiCategory[], items, defaultLang);
       setCategories(built);
     } catch {
       // ignore
@@ -153,7 +157,7 @@ function ViewSwitch(p: SwitchProps) {
     case "onboarding":
       return <OnboardingClient />;
     case "menu":
-      return <MenuList initialCategories={categories} initialSub={sub} />;
+      return <MenuList initialCategories={categories} initialSub={sub} onPersisted={refreshMenu} />;
     case "orders":
     case "orders.detail":
     case "orders.addItem" as never: // legacy; orders page handles its own internal nav
@@ -201,6 +205,31 @@ function ViewSwitch(p: SwitchProps) {
           bookings={bookings}
           menuUrl={restaurant.menuUrl}
           onBack={backToSettings}
+        />
+      );
+    case "settings.tables.new":
+      return (
+        <TableFormPage
+          mode="new"
+          tables={tables}
+          setTables={setTables}
+          orders={orders}
+          bookings={bookings}
+          menuUrl={restaurant.menuUrl}
+          onBack={() => router.push({ name: "settings.tables" })}
+        />
+      );
+    case "settings.tables.edit":
+      return (
+        <TableFormPage
+          mode="edit"
+          tableId={view.id}
+          tables={tables}
+          setTables={setTables}
+          orders={orders}
+          bookings={bookings}
+          menuUrl={restaurant.menuUrl}
+          onBack={() => router.push({ name: "settings.tables" })}
         />
       );
     case "settings.orders":
@@ -335,43 +364,49 @@ function NotMigrated({ label }: { label: string }) {
 }
 
 // ── Settings sub-view wrappers ──
-// Each sub-page needs local restaurant draft state. onBack is supplied by Shell.
 
 interface BackProp { onBack: () => void }
 
-function SettingsAboutWrapper({ onBack }: BackProp) {
+/** Wraps Restaurant draft state and invalidates ["restaurant"] cache on every
+ *  setRestaurant call so Shell's RestaurantProvider re-renders with fresh
+ *  server data after any settings save. */
+function useRestaurantDraft(): [UIRestaurant, React.Dispatch<React.SetStateAction<UIRestaurant>>] {
   const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const qc = useQueryClient();
+  const [r, setR] = useState<UIRestaurant>(restaurant);
+  const setAndInvalidate: React.Dispatch<React.SetStateAction<UIRestaurant>> = (updater) => {
+    setR(updater);
+    void qc.invalidateQueries({ queryKey: ["restaurant"] });
+  };
+  return [r, setAndInvalidate];
+}
+
+function SettingsAboutWrapper({ onBack }: BackProp) {
+  const [r, setR] = useRestaurantDraft();
   return <AboutSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsContactsWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <ContactsSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsBrandingWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <BrandingSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsGeneralWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <GeneralSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsOrdersWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <OrderSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsBookingsWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <BookingSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsLanguagesWrapper({ onBack }: BackProp) {
-  const restaurant = useRestaurant();
-  const [r, setR] = useState(restaurant);
+  const [r, setR] = useRestaurantDraft();
   return <LanguagesSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
 }
 function SettingsBillingWrapper({ onBack }: BackProp) {

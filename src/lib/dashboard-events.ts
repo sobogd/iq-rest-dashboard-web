@@ -349,8 +349,40 @@ export function setDashboardUserId(userId: string) {
 }
 
 const SESSION_ID_KEY = "analytics_session_id";
+const SHARED_COOKIE_KEY = "analytics_sid";
 
+function readSharedCookie(): string | null {
+  if (typeof document === "undefined") return null;
+  const m = document.cookie.match(new RegExp(`(?:^|; )${SHARED_COOKIE_KEY}=([^;]*)`));
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+/** SessionId resolution:
+ *   1. `analytics_sid` cookie (issued by backend with Domain=.iq-rest.com so
+ *      it is shared between landing and dashboard subdomains).
+ *   2. `?sid=` query param (legacy hand-off from landing).
+ *   3. Legacy localStorage / sessionStorage.
+ *   4. Locally generated UUID — backend will overwrite via cookie on first event.
+ */
 function getSessionId(): string {
+  if (typeof window === "undefined") return "";
+
+  const cookieSid = readSharedCookie();
+  if (cookieSid) return cookieSid;
+
+  try {
+    const url = new URL(window.location.href);
+    const sidParam = url.searchParams.get("sid");
+    if (sidParam) {
+      localStorage.setItem(SESSION_ID_KEY, sidParam);
+      url.searchParams.delete("sid");
+      window.history.replaceState({}, "", url.toString());
+      return sidParam;
+    }
+  } catch {
+    // ignore
+  }
+
   let sessionId =
     localStorage.getItem(SESSION_ID_KEY) || sessionStorage.getItem(SESSION_ID_KEY);
   if (!sessionId) {
@@ -395,6 +427,7 @@ function trackReferral() {
 
   fetch("/api/analytics/event", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ event: `referral_${from}`, sessionId, meta: refMeta }),
     keepalive: true,
@@ -416,6 +449,7 @@ export function track(event: DashboardEvent, meta?: Record<string, string>) {
 
   fetch("/api/analytics/event", {
     method: "POST",
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ event, sessionId, ...(meta ? { meta } : {}) }),
     keepalive: true,
@@ -428,6 +462,7 @@ export function track(event: DashboardEvent, meta?: Record<string, string>) {
   if (_userId && event.startsWith("showed_")) {
     fetch("/api/analytics/link-session", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sessionId, userId: _userId }),
       keepalive: true,

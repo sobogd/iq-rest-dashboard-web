@@ -1124,7 +1124,7 @@ function DishWizard({
  ) : null}
 
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <label htmlFor="item-notes" className="block text-sm font-medium text-foreground mb-1.5">{t("notesLabel")}</label>
+ <label htmlFor="item-notes" className="block text-sm font-medium text-foreground mb-2.5">{t("notesLabel")}</label>
  <textarea
  id="item-notes"
  rows={2}

@@ -4,7 +4,7 @@ export const inputClass =
  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors";
 
 export const labelClass =
- "block text-xs font-medium text-foreground mb-1.5";
+ "block text-xs font-medium text-foreground mb-2.5";
 
 export const primaryBtn =
  "h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors";

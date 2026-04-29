@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import {
  CheckIcon,
@@ -14,6 +15,7 @@ import {
 } from "./icons";
 import { inputClass, labelClass, primaryBtn, secondaryBtn } from "./tokens";
 import { getMl, setMl, translateText } from "./i18n";
+import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 
@@ -350,7 +352,7 @@ export function TranslatedInput({
  return (
  <div>
  {(label || showTranslate) ? (
- <div className="flex items-center justify-between gap-2 mb-1.5">
+ <div className="flex items-center justify-between gap-2 mb-2.5">
  {label ? (
  <label htmlFor={id} className="block text-sm font-medium text-foreground">
  {label}
@@ -446,7 +448,7 @@ export function SubscriptionChip({
  <button
  type="button"
  onClick={onClick}
- className={"shrink-0 inline-flex items-center h-7 px-2.5 text-[11px] font-medium rounded-full border transition-colors " + cls}
+ className={"shrink-0 inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium rounded-md " + cls}
  >
  {label}
  </button>
@@ -531,17 +533,17 @@ export function SubpageStickyBar({
  }
  return (
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card/90 backdrop-blur-md border-b border-border"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <button
  type="button"
  onClick={onBack}
- className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
  >
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
- Back
+ {tc("back")}
  </button>
  <div className="flex items-center gap-2">
  {children}
@@ -550,14 +552,14 @@ export function SubpageStickyBar({
  type="button"
  onClick={handleSave}
  disabled={!canSave || saving}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors inline-flex items-center gap-1.5"
+ className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors inline-flex items-center gap-1"
  >
  {saving ? (
  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
  ) : (
  <CheckIcon size={14} />
  )}
- Save
+ {tc("save")}
  </button>
  ) : null}
  </div>
@@ -593,17 +595,17 @@ export function EditPageHeader({
  return (
  <>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card/90 backdrop-blur-md border-b border-border"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <button
  type="button"
  onClick={onBack}
- className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
  >
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
- Back
+ {tc("back")}
  </button>
  <div className="flex items-center gap-2">
  {onLangChange && languages && lang ? (
@@ -614,14 +616,14 @@ export function EditPageHeader({
  type="button"
  onClick={onSave}
  disabled={!canSave || saving}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors inline-flex items-center gap-1.5"
+ className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors inline-flex items-center gap-1"
  >
  {saving ? (
  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
  ) : (
  <CheckIcon size={14} />
  )}
- Save
+ {tc("save")}
  </button>
  ) : null}
  </div>
@@ -647,9 +649,9 @@ export function PreviewButton({ url }: { url: string }) {
  <button
  type="button"
  onClick={() => setOpen(true)}
- className="inline-flex items-center gap-1.5 h-7 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-full transition-colors"
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
  >
- <EyeIcon size={12} />
+ <EyeIcon size={14} />
  {t("preview")}
  </button>
  <MenuPreviewModal menuUrl={fullUrl} open={open} onOpenChange={setOpen} />
@@ -663,9 +665,9 @@ export function ShareButton({ onClick }: { onClick: () => void }) {
  <button
  type="button"
  onClick={onClick}
- className="inline-flex items-center gap-1.5 h-7 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-full transition-colors"
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
  >
- <ShareIcon size={12} />
+ <ShareIcon size={14} />
  {t("share")}
  </button>
  );
@@ -725,39 +727,25 @@ export function ShareModal({
  }
 
  return (
- <Modal open={open} onClose={onClose} title={tp("shareTitle", { name: restaurantName || tp("shareYourMenu") })}>
+ <Modal open={open} onClose={onClose} size="sm" title={tp("shareTitle", { name: restaurantName || tp("shareYourMenu") })}>
  <div className="flex justify-center">
- <div className="p-3 bg-card border border-border rounded-xl">
- <img src={qrSrc} alt={tc("qrCode")} width="192" height="192" className="block w-48 h-48" />
+ <div className="w-[180px] h-[180px] p-5 bg-white rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+ <img src={qrSrc} alt={tc("qrCode")} width="140" height="140" className="block w-[140px] h-[140px]" />
  </div>
  </div>
  <p className="text-xs text-muted-foreground text-center mt-3">
  {tp("tip")}
  </p>
- <div className="mt-5">
- <label className={labelClass}>{tc("menuLink")}</label>
- <div className="flex gap-2">
- <input
- type="text"
- readOnly
- value={fullUrl}
- onFocus={(e) => e.target.select()}
- className={inputClass + " font-mono text-xs"}
- />
+ <div className="mt-5 flex items-center justify-between gap-2 p-3 bg-secondary border border-border rounded-lg">
+ <span className="text-xs text-muted-foreground truncate">{fullUrl.replace(/^https?:\/\//, "")}</span>
  <button
  type="button"
  onClick={copyLink}
- className={
- "shrink-0 h-10 px-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-1.5 " +
- (copied
- ? "text-emerald-700 bg-emerald-50 border border-emerald-200"
- : "text-foreground bg-card border border-input")
- }
+ className="text-xs font-medium text-foreground hover:text-foreground/70 transition-colors flex items-center gap-1 flex-shrink-0"
  >
- {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
+ {copied ? <CheckIcon size={12} /> : <CopyIcon size={12} />}
  {copied ? tc("copied") : tc("copy")}
  </button>
- </div>
  </div>
  <div className="grid grid-cols-2 gap-2 mt-4">
  <button
@@ -950,7 +938,7 @@ export function PhotoPicker({
  return (
  <>
  {onAiClick ? (
- <div className="flex items-center justify-between gap-2 mb-1.5">
+ <div className="flex items-center justify-between gap-2 mb-2.5">
  <label className="block text-sm font-medium text-foreground">Photo</label>
  <button
  type="button"
@@ -983,7 +971,7 @@ export function PhotoPicker({
  e.preventDefault();
  remove();
  }}
- className="absolute top-0.5 right-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-black/50 text-white transition-colors z-10"
+ className="absolute top-0.5 right-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-black/50 text-white transition-colors"
  aria-label={tph("removePhoto")}
  >
  <CloseIcon size={11} />
@@ -1037,6 +1025,8 @@ export function AiImageModal({
 }) {
  const tc = useTranslations("dashboard.common");
  const ta = useTranslations("dashboard.ai");
+ const access = useAiImageAccess();
+ const qc = useQueryClient();
  const [prompt, setPrompt] = useState(defaultPrompt || "");
  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
  const [resultUrl, setResultUrl] = useState<string | null>(null);
@@ -1062,7 +1052,12 @@ export function AiImageModal({
  body: JSON.stringify({ prompt: prompt.trim(), ...(extraBody || {}) }),
  });
  if (!res.ok) {
+ if (res.status === 403) {
+ void qc.invalidateQueries({ queryKey: ["sub"] });
+ setError(ta("quotaExceededMessage", { limit: 5 }));
+ } else {
  setError(ta("errorGenerate"));
+ }
  setStatus("error");
  return;
  }
@@ -1074,6 +1069,7 @@ export function AiImageModal({
  }
  setResultUrl(data.url);
  setStatus("done");
+ void qc.invalidateQueries({ queryKey: ["sub"] });
  } catch {
  setError(ta("errorGenerate"));
  setStatus("error");
@@ -1090,6 +1086,25 @@ export function AiImageModal({
  const isLoading = status === "loading";
  const hasResult = status === "done" && resultUrl;
  const previewCls = aspect === "portrait" ? "aspect-[9/16] max-h-[40vh] mx-auto" : "aspect-square w-full max-w-[60vh] mx-auto";
+
+ if (access.kind === "exhausted" && !resultUrl) {
+ return (
+ <Modal open={open} onClose={onClose} title={title} size="sm">
+ <div className="flex flex-col items-center text-center gap-3 py-4">
+ <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
+ <SparklesIcon size={20} />
+ </div>
+ <div className="text-sm font-medium text-foreground">{ta("quotaExceededTitle")}</div>
+ <p className="text-xs text-muted-foreground max-w-xs">{ta("quotaExceededMessage", { limit: access.limit })}</p>
+ </div>
+ <div className="flex gap-2 mt-4">
+ <button type="button" onClick={onClose} className={primaryBtn + " flex-1"}>
+ {tc("close")}
+ </button>
+ </div>
+ </Modal>
+ );
+ }
 
  return (
  <Modal open={open} onClose={onClose} title={title} size="sm">
@@ -1122,6 +1137,11 @@ export function AiImageModal({
  <p className="text-[11px] text-muted-foreground mt-1">
  {ta("promptTip")}
  </p>
+ {access.kind === "limited" ? (
+ <p className="text-[11px] text-muted-foreground mt-1">
+ {ta("quotaRemaining", { remaining: access.remaining, limit: access.limit })}
+ </p>
+ ) : null}
 
  {error ? <p className="text-xs text-red-600 mt-3">{error}</p> : null}
 
@@ -1131,7 +1151,7 @@ export function AiImageModal({
  <button
  type="button"
  onClick={generate}
- disabled={isLoading || !prompt.trim()}
+ disabled={isLoading || !prompt.trim() || access.kind === "exhausted"}
  className={secondaryBtn + " flex-1 inline-flex items-center justify-center gap-1.5"}
  >
  <SparklesIcon size={13} />

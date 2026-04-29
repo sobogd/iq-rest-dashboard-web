@@ -421,7 +421,7 @@ export function DishForm({
 
  <div className="max-w-2xl mx-auto space-y-3">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <div className="flex flex-col md:flex-row gap-5">
+ <div className="flex flex-col-reverse md:flex-row-reverse gap-4 md:gap-5">
  <div className="w-full md:w-40 shrink-0">
  <PhotoPicker
  url={form.photoUrl}
@@ -433,7 +433,7 @@ export function DishForm({
  />
  </div>
  <div className="flex-1 min-w-0">
- <div className="flex gap-3 items-start mb-4">
+ <div className="flex gap-5 items-start mb-4">
  <div className="flex-1 min-w-0">
  <TranslatedInput
  id="dish-name"
@@ -447,7 +447,7 @@ export function DishForm({
  />
  </div>
  <div className="w-24 shrink-0">
- <label htmlFor="dish-price" className="block text-sm font-medium text-foreground mb-1.5">
+ <label htmlFor="dish-price" className="block text-sm font-medium text-foreground mb-2.5">
  {t("priceLabel")}
  </label>
  <div className="relative">
@@ -500,10 +500,10 @@ export function DishForm({
  type="button"
  onClick={() => toggleAllergen(a.code)}
  className={
- "h-7 px-2.5 text-xs font-medium rounded-full transition-colors " +
+ "inline-flex items-center h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
  (checked
  ? "bg-foreground text-background"
- : "bg-secondary text-foreground")
+ : "bg-secondary text-muted-foreground")
  }
  >
  {tAllergens(a.code as never)}
