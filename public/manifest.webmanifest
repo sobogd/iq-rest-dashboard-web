@@ -1,0 +1,23 @@
+{
+  "name": "IQ Rest - QR Menu for Restaurant & Cafe",
+  "short_name": "IQ Rest",
+  "description": "Create professional QR menu for restaurant and cafe in minutes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
