@@ -539,7 +539,7 @@ export function EmptyState({
  action?: ReactNode;
 }) {
  return (
- <div className="bg-card border border-border rounded-xl p-8 md:p-12 flex flex-col items-center text-center">
+ <div className="bg-card border border-border rounded-xl p-8 md:p-12 min-h-[280px] flex flex-col items-center justify-center text-center">
  <h3 className="text-base font-medium text-foreground">{title}</h3>
  {subtitle ? (
  <p className="text-sm text-muted-foreground leading-snug mt-1.5 max-w-sm">{subtitle}</p>

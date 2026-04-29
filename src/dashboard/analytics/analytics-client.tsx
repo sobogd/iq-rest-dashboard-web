@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { EmptyState, PageHeader } from "../_v2/ui";
@@ -70,32 +70,21 @@ export function AnalyticsClient() {
  <PageHeader
  title={t("title")}
  subtitle={t("subtitle")}
+ action={
+ <PeriodDropdown
+ period={period}
+ onChange={(p) => {
+ track(DashboardEvent.CHANGED_ANALYTICS_PERIOD, { period: p });
+ setPeriod(p);
+ }}
+ />
+ }
  />
 
- <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg mb-5">
- {PERIODS.map((p) => {
- const active = period === p.id;
- return (
- <button
- key={p.id}
- type="button"
- onClick={() => {
- track(DashboardEvent.CHANGED_ANALYTICS_PERIOD, { period: p.id });
- setPeriod(p.id);
- }}
- className={
- "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
- (active ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
- }
- >
- {t(p.labelKey)}
- </button>
- );
- })}
- </div>
-
  {loading && !stats ? (
- <SkeletonGrid />
+ <div className="bg-card border border-border rounded-xl min-h-[280px] flex items-center justify-center">
+ <div className="w-5 h-5 border-2 border-input border-t-foreground rounded-full animate-spin" />
+ </div>
  ) : !stats || stats.totalViews === 0 ? (
  <EmptyState
  title={t("noData")}
@@ -109,6 +98,82 @@ export function AnalyticsClient() {
  <PageBreakdown byPage={stats.byPage} />
  </div>
  )}
+ </div>
+ );
+}
+
+function PeriodDropdown({
+ period,
+ onChange,
+}: {
+ period: string;
+ onChange: (id: string) => void;
+}) {
+ const t = useTranslations("dashboard.analyticsDashboard");
+ const [open, setOpen] = useState(false);
+ const ref = useRef<HTMLDivElement | null>(null);
+
+ useEffect(() => {
+ if (!open) return;
+ function onDocClick(e: MouseEvent) {
+ if (!ref.current) return;
+ if (!ref.current.contains(e.target as Node)) setOpen(false);
+ }
+ function onEsc(e: KeyboardEvent) {
+ if (e.key === "Escape") setOpen(false);
+ }
+ document.addEventListener("mousedown", onDocClick);
+ document.addEventListener("keydown", onEsc);
+ return () => {
+ document.removeEventListener("mousedown", onDocClick);
+ document.removeEventListener("keydown", onEsc);
+ };
+ }, [open]);
+
+ const active = PERIODS.find((p) => p.id === period) || PERIODS[0];
+
+ return (
+ <div ref={ref} className="relative">
+ <button
+ type="button"
+ onClick={() => setOpen((v) => !v)}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium bg-secondary text-foreground rounded-md transition-colors"
+ aria-haspopup="listbox"
+ aria-expanded={open}
+ >
+ <span>{t(active.labelKey)}</span>
+ <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+ <polyline points="6 9 12 15 18 9" />
+ </svg>
+ </button>
+ {open ? (
+ <div
+ role="listbox"
+ className="absolute right-0 mt-1 z-20 min-w-[140px] bg-card border border-border rounded-lg shadow-lg py-1"
+ >
+ {PERIODS.map((p) => {
+ const isActive = p.id === period;
+ return (
+ <button
+ key={p.id}
+ type="button"
+ role="option"
+ aria-selected={isActive}
+ onClick={() => {
+ onChange(p.id);
+ setOpen(false);
+ }}
+ className={
+ "w-full text-left px-3 h-8 text-[12px] transition-colors " +
+ (isActive ? "text-foreground" : "text-muted-foreground")
+ }
+ >
+ {t(p.labelKey)}
+ </button>
+ );
+ })}
+ </div>
+ ) : null}
  </div>
  );
 }
@@ -267,16 +332,3 @@ function LimitCard({ stats }: { stats: Stats }) {
  );
 }
 
-function SkeletonGrid() {
- return (
- <div className="space-y-4">
- <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
- {Array.from({ length: 4 }).map((_, i) => (
- <div key={i} className="bg-card border border-border rounded-2xl p-4 h-20 animate-pulse" />
- ))}
- </div>
- <div className="bg-card border border-border rounded-2xl p-4 h-44 animate-pulse" />
- <div className="bg-card border border-border rounded-2xl p-4 h-32 animate-pulse" />
- </div>
- );
-}

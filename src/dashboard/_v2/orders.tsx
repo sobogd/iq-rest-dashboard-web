@@ -230,20 +230,13 @@ export function OrdersPage({
  if (tables.length === 0) {
  return (
  <div className="max-w-2xl mx-auto">
- <PageHeader title={t("title")} />
+ <PageHeader
+ title={t("title")}
+ subtitle={activeOrders.length === 1 ? t("subtitleOne", { count: activeOrders.length }) : t("subtitleOther", { count: activeOrders.length })}
+ />
  <EmptyState
  title={t("noTablesTitle")}
  subtitle={t("noTablesSub")}
- action={
- <button
- type="button"
- onClick={() => router.push("/dashboard/settings/tables")}
- className="inline-flex items-center gap-1.5 h-9 px-4 text-sm font-medium text-background bg-foreground rounded-lg transition-colors"
- >
- <PlusIcon size={14} />
- {t("manageTables")}
- </button>
- }
  />
  </div>
  );
