@@ -171,9 +171,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {menuUrl ? (
- <span onClickCapture={() => track(DashboardEvent.CLICKED_PREVIEW_MENU)}>
- <PreviewButton url={menuUrl} />
- </span>
+ <PreviewButton url={menuUrl} onOpen={() => track(DashboardEvent.CLICKED_PREVIEW_MENU)} />
  ) : null}
  {menuUrl ? (
  <ShareButton

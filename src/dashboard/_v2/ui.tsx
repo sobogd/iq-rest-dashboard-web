@@ -712,7 +712,7 @@ export function EditPageHeader({
 
 // PreviewButton + ShareButton (used on Menu page sticky bar).
 
-export function PreviewButton({ url }: { url: string }) {
+export function PreviewButton({ url, onOpen }: { url: string; onOpen?: () => void }) {
  const t = useTranslations("dashboard.preview");
  const [open, setOpen] = useState(false);
  const fullUrl = url.startsWith("http") ? url : "https://" + url;
@@ -720,7 +720,10 @@ export function PreviewButton({ url }: { url: string }) {
  <>
  <button
  type="button"
- onClick={() => setOpen(true)}
+ onClick={() => {
+ onOpen?.();
+ setOpen(true);
+ }}
  className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors"
  >
  <EyeIcon size={14} />
