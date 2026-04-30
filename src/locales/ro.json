@@ -92,7 +92,24 @@
       "editCategory": "Editează categoria",
       "editDish": "Editează preparatul",
       "hideDish": "Ascunde preparatul",
-      "showDish": "Afișează preparatul"
+      "showDish": "Afișează preparatul",
+      "onboarding": {
+        "step": {
+          "addCategory": "Acest buton adaugă o categorie nouă — o secțiune a meniului, ca Deserturi, Băuturi sau Feluri principale. Categoriile grupează preparatele.",
+          "addDish": "Aici se adaugă preparate într-o categorie. Fiecare preparat are propriul nume, preț și detalii.",
+          "edit": "Aceeași pictogramă creion apare lângă fiecare categorie și fiecare preparat. La o categorie, deschide ecranul de redenumire. La un preparat, un editor complet — nume, preț, fotografie, descriere, alergeni și traduceri în alte limbi.",
+          "toggleDish": "Această pictogramă ochi ascunde un preparat oaspeților fără a-l șterge — util când ceva s-a terminat pe ziua de azi.",
+          "sort": "Aceste săgeți reordonează categoriile și preparatele. Ceea ce este sus este văzut primul de oaspeți.",
+          "preview": "Previzualizare deschide o vizualizare live a meniului — arată exact ceea ce văd oaspeții când scanează codul QR.",
+          "share": "Partajare îți oferă link-ul și codul QR al meniului. Tipărește QR și pune-l pe mese."
+        },
+        "button": {
+          "continue": "Continuă",
+          "done": "Gata",
+          "back": "Înapoi",
+          "close": "Închide ghidul"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Categorie nouă",

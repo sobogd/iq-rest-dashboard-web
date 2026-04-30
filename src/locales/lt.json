@@ -92,7 +92,24 @@
       "editCategory": "Redaguoti kategoriją",
       "editDish": "Redaguoti patiekalą",
       "hideDish": "Slėpti patiekalą",
-      "showDish": "Rodyti patiekalą"
+      "showDish": "Rodyti patiekalą",
+      "onboarding": {
+        "step": {
+          "addCategory": "Šis mygtukas prideda naują kategoriją — meniu skiltį, pvz., Desertai, Gėrimai ar Pagrindiniai patiekalai. Kategorijos grupuoja patiekalus.",
+          "addDish": "Čia patiekalai pridedami į kategoriją. Kiekvienas patiekalas turi savo pavadinimą, kainą ir detales.",
+          "edit": "Ta pati pieštuko piktograma rodoma šalia kiekvienos kategorijos ir kiekvieno patiekalo. Kategorijai ji atveria pervadinimo langą. Patiekalui — pilną redaktorių: pavadinimas, kaina, nuotrauka, aprašymas, alergenai ir vertimai į kitas kalbas.",
+          "toggleDish": "Ši akies piktograma slepia patiekalą nuo svečių jo neištrinant — naudinga, kai kažkas išpirkta dienai.",
+          "sort": "Šios rodyklės pertvarko kategorijas ir patiekalus. Esančius viršuje svečiai mato pirmus.",
+          "preview": "Peržiūra atveria gyvą jūsų meniu vaizdą — ji rodo būtent tai, ką svečiai mato nuskaitę QR kodą.",
+          "share": "Dalintis suteikia jūsų meniu nuorodą ir QR kodą. Atspausdinkite QR ir padėkite ant stalų."
+        },
+        "button": {
+          "continue": "Tęsti",
+          "done": "Atlikta",
+          "back": "Atgal",
+          "close": "Uždaryti įvadą"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nauja kategorija",

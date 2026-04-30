@@ -92,7 +92,24 @@
       "editCategory": "Edytuj kategorię",
       "editDish": "Edytuj danie",
       "hideDish": "Ukryj danie",
-      "showDish": "Pokaż danie"
+      "showDish": "Pokaż danie",
+      "onboarding": {
+        "step": {
+          "addCategory": "Ten przycisk dodaje nową kategorię — sekcję twojego menu, taką jak Desery, Napoje lub Dania główne. Kategorie grupują dania.",
+          "addDish": "Tutaj dania są dodawane do kategorii. Każde danie ma własną nazwę, cenę i szczegóły.",
+          "edit": "Ta sama ikona ołówka pojawia się obok każdej kategorii i każdego dania. Dla kategorii otwiera ekran zmiany nazwy. Dla dania pełny edytor — nazwa, cena, zdjęcie, opis, alergeny i tłumaczenia na inne języki.",
+          "toggleDish": "Ta ikona oka ukrywa danie przed gośćmi bez usuwania go — przydatne, gdy coś się wyprzedało na dzisiaj.",
+          "sort": "Te strzałki zmieniają kolejność kategorii i dań. To, co jest na górze, goście widzą pierwsze.",
+          "preview": "Podgląd otwiera widok na żywo twojego menu — pokazuje dokładnie to, co widzą goście po zeskanowaniu kodu QR.",
+          "share": "Udostępnij daje link i kod QR twojego menu. Wydrukuj QR i połóż na stolikach."
+        },
+        "button": {
+          "continue": "Dalej",
+          "done": "Gotowe",
+          "back": "Wstecz",
+          "close": "Zamknij wprowadzenie"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nowa kategoria",

@@ -92,7 +92,24 @@
       "editCategory": "Editar categoria",
       "editDish": "Editar prato",
       "hideDish": "Ocultar prato",
-      "showDish": "Mostrar prato"
+      "showDish": "Mostrar prato",
+      "onboarding": {
+        "step": {
+          "addCategory": "Este botão adiciona uma nova categoria — uma secção do seu menu como Sobremesas, Bebidas ou Pratos principais. As categorias agrupam os pratos.",
+          "addDish": "É aqui que os pratos são adicionados a uma categoria. Cada prato tem o seu próprio nome, preço e detalhes.",
+          "edit": "O mesmo ícone de lápis aparece ao lado de cada categoria e de cada prato. Numa categoria abre o ecrã de renomear. Num prato abre um editor completo — nome, preço, foto, descrição, alérgenos e traduções para outras línguas.",
+          "toggleDish": "Este ícone de olho oculta um prato aos clientes sem o eliminar — útil quando algo se esgotou no dia.",
+          "sort": "Estas setas reordenam categorias e pratos. Os que estão no topo são vistos primeiro pelos clientes.",
+          "preview": "Pré-visualizar abre uma vista ao vivo do seu menu — mostra exatamente o que os clientes veem ao digitalizar o código QR.",
+          "share": "Partilhar dá-lhe o link e o código QR do seu menu. Imprima o QR e coloque-o nas mesas."
+        },
+        "button": {
+          "continue": "Continuar",
+          "done": "Concluído",
+          "back": "Voltar",
+          "close": "Fechar a introdução"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nova categoria",

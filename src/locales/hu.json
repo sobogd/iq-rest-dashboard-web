@@ -92,7 +92,24 @@
       "editCategory": "Kategória szerkesztése",
       "editDish": "Étel szerkesztése",
       "hideDish": "Étel elrejtése",
-      "showDish": "Étel megjelenítése"
+      "showDish": "Étel megjelenítése",
+      "onboarding": {
+        "step": {
+          "addCategory": "Ez a gomb új kategóriát ad hozzá — az étlap egy szakasza, mint Desszertek, Italok vagy Főételek. A kategóriák csoportosítják az ételeket.",
+          "addDish": "Itt lehet ételeket egy kategóriához adni. Minden étel saját névvel, árral és részletekkel rendelkezik.",
+          "edit": "Ugyanaz a ceruza ikon jelenik meg minden kategória és minden étel mellett. Kategóriánál átnevező képernyőt nyit. Ételnél teljes szerkesztőt — név, ár, fotó, leírás, allergének és fordítások más nyelvekre.",
+          "toggleDish": "Ez a szem ikon elrejti az ételt a vendégek elől, anélkül hogy törölné — hasznos, amikor valami elfogyott a napra.",
+          "sort": "Ezek a nyilak átrendezik a kategóriákat és ételeket. Ami felül van, azt a vendégek először látják.",
+          "preview": "Az Előnézet az étlap élő nézetét nyitja meg — pontosan azt mutatja, amit a vendégek a QR-kód beolvasásakor látnak.",
+          "share": "A Megosztás megadja az étlap linkjét és QR-kódját. Nyomtassa ki a QR-t és tegye az asztalokra."
+        },
+        "button": {
+          "continue": "Folytatás",
+          "done": "Kész",
+          "back": "Vissza",
+          "close": "Bevezető bezárása"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Új kategória",

@@ -92,7 +92,24 @@
       "editCategory": "Rediģēt kategoriju",
       "editDish": "Rediģēt ēdienu",
       "hideDish": "Slēpt ēdienu",
-      "showDish": "Rādīt ēdienu"
+      "showDish": "Rādīt ēdienu",
+      "onboarding": {
+        "step": {
+          "addCategory": "Šī poga pievieno jaunu kategoriju — ēdienkartes sadaļu, piemēram, Deserti, Dzērieni vai Pamatēdieni. Kategorijas grupē ēdienus.",
+          "addDish": "Šeit ēdieni tiek pievienoti kategorijai. Katram ēdienam ir savs nosaukums, cena un detaļas.",
+          "edit": "Tā pati zīmuļa ikona parādās blakus katrai kategorijai un katram ēdienam. Kategorijai atver pārdēvēšanas ekrānu. Ēdienam pilnu redaktoru — nosaukums, cena, foto, apraksts, alergēni un tulkojumi citās valodās.",
+          "toggleDish": "Šī acs ikona slēpj ēdienu no viesiem, to nedzēšot — noderīgi, kad kaut kas ir izpārdots dienai.",
+          "sort": "Šīs bultiņas maina kategoriju un ēdienu secību. Tos, kas atrodas augšā, viesi redz pirmos.",
+          "preview": "Priekšskatījums atver jūsu ēdienkartes tiešraidi — tas parāda tieši to, ko viesi redz, skenējot QR kodu.",
+          "share": "Kopīgot dod jums saiti un QR kodu jūsu ēdienkartei. Izdrukājiet QR un nolieciet uz galdiem."
+        },
+        "button": {
+          "continue": "Turpināt",
+          "done": "Gatavs",
+          "back": "Atpakaļ",
+          "close": "Aizvērt ievadu"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Jauna kategorija",

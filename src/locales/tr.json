@@ -92,7 +92,24 @@
       "editCategory": "Kategoriyi düzenle",
       "editDish": "Yemeği düzenle",
       "hideDish": "Yemeği gizle",
-      "showDish": "Yemeği göster"
+      "showDish": "Yemeği göster",
+      "onboarding": {
+        "step": {
+          "addCategory": "Bu düğme yeni bir kategori ekler — menünüzün Tatlılar, İçecekler veya Ana Yemekler gibi bir bölümü. Kategoriler yemekleri gruplar.",
+          "addDish": "Yemekler buradan bir kategoriye eklenir. Her yemeğin kendi adı, fiyatı ve ayrıntıları vardır.",
+          "edit": "Aynı kalem simgesi her kategori ve her yemek yanında bulunur. Kategoride yeniden adlandırma ekranını açar. Yemekte ad, fiyat, fotoğraf, açıklama, alerjenler ve diğer dillere çeviriler için tam bir düzenleyici açar.",
+          "toggleDish": "Bu göz simgesi yemeği silmeden müşterilerden gizler — bir şey günlük tükendiğinde kullanışlı.",
+          "sort": "Bu oklar kategorileri ve yemekleri yeniden sıralar. Üsttekileri müşteriler önce görür.",
+          "preview": "Önizleme menünüzün canlı görünümünü açar — müşterilerin QR kodunu taradığında tam olarak ne gördüğünü gösterir.",
+          "share": "Paylaş menünüzün bağlantısını ve QR kodunu verir. QR'ı yazdırın ve masalara koyun."
+        },
+        "button": {
+          "continue": "Devam",
+          "done": "Bitti",
+          "back": "Geri",
+          "close": "Tanıtımı kapat"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Yeni kategori",

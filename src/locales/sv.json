@@ -92,7 +92,24 @@
       "editCategory": "Redigera kategori",
       "editDish": "Redigera rätt",
       "hideDish": "Dölj rätt",
-      "showDish": "Visa rätt"
+      "showDish": "Visa rätt",
+      "onboarding": {
+        "step": {
+          "addCategory": "Den här knappen lägger till en ny kategori — ett avsnitt i din meny som Desserter, Drycker eller Huvudrätter. Kategorier grupperar rätter.",
+          "addDish": "Här läggs rätter till i en kategori. Varje rätt har eget namn, pris och detaljer.",
+          "edit": "Samma pennikon visas bredvid varje kategori och varje rätt. På en kategori öppnar den namnändringssidan. På en rätt en fullständig editor — namn, pris, foto, beskrivning, allergener och översättningar till andra språk.",
+          "toggleDish": "Den här ögonikonen döljer en rätt för gäster utan att radera den — praktiskt när något tagit slut för dagen.",
+          "sort": "Dessa pilar ändrar ordningen på kategorier och rätter. Det som är högst upp ser gäster först.",
+          "preview": "Förhandsvisning öppnar en live-vy av din meny — den visar exakt vad gäster ser när de skannar QR-koden.",
+          "share": "Dela ger dig länken och QR-koden för din meny. Skriv ut QR-koden och lägg den på borden."
+        },
+        "button": {
+          "continue": "Fortsätt",
+          "done": "Klart",
+          "back": "Tillbaka",
+          "close": "Stäng introduktionen"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Ny kategori",

@@ -92,7 +92,24 @@
       "editCategory": "Uredi kategorijo",
       "editDish": "Uredi jed",
       "hideDish": "Skrij jed",
-      "showDish": "Prikaži jed"
+      "showDish": "Prikaži jed",
+      "onboarding": {
+        "step": {
+          "addCategory": "Ta gumb doda novo kategorijo — del jedilnika, kot so Sladice, Pijače ali Glavne jedi. Kategorije združujejo jedi.",
+          "addDish": "Tu se jedi dodajajo v kategorijo. Vsaka jed ima svoje ime, ceno in podrobnosti.",
+          "edit": "Ista ikona svinčnika se pojavi ob vsaki kategoriji in vsaki jedi. Pri kategoriji odpre zaslon za preimenovanje. Pri jedi popoln urejevalnik — ime, cena, fotografija, opis, alergeni in prevodi v druge jezike.",
+          "toggleDish": "Ta ikona očesa skrije jed pred gosti, ne da bi jo izbrisala — uporabno, ko je nekaj razprodano za dan.",
+          "sort": "Te puščice spreminjajo vrstni red kategorij in jedi. Tisto, kar je na vrhu, gostje vidijo najprej.",
+          "preview": "Predogled odpre živi pregled jedilnika — pokaže točno to, kar gostje vidijo ob skeniranju QR kode.",
+          "share": "Deli vam ponudi povezavo in QR kodo jedilnika. Natisnite QR in postavite na mize."
+        },
+        "button": {
+          "continue": "Naprej",
+          "done": "Končano",
+          "back": "Nazaj",
+          "close": "Zapri uvod"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",

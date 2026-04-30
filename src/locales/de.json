@@ -92,7 +92,24 @@
       "editCategory": "Kategorie bearbeiten",
       "editDish": "Gericht bearbeiten",
       "hideDish": "Gericht ausblenden",
-      "showDish": "Gericht einblenden"
+      "showDish": "Gericht einblenden",
+      "onboarding": {
+        "step": {
+          "addCategory": "Diese Schaltfläche fügt eine neue Kategorie hinzu — ein Abschnitt der Speisekarte wie Desserts, Getränke oder Hauptgerichte. Kategorien gruppieren Gerichte.",
+          "addDish": "Hier werden Gerichte einer Kategorie hinzugefügt. Jedes Gericht hat einen eigenen Namen, Preis und Details.",
+          "edit": "Das gleiche Stiftsymbol erscheint neben jeder Kategorie und jedem Gericht. Bei einer Kategorie öffnet es das Umbenennen. Bei einem Gericht den vollständigen Editor — Name, Preis, Foto, Beschreibung, Allergene und Übersetzungen in andere Sprachen.",
+          "toggleDish": "Dieses Augensymbol blendet ein Gericht für Gäste aus, ohne es zu löschen — praktisch, wenn etwas für heute ausverkauft ist.",
+          "sort": "Diese Pfeile sortieren Kategorien und Gerichte um. Was oben steht, sehen Gäste zuerst.",
+          "preview": "Vorschau öffnet eine Live-Ansicht Ihrer Speisekarte — sie zeigt genau das, was Gäste beim Scannen des QR-Codes sehen.",
+          "share": "Teilen liefert den Link und den QR-Code Ihrer Speisekarte. Drucken Sie den QR und legen Sie ihn auf die Tische."
+        },
+        "button": {
+          "continue": "Weiter",
+          "done": "Fertig",
+          "back": "Zurück",
+          "close": "Onboarding schließen"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Neue Kategorie",

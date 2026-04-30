@@ -92,7 +92,24 @@
       "editCategory": "Izmeni kategoriju",
       "editDish": "Izmeni jelo",
       "hideDish": "Sakrij jelo",
-      "showDish": "Prikaži jelo"
+      "showDish": "Prikaži jelo",
+      "onboarding": {
+        "step": {
+          "addCategory": "Ovo dugme dodaje novu kategoriju — odeljak vašeg menija poput Deserti, Pića ili Glavna jela. Kategorije grupišu jela.",
+          "addDish": "Ovde se jela dodaju u kategoriju. Svako jelo ima vlastito ime, cenu i detalje.",
+          "edit": "Ista ikona olovke pojavljuje se pored svake kategorije i svakog jela. Na kategoriji otvara ekran preimenovanja. Na jelu kompletni uređivač — ime, cena, fotografija, opis, alergeni i prevodi na druge jezike.",
+          "toggleDish": "Ova ikona oka skriva jelo gostima bez brisanja — korisno kada je nešto rasprodato za danas.",
+          "sort": "Ove strelice menjaju redosled kategorija i jela. Ono što je na vrhu gosti vide prvo.",
+          "preview": "Pregled otvara prikaz vašeg menija uživo — pokazuje tačno ono što gosti vide kad skeniraju QR kod.",
+          "share": "Podeli vam daje link i QR kod vašeg menija. Odštampajte QR i stavite na stolove."
+        },
+        "button": {
+          "continue": "Nastavi",
+          "done": "Gotovo",
+          "back": "Nazad",
+          "close": "Zatvori uvod"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",

@@ -92,7 +92,24 @@
       "editCategory": "Edita categoria",
       "editDish": "Edita plat",
       "hideDish": "Amaga plat",
-      "showDish": "Mostra plat"
+      "showDish": "Mostra plat",
+      "onboarding": {
+        "step": {
+          "addCategory": "Aquest botó afegeix una nova categoria — una secció del menú com Postres, Begudes o Plats principals. Les categories agrupen els plats.",
+          "addDish": "Aquí s'afegeixen plats a una categoria. Cada plat té el seu propi nom, preu i detalls.",
+          "edit": "La mateixa icona de llapis apareix al costat de cada categoria i de cada plat. En una categoria obre la pantalla de canvi de nom. En un plat un editor complet — nom, preu, foto, descripció, al·lèrgens i traduccions a altres idiomes.",
+          "toggleDish": "Aquesta icona d'ull amaga un plat als clients sense eliminar-lo — útil quan alguna cosa s'ha esgotat pel dia.",
+          "sort": "Aquestes fletxes reordenen categories i plats. El que està a dalt el veuen primer els clients.",
+          "preview": "Vista prèvia obre una vista en directe del teu menú — mostra exactament el que veuen els clients quan escanegen el codi QR.",
+          "share": "Compartir et dona l'enllaç i el codi QR del teu menú. Imprimeix el QR i posa'l a les taules."
+        },
+        "button": {
+          "continue": "Continuar",
+          "done": "Fet",
+          "back": "Enrere",
+          "close": "Tancar la introducció"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nova categoria",

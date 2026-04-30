@@ -22,6 +22,7 @@ import { fetchSubscriptionStatus, patchItem, reorderCategories, reorderItem } fr
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
 import { track } from "@/lib/dashboard-events";
+import { MenuOnboarding } from "./menu-onboarding";
 
 interface SubData {
  plan: string | null;
@@ -171,15 +172,19 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {menuUrl ? (
+ <span data-onboarding-target="preview" className="inline-flex">
  <PreviewButton url={menuUrl} onOpen={() => track("dash_menu_preview_open")} />
+ </span>
  ) : null}
  {menuUrl ? (
+ <span data-onboarding-target="share" className="inline-flex">
  <ShareButton
  onClick={() => {
  track("dash_menu_share_open");
  setShareOpen(true);
  }}
  />
+ </span>
  ) : null}
  </div>
  <SubscriptionChip
@@ -221,6 +226,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
+ data-onboarding-target="add-category"
  className={primaryBtn + " w-full inline-flex items-center justify-center"}
  >
  {t("addCategory")}
@@ -240,6 +246,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  onToggle={() => toggleCategory(cat.id)}
  isFirst={idx === 0}
  isLast={idx === categories.length - 1}
+ isFirstCategory={idx === 0}
  onMoveUp={() => moveCategory(idx, -1)}
  onMoveDown={() => moveCategory(idx, 1)}
  onMoveDish={moveDish}
@@ -254,6 +261,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
+ data-onboarding-target="add-category"
  className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
@@ -269,6 +277,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  url={menuUrl}
  restaurantName={restaurant.name}
  />
+ {categories.length > 0 ? <MenuOnboarding /> : null}
  </>
  );
 }
@@ -281,6 +290,7 @@ function CategoryAccordion({
  onToggle,
  isFirst,
  isLast,
+ isFirstCategory = false,
  onMoveUp,
  onMoveDown,
  onMoveDish,
@@ -293,6 +303,7 @@ function CategoryAccordion({
  onToggle: () => void;
  isFirst: boolean;
  isLast: boolean;
+ isFirstCategory?: boolean;
  onMoveUp: () => void;
  onMoveDown: () => void;
  onMoveDish: (categoryId: string, idx: number, dir: number) => void;
@@ -331,18 +342,24 @@ function CategoryAccordion({
  </button>
 
  <div className="flex items-center gap-0.5 shrink-0">
+ <span
+ className="inline-flex items-center gap-0.5"
+ data-onboarding-target={isFirstCategory ? "sort" : undefined}
+ >
  <button type="button" onClick={onMoveUp} disabled={isFirst} className={iconBtn} aria-label={t("moveCategoryUp")}>
  <ArrowUpIcon size={14} />
  </button>
  <button type="button" onClick={onMoveDown} disabled={isLast} className={iconBtn} aria-label={t("moveCategoryDown")}>
  <ArrowDownIcon size={14} />
  </button>
+ </span>
  <button
  type="button"
  onClick={() => {
  track("dash_menu_category_edit");
  router.push({ name: "category.edit", id: category.id });
  }}
+ data-onboarding-target={isFirstCategory ? "edit" : undefined}
  className={iconBtn}
  aria-label={t("editCategory")}
  >
@@ -367,6 +384,7 @@ function CategoryAccordion({
  currencySymbol={currencySymbol}
  isFirst={idx === 0}
  isLast={idx === category.dishes.length - 1}
+ isFirstDishOfFirstCategory={isFirstCategory && idx === 0}
  onMoveUp={() => onMoveDish(category.id, idx, -1)}
  onMoveDown={() => onMoveDish(category.id, idx, 1)}
  onToggleVisible={() => onToggleDishVisible(category.id, dish.id)}
@@ -381,6 +399,7 @@ function CategoryAccordion({
  track("dash_menu_add_item");
  router.push({ name: "item.new", categoryId: category.id });
  }}
+ data-onboarding-target={isFirstCategory ? "add-dish" : undefined}
  className="w-full flex items-center gap-2 pl-2 pr-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
  >
  <span className="w-8 h-8 flex items-center justify-center shrink-0">
@@ -400,6 +419,7 @@ function DishRow({
  currencySymbol,
  isFirst,
  isLast,
+ isFirstDishOfFirstCategory = false,
  onMoveUp,
  onMoveDown,
  onToggleVisible,
@@ -409,6 +429,7 @@ function DishRow({
  currencySymbol: string;
  isFirst: boolean;
  isLast: boolean;
+ isFirstDishOfFirstCategory?: boolean;
  onMoveUp: () => void;
  onMoveDown: () => void;
  onToggleVisible: () => void;
@@ -450,6 +471,7 @@ function DishRow({
  <button
  type="button"
  onClick={onToggleVisible}
+ data-onboarding-target={isFirstDishOfFirstCategory ? "toggle-dish" : undefined}
  className={iconBtn}
  aria-label={dish.visible ? t("hideDish") : t("showDish")}
  >

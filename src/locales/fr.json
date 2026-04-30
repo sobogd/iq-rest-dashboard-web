@@ -92,7 +92,24 @@
       "editCategory": "Modifier la catégorie",
       "editDish": "Modifier le plat",
       "hideDish": "Masquer le plat",
-      "showDish": "Afficher le plat"
+      "showDish": "Afficher le plat",
+      "onboarding": {
+        "step": {
+          "addCategory": "Ce bouton ajoute une nouvelle catégorie — une section de votre menu comme Desserts, Boissons ou Plats principaux. Les catégories regroupent les plats.",
+          "addDish": "C'est ici que les plats sont ajoutés à une catégorie. Chaque plat a son propre nom, prix et détails.",
+          "edit": "La même icône de crayon apparaît à côté de chaque catégorie et de chaque plat. Sur une catégorie, elle ouvre l'écran de renommage. Sur un plat, elle ouvre un éditeur complet — nom, prix, photo, description, allergènes et traductions dans d'autres langues.",
+          "toggleDish": "Cette icône d'œil masque un plat aux clients sans le supprimer — pratique quand quelque chose est épuisé pour la journée.",
+          "sort": "Ces flèches réordonnent les catégories et les plats. Ce qui est en haut est vu en premier par les clients.",
+          "preview": "Aperçu ouvre une vue en direct de votre menu — il montre exactement ce que voient les clients en scannant le QR code.",
+          "share": "Partager vous donne le lien et le QR code de votre menu. Imprimez le QR et placez-le sur vos tables."
+        },
+        "button": {
+          "continue": "Continuer",
+          "done": "Terminé",
+          "back": "Retour",
+          "close": "Fermer l'introduction"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nouvelle catégorie",

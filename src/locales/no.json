@@ -92,7 +92,24 @@
       "editCategory": "Rediger kategori",
       "editDish": "Rediger rett",
       "hideDish": "Skjul rett",
-      "showDish": "Vis rett"
+      "showDish": "Vis rett",
+      "onboarding": {
+        "step": {
+          "addCategory": "Denne knappen legger til en ny kategori — en seksjon av menyen din som Desserter, Drikker eller Hovedretter. Kategorier grupperer retter.",
+          "addDish": "Her legges retter til i en kategori. Hver rett har eget navn, pris og detaljer.",
+          "edit": "Det samme blyantikonet vises ved siden av hver kategori og hver rett. På en kategori åpner det skjermen for å endre navn. På en rett en fullstendig redigerer — navn, pris, bilde, beskrivelse, allergener og oversettelser til andre språk.",
+          "toggleDish": "Dette øyeikonet skjuler en rett fra gjester uten å slette den — nyttig når noe er utsolgt for dagen.",
+          "sort": "Disse pilene endrer rekkefølgen på kategorier og retter. Det som er øverst ser gjestene først.",
+          "preview": "Forhåndsvisning åpner en live-visning av menyen din — den viser nøyaktig hva gjester ser når de skanner QR-koden.",
+          "share": "Del gir deg lenken og QR-koden til menyen din. Skriv ut QR-en og legg den på bordene."
+        },
+        "button": {
+          "continue": "Fortsett",
+          "done": "Ferdig",
+          "back": "Tilbake",
+          "close": "Lukk introduksjonen"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Ny kategori",

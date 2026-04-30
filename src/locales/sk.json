@@ -92,7 +92,24 @@
       "editCategory": "Upraviť kategóriu",
       "editDish": "Upraviť jedlo",
       "hideDish": "Skryť jedlo",
-      "showDish": "Zobraziť jedlo"
+      "showDish": "Zobraziť jedlo",
+      "onboarding": {
+        "step": {
+          "addCategory": "Toto tlačidlo pridá novú kategóriu — sekciu vášho menu, ako Dezerty, Nápoje alebo Hlavné jedlá. Kategórie zoskupujú pokrmy.",
+          "addDish": "Tu sa pokrmy pridávajú do kategórie. Každý pokrm má vlastný názov, cenu a detaily.",
+          "edit": "Rovnaká ikona ceruzky sa objavuje vedľa každej kategórie a každého pokrmu. Pri kategórii otvorí obrazovku premenovania. Pri pokrme úplný editor — názov, cena, fotka, popis, alergény a preklady do ďalších jazykov.",
+          "toggleDish": "Táto ikona oka skrýva pokrm hosťom bez jeho vymazania — užitočné, keď je niečo na dnes vypredané.",
+          "sort": "Tieto šípky menia poradie kategórií a pokrmov. To, čo je hore, hostia vidia ako prvé.",
+          "preview": "Náhľad otvorí živé zobrazenie vášho menu — ukáže presne to, čo hostia vidia po naskenovaní QR kódu.",
+          "share": "Zdieľať vám dá odkaz a QR kód vášho menu. Vytlačte QR a položte na stoly."
+        },
+        "button": {
+          "continue": "Pokračovať",
+          "done": "Hotovo",
+          "back": "Späť",
+          "close": "Zavrieť onboarding"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nová kategória",

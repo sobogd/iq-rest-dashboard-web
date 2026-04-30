@@ -92,7 +92,24 @@
       "editCategory": "Breyta flokki",
       "editDish": "Breyta rétti",
       "hideDish": "Fela rétt",
-      "showDish": "Sýna rétt"
+      "showDish": "Sýna rétt",
+      "onboarding": {
+        "step": {
+          "addCategory": "Þessi hnappur bætir við nýjum flokki — hluta af matseðlinum eins og Eftirréttir, Drykkir eða Aðalréttir. Flokkar hópa réttum saman.",
+          "addDish": "Hér eru réttir bættir við flokk. Hver réttur hefur sitt eigið nafn, verð og smáatriði.",
+          "edit": "Sama blýantstákn birtist við hliðina á hverjum flokki og hverjum rétti. Á flokki opnar það endurnefnsskjáinn. Á rétti opnar fullkominn ritil — nafn, verð, mynd, lýsing, ofnæmisvaldar og þýðingar á öðrum tungumálum.",
+          "toggleDish": "Þetta auga-tákn felur rétt fyrir gestum án þess að eyða — gagnlegt þegar eitthvað er búið fyrir daginn.",
+          "sort": "Þessar örvar endurraða flokkum og réttum. Þeir efst eru séðir fyrst af gestum.",
+          "preview": "Forskoðun opnar lifandi sýn matseðils þíns — hún sýnir nákvæmlega það sem gestir sjá þegar þeir skanna QR-kóðann.",
+          "share": "Deila gefur þér tengilinn og QR-kóðann fyrir matseðilinn. Prentaðu QR og settu á borðin."
+        },
+        "button": {
+          "continue": "Áfram",
+          "done": "Lokið",
+          "back": "Til baka",
+          "close": "Loka kynningu"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nýr flokkur",

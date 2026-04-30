@@ -92,7 +92,24 @@
       "editCategory": "Categorie bewerken",
       "editDish": "Gerecht bewerken",
       "hideDish": "Gerecht verbergen",
-      "showDish": "Gerecht tonen"
+      "showDish": "Gerecht tonen",
+      "onboarding": {
+        "step": {
+          "addCategory": "Deze knop voegt een nieuwe categorie toe — een onderdeel van je menu zoals Desserts, Drankjes of Hoofdgerechten. Categorieën groeperen gerechten samen.",
+          "addDish": "Hier worden gerechten aan een categorie toegevoegd. Elk gerecht heeft een eigen naam, prijs en details.",
+          "edit": "Hetzelfde potloodicoon staat naast elke categorie en elk gerecht. Bij een categorie opent het de hernoemen-pagina. Bij een gerecht een volledige editor — naam, prijs, foto, beschrijving, allergenen en vertalingen naar andere talen.",
+          "toggleDish": "Dit oogicoon verbergt een gerecht voor gasten zonder het te verwijderen — handig als iets voor vandaag op is.",
+          "sort": "Deze pijlen veranderen de volgorde van categorieën en gerechten. Wat bovenaan staat, zien gasten eerst.",
+          "preview": "Voorbeeld opent een live-weergave van je menu — het toont precies wat gasten zien als ze de QR-code scannen.",
+          "share": "Delen geeft je de link en QR-code van je menu. Druk de QR af en zet hem op je tafels."
+        },
+        "button": {
+          "continue": "Doorgaan",
+          "done": "Klaar",
+          "back": "Terug",
+          "close": "Onboarding sluiten"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Nieuwe categorie",

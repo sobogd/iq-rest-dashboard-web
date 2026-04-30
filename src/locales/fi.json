@@ -92,7 +92,24 @@
       "editCategory": "Muokkaa kategoriaa",
       "editDish": "Muokkaa annosta",
       "hideDish": "Piilota annos",
-      "showDish": "Näytä annos"
+      "showDish": "Näytä annos",
+      "onboarding": {
+        "step": {
+          "addCategory": "Tämä painike lisää uuden kategorian — ruokalistan osion, kuten Jälkiruoat, Juomat tai Pääruoat. Kategoriat ryhmittelevät ruokia.",
+          "addDish": "Tästä ruokia lisätään kategoriaan. Jokaisella ruoalla on oma nimi, hinta ja tiedot.",
+          "edit": "Sama kynäkuvake näkyy jokaisen kategorian ja ruoan vieressä. Kategorialle se avaa nimeämisruudun. Ruoalle täyden editorin — nimi, hinta, kuva, kuvaus, allergeenit ja käännökset muille kielille.",
+          "toggleDish": "Tämä silmäkuvake piilottaa ruoan asiakkailta poistamatta sitä — hyödyllinen, kun jotain on loppunut päiväksi.",
+          "sort": "Nämä nuolet järjestävät kategoriat ja ruoat uudelleen. Asiakkaat näkevät ylimmät ensin.",
+          "preview": "Esikatselu avaa ruokalistan reaaliaikaisen näkymän — se näyttää juuri sen, mitä asiakkaat näkevät QR-koodin skannatessaan.",
+          "share": "Jaa antaa sinulle ruokalistan linkin ja QR-koodin. Tulosta QR ja aseta se pöydille."
+        },
+        "button": {
+          "continue": "Jatka",
+          "done": "Valmis",
+          "back": "Takaisin",
+          "close": "Sulje opastus"
+        }
+      }
     },
     "categoryForm": {
       "newTitle": "Uusi kategoria",
