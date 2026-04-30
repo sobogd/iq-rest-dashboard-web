@@ -95,13 +95,13 @@
       "showDish": "Visa rätt",
       "onboarding": {
         "step": {
-          "addCategory": "Den här knappen lägger till en ny kategori — ett avsnitt i din meny som Desserter, Drycker eller Huvudrätter. Kategorier grupperar rätter.",
-          "addDish": "Här läggs rätter till i en kategori. Varje rätt har eget namn, pris och detaljer.",
-          "edit": "Samma pennikon visas bredvid varje kategori och varje rätt. På en kategori öppnar den namnändringssidan. På en rätt en fullständig editor — namn, pris, foto, beskrivning, allergener och översättningar till andra språk.",
-          "toggleDish": "Den här ögonikonen döljer en rätt för gäster utan att radera den — praktiskt när något tagit slut för dagen.",
-          "sort": "Dessa pilar ändrar ordningen på kategorier och rätter. Det som är högst upp ser gäster först.",
-          "preview": "Förhandsvisning öppnar en live-vy av din meny — den visar exakt vad gäster ser när de skannar QR-koden.",
-          "share": "Dela ger dig länken och QR-koden för din meny. Skriv ut QR-koden och lägg den på borden."
+          "addCategory": "Genom att trycka på den här knappen lägger du till en ny kategori (till exempel: Desserter, Drycker, Huvudrätter).",
+          "addDish": "Genom att trycka på den här knappen lägger du till en rätt i en kategori.",
+          "edit": "Genom att trycka på den här pennan öppnar du redigeraren. På en kategori — namnändring. På en rätt — namn, pris, foto, beskrivning, allergener, översättningar.",
+          "toggleDish": "Genom att trycka på det här ögat döljer eller visar du en rätt för gäster. Själva rätten tas inte bort.",
+          "sort": "Genom att trycka på dessa pilar ändrar du ordningen på kategorier och rätter. Det överst ser gäster först.",
+          "preview": "Genom att trycka på den här knappen öppnar du en förhandsvisning av menyn — det som gästen ser efter att ha skannat QR-koden.",
+          "share": "Genom att trycka på den här knappen får du länken och QR-koden för menyn, redo att skrivas ut."
         },
         "button": {
           "continue": "Fortsätt",

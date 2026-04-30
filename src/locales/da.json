@@ -95,13 +95,13 @@
       "showDish": "Vis ret",
       "onboarding": {
         "step": {
-          "addCategory": "Denne knap tilføjer en ny kategori — en del af din menu som Desserter, Drikkevarer eller Hovedretter. Kategorier grupperer retter.",
-          "addDish": "Her tilføjes retter til en kategori. Hver ret har sit eget navn, pris og detaljer.",
-          "edit": "Det samme blyantikon vises ved siden af hver kategori og hver ret. På en kategori åbner det omdøbningsskærmen. På en ret en fuld editor — navn, pris, foto, beskrivelse, allergener og oversættelser til andre sprog.",
-          "toggleDish": "Dette øjenikon skjuler en ret fra gæster uden at slette den — nyttigt når noget er udsolgt for dagen.",
-          "sort": "Disse pile ændrer rækkefølgen af kategorier og retter. Det øverste ser gæster først.",
-          "preview": "Forhåndsvisning åbner en live-visning af din menu — den viser præcis, hvad gæster ser, når de scanner QR-koden.",
-          "share": "Del giver dig linket og QR-koden til din menu. Udskriv QR-en og placer den på bordene."
+          "addCategory": "Ved at trykke på denne knap tilføjer du en ny kategori (for eksempel: Desserter, Drikkevarer, Hovedretter).",
+          "addDish": "Ved at trykke på denne knap tilføjer du en ret til en kategori.",
+          "edit": "Ved at trykke på denne blyant åbner du editoren. På en kategori — omdøbe. På en ret — navn, pris, foto, beskrivelse, allergener, oversættelser.",
+          "toggleDish": "Ved at trykke på dette øje skjuler eller viser du en ret for gæster. Selve retten slettes ikke.",
+          "sort": "Ved at trykke på disse pile ændrer du rækkefølgen af kategorier og retter. Det øverste ser gæster først.",
+          "preview": "Ved at trykke på denne knap åbner du en forhåndsvisning af menuen — det gæsten ser efter at have scannet QR-koden.",
+          "share": "Ved at trykke på denne knap får du linket og QR-koden til menuen, klar til udskrift."
         },
         "button": {
           "continue": "Fortsæt",

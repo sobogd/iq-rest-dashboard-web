@@ -95,13 +95,13 @@
       "showDish": "Yemeği göster",
       "onboarding": {
         "step": {
-          "addCategory": "Bu düğme yeni bir kategori ekler — menünüzün Tatlılar, İçecekler veya Ana Yemekler gibi bir bölümü. Kategoriler yemekleri gruplar.",
-          "addDish": "Yemekler buradan bir kategoriye eklenir. Her yemeğin kendi adı, fiyatı ve ayrıntıları vardır.",
-          "edit": "Aynı kalem simgesi her kategori ve her yemek yanında bulunur. Kategoride yeniden adlandırma ekranını açar. Yemekte ad, fiyat, fotoğraf, açıklama, alerjenler ve diğer dillere çeviriler için tam bir düzenleyici açar.",
-          "toggleDish": "Bu göz simgesi yemeği silmeden müşterilerden gizler — bir şey günlük tükendiğinde kullanışlı.",
-          "sort": "Bu oklar kategorileri ve yemekleri yeniden sıralar. Üsttekileri müşteriler önce görür.",
-          "preview": "Önizleme menünüzün canlı görünümünü açar — müşterilerin QR kodunu taradığında tam olarak ne gördüğünü gösterir.",
-          "share": "Paylaş menünüzün bağlantısını ve QR kodunu verir. QR'ı yazdırın ve masalara koyun."
+          "addCategory": "Bu düğmeye dokunarak yeni bir kategori eklersiniz (örneğin: Tatlılar, İçecekler, Ana Yemekler).",
+          "addDish": "Bu düğmeye dokunarak bir kategoriye yemek eklersiniz.",
+          "edit": "Bu kaleme dokunarak düzenleyiciyi açarsınız. Kategoride — yeniden adlandırma. Yemekte — ad, fiyat, fotoğraf, açıklama, alerjenler, çeviriler.",
+          "toggleDish": "Bu göze dokunarak bir yemeği müşterilerden gizler veya gösterirsiniz. Yemeğin kendisi silinmez.",
+          "sort": "Bu oklara dokunarak kategorilerin ve yemeklerin sırasını değiştirirsiniz. Üstte olanı müşteriler önce görür.",
+          "preview": "Bu düğmeye dokunarak menünün önizlemesini açarsınız — QR'ı taradıktan sonra müşterinin gördüğü görünüm.",
+          "share": "Bu düğmeye dokunarak menünün bağlantısını ve QR kodunu yazdırmaya hazır şekilde alırsınız."
         },
         "button": {
           "continue": "Devam",

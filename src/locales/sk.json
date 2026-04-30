@@ -95,13 +95,13 @@
       "showDish": "Zobraziť jedlo",
       "onboarding": {
         "step": {
-          "addCategory": "Toto tlačidlo pridá novú kategóriu — sekciu vášho menu, ako Dezerty, Nápoje alebo Hlavné jedlá. Kategórie zoskupujú pokrmy.",
-          "addDish": "Tu sa pokrmy pridávajú do kategórie. Každý pokrm má vlastný názov, cenu a detaily.",
-          "edit": "Rovnaká ikona ceruzky sa objavuje vedľa každej kategórie a každého pokrmu. Pri kategórii otvorí obrazovku premenovania. Pri pokrme úplný editor — názov, cena, fotka, popis, alergény a preklady do ďalších jazykov.",
-          "toggleDish": "Táto ikona oka skrýva pokrm hosťom bez jeho vymazania — užitočné, keď je niečo na dnes vypredané.",
-          "sort": "Tieto šípky menia poradie kategórií a pokrmov. To, čo je hore, hostia vidia ako prvé.",
-          "preview": "Náhľad otvorí živé zobrazenie vášho menu — ukáže presne to, čo hostia vidia po naskenovaní QR kódu.",
-          "share": "Zdieľať vám dá odkaz a QR kód vášho menu. Vytlačte QR a položte na stoly."
+          "addCategory": "Kliknutím na toto tlačidlo pridáte novú kategóriu (napríklad: Dezerty, Nápoje, Hlavné jedlá).",
+          "addDish": "Kliknutím na toto tlačidlo pridáte pokrm do kategórie.",
+          "edit": "Kliknutím na túto ceruzku otvoríte editor. Pri kategórii — premenovanie. Pri pokrme — názov, cena, fotka, popis, alergény, preklady.",
+          "toggleDish": "Kliknutím na toto oko skryjete alebo zobrazíte pokrm hosťom. Pokrm samotný sa nezmaže.",
+          "sort": "Kliknutím na tieto šípky zmeníte poradie kategórií a pokrmov. Čo je hore, hostia vidia ako prvé.",
+          "preview": "Kliknutím na toto tlačidlo otvoríte náhľad menu — to, čo hosť vidí po naskenovaní QR.",
+          "share": "Kliknutím na toto tlačidlo získate odkaz a QR kód menu, pripravené na tlač."
         },
         "button": {
           "continue": "Pokračovať",

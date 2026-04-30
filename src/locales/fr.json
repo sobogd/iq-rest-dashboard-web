@@ -95,13 +95,13 @@
       "showDish": "Afficher le plat",
       "onboarding": {
         "step": {
-          "addCategory": "Ce bouton ajoute une nouvelle catégorie — une section de votre menu comme Desserts, Boissons ou Plats principaux. Les catégories regroupent les plats.",
-          "addDish": "C'est ici que les plats sont ajoutés à une catégorie. Chaque plat a son propre nom, prix et détails.",
-          "edit": "La même icône de crayon apparaît à côté de chaque catégorie et de chaque plat. Sur une catégorie, elle ouvre l'écran de renommage. Sur un plat, elle ouvre un éditeur complet — nom, prix, photo, description, allergènes et traductions dans d'autres langues.",
-          "toggleDish": "Cette icône d'œil masque un plat aux clients sans le supprimer — pratique quand quelque chose est épuisé pour la journée.",
-          "sort": "Ces flèches réordonnent les catégories et les plats. Ce qui est en haut est vu en premier par les clients.",
-          "preview": "Aperçu ouvre une vue en direct de votre menu — il montre exactement ce que voient les clients en scannant le QR code.",
-          "share": "Partager vous donne le lien et le QR code de votre menu. Imprimez le QR et placez-le sur vos tables."
+          "addCategory": "En appuyant sur ce bouton, vous ajouterez une nouvelle catégorie (par exemple : Desserts, Boissons, Plats).",
+          "addDish": "En appuyant sur ce bouton, vous ajouterez un plat à une catégorie.",
+          "edit": "En appuyant sur ce crayon, vous ouvrirez l'éditeur. Pour une catégorie — renommer. Pour un plat — nom, prix, photo, description, allergènes, traductions.",
+          "toggleDish": "En appuyant sur cet œil, vous masquerez ou afficherez un plat aux clients. Le plat lui-même n'est pas supprimé.",
+          "sort": "En appuyant sur ces flèches, vous changerez l'ordre des catégories et des plats. Ce qui est en haut est vu en premier par les clients.",
+          "preview": "En appuyant sur ce bouton, vous ouvrirez un aperçu du menu — ce que voit un client en scannant le QR.",
+          "share": "En appuyant sur ce bouton, vous obtiendrez le lien et le QR code de votre menu, prêts à imprimer."
         },
         "button": {
           "continue": "Continuer",

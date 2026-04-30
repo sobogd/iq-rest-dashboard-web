@@ -95,13 +95,13 @@
       "showDish": "Näytä annos",
       "onboarding": {
         "step": {
-          "addCategory": "Tämä painike lisää uuden kategorian — ruokalistan osion, kuten Jälkiruoat, Juomat tai Pääruoat. Kategoriat ryhmittelevät ruokia.",
-          "addDish": "Tästä ruokia lisätään kategoriaan. Jokaisella ruoalla on oma nimi, hinta ja tiedot.",
-          "edit": "Sama kynäkuvake näkyy jokaisen kategorian ja ruoan vieressä. Kategorialle se avaa nimeämisruudun. Ruoalle täyden editorin — nimi, hinta, kuva, kuvaus, allergeenit ja käännökset muille kielille.",
-          "toggleDish": "Tämä silmäkuvake piilottaa ruoan asiakkailta poistamatta sitä — hyödyllinen, kun jotain on loppunut päiväksi.",
-          "sort": "Nämä nuolet järjestävät kategoriat ja ruoat uudelleen. Asiakkaat näkevät ylimmät ensin.",
-          "preview": "Esikatselu avaa ruokalistan reaaliaikaisen näkymän — se näyttää juuri sen, mitä asiakkaat näkevät QR-koodin skannatessaan.",
-          "share": "Jaa antaa sinulle ruokalistan linkin ja QR-koodin. Tulosta QR ja aseta se pöydille."
+          "addCategory": "Tätä painiketta painamalla lisäät uuden kategorian (esimerkiksi: Jälkiruoat, Juomat, Pääruoat).",
+          "addDish": "Tätä painiketta painamalla lisäät ruoan kategoriaan.",
+          "edit": "Tätä kynää painamalla avaat editorin. Kategorialla — uudelleennimeäminen. Ruoalla — nimi, hinta, kuva, kuvaus, allergeenit, käännökset.",
+          "toggleDish": "Tätä silmää painamalla piilotat tai näytät ruoan asiakkaille. Itse ruoka ei poistu.",
+          "sort": "Näitä nuolia painamalla muutat kategorioiden ja ruokien järjestystä. Ylimpänä oleva näkyy asiakkaalle ensin.",
+          "preview": "Tätä painiketta painamalla avaat ruokalistan esikatselun — sen, mitä asiakas näkee QR:n skannauksen jälkeen.",
+          "share": "Tätä painiketta painamalla saat ruokalistan linkin ja QR-koodin tulostusvalmiina."
         },
         "button": {
           "continue": "Jatka",

@@ -95,13 +95,13 @@
       "showDish": "Taispeáin mias",
       "onboarding": {
         "step": {
-          "addCategory": "Cuireann an cnaipe seo catagóir nua — cuid den bhiachlár ar nós Mílseoga, Deochanna nó Príomhchúrsaí. Grúpálann catagóirí miasa le chéile.",
-          "addDish": "Anseo cuirtear miasa le catagóir. Tá ainm, praghas agus mionsonraí féin ag gach mias.",
-          "edit": "Tá an deilbhín pinn céanna le feiceáil in aice le gach catagóir agus gach mias. Ar chatagóir osclaíonn sé an scáileán athainmniú. Ar mhias eagarthóir iomlán — ainm, praghas, grianghraf, cur síos, ailléirgíní agus aistriúcháin go teangacha eile.",
-          "toggleDish": "Cuireann an deilbhín súile seo mias i bhfolach ó aíonna gan í a scriosadh — úsáideach nuair atá rud éigin díolta amach don lá.",
-          "sort": "Athraíonn na saigheada seo ord catagóirí agus miasa. Feiceann aíonna na cinn ar bharr ar dtús.",
-          "preview": "Osclaíonn Réamhamharc radharc beo ar do bhiachlár — taispeánann sé go díreach an méid a fheiceann aíonna agus iad ag scanadh an chóid QR.",
-          "share": "Tugann Comhroinn an nasc agus an cód QR duit. Priontáil an QR agus cuir ar do bhoird é."
+          "addCategory": "Le brú ar an gcnaipe seo, cuirfidh tú catagóir nua leis (mar shampla: Mílseoga, Deochanna, Príomhchúrsaí).",
+          "addDish": "Le brú ar an gcnaipe seo, cuirfidh tú mias le catagóir.",
+          "edit": "Le brú ar an bpeann luaidhe seo, osclóidh tú an t-eagarthóir. Ar chatagóir — athainmniú. Ar mhias — ainm, praghas, grianghraf, cur síos, ailléirgíní, aistriúcháin.",
+          "toggleDish": "Le brú ar an tsúil seo, ceilfidh tú nó taispeánfaidh tú mias do na haíonna. Ní scriostar an mias féin.",
+          "sort": "Le brú ar na saigheada seo, athraíonn tú ord na gcatagóirí agus na miasa. An rud atá ar bharr feiceann aíonna ar dtús é.",
+          "preview": "Le brú ar an gcnaipe seo, osclóidh tú réamhamharc den bhiachlár — an rud a fheiceann aoi tar éis dó an QR a scanadh.",
+          "share": "Le brú ar an gcnaipe seo, gheobhaidh tú an nasc agus an cód QR den bhiachlár, réidh le priontáil."
         },
         "button": {
           "continue": "Ar aghaidh",

@@ -95,13 +95,13 @@
       "showDish": "Gerecht tonen",
       "onboarding": {
         "step": {
-          "addCategory": "Deze knop voegt een nieuwe categorie toe — een onderdeel van je menu zoals Desserts, Drankjes of Hoofdgerechten. Categorieën groeperen gerechten samen.",
-          "addDish": "Hier worden gerechten aan een categorie toegevoegd. Elk gerecht heeft een eigen naam, prijs en details.",
-          "edit": "Hetzelfde potloodicoon staat naast elke categorie en elk gerecht. Bij een categorie opent het de hernoemen-pagina. Bij een gerecht een volledige editor — naam, prijs, foto, beschrijving, allergenen en vertalingen naar andere talen.",
-          "toggleDish": "Dit oogicoon verbergt een gerecht voor gasten zonder het te verwijderen — handig als iets voor vandaag op is.",
-          "sort": "Deze pijlen veranderen de volgorde van categorieën en gerechten. Wat bovenaan staat, zien gasten eerst.",
-          "preview": "Voorbeeld opent een live-weergave van je menu — het toont precies wat gasten zien als ze de QR-code scannen.",
-          "share": "Delen geeft je de link en QR-code van je menu. Druk de QR af en zet hem op je tafels."
+          "addCategory": "Door op deze knop te tikken, voeg je een nieuwe categorie toe (bijvoorbeeld: Desserts, Drankjes, Hoofdgerechten).",
+          "addDish": "Door op deze knop te tikken, voeg je een gerecht toe aan een categorie.",
+          "edit": "Door op dit potlood te tikken, open je de editor. Bij een categorie — hernoemen. Bij een gerecht — naam, prijs, foto, beschrijving, allergenen, vertalingen.",
+          "toggleDish": "Door op dit oog te tikken, verberg of toon je een gerecht aan gasten. Het gerecht zelf wordt niet verwijderd.",
+          "sort": "Door op deze pijlen te tikken, verander je de volgorde van categorieën en gerechten. Wat bovenaan staat, zien gasten eerst.",
+          "preview": "Door op deze knop te tikken, open je een voorbeeld van het menu — wat een gast ziet na het scannen van de QR.",
+          "share": "Door op deze knop te tikken, krijg je de link en de QR-code van je menu, klaar om af te drukken."
         },
         "button": {
           "continue": "Doorgaan",

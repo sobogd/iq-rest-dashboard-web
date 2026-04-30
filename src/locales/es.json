@@ -95,13 +95,13 @@
       "showDish": "Mostrar plato",
       "onboarding": {
         "step": {
-          "addCategory": "Este botón añade una nueva categoría — una sección de su menú como Postres, Bebidas o Platos principales. Las categorías agrupan los platos.",
-          "addDish": "Aquí se añaden los platos a una categoría. Cada plato tiene su propio nombre, precio y detalles.",
-          "edit": "El mismo icono de lápiz aparece junto a cada categoría y cada plato. En una categoría abre la pantalla de renombrar. En un plato abre un editor completo — nombre, precio, foto, descripción, alérgenos y traducciones a otros idiomas.",
-          "toggleDish": "Este icono de ojo oculta un plato a los clientes sin eliminarlo — útil cuando algo se ha agotado por hoy.",
-          "sort": "Estas flechas reordenan categorías y platos. Lo que está arriba lo ven los clientes primero.",
-          "preview": "Previsualizar abre una vista en vivo de su menú — muestra exactamente lo que ven los clientes al escanear el código QR.",
-          "share": "Compartir le da el enlace y el código QR de su menú. Imprima el QR y póngalo en sus mesas."
+          "addCategory": "Al pulsar este botón, añadirá una nueva categoría (por ejemplo: Postres, Bebidas, Principales).",
+          "addDish": "Al pulsar este botón, añadirá un plato a una categoría.",
+          "edit": "Al pulsar este lápiz, abrirá el editor. Para una categoría — renombrar. Para un plato — nombre, precio, foto, descripción, alérgenos, traducciones.",
+          "toggleDish": "Al pulsar este ojo, ocultará o mostrará un plato a los clientes. El plato no se elimina.",
+          "sort": "Al pulsar estas flechas, cambiará el orden de categorías y platos. Lo que está arriba lo ven los clientes primero.",
+          "preview": "Al pulsar este botón, abrirá una vista previa del menú — lo que ve un cliente al escanear el QR.",
+          "share": "Al pulsar este botón, obtendrá el enlace y el código QR de su menú, listos para imprimir."
         },
         "button": {
           "continue": "Continuar",

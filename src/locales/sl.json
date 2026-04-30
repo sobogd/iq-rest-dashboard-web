@@ -95,13 +95,13 @@
       "showDish": "Prikaži jed",
       "onboarding": {
         "step": {
-          "addCategory": "Ta gumb doda novo kategorijo — del jedilnika, kot so Sladice, Pijače ali Glavne jedi. Kategorije združujejo jedi.",
-          "addDish": "Tu se jedi dodajajo v kategorijo. Vsaka jed ima svoje ime, ceno in podrobnosti.",
-          "edit": "Ista ikona svinčnika se pojavi ob vsaki kategoriji in vsaki jedi. Pri kategoriji odpre zaslon za preimenovanje. Pri jedi popoln urejevalnik — ime, cena, fotografija, opis, alergeni in prevodi v druge jezike.",
-          "toggleDish": "Ta ikona očesa skrije jed pred gosti, ne da bi jo izbrisala — uporabno, ko je nekaj razprodano za dan.",
-          "sort": "Te puščice spreminjajo vrstni red kategorij in jedi. Tisto, kar je na vrhu, gostje vidijo najprej.",
-          "preview": "Predogled odpre živi pregled jedilnika — pokaže točno to, kar gostje vidijo ob skeniranju QR kode.",
-          "share": "Deli vam ponudi povezavo in QR kodo jedilnika. Natisnite QR in postavite na mize."
+          "addCategory": "S klikom na ta gumb boste dodali novo kategorijo (na primer: Sladice, Pijače, Glavne jedi).",
+          "addDish": "S klikom na ta gumb boste dodali jed v kategorijo.",
+          "edit": "S klikom na ta svinčnik boste odprli urejevalnik. Pri kategoriji — preimenovanje. Pri jedi — ime, cena, fotografija, opis, alergeni, prevodi.",
+          "toggleDish": "S klikom na to oko boste skrili ali prikazali jed gostom. Sama jed se ne izbriše.",
+          "sort": "S klikom na te puščice boste spremenili vrstni red kategorij in jedi. Tisto, kar je na vrhu, gostje vidijo najprej.",
+          "preview": "S klikom na ta gumb boste odprli predogled jedilnika — tisto, kar gost vidi po skeniranju QR kode.",
+          "share": "S klikom na ta gumb boste pridobili povezavo in QR kodo jedilnika, pripravljene za tisk."
         },
         "button": {
           "continue": "Naprej",

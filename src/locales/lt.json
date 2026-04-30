@@ -95,13 +95,13 @@
       "showDish": "Rodyti patiekalą",
       "onboarding": {
         "step": {
-          "addCategory": "Šis mygtukas prideda naują kategoriją — meniu skiltį, pvz., Desertai, Gėrimai ar Pagrindiniai patiekalai. Kategorijos grupuoja patiekalus.",
-          "addDish": "Čia patiekalai pridedami į kategoriją. Kiekvienas patiekalas turi savo pavadinimą, kainą ir detales.",
-          "edit": "Ta pati pieštuko piktograma rodoma šalia kiekvienos kategorijos ir kiekvieno patiekalo. Kategorijai ji atveria pervadinimo langą. Patiekalui — pilną redaktorių: pavadinimas, kaina, nuotrauka, aprašymas, alergenai ir vertimai į kitas kalbas.",
-          "toggleDish": "Ši akies piktograma slepia patiekalą nuo svečių jo neištrinant — naudinga, kai kažkas išpirkta dienai.",
-          "sort": "Šios rodyklės pertvarko kategorijas ir patiekalus. Esančius viršuje svečiai mato pirmus.",
-          "preview": "Peržiūra atveria gyvą jūsų meniu vaizdą — ji rodo būtent tai, ką svečiai mato nuskaitę QR kodą.",
-          "share": "Dalintis suteikia jūsų meniu nuorodą ir QR kodą. Atspausdinkite QR ir padėkite ant stalų."
+          "addCategory": "Paspaudus šį mygtuką, pridėsite naują kategoriją (pavyzdžiui: Desertai, Gėrimai, Pagrindiniai).",
+          "addDish": "Paspaudus šį mygtuką, pridėsite patiekalą į kategoriją.",
+          "edit": "Paspaudus šį pieštuką, atversite redaktorių. Kategorijai — pervadinimas. Patiekalui — pavadinimas, kaina, nuotrauka, aprašymas, alergenai, vertimai.",
+          "toggleDish": "Paspaudus šią akį, paslėpsite arba parodysite patiekalą svečiams. Pats patiekalas neištrinamas.",
+          "sort": "Paspaudus šias rodykles, pakeisite kategorijų ir patiekalų tvarką. Tai, kas viršuje, svečiai mato pirmiausia.",
+          "preview": "Paspaudus šį mygtuką, atversite meniu peržiūrą — tai, ką svečias mato nuskaitęs QR.",
+          "share": "Paspaudus šį mygtuką, gausite meniu nuorodą ir QR kodą, paruoštus spausdinti."
         },
         "button": {
           "continue": "Tęsti",

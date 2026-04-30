@@ -95,13 +95,13 @@
       "showDish": "Étel megjelenítése",
       "onboarding": {
         "step": {
-          "addCategory": "Ez a gomb új kategóriát ad hozzá — az étlap egy szakasza, mint Desszertek, Italok vagy Főételek. A kategóriák csoportosítják az ételeket.",
-          "addDish": "Itt lehet ételeket egy kategóriához adni. Minden étel saját névvel, árral és részletekkel rendelkezik.",
-          "edit": "Ugyanaz a ceruza ikon jelenik meg minden kategória és minden étel mellett. Kategóriánál átnevező képernyőt nyit. Ételnél teljes szerkesztőt — név, ár, fotó, leírás, allergének és fordítások más nyelvekre.",
-          "toggleDish": "Ez a szem ikon elrejti az ételt a vendégek elől, anélkül hogy törölné — hasznos, amikor valami elfogyott a napra.",
-          "sort": "Ezek a nyilak átrendezik a kategóriákat és ételeket. Ami felül van, azt a vendégek először látják.",
-          "preview": "Az Előnézet az étlap élő nézetét nyitja meg — pontosan azt mutatja, amit a vendégek a QR-kód beolvasásakor látnak.",
-          "share": "A Megosztás megadja az étlap linkjét és QR-kódját. Nyomtassa ki a QR-t és tegye az asztalokra."
+          "addCategory": "Erre a gombra koppintva új kategóriát ad hozzá (például: Desszertek, Italok, Főételek).",
+          "addDish": "Erre a gombra koppintva ételt ad hozzá egy kategóriához.",
+          "edit": "Erre a ceruzára koppintva megnyitja a szerkesztőt. Kategóriánál — átnevezés. Ételnél — név, ár, fotó, leírás, allergének, fordítások.",
+          "toggleDish": "Erre a szemre koppintva elrejti vagy megmutatja az ételt a vendégeknek. Az étel maga nem törlődik.",
+          "sort": "Ezekre a nyilakra koppintva megváltoztatja a kategóriák és ételek sorrendjét. Ami felül van, azt a vendégek először látják.",
+          "preview": "Erre a gombra koppintva megnyitja az étlap előnézetét — amit a vendég lát a QR beolvasása után.",
+          "share": "Erre a gombra koppintva megkapja az étlap linkjét és QR-kódját, nyomtatásra készen."
         },
         "button": {
           "continue": "Folytatás",

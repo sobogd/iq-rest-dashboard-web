@@ -95,13 +95,13 @@
       "showDish": "Mostrar prato",
       "onboarding": {
         "step": {
-          "addCategory": "Este botão adiciona uma nova categoria — uma secção do seu menu como Sobremesas, Bebidas ou Pratos principais. As categorias agrupam os pratos.",
-          "addDish": "É aqui que os pratos são adicionados a uma categoria. Cada prato tem o seu próprio nome, preço e detalhes.",
-          "edit": "O mesmo ícone de lápis aparece ao lado de cada categoria e de cada prato. Numa categoria abre o ecrã de renomear. Num prato abre um editor completo — nome, preço, foto, descrição, alérgenos e traduções para outras línguas.",
-          "toggleDish": "Este ícone de olho oculta um prato aos clientes sem o eliminar — útil quando algo se esgotou no dia.",
-          "sort": "Estas setas reordenam categorias e pratos. Os que estão no topo são vistos primeiro pelos clientes.",
-          "preview": "Pré-visualizar abre uma vista ao vivo do seu menu — mostra exatamente o que os clientes veem ao digitalizar o código QR.",
-          "share": "Partilhar dá-lhe o link e o código QR do seu menu. Imprima o QR e coloque-o nas mesas."
+          "addCategory": "Ao tocar neste botão, irá adicionar uma nova categoria (por exemplo: Sobremesas, Bebidas, Pratos principais).",
+          "addDish": "Ao tocar neste botão, irá adicionar um prato a uma categoria.",
+          "edit": "Ao tocar neste lápis, irá abrir o editor. Numa categoria — renomear. Num prato — nome, preço, foto, descrição, alérgenos, traduções.",
+          "toggleDish": "Ao tocar neste olho, irá ocultar ou mostrar um prato aos clientes. O prato em si não é eliminado.",
+          "sort": "Ao tocar nestas setas, irá mudar a ordem das categorias e pratos. O que está no topo é visto primeiro pelos clientes.",
+          "preview": "Ao tocar neste botão, irá abrir uma pré-visualização do menu — o que o cliente vê após digitalizar o QR.",
+          "share": "Ao tocar neste botão, irá obter o link e o código QR do seu menu, prontos para imprimir."
         },
         "button": {
           "continue": "Continuar",

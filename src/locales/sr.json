@@ -95,13 +95,13 @@
       "showDish": "Prikaži jelo",
       "onboarding": {
         "step": {
-          "addCategory": "Ovo dugme dodaje novu kategoriju — odeljak vašeg menija poput Deserti, Pića ili Glavna jela. Kategorije grupišu jela.",
-          "addDish": "Ovde se jela dodaju u kategoriju. Svako jelo ima vlastito ime, cenu i detalje.",
-          "edit": "Ista ikona olovke pojavljuje se pored svake kategorije i svakog jela. Na kategoriji otvara ekran preimenovanja. Na jelu kompletni uređivač — ime, cena, fotografija, opis, alergeni i prevodi na druge jezike.",
-          "toggleDish": "Ova ikona oka skriva jelo gostima bez brisanja — korisno kada je nešto rasprodato za danas.",
-          "sort": "Ove strelice menjaju redosled kategorija i jela. Ono što je na vrhu gosti vide prvo.",
-          "preview": "Pregled otvara prikaz vašeg menija uživo — pokazuje tačno ono što gosti vide kad skeniraju QR kod.",
-          "share": "Podeli vam daje link i QR kod vašeg menija. Odštampajte QR i stavite na stolove."
+          "addCategory": "Pritiskom na ovo dugme, dodaćete novu kategoriju (na primer: Deserti, Pića, Glavna jela).",
+          "addDish": "Pritiskom na ovo dugme, dodaćete jelo u kategoriju.",
+          "edit": "Pritiskom na ovu olovku, otvorićete uređivač. Za kategoriju — preimenovanje. Za jelo — ime, cena, fotografija, opis, alergeni, prevodi.",
+          "toggleDish": "Pritiskom na ovo oko, sakrićete ili prikazaćete jelo gostima. Jelo se ne briše.",
+          "sort": "Pritiskom na ove strelice, menjate redosled kategorija i jela. Ono što je na vrhu, gosti vide prvo.",
+          "preview": "Pritiskom na ovo dugme, otvorićete pregled menija — ono što gost vidi nakon skeniranja QR-a.",
+          "share": "Pritiskom na ovo dugme, dobićete link i QR kod menija, spremne za štampu."
         },
         "button": {
           "continue": "Nastavi",

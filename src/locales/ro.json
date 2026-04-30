@@ -95,13 +95,13 @@
       "showDish": "Afișează preparatul",
       "onboarding": {
         "step": {
-          "addCategory": "Acest buton adaugă o categorie nouă — o secțiune a meniului, ca Deserturi, Băuturi sau Feluri principale. Categoriile grupează preparatele.",
-          "addDish": "Aici se adaugă preparate într-o categorie. Fiecare preparat are propriul nume, preț și detalii.",
-          "edit": "Aceeași pictogramă creion apare lângă fiecare categorie și fiecare preparat. La o categorie, deschide ecranul de redenumire. La un preparat, un editor complet — nume, preț, fotografie, descriere, alergeni și traduceri în alte limbi.",
-          "toggleDish": "Această pictogramă ochi ascunde un preparat oaspeților fără a-l șterge — util când ceva s-a terminat pe ziua de azi.",
-          "sort": "Aceste săgeți reordonează categoriile și preparatele. Ceea ce este sus este văzut primul de oaspeți.",
-          "preview": "Previzualizare deschide o vizualizare live a meniului — arată exact ceea ce văd oaspeții când scanează codul QR.",
-          "share": "Partajare îți oferă link-ul și codul QR al meniului. Tipărește QR și pune-l pe mese."
+          "addCategory": "Apăsând pe acest buton, vei adăuga o categorie nouă (de exemplu: Deserturi, Băuturi, Feluri principale).",
+          "addDish": "Apăsând pe acest buton, vei adăuga un preparat într-o categorie.",
+          "edit": "Apăsând pe acest creion, vei deschide editorul. La categorie — redenumire. La preparat — nume, preț, fotografie, descriere, alergeni, traduceri.",
+          "toggleDish": "Apăsând pe acest ochi, vei ascunde sau afișa un preparat oaspeților. Preparatul în sine nu se șterge.",
+          "sort": "Apăsând pe aceste săgeți, schimbi ordinea categoriilor și preparatelor. Ce este sus este văzut primul de oaspeți.",
+          "preview": "Apăsând pe acest buton, vei deschide o previzualizare a meniului — ce vede oaspetele după scanarea QR.",
+          "share": "Apăsând pe acest buton, vei primi linkul și codul QR al meniului, gata de printat."
         },
         "button": {
           "continue": "Continuă",

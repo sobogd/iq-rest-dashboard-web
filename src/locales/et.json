@@ -95,13 +95,13 @@
       "showDish": "Näita roogi",
       "onboarding": {
         "step": {
-          "addCategory": "See nupp lisab uue kategooria — menüü osa, nagu Magustoidud, Joogid või Põhiroad. Kategooriad rühmitavad roogi.",
-          "addDish": "Siin lisatakse roogi kategooriasse. Igal roal on oma nimi, hind ja detailid.",
-          "edit": "Sama pliiatsi ikoon ilmub iga kategooria ja iga roa kõrval. Kategoorial avab see ümbernimetamise ekraani. Roal täisredaktori — nimi, hind, foto, kirjeldus, allergeenid ja tõlked teistesse keeltesse.",
-          "toggleDish": "See silma ikoon peidab roa külalistelt ilma seda kustutamata — kasulik, kui midagi on tänaseks otsa saanud.",
-          "sort": "Need nooled muudavad kategooriate ja roogade järjekorda. Ülemisi näevad külalised esimesena.",
-          "preview": "Eelvaade avab teie menüü reaalajas vaate — see näitab täpselt seda, mida külalised QR-koodi skannides näevad.",
-          "share": "Jaga annab teile menüü lingi ja QR-koodi. Trükkige QR välja ja pange laudadele."
+          "addCategory": "Sellele nupule vajutades lisate uue kategooria (näiteks: Magustoidud, Joogid, Põhiroad).",
+          "addDish": "Sellele nupule vajutades lisate roa kategooriasse.",
+          "edit": "Sellele pliiatsile vajutades avate redaktori. Kategoorial — ümbernimetamine. Roal — nimi, hind, foto, kirjeldus, allergeenid, tõlked.",
+          "toggleDish": "Sellele silmale vajutades peidate või näitate rooga külalistele. Roog ise ei kustu.",
+          "sort": "Nendele nooltele vajutades muudate kategooriate ja roogade järjekorda. Ülal olev nähakse külaliste poolt esimesena.",
+          "preview": "Sellele nupule vajutades avate menüü eelvaate — selle, mida külaline näeb pärast QR-koodi skannimist.",
+          "share": "Sellele nupule vajutades saate menüü lingi ja QR-koodi, valmis trükkimiseks."
         },
         "button": {
           "continue": "Edasi",

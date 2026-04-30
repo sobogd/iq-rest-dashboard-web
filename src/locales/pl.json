@@ -95,13 +95,13 @@
       "showDish": "Pokaż danie",
       "onboarding": {
         "step": {
-          "addCategory": "Ten przycisk dodaje nową kategorię — sekcję twojego menu, taką jak Desery, Napoje lub Dania główne. Kategorie grupują dania.",
-          "addDish": "Tutaj dania są dodawane do kategorii. Każde danie ma własną nazwę, cenę i szczegóły.",
-          "edit": "Ta sama ikona ołówka pojawia się obok każdej kategorii i każdego dania. Dla kategorii otwiera ekran zmiany nazwy. Dla dania pełny edytor — nazwa, cena, zdjęcie, opis, alergeny i tłumaczenia na inne języki.",
-          "toggleDish": "Ta ikona oka ukrywa danie przed gośćmi bez usuwania go — przydatne, gdy coś się wyprzedało na dzisiaj.",
-          "sort": "Te strzałki zmieniają kolejność kategorii i dań. To, co jest na górze, goście widzą pierwsze.",
-          "preview": "Podgląd otwiera widok na żywo twojego menu — pokazuje dokładnie to, co widzą goście po zeskanowaniu kodu QR.",
-          "share": "Udostępnij daje link i kod QR twojego menu. Wydrukuj QR i połóż na stolikach."
+          "addCategory": "Klikając ten przycisk, dodasz nową kategorię (na przykład: Desery, Napoje, Dania główne).",
+          "addDish": "Klikając ten przycisk, dodasz danie do kategorii.",
+          "edit": "Klikając ten ołówek, otworzysz edytor. Dla kategorii — zmiana nazwy. Dla dania — nazwa, cena, zdjęcie, opis, alergeny, tłumaczenia.",
+          "toggleDish": "Klikając to oko, ukryjesz lub pokażesz danie gościom. Danie samo nie zostanie usunięte.",
+          "sort": "Klikając te strzałki, zmienisz kolejność kategorii i dań. To, co jest na górze, goście widzą pierwsze.",
+          "preview": "Klikając ten przycisk, otworzysz podgląd menu — to, co widzi gość po zeskanowaniu QR.",
+          "share": "Klikając ten przycisk, otrzymasz link i kod QR menu, gotowe do druku."
         },
         "button": {
           "continue": "Dalej",

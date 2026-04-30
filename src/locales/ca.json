@@ -95,13 +95,13 @@
       "showDish": "Mostra plat",
       "onboarding": {
         "step": {
-          "addCategory": "Aquest botó afegeix una nova categoria — una secció del menú com Postres, Begudes o Plats principals. Les categories agrupen els plats.",
-          "addDish": "Aquí s'afegeixen plats a una categoria. Cada plat té el seu propi nom, preu i detalls.",
-          "edit": "La mateixa icona de llapis apareix al costat de cada categoria i de cada plat. En una categoria obre la pantalla de canvi de nom. En un plat un editor complet — nom, preu, foto, descripció, al·lèrgens i traduccions a altres idiomes.",
-          "toggleDish": "Aquesta icona d'ull amaga un plat als clients sense eliminar-lo — útil quan alguna cosa s'ha esgotat pel dia.",
-          "sort": "Aquestes fletxes reordenen categories i plats. El que està a dalt el veuen primer els clients.",
-          "preview": "Vista prèvia obre una vista en directe del teu menú — mostra exactament el que veuen els clients quan escanegen el codi QR.",
-          "share": "Compartir et dona l'enllaç i el codi QR del teu menú. Imprimeix el QR i posa'l a les taules."
+          "addCategory": "En tocar aquest botó, afegireu una nova categoria (per exemple: Postres, Begudes, Plats principals).",
+          "addDish": "En tocar aquest botó, afegireu un plat a una categoria.",
+          "edit": "En tocar aquest llapis, obrireu l'editor. En una categoria — canvi de nom. En un plat — nom, preu, foto, descripció, al·lèrgens, traduccions.",
+          "toggleDish": "En tocar aquest ull, amagareu o mostrareu un plat als clients. El plat en si no s'elimina.",
+          "sort": "En tocar aquestes fletxes, canviareu l'ordre de categories i plats. El que està a dalt els clients ho veuen primer.",
+          "preview": "En tocar aquest botó, obrireu una vista prèvia del menú — el que veu un client després d'escanejar el QR.",
+          "share": "En tocar aquest botó, obtindreu l'enllaç i el codi QR del menú, llestos per imprimir."
         },
         "button": {
           "continue": "Continuar",

@@ -95,13 +95,13 @@
       "showDish": "Mostra piatto",
       "onboarding": {
         "step": {
-          "addCategory": "Questo pulsante aggiunge una nuova categoria — una sezione del tuo menu come Dolci, Bevande o Piatti principali. Le categorie raggruppano i piatti.",
-          "addDish": "Qui i piatti vengono aggiunti a una categoria. Ogni piatto ha il proprio nome, prezzo e dettagli.",
-          "edit": "La stessa icona della matita appare accanto a ogni categoria e a ogni piatto. Su una categoria apre la schermata di rinomina. Su un piatto apre un editor completo — nome, prezzo, foto, descrizione, allergeni e traduzioni in altre lingue.",
-          "toggleDish": "Questa icona dell'occhio nasconde un piatto agli ospiti senza eliminarlo — utile quando qualcosa è esaurito per la giornata.",
-          "sort": "Queste frecce riordinano categorie e piatti. Quelli in cima vengono visti per primi dagli ospiti.",
-          "preview": "Anteprima apre una vista live del tuo menu — mostra esattamente ciò che vedono gli ospiti scansionando il QR code.",
-          "share": "Condividi ti dà il link e il QR code del tuo menu. Stampa il QR e mettilo sui tavoli."
+          "addCategory": "Toccando questo pulsante, aggiungerai una nuova categoria (per esempio: Dolci, Bevande, Primi).",
+          "addDish": "Toccando questo pulsante, aggiungerai un piatto a una categoria.",
+          "edit": "Toccando questa matita, aprirai l'editor. Per una categoria — rinominare. Per un piatto — nome, prezzo, foto, descrizione, allergeni, traduzioni.",
+          "toggleDish": "Toccando questo occhio, nasconderai o mostrerai un piatto agli ospiti. Il piatto non viene eliminato.",
+          "sort": "Toccando queste frecce, cambierai l'ordine di categorie e piatti. Ciò che sta in cima viene visto per primo dagli ospiti.",
+          "preview": "Toccando questo pulsante, aprirai un'anteprima del menu — quello che vede un ospite scansionando il QR.",
+          "share": "Toccando questo pulsante, otterrai il link e il QR code del tuo menu, pronti per la stampa."
         },
         "button": {
           "continue": "Continua",

@@ -95,13 +95,13 @@
       "showDish": "Gericht einblenden",
       "onboarding": {
         "step": {
-          "addCategory": "Diese Schaltfläche fügt eine neue Kategorie hinzu — ein Abschnitt der Speisekarte wie Desserts, Getränke oder Hauptgerichte. Kategorien gruppieren Gerichte.",
-          "addDish": "Hier werden Gerichte einer Kategorie hinzugefügt. Jedes Gericht hat einen eigenen Namen, Preis und Details.",
-          "edit": "Das gleiche Stiftsymbol erscheint neben jeder Kategorie und jedem Gericht. Bei einer Kategorie öffnet es das Umbenennen. Bei einem Gericht den vollständigen Editor — Name, Preis, Foto, Beschreibung, Allergene und Übersetzungen in andere Sprachen.",
-          "toggleDish": "Dieses Augensymbol blendet ein Gericht für Gäste aus, ohne es zu löschen — praktisch, wenn etwas für heute ausverkauft ist.",
-          "sort": "Diese Pfeile sortieren Kategorien und Gerichte um. Was oben steht, sehen Gäste zuerst.",
-          "preview": "Vorschau öffnet eine Live-Ansicht Ihrer Speisekarte — sie zeigt genau das, was Gäste beim Scannen des QR-Codes sehen.",
-          "share": "Teilen liefert den Link und den QR-Code Ihrer Speisekarte. Drucken Sie den QR und legen Sie ihn auf die Tische."
+          "addCategory": "Mit einem Tipp auf diese Schaltfläche fügen Sie eine neue Kategorie hinzu (z. B. Desserts, Getränke, Hauptgerichte).",
+          "addDish": "Mit einem Tipp auf diese Schaltfläche fügen Sie ein Gericht zu einer Kategorie hinzu.",
+          "edit": "Mit einem Tipp auf diesen Stift öffnen Sie den Editor. Bei einer Kategorie — Umbenennen. Bei einem Gericht — Name, Preis, Foto, Beschreibung, Allergene, Übersetzungen.",
+          "toggleDish": "Mit einem Tipp auf dieses Auge blenden Sie ein Gericht für Gäste aus oder ein. Das Gericht selbst wird nicht gelöscht.",
+          "sort": "Mit einem Tipp auf diese Pfeile ändern Sie die Reihenfolge der Kategorien und Gerichte. Was oben steht, sehen Gäste zuerst.",
+          "preview": "Mit einem Tipp auf diese Schaltfläche öffnen Sie eine Vorschau der Speisekarte — das, was ein Gast nach dem Scannen des QR sieht.",
+          "share": "Mit einem Tipp auf diese Schaltfläche erhalten Sie den Link und den QR-Code Ihrer Speisekarte zum Drucken."
         },
         "button": {
           "continue": "Weiter",

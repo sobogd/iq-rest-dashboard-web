@@ -95,13 +95,13 @@
       "showDish": "Show dish",
       "onboarding": {
         "step": {
-          "addCategory": "This button adds a new category — a section of your menu like Desserts, Drinks or Mains. Categories group dishes together.",
-          "addDish": "This is where dishes get added into a category. Each dish has its own name, price and details.",
-          "edit": "The same pencil icon shows up next to every category and every dish. On a category it opens the rename screen. On a dish it opens a full editor — name, price, photo, description, allergens and translations into other languages.",
-          "toggleDish": "This eye icon hides a dish from guests without deleting it — useful when something has sold out for the day.",
-          "sort": "These arrows reorder categories and dishes. The ones on top are seen by guests first.",
-          "preview": "Preview opens a live view of your menu — it shows exactly what guests see when they scan the QR code.",
-          "share": "Share gives you the link and QR code for your menu. Print the QR and place it on your tables."
+          "addCategory": "By tapping this button, you'll add a new category (for example: Desserts, Drinks, Mains).",
+          "addDish": "By tapping this button, you'll add a dish to a category.",
+          "edit": "By tapping this pencil, you'll open the editor. For a category — rename. For a dish — name, price, photo, description, allergens, translations.",
+          "toggleDish": "By tapping this eye, you'll hide or show a dish to guests. The dish itself is not deleted.",
+          "sort": "By tapping these arrows, you'll change the order of categories and dishes. What's on top is seen by guests first.",
+          "preview": "By tapping this button, you'll open a preview of the menu — what a guest sees after scanning the QR.",
+          "share": "By tapping this button, you'll get the link and the QR code of your menu, ready to print."
         },
         "button": {
           "continue": "Continue",

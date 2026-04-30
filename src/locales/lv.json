@@ -95,13 +95,13 @@
       "showDish": "Rādīt ēdienu",
       "onboarding": {
         "step": {
-          "addCategory": "Šī poga pievieno jaunu kategoriju — ēdienkartes sadaļu, piemēram, Deserti, Dzērieni vai Pamatēdieni. Kategorijas grupē ēdienus.",
-          "addDish": "Šeit ēdieni tiek pievienoti kategorijai. Katram ēdienam ir savs nosaukums, cena un detaļas.",
-          "edit": "Tā pati zīmuļa ikona parādās blakus katrai kategorijai un katram ēdienam. Kategorijai atver pārdēvēšanas ekrānu. Ēdienam pilnu redaktoru — nosaukums, cena, foto, apraksts, alergēni un tulkojumi citās valodās.",
-          "toggleDish": "Šī acs ikona slēpj ēdienu no viesiem, to nedzēšot — noderīgi, kad kaut kas ir izpārdots dienai.",
-          "sort": "Šīs bultiņas maina kategoriju un ēdienu secību. Tos, kas atrodas augšā, viesi redz pirmos.",
-          "preview": "Priekšskatījums atver jūsu ēdienkartes tiešraidi — tas parāda tieši to, ko viesi redz, skenējot QR kodu.",
-          "share": "Kopīgot dod jums saiti un QR kodu jūsu ēdienkartei. Izdrukājiet QR un nolieciet uz galdiem."
+          "addCategory": "Nospiežot šo pogu, jūs pievienosiet jaunu kategoriju (piemēram: Deserti, Dzērieni, Pamatēdieni).",
+          "addDish": "Nospiežot šo pogu, jūs pievienosiet ēdienu kategorijai.",
+          "edit": "Nospiežot šo zīmuli, jūs atvērsiet redaktoru. Kategorijai — pārdēvēšana. Ēdienam — nosaukums, cena, foto, apraksts, alergēni, tulkojumi.",
+          "toggleDish": "Nospiežot šo aci, jūs slēpsiet vai parādīsiet ēdienu viesiem. Pats ēdiens netiek dzēsts.",
+          "sort": "Nospiežot šīs bultiņas, jūs mainīsiet kategoriju un ēdienu secību. To, kas atrodas augšā, viesi redz pirmo.",
+          "preview": "Nospiežot šo pogu, jūs atvērsiet ēdienkartes priekšskatījumu — to, ko viesis redz pēc QR koda skenēšanas.",
+          "share": "Nospiežot šo pogu, jūs iegūsiet ēdienkartes saiti un QR kodu, gatavus drukāšanai."
         },
         "button": {
           "continue": "Turpināt",
