@@ -101,9 +101,19 @@ type OnboardingState = {
 };
 
 const inputClass =
-  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors";
+  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 invalid:[&:not(:placeholder-shown)]:border-destructive invalid:[&:not(:placeholder-shown)]:focus:ring-destructive/20 transition-colors";
 
 const labelClass = "block text-xs font-medium text-foreground mb-1.5 tracking-tight";
+
+function Logo() {
+  return (
+    <div className="mb-3">
+      <span className="text-2xl font-semibold tracking-tight text-foreground">
+        IQ <span className="text-primary">Rest</span>
+      </span>
+    </div>
+  );
+}
 
 function ProgressBar({ step }: { step: number }) {
   return (
@@ -112,7 +122,7 @@ function ProgressBar({ step }: { step: number }) {
         <div
           key={i}
           className={`h-1 flex-1 min-w-0 rounded-full transition-colors duration-300 ${
-            i < step ? "bg-foreground" : "bg-border"
+            i < step ? "bg-primary" : "bg-border"
           }`}
         />
       ))}
@@ -134,14 +144,10 @@ function Header({ title, subtitle }: { title: string; subtitle: string }) {
 
 function Actions({
   onBack,
-  onContinue,
-  canContinue = true,
   continueLabel,
   loading = false,
 }: {
   onBack?: () => void;
-  onContinue: () => void;
-  canContinue?: boolean;
   continueLabel: string;
   loading?: boolean;
 }) {
@@ -157,10 +163,9 @@ function Actions({
         </button>
       )}
       <button
-        type="button"
-        onClick={onContinue}
-        disabled={!canContinue || loading}
-        className="flex-1 h-10 text-sm font-medium text-background bg-foreground rounded-lg hover:bg-foreground/90 active:scale-[0.99] transition-all tracking-tight disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
+        type="submit"
+        disabled={loading}
+        className="flex-1 h-10 text-sm font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 active:scale-[0.99] transition-all tracking-tight disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
       >
         {loading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
         {continueLabel}
@@ -183,7 +188,13 @@ function Step1({
   t: ReturnType<typeof useTranslations<"onboarding">>;
 }) {
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        track("onboarding_rest_name_continue");
+        onContinue();
+      }}
+    >
       <ProgressBar step={1} />
       <Header title={t("step1.setupText")} subtitle={t("step1.subtitle")} />
 
@@ -193,24 +204,18 @@ function Step1({
       <input
         id="restaurant-name"
         type="text"
+        required
         placeholder={t("step1.namePlaceholder")}
         autoFocus
         value={state.restaurantName}
         onChange={(e) => setState((s) => ({ ...s, restaurantName: e.target.value }))}
         onFocus={() => track("onboarding_rest_name_focus")}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && state.restaurantName.trim()) onContinue();
-        }}
         className={inputClass}
       />
       <p className="text-xs text-muted-foreground mt-2">{t("step1.nameHint")}</p>
 
-      <Actions
-        onContinue={() => { track("onboarding_rest_name_continue"); onContinue(); }}
-        canContinue={state.restaurantName.trim().length > 0}
-        continueLabel={t("continue")}
-      />
-    </>
+      <Actions continueLabel={t("continue")} />
+    </form>
   );
 }
 
@@ -240,13 +245,14 @@ function Step2({
     setState((s) => ({ ...s, dish: { ...s.dish, photoFile: file, photoPreview: preview } }));
   };
 
-  const canContinue =
-    state.category.trim().length > 0 &&
-    state.dish.name.trim().length > 0 &&
-    state.dish.price.trim().length > 0;
-
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        track("onboarding_fill_continue");
+        onContinue();
+      }}
+    >
       <ProgressBar step={2} />
       <Header title={t("step2.title")} subtitle={t("step2.motivation")} />
 
@@ -256,6 +262,7 @@ function Step2({
       <input
         id="category"
         type="text"
+        required
         placeholder={t("step2.categoryPlaceholder")}
         value={state.category}
         onChange={(e) => setState((s) => ({ ...s, category: e.target.value }))}
@@ -271,6 +278,7 @@ function Step2({
       <input
         id="dish-name"
         type="text"
+        required
         placeholder={t("step2.dishNamePlaceholder")}
         value={state.dish.name}
         onChange={(e) =>
@@ -293,6 +301,7 @@ function Step2({
               id="price"
               type="text"
               inputMode="decimal"
+              required
               placeholder="12.50"
               value={state.dish.price}
               onChange={(e) =>
@@ -355,11 +364,9 @@ function Step2({
 
       <Actions
         onBack={() => { track("onboarding_fill_back"); onBack(); }}
-        onContinue={() => { track("onboarding_fill_continue"); onContinue(); }}
-        canContinue={canContinue}
         continueLabel={t("continue")}
       />
-    </>
+    </form>
   );
 }
 
@@ -407,7 +414,13 @@ function Step3({
   const uploadActive = !!uploadedPreview;
 
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        track("onboarding_brand_continue");
+        onContinue();
+      }}
+    >
       <ProgressBar step={3} />
       <Header title={t("step3.title")} subtitle={t("step3.subtitle")} />
 
@@ -501,11 +514,10 @@ function Step3({
 
       <Actions
         onBack={() => { track("onboarding_brand_back"); onBack(); }}
-        onContinue={() => { track("onboarding_brand_continue"); onContinue(); }}
         continueLabel={t("continue")}
         loading={submitting}
       />
-    </>
+    </form>
   );
 }
 
@@ -538,7 +550,13 @@ function Step4({
   };
 
   return (
-    <>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        track("onboarding_end_continue");
+        onGoToDashboard();
+      }}
+    >
       <ProgressBar step={4} />
       <Header title={t("step4.title")} subtitle={t("step4.subtitle")} />
 
@@ -589,11 +607,8 @@ function Step4({
         </div>
       )}
 
-      <Actions
-        onContinue={() => { track("onboarding_end_continue"); onGoToDashboard(); }}
-        continueLabel={t("step4.goToDashboard")}
-      />
-    </>
+      <Actions continueLabel={t("step4.goToDashboard")} />
+    </form>
   );
 }
 
@@ -709,8 +724,9 @@ export function OnboardingClient() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-secondary flex items-center justify-center px-4 py-4 antialiased tracking-tight">
+    <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4 antialiased tracking-tight">
       <div className="w-[360px] max-w-full bg-card border border-border rounded-2xl p-6 pb-7">
+        <Logo />
         {step === 1 && (
           <Step1 state={state} setState={setState} onContinue={next} t={t} />
         )}

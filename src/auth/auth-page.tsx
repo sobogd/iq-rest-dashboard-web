@@ -41,15 +41,25 @@ type Screen = "email" | "verify";
 // ─── Theme-adaptive classes ──────────────────────────────────────────────────
 
 const inputClass =
-  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors";
+  "w-full h-10 px-3 text-sm text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 invalid:[&:not(:placeholder-shown)]:border-destructive invalid:[&:not(:placeholder-shown)]:focus:ring-destructive/20 transition-colors";
 
 const labelClass = "block text-xs font-medium text-foreground mb-1.5 tracking-tight";
 
 const primaryButtonClass =
-  "w-full h-10 text-sm font-medium text-background bg-foreground rounded-lg hover:bg-foreground/90 active:scale-[0.99] transition-all tracking-tight disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2";
+  "w-full h-10 text-sm font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 active:scale-[0.99] transition-all tracking-tight disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2";
 
 const secondaryButtonClass =
   "w-full h-10 text-sm font-medium text-foreground bg-card border border-input rounded-lg hover:border-foreground active:scale-[0.99] transition-all tracking-tight flex items-center justify-center gap-2";
+
+function Logo() {
+  return (
+    <div className="flex justify-center mb-5">
+      <span className="text-3xl font-semibold tracking-tight text-foreground">
+        IQ <span className="text-primary">Rest</span>
+      </span>
+    </div>
+  );
+}
 
 // ─── Google "G" icon (official colors) ──────────────────────────────────────
 
@@ -85,10 +95,9 @@ function EmailScreen({
   googleHiddenRef: React.RefObject<HTMLDivElement | null>;
   t: ReturnType<typeof useTranslations<"dashboard.auth">>;
 }) {
-  const canContinue = isValidEmail(email);
-
   return (
     <>
+      <Logo />
       <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
         {t("title")} {t("titleAccent")}
       </h1>
@@ -102,35 +111,39 @@ function EmailScreen({
         </div>
       )}
 
-      <label htmlFor="email" className={labelClass}>
-        {t("emailLabel")}
-      </label>
-      <input
-        id="email"
-        type="email"
-        inputMode="email"
-        autoComplete="email"
-        placeholder={t("emailPlaceholder")}
-        autoFocus
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        onFocus={() => track("auth_focus_email")}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && canContinue) onContinue();
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onContinue();
         }}
-        disabled={status === "loading"}
-        className={inputClass}
-      />
-
-      <button
-        type="button"
-        onClick={onContinue}
-        disabled={!canContinue || status === "loading"}
-        className={`${primaryButtonClass} mt-4`}
       >
-        {status === "loading" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-        {t("continueEmail")}
-      </button>
+        <label htmlFor="email" className={labelClass}>
+          {t("emailLabel")}
+        </label>
+        <input
+          id="email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          placeholder={t("emailPlaceholder")}
+          autoFocus
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onFocus={() => track("auth_focus_email")}
+          disabled={status === "loading"}
+          className={inputClass}
+        />
+
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className={`${primaryButtonClass} mt-4`}
+        >
+          {status === "loading" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+          {t("continueEmail")}
+        </button>
+      </form>
 
       {GOOGLE_CLIENT_ID && (
         <>
@@ -163,7 +176,7 @@ function EmailScreen({
         </>
       )}
 
-      <p className="text-xs text-muted-foreground leading-snug text-center mt-6">
+      <p className="text-[11px] text-muted-foreground leading-snug text-center mt-6">
         {t("consent.text")}{" "}
         <Link
           href="/terms"
@@ -266,6 +279,7 @@ function VerifyScreen({
 
   return (
     <>
+      <Logo />
       <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
         {t("verifyTitle")}
       </h1>
@@ -304,7 +318,7 @@ function VerifyScreen({
             onFocus={(e) => { track("auth_focus_otp"); e.target.select(); }}
             autoFocus={idx === 0}
             disabled={status === "loading"}
-            className="flex-1 min-w-0 h-12 text-center text-lg font-medium text-foreground bg-card border border-input rounded-lg focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors tabular-nums disabled:opacity-50"
+            className="flex-1 min-w-0 h-12 text-center text-lg font-medium text-foreground bg-card border border-input rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors tabular-nums disabled:opacity-50"
           />
         ))}
       </div>
@@ -321,7 +335,7 @@ function VerifyScreen({
         {t("verifyButton")}
       </button>
 
-      <div className="flex flex-col items-center gap-2 mt-4">
+      <div className="flex flex-col items-center gap-4 mt-4">
         <button
           type="button"
           onClick={onResend}
@@ -590,7 +604,7 @@ export function AuthPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-secondary flex items-center justify-center px-4 py-4 antialiased tracking-tight">
+    <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4 antialiased tracking-tight">
       <div className="w-[360px] max-w-full bg-card border border-border rounded-2xl p-6 pb-7">
         {screen === "email" ? (
           <EmailScreen

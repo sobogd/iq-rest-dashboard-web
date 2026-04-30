@@ -101,7 +101,7 @@ export function DashboardChrome({
  return (
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>
-<div className="min-h-screen bg-secondary antialiased tracking-tight">
+<div className="min-h-screen bg-background antialiased tracking-tight">
  <TopBar restaurant={restaurant} activeTab={activeTab} />
  <main
  className="px-4 md:px-6 py-5 md:py-4 md:pb-10"
@@ -142,7 +142,7 @@ function TopBar({ restaurant, activeTab }: { restaurant: Restaurant; activeTab: 
  return (
  <header
  ref={headerRef}
- className="hidden md:block sticky top-0 z-20 bg-card/90 backdrop-blur-md border-b border-border"
+ className="hidden md:block sticky top-0 z-20 bg-[hsl(0_0%_9%/0.9)] backdrop-blur-md border-b border-border"
  >
  <div className="max-w-5xl mx-auto px-4 md:px-6">
  <div className="flex items-center justify-between gap-3 py-4">
@@ -188,7 +188,7 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  const router = useDashboardRouter();
  return (
  <nav
- className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-card/95 backdrop-blur-md border-t border-border"
+ className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-[hsl(0_0%_9%/0.95)] backdrop-blur-md border-t border-border"
  style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
  >
  <div className="flex items-stretch">
