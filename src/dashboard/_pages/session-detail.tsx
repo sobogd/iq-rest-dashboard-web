@@ -97,7 +97,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
           const data = await res.json();
           setSession(data.session || null);
           const evs = (data.events ?? []) as AnalyticsEvent[];
-          setLastEventAt(evs.length ? evs[evs.length - 1].occurredAt : null);
+          setLastEventAt(evs.length ? evs[0].occurredAt : null);
         }
       } finally {
         setLoading(false);
