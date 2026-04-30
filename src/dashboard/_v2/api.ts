@@ -491,9 +491,12 @@ export async function createCheckoutSession(
  return data.url || null;
 }
 
-export async function openBillingPortal(): Promise<string | null> {
+export async function openBillingPortal(locale?: string): Promise<string | null> {
  const res = await fetch(apiUrl("/api/stripe/portal"), {
-        credentials: "include", method: "POST" });
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ locale: locale || "en" }) });
  if (!res.ok) return null;
  const data = await res.json();
  return data.url || null;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronRightIcon, CheckIcon, CopyIcon, SendIcon, SparklesIcon, CloseIcon } from "./icons";
 import {
  AiImageModal,
@@ -1105,6 +1105,7 @@ interface SubStatus {
 export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.billing");
+ const locale = useLocale();
  const restaurant = useRestaurant();
  const [sub, setSub] = useState<SubStatus | null>(null);
  const [pendingPlan, setPendingPlan] = useState<{ plan: "BASIC" | "PRO"; cycle: "MONTHLY" | "YEARLY" } | null>(null);
@@ -1137,7 +1138,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  async function manage() {
  track(DashboardEvent.CLICKED_MANAGE_SUBSCRIPTION);
  try {
- const url = await openBillingPortal();
+ const url = await openBillingPortal(locale);
  if (url) window.location.href = url;
  else track(DashboardEvent.ERROR_PORTAL);
  } catch {
