@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Loader2 } from "lucide-react";
+import { track } from "@/lib/dashboard-events";
 
 interface MenuPreviewModalProps {
   menuUrl: string;
@@ -49,6 +50,7 @@ export function MenuPreviewModal({ menuUrl, children, className, open: controlle
   }, [open]);
 
   const handleClose = () => {
+    track("dash_menu_preview_close");
     setOpen(false);
   };
 

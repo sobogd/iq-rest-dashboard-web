@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronRightIcon } from "../_v2/icons";
 import { logout } from "../_v2/api";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 export function LogoutLink() {
  const t = useTranslations("dashboard.settingsHub");
@@ -12,7 +12,7 @@ export function LogoutLink() {
  const [busy, setBusy] = useState(false);
 
  async function handle() {
- track(DashboardEvent.CLICKED_LOGOUT);
+ track("dash_settings_click_logout");
  if (busy) return;
  setBusy(true);
  try {

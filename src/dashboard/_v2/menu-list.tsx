@@ -21,7 +21,7 @@ import { currencySymbolOf, moveItem } from "./helpers";
 import { fetchSubscriptionStatus, patchItem, reorderCategories, reorderItem } from "./api";
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 interface SubData {
  plan: string | null;
@@ -48,7 +48,6 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  const [sub, setSub] = useState<SubData | null>(initialSub);
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_MENU);
  if (!initialSub) {
  fetchSubscriptionStatus().then((s) => {
  if (s) setSub({ plan: s.plan, subscriptionStatus: s.subscriptionStatus, trialEndsAt: s.trialEndsAt });
@@ -74,10 +73,14 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  const allOpen = categories.length > 0 && categories.every((c) => openIds[c.id]);
 
  function toggleCategory(id: string) {
- setOpenIds((p) => ({ ...p, [id]: !p[id] }));
+ setOpenIds((p) => {
+ const next = !p[id];
+ track(next ? "dash_menu_category_expand" : "dash_menu_category_collapse");
+ return { ...p, [id]: next };
+ });
  }
  function expandAll() {
- track(DashboardEvent.CLICKED_EXPAND_ALL);
+ track("dash_menu_expand");
  const map: Record<string, boolean> = {};
  categories.forEach((c) => {
  map[c.id] = true;
@@ -85,7 +88,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  setOpenIds(map);
  }
  function collapseAll() {
- track(DashboardEvent.CLICKED_COLLAPSE_ALL);
+ track("dash_menu_collapse");
  // Set false explicitly per id rather than {} — otherwise the
  // initialCategories effect below treats missing ids as "new" and
  // re-opens every category after the next data refresh
@@ -98,19 +101,18 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  }
 
  async function moveCategory(idx: number, dir: number) {
- track(DashboardEvent.SORTED_CATEGORY);
+ track(dir < 0 ? "dash_menu_category_sort_up" : "dash_menu_category_sort_down");
  const next = moveItem(categories, idx, dir);
  setCategories(next);
  try {
  await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })));
  onPersisted?.();
  } catch {
- track(DashboardEvent.ERROR_SORT);
  }
  }
 
  async function moveDish(categoryId: string, idx: number, dir: number) {
- track(DashboardEvent.SORTED_ITEM);
+ track(dir < 0 ? "dash_menu_item_sort_up" : "dash_menu_item_sort_down");
  const cat = categories.find((c) => c.id === categoryId);
  if (!cat) return;
  const dish = cat.dishes[idx];
@@ -124,12 +126,11 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  await reorderItem(dish.id, dir < 0 ? "up" : "down");
  onPersisted?.();
  } catch {
- track(DashboardEvent.ERROR_SORT);
  }
  }
 
  async function toggleDishVisible(categoryId: string, dishId: string) {
- track(DashboardEvent.TOGGLED_ITEM_VISIBLE);
+ track("dash_menu_item_click");
  const cat = categories.find((c) => c.id === categoryId);
  const dish = cat?.dishes.find((d) => d.id === dishId);
  if (!dish) return;
@@ -148,7 +149,6 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  await patchItem(dishId, { isActive: nextVisible });
  onPersisted?.();
  } catch {
- track(DashboardEvent.ERROR_TOGGLE);
  setCategories((cats) =>
  cats.map((c) =>
  c.id === categoryId
@@ -171,12 +171,12 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {menuUrl ? (
- <PreviewButton url={menuUrl} onOpen={() => track(DashboardEvent.CLICKED_PREVIEW_MENU)} />
+ <PreviewButton url={menuUrl} onOpen={() => track("dash_menu_preview_open")} />
  ) : null}
  {menuUrl ? (
  <ShareButton
  onClick={() => {
- track(DashboardEvent.CLICKED_SHARE_MENU);
+ track("dash_menu_share_open");
  setShareOpen(true);
  }}
  />
@@ -185,7 +185,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <SubscriptionChip
  sub={sub}
  onClick={() => {
- track(DashboardEvent.CLICKED_SUBSCRIPTION_CHIP);
+ track("dash_menu_plan");
  router.push({ name: "settings.billing" });
  }}
  />
@@ -218,7 +218,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_ADD_CATEGORY);
+ track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
  className={primaryBtn + " w-full inline-flex items-center justify-center"}
@@ -251,7 +251,7 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_ADD_CATEGORY);
+ track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
  className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
@@ -320,7 +320,7 @@ function CategoryAccordion({
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_CATEGORY_ROW);
+ track("dash_menu_category_click");
  router.push({ name: "category.edit", id: category.id });
  }}
  className="flex-1 min-w-0 text-left"
@@ -340,7 +340,7 @@ function CategoryAccordion({
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_CATEGORY_ROW);
+ track("dash_menu_category_edit");
  router.push({ name: "category.edit", id: category.id });
  }}
  className={iconBtn}
@@ -378,7 +378,7 @@ function CategoryAccordion({
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_ADD_ITEM);
+ track("dash_menu_add_item");
  router.push({ name: "item.new", categoryId: category.id });
  }}
  className="w-full flex items-center gap-2 pl-2 pr-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
@@ -433,7 +433,7 @@ function DishRow({
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_ITEM_ROW);
+ track("dash_menu_item_click");
  router.push({ name: "item.edit", id: dish.id });
  }}
  className="flex-1 min-w-0 text-left flex items-center gap-3"
@@ -458,7 +458,7 @@ function DishRow({
  <button
  type="button"
  onClick={() => {
- track(DashboardEvent.CLICKED_ITEM_ROW);
+ track("dash_menu_item_edit");
  router.push({ name: "item.edit", id: dish.id });
  }}
  className={iconBtn}

@@ -43,7 +43,7 @@ import {
 } from "./api";
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish, DishOption, Ml, OptionVariant } from "./types";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 const OPTIONS_ENABLED = import.meta.env.VITE_OPTIONS_ENABLED === "TRUE";
 
@@ -81,7 +81,6 @@ export function CategoryForm({
  })();
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_CATEGORY_FORM);
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
@@ -89,10 +88,9 @@ export function CategoryForm({
  const [alert, setAlert] = useState<{ title: string; message: string } | null>(null);
 
  async function save() {
- track(DashboardEvent.CLICKED_SAVE_CATEGORY);
+ track("dash_category_click_save");
  if (saving) return;
  if (namePrimary.length === 0) {
- track(DashboardEvent.ERROR_VALIDATION);
  setAlert({
  title: t("nameRequiredTitle"),
  message: t("nameRequiredMessage"),
@@ -113,20 +111,18 @@ export function CategoryForm({
  }
  onSavedRedirect();
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  setSaving(false);
  }
  }
 
  async function confirmDelete() {
- track(DashboardEvent.CLICKED_DELETE_CATEGORY);
+ track("dash_category_click_delete");
  if (!category) return;
  setDeleting(true);
  try {
  await deleteCategory(category.id);
  onDeletedRedirect();
  } catch {
- track(DashboardEvent.ERROR_DELETE);
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -139,7 +135,7 @@ export function CategoryForm({
  return (
  <div>
  <EditPageHeader
- onBack={onBack}
+ onBack={() => { track("dash_category_click_back"); onBack(); }}
  title={titleText}
  breadcrumb={t("breadcrumb")}
  lang={lang}
@@ -148,6 +144,8 @@ export function CategoryForm({
  onSave={save}
  canSave={!saving}
  saving={saving}
+ onLangsOpen={() => track("dash_category_click_langs")}
+ onLangSelect={() => track("dash_category_click_lang")}
  />
 
  <div className="max-w-2xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6">
@@ -160,6 +158,7 @@ export function CategoryForm({
  languages={languages}
  onChange={(v) => setForm((f) => ({ ...f, name: v }))}
  placeholder={t("namePlaceholder")}
+ onFocus={() => track("dash_category_focus_name_input")}
  />
  </div>
 
@@ -259,7 +258,6 @@ export function DishForm({
  })();
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_ITEM_FORM);
  if (typeof window !== "undefined" && window.location.hash === "#options") {
  const el = document.getElementById("options-section");
  if (el) {
@@ -308,7 +306,6 @@ export function DishForm({
  if (saving) return null;
  const validation = validateForm();
  if (validation) {
- track(DashboardEvent.ERROR_VALIDATION);
  setAlert(validation);
  return null;
  }
@@ -355,14 +352,13 @@ export function DishForm({
  }
  return savedId;
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  setSaving(false);
  return null;
  }
  }
 
  async function save() {
- track(DashboardEvent.CLICKED_SAVE_ITEM);
+ track("dash_item_click_save");
  await persist("list");
  }
 
@@ -387,14 +383,13 @@ export function DishForm({
  }
 
  async function confirmDelete() {
- track(DashboardEvent.CLICKED_DELETE_ITEM);
+ track("dash_item_click_delete");
  if (!dish) return;
  setDeleting(true);
  try {
  await deleteItem(dish.id);
  onDeletedRedirect();
  } catch {
- track(DashboardEvent.ERROR_DELETE);
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -408,7 +403,7 @@ export function DishForm({
  return (
  <div>
  <EditPageHeader
- onBack={onBack}
+ onBack={() => { track("dash_item_click_back"); onBack(); }}
  title={titleText}
  breadcrumb={categoryName ? t("breadcrumb") + " / " + categoryName : t("breadcrumb")}
  lang={lang}
@@ -417,6 +412,8 @@ export function DishForm({
  onSave={save}
  canSave={!saving}
  saving={saving}
+ onLangsOpen={() => track("dash_item_click_langs")}
+ onLangSelect={() => track("dash_item_click_lang")}
  />
 
  <div className="max-w-2xl mx-auto space-y-3">
@@ -426,7 +423,9 @@ export function DishForm({
  <PhotoPicker
  url={form.photoUrl}
  onChange={(url) => setForm((f) => ({ ...f, photoUrl: url }))}
- onAiClick={() => setAiOpen(true)}
+ onAiClick={() => { track("dash_item_click_generate_photo"); setAiOpen(true); }}
+ onAddClick={() => track("dash_item_click_add_photo")}
+ onRemoveClick={() => track("dash_item_click_delete_photo")}
  inputId="dish-photo"
  width="w-full"
  height="aspect-square"
@@ -444,6 +443,7 @@ export function DishForm({
  languages={languages}
  onChange={(v) => setForm((f) => ({ ...f, name: v }))}
  placeholder={t("namePlaceholder")}
+ onFocus={() => track("dash_item_focus_name_input")}
  />
  </div>
  <div className="w-24 shrink-0">
@@ -461,6 +461,7 @@ export function DishForm({
  placeholder={t("pricePlaceholder")}
  value={form.price}
  onChange={(e) => setForm((f) => ({ ...f, price: sanitizePriceInput(e.target.value) }))}
+ onFocus={() => track("dash_item_focus_price_input")}
  className={inputClass + " pl-6 pr-2 tabular-nums"}
  />
  </div>
@@ -476,6 +477,7 @@ export function DishForm({
  onChange={(v) => setForm((f) => ({ ...f, description: v }))}
  placeholder={t("descPlaceholder")}
  multiline
+ onFocus={() => track("dash_item_focus_description_input")}
  />
  </div>
  </div>
@@ -498,7 +500,10 @@ export function DishForm({
  <button
  key={a.code}
  type="button"
- onClick={() => toggleAllergen(a.code)}
+ onClick={() => {
+ track(form.allergens.includes(a.code) ? "dash_item_click_allergen_off" : "dash_item_click_allergen_on");
+ toggleAllergen(a.code);
+ }}
  className={
  "inline-flex items-center h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
  (checked
@@ -556,7 +561,10 @@ export function DishForm({
  </div>
  <ToggleSwitch
  checked={form.visible}
- onChange={() => setForm((f) => ({ ...f, visible: !f.visible }))}
+ onChange={() => {
+ track("dash_item_click_visible_toggle");
+ setForm((f) => ({ ...f, visible: !f.visible }));
+ }}
  />
  </label>
  </div>
@@ -599,6 +607,7 @@ export function DishForm({
  title={t("aiTitle")}
  defaultPrompt={getMl(form.name, defaultLang)}
  aspect="square"
+ eventPrefix="dash_item"
  />
  </div>
  );
@@ -799,7 +808,6 @@ export function OptionForm({
  })();
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_OPTION_FORM);
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
@@ -836,14 +844,12 @@ export function OptionForm({
  }));
  }
  function addVariant() {
- track(DashboardEvent.CLICKED_ADD_VARIANT);
  setForm((f) => ({
  ...f,
  variants: [...f.variants, { id: newId(), name: emptyMl(languages), priceDelta: "0" }],
  }));
  }
  function removeVariant(idx: number) {
- track(DashboardEvent.CLICKED_REMOVE_VARIANT);
  setForm((f) => ({ ...f, variants: f.variants.filter((_, i) => i !== idx) }));
  }
  function moveVariant(idx: number, dir: number) {
@@ -851,7 +857,6 @@ export function OptionForm({
  }
 
  async function translateAllVariants() {
- track(DashboardEvent.CLICKED_AI_TRANSLATE);
  if (lang === defaultLang || translatingAll) return;
  const targets = form.variants
  .map((v, i) => ({ v, i }))
@@ -881,11 +886,9 @@ export function OptionForm({
  }
 
  async function save() {
- track(DashboardEvent.CLICKED_SAVE_OPTION);
  if (saving) return;
  const validation = validateForm();
  if (validation) {
- track(DashboardEvent.ERROR_VALIDATION);
  setAlert(validation);
  return;
  }
@@ -912,13 +915,11 @@ export function OptionForm({
  await persistDishOptions(dish, nextOptions, defaultLang);
  onSavedRedirect();
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  setSaving(false);
  }
  }
 
  async function confirmDelete() {
- track(DashboardEvent.CLICKED_DELETE_OPTION);
  if (!option) return;
  setDeleting(true);
  const nextOptions = dish.options.filter((o) => o.id !== option.id);
@@ -926,7 +927,6 @@ export function OptionForm({
  await persistDishOptions(dish, nextOptions, defaultLang);
  onDeletedRedirect();
  } catch {
- track(DashboardEvent.ERROR_DELETE);
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -985,7 +985,6 @@ export function OptionForm({
  <ToggleSwitch
  checked={form.type === "multi"}
  onChange={() => {
- track(DashboardEvent.TOGGLED_OPTION_MULTI);
  setForm((f) => ({ ...f, type: f.type === "multi" ? "single" : "multi" }));
  }}
  />
@@ -1003,7 +1002,6 @@ export function OptionForm({
  <ToggleSwitch
  checked={form.required}
  onChange={() => {
- track(DashboardEvent.TOGGLED_OPTION_REQUIRED);
  setForm((f) => ({ ...f, required: !f.required }));
  }}
  />

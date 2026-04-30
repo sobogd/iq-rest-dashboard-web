@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Loader2 } from "lucide-react";
 import { identify } from "@/lib/analytics";
-import { track, DashboardEvent } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 declare global {
   interface Window {
@@ -114,6 +114,7 @@ function EmailScreen({
         autoFocus
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onFocus={() => track("auth_focus_email")}
         onKeyDown={(e) => {
           if (e.key === "Enter" && canContinue) onContinue();
         }}
@@ -300,7 +301,7 @@ function VerifyScreen({
             value={digit}
             onChange={(e) => setDigit(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
-            onFocus={(e) => e.target.select()}
+            onFocus={(e) => { track("auth_focus_otp"); e.target.select(); }}
             autoFocus={idx === 0}
             disabled={status === "loading"}
             className="flex-1 min-w-0 h-12 text-center text-lg font-medium text-foreground bg-card border border-input rounded-lg focus:outline-none focus:border-foreground focus:ring-2 focus:ring-foreground/5 transition-colors tabular-nums disabled:opacity-50"
@@ -413,8 +414,7 @@ export function AuthPage() {
         });
         const data = await res.json();
         if (res.ok) {
-          track(DashboardEvent.AUTH_GOOGLE_LOGIN);
-          if (data.isNewUser) track(DashboardEvent.AUTH_SIGNUP);
+          track("auth_click_google");
           await identify();
           if (data.legacyDashboard) {
             window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
@@ -475,7 +475,7 @@ export function AuthPage() {
   }, [handleGoogleResponse]);
 
   useEffect(() => {
-    track(DashboardEvent.SHOWED_LOGIN);
+    track("auth_showed");
   }, []);
 
   const handleContinue = async () => {
@@ -499,31 +499,28 @@ export function AuthPage() {
       const data = await res.json();
 
       if (res.ok) {
-        track(DashboardEvent.CLICKED_LOGIN_CONTINUE);
-        if (data.isNewUser) track(DashboardEvent.AUTH_SIGNUP);
+        track("auth_click_continue");
         setCode(Array(CODE_LENGTH).fill(""));
         setCooldown(RESEND_COOLDOWN);
         setStatus("idle");
         setScreen("verify");
-        track(DashboardEvent.SHOWED_OTP);
+        track("auth_showed_otp");
       } else {
-        track(DashboardEvent.ERROR_OTP_SEND);
         setErrorMessage(data.error || t("errors.sendFailed"));
         setStatus("error");
       }
     } catch {
-      track(DashboardEvent.ERROR_OTP_SEND);
       setErrorMessage(t("errors.sendFailed"));
       setStatus("error");
     }
   };
 
   const handleBack = () => {
+    track("auth_click_change_email");
     setCode(Array(CODE_LENGTH).fill(""));
     setScreen("email");
     setStatus("idle");
     setErrorMessage("");
-    track(DashboardEvent.CLICKED_CHANGE_EMAIL);
   };
 
   const handleVerify = async () => {
@@ -543,7 +540,7 @@ export function AuthPage() {
       const data = await res.json();
 
       if (res.ok) {
-        track(DashboardEvent.CLICKED_VERIFY_OTP);
+        track("auth_click_verify");
         await identify();
         if (data.legacyDashboard) {
           window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
@@ -551,14 +548,12 @@ export function AuthPage() {
         }
         window.location.assign(`/${locale}/${data.onboardingStep < 3 ? "onboarding" : "dashboard"}`);
       } else {
-        track(DashboardEvent.ERROR_OTP_VERIFY);
         const key = ERROR_MAP[data.error];
         setErrorMessage(key ? t(key) : t("errors.verifyFailed"));
         setStatus("error");
         setCode(Array(CODE_LENGTH).fill(""));
       }
     } catch {
-      track(DashboardEvent.ERROR_OTP_VERIFY);
       setErrorMessage(t("errors.verifyFailed"));
       setStatus("error");
       setCode(Array(CODE_LENGTH).fill(""));
@@ -567,6 +562,7 @@ export function AuthPage() {
 
   const handleResend = async () => {
     if (cooldown > 0 || resendStatus === "loading") return;
+    track("auth_click_renew_code");
     setResendStatus("loading");
     setErrorMessage("");
     try {

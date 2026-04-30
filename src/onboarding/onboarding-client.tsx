@@ -7,6 +7,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
 import { Loader2, ArrowRight } from "lucide-react";
 import { getMenuUrl, getMenuUrlPrefix } from "@/lib/menu-url";
+import { track } from "@/lib/dashboard-events";
 
 const PRESETS = [
   {
@@ -194,6 +195,7 @@ function Step1({
         autoFocus
         value={state.restaurantName}
         onChange={(e) => setState((s) => ({ ...s, restaurantName: e.target.value }))}
+        onFocus={() => track("onboarding_rest_name_focus")}
         onKeyDown={(e) => {
           if (e.key === "Enter" && state.restaurantName.trim()) onContinue();
         }}
@@ -202,7 +204,7 @@ function Step1({
       <p className="text-xs text-muted-foreground mt-2">{t("step1.nameHint")}</p>
 
       <Actions
-        onContinue={onContinue}
+        onContinue={() => { track("onboarding_rest_name_continue"); onContinue(); }}
         canContinue={state.restaurantName.trim().length > 0}
         continueLabel={t("continue")}
       />
@@ -226,6 +228,7 @@ function Step2({
   t: ReturnType<typeof useTranslations<"onboarding">>;
 }) {
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    track("onboarding_fill_add_photo");
     const file = e.target.files?.[0];
     if (!file) return;
     if (state.dish.photoPreview?.startsWith("blob:")) {
@@ -254,6 +257,7 @@ function Step2({
         placeholder={t("step2.categoryPlaceholder")}
         value={state.category}
         onChange={(e) => setState((s) => ({ ...s, category: e.target.value }))}
+        onFocus={() => track("onboarding_fill_category_focus")}
         className={`${inputClass} mb-5`}
       />
 
@@ -270,6 +274,7 @@ function Step2({
         onChange={(e) =>
           setState((s) => ({ ...s, dish: { ...s.dish, name: e.target.value } }))
         }
+        onFocus={() => track("onboarding_fill_name_focus")}
         className={`${inputClass} mb-4`}
       />
 
@@ -347,8 +352,8 @@ function Step2({
       <p className="text-xs text-muted-foreground mt-3">{t("step2.photoHint")}</p>
 
       <Actions
-        onBack={onBack}
-        onContinue={onContinue}
+        onBack={() => { track("onboarding_fill_back"); onBack(); }}
+        onContinue={() => { track("onboarding_fill_continue"); onContinue(); }}
         canContinue={canContinue}
         continueLabel={t("continue")}
       />
@@ -376,6 +381,7 @@ function Step3({
   const { presetIdx, uploadedPreview } = state.cover;
 
   const handleSelect = (idx: number) => {
+    track(`onboarding_brand_click_style_${idx + 1}`);
     if (state.cover.uploadedPreview?.startsWith("blob:")) {
       URL.revokeObjectURL(state.cover.uploadedPreview);
     }
@@ -386,6 +392,7 @@ function Step3({
   };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    track("onboarding_brand_upload_style");
     const file = e.target.files?.[0];
     if (!file) return;
     if (state.cover.uploadedPreview?.startsWith("blob:")) {
@@ -482,8 +489,8 @@ function Step3({
       </p>
 
       <Actions
-        onBack={onBack}
-        onContinue={onContinue}
+        onBack={() => { track("onboarding_brand_back"); onBack(); }}
+        onContinue={() => { track("onboarding_brand_continue"); onContinue(); }}
         continueLabel={t("continue")}
         loading={submitting}
       />
@@ -509,6 +516,7 @@ function Step4({
   const displayUrl = menuSlug ? getMenuUrlPrefix() + menuSlug : "";
 
   const handleCopy = async () => {
+    track("onboarding_end_click_copy");
     try {
       await navigator.clipboard.writeText(menuUrl);
       setCopied(true);
@@ -525,7 +533,10 @@ function Step4({
 
       {menuUrl && (
         <div className="flex flex-col items-center mb-6">
-          <div className="w-[180px] h-[180px] bg-white rounded-2xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+          <div
+            className="w-[180px] h-[180px] bg-white rounded-2xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+            onClick={() => track("onboarding_end_click_qr_image")}
+          >
             <QRCodeSVG
               value={menuUrl}
               size={140}
@@ -540,7 +551,10 @@ function Step4({
 
       {menuUrl && (
         <div className="flex items-center justify-between gap-2 p-3 bg-secondary border border-border rounded-lg">
-          <span className="text-xs text-muted-foreground truncate">{displayUrl}</span>
+          <span
+            className="text-xs text-muted-foreground truncate"
+            onClick={() => track("onboarding_end_click_input")}
+          >{displayUrl}</span>
           <button
             type="button"
             onClick={handleCopy}
@@ -565,7 +579,7 @@ function Step4({
       )}
 
       <Actions
-        onContinue={onGoToDashboard}
+        onContinue={() => { track("onboarding_end_continue"); onGoToDashboard(); }}
         continueLabel={t("step4.goToDashboard")}
       />
     </>
@@ -578,6 +592,11 @@ export function OnboardingClient() {
   const t = useTranslations("onboarding");
   const locale = useLocale();
   const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    track("onboarding_first_view");
+  }, []);
+
   const [submitting, setSubmitting] = useState(false);
   const [menuSlug, setMenuSlug] = useState("");
   const [state, setState] = useState<OnboardingState>({

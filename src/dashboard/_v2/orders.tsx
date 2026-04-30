@@ -21,7 +21,7 @@ import type {
  OrderItemStatus,
  TableEntity,
 } from "./types";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 const ITEM_STATUS_KEYS: Record<OrderItemStatus, "statusPending" | "statusCooking" | "statusReady" | "statusServed"> = {
  pending: "statusPending",
@@ -84,7 +84,6 @@ export function OrdersPage({
  view.name !== "list" ? orders.find((o) => o.id === view.orderId) || null : null;
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_ORDERS);
  }, []);
 
  useEffect(() => {
@@ -105,12 +104,10 @@ export function OrdersPage({
  total: calcOrderTotal(next),
  });
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  }
  }
 
  function setItemStatus(orderId: string, itemId: string, status: OrderItemStatus) {
- track(DashboardEvent.CHANGED_ORDER_ITEM_STATUS, { status });
  const order = orders.find((o) => o.id === orderId);
  if (!order) return;
  const items = order.items.map((it) => (it.id === itemId ? { ...it, status } : it));
@@ -118,7 +115,7 @@ export function OrdersPage({
  }
 
  function removeItem(orderId: string, itemId: string) {
- track(DashboardEvent.CLICKED_REMOVE_ORDER_ITEM);
+ track("dash_orders_order_remove_item");
  const order = orders.find((o) => o.id === orderId);
  if (!order) return;
  const items = order.items.filter((it) => it.id !== itemId);
@@ -126,20 +123,19 @@ export function OrdersPage({
  }
 
  function completeOrder(orderId: string) {
- track(DashboardEvent.CLICKED_COMPLETE_ORDER);
+ track("dash_orders_order_complete_order");
  persistOrder(orderId, { status: "completed" });
  setView({ name: "list" });
  }
 
  async function removeOrder(orderId: string) {
- track(DashboardEvent.CLICKED_DELETE_ORDER);
+ track("dash_orders_order_delete_order");
  setOrders((all) => all.filter((o) => o.id !== orderId));
  setView({ name: "list" });
  try {
  await deleteOrder(orderId);
  router.refresh();
  } catch {
- track(DashboardEvent.ERROR_DELETE);
  }
  }
 
@@ -151,7 +147,7 @@ export function OrdersPage({
  }
 
  async function startOrderForTable(tableId: string) {
- track(DashboardEvent.CLICKED_START_ORDER);
+ track("dash_orders_click_start_order");
  if (creating) return;
  const table = tables.find((t) => t.id === tableId);
  if (!table) return;
@@ -208,7 +204,7 @@ export function OrdersPage({
  currencySymbol={currencySymbol}
  onBack={() => setView({ name: "list" })}
  onAddItem={() => {
- track(DashboardEvent.CLICKED_ADD_ORDER_ITEM);
+ track("dash_orders_order_add_item");
  setView({ name: "addItem", orderId: currentOrder.id, step: "category" });
  }}
  onItemStatusChange={(itemId, status) => setItemStatus(currentOrder.id, itemId, status)}
@@ -229,7 +225,7 @@ export function OrdersPage({
 
  if (tables.length === 0) {
  return (
- <div className="max-w-2xl mx-auto">
+ <div className="max-w-2xl mx-auto" onClick={() => track("dash_orders_click_map_empty")}>
  <PageHeader
  title={t("title")}
  subtitle={activeOrders.length === 1 ? t("subtitleOne", { count: activeOrders.length }) : t("subtitleOther", { count: activeOrders.length })}
@@ -266,7 +262,7 @@ export function OrdersPage({
  tables={tables}
  selectedId={selectedTableId}
  onSelectTable={(id) => {
- track(DashboardEvent.CLICKED_TABLE_SELECT);
+ track("dash_orders_click_table");
  setSelectedTableId(id);
  }}
  occupiedIds={occupiedIds}
@@ -314,7 +310,7 @@ export function OrdersPage({
  order={order}
  currencySymbol={currencySymbol}
  onClick={() => {
- track(DashboardEvent.CLICKED_OPEN_ORDER);
+ track("dash_orders_click_order");
  setView({ name: "order", orderId: order.id });
  }}
  hideTable
@@ -451,7 +447,7 @@ function OrderDetailPage({
  <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
  <button
  type="button"
- onClick={onBack}
+ onClick={() => { track("dash_orders_order_back"); onBack(); }}
  className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
  >
  <ChevronLeftIcon size={14} />
@@ -606,7 +602,7 @@ function OrderItemCard({
  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
  <button
  type="button"
- onClick={() => onStatusChange(nextStatus[item.status])}
+ onClick={() => { track("dash_orders_order_status_click"); onStatusChange(nextStatus[item.status]); }}
  className={
  "inline-flex items-center h-7 px-2.5 text-[11px] font-medium border rounded-full transition-opacity " +
  statusCls
@@ -720,7 +716,7 @@ function AddItemFlow({
  <button
  key={d.id}
  type="button"
- onClick={() => goConfigure(cat.id, d.id)}
+ onClick={() => { track("dash_orders_order_select_item"); goConfigure(cat.id, d.id); }}
  className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-lg transition-colors"
  >
  <span className="text-sm text-foreground truncate">
@@ -750,7 +746,7 @@ function AddItemFlow({
  <button
  key={c.id}
  type="button"
- onClick={() => goDish(c.id)}
+ onClick={() => { track("dash_orders_order_select_category"); goDish(c.id); }}
  className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-lg transition-colors"
  >
  <span className="text-sm font-medium text-foreground truncate">
@@ -839,7 +835,6 @@ function DishWizard({
  );
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_DISH_WIZARD);
  }, []);
 
  const [reqSelections, setReqSelections] = useState<Record<string, string | string[] | null>>(() => {
@@ -936,7 +931,6 @@ function DishWizard({
  }
 
  function pickRequiredVariant(opt: DishOption, idx: number, variantId: string) {
- track(DashboardEvent.CLICKED_PICK_REQUIRED_VARIANT);
  if (opt.type === "single") {
  setReqSelections((s) => ({ ...s, [opt.id]: variantId }));
  advanceFromRequired(idx);
@@ -952,14 +946,13 @@ function DishWizard({
  }
 
  function handleMultiContinue(opt: DishOption, idx: number) {
- track(DashboardEvent.CLICKED_REQUIRED_CONTINUE);
  const sel = reqSelections[opt.id];
  if (!Array.isArray(sel) || sel.length === 0) return;
  advanceFromRequired(idx);
  }
 
  function handleAdd() {
- track(DashboardEvent.CLICKED_ADD_TO_ORDER);
+ track("dash_orders_order_save_item");
  onAdd({ options: snapshots, notes: notes.trim() });
  }
 
@@ -1123,6 +1116,7 @@ function DishWizard({
  rows={2}
  value={notes}
  onChange={(e) => setNotes(e.target.value)}
+ onFocus={() => track("dash_orders_order_focus_note")}
  placeholder={t("notesPlaceholder")}
  className={inputClass + " h-auto py-2 resize-none"}
  />
@@ -1155,19 +1149,16 @@ export function KitchenPage({
  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_KITCHEN);
  const id = setInterval(() => setTick((t) => t + 1), 15000);
  return () => clearInterval(id);
  }, []);
 
  function setItemStatus(orderId: string, itemId: string, status: OrderItemStatus) {
- track(DashboardEvent.CHANGED_KITCHEN_ITEM_STATUS, { status });
  const order = orders.find((o) => o.id === orderId);
  if (!order) return;
  const items = order.items.map((it) => (it.id === itemId ? { ...it, status } : it));
  setOrders((all) => all.map((o) => (o.id === orderId ? { ...o, items } : o)));
  patchOrder(orderId, { items, total: calcOrderTotal({ ...order, items }) }).catch(() => {
- track(DashboardEvent.ERROR_SAVE);
  });
  }
 

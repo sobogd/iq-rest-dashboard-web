@@ -7,7 +7,7 @@ import { ConfirmDialog, EmptyState, PageHeader } from "./ui";
 import { formatDayLabel, formatTime, isSameDay } from "./helpers";
 import { patchReservation } from "./api";
 import type { Booking, TableEntity } from "./types";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 const BOOKING_STATUS_KEYS: Record<Booking["status"], "statusPending" | "statusConfirmed" | "statusCancelled" | "statusCompleted" | "statusNoShow"> = {
  pending: "statusPending",
@@ -68,18 +68,16 @@ export function ReservationsPage({
  const upcomingGroups = grouped.filter((g) => !isSameDay(g.date, today));
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_RESERVATIONS);
  }, []);
 
  async function setBookingStatus(id: string, status: Booking["status"]) {
- if (status === "confirmed") track(DashboardEvent.CLICKED_CONFIRM_RESERVATION);
- else if (status === "cancelled") track(DashboardEvent.CLICKED_REJECT_RESERVATION);
+ if (status === "confirmed") track("dash_booking_accept");
+ else if (status === "cancelled") track("dash_booking_reject");
  const before = bookings;
  setBookings((bks) => bks.map((b) => (b.id === id ? { ...b, status } : b)));
  try {
  await patchReservation(id, { status });
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  setBookings(before);
  }
  }

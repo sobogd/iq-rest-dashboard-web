@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { EmptyState, PageHeader } from "../_v2/ui";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 
 interface Stats {
  period: string;
@@ -41,7 +41,6 @@ export function AnalyticsClient() {
  const [loading, setLoading] = useState(true);
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_ANALYTICS);
  }, []);
 
  useEffect(() => {
@@ -57,7 +56,6 @@ export function AnalyticsClient() {
  }
  })
  .catch(() => {
- track(DashboardEvent.ERROR_FETCH);
  if (!cancelled) setLoading(false);
  });
  return () => {
@@ -74,7 +72,7 @@ export function AnalyticsClient() {
  <PeriodDropdown
  period={period}
  onChange={(p) => {
- track(DashboardEvent.CHANGED_ANALYTICS_PERIOD, { period: p });
+ track("dash_analytics_click_select_period");
  setPeriod(p);
  }}
  />
@@ -136,7 +134,12 @@ function PeriodDropdown({
  <div ref={ref} className="relative">
  <button
  type="button"
- onClick={() => setOpen((v) => !v)}
+ onClick={() => {
+ setOpen((v) => {
+ if (!v) track("dash_analytics_click_period");
+ return !v;
+ });
+ }}
  className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium bg-secondary text-foreground rounded-md transition-colors"
  aria-haspopup="listbox"
  aria-expanded={open}

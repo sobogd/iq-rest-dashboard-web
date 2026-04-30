@@ -6,7 +6,7 @@ import { apiUrl } from "@/lib/api";
 import { ChevronRightIcon } from "../../_v2/icons";
 import { PageHeader } from "../../_v2/ui";
 import { LogoutLink } from "../../settings/logout-link";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 import { useDashboardRouter } from "../router";
 import type { View } from "../types";
 
@@ -14,19 +14,20 @@ interface CardDef {
   view: View;
   titleKey: string;
   descKey: string;
+  event: string;
 }
 
 const CARDS: CardDef[] = [
-  { view: { name: "settings.about" }, titleKey: "about", descKey: "aboutDesc" },
-  { view: { name: "settings.contacts" }, titleKey: "contacts", descKey: "contactsDesc" },
-  { view: { name: "settings.branding" }, titleKey: "branding", descKey: "brandingDesc" },
-  { view: { name: "settings.general" }, titleKey: "general", descKey: "generalDesc" },
-  { view: { name: "settings.tables" }, titleKey: "tables", descKey: "tablesDesc" },
-  { view: { name: "settings.orders" }, titleKey: "orders", descKey: "ordersDesc" },
-  { view: { name: "settings.bookings" }, titleKey: "bookings", descKey: "bookingsDesc" },
-  { view: { name: "settings.languages" }, titleKey: "languages", descKey: "languagesDesc" },
-  { view: { name: "settings.billing" }, titleKey: "billing", descKey: "billingDesc" },
-  { view: { name: "settings.support" }, titleKey: "support", descKey: "supportDesc" },
+  { view: { name: "settings.about" }, titleKey: "about", descKey: "aboutDesc", event: "dash_settings_click_tab_about" },
+  { view: { name: "settings.contacts" }, titleKey: "contacts", descKey: "contactsDesc", event: "dash_settings_click_tab_contacts" },
+  { view: { name: "settings.branding" }, titleKey: "branding", descKey: "brandingDesc", event: "dash_settings_click_tab_brand" },
+  { view: { name: "settings.general" }, titleKey: "general", descKey: "generalDesc", event: "dash_settings_click_tab_general" },
+  { view: { name: "settings.tables" }, titleKey: "tables", descKey: "tablesDesc", event: "dash_settings_click_tab_tables" },
+  { view: { name: "settings.orders" }, titleKey: "orders", descKey: "ordersDesc", event: "dash_settings_click_tab_orders" },
+  { view: { name: "settings.bookings" }, titleKey: "bookings", descKey: "bookingsDesc", event: "dash_settings_click_tab_bookings" },
+  { view: { name: "settings.languages" }, titleKey: "languages", descKey: "languagesDesc", event: "dash_settings_click_tab_langs" },
+  { view: { name: "settings.billing" }, titleKey: "billing", descKey: "billingDesc", event: "dash_settings_click_tab_billing" },
+  { view: { name: "settings.support" }, titleKey: "support", descKey: "supportDesc", event: "dash_settings_click_tab_support" },
 ];
 
 export function SettingsHubView({
@@ -59,7 +60,6 @@ export function SettingsHubView({
   }
 
   useEffect(() => {
-    track(DashboardEvent.SHOWED_SETTINGS);
   }, []);
 
   return (
@@ -71,7 +71,7 @@ export function SettingsHubView({
             key={card.titleKey}
             type="button"
             onClick={() => {
-              track(DashboardEvent.CLICKED_SETTINGS_ROW, { row: card.view.name });
+              track(card.event);
               router.push(card.view);
             }}
             className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
@@ -88,7 +88,6 @@ export function SettingsHubView({
             <button
               type="button"
               onClick={() => {
-                track(DashboardEvent.CLICKED_SETTINGS_ROW, { row: "settings.admin.companies" });
                 router.push({ name: "settings.admin.companies" });
               }}
               className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
@@ -102,7 +101,6 @@ export function SettingsHubView({
             <button
               type="button"
               onClick={() => {
-                track(DashboardEvent.CLICKED_SETTINGS_ROW, { row: "settings.admin.sessions" });
                 router.push({ name: "settings.admin.sessions" });
               }}
               className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"

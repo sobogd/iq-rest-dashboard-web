@@ -14,7 +14,7 @@ import { inputClass } from "./tokens";
 import { newId } from "./helpers";
 import { createTable, deleteTable, updateTable } from "./api";
 import type { Booking, Order, TableEntity } from "./types";
-import { DashboardEvent, track } from "@/lib/dashboard-events";
+import { track } from "@/lib/dashboard-events";
 import { useDashboardRouter } from "../_spa/router";
 
 function Stepper({
@@ -22,16 +22,20 @@ function Stepper({
  min,
  max,
  onChange,
+ onPlus,
+ onMinus,
 }: {
  value: number;
  min?: number;
  max?: number;
  onChange: (n: number) => void;
+ onPlus?: () => void;
+ onMinus?: () => void;
 }) {
  const lo = min ?? -Infinity;
  const hi = max ?? Infinity;
- const dec = () => onChange(Math.max(lo, value - 1));
- const inc = () => onChange(Math.min(hi, value + 1));
+ const dec = () => { onMinus?.(); onChange(Math.max(lo, value - 1)); };
+ const inc = () => { onPlus?.(); onChange(Math.min(hi, value + 1)); };
  const btn = "w-10 h-10 flex items-center justify-center text-foreground transition-colors disabled:opacity-40";
  return (
  <div className="flex items-center w-full h-10 bg-card border border-input rounded-lg overflow-hidden">
@@ -167,22 +171,22 @@ export function TablesPage({
  const router = useDashboardRouter();
 
  useEffect(() => {
- track(DashboardEvent.SHOWED_TABLES);
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
  function openNew() {
- track(DashboardEvent.CLICKED_ADD_TABLE);
+ track("dash_settings_tables_click_add");
  router.push({ name: "settings.tables.new" });
  }
 
  function openEdit(id: string) {
+ track("dash_settings_tables_click_table");
  router.push({ name: "settings.tables.edit", id });
  }
 
  return (
  <div>
- <SubpageStickyBar onBack={onBack} hideSave />
+ <SubpageStickyBar onBack={() => { track("dash_settings_tables_click_back"); onBack(); }} hideSave />
 
  <div className="max-w-2xl mx-auto pt-5 md:pt-4">
  <div className="mb-5">
@@ -324,7 +328,7 @@ export function TableFormPage({
  }
 
  async function save() {
- track(DashboardEvent.CLICKED_SAVE_TABLE);
+ track("dash_settings_table_click_save");
  if (saving) return;
  setSaving(true);
  try {
@@ -361,14 +365,12 @@ export function TableFormPage({
  }
  onBack();
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  setSaving(false);
  }
  }
 
  function handleDelete() {
  if (mode !== "edit") return;
- track(DashboardEvent.CLICKED_DELETE_TABLE);
  if (usedIds.has(draft.id)) {
  setConfirmState({
  open: true,
@@ -390,7 +392,6 @@ export function TableFormPage({
  setTables((prev) => prev.filter((x) => x.id !== draft.id));
  onBack();
  } catch {
- track(DashboardEvent.ERROR_SAVE);
  }
  },
  });
@@ -398,7 +399,7 @@ export function TableFormPage({
 
  return (
  <div>
- <SubpageStickyBar onBack={onBack} onSave={save} canSave={!saving} />
+ <SubpageStickyBar onBack={() => { track("dash_settings_table_click_back"); onBack(); }} onSave={save} canSave={!saving} />
 
  <div className="max-w-2xl mx-auto pt-5 md:pt-4">
  <div className="mb-5">
@@ -432,7 +433,7 @@ export function TableFormPage({
  : [...tables, draft]}
  selectedId={draft.id}
  onSelectTable={() => {}}
- onPickPosition={(x, y) => setDraft((d) => ({ ...d, x, y }))}
+ onPickPosition={(x, y) => { track("dash_settings_table_click_map"); setDraft((d) => ({ ...d, x, y })); }}
  />
  </div>
  <div className="tables-col-right">
@@ -500,6 +501,7 @@ function TableSettings({
  type="text"
  value={table.name}
  onChange={(e) => onChange({ name: e.target.value })}
+ onFocus={() => track("dash_settings_table_focus_name")}
  placeholder={t("namePlaceholder")}
  className={inputClass}
  />
@@ -512,6 +514,8 @@ function TableSettings({
  value={table.number}
  min={1}
  onChange={(n) => onChange({ number: n })}
+ onPlus={() => track("dash_settings_table_number_plus")}
+ onMinus={() => track("dash_settings_table_number_minus")}
  />
  </div>
  <div className="flex-1 min-w-0">
@@ -521,6 +525,8 @@ function TableSettings({
  min={1}
  max={20}
  onChange={(n) => onChange({ capacity: n })}
+ onPlus={() => track("dash_settings_table_seats_plus")}
+ onMinus={() => track("dash_settings_table_seats_minus")}
  />
  </div>
  </div>
@@ -530,6 +536,8 @@ function TableSettings({
  <PhotoPicker
  url={table.photoUrl}
  onChange={(url) => onChange({ photoUrl: url })}
+ onAddClick={() => track("dash_settings_table_add_photo")}
+ onRemoveClick={() => track("dash_settings_table_delete_photo")}
  inputId={"table-photo-" + table.id}
  width="w-full"
  />

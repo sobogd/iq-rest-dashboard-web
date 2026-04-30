@@ -19,6 +19,7 @@ import { getMl, setMl, translateText } from "./i18n";
 import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
+import { track } from "@/lib/dashboard-events";
 
 // Modal — Escape closes, body scroll lock while open.
 
@@ -177,10 +178,14 @@ export function LanguageSwitcher({
  lang,
  onChange,
  languages,
+ onOpen,
+ onSelect,
 }: {
  lang: string;
  onChange: (code: string) => void;
  languages: MiniLang[];
+ onOpen?: () => void;
+ onSelect?: () => void;
 }) {
  const [open, setOpen] = useState(false);
  const ref = useRef<HTMLDivElement | null>(null);
@@ -209,7 +214,12 @@ export function LanguageSwitcher({
  <div ref={ref} className="relative">
  <button
  type="button"
- onClick={() => setOpen((v) => !v)}
+ onClick={() => {
+ setOpen((v) => {
+ if (!v) onOpen?.();
+ return !v;
+ });
+ }}
  className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium bg-secondary text-foreground rounded-md transition-colors"
  title={active.label}
  aria-haspopup="listbox"
@@ -234,6 +244,7 @@ export function LanguageSwitcher({
  role="option"
  aria-selected={isActive}
  onClick={() => {
+ onSelect?.();
  onChange(l.code);
  setOpen(false);
  }}
@@ -391,6 +402,7 @@ export function TranslatedInput({
  multiline,
  hint,
  translatable = true,
+ onFocus,
 }: {
  id: string;
  label?: string;
@@ -404,6 +416,7 @@ export function TranslatedInput({
  multiline?: boolean;
  hint?: string;
  translatable?: boolean;
+ onFocus?: () => void;
 }) {
  const current = getMl(value, lang);
  const fallback = lang !== defaultLang ? getMl(value, defaultLang) : "";
@@ -417,6 +430,7 @@ export function TranslatedInput({
  value: current,
  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
  onChange(setMl(value, lang, e.target.value)),
+ onFocus,
  placeholder: showFallback ? tc("willUse") + ": " + fallback : (placeholder || ""),
  className: inputClass,
  };
@@ -652,6 +666,8 @@ export function EditPageHeader({
  onSave,
  canSave,
  saving,
+ onLangsOpen,
+ onLangSelect,
 }: {
  onBack: () => void;
  title: string;
@@ -662,6 +678,8 @@ export function EditPageHeader({
  onSave?: () => void;
  canSave?: boolean;
  saving?: boolean;
+ onLangsOpen?: () => void;
+ onLangSelect?: () => void;
 }) {
  const tc = useTranslations("dashboard.common");
  return (
@@ -681,7 +699,7 @@ export function EditPageHeader({
  </button>
  <div className="flex items-center gap-2">
  {onLangChange && languages && lang ? (
- <LanguageSwitcher lang={lang} onChange={onLangChange} languages={languages} />
+ <LanguageSwitcher lang={lang} onChange={onLangChange} languages={languages} onOpen={onLangsOpen} onSelect={onLangSelect} />
  ) : null}
  {onSave ? (
  <button
@@ -775,6 +793,7 @@ export function ShareModal({
  encodeURIComponent(fullUrl);
 
  function copyLink() {
+ track("dash_menu_share_copy");
  if (navigator.clipboard?.writeText) {
  navigator.clipboard
  .writeText(fullUrl)
@@ -787,6 +806,7 @@ export function ShareModal({
  }
 
  function downloadQr() {
+ track("dash_menu_share_download");
  const a = document.createElement("a");
  a.href = qrSrc;
  a.download = "menu-qr.png";
@@ -798,13 +818,22 @@ export function ShareModal({
  }
 
  function openInNewTab() {
+ track("dash_menu_share_open_menu");
  window.open(fullUrl, "_blank", "noopener,noreferrer");
  }
 
+ const handleClose = () => {
+ track("dash_menu_share_close");
+ onClose();
+ };
+
  return (
- <Modal open={open} onClose={onClose} size="sm" title={tp("shareTitle", { name: restaurantName || tp("shareYourMenu") })}>
+ <Modal open={open} onClose={handleClose} size="sm" title={tp("shareTitle", { name: restaurantName || tp("shareYourMenu") })}>
  <div className="flex justify-center">
- <div className="w-[180px] h-[180px] p-5 bg-white rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+ <div
+ className="w-[180px] h-[180px] p-5 bg-white rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+ onClick={() => track("dash_menu_share_qr_image")}
+ >
  <img src={qrSrc} alt={tc("qrCode")} width="140" height="140" className="block w-[140px] h-[140px]" />
  </div>
  </div>
@@ -812,7 +841,10 @@ export function ShareModal({
  {tp("tip")}
  </p>
  <div className="mt-5 flex items-center justify-between gap-2 p-3 bg-secondary border border-border rounded-lg">
- <span className="text-xs text-muted-foreground truncate">{fullUrl.replace(/^https?:\/\//, "")}</span>
+ <span
+ className="text-xs text-muted-foreground truncate"
+ onClick={() => track("dash_menu_share_link_input")}
+ >{fullUrl.replace(/^https?:\/\//, "")}</span>
  <button
  type="button"
  onClick={copyLink}
@@ -976,6 +1008,8 @@ export function PhotoPicker({
  height = "h-10",
  width = "min-w-[150px]",
  fileInputRef,
+ onAddClick,
+ onRemoveClick,
 }: {
  url: string | null;
  onChange: (url: string | null) => void;
@@ -984,6 +1018,8 @@ export function PhotoPicker({
  height?: string;
  width?: string;
  fileInputRef?: React.RefObject<HTMLInputElement | null>;
+ onAddClick?: () => void;
+ onRemoveClick?: () => void;
 }) {
  const tph = useTranslations("dashboard.photo");
  const ta = useTranslations("dashboard.ai");
@@ -1007,6 +1043,7 @@ export function PhotoPicker({
  }
 
  function remove() {
+ onRemoveClick?.();
  onChange(null);
  if (ref.current) ref.current.value = "";
  }
@@ -1028,6 +1065,7 @@ export function PhotoPicker({
  ) : null}
  <label
  htmlFor={inputId}
+ onClick={() => { if (!url) onAddClick?.(); }}
  className={
  "relative flex items-center justify-center gap-1.5 " + width + " " + height +
  " border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden " +
@@ -1088,6 +1126,7 @@ export function AiImageModal({
  defaultPrompt,
  aspect = "square",
  extraBody,
+ eventPrefix,
 }: {
  open: boolean;
  onClose: () => void;
@@ -1098,6 +1137,7 @@ export function AiImageModal({
  defaultPrompt?: string;
  aspect?: "square" | "portrait";
  extraBody?: Record<string, unknown>;
+ eventPrefix?: string;
 }) {
  const tc = useTranslations("dashboard.common");
  const ta = useTranslations("dashboard.ai");
@@ -1118,6 +1158,7 @@ export function AiImageModal({
  }, [open, defaultPrompt]);
 
  async function generate() {
+ if (eventPrefix) track(`${eventPrefix}_generate_photo_click_generate`);
  if (!prompt.trim()) return;
  setStatus("loading");
  setError(null);
@@ -1153,11 +1194,21 @@ export function AiImageModal({
  }
 
  function useImage() {
+ if (eventPrefix) track(`${eventPrefix}_generate_photo_click_use`);
  if (resultUrl) {
  onUse(resultUrl);
  onClose();
  }
  }
+
+ const handleClose = () => {
+ if (eventPrefix) track(`${eventPrefix}_generate_photo_click_close`);
+ onClose();
+ };
+ const handleCancel = () => {
+ if (eventPrefix) track(`${eventPrefix}_generate_photo_click_cancel`);
+ onClose();
+ };
 
  const isLoading = status === "loading";
  const hasResult = status === "done" && resultUrl;
@@ -1165,7 +1216,7 @@ export function AiImageModal({
 
  if (access.kind === "exhausted" && !resultUrl) {
  return (
- <Modal open={open} onClose={onClose} title={title} size="sm">
+ <Modal open={open} onClose={handleClose} title={title} size="sm">
  <div className="flex flex-col items-center text-center gap-3 py-4">
  <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
  <SparklesIcon size={20} />
@@ -1174,7 +1225,7 @@ export function AiImageModal({
  <p className="text-xs text-muted-foreground max-w-xs">{ta("quotaExceededMessage", { limit: access.limit })}</p>
  </div>
  <div className="flex gap-2 mt-4">
- <button type="button" onClick={onClose} className={primaryBtn + " flex-1"}>
+ <button type="button" onClick={handleClose} className={primaryBtn + " flex-1"}>
  {tc("close")}
  </button>
  </div>
@@ -1183,7 +1234,7 @@ export function AiImageModal({
  }
 
  return (
- <Modal open={open} onClose={onClose} title={title} size="sm">
+ <Modal open={open} onClose={handleClose} title={title} size="sm">
  <div className={previewCls + " bg-secondary rounded-xl overflow-hidden border border-border flex items-center justify-center mb-4"}>
  {isLoading ? (
  <div className="flex flex-col items-center gap-1.5 text-muted-foreground">
@@ -1207,6 +1258,7 @@ export function AiImageModal({
  placeholder={placeholder || ta("promptPlaceholder")}
  value={prompt}
  onChange={(e) => setPrompt(e.target.value)}
+ onFocus={() => { if (eventPrefix) track(`${eventPrefix}_generate_photo_focus_description`); }}
  disabled={isLoading}
  className={inputClass + " h-auto py-2 resize-none"}
  />
@@ -1243,7 +1295,7 @@ export function AiImageModal({
  </>
  ) : (
  <>
- <button type="button" onClick={onClose} className={secondaryBtn + " flex-1"}>
+ <button type="button" onClick={handleCancel} className={secondaryBtn + " flex-1"}>
  {tc("cancel")}
  </button>
  <button
