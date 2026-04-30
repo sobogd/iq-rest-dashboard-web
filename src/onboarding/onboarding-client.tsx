@@ -9,68 +9,70 @@ import { Loader2, ArrowRight } from "lucide-react";
 import { getMenuUrl, getMenuUrlPrefix } from "@/lib/menu-url";
 import { track } from "@/lib/dashboard-events";
 
+const BG_BASE = "https://nbg1.your-objectstorage.com/sobogd/files/backgrounds";
+
 const PRESETS = [
   {
     id: "dark-dining",
     label: "Dark dining",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/dark-dining-v2.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/dark-dining-v2-thumb.webp')",
+    bg: `${BG_BASE}/dark-dining-v2.webp`,
+    thumb: `${BG_BASE}/dark-dining-v2-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.35)",
     accentColor: "#2a2018",
   },
   {
     id: "fresh-plate",
     label: "Fresh plate",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/fresh-plate-v2.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/fresh-plate-v2-thumb.webp')",
+    bg: `${BG_BASE}/fresh-plate-v2.webp`,
+    thumb: `${BG_BASE}/fresh-plate-v2-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#6e5e4a",
   },
   {
     id: "warm-bakery",
     label: "Warm bakery",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/warm-bakery.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/warm-bakery-thumb.webp')",
+    bg: `${BG_BASE}/warm-bakery.webp`,
+    thumb: `${BG_BASE}/warm-bakery-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#7a6a52",
   },
   {
     id: "rustic-wood",
     label: "Rustic wood",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/rustic-wood.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/rustic-wood-thumb.webp')",
+    bg: `${BG_BASE}/rustic-wood.webp`,
+    thumb: `${BG_BASE}/rustic-wood-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#6a5040",
   },
   {
     id: "greenery",
     label: "Greenery",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/greenery-v2.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/greenery-v2-thumb.webp')",
+    bg: `${BG_BASE}/greenery-v2.webp`,
+    thumb: `${BG_BASE}/greenery-v2-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.2), rgba(0,0,0,0.35)",
     accentColor: "#4a5a38",
   },
   {
     id: "ocean-night",
     label: "Ocean night",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/ocean-night.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/ocean-night-thumb.webp')",
+    bg: `${BG_BASE}/ocean-night.webp`,
+    thumb: `${BG_BASE}/ocean-night-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.3)",
     accentColor: "#1a3858",
   },
   {
     id: "midnight",
     label: "Midnight",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/midnight.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/midnight-thumb.webp')",
+    bg: `${BG_BASE}/midnight.webp`,
+    thumb: `${BG_BASE}/midnight-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.1), rgba(0,0,0,0.25)",
     accentColor: "#18243e",
   },
   {
     id: "wine-dine",
     label: "Wine & dine",
-    bg: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/wine-dine.jpeg')",
-    thumb: "url('https://nbg1.your-objectstorage.com/sobogd/files/backgrounds/wine-dine-thumb.webp')",
+    bg: `${BG_BASE}/wine-dine.webp`,
+    thumb: `${BG_BASE}/wine-dine-thumb-sm.webp`,
     overlay: "rgba(0,0,0,0.15), rgba(0,0,0,0.3)",
     accentColor: "#5e2030",
   },
@@ -420,12 +422,21 @@ function Step3({
               className={`relative aspect-square rounded-[10px] overflow-hidden cursor-pointer transition-transform duration-150 hover:-translate-y-0.5 ${
                 isActive ? "outline outline-2 outline-foreground outline-offset-2" : ""
               }`}
-              style={{
-                background: `linear-gradient(${preset.overlay}), ${preset.thumb}`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
             >
+              <img
+                src={preset.thumb}
+                alt={preset.label}
+                width={160}
+                height={160}
+                loading={i < 6 ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={i < 3 ? "high" : "auto"}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div
+                className="absolute inset-0"
+                style={{ background: `linear-gradient(${preset.overlay})` }}
+              />
               {isActive ? (
                 <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-card text-foreground flex items-center justify-center">
                   <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
@@ -438,7 +449,7 @@ function Step3({
                   style={{ backgroundColor: preset.accentColor }}
                 />
               )}
-              <span className="absolute bottom-1.5 left-2 right-2 text-[10px] font-medium text-background tracking-tight text-left [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
+              <span className="absolute bottom-1.5 left-2 right-2 text-[10px] font-medium text-white tracking-tight text-left [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
                 {preset.label}
               </span>
             </button>
@@ -466,7 +477,7 @@ function Step3({
                   <polyline points="2,6 5,9 10,3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
-              <span className="absolute bottom-1.5 left-2 right-2 text-[10px] font-medium text-background tracking-tight text-left [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
+              <span className="absolute bottom-1.5 left-2 right-2 text-[10px] font-medium text-white tracking-tight text-left [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
                 {t("step3.yourPhoto")}
               </span>
             </>
@@ -646,14 +657,12 @@ export function OnboardingClient() {
 
       // Create or update restaurant
       const preset = PRESETS[state.cover.presetIdx];
-      const presetBgMatch = preset.bg.match(/url\('([^']+)'\)/);
-      const presetImageUrl = presetBgMatch ? presetBgMatch[1] : null;
       const restaurantPayload: Record<string, unknown> = {
         title: state.restaurantName,
         accentColor: preset.accentColor,
       };
       if (coverSourceUrl) restaurantPayload.source = coverSourceUrl;
-      else if (presetImageUrl) restaurantPayload.source = presetImageUrl;
+      else restaurantPayload.source = preset.bg;
       const restaurantRes = await fetch(apiUrl("/api/restaurant"), {
         credentials: "include",
         method: "POST",
