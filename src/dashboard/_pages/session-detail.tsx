@@ -7,8 +7,6 @@ import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
 import { EVENT_LABELS } from "@/lib/dashboard-events";
 import {
-  COUNTRY_TZ,
-  countryToFlag,
   formatDateFull,
   formatEventName,
   formatTime,
@@ -17,54 +15,21 @@ import {
 
 interface SessionData {
   id: string;
+  userId: string | null;
+  email: string | null;
   companyId: string | null;
-  country: string | null;
-  city: string | null;
-  landingPage: string | null;
-  gclid: string | null;
-  keyword: string | null;
-  userAgent: string | null;
-  browser: string | null;
-  device: string | null;
-  ip: string | null;
   restaurantName: string | null;
-  wasRegistered: boolean;
-  namedRestaurant: boolean;
-  selectedType: boolean;
-  modifiedMenu: boolean;
-  modifiedContacts: boolean;
-  modifiedDesign: boolean;
-  reached50Views: boolean;
-  paidSubscription: boolean;
-  conversionSent: boolean;
-  conversionViewsSent: boolean;
-  conversionSubscriptionSent: boolean;
-  lastSeenAt: string | null;
+  ip: string | null;
+  userAgent: string | null;
   createdAt: string;
-  updatedAt: string;
 }
 
 interface AnalyticsEvent {
   id: string;
   event: string;
-  sessionId: string;
-  meta?: Record<string, string> | null;
+  occurredAt: string;
   createdAt: string;
 }
-
-const FLAG_LABELS: Record<string, string> = {
-  wasRegistered: "Registered",
-  namedRestaurant: "Named restaurant",
-  selectedType: "Selected type",
-  modifiedMenu: "Modified menu",
-  modifiedContacts: "Modified contacts",
-  modifiedDesign: "Modified design",
-  reached50Views: "Reached 20 views",
-  paidSubscription: "Paid subscription",
-  conversionSent: "Conv: type selected",
-  conversionViewsSent: "Conv: 20 views",
-  conversionSubscriptionSent: "Conv: subscription",
-};
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 const EVENTS_PAGE_SIZE = 15;
@@ -80,7 +45,7 @@ function groupEventsByGap(events: AnalyticsEvent[]): AnalyticsEvent[][] {
       continue;
     }
     const gap =
-      new Date(sorted[i - 1].createdAt).getTime() - new Date(sorted[i].createdAt).getTime();
+      new Date(sorted[i - 1].occurredAt).getTime() - new Date(sorted[i].occurredAt).getTime();
     if (gap > TWO_HOURS_MS) {
       groups.push(current);
       current = [];
@@ -103,14 +68,13 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
 
   const [tab, setTab] = useState<Tab>("info");
   const [session, setSession] = useState<SessionData | null>(null);
+  const [lastEventAt, setLastEventAt] = useState<string | null>(null);
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
   const [eventsHasMore, setEventsHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pendingConv, setPendingConv] = useState<string | null>(null);
   const [alert, setAlert] = useState<{ title: string; message: string } | null>(null);
-  const [convPrompt, setConvPrompt] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -122,13 +86,16 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       if (mode === "initial") setLoading(true);
       else setRefreshing(true);
       try {
-        const params = new URLSearchParams({ sessionId, eventLimit: "0" });
+        // Pull last event with eventLimit=1 + reverse order to display "last seen"
+        const params = new URLSearchParams({ sessionId, eventLimit: "1" });
         const res = await fetch(apiUrl(`/api/admin/analytics/sessions?${params}`), {
           credentials: "include",
         });
         if (res.ok) {
           const data = await res.json();
           setSession(data.session || null);
+          const evs = (data.events ?? []) as AnalyticsEvent[];
+          setLastEventAt(evs.length ? evs[evs.length - 1].occurredAt : null);
         }
       } finally {
         setLoading(false);
@@ -177,7 +144,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
 
   useEffect(() => {
     if (tab !== "events") return;
-    if (events.length > 0) return; // already loaded; refresh handles updates
+    if (events.length > 0) return;
     eventsOffsetRef.current = 0;
     setEventsHasMore(false);
     void loadEventsPage(0, "initial");
@@ -206,35 +173,6 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     } else {
       eventsOffsetRef.current = 0;
       void loadEventsPage(0, "refresh");
-    }
-  }
-
-  async function sendConversion(eventType: string) {
-    if (!session?.gclid) return;
-    setPendingConv(eventType);
-    setConvPrompt(null);
-    try {
-      const res = await fetch(apiUrl("/api/admin/analytics/send-conversion"), {
-        credentials: "include",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          gclid: session.gclid,
-          conversionDateTime: new Date().toISOString(),
-          eventType,
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setAlert({ title: "Conversion sent", message: `"${eventType}" delivered.` });
-        void fetchSessionInfo();
-      } else {
-        setAlert({ title: "Send failed", message: data.error || "Failed to send conversion" });
-      }
-    } catch {
-      setAlert({ title: "Send failed", message: "Network error" });
-    } finally {
-      setPendingConv(null);
     }
   }
 
@@ -334,26 +272,12 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
     );
   }
 
-  const isOnline = session.lastSeenAt && Date.now() - new Date(session.lastSeenAt).getTime() < 30_000;
-  const countryTz = session.country ? COUNTRY_TZ[session.country] : undefined;
-  const activeFlags = Object.entries(FLAG_LABELS).filter(
-    ([key]) => session[key as keyof SessionData] === true,
-  );
+  const isOnline = lastEventAt && Date.now() - new Date(lastEventAt).getTime() < 30_000;
 
   const infoRows: { label: string; value: string; sub?: string; copyable?: boolean; onClick?: () => void; valueCls?: string }[] = [];
   if (isOnline) infoRows.push({ label: "Status", value: "Online", valueCls: "text-emerald-600 font-medium" });
-  if (session.country)
-    infoRows.push({
-      label: "Country",
-      value: `${countryToFlag(session.country)} ${session.country}${session.city ? `, ${session.city}` : ""}`,
-    });
-  if (session.landingPage) infoRows.push({ label: "Landing", value: session.landingPage });
+  if (session.email) infoRows.push({ label: "User", value: session.email, copyable: true });
   if (session.ip) infoRows.push({ label: "IP", value: session.ip, copyable: true });
-  if (session.browser) infoRows.push({ label: "Browser", value: session.browser });
-  if (session.device) infoRows.push({ label: "Device", value: session.device });
-  infoRows.push({ label: "Source", value: session.gclid ? "Google Ads" : "Direct" });
-  if (session.gclid) infoRows.push({ label: "GCLID", value: session.gclid, copyable: true });
-  if (session.keyword) infoRows.push({ label: "Keyword", value: session.keyword, copyable: true });
   if (session.companyId)
     infoRows.push({
       label: "Restaurant",
@@ -364,18 +288,11 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   infoRows.push({
     label: "Created",
     value: formatDateFull(session.createdAt),
-    sub: countryTz ? formatTime(session.createdAt, countryTz) : undefined,
   });
-  infoRows.push({
-    label: "Updated",
-    value: formatDateFull(session.updatedAt),
-    sub: countryTz ? formatTime(session.updatedAt, countryTz) : undefined,
-  });
-  if (session.lastSeenAt && !isOnline) {
+  if (lastEventAt && !isOnline) {
     infoRows.push({
-      label: "Last seen",
-      value: formatDateFull(session.lastSeenAt),
-      sub: countryTz ? formatTime(session.lastSeenAt, countryTz) : undefined,
+      label: "Last event",
+      value: formatDateFull(lastEventAt),
     });
   }
 
@@ -404,93 +321,41 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
         </div>
 
         {tab === "info" ? (
-          <>
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <div className="divide-y divide-border">
-                {infoRows.map((row) => (
-                  <button
-                    key={row.label}
-                    type="button"
-                    disabled={!row.copyable && !row.onClick}
-                    onClick={() => {
-                      if (row.copyable) copy(row.value);
-                      else if (row.onClick) row.onClick();
-                    }}
-                    className="flex items-center justify-between w-full px-4 py-2.5 text-left"
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <div className="divide-y divide-border">
+              {infoRows.map((row) => (
+                <button
+                  key={row.label}
+                  type="button"
+                  disabled={!row.copyable && !row.onClick}
+                  onClick={() => {
+                    if (row.copyable) copy(row.value);
+                    else if (row.onClick) row.onClick();
+                  }}
+                  className="flex items-center justify-between w-full px-4 py-2.5 text-left"
+                >
+                  <span className="text-xs text-muted-foreground shrink-0">{row.label}</span>
+                  <span
+                    className={
+                      "text-xs font-mono text-right break-all max-w-[60%] " +
+                      (row.valueCls || (row.onClick ? "text-blue-500" : "text-foreground"))
+                    }
                   >
-                    <span className="text-xs text-muted-foreground shrink-0">{row.label}</span>
-                    <span
-                      className={
-                        "text-xs font-mono text-right break-all max-w-[60%] " +
-                        (row.valueCls || (row.onClick ? "text-blue-500" : "text-foreground"))
-                      }
-                    >
-                      {row.value}
-                      {row.sub ? <span className="block text-muted-foreground">{row.sub}</span> : null}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              {activeFlags.length > 0 ? (
-                <div className="border-t border-border px-4 py-2.5">
-                  <div className="flex flex-wrap gap-1.5">
-                    {activeFlags.map(([, label]) => (
-                      <span
-                        key={label}
-                        className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      >
-                        {label}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              {session.userAgent ? (
-                <div className="border-t border-border px-4 py-2.5">
-                  <p className="text-[10px] text-muted-foreground break-all font-mono">
-                    {session.userAgent}
-                  </p>
-                </div>
-              ) : null}
+                    {row.value}
+                    {row.sub ? <span className="block text-muted-foreground">{row.sub}</span> : null}
+                  </span>
+                </button>
+              ))}
             </div>
 
-            {session.gclid ? (
-              <div className="space-y-2 mt-4">
-                {!session.conversionSent ? (
-                  <button
-                    type="button"
-                    onClick={() => setConvPrompt("type_selected")}
-                    disabled={pendingConv !== null}
-                    className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors disabled:opacity-60"
-                  >
-                    {pendingConv === "type_selected" ? "Sending…" : "Send conversion: type selected"}
-                  </button>
-                ) : null}
-                {!session.conversionViewsSent ? (
-                  <button
-                    type="button"
-                    onClick={() => setConvPrompt("views_reached")}
-                    disabled={pendingConv !== null}
-                    className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors disabled:opacity-60"
-                  >
-                    {pendingConv === "views_reached" ? "Sending…" : "Send conversion: 20 views"}
-                  </button>
-                ) : null}
-                {!session.conversionSubscriptionSent ? (
-                  <button
-                    type="button"
-                    onClick={() => setConvPrompt("subscription")}
-                    disabled={pendingConv !== null}
-                    className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors disabled:opacity-60"
-                  >
-                    {pendingConv === "subscription" ? "Sending…" : "Send conversion: subscription"}
-                  </button>
-                ) : null}
+            {session.userAgent ? (
+              <div className="border-t border-border px-4 py-2.5">
+                <p className="text-[10px] text-muted-foreground break-all font-mono">
+                  {session.userAgent}
+                </p>
               </div>
             ) : null}
-          </>
+          </div>
         ) : (
           <div className="space-y-3">
             {events.length === 0 && !eventsLoading ? (
@@ -505,20 +370,15 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
                 >
                   {group.map((event, index) => {
                     const next = index < group.length - 1 ? group[index + 1] : null;
-                    const diff = next ? formatTimeDiff(next.createdAt, event.createdAt) : null;
+                    const diff = next ? formatTimeDiff(next.occurredAt, event.occurredAt) : null;
                     return (
                       <div key={event.id} className="px-4 py-2.5">
                         <p className="text-sm text-foreground truncate">
                           {formatEventName(event.event, EVENT_LABELS)}
-                          {event.meta ? (
-                            <span className="text-muted-foreground ml-1">
-                              ({Object.values(event.meta).join(" / ")})
-                            </span>
-                          ) : null}
                         </p>
                         <div className="flex items-center justify-between mt-0.5">
                           <span className="text-[10px] text-muted-foreground tabular-nums">
-                            {formatTime(event.createdAt)}
+                            {formatTime(event.occurredAt)}
                           </span>
                           <span className="text-[10px] font-mono text-muted-foreground tabular-nums">
                             {diff ? `+${diff}` : ""}
@@ -557,16 +417,6 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
           confirmLabel="Delete"
           onCancel={() => (deleting ? null : setConfirmDelete(false))}
           onConfirm={handleDelete}
-        />
-
-        <ConfirmDialog
-          open={convPrompt !== null}
-          title="Send conversion?"
-          message={`Send "${convPrompt}" for gclid ${session.gclid}.`}
-          confirmLabel="Send"
-          confirmStyle="primary"
-          onCancel={() => setConvPrompt(null)}
-          onConfirm={() => convPrompt && sendConversion(convPrompt)}
         />
 
         <ConfirmDialog

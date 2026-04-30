@@ -5,7 +5,7 @@ import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { RefreshIcon } from "../_v2/icons";
-import { countryToFlag, formatDateShort, formatDuration } from "./_admin-helpers";
+import { formatDateShort, formatDuration } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 
 interface Session {
@@ -13,10 +13,8 @@ interface Session {
   lastEvent: string;
   duration: number;
   eventCount: number;
-  country: string | null;
-  source: string;
-  hasUser: boolean;
-  lastSeenAt: string | null;
+  userId: string | null;
+  email: string | null;
 }
 
 type Period = "today" | "yesterday";
@@ -124,8 +122,7 @@ export function SessionsPage() {
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
             {sessions.map((s) => {
-              const isOnline =
-                s.lastSeenAt && Date.now() - new Date(s.lastSeenAt).getTime() < 30_000;
+              const isOnline = Date.now() - new Date(s.lastEvent).getTime() < 30_000;
               return (
                 <button
                   key={s.sessionId}
@@ -133,20 +130,17 @@ export function SessionsPage() {
                   onClick={() => openSession(s.sessionId)}
                   className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
                 >
-                  <span className="text-base shrink-0">
-                    {s.country ? countryToFlag(s.country) : "🌐"}
-                  </span>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium text-foreground truncate">
                       {formatDateShort(s.lastEvent)}
                       {isOnline ? (
                         <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 align-middle" />
-                      ) : s.hasUser ? (
+                      ) : s.userId ? (
                         <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle" />
                       ) : null}
                     </div>
                     <div className="text-xs text-muted-foreground truncate">
-                      <span className={s.source === "Ads" ? "text-blue-500" : ""}>{s.source}</span>
+                      {s.email ?? (s.userId ? "user" : "anon")}
                       <span className="mx-1.5">·</span>
                       {formatDuration(s.duration)}
                       <span className="mx-1.5">·</span>
