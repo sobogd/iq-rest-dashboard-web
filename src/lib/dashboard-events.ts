@@ -1,8 +1,4 @@
-// Dashboard analytics events — flat enum, no meta params unless explicit.
-// Naming: showed_* (page view), clicked_* (button), focused_* (input),
-// changed_* (select), toggled_* (switch), error_* (failure path).
-
-import { apiUrl } from "@/lib/api";
+import { trackEvent } from "@/lib/analytics";
 
 export enum DashboardEvent {
   // ── Auth ──
@@ -342,139 +338,10 @@ export const EVENT_LABELS: Record<string, string> = {
   [DashboardEvent.ERROR_CLAIM_VERIFY]: "Error: Claim Verify",
 };
 
-const lastFired = new Map<string, number>();
-
-let _userId: string | null = null;
-
-export function setDashboardUserId(userId: string) {
-  _userId = userId;
+export function setDashboardUserId(_userId: string): void {
+  // Identify on the server is now done via /api/analytics/identify (auth cookie).
 }
 
-const SESSION_ID_KEY = "analytics_session_id";
-const SHARED_COOKIE_KEY = "analytics_sid";
-
-function readSharedCookie(): string | null {
-  if (typeof document === "undefined") return null;
-  const m = document.cookie.match(new RegExp(`(?:^|; )${SHARED_COOKIE_KEY}=([^;]*)`));
-  return m ? decodeURIComponent(m[1]) : null;
-}
-
-/** SessionId resolution:
- *   1. `analytics_sid` cookie (issued by backend with Domain=.iq-rest.com so
- *      it is shared between landing and dashboard subdomains).
- *   2. `?sid=` query param (legacy hand-off from landing).
- *   3. Legacy localStorage / sessionStorage.
- *   4. Locally generated UUID — backend will overwrite via cookie on first event.
- */
-function getSessionId(): string {
-  if (typeof window === "undefined") return "";
-
-  const cookieSid = readSharedCookie();
-  if (cookieSid) return cookieSid;
-
-  try {
-    const url = new URL(window.location.href);
-    const sidParam = url.searchParams.get("sid");
-    if (sidParam) {
-      localStorage.setItem(SESSION_ID_KEY, sidParam);
-      url.searchParams.delete("sid");
-      window.history.replaceState({}, "", url.toString());
-      return sidParam;
-    }
-  } catch {
-    // ignore
-  }
-
-  let sessionId =
-    localStorage.getItem(SESSION_ID_KEY) || sessionStorage.getItem(SESSION_ID_KEY);
-  if (!sessionId) {
-    sessionId =
-      typeof crypto.randomUUID === "function"
-        ? crypto.randomUUID()
-        : Array.from(crypto.getRandomValues(new Uint8Array(16)))
-            .map((b) => b.toString(16).padStart(2, "0"))
-            .join("")
-            .replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
-    sessionStorage.setItem(SESSION_ID_KEY, sessionId);
-  }
-  return sessionId;
-}
-
-function getCookie(name: string): string | null {
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-function deleteCookie(name: string) {
-  document.cookie = `${name}=; path=/; max-age=0`;
-}
-
-function trackReferral() {
-  if (typeof window === "undefined") return;
-  if (sessionStorage.getItem("referral_sent")) return;
-
-  const from = getCookie("ref_from");
-  if (!from) return;
-
-  sessionStorage.setItem("referral_sent", "1");
-
-  const sessionId = getSessionId();
-  const refMeta: Record<string, string> = { from };
-  const slug = getCookie("ref_slug");
-  if (slug) {
-    refMeta.slug = slug;
-    deleteCookie("ref_slug");
-  }
-  deleteCookie("ref_from");
-
-  fetch(apiUrl("/api/analytics/event"), {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event: `referral_${from}`, sessionId, meta: refMeta }),
-    keepalive: true,
-  }).catch(() => {});
-}
-
-export function track(event: DashboardEvent, meta?: Record<string, string>) {
-  if (typeof window === "undefined") return;
-  if (typeof localStorage !== "undefined" && localStorage.getItem("analytics_disabled") === "true")
-    return;
-
-  const now = Date.now();
-  const dedupKey = meta ? event + JSON.stringify(meta) : event;
-  const last = lastFired.get(dedupKey);
-  if (last && now - last < 1000) return;
-  lastFired.set(dedupKey, now);
-
-  const sessionId = getSessionId();
-
-  fetch(apiUrl("/api/analytics/event"), {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event, sessionId, ...(meta ? { meta } : {}) }),
-    keepalive: true,
-  }).catch(() => {});
-
-  if (event.startsWith("showed_")) {
-    trackReferral();
-  }
-
-  if (_userId && event.startsWith("showed_")) {
-    fetch(apiUrl("/api/analytics/link-session"), {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, userId: _userId }),
-      keepalive: true,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const finalId = data.sessionId || sessionId;
-        localStorage.setItem(SESSION_ID_KEY, finalId);
-        sessionStorage.removeItem(SESSION_ID_KEY);
-      })
-      .catch(() => {});
-  }
+export function track(event: DashboardEvent | string, _meta?: Record<string, string>): void {
+  trackEvent(event as string);
 }

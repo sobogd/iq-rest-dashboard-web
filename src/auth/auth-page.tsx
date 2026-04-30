@@ -5,8 +5,7 @@ import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Loader2 } from "lucide-react";
-import { analytics } from "@/lib/analytics";
-import { isAdminEmail } from "@/lib/admin";
+import { identify } from "@/lib/analytics";
 import { track, DashboardEvent } from "@/lib/dashboard-events";
 
 declare global {
@@ -415,9 +414,8 @@ export function AuthPage() {
         const data = await res.json();
         if (res.ok) {
           track(DashboardEvent.AUTH_GOOGLE_LOGIN);
-          if (isAdminEmail(data.email)) analytics.disableTracking();
           if (data.isNewUser) track(DashboardEvent.AUTH_SIGNUP);
-          await analytics.linkSession(data.userId);
+          await identify();
           if (data.legacyDashboard) {
             window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
             return;
@@ -545,9 +543,8 @@ export function AuthPage() {
       const data = await res.json();
 
       if (res.ok) {
-        if (isAdminEmail(email)) analytics.disableTracking();
         track(DashboardEvent.CLICKED_VERIFY_OTP);
-        await analytics.linkSession(data.userId);
+        await identify();
         if (data.legacyDashboard) {
           window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
           return;
