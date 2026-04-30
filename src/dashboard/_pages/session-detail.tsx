@@ -382,7 +382,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
                     const diff = next ? formatTimeDiff(next.occurredAt, event.occurredAt) : null;
                     return (
                       <div key={event.id} className="px-4 py-2.5">
-                        <p className="text-sm text-foreground truncate font-mono">
+                        <p className="text-sm text-foreground truncate">
                           {event.event}
                         </p>
                         <div className="flex items-center justify-between mt-0.5">

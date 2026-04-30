@@ -146,8 +146,12 @@ export function SessionsPage() {
                     </div>
                     <div className="text-xs text-muted-foreground truncate">
                       <span className={s.source === "Ads" ? "text-blue-500" : ""}>{s.source}</span>
-                      <span className="mx-1.5">·</span>
-                      {s.email ?? (s.userId ? "user" : "anon")}
+                      {s.email ? (
+                        <>
+                          <span className="mx-1.5">·</span>
+                          {s.email}
+                        </>
+                      ) : null}
                       <span className="mx-1.5">·</span>
                       {formatDuration(s.duration)}
                       <span className="mx-1.5">·</span>
