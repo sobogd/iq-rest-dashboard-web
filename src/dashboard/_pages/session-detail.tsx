@@ -5,11 +5,9 @@ import { apiUrl } from "@/lib/api";
 import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
 import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
-import { EVENT_LABELS } from "@/lib/dashboard-events";
 import {
   countryToFlag,
   formatDateFull,
-  formatEventName,
   formatTime,
   formatTimeDiff,
 } from "./_admin-helpers";
@@ -384,8 +382,8 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
                     const diff = next ? formatTimeDiff(next.occurredAt, event.occurredAt) : null;
                     return (
                       <div key={event.id} className="px-4 py-2.5">
-                        <p className="text-sm text-foreground truncate">
-                          {formatEventName(event.event, EVENT_LABELS)}
+                        <p className="text-sm text-foreground truncate font-mono">
+                          {event.event}
                         </p>
                         <div className="flex items-center justify-between mt-0.5">
                           <span className="text-[10px] text-muted-foreground tabular-nums">
