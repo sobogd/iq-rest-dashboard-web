@@ -7,6 +7,7 @@ import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
 import { EVENT_LABELS } from "@/lib/dashboard-events";
 import {
+  countryToFlag,
   formatDateFull,
   formatEventName,
   formatTime,
@@ -21,6 +22,9 @@ interface SessionData {
   restaurantName: string | null;
   ip: string | null;
   userAgent: string | null;
+  country: string | null;
+  city: string | null;
+  gclid: string | null;
   createdAt: string;
 }
 
@@ -276,6 +280,13 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
 
   const infoRows: { label: string; value: string; sub?: string; copyable?: boolean; onClick?: () => void; valueCls?: string }[] = [];
   if (isOnline) infoRows.push({ label: "Status", value: "Online", valueCls: "text-emerald-600 font-medium" });
+  if (session.country)
+    infoRows.push({
+      label: "Country",
+      value: `${countryToFlag(session.country)} ${session.country}${session.city ? `, ${session.city}` : ""}`,
+    });
+  infoRows.push({ label: "Source", value: session.gclid ? "Google Ads" : "Direct" });
+  if (session.gclid) infoRows.push({ label: "GCLID", value: session.gclid, copyable: true });
   if (session.email) infoRows.push({ label: "User", value: session.email, copyable: true });
   if (session.ip) infoRows.push({ label: "IP", value: session.ip, copyable: true });
   if (session.companyId)
