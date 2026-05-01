@@ -193,7 +193,7 @@ function EmailScreen({
         {t("consent.text")}{" "}
         <button
           type="button"
-          onClick={() => onOpenLegal("terms")}
+          onClick={() => { track("auth_open_terms"); onOpenLegal("terms"); }}
           className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors"
         >
           {t("consent.terms")}
@@ -201,7 +201,7 @@ function EmailScreen({
         {t("consent.and")}{" "}
         <button
           type="button"
-          onClick={() => onOpenLegal("privacy")}
+          onClick={() => { track("auth_open_privacy"); onOpenLegal("privacy"); }}
           className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors"
         >
           {t("consent.privacy")}
