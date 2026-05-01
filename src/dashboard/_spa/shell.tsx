@@ -31,6 +31,7 @@ import { SettingsHubView } from "./views/settings-hub";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { SessionsPage } from "../_pages/sessions";
+import { PulsePage } from "../_pages/pulse";
 import { SessionDetailPage } from "../_pages/session-detail";
 import { AuthPage } from "../../auth/auth-page";
 
@@ -235,6 +236,8 @@ function ViewSwitch(p: SwitchProps) {
       return <SessionsPage />;
     case "settings.admin.session":
       return <SessionDetailPage sessionId={view.sessionId} />;
+    case "settings.admin.pulse":
+      return <PulsePage />;
 
     case "category.new":
       return (

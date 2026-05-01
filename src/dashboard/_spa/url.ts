@@ -59,6 +59,8 @@ export function viewToPath(view: View): string {
       return view.period ? `/dashboard/sessions?period=${view.period}` : "/dashboard/sessions";
     case "settings.admin.session":
       return `/dashboard/sessions/${view.sessionId}`;
+    case "settings.admin.pulse":
+      return "/dashboard/settings/admin/pulse";
     case "category.new":
       return "/dashboard/categories/new";
     case "category.edit":
@@ -118,6 +120,7 @@ export function pathToView(path: string): View {
   }
   const sessionMatch = stripped.match(/^\/dashboard\/(?:settings\/admin\/)?sessions\/([^/]+)$/);
   if (sessionMatch) return { name: "settings.admin.session", sessionId: sessionMatch[1] };
+  if (stripped === "/dashboard/settings/admin/pulse") return { name: "settings.admin.pulse" };
 
   // Top-level tabs
   if (stripped === "/dashboard/orders") return { name: "orders" };

@@ -111,6 +111,21 @@ export function SettingsHubView({
               </div>
               <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                router.push({ name: "settings.admin.pulse" });
+              }}
+              className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
+            >
+              <div className="min-w-0">
+                <div className="text-sm font-medium text-foreground">Pulse</div>
+                <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+                  Cookieless aggregate counters (top events, timeline)
+                </div>
+              </div>
+              <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
+            </button>
           </>
         ) : null}
         {impersonatedBy ? (
