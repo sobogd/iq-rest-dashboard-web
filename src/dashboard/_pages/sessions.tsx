@@ -9,6 +9,7 @@ import { countryToFlag, formatDateShort, formatDuration } from "./_admin-helpers
 import { useDashboardRouter } from "../_spa/router";
 
 type Device = "mobile" | "tablet" | "desktop" | "unknown";
+type OS = "ios" | "android" | "macos" | "windows" | "linux" | "unknown";
 
 interface Session {
   sessionId: string;
@@ -21,10 +22,13 @@ interface Session {
   region: string | null;
   city: string | null;
   device: Device;
+  os: OS;
   source: string;
 }
 
-function deviceIcon(d: Device): string {
+function deviceIcon(d: Device, os: OS): string {
+  if (os === "ios") return "🍎";
+  if (os === "android") return "🤖";
   if (d === "mobile") return "📱";
   if (d === "tablet") return "📋";
   if (d === "desktop") return "💻";
@@ -176,7 +180,7 @@ export function SessionsPage() {
                   >
                     <span className="text-base shrink-0 flex items-center gap-1">
                       <span>{s.country ? countryToFlag(s.country) : "🌐"}</span>
-                      <span className="text-sm" title={s.device}>{deviceIcon(s.device)}</span>
+                      <span className="text-sm" title={`${s.device} · ${s.os}`}>{deviceIcon(s.device, s.os)}</span>
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-foreground truncate">

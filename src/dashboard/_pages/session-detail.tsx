@@ -13,6 +13,7 @@ import {
 } from "./_admin-helpers";
 
 type Device = "mobile" | "tablet" | "desktop" | "unknown";
+type OS = "ios" | "android" | "macos" | "windows" | "linux" | "unknown";
 
 interface SessionData {
   id: string;
@@ -23,6 +24,7 @@ interface SessionData {
   ip: string | null;
   userAgent: string | null;
   device: Device;
+  os: OS;
   country: string | null;
   region: string | null;
   city: string | null;
@@ -30,10 +32,16 @@ interface SessionData {
   createdAt: string;
 }
 
-function deviceLabel(d: Device): string {
-  if (d === "mobile") return "📱 Mobile";
-  if (d === "tablet") return "📋 Tablet";
-  if (d === "desktop") return "💻 Desktop";
+function deviceLabel(d: Device, os: OS): string {
+  const osLabel =
+    os === "ios" ? " · iOS" :
+    os === "android" ? " · Android" :
+    os === "macos" ? " · macOS" :
+    os === "windows" ? " · Windows" :
+    os === "linux" ? " · Linux" : "";
+  if (d === "mobile") return "📱 Mobile" + osLabel;
+  if (d === "tablet") return "📋 Tablet" + osLabel;
+  if (d === "desktop") return "💻 Desktop" + osLabel;
   return "❓ Unknown";
 }
 
@@ -301,7 +309,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       value: `${countryToFlag(session.country)} ${session.country}${locParts ? `, ${locParts}` : ""}`,
     });
   }
-  infoRows.push({ label: "Device", value: deviceLabel(session.device) });
+  infoRows.push({ label: "Device", value: deviceLabel(session.device, session.os) });
   infoRows.push({ label: "Source", value: session.gclid ? "Google Ads" : "Direct" });
   if (session.gclid) infoRows.push({ label: "GCLID", value: session.gclid, copyable: true });
   if (session.email) infoRows.push({ label: "User", value: session.email, copyable: true });

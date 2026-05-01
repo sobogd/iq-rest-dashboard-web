@@ -17,6 +17,7 @@ interface Company {
   itemsCount: number;
   messagesCount: number;
   monthlyViews: number;
+  todayScans: number;
   lastVisit: string | null;
   scanLimit: number | null;
 }
@@ -164,9 +165,19 @@ export function AdminPage() {
                             "inline-flex items-center gap-0.5 " +
                             (overLimit ? "text-red-500" : "text-blue-500")
                           }
+                          title="Scans this month"
                         >
                           <EyeIcon size={11} />
                           {company.monthlyViews}
+                        </span>
+                      ) : null}
+                      {company.todayScans > 0 ? (
+                        <span
+                          className="inline-flex items-center gap-0.5 text-emerald-600"
+                          title="Scans today"
+                        >
+                          <EyeIcon size={11} />
+                          {company.todayScans}
                         </span>
                       ) : null}
                       {company.messagesCount > 0 ? (
