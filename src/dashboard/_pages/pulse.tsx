@@ -26,6 +26,51 @@ const PERIODS: { value: Period; label: string; bucket: "hour" | "day" }[] = [
   { value: "30d", label: "30d", bucket: "day" },
 ];
 
+// Countries the product actually serves traffic from — keeps the dropdown small.
+// "XX" is the bucket where cf-ipcountry was missing.
+const COUNTRY_OPTIONS: { code: string; name: string }[] = [
+  { code: "ES", name: "Spain" },
+  { code: "PT", name: "Portugal" },
+  { code: "FR", name: "France" },
+  { code: "DE", name: "Germany" },
+  { code: "IT", name: "Italy" },
+  { code: "GB", name: "United Kingdom" },
+  { code: "NL", name: "Netherlands" },
+  { code: "BE", name: "Belgium" },
+  { code: "AT", name: "Austria" },
+  { code: "CH", name: "Switzerland" },
+  { code: "PL", name: "Poland" },
+  { code: "CZ", name: "Czechia" },
+  { code: "SK", name: "Slovakia" },
+  { code: "HU", name: "Hungary" },
+  { code: "RO", name: "Romania" },
+  { code: "BG", name: "Bulgaria" },
+  { code: "GR", name: "Greece" },
+  { code: "TR", name: "Turkey" },
+  { code: "SE", name: "Sweden" },
+  { code: "NO", name: "Norway" },
+  { code: "DK", name: "Denmark" },
+  { code: "FI", name: "Finland" },
+  { code: "IE", name: "Ireland" },
+  { code: "RU", name: "Russia" },
+  { code: "UA", name: "Ukraine" },
+  { code: "BY", name: "Belarus" },
+  { code: "KZ", name: "Kazakhstan" },
+  { code: "US", name: "United States" },
+  { code: "CA", name: "Canada" },
+  { code: "MX", name: "Mexico" },
+  { code: "BR", name: "Brazil" },
+  { code: "AR", name: "Argentina" },
+  { code: "AU", name: "Australia" },
+  { code: "JP", name: "Japan" },
+  { code: "KR", name: "South Korea" },
+  { code: "CN", name: "China" },
+  { code: "IN", name: "India" },
+  { code: "AE", name: "UAE" },
+  { code: "SA", name: "Saudi Arabia" },
+  { code: "XX", name: "Unknown" },
+];
+
 function periodRange(p: Period): { from: string; to: string } {
   const now = new Date();
   const ms = p === "24h" ? 86400000 : p === "7d" ? 7 * 86400000 : 30 * 86400000;
@@ -43,7 +88,7 @@ function fmtBucket(iso: string, bucket: "hour" | "day"): string {
 export function PulsePage() {
   const router = useDashboardRouter();
   const [tab, setTab] = useState<Tab>("top");
-  const [period, setPeriod] = useState<Period>("7d");
+  const [period, setPeriod] = useState<Period>("24h");
   const [country, setCountry] = useState<string>("");
   const [eventFilter, setEventFilter] = useState<string>("");
 
@@ -167,13 +212,18 @@ export function PulsePage() {
               {p.label}
             </button>
           ))}
-          <input
-            type="text"
-            placeholder="Country (e.g. ES)"
+          <select
             value={country}
-            onChange={(e) => setCountry(e.target.value.toUpperCase().slice(0, 2))}
-            className="h-8 w-32 px-2 text-xs bg-secondary border border-border rounded-md"
-          />
+            onChange={(e) => setCountry(e.target.value)}
+            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md min-w-[140px]"
+          >
+            <option value="">All countries</option>
+            {COUNTRY_OPTIONS.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.code} — {c.name}
+              </option>
+            ))}
+          </select>
           {tab === "timeline" ? (
             <select
               value={eventFilter}
