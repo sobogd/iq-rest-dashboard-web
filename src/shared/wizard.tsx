@@ -1,5 +1,7 @@
 import { Loader2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { useLocale } from "next-intl";
+import { landingUrl } from "@/lib/landing-url";
 
 export function WizardCard({ children }: { children: ReactNode }) {
   return (
@@ -12,11 +14,15 @@ export function WizardCard({ children }: { children: ReactNode }) {
 }
 
 export function WizardLogo() {
+  const locale = useLocale();
   return (
     <div className="mb-3">
-      <span className="text-2xl font-semibold tracking-tight text-foreground">
+      <a
+        href={landingUrl(locale)}
+        className="text-2xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity"
+      >
         IQ <span className="text-primary">Rest</span>
-      </span>
+      </a>
     </div>
   );
 }

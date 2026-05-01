@@ -7,6 +7,7 @@ import { Link } from "@/i18n/routing";
 import { Loader2 } from "lucide-react";
 import { identify } from "@/lib/analytics";
 import { track } from "@/lib/dashboard-events";
+import { landingUrl } from "@/lib/landing-url";
 
 declare global {
   interface Window {
@@ -52,11 +53,15 @@ const secondaryButtonClass =
   "w-full h-10 text-sm font-medium text-foreground bg-card border border-input rounded-lg hover:border-foreground active:scale-[0.99] transition-all tracking-tight flex items-center justify-center gap-2";
 
 function Logo() {
+  const locale = useLocale();
   return (
     <div className="flex justify-center mb-5">
-      <span className="text-3xl font-semibold tracking-tight text-foreground">
+      <a
+        href={landingUrl(locale)}
+        className="text-3xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity"
+      >
         IQ <span className="text-primary">Rest</span>
-      </span>
+      </a>
     </div>
   );
 }
@@ -464,7 +469,7 @@ export function AuthPage({
         credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ credential: response.credential, signupContext }),
+          body: JSON.stringify({ credential: response.credential, locale, signupContext }),
         });
         const data = await res.json();
         if (res.ok) {
