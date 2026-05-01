@@ -162,23 +162,23 @@ export function PulsePage() {
             value={date}
             max={todayStr()}
             onChange={(e) => setDate(e.target.value)}
-            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md"
+            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: "calc(10ch + 28px)" }}
           />
-          <div className="inline-flex items-center gap-1 h-8 px-2 text-xs bg-secondary border border-border rounded-md">
-            <input
-              type="time"
-              value={timeFrom}
-              onChange={(e) => setTimeFrom(e.target.value)}
-              className="bg-transparent outline-none w-[68px]"
-            />
-            <span className="text-muted-foreground">—</span>
-            <input
-              type="time"
-              value={timeTo}
-              onChange={(e) => setTimeTo(e.target.value)}
-              className="bg-transparent outline-none w-[68px]"
-            />
-          </div>
+          <input
+            type="time"
+            value={timeFrom}
+            onChange={(e) => setTimeFrom(e.target.value)}
+            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: "calc(5ch + 28px)" }}
+          />
+          <input
+            type="time"
+            value={timeTo}
+            onChange={(e) => setTimeTo(e.target.value)}
+            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: "calc(5ch + 28px)" }}
+          />
           {tab === "timeline" ? (
             <select
               value={eventFilter}
