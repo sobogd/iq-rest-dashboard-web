@@ -6,7 +6,6 @@ import { SubpageStickyBar } from "../_v2/ui";
 import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
 
-type Period = "24h" | "7d" | "30d";
 type Tab = "top" | "timeline";
 
 interface TopRow {
@@ -28,76 +27,31 @@ function countryToFlag(code: string): string {
   return String.fromCodePoint(A + code.charCodeAt(0) - a, A + code.charCodeAt(1) - a);
 }
 
-const PERIODS: { value: Period; label: string; bucket: "hour" | "day" }[] = [
-  { value: "24h", label: "24h", bucket: "hour" },
-  { value: "7d", label: "7d", bucket: "day" },
-  { value: "30d", label: "30d", bucket: "day" },
-];
-
-// Countries the product actually serves traffic from — keeps the dropdown small.
-// "XX" is the bucket where cf-ipcountry was missing.
-const COUNTRY_OPTIONS: { code: string; name: string }[] = [
-  { code: "ES", name: "Spain" },
-  { code: "PT", name: "Portugal" },
-  { code: "FR", name: "France" },
-  { code: "DE", name: "Germany" },
-  { code: "IT", name: "Italy" },
-  { code: "GB", name: "United Kingdom" },
-  { code: "NL", name: "Netherlands" },
-  { code: "BE", name: "Belgium" },
-  { code: "AT", name: "Austria" },
-  { code: "CH", name: "Switzerland" },
-  { code: "PL", name: "Poland" },
-  { code: "CZ", name: "Czechia" },
-  { code: "SK", name: "Slovakia" },
-  { code: "HU", name: "Hungary" },
-  { code: "RO", name: "Romania" },
-  { code: "BG", name: "Bulgaria" },
-  { code: "GR", name: "Greece" },
-  { code: "TR", name: "Turkey" },
-  { code: "SE", name: "Sweden" },
-  { code: "NO", name: "Norway" },
-  { code: "DK", name: "Denmark" },
-  { code: "FI", name: "Finland" },
-  { code: "IE", name: "Ireland" },
-  { code: "RU", name: "Russia" },
-  { code: "UA", name: "Ukraine" },
-  { code: "BY", name: "Belarus" },
-  { code: "KZ", name: "Kazakhstan" },
-  { code: "US", name: "United States" },
-  { code: "CA", name: "Canada" },
-  { code: "MX", name: "Mexico" },
-  { code: "BR", name: "Brazil" },
-  { code: "AR", name: "Argentina" },
-  { code: "AU", name: "Australia" },
-  { code: "JP", name: "Japan" },
-  { code: "KR", name: "South Korea" },
-  { code: "CN", name: "China" },
-  { code: "IN", name: "India" },
-  { code: "AE", name: "UAE" },
-  { code: "SA", name: "Saudi Arabia" },
-  { code: "XX", name: "Unknown" },
-];
-
-function periodRange(p: Period): { from: string; to: string } {
-  const now = new Date();
-  const ms = p === "24h" ? 86400000 : p === "7d" ? 7 * 86400000 : 30 * 86400000;
-  return { from: new Date(now.getTime() - ms).toISOString(), to: now.toISOString() };
+function todayStr(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
-function fmtBucket(iso: string, bucket: "hour" | "day"): string {
-  const d = new Date(iso);
-  if (bucket === "hour") {
-    return d.toLocaleString(undefined, { month: "short", day: "2-digit", hour: "2-digit" });
-  }
-  return d.toLocaleDateString(undefined, { month: "short", day: "2-digit" });
+/** Build ISO from a YYYY-MM-DD date and a HH:MM time, using the user's local TZ. */
+function toIsoLocal(dateStr: string, timeStr: string): string {
+  const [y, m, d] = dateStr.split("-").map((s) => parseInt(s, 10));
+  const [hh, mm] = timeStr.split(":").map((s) => parseInt(s, 10));
+  return new Date(y, m - 1, d, hh, mm, 0, 0).toISOString();
+}
+
+function fmtBucket(iso: string): string {
+  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
 
 export function PulsePage() {
   const router = useDashboardRouter();
   const [tab, setTab] = useState<Tab>("top");
-  const [period, setPeriod] = useState<Period>("24h");
-  const [country, setCountry] = useState<string>("");
+  const [date, setDate] = useState<string>(() => todayStr());
+  const [timeFrom, setTimeFrom] = useState<string>("00:00");
+  const [timeTo, setTimeTo] = useState<string>("23:59");
   const [eventFilter, setEventFilter] = useState<string>("");
 
   const [top, setTop] = useState<TopRow[]>([]);
@@ -106,26 +60,24 @@ export function PulsePage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const periodCfg = PERIODS.find((p) => p.value === period)!;
-
   const load = useCallback(
     async (mode: "initial" | "refresh") => {
       if (mode === "initial") setLoading(true);
       else setRefreshing(true);
       try {
-        const r = periodRange(period);
-        const qs = new URLSearchParams({ from: r.from, to: r.to });
-        if (country) qs.set("country", country);
+        const from = toIsoLocal(date, timeFrom);
+        const to = toIsoLocal(date, timeTo);
+        const qs = new URLSearchParams({ from, to });
         const [topRes, eventsRes, timelineRes] = await Promise.all([
           fetch(apiUrl(`/api/admin/pulse/top?${qs.toString()}&limit=20`), {
             credentials: "include",
           }),
-          fetch(apiUrl(`/api/admin/pulse/events?from=${r.from}&to=${r.to}`), {
+          fetch(apiUrl(`/api/admin/pulse/events?from=${from}&to=${to}`), {
             credentials: "include",
           }),
           fetch(
             apiUrl(
-              `/api/admin/pulse/timeline?${qs.toString()}&bucket=${periodCfg.bucket}` +
+              `/api/admin/pulse/timeline?${qs.toString()}&bucket=hour` +
                 (eventFilter ? `&events=${encodeURIComponent(eventFilter)}` : ""),
             ),
             { credentials: "include" },
@@ -148,7 +100,7 @@ export function PulsePage() {
         setRefreshing(false);
       }
     },
-    [period, country, eventFilter, periodCfg.bucket],
+    [date, timeFrom, timeTo, eventFilter],
   );
 
   useEffect(() => {
@@ -205,33 +157,28 @@ export function PulsePage() {
       <div className="px-3 py-3 space-y-3">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
-          {PERIODS.map((p) => (
-            <button
-              key={p.value}
-              type="button"
-              onClick={() => setPeriod(p.value)}
-              className={
-                "h-8 px-3 text-xs font-medium rounded-md transition-colors " +
-                (period === p.value
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-muted-foreground")
-              }
-            >
-              {p.label}
-            </button>
-          ))}
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md min-w-[140px]"
-          >
-            <option value="">All countries</option>
-            {COUNTRY_OPTIONS.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.code} — {c.name}
-              </option>
-            ))}
-          </select>
+          <input
+            type="date"
+            value={date}
+            max={todayStr()}
+            onChange={(e) => setDate(e.target.value)}
+            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md"
+          />
+          <div className="inline-flex items-center gap-1 h-8 px-2 text-xs bg-secondary border border-border rounded-md">
+            <input
+              type="time"
+              value={timeFrom}
+              onChange={(e) => setTimeFrom(e.target.value)}
+              className="bg-transparent outline-none w-[68px]"
+            />
+            <span className="text-muted-foreground">—</span>
+            <input
+              type="time"
+              value={timeTo}
+              onChange={(e) => setTimeTo(e.target.value)}
+              className="bg-transparent outline-none w-[68px]"
+            />
+          </div>
           {tab === "timeline" ? (
             <select
               value={eventFilter}
@@ -291,7 +238,7 @@ export function PulsePage() {
                 </span>
                 <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
                 <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
-                  {fmtBucket(row.bucket, periodCfg.bucket)}
+                  {fmtBucket(row.bucket)}
                   {row.hits > 1 ? ` ×${row.hits}` : ""}
                 </span>
               </div>
