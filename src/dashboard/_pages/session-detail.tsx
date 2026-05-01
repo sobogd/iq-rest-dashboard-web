@@ -12,6 +12,8 @@ import {
   formatTimeDiff,
 } from "./_admin-helpers";
 
+type Device = "mobile" | "tablet" | "desktop" | "unknown";
+
 interface SessionData {
   id: string;
   userId: string | null;
@@ -20,10 +22,18 @@ interface SessionData {
   restaurantName: string | null;
   ip: string | null;
   userAgent: string | null;
+  device: Device;
   country: string | null;
   city: string | null;
   gclid: string | null;
   createdAt: string;
+}
+
+function deviceLabel(d: Device): string {
+  if (d === "mobile") return "📱 Mobile";
+  if (d === "tablet") return "📋 Tablet";
+  if (d === "desktop") return "💻 Desktop";
+  return "❓ Unknown";
 }
 
 interface AnalyticsEvent {
@@ -288,6 +298,7 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
       label: "Country",
       value: `${countryToFlag(session.country)} ${session.country}${session.city ? `, ${session.city}` : ""}`,
     });
+  infoRows.push({ label: "Device", value: deviceLabel(session.device) });
   infoRows.push({ label: "Source", value: session.gclid ? "Google Ads" : "Direct" });
   if (session.gclid) infoRows.push({ label: "GCLID", value: session.gclid, copyable: true });
   if (session.email) infoRows.push({ label: "User", value: session.email, copyable: true });

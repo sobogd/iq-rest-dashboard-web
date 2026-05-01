@@ -8,6 +8,8 @@ import { RefreshIcon } from "../_v2/icons";
 import { countryToFlag, formatDateShort, formatDuration } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 
+type Device = "mobile" | "tablet" | "desktop" | "unknown";
+
 interface Session {
   sessionId: string;
   lastEvent: string;
@@ -16,7 +18,15 @@ interface Session {
   userId: string | null;
   email: string | null;
   country: string | null;
+  device: Device;
   source: string;
+}
+
+function deviceIcon(d: Device): string {
+  if (d === "mobile") return "📱";
+  if (d === "tablet") return "📋";
+  if (d === "desktop") return "💻";
+  return "❓";
 }
 
 type Period = "today" | "yesterday";
@@ -141,8 +151,9 @@ export function SessionsPage() {
                   onClick={() => openSession(s.sessionId)}
                   className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
                 >
-                  <span className="text-base shrink-0">
-                    {s.country ? countryToFlag(s.country) : "🌐"}
+                  <span className="text-base shrink-0 flex items-center gap-1">
+                    <span>{s.country ? countryToFlag(s.country) : "🌐"}</span>
+                    <span className="text-sm" title={s.device}>{deviceIcon(s.device)}</span>
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium text-foreground truncate">
