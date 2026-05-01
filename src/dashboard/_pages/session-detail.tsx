@@ -24,6 +24,7 @@ interface SessionData {
   userAgent: string | null;
   device: Device;
   country: string | null;
+  region: string | null;
   city: string | null;
   gclid: string | null;
   createdAt: string;
@@ -293,11 +294,13 @@ export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
 
   const infoRows: { label: string; value: string; sub?: string; copyable?: boolean; onClick?: () => void; valueCls?: string }[] = [];
   if (isOnline) infoRows.push({ label: "Status", value: "Online", valueCls: "text-emerald-600 font-medium" });
-  if (session.country)
+  if (session.country) {
+    const locParts = [session.region, session.city].filter(Boolean).join(", ");
     infoRows.push({
       label: "Country",
-      value: `${countryToFlag(session.country)} ${session.country}${session.city ? `, ${session.city}` : ""}`,
+      value: `${countryToFlag(session.country)} ${session.country}${locParts ? `, ${locParts}` : ""}`,
     });
+  }
   infoRows.push({ label: "Device", value: deviceLabel(session.device) });
   infoRows.push({ label: "Source", value: session.gclid ? "Google Ads" : "Direct" });
   if (session.gclid) infoRows.push({ label: "GCLID", value: session.gclid, copyable: true });

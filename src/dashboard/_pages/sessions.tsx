@@ -18,6 +18,8 @@ interface Session {
   userId: string | null;
   email: string | null;
   country: string | null;
+  region: string | null;
+  city: string | null;
   device: Device;
   source: string;
 }
