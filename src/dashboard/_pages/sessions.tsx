@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
-import { SubpageStickyBar } from "../_v2/ui";
-import { RefreshIcon } from "../_v2/icons";
+import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
+import { RefreshIcon, TrashIcon } from "../_v2/icons";
 import { countryToFlag, formatDateShort, formatDuration } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 
@@ -43,6 +43,8 @@ export function SessionsPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const TABS: { value: Period; labelKey: "today" | "yesterday" }[] = [
     { value: "today", labelKey: "today" },
@@ -86,6 +88,25 @@ export function SessionsPage() {
 
   function openSession(sessionId: string) {
     router.push({ name: "settings.admin.session", sessionId });
+  }
+
+  async function deleteSession(sessionId: string) {
+    setDeleting(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/analytics/sessions"), {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      });
+      if (res.ok) {
+        // Optimistic local removal — avoids a full reload roundtrip.
+        setSessions((prev) => prev.filter((s) => s.sessionId !== sessionId));
+      }
+    } finally {
+      setDeleting(false);
+      setPendingDelete(null);
+    }
   }
 
   return (
@@ -145,45 +166,64 @@ export function SessionsPage() {
             {sessions.map((s) => {
               const isOnline = Date.now() - new Date(s.lastEvent).getTime() < 30_000;
               return (
-                <button
-                  key={s.sessionId}
-                  type="button"
-                  onClick={() => openSession(s.sessionId)}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
-                >
-                  <span className="text-base shrink-0 flex items-center gap-1">
-                    <span>{s.country ? countryToFlag(s.country) : "🌐"}</span>
-                    <span className="text-sm" title={s.device}>{deviceIcon(s.device)}</span>
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-foreground truncate">
-                      {formatDateShort(s.lastEvent)}
-                      {isOnline ? (
-                        <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 align-middle" />
-                      ) : s.userId ? (
-                        <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle" />
-                      ) : null}
+                <div key={s.sessionId} className="flex items-center gap-2 pr-2">
+                  <button
+                    type="button"
+                    onClick={() => openSession(s.sessionId)}
+                    className="flex-1 min-w-0 flex items-center gap-3 px-3 py-2 text-left transition-colors"
+                  >
+                    <span className="text-base shrink-0 flex items-center gap-1">
+                      <span>{s.country ? countryToFlag(s.country) : "🌐"}</span>
+                      <span className="text-sm" title={s.device}>{deviceIcon(s.device)}</span>
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-medium text-foreground truncate">
+                        {formatDateShort(s.lastEvent)}
+                        {isOnline ? (
+                          <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 align-middle" />
+                        ) : s.userId ? (
+                          <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full bg-red-500 align-middle" />
+                        ) : null}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        <span className={s.source === "Ads" ? "text-blue-500" : ""}>{s.source}</span>
+                        {s.email ? (
+                          <>
+                            <span className="mx-1.5">·</span>
+                            {s.email}
+                          </>
+                        ) : null}
+                        <span className="mx-1.5">·</span>
+                        {formatDuration(s.duration)}
+                        <span className="mx-1.5">·</span>
+                        {t("events", { count: s.eventCount })}
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      <span className={s.source === "Ads" ? "text-blue-500" : ""}>{s.source}</span>
-                      {s.email ? (
-                        <>
-                          <span className="mx-1.5">·</span>
-                          {s.email}
-                        </>
-                      ) : null}
-                      <span className="mx-1.5">·</span>
-                      {formatDuration(s.duration)}
-                      <span className="mx-1.5">·</span>
-                      {t("events", { count: s.eventCount })}
-                    </div>
-                  </div>
-                </button>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPendingDelete(s.sessionId)}
+                    aria-label="Delete session"
+                    className="shrink-0 w-8 h-8 inline-flex items-center justify-center text-muted-foreground hover:text-red-600 transition-colors"
+                  >
+                    <TrashIcon size={14} />
+                  </button>
+                </div>
               );
             })}
           </div>
         )}
       </div>
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Delete session?"
+        message="The session and all its events will be removed."
+        confirmStyle="danger"
+        onConfirm={() => {
+          if (pendingDelete) void deleteSession(pendingDelete);
+        }}
+        onCancel={() => (deleting ? null : setPendingDelete(null))}
+      />
     </div>
   );
 }
