@@ -105,33 +105,11 @@ export function PulsePage() {
   // ── Top tab: bar chart ─────────────────────────────────────────────────────
   const topMax = top.length ? top[0].hits : 0;
 
-  // ── Timeline: stacked bars per bucket ──────────────────────────────────────
-  const timelineGrouped = useMemo(() => {
-    const byBucket = new Map<string, Map<string, number>>();
-    const eventTotals = new Map<string, number>();
-    for (const row of timeline) {
-      let m = byBucket.get(row.bucket);
-      if (!m) {
-        m = new Map();
-        byBucket.set(row.bucket, m);
-      }
-      m.set(row.event, (m.get(row.event) || 0) + row.hits);
-      eventTotals.set(row.event, (eventTotals.get(row.event) || 0) + row.hits);
-    }
-    const buckets = Array.from(byBucket.keys()).sort();
-    const events = Array.from(eventTotals.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([e]) => e);
-    let maxBucketTotal = 0;
-    const bucketTotals = buckets.map((b) => {
-      let total = 0;
-      const m = byBucket.get(b)!;
-      for (const v of m.values()) total += v;
-      if (total > maxBucketTotal) maxBucketTotal = total;
-      return total;
-    });
-    return { byBucket, buckets, events, bucketTotals, maxBucketTotal };
-  }, [timeline]);
+  // ── Timeline: chronological flat list ──────────────────────────────────────
+  const timelineRows = useMemo(
+    () => [...timeline].sort((a, b) => (a.bucket < b.bucket ? 1 : -1)),
+    [timeline],
+  );
 
   const eventColor = useCallback((event: string): string => {
     let h = 0;
@@ -241,84 +219,34 @@ export function PulsePage() {
               })}
             </div>
           )
-        ) : timelineGrouped.buckets.length === 0 ? (
+        ) : timelineRows.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">No data</div>
         ) : (
-          <div className="space-y-3">
-            {/* Legend */}
-            <div className="flex flex-wrap gap-2">
-              {timelineGrouped.events.slice(0, 12).map((e) => (
-                <div key={e} className="inline-flex items-center gap-1.5 text-[11px]">
-                  <span
-                    className="inline-block w-2.5 h-2.5 rounded-sm"
-                    style={{ background: eventColor(e) }}
-                  />
-                  <span className="font-mono text-muted-foreground">{e}</span>
+          <div className="bg-card border border-border rounded-xl overflow-hidden">
+            <div className="grid grid-cols-[110px_1fr_auto] gap-2 px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase border-b border-border">
+              <span>Time</span>
+              <span>Event</span>
+              <span className="text-right">Hits</span>
+            </div>
+            <div className="divide-y divide-border">
+              {timelineRows.slice(0, 1000).map((row, i) => (
+                <div
+                  key={`${row.bucket}-${row.event}-${i}`}
+                  className="grid grid-cols-[110px_1fr_auto] gap-2 px-3 py-1.5 text-xs items-center"
+                >
+                  <span className="text-muted-foreground tabular-nums">
+                    {fmtBucket(row.bucket, periodCfg.bucket)}
+                  </span>
+                  <span className="font-mono text-foreground truncate inline-flex items-center gap-1.5">
+                    <span
+                      className="inline-block w-2 h-2 rounded-sm shrink-0"
+                      style={{ background: eventColor(row.event) }}
+                    />
+                    {row.event}
+                  </span>
+                  <span className="text-right tabular-nums">{row.hits}</span>
                 </div>
               ))}
-            </div>
-
-            {/* Stacked bars */}
-            <div className="bg-card border border-border rounded-xl p-3 overflow-x-auto">
-              <div className="flex items-end gap-0.5 h-48 min-w-fit">
-                {timelineGrouped.buckets.map((b, idx) => {
-                  const m = timelineGrouped.byBucket.get(b)!;
-                  const total = timelineGrouped.bucketTotals[idx];
-                  const heightPct = timelineGrouped.maxBucketTotal
-                    ? (total / timelineGrouped.maxBucketTotal) * 100
-                    : 0;
-                  return (
-                    <div
-                      key={b}
-                      className="flex flex-col items-center gap-1 min-w-[24px]"
-                      title={`${fmtBucket(b, periodCfg.bucket)}: ${total} hits`}
-                    >
-                      <div className="flex flex-col-reverse w-4 rounded-sm overflow-hidden" style={{ height: `${Math.max(heightPct, 2)}%` }}>
-                        {timelineGrouped.events.map((e) => {
-                          const v = m.get(e) || 0;
-                          if (v === 0) return null;
-                          const pct = total ? (v / total) * 100 : 0;
-                          return (
-                            <div
-                              key={e}
-                              style={{ height: `${pct}%`, background: eventColor(e) }}
-                            />
-                          );
-                        })}
-                      </div>
-                      <span className="text-[9px] text-muted-foreground rotate-45 origin-left whitespace-nowrap mt-1">
-                        {fmtBucket(b, periodCfg.bucket)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <div className="grid grid-cols-[1fr_auto_auto] gap-2 px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase border-b border-border">
-                <span>Time</span>
-                <span>Event</span>
-                <span className="text-right">Hits</span>
-              </div>
-              <div className="divide-y divide-border max-h-[400px] overflow-y-auto">
-                {[...timeline]
-                  .sort((a, b) => (a.bucket < b.bucket ? 1 : -1))
-                  .slice(0, 200)
-                  .map((row, i) => (
-                    <div
-                      key={`${row.bucket}-${row.event}-${i}`}
-                      className="grid grid-cols-[1fr_auto_auto] gap-2 px-3 py-1.5 text-xs"
-                    >
-                      <span className="text-muted-foreground tabular-nums">
-                        {fmtBucket(row.bucket, periodCfg.bucket)}
-                      </span>
-                      <span className="font-mono text-foreground truncate">{row.event}</span>
-                      <span className="text-right tabular-nums">{row.hits}</span>
-                    </div>
-                  ))}
-              </div>
             </div>
           </div>
         )}
@@ -326,3 +254,4 @@ export function PulsePage() {
     </div>
   );
 }
+
