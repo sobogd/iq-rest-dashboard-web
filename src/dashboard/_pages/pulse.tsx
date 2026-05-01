@@ -52,11 +52,9 @@ export function PulsePage() {
   const [date, setDate] = useState<string>(() => todayStr());
   const [timeFrom, setTimeFrom] = useState<string>("00:00");
   const [timeTo, setTimeTo] = useState<string>("23:59");
-  const [eventFilter, setEventFilter] = useState<string>("");
 
   const [top, setTop] = useState<TopRow[]>([]);
   const [timeline, setTimeline] = useState<BucketRow[]>([]);
-  const [allEvents, setAllEvents] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -65,31 +63,22 @@ export function PulsePage() {
       if (mode === "initial") setLoading(true);
       else setRefreshing(true);
       try {
+        // Local-TZ pickers → UTC ISO. Backend stores `hour` as UTC, so passing UTC
+        // ISO makes the day boundary line up with what the user picked locally.
         const from = toIsoLocal(date, timeFrom);
         const to = toIsoLocal(date, timeTo);
         const qs = new URLSearchParams({ from, to });
-        const [topRes, eventsRes, timelineRes] = await Promise.all([
+        const [topRes, timelineRes] = await Promise.all([
           fetch(apiUrl(`/api/admin/pulse/top?${qs.toString()}&limit=20`), {
             credentials: "include",
           }),
-          fetch(apiUrl(`/api/admin/pulse/events?from=${from}&to=${to}`), {
+          fetch(apiUrl(`/api/admin/pulse/timeline?${qs.toString()}&bucket=hour`), {
             credentials: "include",
           }),
-          fetch(
-            apiUrl(
-              `/api/admin/pulse/timeline?${qs.toString()}&bucket=hour` +
-                (eventFilter ? `&events=${encodeURIComponent(eventFilter)}` : ""),
-            ),
-            { credentials: "include" },
-          ),
         ]);
         if (topRes.ok) {
           const j = (await topRes.json()) as { events: TopRow[] };
           setTop(j.events || []);
-        }
-        if (eventsRes.ok) {
-          const j = (await eventsRes.json()) as { events: string[] };
-          setAllEvents(j.events || []);
         }
         if (timelineRes.ok) {
           const j = (await timelineRes.json()) as { buckets: BucketRow[] };
@@ -100,7 +89,7 @@ export function PulsePage() {
         setRefreshing(false);
       }
     },
-    [date, timeFrom, timeTo, eventFilter],
+    [date, timeFrom, timeTo],
   );
 
   useEffect(() => {
@@ -162,37 +151,34 @@ export function PulsePage() {
             value={date}
             max={todayStr()}
             onChange={(e) => setDate(e.target.value)}
-            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: "calc(10ch + 28px)" }}
+            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: 130 }}
           />
           <input
             type="time"
             value={timeFrom}
             onChange={(e) => setTimeFrom(e.target.value)}
-            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: "calc(5ch + 28px)" }}
+            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: 90 }}
           />
           <input
             type="time"
             value={timeTo}
             onChange={(e) => setTimeTo(e.target.value)}
-            className="h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: "calc(5ch + 28px)" }}
+            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
+            style={{ width: 90 }}
           />
-          {tab === "timeline" ? (
-            <select
-              value={eventFilter}
-              onChange={(e) => setEventFilter(e.target.value)}
-              className="h-8 px-2 text-xs bg-secondary border border-border rounded-md min-w-[140px]"
-            >
-              <option value="">All events</option>
-              {allEvents.map((e) => (
-                <option key={e} value={e}>
-                  {e}
-                </option>
-              ))}
-            </select>
-          ) : null}
+          <style>{`
+            .pulse-filter-input::-webkit-calendar-picker-indicator {
+              padding: 0;
+              margin-left: 2px;
+              opacity: 0.6;
+            }
+            .pulse-filter-input::-webkit-inner-spin-button,
+            .pulse-filter-input::-webkit-clear-button {
+              display: none;
+            }
+          `}</style>
         </div>
 
         {loading ? (
