@@ -27,7 +27,7 @@ export type View =
   | { name: "settings.support" }
   | { name: "settings.admin.companies" }
   | { name: "settings.admin.company"; id: string }
-  | { name: "settings.admin.sessions" }
+  | { name: "settings.admin.sessions"; period?: "today" | "yesterday" }
   | { name: "settings.admin.session"; sessionId: string }
   | { name: "category.new" }
   | { name: "category.edit"; id: string }

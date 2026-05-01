@@ -24,8 +24,12 @@ type Period = "today" | "yesterday";
 export function SessionsPage() {
   const t = useTranslations("dashboard.admin");
   const router = useDashboardRouter();
+  // Period lives on the View itself so opening a session detail and clicking back
+  // restores the same tab the user was on (and reloads/share-links keep the tab).
+  const period: Period = router.view.name === "settings.admin.sessions" && router.view.period
+    ? router.view.period
+    : "today";
 
-  const [period, setPeriod] = useState<Period>("today");
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -34,6 +38,11 @@ export function SessionsPage() {
     { value: "today", labelKey: "today" },
     { value: "yesterday", labelKey: "yesterday" },
   ];
+
+  const setPeriod = (next: Period) => {
+    // Replace (no new history entry) so back button still goes to settings, not previous tab.
+    router.replace({ name: "settings.admin.sessions", period: next });
+  };
 
   const load = useCallback(
     async (p: Period, mode: "initial" | "refresh") => {

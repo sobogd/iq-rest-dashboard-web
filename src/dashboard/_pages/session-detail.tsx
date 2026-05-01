@@ -66,7 +66,12 @@ type Tab = "info" | "events";
 
 export function SessionDetailPage({ sessionId }: SessionDetailPageProps) {
   const router = useDashboardRouter();
-  const goBack = () => router.push({ name: "settings.admin.sessions" });
+  // Pop the stack when possible so the previous list view is restored with its
+  // current period tab; fall back to a fresh push when opened directly via URL.
+  const goBack = () => {
+    if (router.canGoBack) router.back();
+    else router.push({ name: "settings.admin.sessions" });
+  };
 
   const [tab, setTab] = useState<Tab>("info");
   const [session, setSession] = useState<SessionData | null>(null);
