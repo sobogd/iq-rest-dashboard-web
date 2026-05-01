@@ -17,7 +17,15 @@ interface TopRow {
 interface BucketRow {
   bucket: string;
   event: string;
+  country: string;
   hits: number;
+}
+
+function countryToFlag(code: string): string {
+  if (!code || code === "XX" || code.length !== 2) return "🌐";
+  const A = 0x1f1e6;
+  const a = "A".charCodeAt(0);
+  return String.fromCodePoint(A + code.charCodeAt(0) - a, A + code.charCodeAt(1) - a);
 }
 
 const PERIODS: { value: Period; label: string; bucket: "hour" | "day" }[] = [
@@ -272,32 +280,22 @@ export function PulsePage() {
         ) : timelineRows.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">No data</div>
         ) : (
-          <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <div className="grid grid-cols-[110px_1fr_auto] gap-2 px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase border-b border-border">
-              <span>Time</span>
-              <span>Event</span>
-              <span className="text-right">Hits</span>
-            </div>
-            <div className="divide-y divide-border">
-              {timelineRows.slice(0, 1000).map((row, i) => (
-                <div
-                  key={`${row.bucket}-${row.event}-${i}`}
-                  className="grid grid-cols-[110px_1fr_auto] gap-2 px-3 py-1.5 text-xs items-center"
-                >
-                  <span className="text-muted-foreground tabular-nums">
-                    {fmtBucket(row.bucket, periodCfg.bucket)}
-                  </span>
-                  <span className="font-mono text-foreground truncate inline-flex items-center gap-1.5">
-                    <span
-                      className="inline-block w-2 h-2 rounded-sm shrink-0"
-                      style={{ background: eventColor(row.event) }}
-                    />
-                    {row.event}
-                  </span>
-                  <span className="text-right tabular-nums">{row.hits}</span>
-                </div>
-              ))}
-            </div>
+          <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+            {timelineRows.slice(0, 1000).map((row, i) => (
+              <div
+                key={`${row.bucket}-${row.event}-${row.country}-${i}`}
+                className="flex items-center gap-2 px-3 py-1.5 text-xs"
+              >
+                <span className="text-base shrink-0" title={row.country}>
+                  {countryToFlag(row.country)}
+                </span>
+                <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
+                <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
+                  {fmtBucket(row.bucket, periodCfg.bucket)}
+                  {row.hits > 1 ? ` ×${row.hits}` : ""}
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </div>
