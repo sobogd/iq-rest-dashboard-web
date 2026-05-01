@@ -101,7 +101,7 @@ function EmailScreen({
   googleReady: boolean;
   googleHiddenRef: React.RefObject<HTMLDivElement | null>;
   embedded: boolean;
-  onOpenLegal: (view: "terms" | "policy") => void;
+  onOpenLegal: (view: "terms" | "policy" | "privacy") => void;
   t: ReturnType<typeof useTranslations<"dashboard.auth">>;
 }) {
   return (
@@ -201,7 +201,7 @@ function EmailScreen({
         {t("consent.and")}{" "}
         <button
           type="button"
-          onClick={() => onOpenLegal("policy")}
+          onClick={() => onOpenLegal("privacy")}
           className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors"
         >
           {t("consent.privacy")}
