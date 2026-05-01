@@ -111,7 +111,10 @@ export function MenuOnboarding() {
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
 
- // Scroll target into upper part of viewport, then lock scroll
+ // Scroll target into upper part of viewport, then lock scroll.
+ // Sticky/fixed targets (preview + share buttons sit in a sticky header) are
+ // always visible — auto-scroll on iOS misaligns the highlight overlay because
+ // the rect we read changes mid-scroll. Skip scroll for those.
  useEffect(() => {
  if (done) return;
  const el = document.querySelector(step.selector) as HTMLElement | null;
@@ -119,11 +122,26 @@ export function MenuOnboarding() {
  const html = document.documentElement;
  const body = document.body;
 
+ const cs = window.getComputedStyle(el);
+ const isPinned = cs.position === "sticky" || cs.position === "fixed";
+ // Walk ancestors — buttons inside a sticky bar should also be treated as pinned.
+ const inPinnedAncestor = (() => {
+ let p: HTMLElement | null = el.parentElement;
+ while (p && p !== body) {
+ const pos = window.getComputedStyle(p).position;
+ if (pos === "sticky" || pos === "fixed") return true;
+ p = p.parentElement;
+ }
+ return false;
+ })();
+
  // Wait a frame so the bottom-padding effect is applied first
  const raf = window.requestAnimationFrame(() => {
+ if (!isPinned && !inPinnedAncestor) {
  const r = el.getBoundingClientRect();
  const targetY = r.top + window.scrollY - window.innerHeight * 0.2;
  window.scrollTo(0, Math.max(0, targetY));
+ }
  html.style.overflow = "hidden";
  body.style.overflow = "hidden";
  });
