@@ -13,8 +13,6 @@ export function viewToPath(view: View): string {
       return "/dashboard/otp";
     case "auth.logout":
       return "/dashboard/logout";
-    case "onboarding":
-      return "/dashboard/onboarding";
     case "menu":
       return "/dashboard";
     case "orders":
@@ -90,7 +88,6 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/login" || stripped === "/login") return { name: "auth.login" };
   if (stripped === "/dashboard/otp" || stripped === "/otp") return { name: "auth.otp" };
   if (stripped === "/dashboard/logout" || stripped === "/logout") return { name: "auth.logout" };
-  if (stripped === "/dashboard/onboarding" || stripped === "/onboarding") return { name: "onboarding" };
   if (stripped === "" || stripped === "/dashboard") return { name: "menu" };
 
   // Settings family

@@ -63,12 +63,9 @@ export function DashboardHost() {
     // and NOT here, otherwise users who clicked "Try new dashboard" from
     // the old monolith would bounce straight back. Once they've reached
     // the new SPA we let them stay.
-    if ((authData.onboardingStep ?? 0) < 3) {
-      navigate({ to: "/$locale/onboarding", params: { locale: locale || "en" }, replace: true });
-    }
   }, [auth.isLoading, authData, navigate, locale]);
 
-  const enabled = !!authData?.authenticated && (authData.onboardingStep ?? 0) >= 3;
+  const enabled = !!authData?.authenticated;
 
   const data = useQueries({
     queries: [

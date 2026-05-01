@@ -525,49 +525,35 @@
       "events": "{count} įv.",
       "loading": "Įkeliama…",
       "settingsBreadcrumb": "Nustatymai"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Sveiki atvykę!",
-      "subtitle": "Užtrunka mažiau nei 2 minutes",
-      "nameLabel": "Restorano pavadinimas",
-      "namePlaceholder": "Pvz. La Bella Italia",
-      "setupText": "Nustatykime jūsų meniu",
-      "nameHint": "Pasirodys jūsų skaitmeninio meniu viršuje."
     },
-    "step2": {
-      "title": "Pridėkite pirmąjį patiekalą",
-      "motivation": "Pridėkite tik vieną patiekalą, kad pamatytumėte, kaip atrodys meniu!",
-      "categoryLabel": "Kategorijos pavadinimas",
-      "categoryPlaceholder": "Pvz. Pagrindinis meniu, Gėrimai",
-      "dishNameLabel": "Patiekalo pavadinimas",
-      "dishNamePlaceholder": "Pvz. Pizza Margherita",
-      "priceLabel": "Kaina",
-      "priceRequired": "Įveskite galiojančią kainą",
-      "photoLabel": "Nuotrauka",
-      "addPhoto": "Pridėti nuotrauką",
-      "photoHint": "JPG arba PNG, iki 5 MB. Nuotraukas galite pridėti vėliau."
+    "createFlow": {
+      "step1": {
+        "title": "Kokio tipo vieta?",
+        "subtitle": "Iš anksto įkelsime pavyzdinį meniu, kad pradėtum nuo redagavimo, o ne tuščio puslapio."
+      },
+      "step2": {
+        "title": "Pavadink savo restoraną",
+        "subtitle": "Tai matys svečiai meniu viršuje. Vėliau galėsi pakeisti.",
+        "nameLabel": "Restorano pavadinimas",
+        "namePlaceholder": "Mario picerija"
+      },
+      "step3": {
+        "title": "Beveik baigta",
+        "subtitle": "Patvirtink el. paštą, kad išsaugotum meniu ir atvertum skydelį."
+      },
+      "back": "Atgal",
+      "continue": "Tęsti",
+      "cuisines": {
+        "pizza": "Picerija",
+        "sushi": "Suši / Japoniškas",
+        "asian": "Azijietiškas",
+        "burger": "Burgeriai / Greitas maistas",
+        "coffee": "Kavinė",
+        "bar": "Baras / Pub",
+        "bakery": "Kepykla / Konditerija",
+        "restaurant": "Restoranas"
+      }
     },
-    "saveError": "Kažkas nutiko, bandykite dar kartą",
-    "save": "Išsaugoti",
-    "cancel": "Atšaukti",
-    "close": "Uždaryti",
-    "step4": {
-      "title": "Jūsų meniu paruoštas!",
-      "subtitle": "Atspausdinkite šį QR kodą ir uždėkite ant savo stalų",
-      "goToDashboard": "Į skydelį ir atsisiųsti QR",
-      "copy": "Kopijuoti",
-      "tip": "Atspausdinkite ir uždėkite ant stalų arba bendrinkite internete."
-    },
-    "step3": {
-      "title": "Pasirinkite viršelį",
-      "subtitle": "Tai svečiai mato, kai nuskaito QR.",
-      "upload": "Įkelti",
-      "yourPhoto": "Jūsų nuotrauka",
-      "changeLater": "Galite pakeisti vėliau nustatymuose."
-    },
-    "back": "Atgal",
-    "continue": "Tęsti"
+    "exampleBadge": "pvz."
   }
 }

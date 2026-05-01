@@ -436,6 +436,7 @@ function DishRow({
 }) {
  const t = useTranslations("dashboard.menu");
  const tc = useTranslations("dashboard.common");
+ const tBadge = useTranslations("dashboard");
  const router = useDashboardRouter();
  const rowCls =
  "flex items-center gap-2 pl-2 pr-3 py-2 transition-colors " +
@@ -457,12 +458,17 @@ function DishRow({
  track("dash_menu_item_click");
  router.push({ name: "item.edit", id: dish.id });
  }}
- className="flex-1 min-w-0 text-left flex items-center gap-3"
+ className="flex-1 min-w-0 text-left flex items-center gap-2"
  >
- <div className="min-w-0 flex-1">
- <div className="text-sm font-medium text-foreground truncate">
+ <div className="min-w-0 flex-1 flex items-center gap-1.5">
+ <span className="text-sm font-medium text-foreground truncate">
  {getMlWithFallback(dish.name, defaultLang, defaultLang)}
- </div>
+ </span>
+ {dish.isExample && (
+ <span className="text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 shrink-0">
+ {tBadge("exampleBadge")}
+ </span>
+ )}
  </div>
  <div className="text-sm text-muted-foreground tabular-nums shrink-0">{currencySymbol + dish.price}</div>
  </button>

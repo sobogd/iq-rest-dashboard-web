@@ -525,49 +525,35 @@
       "events": "{count} év.",
       "loading": "Chargement…",
       "settingsBreadcrumb": "Paramètres"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Bienvenue !",
-      "subtitle": "Cela prend moins de 2 minutes",
-      "nameLabel": "Nom du restaurant",
-      "namePlaceholder": "Ex. La Bella Italia",
-      "setupText": "Configurons votre menu",
-      "nameHint": "Apparaîtra en haut de votre menu numérique."
     },
-    "step2": {
-      "title": "Ajoutez votre premier plat",
-      "motivation": "Ajoutez juste un plat pour voir l'allure de votre menu !",
-      "categoryLabel": "Nom de la catégorie",
-      "categoryPlaceholder": "Ex. Menu principal, Boissons",
-      "dishNameLabel": "Nom du plat",
-      "dishNamePlaceholder": "Ex. Pizza Margherita",
-      "priceLabel": "Prix",
-      "priceRequired": "Saisissez un prix valide",
-      "photoLabel": "Photo",
-      "addPhoto": "Ajouter une photo",
-      "photoHint": "JPG ou PNG, jusqu'à 5 Mo. Vous pouvez ajouter des photos plus tard."
+    "createFlow": {
+      "step1": {
+        "title": "Quel type d'établissement ?",
+        "subtitle": "Nous préchargons un menu d'exemple pour que tu commences à éditer, pas avec une page blanche."
+      },
+      "step2": {
+        "title": "Nomme ton restaurant",
+        "subtitle": "C'est ce que les clients verront en haut de ton menu. Tu pourras le changer plus tard.",
+        "nameLabel": "Nom du restaurant",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Presque terminé",
+        "subtitle": "Confirme ton email pour enregistrer ton menu et débloquer le tableau de bord."
+      },
+      "back": "Retour",
+      "continue": "Continuer",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japonais",
+        "asian": "Asiatique",
+        "burger": "Burger / Restauration rapide",
+        "coffee": "Café",
+        "bar": "Bar / Pub",
+        "bakery": "Boulangerie / Pâtisserie",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Quelque chose a mal tourné, réessayez",
-    "save": "Enregistrer",
-    "cancel": "Annuler",
-    "close": "Fermer",
-    "step4": {
-      "title": "Votre menu est prêt !",
-      "subtitle": "Imprimez ce code QR et placez-le sur vos tables",
-      "goToDashboard": "Aller au tableau de bord et télécharger le QR",
-      "copy": "Copier",
-      "tip": "Imprimez et placez sur les tables, ou partagez en ligne."
-    },
-    "step3": {
-      "title": "Choisissez votre couverture",
-      "subtitle": "C'est ce que les clients voient en scannant le QR.",
-      "upload": "Téléverser",
-      "yourPhoto": "Votre photo",
-      "changeLater": "Vous pouvez changer plus tard dans les paramètres."
-    },
-    "back": "Retour",
-    "continue": "Continuer"
+    "exampleBadge": "ex."
   }
 }

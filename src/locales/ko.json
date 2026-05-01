@@ -525,49 +525,35 @@
       "events": "{count}개 이벤트",
       "loading": "불러오는 중…",
       "settingsBreadcrumb": "설정"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "환영합니다!",
-      "subtitle": "2분 이내에 완료됩니다",
-      "nameLabel": "레스토랑 이름",
-      "namePlaceholder": "예: La Bella Italia",
-      "setupText": "메뉴를 설정해 봅시다",
-      "nameHint": "디지털 메뉴 상단에 표시됩니다."
     },
-    "step2": {
-      "title": "첫 요리를 추가하세요",
-      "motivation": "한 가지 요리만 추가해서 메뉴가 어떻게 보이는지 확인해보세요!",
-      "categoryLabel": "카테고리 이름",
-      "categoryPlaceholder": "예: 메인 메뉴, 음료",
-      "dishNameLabel": "요리 이름",
-      "dishNamePlaceholder": "예: 마르게리타 피자",
-      "priceLabel": "가격",
-      "priceRequired": "유효한 가격을 입력하세요",
-      "photoLabel": "사진",
-      "addPhoto": "사진 추가",
-      "photoHint": "JPG 또는 PNG, 최대 5MB. 나중에 사진을 추가할 수 있습니다."
+    "createFlow": {
+      "step1": {
+        "title": "어떤 종류의 매장인가요?",
+        "subtitle": "샘플 메뉴를 미리 불러와 빈 페이지가 아닌 편집부터 시작할 수 있습니다."
+      },
+      "step2": {
+        "title": "식당 이름을 입력하세요",
+        "subtitle": "이것은 손님이 메뉴 상단에서 보는 이름입니다. 나중에 변경할 수 있습니다.",
+        "nameLabel": "식당 이름",
+        "namePlaceholder": "마리오 피자"
+      },
+      "step3": {
+        "title": "거의 다 됐어요",
+        "subtitle": "메뉴를 저장하고 대시보드를 열려면 이메일을 확인하세요."
+      },
+      "back": "뒤로",
+      "continue": "계속",
+      "cuisines": {
+        "pizza": "피자집",
+        "sushi": "스시 / 일식",
+        "asian": "아시아",
+        "burger": "버거 / 패스트푸드",
+        "coffee": "카페",
+        "bar": "바 / 펍",
+        "bakery": "베이커리 / 디저트",
+        "restaurant": "레스토랑"
+      }
     },
-    "saveError": "문제가 발생했습니다. 다시 시도하세요",
-    "save": "저장",
-    "cancel": "취소",
-    "close": "닫기",
-    "step4": {
-      "title": "메뉴가 준비되었습니다!",
-      "subtitle": "이 QR 코드를 인쇄해서 테이블에 놓으세요",
-      "goToDashboard": "대시보드로 가서 QR 다운로드",
-      "copy": "복사",
-      "tip": "인쇄해서 테이블에 놓거나 온라인으로 공유하세요."
-    },
-    "step3": {
-      "title": "커버 선택",
-      "subtitle": "손님이 QR을 스캔할 때 보는 화면입니다.",
-      "upload": "업로드",
-      "yourPhoto": "내 사진",
-      "changeLater": "나중에 설정에서 변경할 수 있습니다."
-    },
-    "back": "뒤로",
-    "continue": "계속"
+    "exampleBadge": "샘플"
   }
 }

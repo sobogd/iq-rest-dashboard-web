@@ -525,49 +525,35 @@
       "events": "{count} not.",
       "loading": "Ielādē…",
       "settingsBreadcrumb": "Iestatījumi"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Laipni lūdzam!",
-      "subtitle": "Aizņem mazāk par 2 minūtēm",
-      "nameLabel": "Restorāna nosaukums",
-      "namePlaceholder": "Piem. La Bella Italia",
-      "setupText": "Iestatīsim jūsu ēdienkarti",
-      "nameHint": "Tiks parādīts jūsu digitālās ēdienkartes augšpusē."
     },
-    "step2": {
-      "title": "Pievienojiet savu pirmo ēdienu",
-      "motivation": "Pievienojiet tikai vienu ēdienu, lai redzētu, kā izskatīsies ēdienkarte!",
-      "categoryLabel": "Kategorijas nosaukums",
-      "categoryPlaceholder": "Piem. Galvenā ēdienkarte, Dzērieni",
-      "dishNameLabel": "Ēdiena nosaukums",
-      "dishNamePlaceholder": "Piem. Margherita pica",
-      "priceLabel": "Cena",
-      "priceRequired": "Ievadiet derīgu cenu",
-      "photoLabel": "Fotoattēls",
-      "addPhoto": "Pievienot fotoattēlu",
-      "photoHint": "JPG vai PNG, līdz 5 MB. Fotoattēlus var pievienot vēlāk."
+    "createFlow": {
+      "step1": {
+        "title": "Kāda veida vieta?",
+        "subtitle": "Iepriekš ielādēsim piemēra ēdienkarti, lai sāktu ar rediģēšanu, nevis tukšu lapu."
+      },
+      "step2": {
+        "title": "Nosauc savu restorānu",
+        "subtitle": "Šo viesi redzēs ēdienkartes augšpusē. Vēlāk var mainīt.",
+        "nameLabel": "Restorāna nosaukums",
+        "namePlaceholder": "Mario picerija"
+      },
+      "step3": {
+        "title": "Gandrīz gatavs",
+        "subtitle": "Apstiprini e-pastu, lai saglabātu ēdienkarti un atvērtu paneli."
+      },
+      "back": "Atpakaļ",
+      "continue": "Turpināt",
+      "cuisines": {
+        "pizza": "Picerija",
+        "sushi": "Suši / Japāņu",
+        "asian": "Aziātu",
+        "burger": "Burgeri / Ātrā ēdināšana",
+        "coffee": "Kafejnīca",
+        "bar": "Bārs / Pubs",
+        "bakery": "Maizes ceptuve / Konditoreja",
+        "restaurant": "Restorāns"
+      }
     },
-    "saveError": "Kaut kas nogāja greizi, mēģiniet vēlreiz",
-    "save": "Saglabāt",
-    "cancel": "Atcelt",
-    "close": "Aizvērt",
-    "step4": {
-      "title": "Jūsu ēdienkarte ir gatava!",
-      "subtitle": "Izdrukājiet šo QR kodu un nolieciet uz galdiem",
-      "goToDashboard": "Uz paneli un lejupielādēt QR",
-      "copy": "Kopēt",
-      "tip": "Izdrukājiet un novietojiet uz galdiem vai kopīgojiet tiešsaistē."
-    },
-    "step3": {
-      "title": "Izvēlieties vāku",
-      "subtitle": "To viesi redz, kad skenē QR.",
-      "upload": "Augšupielādēt",
-      "yourPhoto": "Jūsu fotoattēls",
-      "changeLater": "Varat to mainīt vēlāk iestatījumos."
-    },
-    "back": "Atpakaļ",
-    "continue": "Turpināt"
+    "exampleBadge": "piem."
   }
 }

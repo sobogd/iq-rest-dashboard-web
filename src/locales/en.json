@@ -511,6 +511,35 @@
         "tooManyAttempts": "Too many attempts. Wait and try again later."
       }
     },
+    "createFlow": {
+      "step1": {
+        "title": "What kind of place?",
+        "subtitle": "We'll preload a sample menu so you can start with something to edit, not a blank page."
+      },
+      "step2": {
+        "title": "Name your restaurant",
+        "subtitle": "This is what guests will see at the top of your menu. You can change it later.",
+        "nameLabel": "Restaurant name",
+        "namePlaceholder": "Mario's Pizza"
+      },
+      "step3": {
+        "title": "Almost there",
+        "subtitle": "Confirm your email to save your menu and unlock the dashboard."
+      },
+      "back": "Back",
+      "continue": "Continue",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanese",
+        "asian": "Asian",
+        "burger": "Burger / Fast food",
+        "coffee": "Coffee / Cafe",
+        "bar": "Bar / Pub",
+        "bakery": "Bakery / Pastry",
+        "restaurant": "Restaurant"
+      }
+    },
+    "exampleBadge": "demo",
     "admin": {
       "all": "All",
       "active": "Active",
@@ -526,48 +555,5 @@
       "loading": "Loading…",
       "settingsBreadcrumb": "Settings"
     }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Welcome!",
-      "subtitle": "It takes less than 2 minutes",
-      "nameLabel": "Restaurant name",
-      "namePlaceholder": "E.g. La Bella Italia",
-      "setupText": "Let's set up your menu",
-      "nameHint": "This will appear at the top of your digital menu."
-    },
-    "step2": {
-      "title": "Add your first dish",
-      "motivation": "Add just one dish to see how your menu will look!",
-      "categoryLabel": "Category name",
-      "categoryPlaceholder": "E.g. Main Menu, Drinks",
-      "dishNameLabel": "Dish name",
-      "dishNamePlaceholder": "E.g. Margherita Pizza",
-      "priceLabel": "Price",
-      "priceRequired": "Please enter a valid price",
-      "photoLabel": "Photo",
-      "addPhoto": "Add photo",
-      "photoHint": "JPG or PNG, up to 5 MB. You can add photos later."
-    },
-    "saveError": "Something went wrong, please try again",
-    "save": "Save",
-    "cancel": "Cancel",
-    "close": "Close",
-    "step4": {
-      "title": "Your menu is ready!",
-      "subtitle": "Print this QR code and put it on your tables",
-      "goToDashboard": "Go to Dashboard & Download QR",
-      "copy": "Copy",
-      "tip": "Print and place on tables, or share online."
-    },
-    "step3": {
-      "title": "Choose your cover",
-      "subtitle": "This is what guests see when they scan the QR.",
-      "upload": "Upload",
-      "yourPhoto": "Your photo",
-      "changeLater": "You can change this later in settings."
-    },
-    "back": "Back",
-    "continue": "Continue"
   }
 }

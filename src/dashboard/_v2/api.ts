@@ -155,6 +155,7 @@ export interface ApiItem {
  options: DishOption[] | null;
  sortOrder: number;
  isActive: boolean;
+ isExample?: boolean;
  categoryId: string;
 }
 

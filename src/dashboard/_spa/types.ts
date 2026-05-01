@@ -6,7 +6,6 @@ export type View =
   | { name: "auth.login" }
   | { name: "auth.otp" }
   | { name: "auth.logout" }
-  | { name: "onboarding" }
   | { name: "menu" }
   | { name: "orders" }
   | { name: "orders.detail"; orderId: string }

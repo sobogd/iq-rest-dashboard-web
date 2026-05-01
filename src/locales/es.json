@@ -511,6 +511,35 @@
         "tooManyAttempts": "Demasiados intentos. Espera y vuelve a intentarlo."
       }
     },
+    "createFlow": {
+      "step1": {
+        "title": "¿Qué tipo de local?",
+        "subtitle": "Vamos a precargar un menú de ejemplo para que empieces editando, no desde cero."
+      },
+      "step2": {
+        "title": "Pon nombre a tu restaurante",
+        "subtitle": "Esto aparecerá en la parte superior de tu menú. Puedes cambiarlo después.",
+        "nameLabel": "Nombre del restaurante",
+        "namePlaceholder": "Pizzería Mario"
+      },
+      "step3": {
+        "title": "Ya casi",
+        "subtitle": "Confirma tu email para guardar tu menú y abrir el panel."
+      },
+      "back": "Atrás",
+      "continue": "Continuar",
+      "cuisines": {
+        "pizza": "Pizzería",
+        "sushi": "Sushi / Japonés",
+        "asian": "Asiático",
+        "burger": "Hamburguesas / Comida rápida",
+        "coffee": "Café / Cafetería",
+        "bar": "Bar / Pub",
+        "bakery": "Panadería / Bollería",
+        "restaurant": "Restaurante"
+      }
+    },
+    "exampleBadge": "ej.",
     "admin": {
       "all": "Todos",
       "active": "Activos",
@@ -526,48 +555,5 @@
       "loading": "Cargando…",
       "settingsBreadcrumb": "Ajustes"
     }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "¡Bienvenido!",
-      "subtitle": "Tarda menos de 2 minutos",
-      "nameLabel": "Nombre del restaurante",
-      "namePlaceholder": "P. ej. La Bella Italia",
-      "setupText": "Vamos a configurar tu menú",
-      "nameHint": "Aparecerá en la parte superior de tu menú digital."
-    },
-    "step2": {
-      "title": "Añade tu primer plato",
-      "motivation": "¡Añade un solo plato para ver cómo lucirá tu menú!",
-      "categoryLabel": "Nombre de la categoría",
-      "categoryPlaceholder": "P. ej. Menú principal, Bebidas",
-      "dishNameLabel": "Nombre del plato",
-      "dishNamePlaceholder": "P. ej. Pizza Margherita",
-      "priceLabel": "Precio",
-      "priceRequired": "Introduce un precio válido",
-      "photoLabel": "Foto",
-      "addPhoto": "Añadir foto",
-      "photoHint": "JPG o PNG, hasta 5 MB. Puedes añadir fotos más tarde."
-    },
-    "saveError": "Algo salió mal, inténtalo de nuevo",
-    "save": "Guardar",
-    "cancel": "Cancelar",
-    "close": "Cerrar",
-    "step4": {
-      "title": "¡Tu menú está listo!",
-      "subtitle": "Imprime este código QR y colócalo en tus mesas",
-      "goToDashboard": "Ir al panel y descargar QR",
-      "copy": "Copiar",
-      "tip": "Imprime y coloca en las mesas, o comparte en línea."
-    },
-    "step3": {
-      "title": "Elige tu portada",
-      "subtitle": "Esto es lo que ven los clientes al escanear el QR.",
-      "upload": "Subir",
-      "yourPhoto": "Tu foto",
-      "changeLater": "Puedes cambiarlo más tarde en ajustes."
-    },
-    "back": "Atrás",
-    "continue": "Continuar"
   }
 }

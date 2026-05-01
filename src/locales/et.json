@@ -525,49 +525,35 @@
       "events": "{count} sünd.",
       "loading": "Laadimine…",
       "settingsBreadcrumb": "Seaded"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Tere tulemast!",
-      "subtitle": "Võtab vähem kui 2 minutit",
-      "nameLabel": "Restorani nimi",
-      "namePlaceholder": "Nt La Bella Italia",
-      "setupText": "Seadistame menüü",
-      "nameHint": "Kuvatakse digitaalse menüü ülaservas."
     },
-    "step2": {
-      "title": "Lisa esimene roog",
-      "motivation": "Lisa lihtsalt üks roog, et näha, kuidas menüü välja näeb!",
-      "categoryLabel": "Kategooria nimi",
-      "categoryPlaceholder": "Nt Põhimenüü, Joogid",
-      "dishNameLabel": "Roa nimi",
-      "dishNamePlaceholder": "Nt Margherita pitsa",
-      "priceLabel": "Hind",
-      "priceRequired": "Sisesta kehtiv hind",
-      "photoLabel": "Foto",
-      "addPhoto": "Lisa foto",
-      "photoHint": "JPG või PNG, kuni 5 MB. Fotosid saab lisada hiljem."
+    "createFlow": {
+      "step1": {
+        "title": "Mis tüüpi koht?",
+        "subtitle": "Laadime sulle näidismenüü, et alustaksid muutmisest, mitte tühjast lehest."
+      },
+      "step2": {
+        "title": "Anna oma restoranile nimi",
+        "subtitle": "Seda näevad külalised menüü tipus. Saad hiljem muuta.",
+        "nameLabel": "Restorani nimi",
+        "namePlaceholder": "Mario Pitsabaar"
+      },
+      "step3": {
+        "title": "Peaaegu valmis",
+        "subtitle": "Kinnita e-mail, et menüü salvestada ja töölaud avada."
+      },
+      "back": "Tagasi",
+      "continue": "Edasi",
+      "cuisines": {
+        "pizza": "Pitsabaar",
+        "sushi": "Sushi / Jaapani",
+        "asian": "Aasia",
+        "burger": "Burger / Kiirtoit",
+        "coffee": "Kohvik",
+        "bar": "Baar / Pub",
+        "bakery": "Pagariäri / Kondiitriäri",
+        "restaurant": "Restoran"
+      }
     },
-    "saveError": "Midagi läks valesti, proovi uuesti",
-    "save": "Salvesta",
-    "cancel": "Tühista",
-    "close": "Sulge",
-    "step4": {
-      "title": "Sinu menüü on valmis!",
-      "subtitle": "Prindi see QR-kood ja pane oma laudadele",
-      "goToDashboard": "Paneeli ja laadi QR alla",
-      "copy": "Kopeeri",
-      "tip": "Prindi ja aseta laudadele või jaga veebis."
-    },
-    "step3": {
-      "title": "Vali kaanepilt",
-      "subtitle": "Seda näevad külalised QR-i skannimisel.",
-      "upload": "Lae üles",
-      "yourPhoto": "Sinu foto",
-      "changeLater": "Saad seda hiljem seadetes muuta."
-    },
-    "back": "Tagasi",
-    "continue": "Jätka"
+    "exampleBadge": "näid."
   }
 }

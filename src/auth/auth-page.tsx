@@ -84,6 +84,7 @@ function EmailScreen({
   errorMessage,
   googleReady,
   googleHiddenRef,
+  embedded,
   t,
 }: {
   email: string;
@@ -93,17 +94,22 @@ function EmailScreen({
   errorMessage: string;
   googleReady: boolean;
   googleHiddenRef: React.RefObject<HTMLDivElement | null>;
+  embedded: boolean;
   t: ReturnType<typeof useTranslations<"dashboard.auth">>;
 }) {
   return (
     <>
-      <Logo />
-      <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
-        {t("title")} {t("titleAccent")}
-      </h1>
-      <p className="text-xs text-muted-foreground leading-snug mb-5">
-        {t("subtitle")}
-      </p>
+      {!embedded && (
+        <>
+          <Logo />
+          <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
+            {t("title")} {t("titleAccent")}
+          </h1>
+          <p className="text-xs text-muted-foreground leading-snug mb-5">
+            {t("subtitle")}
+          </p>
+        </>
+      )}
 
       {status === "error" && errorMessage && (
         <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-lg text-red-600 dark:text-red-400 text-xs leading-snug">
@@ -210,6 +216,7 @@ function VerifyScreen({
   errorMessage,
   cooldown,
   resendStatus,
+  embedded,
   t,
 }: {
   email: string;
@@ -222,6 +229,7 @@ function VerifyScreen({
   errorMessage: string;
   cooldown: number;
   resendStatus: "idle" | "loading" | "sent";
+  embedded: boolean;
   t: ReturnType<typeof useTranslations<"dashboard.auth">>;
 }) {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
@@ -279,22 +287,40 @@ function VerifyScreen({
 
   return (
     <>
-      <Logo />
-      <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
-        {t("verifyTitle")}
-      </h1>
-      <p className="text-[13px] text-muted-foreground leading-snug mb-5">
-        {t("verifySubtitle", { email }).split(email).map((part, i, arr) =>
-          i < arr.length - 1 ? (
-            <span key={i}>
-              {part}
-              <span className="text-foreground font-medium">{email}</span>
-            </span>
-          ) : (
-            <span key={i}>{part}</span>
-          )
-        )}
-      </p>
+      {!embedded && (
+        <>
+          <Logo />
+          <h1 className="text-xl font-medium text-foreground tracking-tight mb-1.5">
+            {t("verifyTitle")}
+          </h1>
+          <p className="text-[13px] text-muted-foreground leading-snug mb-5">
+            {t("verifySubtitle", { email }).split(email).map((part, i, arr) =>
+              i < arr.length - 1 ? (
+                <span key={i}>
+                  {part}
+                  <span className="text-foreground font-medium">{email}</span>
+                </span>
+              ) : (
+                <span key={i}>{part}</span>
+              )
+            )}
+          </p>
+        </>
+      )}
+      {embedded && (
+        <p className="text-[13px] text-muted-foreground leading-snug mb-5">
+          {t("verifySubtitle", { email }).split(email).map((part, i, arr) =>
+            i < arr.length - 1 ? (
+              <span key={i}>
+                {part}
+                <span className="text-foreground font-medium">{email}</span>
+              </span>
+            ) : (
+              <span key={i}>{part}</span>
+            )
+          )}
+        </p>
+      )}
 
       {status === "error" && errorMessage && (
         <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-lg text-red-600 dark:text-red-400 text-xs leading-snug">
@@ -371,7 +397,21 @@ function VerifyScreen({
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
-export function AuthPage() {
+type SignupContext = { cuisine: string; restaurantName: string };
+
+export function AuthPage({
+  embedded = false,
+  signupContext,
+  skipAuthCheck = false,
+}: {
+  /** When true, the AuthPage skips its own logo/heading — caller is expected to render those. */
+  embedded?: boolean;
+  /** Forwarded to send-otp / google verify so the API can seed a template restaurant. */
+  signupContext?: SignupContext;
+  /** Skip the "already authenticated" redirect. Useful inside the create-flow wizard so a
+   *  half-finished signup attempt doesn't bounce out before the user picks cuisine + name. */
+  skipAuthCheck?: boolean;
+} = {}) {
   const t = useTranslations("dashboard.auth");
   const locale = useLocale();
 
@@ -389,6 +429,7 @@ export function AuthPage() {
   // Legacy companies → old monolith; everyone else → /<locale>/dashboard
   // (or /<locale>/onboarding if onboardingStep < 3).
   useEffect(() => {
+    if (skipAuthCheck) return;
     let cancelled = false;
     fetch(apiUrl("/api/auth/check"), { credentials: "include", cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
@@ -398,14 +439,13 @@ export function AuthPage() {
           window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
           return;
         }
-        const next = (data.onboardingStep ?? 0) < 3 ? "onboarding" : "dashboard";
-        window.location.assign(`/${locale}/${next}`);
+        window.location.assign(`/${locale}/dashboard`);
       })
       .catch(() => {});
     return () => {
       cancelled = true;
     };
-  }, [locale]);
+  }, [locale, skipAuthCheck]);
 
   // Resend cooldown countdown
   useEffect(() => {
@@ -424,7 +464,7 @@ export function AuthPage() {
         credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ credential: response.credential }),
+          body: JSON.stringify({ credential: response.credential, signupContext }),
         });
         const data = await res.json();
         if (res.ok) {
@@ -435,7 +475,7 @@ export function AuthPage() {
             return;
           }
           // Full reload so server layout re-fetches restaurant + auth state.
-          window.location.assign(`/${locale}/${data.isNewUser ? "onboarding" : "dashboard"}`);
+          window.location.assign(`/${locale}/dashboard`);
         } else {
           setErrorMessage(data.error || t("errors.sendFailed"));
           setStatus("error");
@@ -445,7 +485,7 @@ export function AuthPage() {
         setStatus("error");
       }
     },
-    [locale, t]
+    [locale, t, signupContext]
   );
 
   useEffect(() => {
@@ -508,7 +548,7 @@ export function AuthPage() {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed, locale }),
+        body: JSON.stringify({ email: trimmed, locale, signupContext }),
       });
       const data = await res.json();
 
@@ -560,7 +600,7 @@ export function AuthPage() {
           window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
           return;
         }
-        window.location.assign(`/${locale}/${data.onboardingStep < 3 ? "onboarding" : "dashboard"}`);
+        window.location.assign(`/${locale}/dashboard`);
       } else {
         const key = ERROR_MAP[data.error];
         setErrorMessage(key ? t(key) : t("errors.verifyFailed"));
@@ -584,7 +624,7 @@ export function AuthPage() {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim().toLowerCase(), locale }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), locale, signupContext }),
       });
       if (res.ok) {
         setResendStatus("sent");
@@ -603,35 +643,42 @@ export function AuthPage() {
     }
   };
 
+  const inner =
+    screen === "email" ? (
+      <EmailScreen
+        email={email}
+        setEmail={setEmail}
+        onContinue={handleContinue}
+        status={status}
+        errorMessage={errorMessage}
+        googleReady={googleReady}
+        googleHiddenRef={googleHiddenRef}
+        embedded={embedded}
+        t={t}
+      />
+    ) : (
+      <VerifyScreen
+        email={email}
+        code={code}
+        setCode={setCode}
+        onBack={handleBack}
+        onVerify={handleVerify}
+        onResend={handleResend}
+        status={status}
+        errorMessage={errorMessage}
+        cooldown={cooldown}
+        resendStatus={resendStatus}
+        embedded={embedded}
+        t={t}
+      />
+    );
+
+  if (embedded) return inner;
+
   return (
     <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4 antialiased tracking-tight">
       <div className="w-[360px] max-w-full bg-card border border-border rounded-2xl p-6 pb-7">
-        {screen === "email" ? (
-          <EmailScreen
-            email={email}
-            setEmail={setEmail}
-            onContinue={handleContinue}
-            status={status}
-            errorMessage={errorMessage}
-            googleReady={googleReady}
-            googleHiddenRef={googleHiddenRef}
-            t={t}
-          />
-        ) : (
-          <VerifyScreen
-            email={email}
-            code={code}
-            setCode={setCode}
-            onBack={handleBack}
-            onVerify={handleVerify}
-            onResend={handleResend}
-            status={status}
-            errorMessage={errorMessage}
-            cooldown={cooldown}
-            resendStatus={resendStatus}
-            t={t}
-          />
-        )}
+        {inner}
       </div>
     </div>
   );

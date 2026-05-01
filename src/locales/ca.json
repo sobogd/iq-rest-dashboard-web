@@ -525,49 +525,35 @@
       "events": "{count} esd.",
       "loading": "Carregant…",
       "settingsBreadcrumb": "Configuració"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Benvingut!",
-      "subtitle": "Es triga menys de 2 minuts",
-      "nameLabel": "Nom del restaurant",
-      "namePlaceholder": "P. ex. La Bella Italia",
-      "setupText": "Configurem el teu menú",
-      "nameHint": "Apareixerà a la part superior del menú digital."
     },
-    "step2": {
-      "title": "Afegeix el teu primer plat",
-      "motivation": "Afegeix només un plat per veure com es veurà el menú!",
-      "categoryLabel": "Nom de la categoria",
-      "categoryPlaceholder": "P. ex. Menú principal, Begudes",
-      "dishNameLabel": "Nom del plat",
-      "dishNamePlaceholder": "P. ex. Pizza Margherita",
-      "priceLabel": "Preu",
-      "priceRequired": "Introdueix un preu vàlid",
-      "photoLabel": "Foto",
-      "addPhoto": "Afegeix foto",
-      "photoHint": "JPG o PNG, fins a 5 MB. Pots afegir fotos més tard."
+    "createFlow": {
+      "step1": {
+        "title": "Quin tipus de local?",
+        "subtitle": "Precarregarem un menú d'exemple perquè comencis editant, no amb una pàgina en blanc."
+      },
+      "step2": {
+        "title": "Posa nom al teu restaurant",
+        "subtitle": "Això veuran els clients a dalt del menú. Pots canviar-ho després.",
+        "nameLabel": "Nom del restaurant",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Quasi a punt",
+        "subtitle": "Confirma el teu correu per desar el menú i obrir el tauler."
+      },
+      "back": "Enrere",
+      "continue": "Continuar",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japonès",
+        "asian": "Asiàtic",
+        "burger": "Hamburguesa / Menjar ràpid",
+        "coffee": "Cafeteria",
+        "bar": "Bar / Pub",
+        "bakery": "Forn / Pastisseria",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Alguna cosa ha anat malament, torna-ho a provar",
-    "save": "Desa",
-    "cancel": "Cancel·la",
-    "close": "Tanca",
-    "step4": {
-      "title": "El teu menú està llest!",
-      "subtitle": "Imprimeix aquest codi QR i col·loca'l a les teves taules",
-      "goToDashboard": "Al panell i descarrega QR",
-      "copy": "Copia",
-      "tip": "Imprimeix i col·loca a les taules, o comparteix en línia."
-    },
-    "step3": {
-      "title": "Tria la teva portada",
-      "subtitle": "Això és el que veuen els clients en escanejar el QR.",
-      "upload": "Puja",
-      "yourPhoto": "La teva foto",
-      "changeLater": "Pots canviar-ho més tard a la configuració."
-    },
-    "back": "Enrere",
-    "continue": "Continua"
+    "exampleBadge": "ex."
   }
 }

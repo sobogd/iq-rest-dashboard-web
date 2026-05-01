@@ -525,49 +525,35 @@
       "events": "{count} Ev.",
       "loading": "Wird geladen…",
       "settingsBreadcrumb": "Einstellungen"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Willkommen!",
-      "subtitle": "Dauert weniger als 2 Minuten",
-      "nameLabel": "Restaurantname",
-      "namePlaceholder": "Z. B. La Bella Italia",
-      "setupText": "Richten wir Ihre Karte ein",
-      "nameHint": "Erscheint oben in Ihrer digitalen Karte."
     },
-    "step2": {
-      "title": "Fügen Sie Ihr erstes Gericht hinzu",
-      "motivation": "Fügen Sie nur ein Gericht hinzu, um zu sehen, wie Ihre Karte aussehen wird!",
-      "categoryLabel": "Kategoriename",
-      "categoryPlaceholder": "Z. B. Hauptkarte, Getränke",
-      "dishNameLabel": "Gerichtname",
-      "dishNamePlaceholder": "Z. B. Pizza Margherita",
-      "priceLabel": "Preis",
-      "priceRequired": "Bitte gültigen Preis eingeben",
-      "photoLabel": "Foto",
-      "addPhoto": "Foto hinzufügen",
-      "photoHint": "JPG oder PNG, bis 5 MB. Fotos können später hinzugefügt werden."
+    "createFlow": {
+      "step1": {
+        "title": "Was für ein Lokal?",
+        "subtitle": "Wir laden eine Beispielspeisekarte vor, damit du etwas zum Bearbeiten hast statt einer leeren Seite."
+      },
+      "step2": {
+        "title": "Benenne dein Restaurant",
+        "subtitle": "Das sehen deine Gäste oben in deiner Speisekarte. Du kannst es später ändern.",
+        "nameLabel": "Restaurantname",
+        "namePlaceholder": "Mario's Pizza"
+      },
+      "step3": {
+        "title": "Fast geschafft",
+        "subtitle": "Bestätige deine E-Mail, um deine Speisekarte zu speichern und das Dashboard freizuschalten."
+      },
+      "back": "Zurück",
+      "continue": "Weiter",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanisch",
+        "asian": "Asiatisch",
+        "burger": "Burger / Fast Food",
+        "coffee": "Kaffee / Café",
+        "bar": "Bar / Pub",
+        "bakery": "Bäckerei / Konditorei",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Etwas ist schiefgegangen, bitte erneut versuchen",
-    "save": "Speichern",
-    "cancel": "Abbrechen",
-    "close": "Schließen",
-    "step4": {
-      "title": "Ihre Karte ist fertig!",
-      "subtitle": "Drucken Sie diesen QR-Code und legen Sie ihn auf Ihre Tische",
-      "goToDashboard": "Zum Dashboard und QR herunterladen",
-      "copy": "Kopieren",
-      "tip": "Drucken und auf Tische legen oder online teilen."
-    },
-    "step3": {
-      "title": "Wählen Sie Ihr Cover",
-      "subtitle": "Das sehen Gäste, wenn sie den QR scannen.",
-      "upload": "Hochladen",
-      "yourPhoto": "Ihr Foto",
-      "changeLater": "Sie können dies später in den Einstellungen ändern."
-    },
-    "back": "Zurück",
-    "continue": "Weiter"
+    "exampleBadge": "Demo"
   }
 }

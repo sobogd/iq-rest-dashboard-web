@@ -525,49 +525,35 @@
       "events": "{count} ev.",
       "loading": "Se încarcă…",
       "settingsBreadcrumb": "Setări"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Bine ai venit!",
-      "subtitle": "Durează mai puțin de 2 minute",
-      "nameLabel": "Numele restaurantului",
-      "namePlaceholder": "Ex. La Bella Italia",
-      "setupText": "Hai să configurăm meniul",
-      "nameHint": "Va apărea în partea de sus a meniului digital."
     },
-    "step2": {
-      "title": "Adaugă primul preparat",
-      "motivation": "Adaugă doar un preparat ca să vezi cum va arăta meniul!",
-      "categoryLabel": "Numele categoriei",
-      "categoryPlaceholder": "Ex. Meniu principal, Băuturi",
-      "dishNameLabel": "Numele preparatului",
-      "dishNamePlaceholder": "Ex. Pizza Margherita",
-      "priceLabel": "Preț",
-      "priceRequired": "Introdu un preț valid",
-      "photoLabel": "Poză",
-      "addPhoto": "Adaugă poză",
-      "photoHint": "JPG sau PNG, până la 5 MB. Poți adăuga poze mai târziu."
+    "createFlow": {
+      "step1": {
+        "title": "Ce fel de local?",
+        "subtitle": "Vom preîncărca un meniu exemplu ca să începi cu editarea, nu cu o pagină goală."
+      },
+      "step2": {
+        "title": "Numește-ți restaurantul",
+        "subtitle": "Asta vor vedea clienții în partea de sus a meniului. Poți schimba mai târziu.",
+        "nameLabel": "Numele restaurantului",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Aproape gata",
+        "subtitle": "Confirmă email-ul ca să salvezi meniul și să deschizi panoul."
+      },
+      "back": "Înapoi",
+      "continue": "Continuă",
+      "cuisines": {
+        "pizza": "Pizzerie",
+        "sushi": "Sushi / Japonez",
+        "asian": "Asiatic",
+        "burger": "Burger / Fast food",
+        "coffee": "Cafenea",
+        "bar": "Bar / Pub",
+        "bakery": "Brutărie / Cofetărie",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Ceva nu a mers, încearcă din nou",
-    "save": "Salvează",
-    "cancel": "Anulează",
-    "close": "Închide",
-    "step4": {
-      "title": "Meniul tău e gata!",
-      "subtitle": "Printează acest cod QR și pune-l pe mese",
-      "goToDashboard": "La panou și descarcă QR",
-      "copy": "Copiază",
-      "tip": "Printează și pune pe mese, sau partajează online."
-    },
-    "step3": {
-      "title": "Alege coperta",
-      "subtitle": "Asta văd clienții când scanează QR.",
-      "upload": "Încarcă",
-      "yourPhoto": "Poza ta",
-      "changeLater": "Poți schimba mai târziu în setări."
-    },
-    "back": "Înapoi",
-    "continue": "Continuă"
+    "exampleBadge": "ex."
   }
 }

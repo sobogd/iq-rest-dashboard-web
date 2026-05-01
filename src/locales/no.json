@@ -525,49 +525,35 @@
       "events": "{count} hend.",
       "loading": "Laster…",
       "settingsBreadcrumb": "Innstillinger"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Velkommen!",
-      "subtitle": "Tar mindre enn 2 minutter",
-      "nameLabel": "Restaurantnavn",
-      "namePlaceholder": "F.eks. La Bella Italia",
-      "setupText": "La oss sette opp menyen din",
-      "nameHint": "Vises øverst i den digitale menyen din."
     },
-    "step2": {
-      "title": "Legg til din første rett",
-      "motivation": "Legg til bare én rett for å se hvordan menyen kommer til å se ut!",
-      "categoryLabel": "Kategorinavn",
-      "categoryPlaceholder": "F.eks. Hovedmeny, Drikke",
-      "dishNameLabel": "Rettnavn",
-      "dishNamePlaceholder": "F.eks. Pizza Margherita",
-      "priceLabel": "Pris",
-      "priceRequired": "Skriv inn en gyldig pris",
-      "photoLabel": "Bilde",
-      "addPhoto": "Legg til bilde",
-      "photoHint": "JPG eller PNG, opptil 5 MB. Du kan legge til bilder senere."
+    "createFlow": {
+      "step1": {
+        "title": "Hva slags sted?",
+        "subtitle": "Vi forhåndslaster en eksempelmeny så du starter med noe å redigere, ikke en tom side."
+      },
+      "step2": {
+        "title": "Gi restauranten et navn",
+        "subtitle": "Dette ser gjestene øverst i menyen. Du kan endre senere.",
+        "nameLabel": "Restaurantnavn",
+        "namePlaceholder": "Mario's Pizza"
+      },
+      "step3": {
+        "title": "Nesten ferdig",
+        "subtitle": "Bekreft e-posten din for å lagre menyen og åpne dashbordet."
+      },
+      "back": "Tilbake",
+      "continue": "Fortsett",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japansk",
+        "asian": "Asiatisk",
+        "burger": "Burger / Hurtigmat",
+        "coffee": "Kaffe / Kafé",
+        "bar": "Bar / Pub",
+        "bakery": "Bakeri / Konditori",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Noe gikk galt, prøv igjen",
-    "save": "Lagre",
-    "cancel": "Avbryt",
-    "close": "Lukk",
-    "step4": {
-      "title": "Menyen din er klar!",
-      "subtitle": "Skriv ut denne QR-koden og plasser på bordene dine",
-      "goToDashboard": "Til panelet og last ned QR",
-      "copy": "Kopier",
-      "tip": "Skriv ut og legg på borde, eller del på nett."
-    },
-    "step3": {
-      "title": "Velg forsiden din",
-      "subtitle": "Dette er det gjester ser når de skanner QR.",
-      "upload": "Last opp",
-      "yourPhoto": "Bildet ditt",
-      "changeLater": "Du kan endre senere i innstillingene."
-    },
-    "back": "Tilbake",
-    "continue": "Fortsett"
+    "exampleBadge": "demo"
   }
 }

@@ -525,49 +525,35 @@
       "events": "{count} es.",
       "loading": "Betöltés…",
       "settingsBreadcrumb": "Beállítások"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Üdvözlünk!",
-      "subtitle": "Kevesebb mint 2 percet vesz igénybe",
-      "nameLabel": "Étterem neve",
-      "namePlaceholder": "Pl. La Bella Italia",
-      "setupText": "Állítsuk be az étlapod",
-      "nameHint": "A digitális étlap tetején jelenik meg."
     },
-    "step2": {
-      "title": "Add hozzá az első ételt",
-      "motivation": "Adj hozzá csak egy ételt, hogy lásd, hogyan néz ki az étlap!",
-      "categoryLabel": "Kategória neve",
-      "categoryPlaceholder": "Pl. Főételek, Italok",
-      "dishNameLabel": "Étel neve",
-      "dishNamePlaceholder": "Pl. Margherita pizza",
-      "priceLabel": "Ár",
-      "priceRequired": "Adj meg érvényes árat",
-      "photoLabel": "Fotó",
-      "addPhoto": "Fotó hozzáadása",
-      "photoHint": "JPG vagy PNG, max 5 MB. Fotókat később is hozzáadhatsz."
+    "createFlow": {
+      "step1": {
+        "title": "Milyen hely?",
+        "subtitle": "Betöltünk egy mintamenüt, hogy szerkesztéssel indulhass, ne üres oldallal."
+      },
+      "step2": {
+        "title": "Nevezd el az éttermed",
+        "subtitle": "Ezt látják a vendégek a menü tetején. Később módosíthatod.",
+        "nameLabel": "Étterem neve",
+        "namePlaceholder": "Mario Pizzéria"
+      },
+      "step3": {
+        "title": "Majdnem kész",
+        "subtitle": "Erősítsd meg az e-mailedet a menü mentéséhez és a vezérlőpult megnyitásához."
+      },
+      "back": "Vissza",
+      "continue": "Tovább",
+      "cuisines": {
+        "pizza": "Pizzéria",
+        "sushi": "Szusi / Japán",
+        "asian": "Ázsiai",
+        "burger": "Burger / Gyorsétel",
+        "coffee": "Kávézó",
+        "bar": "Bár / Pub",
+        "bakery": "Pékség / Cukrászda",
+        "restaurant": "Étterem"
+      }
     },
-    "saveError": "Valami baj történt, próbáld újra",
-    "save": "Mentés",
-    "cancel": "Mégse",
-    "close": "Bezárás",
-    "step4": {
-      "title": "Az étlapod kész!",
-      "subtitle": "Nyomtasd ki ezt a QR-kódot és tedd az asztalokra",
-      "goToDashboard": "Az irányítópultra és QR letöltése",
-      "copy": "Másolás",
-      "tip": "Nyomtasd ki és tedd az asztalokra, vagy oszd meg online."
-    },
-    "step3": {
-      "title": "Válaszd ki a borítót",
-      "subtitle": "Ezt látják a vendégek a QR beolvasásakor.",
-      "upload": "Feltöltés",
-      "yourPhoto": "A te fotód",
-      "changeLater": "Később módosíthatod a beállításokban."
-    },
-    "back": "Vissza",
-    "continue": "Tovább"
+    "exampleBadge": "pl."
   }
 }

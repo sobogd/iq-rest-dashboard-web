@@ -525,49 +525,35 @@
       "events": "{count} حدث",
       "loading": "جارٍ التحميل…",
       "settingsBreadcrumb": "الإعدادات"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "مرحباً!",
-      "subtitle": "يستغرق أقل من دقيقتين",
-      "nameLabel": "اسم المطعم",
-      "namePlaceholder": "مثلاً La Bella Italia",
-      "setupText": "لنُعدّ قائمتك",
-      "nameHint": "ستظهر في أعلى قائمتك الرقمية."
     },
-    "step2": {
-      "title": "أضف أول طبق",
-      "motivation": "أضف طبقاً واحداً فقط لترى كيف ستبدو قائمتك!",
-      "categoryLabel": "اسم الفئة",
-      "categoryPlaceholder": "مثلاً القائمة الرئيسية، المشروبات",
-      "dishNameLabel": "اسم الطبق",
-      "dishNamePlaceholder": "مثلاً بيتزا مارغريتا",
-      "priceLabel": "السعر",
-      "priceRequired": "أدخل سعراً صالحاً",
-      "photoLabel": "صورة",
-      "addPhoto": "إضافة صورة",
-      "photoHint": "JPG أو PNG، حتى 5 ميغابايت. يمكنك إضافة الصور لاحقاً."
+    "createFlow": {
+      "step1": {
+        "title": "ما نوع المكان؟",
+        "subtitle": "سنحمّل قائمة طعام تجريبية لتبدأ بالتعديل، وليس بصفحة فارغة."
+      },
+      "step2": {
+        "title": "سمّ مطعمك",
+        "subtitle": "هذا ما سيراه الضيوف أعلى القائمة. يمكنك تغييره لاحقًا.",
+        "nameLabel": "اسم المطعم",
+        "namePlaceholder": "بيتزا ماريو"
+      },
+      "step3": {
+        "title": "اقتربت",
+        "subtitle": "أكّد بريدك الإلكتروني لحفظ القائمة وفتح لوحة التحكم."
+      },
+      "back": "رجوع",
+      "continue": "متابعة",
+      "cuisines": {
+        "pizza": "بيتزا",
+        "sushi": "سوشي / ياباني",
+        "asian": "آسيوي",
+        "burger": "برغر / وجبات سريعة",
+        "coffee": "مقهى",
+        "bar": "بار / حانة",
+        "bakery": "مخبز / حلويات",
+        "restaurant": "مطعم"
+      }
     },
-    "saveError": "حدث خطأ ما، حاول مرة أخرى",
-    "save": "حفظ",
-    "cancel": "إلغاء",
-    "close": "إغلاق",
-    "step4": {
-      "title": "قائمتك جاهزة!",
-      "subtitle": "اطبع رمز QR هذا وضعه على طاولاتك",
-      "goToDashboard": "إلى اللوحة وتنزيل QR",
-      "copy": "نسخ",
-      "tip": "اطبع وضع على الطاولات، أو شارك عبر الإنترنت."
-    },
-    "step3": {
-      "title": "اختر الغلاف",
-      "subtitle": "هذا ما يراه الضيوف عند مسح QR.",
-      "upload": "تحميل",
-      "yourPhoto": "صورتك",
-      "changeLater": "يمكنك تغييره لاحقاً في الإعدادات."
-    },
-    "back": "رجوع",
-    "continue": "متابعة"
+    "exampleBadge": "تج."
   }
 }

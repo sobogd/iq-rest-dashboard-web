@@ -525,49 +525,35 @@
       "events": "{count} tap.",
       "loading": "Ladataan…",
       "settingsBreadcrumb": "Asetukset"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Tervetuloa!",
-      "subtitle": "Kestää alle 2 minuuttia",
-      "nameLabel": "Ravintolan nimi",
-      "namePlaceholder": "Esim. La Bella Italia",
-      "setupText": "Asetetaan menusi",
-      "nameHint": "Näkyy digitaalisen menusi yläosassa."
     },
-    "step2": {
-      "title": "Lisää ensimmäinen annoksesi",
-      "motivation": "Lisää vain yksi annos nähdäksesi miltä menu näyttää!",
-      "categoryLabel": "Kategorian nimi",
-      "categoryPlaceholder": "Esim. Pääruoka, Juomat",
-      "dishNameLabel": "Annoksen nimi",
-      "dishNamePlaceholder": "Esim. Pizza Margherita",
-      "priceLabel": "Hinta",
-      "priceRequired": "Anna kelvollinen hinta",
-      "photoLabel": "Kuva",
-      "addPhoto": "Lisää kuva",
-      "photoHint": "JPG tai PNG, enintään 5 MB. Voit lisätä kuvia myöhemmin."
+    "createFlow": {
+      "step1": {
+        "title": "Millainen paikka?",
+        "subtitle": "Lataamme esimerkkimenun, jotta aloitat muokkaamalla etkä tyhjältä sivulta."
+      },
+      "step2": {
+        "title": "Anna ravintolallesi nimi",
+        "subtitle": "Tämän asiakkaat näkevät menun yläosassa. Voit muuttaa myöhemmin.",
+        "nameLabel": "Ravintolan nimi",
+        "namePlaceholder": "Marion Pizzeria"
+      },
+      "step3": {
+        "title": "Melkein valmis",
+        "subtitle": "Vahvista sähköpostisi tallentaaksesi menun ja avataksesi hallintapaneelin."
+      },
+      "back": "Takaisin",
+      "continue": "Jatka",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanilainen",
+        "asian": "Aasialainen",
+        "burger": "Burgeri / Pikaruoka",
+        "coffee": "Kahvila",
+        "bar": "Baari / Pub",
+        "bakery": "Leipomo / Konditoria",
+        "restaurant": "Ravintola"
+      }
     },
-    "saveError": "Jotain meni pieleen, yritä uudelleen",
-    "save": "Tallenna",
-    "cancel": "Peruuta",
-    "close": "Sulje",
-    "step4": {
-      "title": "Menusi on valmis!",
-      "subtitle": "Tulosta tämä QR-koodi ja laita pöytiin",
-      "goToDashboard": "Paneeliin ja lataa QR",
-      "copy": "Kopioi",
-      "tip": "Tulosta ja laita pöytiin tai jaa verkossa."
-    },
-    "step3": {
-      "title": "Valitse kansikuva",
-      "subtitle": "Tämän vieraat näkevät skannatessaan QR:n.",
-      "upload": "Lähetä",
-      "yourPhoto": "Oma kuvasi",
-      "changeLater": "Voit vaihtaa myöhemmin asetuksissa."
-    },
-    "back": "Takaisin",
-    "continue": "Jatka"
+    "exampleBadge": "esim."
   }
 }

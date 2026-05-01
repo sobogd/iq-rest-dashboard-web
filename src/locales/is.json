@@ -525,49 +525,35 @@
       "events": "{count} atb.",
       "loading": "Hleður…",
       "settingsBreadcrumb": "Stillingar"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Velkomin!",
-      "subtitle": "Tekur minna en 2 mínútur",
-      "nameLabel": "Nafn veitingastaðar",
-      "namePlaceholder": "T.d. La Bella Italia",
-      "setupText": "Setjum upp matseðilinn þinn",
-      "nameHint": "Mun birtast efst á stafræna matseðlinum þínum."
     },
-    "step2": {
-      "title": "Bættu fyrsta réttinum við",
-      "motivation": "Bættu bara einum rétti við til að sjá hvernig matseðillinn lítur út!",
-      "categoryLabel": "Nafn flokks",
-      "categoryPlaceholder": "T.d. Aðalmatseðill, Drykkir",
-      "dishNameLabel": "Nafn rétts",
-      "dishNamePlaceholder": "T.d. Margherita pizza",
-      "priceLabel": "Verð",
-      "priceRequired": "Sláðu inn gilt verð",
-      "photoLabel": "Mynd",
-      "addPhoto": "Bæta mynd við",
-      "photoHint": "JPG eða PNG, allt að 5 MB. Þú getur bætt myndum við seinna."
+    "createFlow": {
+      "step1": {
+        "title": "Hvers konar staður?",
+        "subtitle": "Við hlaðum sýnishornsmatseðli svo þú byrjir á því að breyta, ekki með tóma síðu."
+      },
+      "step2": {
+        "title": "Gefðu veitingastaðnum þínum nafn",
+        "subtitle": "Þetta sjá gestir efst á matseðlinum. Þú getur breytt síðar.",
+        "nameLabel": "Heiti veitingastaðar",
+        "namePlaceholder": "Mario Pizzeria"
+      },
+      "step3": {
+        "title": "Næstum búið",
+        "subtitle": "Staðfestu netfangið þitt til að vista matseðilinn og opna mælaborðið."
+      },
+      "back": "Til baka",
+      "continue": "Áfram",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanskt",
+        "asian": "Asískt",
+        "burger": "Hamborgari / Skyndibiti",
+        "coffee": "Kaffihús",
+        "bar": "Bar / Krá",
+        "bakery": "Bakarí / Sætindi",
+        "restaurant": "Veitingastaður"
+      }
     },
-    "saveError": "Eitthvað fór úrskeiðis, reyndu aftur",
-    "save": "Vista",
-    "cancel": "Hætta við",
-    "close": "Loka",
-    "step4": {
-      "title": "Matseðillinn þinn er tilbúinn!",
-      "subtitle": "Prentaðu þennan QR-kóða og settu á borðin þín",
-      "goToDashboard": "Á spjaldið og hlaða QR niður",
-      "copy": "Afrita",
-      "tip": "Prentaðu og settu á borð, eða deildu á netinu."
-    },
-    "step3": {
-      "title": "Veldu forsíðu",
-      "subtitle": "Þetta sjá gestir þegar þeir skanna QR.",
-      "upload": "Hlaða upp",
-      "yourPhoto": "Myndin þín",
-      "changeLater": "Þú getur breytt þessu seinna í stillingum."
-    },
-    "back": "Til baka",
-    "continue": "Halda áfram"
+    "exampleBadge": "sýn."
   }
 }

@@ -525,49 +525,35 @@
       "events": "{count} 件のイベント",
       "loading": "読み込み中…",
       "settingsBreadcrumb": "設定"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "ようこそ！",
-      "subtitle": "2分以内で完了します",
-      "nameLabel": "レストラン名",
-      "namePlaceholder": "例：La Bella Italia",
-      "setupText": "メニューを設定しましょう",
-      "nameHint": "デジタルメニューの上部に表示されます。"
     },
-    "step2": {
-      "title": "最初の料理を追加",
-      "motivation": "1つの料理を追加して、メニューがどのように見えるか確認しましょう！",
-      "categoryLabel": "カテゴリ名",
-      "categoryPlaceholder": "例：メインメニュー、ドリンク",
-      "dishNameLabel": "料理名",
-      "dishNamePlaceholder": "例：マルゲリータピザ",
-      "priceLabel": "価格",
-      "priceRequired": "有効な価格を入力してください",
-      "photoLabel": "写真",
-      "addPhoto": "写真を追加",
-      "photoHint": "JPGまたはPNG、最大5MB。後で写真を追加できます。"
+    "createFlow": {
+      "step1": {
+        "title": "どんなお店ですか？",
+        "subtitle": "サンプルメニューを事前に読み込むので、空白のページからではなく編集から始められます。"
+      },
+      "step2": {
+        "title": "レストラン名を入力",
+        "subtitle": "これがメニューの上部に表示されます。後で変更できます。",
+        "nameLabel": "レストラン名",
+        "namePlaceholder": "マリオのピザ"
+      },
+      "step3": {
+        "title": "あと少し",
+        "subtitle": "メールを確認してメニューを保存し、ダッシュボードを開きます。"
+      },
+      "back": "戻る",
+      "continue": "次へ",
+      "cuisines": {
+        "pizza": "ピッツェリア",
+        "sushi": "寿司 / 和食",
+        "asian": "アジア料理",
+        "burger": "バーガー / ファストフード",
+        "coffee": "コーヒー / カフェ",
+        "bar": "バー / パブ",
+        "bakery": "ベーカリー / 製菓",
+        "restaurant": "レストラン"
+      }
     },
-    "saveError": "問題が発生しました。もう一度試してください",
-    "save": "保存",
-    "cancel": "キャンセル",
-    "close": "閉じる",
-    "step4": {
-      "title": "メニューの準備ができました！",
-      "subtitle": "このQRコードを印刷してテーブルに置きましょう",
-      "goToDashboard": "ダッシュボードへ進みQRをダウンロード",
-      "copy": "コピー",
-      "tip": "印刷してテーブルに置くか、オンラインで共有してください。"
-    },
-    "step3": {
-      "title": "カバーを選択",
-      "subtitle": "ゲストがQRをスキャンしたときに見える内容です。",
-      "upload": "アップロード",
-      "yourPhoto": "あなたの写真",
-      "changeLater": "後で設定で変更できます。"
-    },
-    "back": "戻る",
-    "continue": "続ける"
+    "exampleBadge": "見本"
   }
 }

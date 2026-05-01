@@ -33,7 +33,6 @@ import { AdminCompanyPage } from "../_pages/admin-company";
 import { SessionsPage } from "../_pages/sessions";
 import { SessionDetailPage } from "../_pages/session-detail";
 import { AuthPage } from "../../auth/auth-page";
-import { OnboardingClient } from "../../onboarding/onboarding-client";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
 
@@ -55,7 +54,7 @@ function ShellBody(props: ShellInitialData) {
   const router = useDashboardRouter();
   const { view } = router;
   const restaurant = useRestaurantOrNull();
-  const isAuthView = view.name.startsWith("auth.") || view.name === "onboarding";
+  const isAuthView = view.name.startsWith("auth.");
 
   const backToSettings = useCallback(() => router.push({ name: "settings" }), [router]);
   const backToMenu = useCallback(() => router.resetTo({ name: "menu" }), [router]);
@@ -84,7 +83,7 @@ function ShellBody(props: ShellInitialData) {
   // Local setInterval was duplicating that polling — removed.
 
   if (isAuthView) {
-    return view.name === "onboarding" ? <OnboardingClient /> : <AuthPage />;
+    return <AuthPage />;
   }
   if (!restaurant) return null;
 
@@ -141,8 +140,6 @@ function ViewSwitch(p: SwitchProps) {
     case "auth.otp":
     case "auth.logout":
       return <AuthPage />;
-    case "onboarding":
-      return <OnboardingClient />;
     case "menu":
       return <MenuList initialCategories={categories} initialSub={sub} onPersisted={refreshMenu} />;
     case "orders":

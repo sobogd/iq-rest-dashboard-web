@@ -525,49 +525,35 @@
       "events": "{count} ud.",
       "loading": "Načítava sa…",
       "settingsBreadcrumb": "Nastavenia"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Vitajte!",
-      "subtitle": "Trvá menej ako 2 minúty",
-      "nameLabel": "Názov reštaurácie",
-      "namePlaceholder": "Napr. La Bella Italia",
-      "setupText": "Nastavme si vaše menu",
-      "nameHint": "Zobrazí sa hore v digitálnom menu."
     },
-    "step2": {
-      "title": "Pridajte prvé jedlo",
-      "motivation": "Pridajte len jedno jedlo, aby ste videli, ako bude menu vyzerať!",
-      "categoryLabel": "Názov kategórie",
-      "categoryPlaceholder": "Napr. Hlavné menu, Nápoje",
-      "dishNameLabel": "Názov jedla",
-      "dishNamePlaceholder": "Napr. Pizza Margherita",
-      "priceLabel": "Cena",
-      "priceRequired": "Zadajte platnú cenu",
-      "photoLabel": "Fotka",
-      "addPhoto": "Pridať fotku",
-      "photoHint": "JPG alebo PNG, do 5 MB. Fotky môžete pridať neskôr."
+    "createFlow": {
+      "step1": {
+        "title": "Aký typ podniku?",
+        "subtitle": "Predtým nahráme ukážkové menu, aby si začal úpravami, nie prázdnou stránkou."
+      },
+      "step2": {
+        "title": "Pomenuj svoju reštauráciu",
+        "subtitle": "Toto uvidia hostia hore v menu. Neskôr môžeš zmeniť.",
+        "nameLabel": "Názov reštaurácie",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Skoro hotovo",
+        "subtitle": "Potvrď email, aby sa menu uložilo a otvoril sa panel."
+      },
+      "back": "Späť",
+      "continue": "Pokračovať",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japonská",
+        "asian": "Ázijská",
+        "burger": "Burger / Fast food",
+        "coffee": "Kaviareň",
+        "bar": "Bar / Pub",
+        "bakery": "Pekáreň / Cukráreň",
+        "restaurant": "Reštaurácia"
+      }
     },
-    "saveError": "Niečo sa pokazilo, skúste znova",
-    "save": "Uložiť",
-    "cancel": "Zrušiť",
-    "close": "Zavrieť",
-    "step4": {
-      "title": "Vaše menu je pripravené!",
-      "subtitle": "Vytlačte tento QR kód a umiestnite na stoly",
-      "goToDashboard": "Do panela a stiahnuť QR",
-      "copy": "Kopírovať",
-      "tip": "Vytlačte a umiestnite na stoly alebo zdieľajte online."
-    },
-    "step3": {
-      "title": "Vyberte obal",
-      "subtitle": "Toto vidia hostia pri skenovaní QR.",
-      "upload": "Nahrať",
-      "yourPhoto": "Vaša fotka",
-      "changeLater": "Môžete zmeniť neskôr v nastaveniach."
-    },
-    "back": "Späť",
-    "continue": "Pokračovať"
+    "exampleBadge": "ukáž."
   }
 }

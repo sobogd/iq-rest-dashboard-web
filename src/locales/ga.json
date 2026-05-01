@@ -525,49 +525,35 @@
       "events": "{count} eachtra",
       "loading": "Á luchtú…",
       "settingsBreadcrumb": "Socruithe"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Fáilte!",
-      "subtitle": "Tógann sé níos lú ná 2 nóiméad",
-      "nameLabel": "Ainm na bialainne",
-      "namePlaceholder": "M.sh. La Bella Italia",
-      "setupText": "Cuirimis do bhiachlár ar siúl",
-      "nameHint": "Beidh sé le feiceáil ag barr do bhiachláir dhigitigh."
     },
-    "step2": {
-      "title": "Cuir do chéad mhias leis",
-      "motivation": "Cuir mias amháin leis chun a fheiceáil conas a bheidh do bhiachlár!",
-      "categoryLabel": "Ainm catagóire",
-      "categoryPlaceholder": "M.sh. Príomhbhiachlár, Deochanna",
-      "dishNameLabel": "Ainm an mhias",
-      "dishNamePlaceholder": "M.sh. Pizza Margherita",
-      "priceLabel": "Praghas",
-      "priceRequired": "Cuir isteach praghas bailí",
-      "photoLabel": "Grianghraf",
-      "addPhoto": "Cuir grianghraf leis",
-      "photoHint": "JPG nó PNG, suas le 5 MB. Is féidir leat grianghraif a chur leis níos déanaí."
+    "createFlow": {
+      "step1": {
+        "title": "Cén cineál áite?",
+        "subtitle": "Lódálfaimid biachlár samplach roimh ré ionas go dtosóidh tú ag eagrú, ní le leathanach folamh."
+      },
+      "step2": {
+        "title": "Tabhair ainm ar do bhialann",
+        "subtitle": "Sin a fheicfidh aíonna ag barr do bhiachlár. Is féidir é a athrú níos déanaí.",
+        "nameLabel": "Ainm na bialainne",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Beagnach ann",
+        "subtitle": "Deimhnigh do ríomhphost chun do bhiachlár a shábháil agus an deais a oscailt."
+      },
+      "back": "Ar ais",
+      "continue": "Ar aghaidh",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Seapánach",
+        "asian": "Áiseach",
+        "burger": "Burger / Mearbhia",
+        "coffee": "Caifé",
+        "bar": "Beár / Teach Tábhairne",
+        "bakery": "Báicéireacht / Píóga",
+        "restaurant": "Bialann"
+      }
     },
-    "saveError": "Chuaigh rud éigin mícheart, bain triail eile",
-    "save": "Sábháil",
-    "cancel": "Cealaigh",
-    "close": "Dún",
-    "step4": {
-      "title": "Tá do bhiachlár réidh!",
-      "subtitle": "Priontáil an cód QR seo agus cuir é ar do bhoird",
-      "goToDashboard": "Chuig an phainéal agus íoslódáil QR",
-      "copy": "Cóipeáil",
-      "tip": "Priontáil agus cuir ar bhoird, nó roinn ar líne."
-    },
-    "step3": {
-      "title": "Roghnaigh do chlúdach",
-      "subtitle": "Seo a fheiceann cuairteoirí nuair a scanann siad an QR.",
-      "upload": "Uaslódáil",
-      "yourPhoto": "Do ghrianghraf",
-      "changeLater": "Is féidir leat é a athrú níos déanaí sna socruithe."
-    },
-    "back": "Ar ais",
-    "continue": "Lean ar aghaidh"
+    "exampleBadge": "samp."
   }
 }

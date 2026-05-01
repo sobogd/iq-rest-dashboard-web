@@ -122,6 +122,7 @@ export function apiCategoryToCategory(
  photoUrl: item.imageUrl || null,
  sortOrder: item.sortOrder,
  categoryId: item.categoryId,
+ isExample: item.isExample === true,
  }));
  return {
  id: category.id,

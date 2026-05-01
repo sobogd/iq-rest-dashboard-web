@@ -525,49 +525,35 @@
       "events": "{count} dog.",
       "loading": "Učitavanje…",
       "settingsBreadcrumb": "Postavke"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Dobrodošli!",
-      "subtitle": "Traje manje od 2 minute",
-      "nameLabel": "Naziv restorana",
-      "namePlaceholder": "Npr. La Bella Italia",
-      "setupText": "Postavimo vaš jelovnik",
-      "nameHint": "Pojavit će se na vrhu vašeg digitalnog jelovnika."
     },
-    "step2": {
-      "title": "Dodajte prvo jelo",
-      "motivation": "Dodajte samo jedno jelo da vidite kako će izgledati jelovnik!",
-      "categoryLabel": "Naziv kategorije",
-      "categoryPlaceholder": "Npr. Glavni jelovnik, Pića",
-      "dishNameLabel": "Naziv jela",
-      "dishNamePlaceholder": "Npr. Pizza Margherita",
-      "priceLabel": "Cijena",
-      "priceRequired": "Unesite valjanu cijenu",
-      "photoLabel": "Fotografija",
-      "addPhoto": "Dodaj fotografiju",
-      "photoHint": "JPG ili PNG, do 5 MB. Fotografije možete dodati kasnije."
+    "createFlow": {
+      "step1": {
+        "title": "Kakvo mjesto?",
+        "subtitle": "Učitat ćemo primjer jelovnika kako bi započeo s uređivanjem, ne s praznom stranicom."
+      },
+      "step2": {
+        "title": "Daj svom restoranu naziv",
+        "subtitle": "To će gosti vidjeti na vrhu jelovnika. Kasnije možeš promijeniti.",
+        "nameLabel": "Naziv restorana",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Skoro gotovo",
+        "subtitle": "Potvrdi email kako bi spremio jelovnik i otvorio nadzornu ploču."
+      },
+      "back": "Natrag",
+      "continue": "Nastavi",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanski",
+        "asian": "Azijski",
+        "burger": "Burger / Brza hrana",
+        "coffee": "Kafić",
+        "bar": "Bar / Pub",
+        "bakery": "Pekarnica / Slastičarna",
+        "restaurant": "Restoran"
+      }
     },
-    "saveError": "Nešto je pošlo po zlu, pokušajte ponovno",
-    "save": "Spremi",
-    "cancel": "Odustani",
-    "close": "Zatvori",
-    "step4": {
-      "title": "Vaš jelovnik je spreman!",
-      "subtitle": "Ispišite ovaj QR kod i stavite ga na svoje stolove",
-      "goToDashboard": "Na panel i preuzmi QR",
-      "copy": "Kopiraj",
-      "tip": "Ispišite i stavite na stolove ili podijelite online."
-    },
-    "step3": {
-      "title": "Odaberite naslovnicu",
-      "subtitle": "Ovo gosti vide kad skeniraju QR.",
-      "upload": "Učitaj",
-      "yourPhoto": "Vaša fotografija",
-      "changeLater": "Možete promijeniti kasnije u postavkama."
-    },
-    "back": "Natrag",
-    "continue": "Nastavi"
+    "exampleBadge": "prim."
   }
 }

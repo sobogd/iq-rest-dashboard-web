@@ -84,11 +84,10 @@ export function DashboardChrome({
 
  const { view } = useDashboardRouter();
  const activeTab = viewToTab(view.name);
- const isAuthOrOnboarding =
- view.name.startsWith("auth.") || view.name === "onboarding";
+ const isAuth = view.name.startsWith("auth.");
 
- if (isAuthOrOnboarding) {
- // Auth & onboarding render fullscreen — no top/bottom dashboard nav.
+ if (isAuth) {
+ // Auth renders fullscreen — no top/bottom dashboard nav.
  return (
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>

@@ -525,49 +525,35 @@
       "events": "{count} händ.",
       "loading": "Laddar…",
       "settingsBreadcrumb": "Inställningar"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Välkommen!",
-      "subtitle": "Tar mindre än 2 minuter",
-      "nameLabel": "Restaurangnamn",
-      "namePlaceholder": "T.ex. La Bella Italia",
-      "setupText": "Vi sätter upp din meny",
-      "nameHint": "Visas högst upp i din digitala meny."
     },
-    "step2": {
-      "title": "Lägg till din första rätt",
-      "motivation": "Lägg till bara en rätt för att se hur menyn kommer se ut!",
-      "categoryLabel": "Kategorinamn",
-      "categoryPlaceholder": "T.ex. Huvudmeny, Drycker",
-      "dishNameLabel": "Rättnamn",
-      "dishNamePlaceholder": "T.ex. Pizza Margherita",
-      "priceLabel": "Pris",
-      "priceRequired": "Ange ett giltigt pris",
-      "photoLabel": "Foto",
-      "addPhoto": "Lägg till foto",
-      "photoHint": "JPG eller PNG, upp till 5 MB. Du kan lägga till foton senare."
+    "createFlow": {
+      "step1": {
+        "title": "Vad för slags ställe?",
+        "subtitle": "Vi förladdar en exempelmeny så du börjar med något att redigera, inte en tom sida."
+      },
+      "step2": {
+        "title": "Ge din restaurang ett namn",
+        "subtitle": "Det här ser gästerna högst upp i menyn. Du kan ändra senare.",
+        "nameLabel": "Restaurangnamn",
+        "namePlaceholder": "Mario's Pizza"
+      },
+      "step3": {
+        "title": "Nästan klart",
+        "subtitle": "Bekräfta din e-post för att spara menyn och låsa upp dashboarden."
+      },
+      "back": "Tillbaka",
+      "continue": "Fortsätt",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japansk",
+        "asian": "Asiatisk",
+        "burger": "Burger / Snabbmat",
+        "coffee": "Kaffe / Café",
+        "bar": "Bar / Pub",
+        "bakery": "Bageri / Konditori",
+        "restaurant": "Restaurang"
+      }
     },
-    "saveError": "Något gick fel, försök igen",
-    "save": "Spara",
-    "cancel": "Avbryt",
-    "close": "Stäng",
-    "step4": {
-      "title": "Din meny är klar!",
-      "subtitle": "Skriv ut denna QR-kod och placera på borden",
-      "goToDashboard": "Till panelen och ladda ner QR",
-      "copy": "Kopiera",
-      "tip": "Skriv ut och lägg på borden, eller dela online."
-    },
-    "step3": {
-      "title": "Välj omslag",
-      "subtitle": "Det här ser gäster när de skannar QR.",
-      "upload": "Ladda upp",
-      "yourPhoto": "Ditt foto",
-      "changeLater": "Du kan ändra senare i inställningar."
-    },
-    "back": "Tillbaka",
-    "continue": "Fortsätt"
+    "exampleBadge": "demo"
   }
 }

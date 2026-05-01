@@ -525,49 +525,35 @@
       "events": "{count} 个事件",
       "loading": "加载中…",
       "settingsBreadcrumb": "设置"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "欢迎！",
-      "subtitle": "不到 2 分钟",
-      "nameLabel": "餐厅名称",
-      "namePlaceholder": "如：La Bella Italia",
-      "setupText": "让我们设置您的菜单",
-      "nameHint": "将显示在数字菜单顶部。"
     },
-    "step2": {
-      "title": "添加您的第一道菜",
-      "motivation": "添加一道菜即可看到菜单的样子！",
-      "categoryLabel": "类别名称",
-      "categoryPlaceholder": "如：主菜单、饮品",
-      "dishNameLabel": "菜品名称",
-      "dishNamePlaceholder": "如：玛格丽特披萨",
-      "priceLabel": "价格",
-      "priceRequired": "请输入有效价格",
-      "photoLabel": "照片",
-      "addPhoto": "添加照片",
-      "photoHint": "JPG 或 PNG，最大 5 MB。可以稍后添加照片。"
+    "createFlow": {
+      "step1": {
+        "title": "什么类型的店？",
+        "subtitle": "我们会预加载一个示例菜单，让你从编辑开始，而不是空白页面。"
+      },
+      "step2": {
+        "title": "为你的餐厅命名",
+        "subtitle": "这将显示在菜单顶部，供顾客查看。稍后可以更改。",
+        "nameLabel": "餐厅名称",
+        "namePlaceholder": "马里奥披萨"
+      },
+      "step3": {
+        "title": "就快好了",
+        "subtitle": "确认你的邮箱以保存菜单并打开仪表板。"
+      },
+      "back": "返回",
+      "continue": "继续",
+      "cuisines": {
+        "pizza": "披萨店",
+        "sushi": "寿司 / 日料",
+        "asian": "亚洲菜",
+        "burger": "汉堡 / 快餐",
+        "coffee": "咖啡 / 咖啡馆",
+        "bar": "酒吧 / 酒馆",
+        "bakery": "烘焙 / 糕点",
+        "restaurant": "餐厅"
+      }
     },
-    "saveError": "出错了，请重试",
-    "save": "保存",
-    "cancel": "取消",
-    "close": "关闭",
-    "step4": {
-      "title": "您的菜单已就绪！",
-      "subtitle": "打印此二维码并放在您的桌上",
-      "goToDashboard": "前往面板并下载二维码",
-      "copy": "复制",
-      "tip": "打印并放在桌上，或在线分享。"
-    },
-    "step3": {
-      "title": "选择封面",
-      "subtitle": "顾客扫描二维码时看到的内容。",
-      "upload": "上传",
-      "yourPhoto": "您的照片",
-      "changeLater": "可以稍后在设置中更改。"
-    },
-    "back": "返回",
-    "continue": "继续"
+    "exampleBadge": "样"
   }
 }

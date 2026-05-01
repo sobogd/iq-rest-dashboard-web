@@ -525,49 +525,35 @@
       "events": "{count} dog.",
       "loading": "Učitavanje…",
       "settingsBreadcrumb": "Podešavanja"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Dobrodošli!",
-      "subtitle": "Traje manje od 2 minuta",
-      "nameLabel": "Ime restorana",
-      "namePlaceholder": "Npr. La Bella Italia",
-      "setupText": "Postavimo vaš meni",
-      "nameHint": "Pojaviće se na vrhu vašeg digitalnog menija."
     },
-    "step2": {
-      "title": "Dodajte prvo jelo",
-      "motivation": "Dodajte samo jedno jelo da vidite kako će meni izgledati!",
-      "categoryLabel": "Ime kategorije",
-      "categoryPlaceholder": "Npr. Glavni meni, Pića",
-      "dishNameLabel": "Ime jela",
-      "dishNamePlaceholder": "Npr. Pica Margherita",
-      "priceLabel": "Cena",
-      "priceRequired": "Unesite važeću cenu",
-      "photoLabel": "Fotografija",
-      "addPhoto": "Dodaj fotografiju",
-      "photoHint": "JPG ili PNG, do 5 MB. Fotografije možete dodati kasnije."
+    "createFlow": {
+      "step1": {
+        "title": "Kakvo mesto?",
+        "subtitle": "Učitaćemo primer menija da krenete sa uređivanjem, a ne sa praznom stranicom."
+      },
+      "step2": {
+        "title": "Daj svom restoranu ime",
+        "subtitle": "Ovo će gosti videti na vrhu menija. Kasnije možeš promeniti.",
+        "nameLabel": "Naziv restorana",
+        "namePlaceholder": "Pizzeria Mario"
+      },
+      "step3": {
+        "title": "Skoro gotovo",
+        "subtitle": "Potvrdi email da sačuvaš meni i otvoriš panel."
+      },
+      "back": "Nazad",
+      "continue": "Nastavi",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japanski",
+        "asian": "Azijski",
+        "burger": "Burger / Brza hrana",
+        "coffee": "Kafić",
+        "bar": "Bar / Pub",
+        "bakery": "Pekara / Poslastičarnica",
+        "restaurant": "Restoran"
+      }
     },
-    "saveError": "Nešto je pošlo po zlu, pokušajte ponovo",
-    "save": "Sačuvaj",
-    "cancel": "Otkaži",
-    "close": "Zatvori",
-    "step4": {
-      "title": "Vaš meni je spreman!",
-      "subtitle": "Odštampajte ovaj QR kod i postavite ga na svoje stolove",
-      "goToDashboard": "Na panel i preuzmi QR",
-      "copy": "Kopiraj",
-      "tip": "Odštampajte i postavite na stolove ili podelite onlajn."
-    },
-    "step3": {
-      "title": "Izaberite naslovnicu",
-      "subtitle": "Ovo gosti vide kad skeniraju QR.",
-      "upload": "Otpremi",
-      "yourPhoto": "Vaša fotografija",
-      "changeLater": "Možete promeniti kasnije u podešavanjima."
-    },
-    "back": "Nazad",
-    "continue": "Nastavi"
+    "exampleBadge": "prim."
   }
 }

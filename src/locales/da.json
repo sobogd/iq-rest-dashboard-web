@@ -525,49 +525,35 @@
       "events": "{count} hænd.",
       "loading": "Indlæser…",
       "settingsBreadcrumb": "Indstillinger"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Velkommen!",
-      "subtitle": "Tager mindre end 2 minutter",
-      "nameLabel": "Restaurantnavn",
-      "namePlaceholder": "F.eks. La Bella Italia",
-      "setupText": "Lad os opsætte din menu",
-      "nameHint": "Vises øverst i din digitale menu."
     },
-    "step2": {
-      "title": "Tilføj din første ret",
-      "motivation": "Tilføj bare én ret for at se hvordan menuen kommer til at se ud!",
-      "categoryLabel": "Kategorinavn",
-      "categoryPlaceholder": "F.eks. Hovedmenu, Drikke",
-      "dishNameLabel": "Retnavn",
-      "dishNamePlaceholder": "F.eks. Pizza Margherita",
-      "priceLabel": "Pris",
-      "priceRequired": "Indtast en gyldig pris",
-      "photoLabel": "Foto",
-      "addPhoto": "Tilføj foto",
-      "photoHint": "JPG eller PNG, op til 5 MB. Du kan tilføje fotos senere."
+    "createFlow": {
+      "step1": {
+        "title": "Hvilken slags sted?",
+        "subtitle": "Vi indlæser en eksempelmenu, så du starter med noget at redigere, ikke en tom side."
+      },
+      "step2": {
+        "title": "Navngiv din restaurant",
+        "subtitle": "Det er hvad gæsterne ser øverst i menuen. Du kan ændre det senere.",
+        "nameLabel": "Restaurantnavn",
+        "namePlaceholder": "Mario's Pizza"
+      },
+      "step3": {
+        "title": "Næsten færdig",
+        "subtitle": "Bekræft din e-mail for at gemme menuen og låse dashboardet op."
+      },
+      "back": "Tilbage",
+      "continue": "Fortsæt",
+      "cuisines": {
+        "pizza": "Pizzeria",
+        "sushi": "Sushi / Japansk",
+        "asian": "Asiatisk",
+        "burger": "Burger / Fast food",
+        "coffee": "Kaffe / Café",
+        "bar": "Bar / Pub",
+        "bakery": "Bageri / Konditori",
+        "restaurant": "Restaurant"
+      }
     },
-    "saveError": "Noget gik galt, prøv igen",
-    "save": "Gem",
-    "cancel": "Annuller",
-    "close": "Luk",
-    "step4": {
-      "title": "Din menu er klar!",
-      "subtitle": "Print denne QR-kode og placér den på dine borde",
-      "goToDashboard": "Til panelet og download QR",
-      "copy": "Kopier",
-      "tip": "Print og læg på borde, eller del online."
-    },
-    "step3": {
-      "title": "Vælg dit forsidebillede",
-      "subtitle": "Det her ser gæster når de scanner QR.",
-      "upload": "Upload",
-      "yourPhoto": "Dit foto",
-      "changeLater": "Du kan ændre senere i indstillinger."
-    },
-    "back": "Tilbage",
-    "continue": "Fortsæt"
+    "exampleBadge": "demo"
   }
 }

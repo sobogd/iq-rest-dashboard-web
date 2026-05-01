@@ -525,49 +525,35 @@
       "events": "{count} olay",
       "loading": "Yükleniyor…",
       "settingsBreadcrumb": "Ayarlar"
-    }
-  },
-  "onboarding": {
-    "step1": {
-      "title": "Hoş geldiniz!",
-      "subtitle": "2 dakikadan az sürer",
-      "nameLabel": "Restoran adı",
-      "namePlaceholder": "Ör. La Bella Italia",
-      "setupText": "Menünüzü ayarlayalım",
-      "nameHint": "Dijital menünüzün üstünde görünecek."
     },
-    "step2": {
-      "title": "İlk yemeğinizi ekleyin",
-      "motivation": "Menünün nasıl görüneceğini görmek için bir yemek ekleyin!",
-      "categoryLabel": "Kategori adı",
-      "categoryPlaceholder": "Ör. Ana Menü, İçecekler",
-      "dishNameLabel": "Yemek adı",
-      "dishNamePlaceholder": "Ör. Margherita Pizza",
-      "priceLabel": "Fiyat",
-      "priceRequired": "Geçerli bir fiyat girin",
-      "photoLabel": "Fotoğraf",
-      "addPhoto": "Fotoğraf ekle",
-      "photoHint": "JPG veya PNG, 5 MB'a kadar. Fotoğrafları daha sonra ekleyebilirsiniz."
+    "createFlow": {
+      "step1": {
+        "title": "Ne tür bir mekan?",
+        "subtitle": "Boş bir sayfayla değil, düzenlemeyle başlaman için örnek bir menü yükleyeceğiz."
+      },
+      "step2": {
+        "title": "Restoranına bir isim ver",
+        "subtitle": "Bu, müşterilerin menünün üstünde göreceği isim. Sonra değiştirebilirsin.",
+        "nameLabel": "Restoran adı",
+        "namePlaceholder": "Mario'nun Pizzası"
+      },
+      "step3": {
+        "title": "Az kaldı",
+        "subtitle": "Menünü kaydedip paneli açmak için e-postanı onayla."
+      },
+      "back": "Geri",
+      "continue": "Devam et",
+      "cuisines": {
+        "pizza": "Pizzacı",
+        "sushi": "Suşi / Japon",
+        "asian": "Asya",
+        "burger": "Burger / Fast food",
+        "coffee": "Kafe",
+        "bar": "Bar / Pub",
+        "bakery": "Fırın / Pastane",
+        "restaurant": "Restoran"
+      }
     },
-    "saveError": "Bir şeyler ters gitti, tekrar deneyin",
-    "save": "Kaydet",
-    "cancel": "İptal",
-    "close": "Kapat",
-    "step4": {
-      "title": "Menünüz hazır!",
-      "subtitle": "Bu QR kodunu yazdırın ve masalarınıza koyun",
-      "goToDashboard": "Panele git ve QR'ı indir",
-      "copy": "Kopyala",
-      "tip": "Yazdırın ve masalara koyun veya çevrimiçi paylaşın."
-    },
-    "step3": {
-      "title": "Kapağınızı seçin",
-      "subtitle": "QR'ı taradığında misafirler bunu görür.",
-      "upload": "Yükle",
-      "yourPhoto": "Fotoğrafınız",
-      "changeLater": "Daha sonra ayarlardan değiştirebilirsiniz."
-    },
-    "back": "Geri",
-    "continue": "Devam"
+    "exampleBadge": "örn."
   }
 }
