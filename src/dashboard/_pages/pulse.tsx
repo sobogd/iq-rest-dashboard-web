@@ -144,7 +144,7 @@ export function PulsePage() {
         </button>
       </SubpageStickyBar>
 
-      <div className="px-3 py-3 space-y-3">
+      <div className="max-w-2xl mx-auto px-3 py-3 space-y-3">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <input
