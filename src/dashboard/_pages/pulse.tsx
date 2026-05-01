@@ -18,6 +18,7 @@ interface PulseRow {
   event: string;
   country: string;
   region: string;
+  gclid: string | null;
 }
 
 function countryToFlag(code: string): string {
@@ -224,6 +225,19 @@ export function PulsePage() {
                   {countryToFlag(row.country)}
                 </span>
                 <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
+                {row.gclid ? (
+                  <button
+                    type="button"
+                    title={`Google Ads click — tap to copy gclid:\n${row.gclid}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigator.clipboard?.writeText(row.gclid!);
+                    }}
+                    className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0 hover:scale-110 transition-transform cursor-pointer"
+                  >
+                    G
+                  </button>
+                ) : null}
                 <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                   {fmtAt(row.at)}
                 </span>
