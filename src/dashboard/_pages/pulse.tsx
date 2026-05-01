@@ -52,7 +52,7 @@ function fmtAt(iso: string): string {
 
 export function PulsePage() {
   const router = useDashboardRouter();
-  const [tab, setTab] = useState<Tab>("top");
+  const [tab, setTab] = useState<Tab>("timeline");
   const [date, setDate] = useState<string>(() => todayStr());
   const [timeFrom, setTimeFrom] = useState<string>("00:00");
   const [timeTo, setTimeTo] = useState<string>("23:59");
