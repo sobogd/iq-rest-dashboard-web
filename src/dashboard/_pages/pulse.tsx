@@ -13,11 +13,11 @@ interface TopRow {
   hits: number;
 }
 
-interface BucketRow {
-  bucket: string;
+interface PulseRow {
+  at: string;
   event: string;
   country: string;
-  hits: number;
+  region: string;
 }
 
 function countryToFlag(code: string): string {
@@ -42,8 +42,12 @@ function toIsoLocal(dateStr: string, timeStr: string): string {
   return new Date(y, m - 1, d, hh, mm, 0, 0).toISOString();
 }
 
-function fmtBucket(iso: string): string {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+function fmtAt(iso: string): string {
+  return new Date(iso).toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 }
 
 export function PulsePage() {
@@ -54,7 +58,7 @@ export function PulsePage() {
   const [timeTo, setTimeTo] = useState<string>("23:59");
 
   const [top, setTop] = useState<TopRow[]>([]);
-  const [timeline, setTimeline] = useState<BucketRow[]>([]);
+  const [timeline, setTimeline] = useState<PulseRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -72,7 +76,7 @@ export function PulsePage() {
           fetch(apiUrl(`/api/admin/pulse/top?${qs.toString()}&limit=20`), {
             credentials: "include",
           }),
-          fetch(apiUrl(`/api/admin/pulse/timeline?${qs.toString()}&bucket=hour`), {
+          fetch(apiUrl(`/api/admin/pulse/timeline?${qs.toString()}&limit=1000`), {
             credentials: "include",
           }),
         ]);
@@ -81,8 +85,8 @@ export function PulsePage() {
           setTop(j.events || []);
         }
         if (timelineRes.ok) {
-          const j = (await timelineRes.json()) as { buckets: BucketRow[] };
-          setTimeline(j.buckets || []);
+          const j = (await timelineRes.json()) as { events: PulseRow[] };
+          setTimeline(j.events || []);
         }
       } finally {
         setLoading(false);
@@ -99,11 +103,8 @@ export function PulsePage() {
   // ── Top tab: bar chart ─────────────────────────────────────────────────────
   const topMax = top.length ? top[0].hits : 0;
 
-  // ── Timeline: chronological flat list ──────────────────────────────────────
-  const timelineRows = useMemo(
-    () => [...timeline].sort((a, b) => (a.bucket < b.bucket ? 1 : -1)),
-    [timeline],
-  );
+  // Backend already returns newest-first ordered by `at`.
+  const timelineRows = timeline;
 
   const eventColor = useCallback((event: string): string => {
     let h = 0;
@@ -214,9 +215,9 @@ export function PulsePage() {
           <div className="text-xs text-muted-foreground py-8 text-center">No data</div>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-            {timelineRows.slice(0, 1000).map((row, i) => (
+            {timelineRows.map((row, i) => (
               <div
-                key={`${row.bucket}-${row.event}-${row.country}-${i}`}
+                key={`${row.at}-${row.event}-${i}`}
                 className="flex items-center gap-2 px-3 py-1.5 text-xs"
               >
                 <span className="text-base shrink-0" title={row.country}>
@@ -224,8 +225,7 @@ export function PulsePage() {
                 </span>
                 <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
                 <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
-                  {fmtBucket(row.bucket)}
-                  {row.hits > 1 ? ` ×${row.hits}` : ""}
+                  {fmtAt(row.at)}
                 </span>
               </div>
             ))}
