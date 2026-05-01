@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
 import { Loader2 } from "lucide-react";
 import { identify } from "@/lib/analytics";
 import { track } from "@/lib/dashboard-events";
 import { landingUrl } from "@/lib/landing-url";
+import { LegalModal, type LegalView } from "@/components/legal-modal";
 
 declare global {
   interface Window {
@@ -90,6 +90,7 @@ function EmailScreen({
   googleReady,
   googleHiddenRef,
   embedded,
+  onOpenLegal,
   t,
 }: {
   email: string;
@@ -100,6 +101,7 @@ function EmailScreen({
   googleReady: boolean;
   googleHiddenRef: React.RefObject<HTMLDivElement | null>;
   embedded: boolean;
+  onOpenLegal: (view: "terms" | "policy") => void;
   t: ReturnType<typeof useTranslations<"dashboard.auth">>;
 }) {
   return (
@@ -189,19 +191,21 @@ function EmailScreen({
 
       <p className="text-[11px] text-muted-foreground leading-snug text-center mt-6">
         {t("consent.text")}{" "}
-        <Link
-          href="/terms"
+        <button
+          type="button"
+          onClick={() => onOpenLegal("terms")}
           className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors"
         >
           {t("consent.terms")}
-        </Link>{" "}
+        </button>{" "}
         {t("consent.and")}{" "}
-        <Link
-          href="/privacy"
+        <button
+          type="button"
+          onClick={() => onOpenLegal("policy")}
           className="text-foreground/70 hover:text-foreground underline underline-offset-2 transition-colors"
         >
           {t("consent.privacy")}
-        </Link>
+        </button>
         .
       </p>
     </>
@@ -428,6 +432,7 @@ export function AuthPage({
   const [cooldown, setCooldown] = useState(0);
   const [resendStatus, setResendStatus] = useState<"idle" | "loading" | "sent">("idle");
   const [googleReady, setGoogleReady] = useState(false);
+  const [legalView, setLegalView] = useState<LegalView>(null);
   const googleHiddenRef = useRef<HTMLDivElement>(null);
 
   // Already-authenticated visitors get sent to the right dashboard.
@@ -659,6 +664,7 @@ export function AuthPage({
         googleReady={googleReady}
         googleHiddenRef={googleHiddenRef}
         embedded={embedded}
+        onOpenLegal={(v) => setLegalView(v)}
         t={t}
       />
     ) : (
@@ -678,13 +684,19 @@ export function AuthPage({
       />
     );
 
-  if (embedded) return inner;
+  if (embedded) return (
+    <>
+      {inner}
+      <LegalModal view={legalView} onClose={() => setLegalView(null)} />
+    </>
+  );
 
   return (
     <div className="min-h-[100dvh] bg-background flex items-center justify-center px-4 py-4 antialiased tracking-tight">
       <div className="w-[360px] max-w-full bg-card border border-border rounded-2xl p-6 pb-7">
         {inner}
       </div>
+      <LegalModal view={legalView} onClose={() => setLegalView(null)} />
     </div>
   );
 }
