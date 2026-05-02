@@ -23,8 +23,44 @@ export function CreateFlow() {
     track("create_flow_first_view");
   }, []);
 
-  const next = () => setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  const back = () => setStep((s) => Math.max(s - 1, 1));
+  // Trap browser-back: from step 2 (name) and step 3, send the user to the
+  // previous wizard step instead of letting the browser pop us back out to the
+  // landing page. We push a history entry on every forward navigation and
+  // listen for popstate to drive setStep.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.history.replaceState(
+      { ...(window.history.state || {}), wizardStep: step },
+      "",
+    );
+    const onPopState = (e: PopStateEvent) => {
+      const target = (e.state as { wizardStep?: number } | null)?.wizardStep;
+      if (typeof target === "number") {
+        setStep(target);
+      }
+      // No wizardStep in popped state == user navigated past the wizard
+      // (e.g. back to landing). Allow it — only step 1 should reach this branch.
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [step]);
+
+  const next = () =>
+    setStep((s) => {
+      const ns = Math.min(s + 1, TOTAL_STEPS);
+      if (ns > s && typeof window !== "undefined") {
+        window.history.pushState({ wizardStep: ns }, "");
+      }
+      return ns;
+    });
+  const back = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      // Use the browser's history so the URL/state stays consistent.
+      window.history.back();
+      return;
+    }
+    setStep((s) => Math.max(s - 1, 1));
+  };
 
   // Memoise the context object so AuthPage's useCallback deps stay stable across rerenders —
   // otherwise a new object reference per render re-initialises Google Identity Services every tick.
