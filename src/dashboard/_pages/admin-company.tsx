@@ -49,7 +49,22 @@ interface Company {
   sessionId: string | null;
   users: User[];
   restaurants: Restaurant[];
+  emailsSent: Record<string, string> | null;
 }
+
+interface EmailTemplate {
+  id: string;
+  label: string;
+  description: string;
+}
+
+const EMAIL_TEMPLATES: EmailTemplate[] = [
+  {
+    id: "welcome_personal",
+    label: "Personal welcome from Bogdan",
+    description: "Friendly intro offering setup help. Sent in owner's preferred language.",
+  },
+];
 
 interface Message {
   id: string;
@@ -102,6 +117,8 @@ export function AdminCompanyPage({ companyId }: Props) {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendingTemplate, setSendingTemplate] = useState<string | null>(null);
+  const [confirmTemplate, setConfirmTemplate] = useState<EmailTemplate | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -217,6 +234,40 @@ export function AdminCompanyPage({ companyId }: Props) {
     } catch {
       setAlert({ title: "Login failed", message: "Network error" });
       setImpersonating(false);
+    }
+  }
+
+  async function sendEmailTemplate(tpl: EmailTemplate) {
+    if (sendingTemplate) return;
+    setSendingTemplate(tpl.id);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/send-email`), {
+        credentials: "include",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ template: tpl.id }),
+      });
+      if (res.ok) {
+        const j = await res.json();
+        // Optimistic update
+        setCompany((prev) =>
+          prev
+            ? {
+                ...prev,
+                emailsSent: { ...(prev.emailsSent || {}), [tpl.id]: j.sentAt },
+              }
+            : prev,
+        );
+        setAlert({ title: "Sent", message: `Email "${tpl.label}" sent to ${j.to} in ${j.locale}.` });
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setAlert({ title: "Failed", message: j.message || j.error || "Could not send email." });
+      }
+    } catch {
+      setAlert({ title: "Failed", message: "Network error" });
+    } finally {
+      setSendingTemplate(null);
+      setConfirmTemplate(null);
     }
   }
 
@@ -449,6 +500,38 @@ export function AdminCompanyPage({ companyId }: Props) {
               </button>
             ) : null}
 
+            {/* Email templates */}
+            <div className="bg-card border border-border rounded-2xl p-4 space-y-3">
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Email templates
+              </div>
+              {EMAIL_TEMPLATES.map((tpl) => {
+                const sentAt = company.emailsSent?.[tpl.id];
+                const sentLabel = sentAt
+                  ? `Sent ${new Date(sentAt).toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}`
+                  : null;
+                return (
+                  <div key={tpl.id} className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-medium text-foreground">{tpl.label}</div>
+                      <div className="text-xs text-muted-foreground leading-snug mt-0.5">{tpl.description}</div>
+                      {sentLabel ? (
+                        <div className="text-[11px] text-emerald-600 mt-1">✓ {sentLabel}</div>
+                      ) : null}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmTemplate(tpl)}
+                      disabled={sendingTemplate === tpl.id}
+                      className="h-8 px-3 text-xs font-medium text-foreground bg-secondary border border-border rounded-md transition-colors shrink-0 disabled:opacity-60"
+                    >
+                      {sendingTemplate === tpl.id ? "Sending…" : sentAt ? "Resend" : "Send"}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
             <button
               type="button"
               onClick={() => setConfirmDelete(true)}
@@ -518,6 +601,19 @@ export function AdminCompanyPage({ companyId }: Props) {
         confirmLabel="Delete"
         onCancel={() => (deleting ? null : setConfirmDelete(false))}
         onConfirm={handleDelete}
+      />
+
+      <ConfirmDialog
+        open={confirmTemplate !== null}
+        title={`Send "${confirmTemplate?.label}"?`}
+        message={
+          confirmTemplate
+            ? `Sends the email to ${company.users[0]?.email ?? "owner"} in their preferred language.`
+            : ""
+        }
+        confirmLabel="Send"
+        onCancel={() => (sendingTemplate ? null : setConfirmTemplate(null))}
+        onConfirm={() => confirmTemplate && sendEmailTemplate(confirmTemplate)}
       />
 
       <ConfirmDialog
