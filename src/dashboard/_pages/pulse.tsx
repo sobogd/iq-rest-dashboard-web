@@ -6,12 +6,7 @@ import { SubpageStickyBar } from "../_v2/ui";
 import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
 
-type Tab = "top" | "timeline";
-
-interface TopRow {
-  event: string;
-  hits: number;
-}
+type Source = "presignup" | "dashboard";
 
 interface PulseRow {
   at: string;
@@ -30,17 +25,18 @@ function countryToFlag(code: string): string {
 
 function todayStr(): string {
   const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/** Build ISO from a YYYY-MM-DD date and a HH:MM time, using the user's local TZ. */
-function toIsoLocal(dateStr: string, timeStr: string): string {
-  const [y, m, d] = dateStr.split("-").map((s) => parseInt(s, 10));
-  const [hh, mm] = timeStr.split(":").map((s) => parseInt(s, 10));
-  return new Date(y, m - 1, d, hh, mm, 0, 0).toISOString();
+function fmtDateLabel(date: string): string {
+  const d = new Date(date + "T00:00:00");
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff = Math.round((d.getTime() - today.getTime()) / 86400000);
+  if (diff === 0) return "Today";
+  if (diff === -1) return "Yesterday";
+  if (diff === 1) return "Tomorrow";
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 function fmtAt(iso: string): string {
@@ -51,52 +47,70 @@ function fmtAt(iso: string): string {
   });
 }
 
-type Source = "presignup" | "dashboard";
+function fmtHour(date: Date): string {
+  return date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
 
-// Event-name prefixes that classify a row as pre-signup. Anything else
-// (dash_*, clicked_*, refresh_*, etc) is classified as dashboard.
-const PRESIGNUP_PREFIXES = ["land_", "auth_", "create_flow_", "onboarding_", "wizard_"];
-function isPresignup(eventName: string): boolean {
-  return PRESIGNUP_PREFIXES.some((p) => eventName.startsWith(p));
+function shiftDate(date: string, days: number): string {
+  const d = new Date(date + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 export function PulsePage() {
   const router = useDashboardRouter();
-  const [tab, setTab] = useState<Tab>("timeline");
-  const [source, setSource] = useState<Source>("presignup");
-  const [date, setDate] = useState<string>(() => todayStr());
-  const [timeFrom, setTimeFrom] = useState<string>("00:00");
-  const [timeTo, setTimeTo] = useState<string>("23:59");
 
-  const [top, setTop] = useState<TopRow[]>([]);
+  // Date — defaults to today, chevrons shift by ±1 day
+  const [date, setDate] = useState<string>(() => todayStr());
+
+  // Hour-window offset — 0 = "current hour" (last 60min), 1 = previous hour, etc.
+  // Window is anchored to the picked date's "now-equivalent" — when date=today
+  // it's a rolling 1h up to current time; for past days it's anchor = end-of-day.
+  const [hourOffset, setHourOffset] = useState<number>(0);
+
+  const [source, setSource] = useState<Source>("presignup");
   const [timeline, setTimeline] = useState<PulseRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const isToday = date === todayStr();
+
+  // Compute the [from, to] window from date + hourOffset.
+  // For today: anchor = now → window = [now - (offset+1)h, now - offset*h].
+  // For past days: anchor = end of that day at 23:59 local.
+  const { fromDate, toDate, windowLabel } = useMemo(() => {
+    let anchor: Date;
+    if (isToday) {
+      anchor = new Date(); // now
+    } else {
+      const [y, m, d] = date.split("-").map(Number);
+      anchor = new Date(y, m - 1, d, 23, 59, 59, 999);
+    }
+    const to = new Date(anchor.getTime() - hourOffset * 60 * 60 * 1000);
+    const from = new Date(to.getTime() - 60 * 60 * 1000);
+    return {
+      fromDate: from,
+      toDate: to,
+      windowLabel: `${fmtHour(from)} – ${fmtHour(to)}`,
+    };
+  }, [date, hourOffset, isToday]);
 
   const load = useCallback(
     async (mode: "initial" | "refresh") => {
       if (mode === "initial") setLoading(true);
       else setRefreshing(true);
       try {
-        // Local-TZ pickers → UTC ISO. Backend stores `hour` as UTC, so passing UTC
-        // ISO makes the day boundary line up with what the user picked locally.
-        const from = toIsoLocal(date, timeFrom);
-        const to = toIsoLocal(date, timeTo);
-        const qs = new URLSearchParams({ from, to });
-        const [topRes, timelineRes] = await Promise.all([
-          fetch(apiUrl(`/api/admin/pulse/top?${qs.toString()}&limit=20`), {
-            credentials: "include",
-          }),
-          fetch(apiUrl(`/api/admin/pulse/timeline?${qs.toString()}&limit=1000`), {
-            credentials: "include",
-          }),
-        ]);
-        if (topRes.ok) {
-          const j = (await topRes.json()) as { events: TopRow[] };
-          setTop(j.events || []);
-        }
-        if (timelineRes.ok) {
-          const j = (await timelineRes.json()) as { events: PulseRow[] };
+        const qs = new URLSearchParams({
+          from: fromDate.toISOString(),
+          to: toDate.toISOString(),
+          source,
+          limit: "500",
+        });
+        const res = await fetch(apiUrl(`/api/admin/pulse/timeline?${qs.toString()}`), {
+          credentials: "include",
+        });
+        if (res.ok) {
+          const j = (await res.json()) as { events: PulseRow[] };
           setTimeline(j.events || []);
         }
       } finally {
@@ -104,56 +118,16 @@ export function PulsePage() {
         setRefreshing(false);
       }
     },
-    [date, timeFrom, timeTo],
+    [fromDate, toDate, source],
   );
 
   useEffect(() => {
     void load("initial");
   }, [load]);
 
-  // ── Top tab: bar chart ─────────────────────────────────────────────────────
-  // Filter by source. Done client-side because backend pulse_events table
-  // doesn't have a source column — we infer from event name prefix.
-  const filteredTop =
-    source === "presignup"
-      ? top.filter((r) => isPresignup(r.event))
-      : top.filter((r) => !isPresignup(r.event));
-  const topMax = filteredTop.length ? filteredTop[0].hits : 0;
-
-  // Backend already returns newest-first ordered by `at`.
-  const timelineRows =
-    source === "presignup"
-      ? timeline.filter((r) => isPresignup(r.event))
-      : timeline.filter((r) => !isPresignup(r.event));
-
-  const eventColor = useCallback((event: string): string => {
-    let h = 0;
-    for (let i = 0; i < event.length; i++) h = (h * 31 + event.charCodeAt(i)) | 0;
-    const hue = Math.abs(h) % 360;
-    return `hsl(${hue} 65% 55%)`;
-  }, []);
-
   return (
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
-        <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
-          {(["top", "timeline"] as Tab[]).map((t) => {
-            const isActive = tab === t;
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTab(t)}
-                className={
-                  "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors capitalize " +
-                  (isActive ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-                }
-              >
-                {t}
-              </button>
-            );
-          })}
-        </div>
         <button
           type="button"
           onClick={() => void load("refresh")}
@@ -165,102 +139,93 @@ export function PulsePage() {
       </SubpageStickyBar>
 
       <div className="max-w-2xl mx-auto px-3 py-3 space-y-3">
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="date"
-            value={date}
-            max={todayStr()}
-            onChange={(e) => setDate(e.target.value)}
-            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: 130 }}
-          />
-          <input
-            type="time"
-            value={timeFrom}
-            onChange={(e) => setTimeFrom(e.target.value)}
-            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: 90 }}
-          />
-          <input
-            type="time"
-            value={timeTo}
-            onChange={(e) => setTimeTo(e.target.value)}
-            className="pulse-filter-input h-8 px-2 text-xs bg-secondary border border-border rounded-md tabular-nums"
-            style={{ width: 90 }}
-          />
-          <style>{`
-            .pulse-filter-input::-webkit-calendar-picker-indicator {
-              padding: 0;
-              margin-left: 2px;
-              opacity: 0.6;
-            }
-            .pulse-filter-input::-webkit-inner-spin-button,
-            .pulse-filter-input::-webkit-clear-button {
-              display: none;
-            }
-          `}</style>
+        {/* Date stepper */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setDate((d) => shiftDate(d, -1))}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+            title="Previous day"
+          >
+            ‹
+          </button>
+          <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
+            {fmtDateLabel(date)}{" "}
+            <span className="text-muted-foreground ml-1.5">{date}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              const next = shiftDate(date, 1);
+              if (new Date(next + "T00:00:00") <= new Date()) setDate(next);
+            }}
+            disabled={isToday}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Next day"
+          >
+            ›
+          </button>
+
+          {/* Hour window stepper */}
+          <button
+            type="button"
+            onClick={() => setHourOffset((h) => h + 1)}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground ml-2"
+            title="Earlier hour"
+          >
+            ‹
+          </button>
+          <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
+            {windowLabel}
+          </div>
+          <button
+            type="button"
+            onClick={() => setHourOffset((h) => Math.max(0, h - 1))}
+            disabled={hourOffset === 0}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Later hour"
+          >
+            ›
+          </button>
         </div>
 
-        {/* Source filter — pre-signup (land+auth+onboarding) vs dashboard */}
-        <div className="flex items-center gap-1 p-0.5 bg-secondary rounded-lg w-fit">
-          {(
-            [
-              { value: "presignup" as Source, label: "Land + Auth + Onboarding" },
-              { value: "dashboard" as Source, label: "Dashboard" },
-            ]
-          ).map((opt) => {
-            const isActive = source === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setSource(opt.value)}
-                className={
-                  "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
-                  (isActive ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-                }
-              >
-                {opt.label}
-              </button>
-            );
-          })}
+        {/* Source toggle — 2 icons */}
+        <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
+          <button
+            type="button"
+            onClick={() => setSource("presignup")}
+            title="Landing + Auth + Onboarding"
+            className={
+              "h-8 w-10 inline-flex items-center justify-center rounded-md transition-colors text-base " +
+              (source === "presignup"
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted-foreground")
+            }
+          >
+            🌐
+          </button>
+          <button
+            type="button"
+            onClick={() => setSource("dashboard")}
+            title="Dashboard activity"
+            className={
+              "h-8 w-10 inline-flex items-center justify-center rounded-md transition-colors text-base " +
+              (source === "dashboard"
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted-foreground")
+            }
+          >
+            📊
+          </button>
         </div>
 
         {loading ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-        ) : tab === "top" ? (
-          filteredTop.length === 0 ? (
-            <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
-          ) : (
-            <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {filteredTop.map((row) => {
-                const pct = topMax ? (row.hits / topMax) * 100 : 0;
-                return (
-                  <div key={row.event} className="px-3 py-2">
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-mono truncate text-foreground">{row.event}</span>
-                      <span className="tabular-nums text-muted-foreground ml-2">{row.hits}</span>
-                    </div>
-                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                      <div
-                        className="h-full"
-                        style={{
-                          width: `${pct}%`,
-                          background: eventColor(row.event),
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )
-        ) : timelineRows.length === 0 ? (
-          <div className="text-xs text-muted-foreground py-8 text-center">No data</div>
+        ) : timeline.length === 0 ? (
+          <div className="text-xs text-muted-foreground py-8 text-center">No events in this window</div>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-            {timelineRows.map((row, i) => (
+            {timeline.map((row, i) => (
               <div
                 key={`${row.at}-${row.event}-${i}`}
                 className="flex items-center gap-2 px-3 py-1.5 text-xs"
@@ -293,4 +258,3 @@ export function PulsePage() {
     </div>
   );
 }
-
