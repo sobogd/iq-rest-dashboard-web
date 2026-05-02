@@ -62,11 +62,30 @@ export function trackEvent(event: string): void {
   if (typeof window === "undefined") return;
   ensureSid();
   const gclid = getGclid();
+
+  // Sid-attributed event (rich session analytics)
   fetch(apiUrl("/api/analytics/event"), {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ event, occurredAt: new Date().toISOString(), ...(gclid ? { gclid } : {}) }),
+    keepalive: true,
+  }).catch(() => {});
+
+  // Cookieless pulse — same event also lands in pulse_events for the unified
+  // Pulse admin view (covers landing + auth + onboarding + dashboard).
+  // Geo from apex-domain cookies set by soqrmenuweb middleware.
+  const country = (readCookie("geo_country") || "").toUpperCase().slice(0, 2);
+  const region = (readCookie("geo_region") || "").slice(0, 100);
+  fetch(apiUrl("/api/analytics/pulse"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      event,
+      ...(gclid ? { gclid } : {}),
+      ...(country && /^[A-Z]{2}$/.test(country) ? { country } : {}),
+      ...(region ? { region } : {}),
+    }),
     keepalive: true,
   }).catch(() => {});
 }

@@ -51,9 +51,19 @@ function fmtAt(iso: string): string {
   });
 }
 
+type Source = "presignup" | "dashboard";
+
+// Event-name prefixes that classify a row as pre-signup. Anything else
+// (dash_*, clicked_*, refresh_*, etc) is classified as dashboard.
+const PRESIGNUP_PREFIXES = ["land_", "auth_", "create_flow_", "onboarding_", "wizard_"];
+function isPresignup(eventName: string): boolean {
+  return PRESIGNUP_PREFIXES.some((p) => eventName.startsWith(p));
+}
+
 export function PulsePage() {
   const router = useDashboardRouter();
   const [tab, setTab] = useState<Tab>("timeline");
+  const [source, setSource] = useState<Source>("presignup");
   const [date, setDate] = useState<string>(() => todayStr());
   const [timeFrom, setTimeFrom] = useState<string>("00:00");
   const [timeTo, setTimeTo] = useState<string>("23:59");
@@ -102,10 +112,19 @@ export function PulsePage() {
   }, [load]);
 
   // ── Top tab: bar chart ─────────────────────────────────────────────────────
-  const topMax = top.length ? top[0].hits : 0;
+  // Filter by source. Done client-side because backend pulse_events table
+  // doesn't have a source column — we infer from event name prefix.
+  const filteredTop =
+    source === "presignup"
+      ? top.filter((r) => isPresignup(r.event))
+      : top.filter((r) => !isPresignup(r.event));
+  const topMax = filteredTop.length ? filteredTop[0].hits : 0;
 
   // Backend already returns newest-first ordered by `at`.
-  const timelineRows = timeline;
+  const timelineRows =
+    source === "presignup"
+      ? timeline.filter((r) => isPresignup(r.event))
+      : timeline.filter((r) => !isPresignup(r.event));
 
   const eventColor = useCallback((event: string): string => {
     let h = 0;
@@ -183,14 +202,39 @@ export function PulsePage() {
           `}</style>
         </div>
 
+        {/* Source filter — pre-signup (land+auth+onboarding) vs dashboard */}
+        <div className="flex items-center gap-1 p-0.5 bg-secondary rounded-lg w-fit">
+          {(
+            [
+              { value: "presignup" as Source, label: "Land + Auth + Onboarding" },
+              { value: "dashboard" as Source, label: "Dashboard" },
+            ]
+          ).map((opt) => {
+            const isActive = source === opt.value;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setSource(opt.value)}
+                className={
+                  "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
+                  (isActive ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
+                }
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+
         {loading ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
         ) : tab === "top" ? (
-          top.length === 0 ? (
+          filteredTop.length === 0 ? (
             <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
           ) : (
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {top.map((row) => {
+              {filteredTop.map((row) => {
                 const pct = topMax ? (row.hits / topMax) * 100 : 0;
                 return (
                   <div key={row.event} className="px-3 py-2">
