@@ -54,10 +54,10 @@ export function PulsePage() {
   // Date — defaults to today, chevrons shift by ±1 day
   const [date, setDate] = useState<string>(() => todayStr());
 
-  // Clock-hour for the END of the window (24h, 0–23). Window = [hour-1, hour].
-  // Default for today = current hour (e.g. now=12:40 → window 11–12, hour=12).
-  // For past days = end-of-day (23, window 22–23).
-  const [hourEnd, setHourEnd] = useState<number>(() => new Date().getHours());
+  // Clock-hour for the END of the window. Window = [hourEnd-1 : 00, hourEnd : 00].
+  // Default for today = NOW's hour + 1 (current ongoing hour, clamped at `now`)
+  // so latest events are visible by default. Past days = 24 (end of day).
+  const [hourEnd, setHourEnd] = useState<number>(() => new Date().getHours() + 1);
 
   const [source, setSource] = useState<Source>("presignup");
   const [timeline, setTimeline] = useState<PulseRow[]>([]);
@@ -65,23 +65,27 @@ export function PulsePage() {
   const [refreshing, setRefreshing] = useState(false);
 
   const isToday = date === todayStr();
-  const currentHour = new Date().getHours();
+  // Latest hour-end the user can pick today (i.e. current ongoing hour)
+  const maxHourEndToday = new Date().getHours() + 1;
 
   // When user switches date, reset hour to default for that day.
-  // Today → current hour. Past → 23 (end of day). Done via effect on `date`.
+  // Today → current ongoing hour. Past → 24 (end of day, window 23–24).
   useEffect(() => {
-    setHourEnd(date === todayStr() ? new Date().getHours() : 23);
+    setHourEnd(date === todayStr() ? new Date().getHours() + 1 : 24);
   }, [date]);
 
   const { fromDate, toDate, windowLabel } = useMemo(() => {
     const [y, m, d] = date.split("-").map(Number);
-    // Window covers the FULL clock hour [hourEnd-1 : 00 ... hourEnd : 00]
-    const to = new Date(y, m - 1, d, hourEnd, 0, 0, 0);
-    const from = new Date(y, m - 1, d, hourEnd - 1, 0, 0, 0);
-    const startH = String(Math.max(0, hourEnd - 1)).padStart(2, "0");
-    const endH = String(hourEnd).padStart(2, "0");
-    return { fromDate: from, toDate: to, windowLabel: `${startH}–${endH}` };
-  }, [date, hourEnd]);
+    const slotStart = new Date(y, m - 1, d, hourEnd - 1, 0, 0, 0);
+    const slotEnd = new Date(y, m - 1, d, hourEnd, 0, 0, 0);
+    // For the current ongoing hour, clamp `to` to right now (no point asking
+    // the API for the next 47 minutes that haven't happened yet).
+    const now = new Date();
+    const to = isToday && hourEnd === maxHourEndToday ? now : slotEnd;
+    const startH = String(hourEnd - 1).padStart(2, "0");
+    const endH = String(hourEnd % 24).padStart(2, "0");
+    return { fromDate: slotStart, toDate: to, windowLabel: `${startH}–${endH}` };
+  }, [date, hourEnd, isToday, maxHourEndToday]);
 
   const load = useCallback(
     async (mode: "initial" | "refresh") => {
@@ -169,10 +173,10 @@ export function PulsePage() {
           <button
             type="button"
             onClick={() => {
-              const max = isToday ? currentHour : 23;
+              const max = isToday ? maxHourEndToday : 24;
               setHourEnd((h) => Math.min(max, h + 1));
             }}
-            disabled={isToday ? hourEnd >= currentHour : hourEnd >= 23}
+            disabled={isToday ? hourEnd >= maxHourEndToday : hourEnd >= 24}
             className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
             title="Later hour"
           >
