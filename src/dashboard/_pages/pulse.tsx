@@ -29,14 +29,9 @@ function todayStr(): string {
 }
 
 function fmtDateLabel(date: string): string {
-  const d = new Date(date + "T00:00:00");
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const diff = Math.round((d.getTime() - today.getTime()) / 86400000);
-  if (diff === 0) return "Today";
-  if (diff === -1) return "Yesterday";
-  if (diff === 1) return "Tomorrow";
-  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  // dd/mm — short, no year, no "today/yesterday"
+  const [, m, d] = date.split("-");
+  return `${d}/${m}`;
 }
 
 function fmtAt(iso: string): string {
@@ -45,10 +40,6 @@ function fmtAt(iso: string): string {
     minute: "2-digit",
     second: "2-digit",
   });
-}
-
-function fmtHour(date: Date): string {
-  return date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
 
 function shiftDate(date: string, days: number): string {
@@ -63,10 +54,10 @@ export function PulsePage() {
   // Date — defaults to today, chevrons shift by ±1 day
   const [date, setDate] = useState<string>(() => todayStr());
 
-  // Hour-window offset — 0 = "current hour" (last 60min), 1 = previous hour, etc.
-  // Window is anchored to the picked date's "now-equivalent" — when date=today
-  // it's a rolling 1h up to current time; for past days it's anchor = end-of-day.
-  const [hourOffset, setHourOffset] = useState<number>(0);
+  // Clock-hour for the END of the window (24h, 0–23). Window = [hour-1, hour].
+  // Default for today = current hour (e.g. now=12:40 → window 11–12, hour=12).
+  // For past days = end-of-day (23, window 22–23).
+  const [hourEnd, setHourEnd] = useState<number>(() => new Date().getHours());
 
   const [source, setSource] = useState<Source>("presignup");
   const [timeline, setTimeline] = useState<PulseRow[]>([]);
@@ -74,26 +65,23 @@ export function PulsePage() {
   const [refreshing, setRefreshing] = useState(false);
 
   const isToday = date === todayStr();
+  const currentHour = new Date().getHours();
 
-  // Compute the [from, to] window from date + hourOffset.
-  // For today: anchor = now → window = [now - (offset+1)h, now - offset*h].
-  // For past days: anchor = end of that day at 23:59 local.
+  // When user switches date, reset hour to default for that day.
+  // Today → current hour. Past → 23 (end of day). Done via effect on `date`.
+  useEffect(() => {
+    setHourEnd(date === todayStr() ? new Date().getHours() : 23);
+  }, [date]);
+
   const { fromDate, toDate, windowLabel } = useMemo(() => {
-    let anchor: Date;
-    if (isToday) {
-      anchor = new Date(); // now
-    } else {
-      const [y, m, d] = date.split("-").map(Number);
-      anchor = new Date(y, m - 1, d, 23, 59, 59, 999);
-    }
-    const to = new Date(anchor.getTime() - hourOffset * 60 * 60 * 1000);
-    const from = new Date(to.getTime() - 60 * 60 * 1000);
-    return {
-      fromDate: from,
-      toDate: to,
-      windowLabel: `${fmtHour(from)} – ${fmtHour(to)}`,
-    };
-  }, [date, hourOffset, isToday]);
+    const [y, m, d] = date.split("-").map(Number);
+    // Window covers the FULL clock hour [hourEnd-1 : 00 ... hourEnd : 00]
+    const to = new Date(y, m - 1, d, hourEnd, 0, 0, 0);
+    const from = new Date(y, m - 1, d, hourEnd - 1, 0, 0, 0);
+    const startH = String(Math.max(0, hourEnd - 1)).padStart(2, "0");
+    const endH = String(hourEnd).padStart(2, "0");
+    return { fromDate: from, toDate: to, windowLabel: `${startH}–${endH}` };
+  }, [date, hourEnd]);
 
   const load = useCallback(
     async (mode: "initial" | "refresh") => {
@@ -150,8 +138,7 @@ export function PulsePage() {
             ‹
           </button>
           <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
-            {fmtDateLabel(date)}{" "}
-            <span className="text-muted-foreground ml-1.5">{date}</span>
+            {fmtDateLabel(date)}
           </div>
           <button
             type="button"
@@ -166,11 +153,12 @@ export function PulsePage() {
             ›
           </button>
 
-          {/* Hour window stepper */}
+          {/* Hour-window stepper */}
           <button
             type="button"
-            onClick={() => setHourOffset((h) => h + 1)}
-            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground ml-2"
+            onClick={() => setHourEnd((h) => Math.max(1, h - 1))}
+            disabled={hourEnd <= 1}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground ml-2 disabled:opacity-40 disabled:cursor-not-allowed"
             title="Earlier hour"
           >
             ‹
@@ -180,8 +168,11 @@ export function PulsePage() {
           </div>
           <button
             type="button"
-            onClick={() => setHourOffset((h) => Math.max(0, h - 1))}
-            disabled={hourOffset === 0}
+            onClick={() => {
+              const max = isToday ? currentHour : 23;
+              setHourEnd((h) => Math.min(max, h + 1));
+            }}
+            disabled={isToday ? hourEnd >= currentHour : hourEnd >= 23}
             className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
             title="Later hour"
           >
@@ -189,33 +180,31 @@ export function PulsePage() {
           </button>
         </div>
 
-        {/* Source toggle — 2 icons */}
+        {/* Source toggle — text labels */}
         <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
           <button
             type="button"
             onClick={() => setSource("presignup")}
-            title="Landing + Auth + Onboarding"
             className={
-              "h-8 w-10 inline-flex items-center justify-center rounded-md transition-colors text-base " +
+              "h-8 px-3 inline-flex items-center rounded-md text-[11px] font-medium transition-colors " +
               (source === "presignup"
                 ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground")
             }
           >
-            🌐
+            Landing + Auth + Onboarding
           </button>
           <button
             type="button"
             onClick={() => setSource("dashboard")}
-            title="Dashboard activity"
             className={
-              "h-8 w-10 inline-flex items-center justify-center rounded-md transition-colors text-base " +
+              "h-8 px-3 inline-flex items-center rounded-md text-[11px] font-medium transition-colors " +
               (source === "dashboard"
                 ? "bg-card text-foreground shadow-sm"
                 : "text-muted-foreground")
             }
           >
-            📊
+            Dashboard
           </button>
         </div>
 
