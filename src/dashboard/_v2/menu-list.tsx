@@ -172,19 +172,20 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {menuUrl ? (
- <span data-onboarding-target="preview" className="inline-flex">
- <PreviewButton url={menuUrl} onOpen={() => track("dash_menu_preview_open")} />
- </span>
+ <PreviewButton
+ url={menuUrl}
+ onOpen={() => track("dash_menu_preview_open")}
+ onboardingTarget="preview"
+ />
  ) : null}
  {menuUrl ? (
- <span data-onboarding-target="share" className="inline-flex">
  <ShareButton
  onClick={() => {
  track("dash_menu_share_open");
  setShareOpen(true);
  }}
+ onboardingTarget="share"
  />
- </span>
  ) : null}
  </div>
  <SubscriptionChip
