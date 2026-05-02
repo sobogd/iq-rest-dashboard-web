@@ -23,6 +23,58 @@ function countryToFlag(code: string): string {
   return String.fromCodePoint(A + code.charCodeAt(0) - a, A + code.charCodeAt(1) - a);
 }
 
+// Maps the 2-letter locale embedded in event names like "land_es_gclid_arrival"
+// to the country code we want to flag. Catalan landings live in Spain.
+const LOCALE_TO_COUNTRY: Record<string, string> = {
+  en: "GB",
+  es: "ES",
+  it: "IT",
+  de: "DE",
+  fr: "FR",
+  pt: "PT",
+  nl: "NL",
+  pl: "PL",
+  ru: "RU",
+  uk: "UA",
+  sv: "SE",
+  no: "NO",
+  da: "DK",
+  fi: "FI",
+  cs: "CZ",
+  sk: "SK",
+  hu: "HU",
+  ro: "RO",
+  bg: "BG",
+  hr: "HR",
+  sl: "SI",
+  sr: "RS",
+  el: "GR",
+  tr: "TR",
+  et: "EE",
+  lv: "LV",
+  lt: "LT",
+  is: "IS",
+  ga: "IE",
+  ca: "ES",
+  ar: "SA",
+  fa: "IR",
+  ja: "JP",
+  ko: "KR",
+  zh: "CN",
+};
+
+// For locale-tagged events (e.g. land_es_gclid_arrival) we'd rather show the
+// landing-page country than the visitor's geo IP — a German tourist hitting the
+// Spanish landing should still flag as ES.
+function flagFor(event: string, geoCountry: string): string {
+  const m = event.match(/^[a-z_]+_([a-z]{2})_/);
+  if (m) {
+    const locCountry = LOCALE_TO_COUNTRY[m[1]];
+    if (locCountry) return countryToFlag(locCountry);
+  }
+  return countryToFlag(geoCountry);
+}
+
 function todayStr(): string {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -224,7 +276,7 @@ export function PulsePage() {
                 className="flex items-center gap-2 px-3 py-1.5 text-xs"
               >
                 <span className="text-base shrink-0" title={row.country}>
-                  {countryToFlag(row.country)}
+                  {flagFor(row.event, row.country)}
                 </span>
                 <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
                 {row.gclid ? (
