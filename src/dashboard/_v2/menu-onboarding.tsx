@@ -115,16 +115,20 @@ export function MenuOnboarding() {
  // Sticky/fixed targets (preview + share buttons sit in a sticky header) are
  // always visible — auto-scroll on iOS misaligns the highlight overlay because
  // the rect we read changes mid-scroll. Skip scroll for those.
+ //
+ // Do NOT lock document scroll via overflow:hidden — that breaks `position:sticky`
+ // (sticky elements fall back to their natural document position, the highlight
+ // gets drawn around something halfway down the page). The dim overlay already
+ // captures clicks; users can still scroll, and the existing scroll listener
+ // re-measures rect so the highlight tracks the target.
  useEffect(() => {
  if (done) return;
  const el = document.querySelector(step.selector) as HTMLElement | null;
  if (!el) return;
- const html = document.documentElement;
  const body = document.body;
 
  const cs = window.getComputedStyle(el);
  const isPinned = cs.position === "sticky" || cs.position === "fixed";
- // Walk ancestors — buttons inside a sticky bar should also be treated as pinned.
  const inPinnedAncestor = (() => {
  let p: HTMLElement | null = el.parentElement;
  while (p && p !== body) {
@@ -142,13 +146,9 @@ export function MenuOnboarding() {
  const targetY = r.top + window.scrollY - window.innerHeight * 0.2;
  window.scrollTo(0, Math.max(0, targetY));
  }
- html.style.overflow = "hidden";
- body.style.overflow = "hidden";
  });
  return () => {
  window.cancelAnimationFrame(raf);
- html.style.overflow = "";
- body.style.overflow = "";
  };
  }, [done, step.selector]);
 
