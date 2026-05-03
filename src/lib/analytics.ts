@@ -7,19 +7,46 @@ const ADMIN_KEY = "iq_admin";
 
 function isAdminBrowser(): boolean {
   if (typeof window === "undefined") return false;
-  try { return localStorage.getItem(ADMIN_KEY) === "1"; } catch { return false; }
+  try {
+    if (localStorage.getItem(ADMIN_KEY) === "1") return true;
+  } catch {
+    // ignore
+  }
+  // Fallback to apex cookie set by setAdminFlag — covers cases where
+  // localStorage was cleared or the user lands on a fresh subdomain.
+  if (typeof document !== "undefined") {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${ADMIN_KEY}=([^;]*)`));
+    if (m && m[1] === "1") return true;
+  }
+  return false;
 }
 
 // Stamps the local browser as belonging to an admin so analytics calls become
 // no-ops. Called after every successful auth check — also clears the flag if
-// the same browser is later used by a non-admin account.
+// the same browser is later used by a non-admin account. The flag is mirrored
+// to an apex-domain cookie so the marketing site (different origin) can read
+// it and silence its own analytics for admin browsers too.
 export function setAdminFlag(email: string | null | undefined): void {
   if (typeof window === "undefined") return;
+  const isAdmin = isAdminEmail(email);
   try {
-    if (isAdminEmail(email)) localStorage.setItem(ADMIN_KEY, "1");
+    if (isAdmin) localStorage.setItem(ADMIN_KEY, "1");
     else localStorage.removeItem(ADMIN_KEY);
   } catch {
     // localStorage may be blocked — silently ignore.
+  }
+  // Apex-domain cookie so iq-rest.com (landing) sees it via document.cookie
+  // and via Next.js server cookies().
+  if (typeof document !== "undefined") {
+    const parts = [
+      `${ADMIN_KEY}=${isAdmin ? "1" : ""}`,
+      `domain=${apexDomain()}`,
+      `path=/`,
+      `max-age=${isAdmin ? 365 * 24 * 60 * 60 : 0}`,
+      `SameSite=Lax`,
+    ];
+    if (location.protocol === "https:") parts.push("Secure");
+    document.cookie = parts.join("; ");
   }
 }
 const SID_REGEX =
