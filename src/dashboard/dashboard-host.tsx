@@ -22,6 +22,7 @@ import type {
   ApiTable,
 } from "./_v2/api";
 import { isAdminEmail } from "@/lib/admin";
+import { setAdminFlag } from "@/lib/analytics";
 
 interface AuthCheck {
   authenticated: boolean;
@@ -59,6 +60,7 @@ export function DashboardHost() {
       navigate({ to: "/$locale/login", params: { locale: locale || "en" }, replace: true });
       return;
     }
+    setAdminFlag(authData.email);
     // The legacyDashboard flag is honoured only on /login (post-sign-in)
     // and NOT here, otherwise users who clicked "Try new dashboard" from
     // the old monolith would bounce straight back. Once they've reached

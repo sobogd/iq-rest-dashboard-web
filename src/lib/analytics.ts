@@ -1,7 +1,27 @@
 import { apiUrl } from "@/lib/api";
+import { isAdminEmail } from "@/lib/admin";
 
 const GCLID_KEY = "analytics_gclid";
 const SID_COOKIE = "analytics_sid";
+const ADMIN_KEY = "iq_admin";
+
+function isAdminBrowser(): boolean {
+  if (typeof window === "undefined") return false;
+  try { return localStorage.getItem(ADMIN_KEY) === "1"; } catch { return false; }
+}
+
+// Stamps the local browser as belonging to an admin so analytics calls become
+// no-ops. Called after every successful auth check — also clears the flag if
+// the same browser is later used by a non-admin account.
+export function setAdminFlag(email: string | null | undefined): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (isAdminEmail(email)) localStorage.setItem(ADMIN_KEY, "1");
+    else localStorage.removeItem(ADMIN_KEY);
+  } catch {
+    // localStorage may be blocked — silently ignore.
+  }
+}
 const SID_REGEX =
   /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|c[a-z0-9]{24})$/i;
 
@@ -60,6 +80,7 @@ function getGclid(): string | null {
 
 export function trackEvent(event: string): void {
   if (typeof window === "undefined") return;
+  if (isAdminBrowser()) return;
   ensureSid();
   const gclid = getGclid();
 
@@ -92,6 +113,7 @@ export function trackEvent(event: string): void {
 
 export function identify(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
+  if (isAdminBrowser()) return Promise.resolve();
   ensureSid();
   return fetch(apiUrl("/api/analytics/identify"), {
     method: "POST",
