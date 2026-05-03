@@ -446,7 +446,7 @@ export function AuthPage({
       .then((data) => {
         if (cancelled || !data?.authenticated) return;
         if (data.legacyDashboard) {
-          window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+          window.location.assign(`${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`);
           return;
         }
         window.location.assign(`/${locale}/dashboard`);
@@ -481,7 +481,7 @@ export function AuthPage({
           track("auth_click_google");
           await identify();
           if (data.legacyDashboard) {
-            window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+            window.location.assign(`${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`);
             return;
           }
           // Full reload so server layout re-fetches restaurant + auth state.
@@ -607,7 +607,7 @@ export function AuthPage({
         track("auth_click_verify");
         await identify();
         if (data.legacyDashboard) {
-          window.location.assign(`https://iq-rest.com/${locale}/dashboard`);
+          window.location.assign(`${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`);
           return;
         }
         window.location.assign(`/${locale}/dashboard`);
