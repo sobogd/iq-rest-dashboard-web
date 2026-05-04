@@ -21,6 +21,15 @@ function truncate(s: string, max: number): string {
   return s.length <= max ? s : s.slice(0, max) + "…";
 }
 
+/** Stable hash → HSL hue. Rows sharing country|region|device|platform get the
+ *  same colour dot so likely-same-visitor anonymous sessions cluster visually. */
+function sessionHueFor(row: UsageRow): number {
+  const key = `${row.country}|${row.region}|${row.device || ""}|${row.platform || ""}`;
+  let h = 5381;
+  for (let i = 0; i < key.length; i++) h = ((h << 5) + h + key.charCodeAt(i)) >>> 0;
+  return h % 360;
+}
+
 export type UsageScope = "anonymous" | "identified";
 
 function countryToFlag(code: string): string {
@@ -227,6 +236,11 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
               onClick={() => setSelected(row)}
               className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
             >
+              <span
+                className="inline-block w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
+                title={`Session group: ${row.country} ${row.region || "—"} / ${row.device || "—"} / ${row.platform || "—"}`}
+              />
               <span className="text-base shrink-0" title={row.country}>
                 {countryToFlag(row.country)}
               </span>
