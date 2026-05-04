@@ -33,7 +33,7 @@ export const COOKIE_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }[
   {
     heading: "1. What cookies are",
     paragraphs: [
-      `Cookies are small text files that a website places on your device when you visit. They allow the site to remember your choices, keep you signed in, and understand how the site is used. Some cookies are essential for the site to function; others are used for analytics or other purposes that require your consent.`,
+      `Cookies are small text files that a website places on your device when you visit. They allow the site to remember your choices, keep you signed in, and understand how the site is used. We only use cookies that are strictly necessary to operate the Site, so no cookie consent banner is shown.`,
     ],
   },
   {
@@ -45,34 +45,30 @@ export const COOKIE_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }[
   {
     heading: "3. Strictly necessary cookies",
     paragraphs: [
-      `These cookies are required to operate the Site and the dashboard. Without them you would not be able to sign in, navigate language-specific pages, or place orders. They are set automatically and do not require consent under Article 5(3) of the ePrivacy Directive (the "strictly necessary" exemption).`,
+      `These are the only cookies we set. They are required to operate the Site and the dashboard — without them you would not be able to sign in, navigate language-specific pages, or place orders. They are set automatically and do not require consent under Article 5(3) of the ePrivacy Directive (the "strictly necessary" exemption).`,
       `Examples of strictly necessary cookies we use:`,
-      `• iqr_session, iqr_email, session, user_email — keep you signed in to the dashboard`,
+      `• iqr_session, iqr_email — keep you signed in to the dashboard`,
       `• sqr_session_id — identifies the visitor's browsing session on the public QR menu so cart contents persist between pages`,
-      `• geo_country, geo_city, geo_ip, geo_ua — country detected from your IP via Cloudflare; used to pick the best language and currency`,
+      `• geo_country, geo_region, geo_city, geo_ip, geo_ua — country detected from your IP via Cloudflare; used to pick the best language and currency`,
       `• currency — your selected currency for pricing display`,
-      `• cookie_consent — remembers your cookie choice for one year`,
     ],
   },
   {
-    heading: "4. Analytics cookies (require your consent)",
+    heading: "4. Analytics — no cookies on your device",
     paragraphs: [
-      `If you click "Accept" on the cookie banner, we set additional first-party cookies to measure usage of the Site and improve features. These cookies do not contain personal information beyond a random session identifier; data is stored on our own servers and never shared with third parties.`,
-      `Examples:`,
-      `• analytics_sid — anonymous session identifier used to count unique visitors and track navigation paths`,
-      `If you click "Reject", these cookies are not set and no analytics data is collected from your visit.`,
+      `We measure how the Site is used through anonymous first-party events sent to our own server. No analytics-specific cookie is stored on your device, no cross-site identifier exists, and the events cannot be linked back to you as an individual. Each event records only the action name (e.g. "land_pricing_view"), the moment it occurred, and approximate geo (country and region from your IP via Cloudflare). Lawful under ePrivacy because nothing is written to your device beyond the strictly necessary cookies above.`,
     ],
   },
   {
-    heading: "5. Marketing and advertising cookies",
+    heading: "5. Google Ads attribution (gclid)",
     paragraphs: [
-      `We do not use advertising cookies, retargeting pixels, or third-party marketing trackers. If a visitor arrives via a Google Ads click, we may store the click identifier (gclid) in our own database for attribution; this is grouped under analytics consent and is not shared with Google or any other party beyond what Google itself receives via its own conversion pixel.`,
+      `If you arrive via a Google Ads click, the click identifier (gclid) is included in the URL by Google. We store this gclid in our own database for up to 90 days and use it to upload conversion events back to Google Ads (server-to-server) so we can measure which ads work. This processing relies on our legitimate interest in evaluating advertising effectiveness (GDPR Art. 6(1)(f)). It does not require a cookie banner because no cookie is set on your device for this purpose. You may object to this processing at any time by emailing ${OPERATOR.contactEmail} with the gclid from your original ad-click URL.`,
     ],
   },
   {
-    heading: "6. How to change your choice",
+    heading: "6. No marketing or third-party trackers",
     paragraphs: [
-      `You can change your cookie preference at any time by clearing the cookie_consent cookie in your browser settings. The next time you load the Site, the banner will reappear and you can choose again.`,
+      `We do not use advertising cookies, retargeting pixels, third-party marketing trackers, Google Analytics, Facebook Pixel, Hotjar, or similar services. The only data we send to Google is server-to-server conversion uploads via the gclid mechanism described above.`,
     ],
   },
   {
@@ -126,7 +122,8 @@ export const PRIVACY_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }
       `Reservations — for each booking: guest name, guest email, guest phone (optional), party size, date, time, duration, table assignment, status, internal notes.`,
       `Orders — for each public order: customer name (optional), customer phone (optional), delivery address (optional), comment, table number, items ordered, total amount, currency, status.`,
       `Support messages — content of messages you exchange with our support team.`,
-      `Analytics & technical data (only with cookie consent) — anonymous session identifier; pages visited; events triggered (clicks, conversions); country and city derived from your IP via Cloudflare; browser User-Agent; gclid (Google Ads click identifier) for ad attribution.`,
+      `Analytics & technical data — anonymous first-party events (action name, timestamp, country and region derived from your IP via Cloudflare). No analytics-specific cookie is stored on your device.`,
+      `Google Ads attribution — when you arrive via a Google Ads click, we store the click identifier (gclid) for up to 90 days to upload conversion events back to Google Ads (server-to-server). Processed under legitimate interest; you may object at any time by emailing ${OPERATOR.contactEmail}.`,
       `Public-menu page views — when guests scan a QR code: anonymous session id, page slug, language, referrer, IP, User-Agent. Used for scan-count limits and the analytics dashboard you see.`,
       `Payment data — handled by Stripe; we never see or store full card details. We hold only the Stripe customer/subscription IDs and high-level subscription state.`,
     ],
@@ -136,8 +133,7 @@ export const PRIVACY_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }
     paragraphs: [
       `Each category is processed under one of the legal bases in GDPR Article 6:`,
       `Contract performance (Art. 6(1)(b)) — account data, authentication data, business profile, restaurant profile, menu content, reservations, orders, support messages, payment data. Required to provide the Service you signed up for.`,
-      `Legitimate interest (Art. 6(1)(f)) — short-term operational logs, fraud and abuse prevention, basic aggregate metrics. Balanced against your rights; you can object at any time.`,
-      `Consent (Art. 6(1)(a)) — analytics cookies and technical data described in section 2 marked "only with cookie consent". You can withdraw consent at any time via the Cookie Settings link in the footer.`,
+      `Legitimate interest (Art. 6(1)(f)) — anonymous first-party analytics, short-term operational logs, fraud and abuse prevention, Google Ads conversion attribution via gclid. Balanced against your rights; you can object at any time by emailing ${OPERATOR.contactEmail}.`,
       `Legal obligation (Art. 6(1)(c)) — invoicing data we are required to retain by Spanish tax law.`,
     ],
   },
@@ -148,7 +144,7 @@ export const PRIVACY_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }
       `Authenticate you: send OTP codes by email, validate Google OAuth tokens, manage sessions.`,
       `Bill you: process subscription payments through Stripe, send invoices.`,
       `Communicate with you: account and service notices, support replies, important changes to the Service. We do not send marketing emails without your separate consent.`,
-      `Improve the platform: aggregate usage analytics (only with cookie consent), debugging, performance monitoring.`,
+      `Improve the platform: anonymous first-party usage analytics, debugging, performance monitoring.`,
       `Comply with legal obligations: tax records, regulatory reporting when required.`,
     ],
   },
@@ -166,7 +162,7 @@ export const PRIVACY_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }
       `We share data with the minimum number of third parties necessary to operate the Service:`,
       `Stripe, Inc. — payment processing. Receives your billing email, billing address (if provided), and the amount and product of each transaction. Stripe is a separate data controller for payment data. Privacy: https://stripe.com/privacy`,
       `Hetzner Online GmbH — server hosting (Nuremberg, Germany). Acts as a data processor under a Data Processing Agreement; cannot access database contents in normal operation.`,
-      `Google LLC (only if you sign in with Google) — receives only the standard OAuth scope (email, name, picture). Same data Google already has on you. We do not send analytics or events to Google.`,
+      `Google LLC — (a) if you sign in with Google, receives only the standard OAuth scope (email, name, picture); same data Google already has on you. (b) For visitors arriving from Google Ads, we upload conversion events to the Google Ads API (server-to-server) using the gclid from your URL — no client-side tracker is loaded.`,
       `Cloudflare, Inc. — CDN and DDoS protection. Sees inbound HTTP requests including your IP address and User-Agent. Acts as a data processor.`,
       `We do not sell or rent your personal data to anyone. We do not use Google Analytics, PostHog, Facebook Pixel, Mixpanel, Amplitude, or any other third-party analytics or advertising tracker.`,
     ],
@@ -197,8 +193,7 @@ export const PRIVACY_POLICY_SECTIONS: { heading?: string; paragraphs: string[] }
       `Erasure ("right to be forgotten") — request deletion of your data; we will comply unless retention is required by law.`,
       `Restriction — pause processing while a complaint is investigated.`,
       `Portability — receive your data in a structured, machine-readable format and transfer it to another provider.`,
-      `Object — object to processing based on legitimate interest, including opting out of analytics.`,
-      `Withdraw consent — withdraw cookie consent at any time via the Cookie Settings link in the footer.`,
+      `Object — object to processing based on legitimate interest, including anonymous analytics and Google Ads attribution. Email ${OPERATOR.contactEmail} (include the gclid from your original ad-click URL if you want to exclude past Google Ads attribution).`,
       `Lodge a complaint — file a complaint with the Spanish data protection authority, the Agencia Española de Protección de Datos (AEPD), at www.aepd.es.`,
       `To exercise any of these rights, email ${OPERATOR.contactEmail}. We respond within 30 days.`,
     ],

@@ -6,6 +6,7 @@ import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
 import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { useDashboardRouter } from "../_spa/router";
+import { UsageEventsTable } from "./usage-events-table";
 
 interface User {
   id: string;
@@ -74,7 +75,7 @@ interface Message {
   user: { email: string };
 }
 
-type Tab = "info" | "messages";
+type Tab = "info" | "messages" | "events";
 
 interface Props {
   companyId: string;
@@ -412,6 +413,16 @@ export function AdminCompanyPage({ companyId }: Props) {
               <span className="ml-1 opacity-70">({company.messagesCount})</span>
             ) : null}
           </button>
+          <button
+            type="button"
+            onClick={() => setTab("events")}
+            className={
+              "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
+              (tab === "events" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
+            }
+          >
+            Events
+          </button>
         </div>
       </SubpageStickyBar>
       <div
@@ -541,6 +552,8 @@ export function AdminCompanyPage({ companyId }: Props) {
             </button>
           </div>
         </div>
+      ) : tab === "events" ? (
+        <UsageEventsTable companyId={companyId} />
       ) : (
         <>
           <div

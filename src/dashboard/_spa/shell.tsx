@@ -32,6 +32,7 @@ import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { SessionsPage } from "../_pages/sessions";
 import { PulsePage } from "../_pages/pulse";
+import { UsagePage } from "../_pages/usage";
 import { SessionDetailPage } from "../_pages/session-detail";
 import { AuthPage } from "../../auth/auth-page";
 
@@ -238,6 +239,8 @@ function ViewSwitch(p: SwitchProps) {
       return <SessionDetailPage sessionId={view.sessionId} />;
     case "settings.admin.pulse":
       return <PulsePage />;
+    case "settings.admin.usage":
+      return <UsagePage />;
 
     case "category.new":
       return (

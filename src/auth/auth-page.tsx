@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
-import { identify } from "@/lib/analytics";
 import { track } from "@/lib/dashboard-events";
 import { landingUrl } from "@/lib/landing-url";
 import { LogoIcon } from "@/shared/logo-icon";
@@ -480,7 +479,6 @@ export function AuthPage({
         const data = await res.json();
         if (res.ok) {
           track("auth_click_google");
-          await identify();
           if (data.legacyDashboard) {
             window.location.assign(`${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`);
             return;
@@ -606,7 +604,6 @@ export function AuthPage({
 
       if (res.ok) {
         track("auth_click_verify");
-        await identify();
         if (data.legacyDashboard) {
           window.location.assign(`${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`);
           return;
