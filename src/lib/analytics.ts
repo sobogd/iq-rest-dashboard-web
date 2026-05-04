@@ -130,6 +130,7 @@ export function trackEvent(event: string): void {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       event,
+      occurredAt: Date.now(),
       ...(gclid ? { gclid } : {}),
       ...(country && /^[A-Z]{2}$/.test(country) ? { country } : {}),
       ...(region ? { region } : {}),
