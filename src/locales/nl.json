@@ -509,6 +509,10 @@
         "noCode": "Geen code geregistreerd. Vraag een nieuwe aan.",
         "invalidCode": "Onjuiste code. Probeer opnieuw.",
         "tooManyAttempts": "Te veel pogingen. Wacht en probeer later."
+      },
+      "haveAccount": {
+        "text": "Al een account?",
+        "link": "Inloggen"
       }
     },
     "admin": {

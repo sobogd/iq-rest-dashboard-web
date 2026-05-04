@@ -2,6 +2,7 @@ import { Loader2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLocale } from "next-intl";
 import { landingUrl } from "@/lib/landing-url";
+import { LogoIcon } from "@/shared/logo-icon";
 
 export function WizardCard({ children }: { children: ReactNode }) {
   return (
@@ -19,9 +20,10 @@ export function WizardLogo() {
     <div className="mb-3">
       <a
         href={landingUrl(locale)}
-        className="text-2xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity"
+        className="flex items-center gap-1.5 text-[18px] font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity w-fit"
       >
-        IQ <span className="text-primary">Rest</span>
+        <LogoIcon className="h-7 w-7" />
+        Rest
       </a>
     </div>
   );

@@ -509,6 +509,10 @@
         "noCode": "Enginn skráður kóði. Biddu um nýjan.",
         "invalidCode": "Rangur kóði. Reyndu aftur.",
         "tooManyAttempts": "Of margar tilraunir. Bíddu og reyndu síðar."
+      },
+      "haveAccount": {
+        "text": "Ertu þegar með reikning?",
+        "link": "Skrá inn"
       }
     },
     "admin": {

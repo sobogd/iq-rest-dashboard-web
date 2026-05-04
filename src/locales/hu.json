@@ -509,6 +509,10 @@
         "noCode": "Nincs rögzített kód. Kérj újat.",
         "invalidCode": "Hibás kód. Próbáld újra.",
         "tooManyAttempts": "Túl sok próbálkozás. Várj, és próbáld később."
+      },
+      "haveAccount": {
+        "text": "Már van fiókod?",
+        "link": "Bejelentkezés"
       }
     },
     "admin": {

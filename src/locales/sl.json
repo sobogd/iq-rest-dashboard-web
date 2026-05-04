@@ -509,6 +509,10 @@
         "noCode": "Ni zabeležene kode. Zahtevajte novo.",
         "invalidCode": "Napačna koda. Poskusite znova.",
         "tooManyAttempts": "Preveč poskusov. Počakajte in poskusite kasneje."
+      },
+      "haveAccount": {
+        "text": "Imate že račun?",
+        "link": "Prijava"
       }
     },
     "admin": {

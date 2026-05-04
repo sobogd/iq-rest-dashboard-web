@@ -509,6 +509,10 @@
         "noCode": "Kayıtlı kod yok. Yenisini isteyin.",
         "invalidCode": "Yanlış kod. Tekrar deneyin.",
         "tooManyAttempts": "Çok fazla deneme. Bekleyin ve daha sonra tekrar deneyin."
+      },
+      "haveAccount": {
+        "text": "Zaten hesabınız var mı?",
+        "link": "Giriş yap"
       }
     },
     "admin": {

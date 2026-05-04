@@ -509,6 +509,10 @@
         "noCode": "Nėra įrašyto kodo. Užklauskite naujo.",
         "invalidCode": "Neteisingas kodas. Bandykite dar kartą.",
         "tooManyAttempts": "Per daug bandymų. Palaukite ir bandykite vėliau."
+      },
+      "haveAccount": {
+        "text": "Jau turite paskyrą?",
+        "link": "Prisijungti"
       }
     },
     "admin": {

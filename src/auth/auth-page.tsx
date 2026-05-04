@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import { identify } from "@/lib/analytics";
 import { track } from "@/lib/dashboard-events";
 import { landingUrl } from "@/lib/landing-url";
+import { LogoIcon } from "@/shared/logo-icon";
 import { LegalModal, type LegalView } from "@/components/legal-modal";
 
 declare global {
@@ -55,12 +56,13 @@ const secondaryButtonClass =
 function Logo() {
   const locale = useLocale();
   return (
-    <div className="flex justify-center mb-5">
+    <div className="mb-6">
       <a
         href={landingUrl(locale)}
-        className="text-3xl font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity"
+        className="flex items-center gap-2 text-[22px] font-semibold tracking-tight text-foreground hover:opacity-80 transition-opacity w-fit"
       >
-        IQ <span className="text-primary">Rest</span>
+        <LogoIcon className="h-9 w-9" />
+        Rest
       </a>
     </div>
   );
@@ -140,7 +142,6 @@ function EmailScreen({
           autoComplete="email"
           required
           placeholder={t("emailPlaceholder")}
-          autoFocus
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onFocus={() => track("auth_focus_email")}
@@ -208,6 +209,7 @@ function EmailScreen({
         </button>
         .
       </p>
+
     </>
   );
 }
@@ -351,7 +353,6 @@ function VerifyScreen({
             onChange={(e) => setDigit(idx, e.target.value)}
             onKeyDown={(e) => handleKeyDown(idx, e)}
             onFocus={(e) => { track("auth_focus_otp"); e.target.select(); }}
-            autoFocus={idx === 0}
             disabled={status === "loading"}
             className="flex-1 min-w-0 h-12 text-center text-lg font-medium text-foreground bg-card border border-input rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors tabular-nums disabled:opacity-50"
           />

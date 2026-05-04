@@ -509,6 +509,10 @@
         "noCode": "Žiadny kód. Vyžiadajte si nový.",
         "invalidCode": "Nesprávny kód. Skúste znova.",
         "tooManyAttempts": "Príliš veľa pokusov. Počkajte a skúste neskôr."
+      },
+      "haveAccount": {
+        "text": "Už máte účet?",
+        "link": "Prihlásiť sa"
       }
     },
     "admin": {

@@ -509,6 +509,10 @@
         "noCode": "No code on file. Request a new one.",
         "invalidCode": "Wrong code. Try again.",
         "tooManyAttempts": "Too many attempts. Wait and try again later."
+      },
+      "haveAccount": {
+        "text": "Already have an account?",
+        "link": "Sign in"
       }
     },
     "createFlow": {

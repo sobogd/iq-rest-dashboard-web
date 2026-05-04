@@ -509,6 +509,10 @@
         "noCode": "Brak zapisanego kodu. Poproś o nowy.",
         "invalidCode": "Niepoprawny kod. Spróbuj ponownie.",
         "tooManyAttempts": "Zbyt wiele prób. Poczekaj i spróbuj później."
+      },
+      "haveAccount": {
+        "text": "Masz już konto?",
+        "link": "Zaloguj się"
       }
     },
     "admin": {

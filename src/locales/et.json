@@ -509,6 +509,10 @@
         "noCode": "Salvestatud koodi pole. Telli uus.",
         "invalidCode": "Vale kood. Proovi uuesti.",
         "tooManyAttempts": "Liiga palju katseid. Oota ja proovi hiljem."
+      },
+      "haveAccount": {
+        "text": "Kas teil on juba konto?",
+        "link": "Logige sisse"
       }
     },
     "admin": {

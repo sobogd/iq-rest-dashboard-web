@@ -509,6 +509,10 @@
         "noCode": "Nessun codice registrato. Richiedine uno nuovo.",
         "invalidCode": "Codice errato. Riprova.",
         "tooManyAttempts": "Troppi tentativi. Aspetta e riprova più tardi."
+      },
+      "haveAccount": {
+        "text": "Hai già un account?",
+        "link": "Accedi"
       }
     },
     "admin": {

@@ -509,6 +509,10 @@
         "noCode": "Nema zabilježenog koda. Zatražite novi.",
         "invalidCode": "Pogrešan kod. Pokušajte ponovno.",
         "tooManyAttempts": "Previše pokušaja. Pričekajte i pokušajte kasnije."
+      },
+      "haveAccount": {
+        "text": "Već imate račun?",
+        "link": "Prijava"
       }
     },
     "admin": {

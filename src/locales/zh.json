@@ -509,6 +509,10 @@
         "noCode": "无记录验证码。请请求新的。",
         "invalidCode": "验证码错误。请重试。",
         "tooManyAttempts": "尝试次数过多。请稍候后再试。"
+      },
+      "haveAccount": {
+        "text": "已有账户?",
+        "link": "登录"
       }
     },
     "admin": {

@@ -509,6 +509,10 @@
         "noCode": "Ingen kode registreret. Bed om en ny.",
         "invalidCode": "Forkert kode. Prøv igen.",
         "tooManyAttempts": "For mange forsøg. Vent og prøv senere."
+      },
+      "haveAccount": {
+        "text": "Har du allerede en konto?",
+        "link": "Log ind"
       }
     },
     "admin": {

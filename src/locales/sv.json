@@ -509,6 +509,10 @@
         "noCode": "Ingen kod registrerad. Begär en ny.",
         "invalidCode": "Fel kod. Försök igen.",
         "tooManyAttempts": "För många försök. Vänta och försök senare."
+      },
+      "haveAccount": {
+        "text": "Har du redan ett konto?",
+        "link": "Logga in"
       }
     },
     "admin": {

@@ -509,6 +509,10 @@
         "noCode": "Nav reģistrēta koda. Pieprasiet jaunu.",
         "invalidCode": "Nepareizs kods. Mēģiniet vēlreiz.",
         "tooManyAttempts": "Pārāk daudz mēģinājumu. Pagaidiet un mēģiniet vēlāk."
+      },
+      "haveAccount": {
+        "text": "Vai jums jau ir konts?",
+        "link": "Pieslēgties"
       }
     },
     "admin": {

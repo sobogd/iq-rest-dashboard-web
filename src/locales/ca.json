@@ -509,6 +509,10 @@
         "noCode": "No hi ha codi registrat. Demana'n un de nou.",
         "invalidCode": "Codi incorrecte. Torna-ho a provar.",
         "tooManyAttempts": "Massa intents. Espera i torna-ho a provar més tard."
+      },
+      "haveAccount": {
+        "text": "Ja tens un compte?",
+        "link": "Inicia sessió"
       }
     },
     "admin": {

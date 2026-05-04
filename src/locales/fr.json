@@ -509,6 +509,10 @@
         "noCode": "Aucun code enregistré. Demandez-en un nouveau.",
         "invalidCode": "Code incorrect. Réessayez.",
         "tooManyAttempts": "Trop de tentatives. Attendez et réessayez plus tard."
+      },
+      "haveAccount": {
+        "text": "Vous avez déjà un compte ?",
+        "link": "Se connecter"
       }
     },
     "admin": {

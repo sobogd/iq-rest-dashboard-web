@@ -509,6 +509,10 @@
         "noCode": "Gan cód cláraithe. Iarr ceann nua.",
         "invalidCode": "Cód mícheart. Bain triail eile.",
         "tooManyAttempts": "An iomarca iarrachtaí. Fan agus bain triail eile níos déanaí."
+      },
+      "haveAccount": {
+        "text": "Cuntas agat cheana?",
+        "link": "Logáil isteach"
       }
     },
     "admin": {

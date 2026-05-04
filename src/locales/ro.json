@@ -509,6 +509,10 @@
         "noCode": "Niciun cod înregistrat. Cere unul nou.",
         "invalidCode": "Cod greșit. Încearcă din nou.",
         "tooManyAttempts": "Prea multe încercări. Așteaptă și încearcă mai târziu."
+      },
+      "haveAccount": {
+        "text": "Aveți deja un cont?",
+        "link": "Conectați-vă"
       }
     },
     "admin": {

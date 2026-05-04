@@ -509,6 +509,10 @@
         "noCode": "Sem código registado. Peça um novo.",
         "invalidCode": "Código errado. Tente novamente.",
         "tooManyAttempts": "Demasiadas tentativas. Aguarde e tente mais tarde."
+      },
+      "haveAccount": {
+        "text": "Já tem conta?",
+        "link": "Iniciar sessão"
       }
     },
     "admin": {

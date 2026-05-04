@@ -509,6 +509,10 @@
         "noCode": "Ei tallennettua koodia. Pyydä uusi.",
         "invalidCode": "Väärä koodi. Yritä uudelleen.",
         "tooManyAttempts": "Liian monta yritystä. Odota ja yritä myöhemmin."
+      },
+      "haveAccount": {
+        "text": "Onko sinulla jo tili?",
+        "link": "Kirjaudu sisään"
       }
     },
     "admin": {

@@ -509,6 +509,10 @@
         "noCode": "No hay código registrado. Solicita uno nuevo.",
         "invalidCode": "Código incorrecto. Inténtalo de nuevo.",
         "tooManyAttempts": "Demasiados intentos. Espera y vuelve a intentarlo."
+      },
+      "haveAccount": {
+        "text": "¿Ya tienes una cuenta?",
+        "link": "Inicia sesión"
       }
     },
     "createFlow": {

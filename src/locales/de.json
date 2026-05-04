@@ -509,6 +509,10 @@
         "noCode": "Kein Code hinterlegt. Neuen anfordern.",
         "invalidCode": "Falscher Code. Erneut versuchen.",
         "tooManyAttempts": "Zu viele Versuche. Bitte später erneut versuchen."
+      },
+      "haveAccount": {
+        "text": "Schon ein Konto?",
+        "link": "Anmelden"
       }
     },
     "admin": {

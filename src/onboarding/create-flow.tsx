@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AuthPage } from "@/auth/auth-page";
 import { CUISINE_KEYS, CUISINE_META, type CuisineKey } from "@/onboarding/cuisine";
 import { track } from "@/lib/dashboard-events";
@@ -15,6 +15,8 @@ const TOTAL_STEPS = 3;
 
 export function CreateFlow() {
   const t = useTranslations("dashboard.createFlow");
+  const tAuth = useTranslations("dashboard.auth");
+  const locale = useLocale();
   const [step, setStep] = useState(1);
   const [cuisine, setCuisine] = useState<CuisineKey | null>(null);
   const [restaurantName, setRestaurantName] = useState("");
@@ -45,14 +47,13 @@ export function CreateFlow() {
     return () => window.removeEventListener("popstate", onPopState);
   }, [step]);
 
-  const next = () =>
-    setStep((s) => {
-      const ns = Math.min(s + 1, TOTAL_STEPS);
-      if (ns > s && typeof window !== "undefined") {
-        window.history.pushState({ wizardStep: ns }, "");
-      }
-      return ns;
-    });
+  const next = () => {
+    const ns = Math.min(step + 1, TOTAL_STEPS);
+    if (ns > step && typeof window !== "undefined") {
+      window.history.pushState({ wizardStep: ns }, "");
+    }
+    setStep(ns);
+  };
   const back = () => {
     if (typeof window !== "undefined" && window.history.length > 1) {
       // Use the browser's history so the URL/state stays consistent.
@@ -110,6 +111,18 @@ export function CreateFlow() {
           <WizardHeader title={t("step3.title")} subtitle={t("step3.subtitle")} />
           <AuthPage embedded skipAuthCheck signupContext={signupContext} />
         </>
+      )}
+
+      {step !== 3 && (
+        <p className="text-xs text-muted-foreground text-center mt-6 pt-5 border-t border-border">
+          {tAuth("haveAccount.text")}{" "}
+          <a
+            href={`/${locale}/login`}
+            className="text-foreground/80 hover:text-foreground underline underline-offset-2 transition-colors"
+          >
+            {tAuth("haveAccount.link")}
+          </a>
+        </p>
       )}
     </WizardCard>
   );
@@ -199,7 +212,6 @@ function NameStep({
         id="create-flow-name"
         type="text"
         required
-        autoFocus
         placeholder={t("step2.namePlaceholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
