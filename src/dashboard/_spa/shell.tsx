@@ -30,10 +30,7 @@ import { AnalyticsClient } from "../analytics/analytics-client";
 import { SettingsHubView } from "./views/settings-hub";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
-import { SessionsPage } from "../_pages/sessions";
-import { PulsePage } from "../_pages/pulse";
 import { UsagePage } from "../_pages/usage";
-import { SessionDetailPage } from "../_pages/session-detail";
 import { AuthPage } from "../../auth/auth-page";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -233,12 +230,6 @@ function ViewSwitch(p: SwitchProps) {
       return <AdminPage />;
     case "settings.admin.company":
       return <AdminCompanyPage companyId={view.id} />;
-    case "settings.admin.sessions":
-      return <SessionsPage />;
-    case "settings.admin.session":
-      return <SessionDetailPage sessionId={view.sessionId} />;
-    case "settings.admin.pulse":
-      return <PulsePage />;
     case "settings.admin.usage":
       return <UsagePage />;
 

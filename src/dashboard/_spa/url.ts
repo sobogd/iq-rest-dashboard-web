@@ -55,12 +55,6 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/admin/companies";
     case "settings.admin.company":
       return `/dashboard/settings/admin/companies/${view.id}`;
-    case "settings.admin.sessions":
-      return view.period ? `/dashboard/sessions?period=${view.period}` : "/dashboard/sessions";
-    case "settings.admin.session":
-      return `/dashboard/sessions/${view.sessionId}`;
-    case "settings.admin.pulse":
-      return "/dashboard/settings/admin/pulse";
     case "settings.admin.usage":
       return "/dashboard/settings/admin/usage";
     case "category.new":
@@ -114,15 +108,6 @@ export function pathToView(path: string): View {
   const companyMatch = stripped.match(/^\/dashboard\/settings\/admin\/companies\/([^/]+)$/);
   if (companyMatch) return { name: "settings.admin.company", id: companyMatch[1] };
 
-  // Sessions admin (both /dashboard/sessions and /dashboard/settings/admin/sessions paths point at the same view)
-  if (stripped === "/dashboard/sessions" || stripped === "/dashboard/settings/admin/sessions") {
-    const p = params.get("period");
-    const period = p === "yesterday" || p === "today" ? p : undefined;
-    return { name: "settings.admin.sessions", ...(period ? { period } : {}) };
-  }
-  const sessionMatch = stripped.match(/^\/dashboard\/(?:settings\/admin\/)?sessions\/([^/]+)$/);
-  if (sessionMatch) return { name: "settings.admin.session", sessionId: sessionMatch[1] };
-  if (stripped === "/dashboard/settings/admin/pulse") return { name: "settings.admin.pulse" };
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
 
   // Top-level tabs

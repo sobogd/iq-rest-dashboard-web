@@ -47,7 +47,6 @@ interface Company {
   messagesCount: number;
   monthlyViews: number;
   scanLimit: number;
-  sessionId: string | null;
   users: User[];
   restaurants: Restaurant[];
   emailsSent: Record<string, string> | null;
@@ -381,10 +380,6 @@ export function AdminCompanyPage({ companyId }: Props) {
 
   const menuLink = restaurant?.slug ? `/m/${restaurant.slug}` : null;
 
-  function openSession() {
-    if (!company?.sessionId) return;
-    router.push({ name: "settings.admin.session", sessionId: company.sessionId });
-  }
 
   return (
     <div className={tab === "messages" ? "flex flex-col h-[calc(100dvh-var(--topbar-h,0px)-116px)] md:h-[calc(100dvh-var(--topbar-h,0px)-56px)]" : ""}>
@@ -480,16 +475,6 @@ export function AdminCompanyPage({ companyId }: Props) {
 
           {/* Action buttons */}
           <div className="space-y-2">
-            {company.sessionId ? (
-              <button
-                type="button"
-                onClick={openSession}
-                className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
-              >
-                View Session
-              </button>
-            ) : null}
-
             {menuLink ? (
               <button
                 type="button"
