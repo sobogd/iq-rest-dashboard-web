@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AuthPage } from "@/auth/auth-page";
+import { apiUrl } from "@/lib/api";
 import { CUISINE_KEYS, CUISINE_META, type CuisineKey } from "@/onboarding/cuisine";
 import { track } from "@/lib/dashboard-events";
 import {
@@ -24,6 +25,28 @@ export function CreateFlow() {
   useEffect(() => {
     track("create_flow_first_view");
   }, []);
+
+  // Already-authenticated visitors skip the wizard and land on the right dashboard.
+  // Legacy companies → old monolith; everyone else → /<locale>/dashboard.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(apiUrl("/api/auth/check"), { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.authenticated) return;
+        if (data.legacyDashboard) {
+          window.location.assign(
+            `${import.meta.env.VITE_LEGACY_DASHBOARD_URL || "https://iq-rest.com"}/${locale}/dashboard`,
+          );
+          return;
+        }
+        window.location.assign(`/${locale}/dashboard`);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
 
   // Trap browser-back: from step 2 (name) and step 3, send the user to the
   // previous wizard step instead of letting the browser pop us back out to the
