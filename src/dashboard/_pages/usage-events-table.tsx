@@ -310,54 +310,7 @@ function parseAdParams(raw: string | null): Array<[string, string]> {
   }
 }
 
-function ConversionPicker({ gclid, onClose }: { gclid: string; onClose: () => void }) {
-  const [loading, setLoading] = useState<string | null>(null);
-  const [done, setDone] = useState<string | null>(null);
-
-  async function upload(type: string) {
-    setLoading(type);
-    try {
-      const res = await fetch(apiUrl("/api/admin/usage/upload-conversion"), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gclid, type }),
-      });
-      if (res.ok) setDone(type);
-    } finally {
-      setLoading(null);
-    }
-  }
-
-  return (
-    <div onClick={(e) => e.stopPropagation()} className="mt-3 pt-3 border-t border-border">
-      <p className="text-[11px] text-muted-foreground mb-2">Upload conversion</p>
-      {done ? (
-        <p className="text-xs text-green-500">{done} uploaded ✓</p>
-      ) : (
-        <div className="flex gap-2">
-          {["T1", "T2", "T3"].map((t) => (
-            <button
-              key={t}
-              type="button"
-              disabled={!!loading}
-              onClick={() => void upload(t)}
-              className="h-7 px-3 text-xs font-medium bg-secondary hover:bg-muted rounded-md disabled:opacity-50"
-            >
-              {loading === t ? "…" : t}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
-  const [showConvPicker, setShowConvPicker] = useState(false);
-
-  useEffect(() => { setShowConvPicker(false); }, [event]);
-
   if (!event) return null;
   const at = new Date(event.at);
   const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
@@ -409,21 +362,6 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
             </div>
           ))}
         </div>
-        {event.gclid && (
-          <div className="px-4 pb-4">
-            {showConvPicker ? (
-              <ConversionPicker gclid={event.gclid} onClose={() => setShowConvPicker(false)} />
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowConvPicker(true)}
-                className="mt-3 h-8 px-4 text-xs font-medium bg-[#4285f4] hover:bg-[#3367d6] text-white rounded-md w-full"
-              >
-                Upload to Google Ads
-              </button>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
