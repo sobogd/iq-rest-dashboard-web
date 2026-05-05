@@ -13,8 +13,7 @@ export interface UsageRow {
   device: string | null;
   platform: string | null;
   gclid: string | null;
-  keyword: string | null;
-  campaign: string | null;
+  adParams: string | null;
   companyId: string | null;
   companyLabel: string | null;
 }
@@ -300,10 +299,22 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   );
 }
 
+function parseAdParams(raw: string | null): Array<[string, string]> {
+  if (!raw) return [];
+  try {
+    const obj = JSON.parse(raw) as Record<string, string>;
+    const LABELS: Record<string, string> = { kw: "Keyword", term: "Search term", campaign: "Campaign" };
+    return Object.entries(obj).map(([k, v]) => [LABELS[k] || k, v]);
+  } catch {
+    return [["Ad params", raw]];
+  }
+}
+
 function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
   if (!event) return null;
   const at = new Date(event.at);
   const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
+  const adParamFields = parseAdParams(event.adParams);
   const fields: Array<[string, string | null]> = [
     ["Event", event.event],
     ["When", dt],
@@ -314,8 +325,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["Company", event.companyLabel || event.companyId || "—"],
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
-    ["Keyword", event.keyword || "—"],
-    ["Campaign", event.campaign || "—"],
+    ...adParamFields,
     ["Event ID", event.id],
   ];
   return (
