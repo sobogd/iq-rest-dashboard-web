@@ -13,6 +13,8 @@ export interface UsageRow {
   device: string | null;
   platform: string | null;
   gclid: string | null;
+  keyword: string | null;
+  campaign: string | null;
   companyId: string | null;
   companyLabel: string | null;
 }
@@ -312,6 +314,8 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["Company", event.companyLabel || event.companyId || "—"],
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
+    ["Keyword", event.keyword || "—"],
+    ["Campaign", event.campaign || "—"],
     ["Event ID", event.id],
   ];
   return (
