@@ -85,6 +85,15 @@ export function AdminGoogleAdsNegativesPage() {
     }
   }
 
+  function cycleMatchType(i: number) {
+    const cycle: MatchType[] = ["BROAD", "PHRASE", "EXACT"];
+    setSuggestions((prev) =>
+      prev.map((s, idx) =>
+        idx === i ? { ...s, matchType: cycle[(cycle.indexOf(s.matchType) + 1) % 3] } : s,
+      ),
+    );
+  }
+
   function toggleAll(val: boolean) {
     setChecked(val ? new Set(suggestions.map((_, i) => i)) : new Set());
   }
@@ -182,7 +191,11 @@ export function AdminGoogleAdsNegativesPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-mono text-foreground">{s.keyword}</span>
-                        <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${MATCH_COLORS[s.matchType] ?? ""}`}>
+                        <span
+                          onClick={(e) => { e.preventDefault(); cycleMatchType(i); }}
+                          className={`text-[10px] font-semibold px-1.5 py-0.5 rounded cursor-pointer select-none hover:opacity-70 transition-opacity ${MATCH_COLORS[s.matchType] ?? ""}`}
+                          title="Click to change match type"
+                        >
                           {s.matchType}
                         </span>
                       </div>
