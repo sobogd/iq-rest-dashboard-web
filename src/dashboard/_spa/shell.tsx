@@ -32,6 +32,7 @@ import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { UsagePage } from "../_pages/usage";
 import { AdminGoogleAdsPage } from "../_pages/admin-google-ads";
+import { AdminGoogleAdsNegativesPage } from "../_pages/admin-google-ads-negatives";
 import { AuthPage } from "../../auth/auth-page";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -235,6 +236,8 @@ function ViewSwitch(p: SwitchProps) {
       return <UsagePage />;
     case "settings.admin.google-ads":
       return <AdminGoogleAdsPage />;
+    case "settings.admin.google-ads-negatives":
+      return <AdminGoogleAdsNegativesPage />;
 
     case "category.new":
       return (
