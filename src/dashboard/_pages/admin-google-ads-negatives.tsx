@@ -110,13 +110,13 @@ export function AdminGoogleAdsNegativesPage() {
   return (
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
-        <span className="text-sm font-medium text-foreground">Google Ads — Поисковые запросы</span>
+        <span className="text-sm font-medium text-foreground">Google Ads — Search Terms</span>
       </SubpageStickyBar>
       <div className="max-w-2xl mx-auto px-3 py-3 space-y-4">
 
         {/* Campaign selector + Load */}
         <div className="flex gap-2 items-center">
-          <span className="text-xs text-muted-foreground shrink-0">Кампания:</span>
+          <span className="text-xs text-muted-foreground shrink-0">Campaign:</span>
           <div className="inline-flex gap-0.5 p-0.5 bg-secondary rounded-lg">
             {(["EN", "IT", "ES"] as Campaign[]).map((c) => (
               <button
@@ -139,22 +139,22 @@ export function AdminGoogleAdsNegativesPage() {
             disabled={stage === "loading" || stage === "applying"}
             className="ml-auto h-9 px-5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
           >
-            {stage === "loading" ? "Загрузка…" : "Загрузить"}
+            {stage === "loading" ? "Loading…" : "Load"}
           </button>
         </div>
 
         {stage === "loading" && (
-          <div className="text-sm text-muted-foreground py-8 text-center">Загружаю поисковые запросы…</div>
+          <div className="text-sm text-muted-foreground py-8 text-center">Fetching search terms…</div>
         )}
 
         {(stage === "review" || stage === "applying" || stage === "done") && (
           <>
             {rows.length === 0 ? (
               <div className="text-sm text-muted-foreground text-center py-6">
-                Поисковые запросы не найдены.{" "}
+                No search terms found.{" "}
                 {debugLog !== null && (
                   <button type="button" className="underline" onClick={() => setModal(debugLog)}>
-                    Ответ API
+                    View API response
                   </button>
                 )}
               </div>
@@ -163,7 +163,7 @@ export function AdminGoogleAdsNegativesPage() {
                 {/* Header */}
                 <div className="px-4 py-2.5 border-b border-border flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">
-                    {rows.length} запросов · {negCount} в негативы · {hideCount} в исключения
+                    {rows.length} terms · {negCount} negative · {hideCount} exclude
                   </span>
                   {debugLog !== null && (
                     <button
@@ -171,7 +171,7 @@ export function AdminGoogleAdsNegativesPage() {
                       onClick={() => setModal(debugLog)}
                       className="text-[11px] text-muted-foreground underline"
                     >
-                      Лог
+                      Debug log
                     </button>
                   )}
                 </div>
@@ -197,7 +197,7 @@ export function AdminGoogleAdsNegativesPage() {
                             onChange={(e) => update(i, { addNeg: e.target.checked })}
                             className="w-4 h-4 accent-primary"
                           />
-                          <span className="text-xs text-muted-foreground">Добавить негатив</span>
+                          <span className="text-xs text-muted-foreground">Add negative</span>
                         </label>
                         {row.addNeg && (
                           <>
@@ -237,7 +237,7 @@ export function AdminGoogleAdsNegativesPage() {
                           onChange={(e) => update(i, { hide: e.target.checked })}
                           className="w-4 h-4 accent-primary"
                         />
-                        <span className="text-xs text-muted-foreground">Исключить (не показывать)</span>
+                        <span className="text-xs text-muted-foreground">Exclude (hide in future)</span>
                       </label>
                     </div>
                   ))}
@@ -252,10 +252,10 @@ export function AdminGoogleAdsNegativesPage() {
                     className="w-full h-9 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
                   >
                     {stage === "applying"
-                      ? "Сохраняю…"
+                      ? "Saving…"
                       : stage === "done"
-                      ? "Готово ✓"
-                      : `Применить — ${negCount} негатив${negCount === 1 ? "" : negCount < 5 ? "а" : "ов"}, ${hideCount} исключён${hideCount === 1 ? "" : hideCount < 5 ? "о" : "о"}`}
+                      ? "Done ✓"
+                      : `Apply — ${negCount} negative${negCount !== 1 ? "s" : ""}, ${hideCount} excluded`}
                   </button>
                 </div>
               </div>
