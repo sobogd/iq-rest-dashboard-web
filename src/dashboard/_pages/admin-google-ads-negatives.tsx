@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { apiUrl } from "@/lib/api";
-import { PageHeader } from "../_v2/ui";
+import { SubpageStickyBar } from "../_v2/ui";
+import { useDashboardRouter } from "../_spa/router";
 
 type MatchType = "BROAD" | "PHRASE" | "EXACT";
 type Campaign = "EN" | "IT" | "ES";
@@ -29,6 +30,7 @@ const MATCH_COLORS: Record<MatchType, string> = {
 type Stage = "idle" | "loading" | "review" | "applying" | "done";
 
 export function AdminGoogleAdsNegativesPage() {
+  const router = useDashboardRouter();
   const [campaign, setCampaign] = useState<Campaign>("EN");
   const [stage, setStage] = useState<Stage>("idle");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -85,8 +87,11 @@ export function AdminGoogleAdsNegativesPage() {
   const selectedCount = checked.size;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-5">
-      <PageHeader title="Google Ads — Negative Keywords" />
+    <div>
+      <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
+        <span className="text-sm font-medium text-foreground">Google Ads — Negative Keywords</span>
+      </SubpageStickyBar>
+      <div className="max-w-3xl mx-auto px-3 py-3 space-y-4">
 
       {/* Campaign selector */}
       <div className="flex gap-2 items-center">
@@ -203,6 +208,7 @@ export function AdminGoogleAdsNegativesPage() {
       )}
 
       {modal !== null && <LogModal data={modal} onClose={() => setModal(null)} />}
+      </div>
     </div>
   );
 }
