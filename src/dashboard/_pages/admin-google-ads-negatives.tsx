@@ -12,6 +12,7 @@ interface Suggestion {
   keyword: string;
   matchType: MatchType;
   reason: string;
+  example?: string;
 }
 
 interface AnalyzeResult {
@@ -199,6 +200,9 @@ export function AdminGoogleAdsNegativesPage() {
                           {s.matchType}
                         </span>
                       </div>
+                      {s.example && (
+                        <p className="text-[11px] text-blue-400/80 mt-0.5 font-mono">"{s.example}"</p>
+                      )}
                       <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{s.reason}</p>
                     </div>
                   </label>
