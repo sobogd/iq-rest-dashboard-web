@@ -78,7 +78,7 @@ export function AdminGoogleAdsNegativesPage() {
       .filter((r) => r.addNeg)
       .map((r) => ({ keyword: stripFormatting(r.keyword).trim(), matchType: r.matchType }));
     const exclusions = rows
-      .filter((r) => r.hide)
+      .filter((r) => r.hide || r.addNeg)
       .map((r) => ({ keyword: r.term, matchType: "EXACT" as MatchType }));
     if (!keywords.length && !exclusions.length) return;
 
