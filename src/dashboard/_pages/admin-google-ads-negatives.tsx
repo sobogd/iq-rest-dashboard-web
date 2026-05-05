@@ -91,7 +91,7 @@ export function AdminGoogleAdsNegativesPage() {
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
         <span className="text-sm font-medium text-foreground">Google Ads — Negative Keywords</span>
       </SubpageStickyBar>
-      <div className="max-w-3xl mx-auto px-3 py-3 space-y-4">
+      <div className="max-w-2xl mx-auto px-3 py-3 space-y-4">
 
       {/* Campaign selector */}
       <div className="flex gap-2 items-center">

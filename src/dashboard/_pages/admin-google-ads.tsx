@@ -36,7 +36,7 @@ export function AdminGoogleAdsPage() {
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
         <span className="text-sm font-medium text-foreground">Google Ads Conversion</span>
       </SubpageStickyBar>
-      <div className="max-w-3xl mx-auto px-3 py-3">
+      <div className="max-w-2xl mx-auto px-3 py-3">
         <div className="space-y-3">
           <input
             type="text"

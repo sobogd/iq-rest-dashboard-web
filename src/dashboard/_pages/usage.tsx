@@ -15,7 +15,7 @@ export function UsagePage() {
           {count === null ? "" : `${count} event${count === 1 ? "" : "s"}`}
         </span>
       </SubpageStickyBar>
-      <div className="max-w-3xl mx-auto px-3 py-3">
+      <div className="max-w-2xl mx-auto px-3 py-3">
         <UsageEventsTable onCountChange={setCount} />
       </div>
     </div>
