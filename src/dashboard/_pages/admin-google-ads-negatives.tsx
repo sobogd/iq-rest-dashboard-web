@@ -62,14 +62,19 @@ export function AdminGoogleAdsNegativesPage() {
 
   async function addSelected() {
     const selected = suggestions.filter((_, i) => checked.has(i));
-    if (!selected.length) return;
+    const excluded = suggestions.filter((_, i) => !checked.has(i));
+    if (!selected.length && !excluded.length) return;
     setStage("applying");
     try {
       const res = await fetch(apiUrl("/api/admin/google-ads/add-negatives"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ campaign, keywords: selected.map(s => ({ keyword: s.keyword, matchType: s.matchType })) }),
+        body: JSON.stringify({
+          campaign,
+          keywords: selected.map(s => ({ keyword: s.keyword, matchType: s.matchType })),
+          exclusions: excluded.map(s => ({ keyword: s.keyword, matchType: s.matchType })),
+        }),
       });
       const data: unknown = await res.json();
       setModal(data);
@@ -191,7 +196,7 @@ export function AdminGoogleAdsNegativesPage() {
               <div className="px-4 py-3 border-t border-border">
                 <button
                   type="button"
-                  disabled={selectedCount === 0 || stage === "applying" || stage === "done"}
+                  disabled={stage === "applying" || stage === "done"}
                   onClick={() => void addSelected()}
                   className="w-full h-9 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
                 >
@@ -199,7 +204,9 @@ export function AdminGoogleAdsNegativesPage() {
                     ? "Adding…"
                     : stage === "done"
                     ? "Done ✓"
-                    : `Add ${selectedCount} negative${selectedCount !== 1 ? "s" : ""} to ${campaign}`}
+                    : selectedCount > 0
+                    ? `Add ${selectedCount} to ${campaign} · exclude ${suggestions.length - selectedCount}`
+                    : `Exclude ${suggestions.length} (add none)`}
                 </button>
               </div>
             </div>
