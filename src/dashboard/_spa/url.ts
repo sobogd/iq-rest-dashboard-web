@@ -57,6 +57,8 @@ export function viewToPath(view: View): string {
       return `/dashboard/settings/admin/companies/${view.id}`;
     case "settings.admin.usage":
       return "/dashboard/settings/admin/usage";
+    case "settings.admin.google-ads":
+      return "/dashboard/settings/admin/google-ads";
     case "category.new":
       return "/dashboard/categories/new";
     case "category.edit":
@@ -109,6 +111,7 @@ export function pathToView(path: string): View {
   if (companyMatch) return { name: "settings.admin.company", id: companyMatch[1] };
 
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
+  if (stripped === "/dashboard/settings/admin/google-ads") return { name: "settings.admin.google-ads" };
 
   // Top-level tabs
   if (stripped === "/dashboard/orders") return { name: "orders" };
