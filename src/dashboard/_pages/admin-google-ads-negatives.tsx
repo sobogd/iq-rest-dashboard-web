@@ -8,19 +8,17 @@ import { useDashboardRouter } from "../_spa/router";
 type MatchType = "BROAD" | "PHRASE" | "EXACT";
 type Campaign = "EN" | "IT" | "ES";
 
-interface Suggestion {
+interface TermRow {
+  term: string;
+  impressions: number;
+  clicks: number;
+  addNeg: boolean;
   keyword: string;
   matchType: MatchType;
-  reason: string;
-  example?: string;
+  hide: boolean;
 }
 
-interface AnalyzeResult {
-  ok: boolean;
-  campaign: Campaign;
-  suggestions: Suggestion[];
-  log: unknown;
-}
+const MATCH_TYPES: MatchType[] = ["BROAD", "PHRASE", "EXACT"];
 
 const MATCH_COLORS: Record<MatchType, string> = {
   BROAD: "bg-orange-500/15 text-orange-400",
@@ -30,19 +28,22 @@ const MATCH_COLORS: Record<MatchType, string> = {
 
 type Stage = "idle" | "loading" | "review" | "applying" | "done";
 
+function stripFormatting(s: string) {
+  return s.replace(/["[\]]/g, "");
+}
+
 export function AdminGoogleAdsNegativesPage() {
   const router = useDashboardRouter();
   const [campaign, setCampaign] = useState<Campaign>("EN");
   const [stage, setStage] = useState<Stage>("idle");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [checked, setChecked] = useState<Set<number>>(new Set());
-  const [log, setLog] = useState<unknown>(null);
+  const [rows, setRows] = useState<TermRow[]>([]);
+  const [debugLog, setDebugLog] = useState<unknown>(null);
   const [modal, setModal] = useState<unknown>(null);
 
-  async function analyze() {
+  async function load() {
     setStage("loading");
-    setSuggestions([]);
-    setLog(null);
+    setRows([]);
+    setDebugLog(null);
     try {
       const res = await fetch(apiUrl("/api/admin/google-ads/analyze-negatives"), {
         method: "POST",
@@ -50,32 +51,44 @@ export function AdminGoogleAdsNegativesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ campaign }),
       });
-      const data = await res.json() as AnalyzeResult;
-      setLog(data.log);
-      setSuggestions(data.suggestions ?? []);
-      setChecked(new Set((data.suggestions ?? []).map((_, i) => i)));
+      const data = await res.json() as {
+        ok: boolean;
+        searchTerms?: Array<{ term: string; impressions: number; clicks: number }>;
+        debugLog?: unknown;
+      };
+      setDebugLog(data.debugLog ?? null);
+      setRows((data.searchTerms ?? []).map((t) => ({
+        term: t.term,
+        impressions: t.impressions,
+        clicks: t.clicks,
+        addNeg: false,
+        keyword: t.term,
+        matchType: "EXACT",
+        hide: false,
+      })));
       setStage("review");
     } catch (e) {
-      setLog({ error: String(e) });
+      setDebugLog({ error: String(e) });
       setStage("review");
     }
   }
 
-  async function addSelected() {
-    const selected = suggestions.filter((_, i) => checked.has(i));
-    const excluded = suggestions.filter((_, i) => !checked.has(i));
-    if (!selected.length && !excluded.length) return;
+  async function apply() {
+    const keywords = rows
+      .filter((r) => r.addNeg)
+      .map((r) => ({ keyword: stripFormatting(r.keyword).trim(), matchType: r.matchType }));
+    const exclusions = rows
+      .filter((r) => r.hide)
+      .map((r) => ({ keyword: r.term, matchType: "EXACT" as MatchType }));
+    if (!keywords.length && !exclusions.length) return;
+
     setStage("applying");
     try {
       const res = await fetch(apiUrl("/api/admin/google-ads/add-negatives"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          campaign,
-          keywords: selected.map(s => ({ keyword: s.keyword, matchType: s.matchType })),
-          exclusions: excluded.map(s => ({ keyword: s.keyword, matchType: s.matchType })),
-        }),
+        body: JSON.stringify({ campaign, keywords, exclusions }),
       });
       const data: unknown = await res.json();
       setModal(data);
@@ -86,152 +99,171 @@ export function AdminGoogleAdsNegativesPage() {
     }
   }
 
-  function cycleMatchType(i: number) {
-    const cycle: MatchType[] = ["BROAD", "PHRASE", "EXACT"];
-    setSuggestions((prev) =>
-      prev.map((s, idx) =>
-        idx === i ? { ...s, matchType: cycle[(cycle.indexOf(s.matchType) + 1) % 3] } : s,
-      ),
-    );
+  function update(i: number, patch: Partial<TermRow>) {
+    setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
   }
 
-  function toggleAll(val: boolean) {
-    setChecked(val ? new Set(suggestions.map((_, i) => i)) : new Set());
-  }
-
-  const selectedCount = checked.size;
+  const negCount = rows.filter((r) => r.addNeg).length;
+  const hideCount = rows.filter((r) => r.hide).length;
+  const anyAction = negCount > 0 || hideCount > 0;
 
   return (
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
-        <span className="text-sm font-medium text-foreground">Google Ads — Negative Keywords</span>
+        <span className="text-sm font-medium text-foreground">Google Ads — Search Terms</span>
       </SubpageStickyBar>
       <div className="max-w-2xl mx-auto px-3 py-3 space-y-4">
 
-      {/* Campaign selector */}
-      <div className="flex gap-2 items-center">
-        <span className="text-xs text-muted-foreground shrink-0">Campaign:</span>
-        <div className="inline-flex gap-0.5 p-0.5 bg-secondary rounded-lg">
-          {(["EN", "IT", "ES"] as Campaign[]).map((c) => (
-            <button
-              key={c}
-              type="button"
-              disabled={stage === "loading" || stage === "applying"}
-              onClick={() => { setCampaign(c); setStage("idle"); setSuggestions([]); }}
-              className={
-                "h-7 px-3 text-xs font-medium rounded-md transition-colors " +
-                (campaign === c ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-              }
-            >
-              {c}
-            </button>
-          ))}
+        {/* Campaign selector + Load */}
+        <div className="flex gap-2 items-center">
+          <span className="text-xs text-muted-foreground shrink-0">Campaign:</span>
+          <div className="inline-flex gap-0.5 p-0.5 bg-secondary rounded-lg">
+            {(["EN", "IT", "ES"] as Campaign[]).map((c) => (
+              <button
+                key={c}
+                type="button"
+                disabled={stage === "loading" || stage === "applying"}
+                onClick={() => { setCampaign(c); setStage("idle"); setRows([]); setDebugLog(null); }}
+                className={
+                  "h-7 px-3 text-xs font-medium rounded-md transition-colors " +
+                  (campaign === c ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
+                }
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => void load()}
+            disabled={stage === "loading" || stage === "applying"}
+            className="ml-auto h-9 px-5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
+          >
+            {stage === "loading" ? "Loading…" : "Load"}
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => void analyze()}
-          disabled={stage === "loading" || stage === "applying"}
-          className="ml-auto h-9 px-5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
-        >
-          {stage === "loading" ? "Analyzing…" : "Analyze"}
-        </button>
-      </div>
 
-      {stage === "loading" && (
-        <div className="text-sm text-muted-foreground py-8 text-center">
-          Fetching search terms + calling Gemini 2.5 Pro…
-        </div>
-      )}
+        {stage === "loading" && (
+          <div className="text-sm text-muted-foreground py-8 text-center">Fetching search terms…</div>
+        )}
 
-      {(stage === "review" || stage === "applying" || stage === "done") && (
-        <>
-          {suggestions.length === 0 ? (
-            <div className="text-sm text-muted-foreground text-center py-6">
-              No suggestions returned.{" "}
-              <button type="button" className="underline" onClick={() => setModal(log)}>View log</button>
-            </div>
-          ) : (
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              {/* Header row */}
-              <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border">
-                <input
-                  type="checkbox"
-                  checked={selectedCount === suggestions.length}
-                  onChange={(e) => toggleAll(e.target.checked)}
-                  className="w-4 h-4 accent-primary"
-                />
-                <span className="text-xs text-muted-foreground flex-1">
-                  {selectedCount} / {suggestions.length} selected
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setModal(log)}
-                  className="text-[11px] text-muted-foreground underline"
-                >
-                  View log
-                </button>
+        {(stage === "review" || stage === "applying" || stage === "done") && (
+          <>
+            {rows.length === 0 ? (
+              <div className="text-sm text-muted-foreground text-center py-6">
+                No search terms found.{" "}
+                {debugLog !== null && (
+                  <button type="button" className="underline" onClick={() => setModal(debugLog)}>
+                    View API response
+                  </button>
+                )}
               </div>
+            ) : (
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
+                {/* Header */}
+                <div className="px-4 py-2.5 border-b border-border flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">
+                    {rows.length} terms · {negCount} negative · {hideCount} exclude
+                  </span>
+                  {debugLog !== null && (
+                    <button
+                      type="button"
+                      onClick={() => setModal(debugLog)}
+                      className="text-[11px] text-muted-foreground underline"
+                    >
+                      Debug log
+                    </button>
+                  )}
+                </div>
 
-              {/* Suggestions list */}
-              <div className="divide-y divide-border max-h-[50vh] overflow-y-auto">
-                {suggestions.map((s, i) => (
-                  <label
-                    key={i}
-                    className="flex items-start gap-3 px-4 py-2.5 cursor-pointer hover:bg-muted/30 transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked.has(i)}
-                      onChange={(e) => {
-                        const next = new Set(checked);
-                        e.target.checked ? next.add(i) : next.delete(i);
-                        setChecked(next);
-                      }}
-                      className="w-4 h-4 mt-0.5 shrink-0 accent-primary"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-mono text-foreground">{s.keyword}</span>
-                        <span
-                          onClick={(e) => { e.preventDefault(); cycleMatchType(i); }}
-                          className={`text-[10px] font-semibold px-1.5 py-0.5 rounded cursor-pointer select-none hover:opacity-70 transition-opacity ${MATCH_COLORS[s.matchType] ?? ""}`}
-                          title="Click to change match type"
-                        >
-                          {s.matchType}
+                {/* Rows */}
+                <div className="divide-y divide-border max-h-[60vh] overflow-y-auto">
+                  {rows.map((row, i) => (
+                    <div key={i} className="px-4 py-3 space-y-2">
+                      {/* Term + stats */}
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-sm font-mono text-foreground">{row.term}</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          {row.impressions} imp · {row.clicks} clk
                         </span>
                       </div>
-                      {s.example && (
-                        <p className="text-[11px] text-blue-400/80 mt-0.5 font-mono">"{s.example}"</p>
-                      )}
-                      <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{s.reason}</p>
+
+                      {/* Checkbox 1: Add as negative */}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <label className="flex items-center gap-1.5 cursor-pointer shrink-0">
+                          <input
+                            type="checkbox"
+                            checked={row.addNeg}
+                            onChange={(e) => update(i, { addNeg: e.target.checked })}
+                            className="w-4 h-4 accent-primary"
+                          />
+                          <span className="text-xs text-muted-foreground">Add negative</span>
+                        </label>
+                        {row.addNeg && (
+                          <>
+                            <div className="inline-flex gap-0.5 p-0.5 bg-secondary rounded-md shrink-0">
+                              {MATCH_TYPES.map((mt) => (
+                                <button
+                                  key={mt}
+                                  type="button"
+                                  onClick={() => update(i, { matchType: mt })}
+                                  className={
+                                    "h-5 px-1.5 text-[10px] font-semibold rounded transition-colors " +
+                                    (row.matchType === mt
+                                      ? MATCH_COLORS[mt] + " shadow-sm"
+                                      : "text-muted-foreground hover:text-foreground")
+                                  }
+                                >
+                                  {mt}
+                                </button>
+                              ))}
+                            </div>
+                            <input
+                              type="text"
+                              value={row.keyword}
+                              onChange={(e) => update(i, { keyword: stripFormatting(e.target.value) })}
+                              className="flex-1 h-6 px-2 text-xs font-mono bg-secondary border border-border rounded focus:outline-none focus:ring-1 focus:ring-primary min-w-0"
+                              style={{ minWidth: "8rem" }}
+                            />
+                          </>
+                        )}
+                      </div>
+
+                      {/* Checkbox 2: Exclude (hide) */}
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={row.hide}
+                          onChange={(e) => update(i, { hide: e.target.checked })}
+                          className="w-4 h-4 accent-primary"
+                        />
+                        <span className="text-xs text-muted-foreground">Exclude (hide in future)</span>
+                      </label>
                     </div>
-                  </label>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              {/* Footer action */}
-              <div className="px-4 py-3 border-t border-border">
-                <button
-                  type="button"
-                  disabled={stage === "applying" || stage === "done"}
-                  onClick={() => void addSelected()}
-                  className="w-full h-9 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
-                >
-                  {stage === "applying"
-                    ? "Adding…"
-                    : stage === "done"
-                    ? "Done ✓"
-                    : selectedCount > 0
-                    ? `Add ${selectedCount} to ${campaign} · exclude ${suggestions.length - selectedCount}`
-                    : `Exclude ${suggestions.length} (add none)`}
-                </button>
+                {/* Footer */}
+                <div className="px-4 py-3 border-t border-border">
+                  <button
+                    type="button"
+                    disabled={!anyAction || stage === "applying" || stage === "done"}
+                    onClick={() => void apply()}
+                    className="w-full h-9 text-sm font-semibold bg-primary text-primary-foreground rounded-lg disabled:opacity-50"
+                  >
+                    {stage === "applying"
+                      ? "Saving…"
+                      : stage === "done"
+                      ? "Done ✓"
+                      : `Apply — ${negCount} negative${negCount !== 1 ? "s" : ""}, ${hideCount} excluded`}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
 
-      {modal !== null && <LogModal data={modal} onClose={() => setModal(null)} />}
+        {modal !== null && <LogModal data={modal} onClose={() => setModal(null)} />}
       </div>
     </div>
   );
