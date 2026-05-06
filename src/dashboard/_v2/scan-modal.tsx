@@ -5,7 +5,7 @@ import { Modal } from "./ui";
 import { primaryBtn } from "./tokens";
 import { scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
 
-const MAX_SIZE = 20 * 1024 * 1024;
+const MAX_SIZE = 100 * 1024 * 1024;
 const MAX_FILES = 5;
 
 interface PoolPhoto {
@@ -89,7 +89,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   const accepted = Array.from(files).slice(0, remaining);
   for (const file of accepted) {
    if (file.size > MAX_SIZE) {
-    setError("File too large (max 20 MB)");
+    setError("File too large (max 100 MB)");
     return;
    }
   }
