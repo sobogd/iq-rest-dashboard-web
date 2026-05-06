@@ -31,6 +31,7 @@ import {
  setMl,
  translateText,
 } from "./i18n";
+import { AllergenIcon } from "./allergen-icon";
 import { moveItem, newId, currencySymbolOf, parseDecimal, sanitizePriceInput } from "./helpers";
 import { buildCategoryTranslations, buildItemTranslations } from "./mappers";
 import {
@@ -505,12 +506,13 @@ export function DishForm({
  toggleAllergen(a.code);
  }}
  className={
- "inline-flex items-center h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
+ "inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
  (checked
  ? "bg-foreground text-background"
  : "bg-secondary text-muted-foreground")
  }
  >
+ <AllergenIcon code={a.code} className="w-3.5 h-3.5" />
  {tAllergens(a.code as never)}
  </button>
  );
