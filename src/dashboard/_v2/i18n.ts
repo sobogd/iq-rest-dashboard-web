@@ -51,17 +51,17 @@ export const AVAILABLE_LANGUAGES: LanguageMeta[] = [
 
 export const ALLERGENS: { code: string; label: string }[] = [
  { code: "gluten", label: "Gluten" },
- { code: "lactose", label: "Lactose" },
+ { code: "dairy", label: "Dairy" },
  { code: "eggs", label: "Eggs" },
  { code: "nuts", label: "Tree nuts" },
  { code: "peanuts", label: "Peanuts" },
  { code: "fish", label: "Fish" },
- { code: "shellfish", label: "Shellfish" },
- { code: "soy", label: "Soy" },
+ { code: "crustaceans", label: "Crustaceans" },
+ { code: "soybeans", label: "Soy" },
  { code: "sesame", label: "Sesame" },
  { code: "celery", label: "Celery" },
  { code: "mustard", label: "Mustard" },
- { code: "sulfites", label: "Sulfites" },
+ { code: "sulphites", label: "Sulphites" },
  { code: "lupin", label: "Lupin" },
  { code: "molluscs", label: "Molluscs" },
 ];
