@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Modal } from "./ui";
 import { primaryBtn } from "./tokens";
-import { scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
+import { dismissScanBanner, scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
 
 const MAX_SIZE = 20 * 1024 * 1024;
 const MAX_FILES = 5;
@@ -201,6 +201,8 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    return;
   }
   setResultMessage(`Added ${result.itemsCount} items in ${result.categoriesCount} categories`);
+  // Auto-dismiss banner after a successful scan — user is done with the feature.
+  try { await dismissScanBanner(); } catch { /* ignore */ }
   onSaved();
   handleClose();
  }
@@ -215,8 +217,29 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   stage === "confirm" ? "Replace existing menu?" :
   "Saving…";
 
+ const footer =
+  stage === "upload" ? (
+   <button
+    type="button"
+    className={primaryBtn + " w-full h-10"}
+    disabled={photoPool.length === 0}
+    onClick={() => void handleStartScan()}
+   >
+    Scan
+   </button>
+  ) : stage === "review" ? (
+   <button
+    type="button"
+    className={primaryBtn + " w-full h-10"}
+    disabled={selectedCount === 0}
+    onClick={proceedFromReview}
+   >
+    Continue ({selectedCount} selected)
+   </button>
+  ) : null;
+
  return (
-  <Modal open={open} onClose={handleClose} title={title} size="lg">
+  <Modal open={open} onClose={handleClose} title={title} size="lg" footer={footer}>
    {stage === "upload" && (
     <div className="flex flex-col gap-3">
      <p className="text-sm text-muted-foreground">
@@ -262,14 +285,6 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
       )}
      </div>
      {error && <p className="text-sm text-destructive font-medium text-center">{error}</p>}
-     <button
-      type="button"
-      className={primaryBtn + " w-full h-10"}
-      disabled={photoPool.length === 0}
-      onClick={() => void handleStartScan()}
-     >
-      Scan
-     </button>
     </div>
    )}
 
@@ -319,14 +334,6 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
       </div>
      ))}
      {error && <p className="text-sm text-destructive font-medium text-center">{error}</p>}
-     <button
-      type="button"
-      className={primaryBtn + " w-full h-10"}
-      disabled={selectedCount === 0}
-      onClick={proceedFromReview}
-     >
-      Continue ({selectedCount} selected)
-     </button>
     </div>
    )}
 

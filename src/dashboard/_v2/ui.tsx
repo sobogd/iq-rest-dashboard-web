@@ -29,12 +29,14 @@ export function Modal({
  title,
  children,
  size = "md",
+ footer,
 }: {
  open: boolean;
  onClose: () => void;
  title: string;
  children: ReactNode;
  size?: "sm" | "md" | "lg";
+ footer?: ReactNode;
 }) {
  useEffect(() => {
  if (!open) return;
@@ -82,6 +84,9 @@ export function Modal({
  </button>
  </div>
  <div className="flex-1 overflow-y-auto p-5">{children}</div>
+ {footer ? (
+ <div className="px-5 py-3 border-t border-border shrink-0">{footer}</div>
+ ) : null}
  </div>
  </div>
  );

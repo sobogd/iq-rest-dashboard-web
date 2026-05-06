@@ -351,7 +351,10 @@ export function MenuList({
  open={scanModalOpen}
  onClose={() => setScanModalOpen(false)}
  existingRealItemsCount={existingRealItemsCount}
- onSaved={() => onPersisted?.()}
+ onSaved={() => {
+ setScanBannerVisible(false);
+ onPersisted?.();
+ }}
  />
  )}
  {categories.length > 0 ? <MenuOnboarding /> : null}
