@@ -127,6 +127,7 @@
         "upload": {
           "description": "Încarcă fotografii sau PDF-ul meniului tău pe hârtie. AI îl împarte pe categorii și produse.",
           "addFile": "+ Adaugă fișier",
+          "hint": "Maximum 5 fișiere. Aveți nevoie de mai multe? Contactați asistența și vă vom ajuta.",
           "scan": "Scanează",
           "errorTooMany": "Maxim 5 fișiere",
           "errorTooLarge": "Fișier prea mare (max. 20 MB)",

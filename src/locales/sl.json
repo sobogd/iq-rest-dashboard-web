@@ -127,6 +127,7 @@
         "upload": {
           "description": "Naloži fotografije ali PDF papirnatega menija. UI ga bo razvrstil v kategorije in jedi.",
           "addFile": "+ Dodaj datoteko",
+          "hint": "Največ 5 datotek. Potrebujete več? Obrnite se na podporo in vam bomo pomagali.",
           "scan": "Skeniraj",
           "errorTooMany": "Največ 5 datotek",
           "errorTooLarge": "Datoteka je prevelika (največ 20 MB)",

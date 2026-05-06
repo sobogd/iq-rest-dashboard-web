@@ -127,6 +127,7 @@
         "upload": {
           "description": "Last opp bilder eller en PDF av papirmenyen. AI sorterer det i kategorier og retter.",
           "addFile": "+ Legg til fil",
+          "hint": "Maksimalt 5 filer. Trenger du flere? Kontakt support, så hjelper vi deg.",
           "scan": "Skann",
           "errorTooMany": "Maks 5 filer",
           "errorTooLarge": "Filen er for stor (maks 20 MB)",

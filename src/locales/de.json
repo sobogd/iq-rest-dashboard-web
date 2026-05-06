@@ -127,6 +127,7 @@
         "upload": {
           "description": "Lade Fotos oder ein PDF deiner Papierkarte hoch. Die KI erstellt daraus Kategorien und Gerichte.",
           "addFile": "+ Datei hinzufügen",
+          "hint": "Maximal 5 Dateien. Brauchst du mehr? Kontaktiere den Support, wir helfen dir gern.",
           "scan": "Scannen",
           "errorTooMany": "Maximal 5 Dateien",
           "errorTooLarge": "Datei zu groß (max. 20 MB)",

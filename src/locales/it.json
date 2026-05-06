@@ -127,6 +127,7 @@
         "upload": {
           "description": "Carica foto o un PDF del tuo menù cartaceo. L'IA lo dividerà in categorie e piatti.",
           "addFile": "+ Aggiungi file",
+          "hint": "Massimo 5 file. Ne servono di più? Contatta il supporto e ti aiuteremo.",
           "scan": "Scansiona",
           "errorTooMany": "Massimo 5 file",
           "errorTooLarge": "File troppo grande (max 20 MB)",

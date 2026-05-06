@@ -127,6 +127,7 @@
         "upload": {
           "description": "Uaslódáil grianghraif nó PDF de do bhiachlár páipéir. Roinnfidh an IS é i gcatagóirí agus i míreanna.",
           "addFile": "+ Cuir comhad leis",
+          "hint": "Uasmhéid 5 chomhad. Ag teastáil níos mó uait? Déan teagmháil leis an tacaíocht agus cabhróimid leat.",
           "scan": "Scan",
           "errorTooMany": "Uasmhéid 5 chomhad",
           "errorTooLarge": "Tá an comhad ró-mhór (uas. 20 MB)",

@@ -127,6 +127,7 @@
         "upload": {
           "description": "Ladda upp foton eller en PDF av din pappersmeny. AI sorterar in dem i kategorier och rätter.",
           "addFile": "+ Lägg till fil",
+          "hint": "Max 5 filer. Behöver du fler? Kontakta supporten så hjälper vi dig.",
           "scan": "Skanna",
           "errorTooMany": "Max 5 filer",
           "errorTooLarge": "Filen är för stor (max 20 MB)",

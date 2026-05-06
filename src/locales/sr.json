@@ -127,6 +127,7 @@
         "upload": {
           "description": "Otpremi fotografije ili PDF papirnog menija. VI će ga razvrstati u kategorije i jela.",
           "addFile": "+ Dodaj fajl",
+          "hint": "Највише 5 датотека. Треба вам више? Обратите се подршци и помоћи ћемо вам.",
           "scan": "Skeniraj",
           "errorTooMany": "Najviše 5 fajlova",
           "errorTooLarge": "Fajl je prevelik (maks. 20 MB)",

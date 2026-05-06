@@ -127,6 +127,7 @@
         "upload": {
           "description": "Hladdu upp myndum eða PDF af pappírsmatseðlinum. Gervigreindin flokkar í flokka og rétti.",
           "addFile": "+ Bæta við skrá",
+          "hint": "Hámark 5 skrár. Þarftu fleiri? Hafðu samband við þjónustuna og við hjálpum þér.",
           "scan": "Skanna",
           "errorTooMany": "Hámark 5 skrár",
           "errorTooLarge": "Skrá of stór (hámark 20 MB)",

@@ -127,6 +127,7 @@
         "upload": {
           "description": "Kâğıt menünün fotoğraflarını veya PDF'sini yükle. AI bunu kategorilere ve ürünlere ayırır.",
           "addFile": "+ Dosya ekle",
+          "hint": "En fazla 5 dosya. Daha fazlası mı gerekiyor? Destek ile iletişime geçin, yardımcı olalım.",
           "scan": "Tara",
           "errorTooMany": "En fazla 5 dosya",
           "errorTooLarge": "Dosya çok büyük (maks. 20 MB)",

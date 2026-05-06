@@ -127,6 +127,7 @@
         "upload": {
           "description": "Učitaj fotografije ili PDF papirnatog jelovnika. AI će ga podijeliti u kategorije i jela.",
           "addFile": "+ Dodaj datoteku",
+          "hint": "Najviše 5 datoteka. Trebate više? Javite se podršci i pomoći ćemo vam.",
           "scan": "Skeniraj",
           "errorTooMany": "Najviše 5 datoteka",
           "errorTooLarge": "Datoteka je prevelika (maks. 20 MB)",

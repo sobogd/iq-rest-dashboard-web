@@ -127,6 +127,7 @@
         "upload": {
           "description": "Puja fotos o un PDF de la teva carta en paper. La IA ho dividirà en categories i plats.",
           "addFile": "+ Afegir fitxer",
+          "hint": "Màxim 5 fitxers. En necessites més? Contacta amb el suport i t'ajudarem.",
           "scan": "Escaneja",
           "errorTooMany": "Màxim 5 fitxers",
           "errorTooLarge": "Fitxer massa gran (màx. 20 MB)",

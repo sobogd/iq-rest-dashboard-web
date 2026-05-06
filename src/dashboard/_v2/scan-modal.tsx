@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
+import { ImagePlus, X } from "lucide-react";
 import { Modal } from "./ui";
 import { primaryBtn } from "./tokens";
 import { dismissScanBanner, scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
@@ -249,7 +250,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   stage === "upload" ? (
    <button
     type="button"
-    className={primaryBtn + " w-full h-10"}
+    className={primaryBtn + " w-full h-10 hover:bg-primary/90 active:scale-[0.99] transition-all disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 disabled:hover:bg-input"}
     disabled={photoPool.length === 0}
     onClick={() => void handleStartScan()}
    >
@@ -267,10 +268,10 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   ) : null;
 
  return (
-  <Modal open={open} onClose={handleClose} title={title} size="lg" footer={footer}>
+  <Modal open={open} onClose={handleClose} title={title} size="md" footer={footer}>
    {stage === "upload" && (
     <div className="flex flex-col gap-3">
-     <p className="text-sm text-muted-foreground">{t("upload.description")}</p>
+     <p className="text-sm text-muted-foreground leading-relaxed">{t("upload.description")}</p>
      <input
       ref={fileInputRef}
       type="file"
@@ -281,10 +282,13 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
      />
      <div className="flex flex-col gap-2">
       {photoPool.map((photo) => (
-       <div key={photo.id} className="flex items-center gap-3 w-full rounded-xl border border-border bg-muted/30 p-3">
+       <div
+        key={photo.id}
+        className="flex items-center gap-3 w-full h-12 rounded-xl border border-border bg-muted/30 pl-2 pr-1"
+       >
         {photo.preview === "pdf" || photo.preview === "heic" ? (
-         <span className="text-xs font-mono text-muted-foreground">
-          {photo.preview === "pdf" ? "PDF" : "…"}
+         <span className="w-8 h-8 shrink-0 inline-flex items-center justify-center rounded-lg bg-muted text-[10px] font-mono font-semibold text-muted-foreground">
+          {photo.preview === "pdf" ? "PDF" : "HEIC"}
          </span>
         ) : (
          // eslint-disable-next-line @next/next/no-img-element
@@ -293,10 +297,11 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
         <p className="text-sm font-medium truncate min-w-0 flex-1">{photo.file.name}</p>
         <button
          type="button"
+         aria-label="Remove"
          onClick={() => removeFromPool(photo.id)}
-         className="h-8 w-8 shrink-0 rounded-md hover:bg-muted/50 inline-flex items-center justify-center text-muted-foreground"
+         className="h-8 w-8 shrink-0 rounded-md hover:bg-muted/60 inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
         >
-         ×
+         <X className="w-4 h-4" strokeWidth={2} />
         </button>
        </div>
       ))}
@@ -304,12 +309,18 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
        <button
         type="button"
         onClick={() => fileInputRef.current?.click()}
-        className="flex items-center justify-center gap-2 w-full rounded-xl border-2 border-dashed border-border p-4 hover:border-muted-foreground/30 transition-all"
+        className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border-2 border-dashed border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/40 px-4 transition-all"
        >
-        <span className="text-sm font-medium text-muted-foreground/70">{t("upload.addFile")}</span>
+        <ImagePlus className="w-5 h-5 text-muted-foreground/70" strokeWidth={1.5} />
+        <span className="text-sm font-medium text-foreground/80">{t("upload.addFile")}</span>
        </button>
       )}
      </div>
+     {photoPool.length < MAX_FILES && (
+      <p className="text-xs text-muted-foreground/70 text-center leading-relaxed px-2">
+       {t("upload.hint")}
+      </p>
+     )}
      {error && <p className="text-sm text-destructive font-medium text-center">{error}</p>}
     </div>
    )}

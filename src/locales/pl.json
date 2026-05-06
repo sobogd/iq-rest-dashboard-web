@@ -127,6 +127,7 @@
         "upload": {
           "description": "Wgraj zdjęcia lub PDF papierowego menu. AI podzieli je na kategorie i dania.",
           "addFile": "+ Dodaj plik",
+          "hint": "Maksymalnie 5 plików. Potrzebujesz więcej? Skontaktuj się z pomocą, a my pomożemy.",
           "scan": "Skanuj",
           "errorTooMany": "Maksymalnie 5 plików",
           "errorTooLarge": "Plik zbyt duży (max. 20 MB)",

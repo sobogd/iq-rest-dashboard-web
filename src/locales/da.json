@@ -127,6 +127,7 @@
         "upload": {
           "description": "Upload fotos eller en PDF af dit papirmenu. AI sorterer det i kategorier og retter.",
           "addFile": "+ Tilføj fil",
+          "hint": "Maksimalt 5 filer. Har du brug for flere? Kontakt support, så hjælper vi dig.",
           "scan": "Scan",
           "errorTooMany": "Højst 5 filer",
           "errorTooLarge": "Filen er for stor (maks. 20 MB)",

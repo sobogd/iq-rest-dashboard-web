@@ -181,6 +181,7 @@ export function MenuOnboarding() {
  // ignore
  }
  setDone(true);
+ window.scrollTo({ top: 0, behavior: "auto" });
  }
 
  function next() {

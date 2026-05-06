@@ -127,6 +127,7 @@
         "upload": {
           "description": "Sube fotos o un PDF de tu menú en papel. La IA lo dividirá en categorías y platos.",
           "addFile": "+ Añadir archivo",
+          "hint": "Máximo 5 archivos. ¿Necesitas más? Contacta con soporte y te ayudaremos.",
           "scan": "Escanear",
           "errorTooMany": "Máximo 5 archivos",
           "errorTooLarge": "Archivo demasiado grande (máx. 20 MB)",

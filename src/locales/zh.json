@@ -127,6 +127,7 @@
         "upload": {
           "description": "上传纸质菜单的照片或 PDF。AI 会将其分类为类别和菜品。",
           "addFile": "+ 添加文件",
+          "hint": "最多5个文件。需要更多？联系客服，我们会帮您。",
           "scan": "扫描",
           "errorTooMany": "最多 5 个文件",
           "errorTooLarge": "文件过大（最大 20 MB）",

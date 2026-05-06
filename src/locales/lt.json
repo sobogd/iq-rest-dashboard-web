@@ -127,6 +127,7 @@
         "upload": {
           "description": "Įkelk popierinio meniu nuotraukas arba PDF. DI suskirstys jį į kategorijas ir patiekalus.",
           "addFile": "+ Pridėti failą",
+          "hint": "Daugiausia 5 failai. Reikia daugiau? Susisiekite su palaikymu ir mes padėsime.",
           "scan": "Skenuoti",
           "errorTooMany": "Daugiausia 5 failai",
           "errorTooLarge": "Failas per didelis (maks. 20 MB)",

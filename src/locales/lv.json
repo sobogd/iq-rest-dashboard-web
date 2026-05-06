@@ -127,6 +127,7 @@
         "upload": {
           "description": "Augšupielādē fotogrāfijas vai PDF papīra ēdienkartei. MI to sadalīs kategorijās un ēdienos.",
           "addFile": "+ Pievienot failu",
+          "hint": "Maksimums 5 faili. Vajag vairāk? Sazinieties ar atbalstu, un mēs palīdzēsim.",
           "scan": "Skenēt",
           "errorTooMany": "Maksimums 5 faili",
           "errorTooLarge": "Fails pārāk liels (maks. 20 MB)",

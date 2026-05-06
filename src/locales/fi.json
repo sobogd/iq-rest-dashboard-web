@@ -127,6 +127,7 @@
         "upload": {
           "description": "Lataa kuvia tai PDF paperisesta ruokalistasta. Tekoäly jakaa sen luokkiin ja annoksiin.",
           "addFile": "+ Lisää tiedosto",
+          "hint": "Enintään 5 tiedostoa. Tarvitsetko lisää? Ota yhteyttä tukeen, autamme sinua.",
           "scan": "Skannaa",
           "errorTooMany": "Enintään 5 tiedostoa",
           "errorTooLarge": "Tiedosto on liian suuri (enint. 20 Mt)",

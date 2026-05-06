@@ -127,6 +127,7 @@
         "upload": {
           "description": "Téléversez des photos ou un PDF de votre carte papier. L'IA en extraira les catégories et plats.",
           "addFile": "+ Ajouter un fichier",
+          "hint": "Maximum 5 fichiers. Besoin de plus ? Contactez le support et nous vous aiderons.",
           "scan": "Scanner",
           "errorTooMany": "5 fichiers maximum",
           "errorTooLarge": "Fichier trop volumineux (max. 20 Mo)",

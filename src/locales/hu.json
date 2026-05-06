@@ -127,6 +127,7 @@
         "upload": {
           "description": "Tölts fel fotókat vagy PDF-et a papír étlapodról. Az AI kategóriákra és ételekre bontja.",
           "addFile": "+ Fájl hozzáadása",
+          "hint": "Legfeljebb 5 fájl. Többre van szüksége? Vegye fel a kapcsolatot a támogatással, segítünk.",
           "scan": "Beolvasás",
           "errorTooMany": "Legfeljebb 5 fájl",
           "errorTooLarge": "A fájl túl nagy (max. 20 MB)",

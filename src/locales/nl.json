@@ -127,6 +127,7 @@
         "upload": {
           "description": "Upload foto's of een PDF van je papieren menu. De AI maakt er categorieën en gerechten van.",
           "addFile": "+ Bestand toevoegen",
+          "hint": "Maximaal 5 bestanden. Meer nodig? Neem contact op met support en we helpen je.",
           "scan": "Scannen",
           "errorTooMany": "Maximaal 5 bestanden",
           "errorTooLarge": "Bestand te groot (max. 20 MB)",

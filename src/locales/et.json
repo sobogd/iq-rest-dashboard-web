@@ -127,6 +127,7 @@
         "upload": {
           "description": "Lae üles fotosid või PDF paber-menüüst. Tehisintellekt jaotab selle kategooriateks ja roogadeks.",
           "addFile": "+ Lisa fail",
+          "hint": "Maksimaalselt 5 faili. Vajad rohkem? Võta klienditoega ühendust ja aitame.",
           "scan": "Skanni",
           "errorTooMany": "Kuni 5 faili",
           "errorTooLarge": "Fail on liiga suur (max 20 MB)",

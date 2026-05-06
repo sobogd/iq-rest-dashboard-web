@@ -127,6 +127,7 @@
         "upload": {
           "description": "Carrega fotos ou um PDF do teu menu em papel. A IA divide-o em categorias e pratos.",
           "addFile": "+ Adicionar ficheiro",
+          "hint": "Máximo de 5 ficheiros. Precisa de mais? Contacte o suporte e nós ajudamos.",
           "scan": "Digitalizar",
           "errorTooMany": "Máximo 5 ficheiros",
           "errorTooLarge": "Ficheiro demasiado grande (máx. 20 MB)",

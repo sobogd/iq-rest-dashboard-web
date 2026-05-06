@@ -127,6 +127,7 @@
         "upload": {
           "description": "Upload photos or a PDF of your paper menu. AI will parse it into categories and items.",
           "addFile": "+ Add file",
+          "hint": "Maximum 5 files. Need more? Contact support and we'll help.",
           "scan": "Scan",
           "errorTooMany": "Maximum 5 files",
           "errorTooLarge": "File too large (max 20 MB)",

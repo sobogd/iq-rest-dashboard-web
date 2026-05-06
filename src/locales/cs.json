@@ -127,6 +127,7 @@
         "upload": {
           "description": "Nahrajte fotky nebo PDF papírového menu. AI ho rozdělí do kategorií a položek.",
           "addFile": "+ Přidat soubor",
+          "hint": "Maximálně 5 souborů. Potřebujete více? Napište podpoře a pomůžeme vám.",
           "scan": "Naskenovat",
           "errorTooMany": "Maximálně 5 souborů",
           "errorTooLarge": "Soubor je příliš velký (max. 20 MB)",
