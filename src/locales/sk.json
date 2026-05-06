@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Pracovné hodiny",
         "hoursTip": "Rezervácie možno robiť v týchto časoch.",
-        "hoursError": "„Od“ musí byť skôr ako „do“."
+        "hoursError": "„Od“ musí byť skôr ako „do“.",
+        "scheduleLabel": "Týždenný rozvrh",
+        "dayOpen": "Otvorené",
+        "dayClosed": "Zatvorené",
+        "lunchLabel": "Obedná pauza / siesta",
+        "day": {
+          "mon": "Pondelok",
+          "tue": "Utorok",
+          "wed": "Streda",
+          "thu": "Štvrtok",
+          "fri": "Piatok",
+          "sat": "Sobota",
+          "sun": "Nedeľa"
+        },
+        "error": {
+          "hours": "Začiatok musí byť pred koncom.",
+          "lunch": "Neplatný čas pauzy.",
+          "lunchOutside": "Pauza musí byť počas otváracích hodín."
+        }
       },
       "languages": {
         "title": "Jazyky",

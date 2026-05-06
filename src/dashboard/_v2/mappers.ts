@@ -7,6 +7,7 @@ import type {
  ApiRestaurant,
  ApiReservation,
  ApiOrder,
+ ApiScheduleDay,
 } from "./api";
 import type {
  Category,
@@ -16,9 +17,34 @@ import type {
  Booking,
  Order,
  Ml,
+ ReservationSchedule,
 } from "./types";
 import { normalizeOrderItems } from "./api";
 import { getMenuUrl } from "@/lib/menu-url";
+
+export function scheduleFromApi(
+ raw: ApiScheduleDay[] | null | undefined,
+ fallbackFrom: string,
+ fallbackTo: string,
+): ReservationSchedule {
+ if (Array.isArray(raw) && raw.length === 7) {
+  return raw.map((d) => ({
+   closed: !!d.closed,
+   from: d.from || fallbackFrom,
+   to: d.to || fallbackTo,
+   lunchFrom: d.lunchFrom || null,
+   lunchTo: d.lunchTo || null,
+  }));
+ }
+ // Legacy single-window — open every day with the same hours, no lunch.
+ return Array.from({ length: 7 }, () => ({
+  closed: false,
+  from: fallbackFrom,
+  to: fallbackTo,
+  lunchFrom: null,
+  lunchTo: null,
+ }));
+}
 
 export function categoryToMl(category: ApiCategory, defaultLang: string): Ml {
  const map: Ml = {};
@@ -193,7 +219,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  enabled: r.reservationsEnabled,
  approval: (r.reservationMode === "auto" ? "auto" : "manual") as "auto" | "manual",
  duration: r.reservationSlotMinutes,
- workingHours: { from: r.workingHoursStart, to: r.workingHoursEnd },
+ schedule: scheduleFromApi(r.reservationSchedule, r.workingHoursStart, r.workingHoursEnd),
  },
  orderSettings: {
  acceptOrders: r.ordersEnabled,

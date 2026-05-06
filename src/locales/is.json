@@ -422,7 +422,25 @@
         "durationMin": "{min} mín",
         "hoursLabel": "Vinnutími",
         "hoursTip": "Bókanir er hægt að gera innan þessara tíma.",
-        "hoursError": "„Frá“ verður að vera fyrir „til“."
+        "hoursError": "„Frá“ verður að vera fyrir „til“.",
+        "scheduleLabel": "Vikuáætlun",
+        "dayOpen": "Opið",
+        "dayClosed": "Lokað",
+        "lunchLabel": "Hádegishlé / síesta",
+        "day": {
+          "mon": "Mánudagur",
+          "tue": "Þriðjudagur",
+          "wed": "Miðvikudagur",
+          "thu": "Fimmtudagur",
+          "fri": "Föstudagur",
+          "sat": "Laugardagur",
+          "sun": "Sunnudagur"
+        },
+        "error": {
+          "hours": "Upphafstími verður að vera á undan lokatíma.",
+          "lunch": "Ógildur hlétími.",
+          "lunchOutside": "Hlé verður að vera innan opnunartíma."
+        }
       },
       "languages": {
         "title": "Tungumál",

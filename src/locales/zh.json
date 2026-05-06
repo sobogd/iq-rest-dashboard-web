@@ -422,7 +422,25 @@
         "durationMin": "{min} 分钟",
         "hoursLabel": "营业时间",
         "hoursTip": "可在这些时间内进行预订。",
-        "hoursError": "「从」必须早于「到」。"
+        "hoursError": "「从」必须早于「到」。",
+        "scheduleLabel": "每周时间表",
+        "dayOpen": "营业",
+        "dayClosed": "休息",
+        "lunchLabel": "午休 / 午睡",
+        "day": {
+          "mon": "星期一",
+          "tue": "星期二",
+          "wed": "星期三",
+          "thu": "星期四",
+          "fri": "星期五",
+          "sat": "星期六",
+          "sun": "星期日"
+        },
+        "error": {
+          "hours": "开始时间必须早于结束时间。",
+          "lunch": "无效的午休时间。",
+          "lunchOutside": "午休必须在营业时间内。"
+        }
       },
       "languages": {
         "title": "语言",

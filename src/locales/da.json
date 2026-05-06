@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Åbningstider",
         "hoursTip": "Reservationer kan laves inden for disse tider.",
-        "hoursError": "\"Fra\" skal være før \"til\"."
+        "hoursError": "\"Fra\" skal være før \"til\".",
+        "scheduleLabel": "Ugentlig tidsplan",
+        "dayOpen": "Åben",
+        "dayClosed": "Lukket",
+        "lunchLabel": "Frokostpause / siesta",
+        "day": {
+          "mon": "Mandag",
+          "tue": "Tirsdag",
+          "wed": "Onsdag",
+          "thu": "Torsdag",
+          "fri": "Fredag",
+          "sat": "Lørdag",
+          "sun": "Søndag"
+        },
+        "error": {
+          "hours": "Start skal være før slut.",
+          "lunch": "Ugyldig pausetid.",
+          "lunchOutside": "Pausen skal være inden for åbningstiden."
+        }
       },
       "languages": {
         "title": "Sprog",

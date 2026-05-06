@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Horário de funcionamento",
         "hoursTip": "As reservas podem ser feitas dentro destes horários.",
-        "hoursError": "\"De\" deve ser anterior a \"até\"."
+        "hoursError": "\"De\" deve ser anterior a \"até\".",
+        "scheduleLabel": "Horário semanal",
+        "dayOpen": "Aberto",
+        "dayClosed": "Fechado",
+        "lunchLabel": "Pausa para almoço / sesta",
+        "day": {
+          "mon": "Segunda-feira",
+          "tue": "Terça-feira",
+          "wed": "Quarta-feira",
+          "thu": "Quinta-feira",
+          "fri": "Sexta-feira",
+          "sat": "Sábado",
+          "sun": "Domingo"
+        },
+        "error": {
+          "hours": "O início deve ser antes do fim.",
+          "lunch": "Horário de pausa inválido.",
+          "lunchOutside": "A pausa deve estar dentro do horário."
+        }
       },
       "languages": {
         "title": "Idiomas",

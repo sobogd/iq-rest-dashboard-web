@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Radno vreme",
         "hoursTip": "Rezervacije se mogu praviti u ovim satima.",
-        "hoursError": "„Od“ mora biti pre „do“."
+        "hoursError": "„Od“ mora biti pre „do“.",
+        "scheduleLabel": "Недељни распоред",
+        "dayOpen": "Отворено",
+        "dayClosed": "Затворено",
+        "lunchLabel": "Пауза за ручак / сијеста",
+        "day": {
+          "mon": "Понедељак",
+          "tue": "Уторак",
+          "wed": "Среда",
+          "thu": "Четвртак",
+          "fri": "Петак",
+          "sat": "Субота",
+          "sun": "Недеља"
+        },
+        "error": {
+          "hours": "Почетак мора бити пре краја.",
+          "lunch": "Неисправно време паузе.",
+          "lunchOutside": "Пауза мора бити у радном времену."
+        }
       },
       "languages": {
         "title": "Jezici",

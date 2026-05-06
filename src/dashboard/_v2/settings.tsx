@@ -811,25 +811,46 @@ export function BookingSettingsPage({
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
- const validHours = draft.workingHours.from < draft.workingHours.to;
- const canSave = !draft.enabled || validHours;
+ const dayErrors = draft.schedule.map((d) => {
+ if (d.closed) return null;
+ if (!(d.from < d.to)) return "hours";
+ const lunchSet = d.lunchFrom !== null && d.lunchTo !== null;
+ if (lunchSet) {
+ if (!(d.lunchFrom! < d.lunchTo!)) return "lunch";
+ if (!(d.lunchFrom! >= d.from && d.lunchTo! <= d.to)) return "lunchOutside";
+ }
+ return null;
+ });
+ const canSave = !draft.enabled || dayErrors.every((e) => e === null);
 
  async function save() {
  track("dash_settings_booking_save");
  if (!canSave) return;
+ // Keep legacy workingHoursStart/End in sync with the first open day so
+ // public-menu fallback (reservationSchedule null) still picks something.
+ const firstOpen = draft.schedule.find((d) => !d.closed);
  try {
  await updateRestaurant({
  reservationsEnabled: draft.enabled,
  reservationMode: draft.approval,
  reservationSlotMinutes: draft.duration,
- workingHoursStart: draft.workingHours.from,
- workingHoursEnd: draft.workingHours.to,
+ reservationSchedule: draft.schedule,
+ ...(firstOpen
+ ? { workingHoursStart: firstOpen.from, workingHoursEnd: firstOpen.to }
+ : {}),
  });
  } catch {
  return;
  }
  setRestaurant((r) => ({ ...r, bookingSettings: draft }));
  onBack();
+ }
+
+ function updateDay(idx: number, patch: Partial<typeof draft.schedule[0]>) {
+ setDraft((d) => ({
+ ...d,
+ schedule: d.schedule.map((day, i) => (i === idx ? { ...day, ...patch } : day)),
+ }));
  }
 
  const disabled = !draft.enabled;
@@ -906,49 +927,128 @@ export function BookingSettingsPage({
  </select>
  </div>
  </div>
+ </div>
 
- <Divider />
+ {/* All weekdays in one card, separated by dividers. */}
+ <div className={"mt-5 bg-card border border-border rounded-2xl p-5 md:p-6 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
+ {draft.schedule.map((day, idx) => (
+ <div key={idx}>
+ {idx > 0 ? <Divider /> : null}
+ <ScheduleDayRow
+ idx={idx}
+ day={day}
+ dayName={tb(`day.${WEEKDAY_KEYS[idx]}`)}
+ error={dayErrors[idx]}
+ tb={tb}
+ onChange={(patch) => updateDay(idx, patch)}
+ />
+ </div>
+ ))}
+ </div>
+ </div>
+ </div>
+ );
+}
 
- <div className={disabled ? "opacity-50 pointer-events-none" : ""}>
- <div className="flex items-center justify-between gap-3 flex-wrap">
+const WEEKDAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
+
+type DayErrorCode = "hours" | "lunch" | "lunchOutside" | null;
+
+function ScheduleDayRow({
+ idx,
+ day,
+ dayName,
+ error,
+ tb,
+ onChange,
+}: {
+ idx: number;
+ day: { closed: boolean; from: string; to: string; lunchFrom: string | null; lunchTo: string | null };
+ dayName: string;
+ error: DayErrorCode;
+ tb: ReturnType<typeof useTranslations>;
+ onChange: (patch: Partial<{ closed: boolean; from: string; to: string; lunchFrom: string | null; lunchTo: string | null }>) => void;
+}) {
+ const lunchEnabled = day.lunchFrom !== null && day.lunchTo !== null;
+ // Lunch must fit inside the day's working hours.
+ const lunchTimes = TIME_OPTIONS.filter((t) => t >= day.from && t <= day.to);
+ return (
  <div>
- <div className="text-sm font-medium text-foreground">{tb("hoursLabel")}</div>
- <div className="text-xs text-muted-foreground leading-snug mt-0.5">
- {tb("hoursTip")}
- </div>
- </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center justify-between gap-3 flex-nowrap min-h-10">
+ <label className="flex items-center gap-3 cursor-pointer select-none min-w-0">
+ <ToggleSwitch
+ checked={!day.closed}
+ onChange={() => {
+ track("dash_settings_booking_toggle_day", { idx });
+ onChange({ closed: !day.closed });
+ }}
+ />
+ <div className="text-sm font-semibold text-foreground truncate min-w-0">{dayName}</div>
+ </label>
+ <div className={"items-center gap-2 ml-auto shrink-0 " + (day.closed ? "hidden" : "flex")}>
  <select
- value={draft.workingHours.from}
- onChange={(e) => { track("dash_settings_booking_change_hour1"); setDraft((d) => ({ ...d, workingHours: { ...d.workingHours, from: e.target.value } })); }}
+ value={day.from}
+ onChange={(e) => onChange({ from: e.target.value })}
+ disabled={day.closed}
  className={inputClass + " w-auto tabular-nums"}
  >
- {TIME_OPTIONS.map((tm) => (
- <option key={tm} value={tm}>
- {tm}
- </option>
- ))}
+ {TIME_OPTIONS.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
  </select>
  <span className="text-muted-foreground">—</span>
  <select
- value={draft.workingHours.to}
- onChange={(e) => { track("dash_settings_booking_change_hour2"); setDraft((d) => ({ ...d, workingHours: { ...d.workingHours, to: e.target.value } })); }}
+ value={day.to}
+ onChange={(e) => onChange({ to: e.target.value })}
+ disabled={day.closed}
  className={inputClass + " w-auto tabular-nums"}
  >
- {TIME_OPTIONS.map((tm) => (
- <option key={tm} value={tm}>
- {tm}
- </option>
- ))}
+ {TIME_OPTIONS.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
  </select>
  </div>
  </div>
- {!validHours ? (
- <p className="text-xs text-red-600 mt-2">{tb("hoursError")}</p>
+
+ {!day.closed && (
+ <>
+ <div className="flex items-center justify-between gap-3 flex-nowrap min-h-10 mt-3">
+ <label className="flex items-center gap-3 cursor-pointer select-none min-w-0">
+ <ToggleSwitch
+ checked={lunchEnabled}
+ onChange={() => {
+ track("dash_settings_booking_toggle_lunch", { idx });
+ if (lunchEnabled) {
+ onChange({ lunchFrom: null, lunchTo: null });
+ } else {
+ onChange({ lunchFrom: "14:00", lunchTo: "16:00" });
+ }
+ }}
+ />
+ <div className="text-sm font-semibold text-foreground truncate min-w-0">{tb("lunchLabel")}</div>
+ </label>
+ <div className={"items-center gap-2 ml-auto shrink-0 " + (lunchEnabled ? "flex" : "hidden")}>
+ <select
+ value={day.lunchFrom || lunchTimes[0] || day.from}
+ onChange={(e) => onChange({ lunchFrom: e.target.value })}
+ disabled={!lunchEnabled}
+ className={inputClass + " w-auto tabular-nums"}
+ >
+ {lunchTimes.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
+ </select>
+ <span className="text-muted-foreground">—</span>
+ <select
+ value={day.lunchTo || lunchTimes[lunchTimes.length - 1] || day.to}
+ onChange={(e) => onChange({ lunchTo: e.target.value })}
+ disabled={!lunchEnabled}
+ className={inputClass + " w-auto tabular-nums"}
+ >
+ {lunchTimes.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
+ </select>
+ </div>
+ </div>
+
+ {error ? (
+ <p className="text-xs text-red-600 mt-3">{tb(`error.${error}`)}</p>
  ) : null}
- </div>
- </div>
- </div>
+ </>
+ )}
  </div>
  );
 }

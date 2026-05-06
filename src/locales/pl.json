@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Godziny pracy",
         "hoursTip": "Rezerwacje można składać w tych godzinach.",
-        "hoursError": "„Od” musi być wcześniej niż „do”."
+        "hoursError": "„Od” musi być wcześniej niż „do”.",
+        "scheduleLabel": "Harmonogram tygodniowy",
+        "dayOpen": "Otwarte",
+        "dayClosed": "Zamknięte",
+        "lunchLabel": "Przerwa obiadowa / sjesta",
+        "day": {
+          "mon": "Poniedziałek",
+          "tue": "Wtorek",
+          "wed": "Środa",
+          "thu": "Czwartek",
+          "fri": "Piątek",
+          "sat": "Sobota",
+          "sun": "Niedziela"
+        },
+        "error": {
+          "hours": "Początek musi być przed końcem.",
+          "lunch": "Nieprawidłowy czas przerwy.",
+          "lunchOutside": "Przerwa musi mieścić się w godzinach pracy."
+        }
       },
       "languages": {
         "title": "Języki",

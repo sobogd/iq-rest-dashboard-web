@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Töötunnid",
         "hoursTip": "Broneeringuid saab teha nendel kellaaegadel.",
-        "hoursError": "„Alates“ peab olema enne „kuni“."
+        "hoursError": "„Alates“ peab olema enne „kuni“.",
+        "scheduleLabel": "Nädala graafik",
+        "dayOpen": "Avatud",
+        "dayClosed": "Suletud",
+        "lunchLabel": "Lõunapaus / siesta",
+        "day": {
+          "mon": "Esmaspäev",
+          "tue": "Teisipäev",
+          "wed": "Kolmapäev",
+          "thu": "Neljapäev",
+          "fri": "Reede",
+          "sat": "Laupäev",
+          "sun": "Pühapäev"
+        },
+        "error": {
+          "hours": "Algus peab olema enne lõppu.",
+          "lunch": "Vigane pausi aeg.",
+          "lunchOutside": "Paus peab olema lahtiolekuajas."
+        }
       },
       "languages": {
         "title": "Keeled",

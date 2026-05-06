@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Darbo valandos",
         "hoursTip": "Rezervacijos galimos šiomis valandomis.",
-        "hoursError": "„Nuo“ turi būti anksčiau už „iki“."
+        "hoursError": "„Nuo“ turi būti anksčiau už „iki“.",
+        "scheduleLabel": "Savaitės grafikas",
+        "dayOpen": "Atidaryta",
+        "dayClosed": "Uždaryta",
+        "lunchLabel": "Pietų pertrauka / siesta",
+        "day": {
+          "mon": "Pirmadienis",
+          "tue": "Antradienis",
+          "wed": "Trečiadienis",
+          "thu": "Ketvirtadienis",
+          "fri": "Penktadienis",
+          "sat": "Šeštadienis",
+          "sun": "Sekmadienis"
+        },
+        "error": {
+          "hours": "Pradžia turi būti anksčiau nei pabaiga.",
+          "lunch": "Neteisingas pertraukos laikas.",
+          "lunchOutside": "Pertrauka turi būti darbo valandomis."
+        }
       },
       "languages": {
         "title": "Kalbos",

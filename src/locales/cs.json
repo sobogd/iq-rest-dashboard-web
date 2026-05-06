@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Pracovní hodiny",
         "hoursTip": "Rezervace lze provést v rámci těchto hodin.",
-        "hoursError": "„Od“ musí být dříve než „do“."
+        "hoursError": "„Od“ musí být dříve než „do“.",
+        "scheduleLabel": "Týdenní rozvrh",
+        "dayOpen": "Otevřeno",
+        "dayClosed": "Zavřeno",
+        "lunchLabel": "Polední pauza / siesta",
+        "day": {
+          "mon": "Pondělí",
+          "tue": "Úterý",
+          "wed": "Středa",
+          "thu": "Čtvrtek",
+          "fri": "Pátek",
+          "sat": "Sobota",
+          "sun": "Neděle"
+        },
+        "error": {
+          "hours": "Začátek musí být před koncem.",
+          "lunch": "Neplatný čas pauzy.",
+          "lunchOutside": "Pauza musí být uvnitř otevírací doby."
+        }
       },
       "languages": {
         "title": "Jazyky",

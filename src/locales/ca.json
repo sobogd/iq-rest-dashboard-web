@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Horari",
         "hoursTip": "Les reserves es poden fer dins d'aquest horari.",
-        "hoursError": "«Des de» ha de ser anterior a «fins a»."
+        "hoursError": "«Des de» ha de ser anterior a «fins a».",
+        "scheduleLabel": "Horari setmanal",
+        "dayOpen": "Obert",
+        "dayClosed": "Tancat",
+        "lunchLabel": "Pausa de migdia / sesta",
+        "day": {
+          "mon": "Dilluns",
+          "tue": "Dimarts",
+          "wed": "Dimecres",
+          "thu": "Dijous",
+          "fri": "Divendres",
+          "sat": "Dissabte",
+          "sun": "Diumenge"
+        },
+        "error": {
+          "hours": "L'inici ha de ser anterior al final.",
+          "lunch": "Hores de la pausa incorrectes.",
+          "lunchOutside": "La pausa ha d'estar dins l'horari."
+        }
       },
       "languages": {
         "title": "Idiomes",

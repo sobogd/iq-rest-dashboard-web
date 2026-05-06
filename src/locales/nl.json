@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Openingstijden",
         "hoursTip": "Reserveringen kunnen binnen deze tijden gemaakt worden.",
-        "hoursError": "\"Van\" moet voor \"tot\" liggen."
+        "hoursError": "\"Van\" moet voor \"tot\" liggen.",
+        "scheduleLabel": "Weekrooster",
+        "dayOpen": "Open",
+        "dayClosed": "Gesloten",
+        "lunchLabel": "Lunchpauze / siesta",
+        "day": {
+          "mon": "Maandag",
+          "tue": "Dinsdag",
+          "wed": "Woensdag",
+          "thu": "Donderdag",
+          "fri": "Vrijdag",
+          "sat": "Zaterdag",
+          "sun": "Zondag"
+        },
+        "error": {
+          "hours": "Begin moet vóór einde liggen.",
+          "lunch": "Ongeldige pauzetijd.",
+          "lunchOutside": "Pauze moet binnen openingstijden vallen."
+        }
       },
       "languages": {
         "title": "Talen",

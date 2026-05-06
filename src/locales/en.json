@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Working hours",
         "hoursTip": "Reservations can be made within these hours.",
-        "hoursError": "\"From\" must be earlier than \"to\"."
+        "hoursError": "\"From\" must be earlier than \"to\".",
+        "scheduleLabel": "Weekly schedule",
+        "dayOpen": "Open",
+        "dayClosed": "Closed",
+        "lunchLabel": "Lunch break / siesta",
+        "day": {
+          "mon": "Monday",
+          "tue": "Tuesday",
+          "wed": "Wednesday",
+          "thu": "Thursday",
+          "fri": "Friday",
+          "sat": "Saturday",
+          "sun": "Sunday"
+        },
+        "error": {
+          "hours": "Start time must be before end time.",
+          "lunch": "Invalid lunch break.",
+          "lunchOutside": "Lunch break must be within working hours."
+        }
       },
       "languages": {
         "title": "Languages",

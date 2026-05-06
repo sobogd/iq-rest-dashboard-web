@@ -422,7 +422,25 @@
         "durationMin": "{min} perc",
         "hoursLabel": "Nyitvatartás",
         "hoursTip": "Foglalások ezen időpontok között lehetségesek.",
-        "hoursError": "A „-tól” értéknek korábbinak kell lennie a „-ig” értéknél."
+        "hoursError": "A „-tól” értéknek korábbinak kell lennie a „-ig” értéknél.",
+        "scheduleLabel": "Heti beosztás",
+        "dayOpen": "Nyitva",
+        "dayClosed": "Zárva",
+        "lunchLabel": "Ebédszünet / sziesta",
+        "day": {
+          "mon": "Hétfő",
+          "tue": "Kedd",
+          "wed": "Szerda",
+          "thu": "Csütörtök",
+          "fri": "Péntek",
+          "sat": "Szombat",
+          "sun": "Vasárnap"
+        },
+        "error": {
+          "hours": "A kezdésnek a befejezés előtt kell lennie.",
+          "lunch": "Érvénytelen szünetidő.",
+          "lunchOutside": "A szünetnek a nyitvatartási időn belül kell lennie."
+        }
       },
       "languages": {
         "title": "Nyelvek",

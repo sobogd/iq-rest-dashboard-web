@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Öppettider",
         "hoursTip": "Bokningar kan göras inom dessa tider.",
-        "hoursError": "\"Från\" måste vara före \"till\"."
+        "hoursError": "\"Från\" måste vara före \"till\".",
+        "scheduleLabel": "Veckoschema",
+        "dayOpen": "Öppet",
+        "dayClosed": "Stängt",
+        "lunchLabel": "Lunchrast / siesta",
+        "day": {
+          "mon": "Måndag",
+          "tue": "Tisdag",
+          "wed": "Onsdag",
+          "thu": "Torsdag",
+          "fri": "Fredag",
+          "sat": "Lördag",
+          "sun": "Söndag"
+        },
+        "error": {
+          "hours": "Start måste vara före slut.",
+          "lunch": "Ogiltig rasttid.",
+          "lunchOutside": "Rasten måste vara inom öppettiderna."
+        }
       },
       "languages": {
         "title": "Språk",

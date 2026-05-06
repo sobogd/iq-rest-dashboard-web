@@ -422,7 +422,25 @@
         "durationMin": "{min} nóim",
         "hoursLabel": "Uaireanta oibre",
         "hoursTip": "Is féidir áirithintí a dhéanamh laistigh de na huaireanta seo.",
-        "hoursError": "Caithfidh „Ó“ a bheith roimh „go“."
+        "hoursError": "Caithfidh „Ó“ a bheith roimh „go“.",
+        "scheduleLabel": "Sceideal seachtainiúil",
+        "dayOpen": "Oscailte",
+        "dayClosed": "Dúnta",
+        "lunchLabel": "Sos lóin / siesta",
+        "day": {
+          "mon": "Luan",
+          "tue": "Máirt",
+          "wed": "Céadaoin",
+          "thu": "Déardaoin",
+          "fri": "Aoine",
+          "sat": "Satharn",
+          "sun": "Domhnach"
+        },
+        "error": {
+          "hours": "Ní mór don tús a bheith roimh an deireadh.",
+          "lunch": "Am sosa neamhbhailí.",
+          "lunchOutside": "Caithfidh an sos a bheith laistigh d'uaireanta oibre."
+        }
       },
       "languages": {
         "title": "Teangacha",

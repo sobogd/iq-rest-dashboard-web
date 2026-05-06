@@ -104,11 +104,22 @@ export interface RestaurantLocation {
  lng: number | null;
 }
 
+export interface ScheduleDay {
+ closed: boolean;
+ from: string;
+ to: string;
+ lunchFrom: string | null;
+ lunchTo: string | null;
+}
+
+// Length 7. Index 0=Mon ... 6=Sun.
+export type ReservationSchedule = ScheduleDay[];
+
 export interface BookingSettings {
  enabled: boolean;
  approval: "manual" | "auto";
  duration: number;
- workingHours: { from: string; to: string };
+ schedule: ReservationSchedule;
 }
 
 export interface OrderSettings {

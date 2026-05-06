@@ -6,6 +6,14 @@ import { apiUrl } from "@/lib/api";
 
 // ── Restaurant ──
 
+export interface ApiScheduleDay {
+ closed: boolean;
+ from: string;
+ to: string;
+ lunchFrom: string | null;
+ lunchTo: string | null;
+}
+
 export interface ApiRestaurant {
  id: string;
  title: string;
@@ -30,6 +38,7 @@ export interface ApiRestaurant {
  reservationSlotMinutes: number;
  workingHoursStart: string;
  workingHoursEnd: string;
+ reservationSchedule: ApiScheduleDay[] | null;
  ordersEnabled: boolean;
  orderNameEnabled: boolean;
  orderPhoneEnabled: boolean;

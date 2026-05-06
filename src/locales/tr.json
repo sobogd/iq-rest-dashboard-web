@@ -422,7 +422,25 @@
         "durationMin": "{min} dk",
         "hoursLabel": "Çalışma saatleri",
         "hoursTip": "Rezervasyonlar bu saatler içinde yapılabilir.",
-        "hoursError": "\"Başlangıç\" \"bitiş\"ten önce olmalı."
+        "hoursError": "\"Başlangıç\" \"bitiş\"ten önce olmalı.",
+        "scheduleLabel": "Haftalık program",
+        "dayOpen": "Açık",
+        "dayClosed": "Kapalı",
+        "lunchLabel": "Öğle molası / siesta",
+        "day": {
+          "mon": "Pazartesi",
+          "tue": "Salı",
+          "wed": "Çarşamba",
+          "thu": "Perşembe",
+          "fri": "Cuma",
+          "sat": "Cumartesi",
+          "sun": "Pazar"
+        },
+        "error": {
+          "hours": "Başlangıç bitişten önce olmalı.",
+          "lunch": "Geçersiz mola saati.",
+          "lunchOutside": "Mola çalışma saatleri içinde olmalı."
+        }
       },
       "languages": {
         "title": "Diller",

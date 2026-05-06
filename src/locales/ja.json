@@ -422,7 +422,25 @@
         "durationMin": "{min} 分",
         "hoursLabel": "営業時間",
         "hoursTip": "予約はこの時間内に行えます。",
-        "hoursError": "「開始」は「終了」より前である必要があります。"
+        "hoursError": "「開始」は「終了」より前である必要があります。",
+        "scheduleLabel": "週間スケジュール",
+        "dayOpen": "営業中",
+        "dayClosed": "休業",
+        "lunchLabel": "昼休憩 / シエスタ",
+        "day": {
+          "mon": "月曜日",
+          "tue": "火曜日",
+          "wed": "水曜日",
+          "thu": "木曜日",
+          "fri": "金曜日",
+          "sat": "土曜日",
+          "sun": "日曜日"
+        },
+        "error": {
+          "hours": "開始時刻は終了時刻より前である必要があります。",
+          "lunch": "昼休憩の時間が無効です。",
+          "lunchOutside": "昼休憩は営業時間内でなければなりません。"
+        }
       },
       "languages": {
         "title": "言語",

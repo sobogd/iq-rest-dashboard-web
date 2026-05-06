@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Darba laiks",
         "hoursTip": "Rezervācijas var veikt šajās stundās.",
-        "hoursError": "„No“ jābūt agrāk nekā „līdz“."
+        "hoursError": "„No“ jābūt agrāk nekā „līdz“.",
+        "scheduleLabel": "Nedēļas grafiks",
+        "dayOpen": "Atvērts",
+        "dayClosed": "Slēgts",
+        "lunchLabel": "Pusdienu pārtraukums / siesta",
+        "day": {
+          "mon": "Pirmdiena",
+          "tue": "Otrdiena",
+          "wed": "Trešdiena",
+          "thu": "Ceturtdiena",
+          "fri": "Piektdiena",
+          "sat": "Sestdiena",
+          "sun": "Svētdiena"
+        },
+        "error": {
+          "hours": "Sākumam jābūt pirms beigām.",
+          "lunch": "Nepareizs pārtraukuma laiks.",
+          "lunchOutside": "Pārtraukumam jābūt darba laikā."
+        }
       },
       "languages": {
         "title": "Valodas",

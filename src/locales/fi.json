@@ -422,7 +422,25 @@
         "durationMin": "{min} min",
         "hoursLabel": "Aukioloajat",
         "hoursTip": "Varauksia voi tehdä näinä aikoina.",
-        "hoursError": "”Mistä” täytyy olla ennen ”mihin”."
+        "hoursError": "”Mistä” täytyy olla ennen ”mihin”.",
+        "scheduleLabel": "Viikkoaikataulu",
+        "dayOpen": "Avoinna",
+        "dayClosed": "Suljettu",
+        "lunchLabel": "Lounastauko / siesta",
+        "day": {
+          "mon": "Maanantai",
+          "tue": "Tiistai",
+          "wed": "Keskiviikko",
+          "thu": "Torstai",
+          "fri": "Perjantai",
+          "sat": "Lauantai",
+          "sun": "Sunnuntai"
+        },
+        "error": {
+          "hours": "Alkamisajan on oltava ennen päättymistä.",
+          "lunch": "Virheellinen tauon aika.",
+          "lunchOutside": "Tauon on oltava aukioloaikojen sisällä."
+        }
       },
       "languages": {
         "title": "Kielet",
