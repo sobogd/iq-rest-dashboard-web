@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { MapPinIcon, UsersIcon } from "./icons";
@@ -34,30 +35,35 @@ export function ReservationsPage({
 }) {
  const t = useTranslations("dashboard.reservations");
 
- const grouped = (() => {
+ const [showPast, setShowPast] = useState(false);
+
+ const { upcoming, past } = (() => {
  const today = new Date();
  today.setHours(0, 0, 0, 0);
- const map = new Map<string, { date: Date; items: Booking[] }>();
+ const upcomingMap = new Map<string, { date: Date; items: Booking[] }>();
+ const pastMap = new Map<string, { date: Date; items: Booking[] }>();
  bookings.forEach((b) => {
  if (b.status === "cancelled") return;
  const d = new Date(b.datetime);
  d.setHours(0, 0, 0, 0);
- if (d < today) return;
  const key = d.toISOString().slice(0, 10);
- if (!map.has(key)) map.set(key, { date: d, items: [] });
- map.get(key)!.items.push(b);
+ const targetMap = d < today ? pastMap : upcomingMap;
+ if (!targetMap.has(key)) targetMap.set(key, { date: d, items: [] });
+ targetMap.get(key)!.items.push(b);
  });
- const days = [...map.values()].sort((a, b) => a.date.getTime() - b.date.getTime());
- days.forEach((d) =>
- d.items.sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()),
- );
- return days;
+ const upcomingDays = [...upcomingMap.values()].sort((a, b) => a.date.getTime() - b.date.getTime());
+ const pastDays = [...pastMap.values()].sort((a, b) => b.date.getTime() - a.date.getTime());
+ const sortItems = (d: { items: Booking[] }) =>
+ d.items.sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
+ upcomingDays.forEach(sortItems);
+ pastDays.forEach(sortItems);
+ return { upcoming: upcomingDays, past: pastDays };
  })();
 
  const today = new Date();
  today.setHours(0, 0, 0, 0);
- const todayGroup = grouped.find((g) => isSameDay(g.date, today));
- const upcomingGroups = grouped.filter((g) => !isSameDay(g.date, today));
+ const todayGroup = upcoming.find((g) => isSameDay(g.date, today));
+ const upcomingGroups = upcoming.filter((g) => !isSameDay(g.date, today));
 
  async function setBookingStatus(id: string, status: Booking["status"]) {
  if (status === "confirmed") track("dash_booking_accept");
@@ -75,7 +81,8 @@ export function ReservationsPage({
  // Count must match the grouped list — only today and future, non-cancelled.
  // Otherwise the subtitle ("Tiene 2 reservas próximas") can disagree with
  // the empty-state body when all reservations are in the past.
- const upcomingCount = grouped.reduce((sum, g) => sum + g.items.length, 0);
+ const upcomingCount = upcoming.reduce((sum, g) => sum + g.items.length, 0);
+ const pastCount = past.reduce((sum, g) => sum + g.items.length, 0);
 
  return (
  <div className="max-w-2xl mx-auto">
@@ -84,13 +91,20 @@ export function ReservationsPage({
  subtitle={upcomingCount === 1 ? t("subtitleOne", { count: upcomingCount }) : t("subtitleOther", { count: upcomingCount })}
  />
 
- {grouped.length === 0 ? (
+ {upcoming.length === 0 && past.length === 0 ? (
  <EmptyState
  title={t("noBookings")}
  subtitle={t("noBookingsSub")}
  />
  ) : (
  <div className="space-y-6">
+ {upcoming.length === 0 ? (
+ <EmptyState
+ title={t("noBookings")}
+ subtitle={t("noBookingsSub")}
+ />
+ ) : (
+ <>
  {todayGroup ? (
  <BookingGroup
  date={todayGroup.date}
@@ -117,6 +131,33 @@ export function ReservationsPage({
  onStatusChange={setBookingStatus}
  />
  ))}
+ </>
+ )}
+
+ {past.length > 0 ? (
+ <div className="pt-4 border-t border-border">
+ <button
+ type="button"
+ onClick={() => setShowPast((v) => !v)}
+ className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+ >
+ {showPast ? t("hidePast") : t("showPast", { count: pastCount })}
+ </button>
+ {showPast ? (
+ <div className="space-y-6 mt-4">
+ {past.map((g) => (
+ <BookingGroup
+ key={g.date.toISOString()}
+ date={g.date}
+ items={g.items}
+ tables={tables}
+ onStatusChange={setBookingStatus}
+ />
+ ))}
+ </div>
+ ) : null}
+ </div>
+ ) : null}
  </div>
  )}
  </div>
@@ -189,7 +230,10 @@ function BookingCard({
  </span>
  </div>
  <div className="text-sm text-foreground mt-1 truncate">{booking.guestName}</div>
- <div className="text-xs text-muted-foreground truncate">{booking.guestEmail}</div>
+ <div className="text-xs text-muted-foreground truncate">
+ {booking.guestEmail}
+ {booking.guestPhone ? ` · ${booking.guestPhone}` : ""}
+ </div>
  </div>
 
  <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -228,6 +272,16 @@ function BookingCard({
  className="flex-1 h-8 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-md transition-colors dark:bg-emerald-950/40 dark:text-emerald-400"
  >
  {t("confirm")}
+ </button>
+ </div>
+ ) : booking.status === "confirmed" ? (
+ <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
+ <button
+ type="button"
+ onClick={() => onStatusChange(booking.id, "completed")}
+ className="flex-1 h-8 text-xs font-medium text-foreground bg-secondary rounded-md transition-colors hover:bg-muted"
+ >
+ {t("markComplete")}
  </button>
  </div>
  ) : null}

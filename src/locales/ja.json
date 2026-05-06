@@ -313,7 +313,10 @@
       "statusPending": "保留中",
       "statusConfirmed": "確認済み",
       "statusCancelled": "キャンセル",
-      "statusCompleted": "完了"
+      "statusCompleted": "完了",
+      "markComplete": "完了",
+      "showPast": "過去の予約を表示 ({count})",
+      "hidePast": "過去の予約を非表示"
     },
     "tables": {
       "table": "テーブル",

@@ -313,7 +313,10 @@
       "statusPending": "قيد الانتظار",
       "statusConfirmed": "مؤكد",
       "statusCancelled": "ملغى",
-      "statusCompleted": "مكتمل"
+      "statusCompleted": "مكتمل",
+      "markComplete": "إنهاء",
+      "showPast": "عرض الحجوزات السابقة ({count})",
+      "hidePast": "إخفاء الحجوزات السابقة"
     },
     "tables": {
       "table": "طاولة",

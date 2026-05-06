@@ -313,7 +313,10 @@
       "statusPending": "Oczekująca",
       "statusConfirmed": "Potwierdzona",
       "statusCancelled": "Anulowana",
-      "statusCompleted": "Zakończona"
+      "statusCompleted": "Zakończona",
+      "markComplete": "Zakończ",
+      "showPast": "Pokaż wcześniejsze rezerwacje ({count})",
+      "hidePast": "Ukryj wcześniejsze rezerwacje"
     },
     "tables": {
       "table": "Stolik",

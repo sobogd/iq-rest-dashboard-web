@@ -313,7 +313,10 @@
       "statusPending": "Gaida",
       "statusConfirmed": "Apstiprināts",
       "statusCancelled": "Atcelts",
-      "statusCompleted": "Pabeigts"
+      "statusCompleted": "Pabeigts",
+      "markComplete": "Pabeigt",
+      "showPast": "Rādīt iepriekšējās rezervācijas ({count})",
+      "hidePast": "Slēpt iepriekšējās rezervācijas"
     },
     "tables": {
       "table": "Galds",

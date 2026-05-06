@@ -313,7 +313,10 @@
       "statusPending": "Чакаща",
       "statusConfirmed": "Потвърдена",
       "statusCancelled": "Отказана",
-      "statusCompleted": "Завършена"
+      "statusCompleted": "Завършена",
+      "markComplete": "Завърши",
+      "showPast": "Покажи минали резервации ({count})",
+      "hidePast": "Скрий минали резервации"
     },
     "tables": {
       "table": "Маса",

@@ -313,7 +313,10 @@
       "statusPending": "În așteptare",
       "statusConfirmed": "Confirmată",
       "statusCancelled": "Anulată",
-      "statusCompleted": "Finalizată"
+      "statusCompleted": "Finalizată",
+      "markComplete": "Finalizează",
+      "showPast": "Afișează rezervările anterioare ({count})",
+      "hidePast": "Ascunde rezervările anterioare"
     },
     "tables": {
       "table": "Masa",

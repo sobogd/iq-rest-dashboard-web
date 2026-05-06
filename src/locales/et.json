@@ -313,7 +313,10 @@
       "statusPending": "Ootel",
       "statusConfirmed": "Kinnitatud",
       "statusCancelled": "Tühistatud",
-      "statusCompleted": "Lõpetatud"
+      "statusCompleted": "Lõpetatud",
+      "markComplete": "Lõpeta",
+      "showPast": "Näita varasemaid broneeringuid ({count})",
+      "hidePast": "Peida varasemad broneeringud"
     },
     "tables": {
       "table": "Laud",

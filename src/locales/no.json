@@ -313,7 +313,10 @@
       "statusPending": "Venter",
       "statusConfirmed": "Bekreftet",
       "statusCancelled": "Kansellert",
-      "statusCompleted": "Fullført"
+      "statusCompleted": "Fullført",
+      "markComplete": "Fullfør",
+      "showPast": "Vis tidligere reservasjoner ({count})",
+      "hidePast": "Skjul tidligere reservasjoner"
     },
     "tables": {
       "table": "Bord",

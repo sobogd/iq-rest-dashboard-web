@@ -313,7 +313,10 @@
       "statusPending": "대기 중",
       "statusConfirmed": "확정",
       "statusCancelled": "취소",
-      "statusCompleted": "완료"
+      "statusCompleted": "완료",
+      "markComplete": "완료",
+      "showPast": "지난 예약 보기 ({count})",
+      "hidePast": "지난 예약 숨기기"
     },
     "tables": {
       "table": "테이블",

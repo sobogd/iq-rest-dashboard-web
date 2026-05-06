@@ -313,7 +313,10 @@
       "statusPending": "Beklemede",
       "statusConfirmed": "Onaylandı",
       "statusCancelled": "İptal edildi",
-      "statusCompleted": "Tamamlandı"
+      "statusCompleted": "Tamamlandı",
+      "markComplete": "Tamamla",
+      "showPast": "Geçmiş rezervasyonları göster ({count})",
+      "hidePast": "Geçmiş rezervasyonları gizle"
     },
     "tables": {
       "table": "Masa",

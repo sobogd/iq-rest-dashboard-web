@@ -313,7 +313,10 @@
       "statusPending": "Odottaa",
       "statusConfirmed": "Vahvistettu",
       "statusCancelled": "Peruttu",
-      "statusCompleted": "Päättynyt"
+      "statusCompleted": "Päättynyt",
+      "markComplete": "Merkitse valmiiksi",
+      "showPast": "Näytä menneet varaukset ({count})",
+      "hidePast": "Piilota menneet varaukset"
     },
     "tables": {
       "table": "Pöytä",

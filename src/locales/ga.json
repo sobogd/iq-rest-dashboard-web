@@ -313,7 +313,10 @@
       "statusPending": "Ar feitheamh",
       "statusConfirmed": "Deimhnithe",
       "statusCancelled": "Cealaithe",
-      "statusCompleted": "Críochnaithe"
+      "statusCompleted": "Críochnaithe",
+      "markComplete": "Críochnaigh",
+      "showPast": "Taispeáin áirithintí roimhe seo ({count})",
+      "hidePast": "Folaigh áirithintí roimhe seo"
     },
     "tables": {
       "table": "Bord",

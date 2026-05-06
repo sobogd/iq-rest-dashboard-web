@@ -313,7 +313,10 @@
       "statusPending": "In afwachting",
       "statusConfirmed": "Bevestigd",
       "statusCancelled": "Geannuleerd",
-      "statusCompleted": "Voltooid"
+      "statusCompleted": "Voltooid",
+      "markComplete": "Afronden",
+      "showPast": "Eerdere reserveringen tonen ({count})",
+      "hidePast": "Eerdere reserveringen verbergen"
     },
     "tables": {
       "table": "Tafel",

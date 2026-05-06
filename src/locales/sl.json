@@ -313,7 +313,10 @@
       "statusPending": "Čaka",
       "statusConfirmed": "Potrjeno",
       "statusCancelled": "Preklicano",
-      "statusCompleted": "Zaključeno"
+      "statusCompleted": "Zaključeno",
+      "markComplete": "Zaključi",
+      "showPast": "Prikaži pretekle rezervacije ({count})",
+      "hidePast": "Skrij pretekle rezervacije"
     },
     "tables": {
       "table": "Miza",

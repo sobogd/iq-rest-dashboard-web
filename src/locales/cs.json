@@ -313,7 +313,10 @@
       "statusPending": "Čeká",
       "statusConfirmed": "Potvrzeno",
       "statusCancelled": "Zrušeno",
-      "statusCompleted": "Dokončeno"
+      "statusCompleted": "Dokončeno",
+      "markComplete": "Dokončit",
+      "showPast": "Zobrazit minulé rezervace ({count})",
+      "hidePast": "Skrýt minulé rezervace"
     },
     "tables": {
       "table": "Stůl",

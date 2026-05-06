@@ -313,7 +313,10 @@
       "statusPending": "待处理",
       "statusConfirmed": "已确认",
       "statusCancelled": "已取消",
-      "statusCompleted": "已完成"
+      "statusCompleted": "已完成",
+      "markComplete": "完成",
+      "showPast": "显示历史预订 ({count})",
+      "hidePast": "隐藏历史预订"
     },
     "tables": {
       "table": "桌台",

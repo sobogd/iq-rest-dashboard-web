@@ -313,7 +313,10 @@
       "statusPending": "در انتظار",
       "statusConfirmed": "تأیید شد",
       "statusCancelled": "لغو شد",
-      "statusCompleted": "تکمیل شد"
+      "statusCompleted": "تکمیل شد",
+      "markComplete": "اتمام",
+      "showPast": "نمایش رزروهای گذشته ({count})",
+      "hidePast": "پنهان کردن رزروهای گذشته"
     },
     "tables": {
       "table": "میز",

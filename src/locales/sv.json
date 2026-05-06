@@ -313,7 +313,10 @@
       "statusPending": "Väntande",
       "statusConfirmed": "Bekräftad",
       "statusCancelled": "Avbokad",
-      "statusCompleted": "Slutförd"
+      "statusCompleted": "Slutförd",
+      "markComplete": "Slutför",
+      "showPast": "Visa tidigare bokningar ({count})",
+      "hidePast": "Dölj tidigare bokningar"
     },
     "tables": {
       "table": "Bord",

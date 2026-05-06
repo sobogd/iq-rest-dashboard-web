@@ -313,7 +313,10 @@
       "statusPending": "Ожидает",
       "statusConfirmed": "Подтверждено",
       "statusCancelled": "Отменено",
-      "statusCompleted": "Завершено"
+      "statusCompleted": "Завершено",
+      "markComplete": "Завершить",
+      "showPast": "Показать прошлые брони ({count})",
+      "hidePast": "Скрыть прошлые брони"
     },
     "tables": {
       "table": "Стол",

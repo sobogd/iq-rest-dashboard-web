@@ -313,7 +313,10 @@
       "statusPending": "En attente",
       "statusConfirmed": "Confirmée",
       "statusCancelled": "Annulée",
-      "statusCompleted": "Terminée"
+      "statusCompleted": "Terminée",
+      "markComplete": "Terminer",
+      "showPast": "Afficher les réservations passées ({count})",
+      "hidePast": "Masquer les réservations passées"
     },
     "tables": {
       "table": "Table",

@@ -313,7 +313,10 @@
       "statusPending": "Laukia",
       "statusConfirmed": "Patvirtinta",
       "statusCancelled": "Atšaukta",
-      "statusCompleted": "Užbaigta"
+      "statusCompleted": "Užbaigta",
+      "markComplete": "Užbaigti",
+      "showPast": "Rodyti ankstesnes rezervacijas ({count})",
+      "hidePast": "Slėpti ankstesnes rezervacijas"
     },
     "tables": {
       "table": "Stalas",

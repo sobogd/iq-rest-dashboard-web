@@ -313,7 +313,10 @@
       "statusPending": "Pendent",
       "statusConfirmed": "Confirmada",
       "statusCancelled": "Cancel·lada",
-      "statusCompleted": "Completada"
+      "statusCompleted": "Completada",
+      "markComplete": "Completar",
+      "showPast": "Mostrar reserves passades ({count})",
+      "hidePast": "Amagar reserves passades"
     },
     "tables": {
       "table": "Taula",

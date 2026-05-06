@@ -313,7 +313,10 @@
       "statusPending": "Pendiente",
       "statusConfirmed": "Confirmada",
       "statusCancelled": "Cancelada",
-      "statusCompleted": "Completada"
+      "statusCompleted": "Completada",
+      "markComplete": "Completar",
+      "showPast": "Mostrar reservas pasadas ({count})",
+      "hidePast": "Ocultar reservas pasadas"
     },
     "tables": {
       "table": "Mesa",

@@ -313,7 +313,10 @@
       "statusPending": "Függőben",
       "statusConfirmed": "Megerősítve",
       "statusCancelled": "Lemondva",
-      "statusCompleted": "Befejezve"
+      "statusCompleted": "Befejezve",
+      "markComplete": "Befejezés",
+      "showPast": "Korábbi foglalások megjelenítése ({count})",
+      "hidePast": "Korábbi foglalások elrejtése"
     },
     "tables": {
       "table": "Asztal",

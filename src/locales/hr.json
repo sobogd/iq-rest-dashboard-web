@@ -313,7 +313,10 @@
       "statusPending": "Na čekanju",
       "statusConfirmed": "Potvrđeno",
       "statusCancelled": "Otkazano",
-      "statusCompleted": "Završeno"
+      "statusCompleted": "Završeno",
+      "markComplete": "Završi",
+      "showPast": "Prikaži prošle rezervacije ({count})",
+      "hidePast": "Sakrij prošle rezervacije"
     },
     "tables": {
       "table": "Stol",

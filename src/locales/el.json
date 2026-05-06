@@ -313,7 +313,10 @@
       "statusPending": "Εκκρεμεί",
       "statusConfirmed": "Επιβεβαιώθηκε",
       "statusCancelled": "Ακυρώθηκε",
-      "statusCompleted": "Ολοκληρώθηκε"
+      "statusCompleted": "Ολοκληρώθηκε",
+      "markComplete": "Ολοκλήρωση",
+      "showPast": "Εμφάνιση παλαιών κρατήσεων ({count})",
+      "hidePast": "Απόκρυψη παλαιών κρατήσεων"
     },
     "tables": {
       "table": "Τραπέζι",

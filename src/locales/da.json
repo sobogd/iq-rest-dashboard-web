@@ -313,7 +313,10 @@
       "statusPending": "Afventer",
       "statusConfirmed": "Bekræftet",
       "statusCancelled": "Annulleret",
-      "statusCompleted": "Afsluttet"
+      "statusCompleted": "Afsluttet",
+      "markComplete": "Afslut",
+      "showPast": "Vis tidligere reservationer ({count})",
+      "hidePast": "Skjul tidligere reservationer"
     },
     "tables": {
       "table": "Bord",

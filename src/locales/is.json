@@ -313,7 +313,10 @@
       "statusPending": "Bíður",
       "statusConfirmed": "Staðfest",
       "statusCancelled": "Aflýst",
-      "statusCompleted": "Lokið"
+      "statusCompleted": "Lokið",
+      "markComplete": "Ljúka",
+      "showPast": "Sýna fyrri bókanir ({count})",
+      "hidePast": "Fela fyrri bókanir"
     },
     "tables": {
       "table": "Borð",

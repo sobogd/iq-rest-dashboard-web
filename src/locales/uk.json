@@ -313,7 +313,10 @@
       "statusPending": "Очікує",
       "statusConfirmed": "Підтверджено",
       "statusCancelled": "Скасовано",
-      "statusCompleted": "Завершено"
+      "statusCompleted": "Завершено",
+      "markComplete": "Завершити",
+      "showPast": "Показати минулі бронювання ({count})",
+      "hidePast": "Сховати минулі бронювання"
     },
     "tables": {
       "table": "Стіл",

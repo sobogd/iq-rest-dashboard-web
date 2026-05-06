@@ -313,7 +313,10 @@
       "statusPending": "In attesa",
       "statusConfirmed": "Confermata",
       "statusCancelled": "Annullata",
-      "statusCompleted": "Completata"
+      "statusCompleted": "Completata",
+      "markComplete": "Completa",
+      "showPast": "Mostra prenotazioni passate ({count})",
+      "hidePast": "Nascondi prenotazioni passate"
     },
     "tables": {
       "table": "Tavolo",

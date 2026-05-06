@@ -313,7 +313,10 @@
       "statusPending": "Ausstehend",
       "statusConfirmed": "Bestätigt",
       "statusCancelled": "Storniert",
-      "statusCompleted": "Abgeschlossen"
+      "statusCompleted": "Abgeschlossen",
+      "markComplete": "Abschließen",
+      "showPast": "Vergangene Reservierungen anzeigen ({count})",
+      "hidePast": "Vergangene Reservierungen ausblenden"
     },
     "tables": {
       "table": "Tisch",

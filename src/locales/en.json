@@ -313,7 +313,10 @@
       "statusPending": "Pending",
       "statusConfirmed": "Confirmed",
       "statusCancelled": "Cancelled",
-      "statusCompleted": "Completed"
+      "statusCompleted": "Completed",
+      "markComplete": "Mark complete",
+      "showPast": "Show past bookings ({count})",
+      "hidePast": "Hide past bookings"
     },
     "tables": {
       "table": "Table",
