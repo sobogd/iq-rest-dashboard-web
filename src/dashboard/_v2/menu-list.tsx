@@ -255,7 +255,7 @@ export function MenuList({
  type="button"
  onClick={() => void handleDismissBanner()}
  className="absolute top-2 right-2 h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted/50"
- aria-label="Dismiss"
+ aria-label={t("scan.banner.dismiss")}
  >
  ×
  </button>
@@ -267,17 +267,15 @@ export function MenuList({
  ✨
  </div>
  <div className="flex-1 min-w-0">
- <p className="text-sm font-semibold">Upload your paper menu</p>
- <p className="text-xs text-muted-foreground mt-0.5">
- Snap a photo or upload a PDF — AI will parse all items into categories for you.
- </p>
+ <p className="text-sm font-semibold">{t("scan.banner.title")}</p>
+ <p className="text-xs text-muted-foreground mt-0.5">{t("scan.banner.subtitle")}</p>
  <button
  type="button"
  onClick={() => setScanModalOpen(true)}
  className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
  style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
  >
- Upload menu
+ {t("scan.banner.cta")}
  </button>
  </div>
  </div>

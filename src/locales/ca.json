@@ -109,6 +109,52 @@
           "back": "Enrere",
           "close": "Tancar la introducció"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Puja la teva carta en paper",
+          "subtitle": "Fes una foto o puja un PDF — la IA ho dividirà tot en categories.",
+          "cta": "Pujar carta",
+          "dismiss": "Tanca"
+        },
+        "title": {
+          "upload": "Pujar carta",
+          "loading": "Analitzant la carta…",
+          "review": "Revisa la carta reconeguda",
+          "confirm": "Substituir la carta actual?",
+          "saving": "Desant…"
+        },
+        "upload": {
+          "description": "Puja fotos o un PDF de la teva carta en paper. La IA ho dividirà en categories i plats.",
+          "addFile": "+ Afegir fitxer",
+          "scan": "Escaneja",
+          "errorTooMany": "Màxim 5 fitxers",
+          "errorTooLarge": "Fitxer massa gran (màx. 20 MB)",
+          "errorNotMenu": "La imatge no és una carta",
+          "errorScan": "No s'ha pogut escanejar la carta"
+        },
+        "loading": {
+          "primary": "Analitzant la teva carta…",
+          "secondary": "Pot trigar fins a un minut"
+        },
+        "review": {
+          "description": "La IA ha trobat {total} plats en {cats} categories. Desmarca els que no vulguis.",
+          "continue": "Continuar ({n} seleccionats)"
+        },
+        "confirm": {
+          "prompt": "Ja tens {existing} plats a la carta. Què en fem?",
+          "replaceTitle": "Substituir la carta actual",
+          "replaceDescription": "Elimina els {existing} plats existents i deixa només els {selected} nous.",
+          "keepTitle": "Mantenir i afegir els nous",
+          "keepDescription": "Afegeix els {selected} plats nous a la carta actual.",
+          "examplesNote": "Els plats d'exemple s'eliminen en ambdós casos."
+        },
+        "saving": {
+          "primary": "Desant carta…"
+        },
+        "toast": {
+          "saved": "Afegits {items} plats en {cats} categories"
+        }
       }
     },
     "categoryForm": {

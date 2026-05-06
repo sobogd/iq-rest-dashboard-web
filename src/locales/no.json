@@ -109,6 +109,52 @@
           "back": "Tilbake",
           "close": "Lukk introduksjonen"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Last opp papirmenyen din",
+          "subtitle": "Ta et bilde eller last opp en PDF — AI sorterer alle rettene i kategorier.",
+          "cta": "Last opp meny",
+          "dismiss": "Lukk"
+        },
+        "title": {
+          "upload": "Last opp meny",
+          "loading": "Analyserer menyen…",
+          "review": "Sjekk gjenkjent meny",
+          "confirm": "Erstatte eksisterende meny?",
+          "saving": "Lagrer…"
+        },
+        "upload": {
+          "description": "Last opp bilder eller en PDF av papirmenyen. AI sorterer det i kategorier og retter.",
+          "addFile": "+ Legg til fil",
+          "scan": "Skann",
+          "errorTooMany": "Maks 5 filer",
+          "errorTooLarge": "Filen er for stor (maks 20 MB)",
+          "errorNotMenu": "Bildet er ikke en meny",
+          "errorScan": "Kunne ikke skanne menyen"
+        },
+        "loading": {
+          "primary": "Analyserer menyen din…",
+          "secondary": "Dette kan ta opptil ett minutt"
+        },
+        "review": {
+          "description": "AI fant {total} retter i {cats} kategorier. Fjern haken på dem du ikke vil ha.",
+          "continue": "Fortsett ({n} valgt)"
+        },
+        "confirm": {
+          "prompt": "Du har allerede {existing} retter i menyen. Hva skal vi gjøre med dem?",
+          "replaceTitle": "Erstatt eksisterende meny",
+          "replaceDescription": "Slett alle {existing} eksisterende retter og behold kun de {selected} nye.",
+          "keepTitle": "Behold og legg til nye",
+          "keepDescription": "Legg til {selected} nye retter på toppen av nåværende meny.",
+          "examplesNote": "Eksempelretter fjernes i begge tilfeller."
+        },
+        "saving": {
+          "primary": "Lagrer meny…"
+        },
+        "toast": {
+          "saved": "{items} retter lagt til i {cats} kategorier"
+        }
       }
     },
     "categoryForm": {

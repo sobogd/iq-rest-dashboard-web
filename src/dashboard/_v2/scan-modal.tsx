@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { Modal } from "./ui";
 import { primaryBtn } from "./tokens";
 import { dismissScanBanner, scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
@@ -57,6 +58,7 @@ function fileToJpegBase64(file: File): Promise<string> {
 }
 
 export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: ScanModalProps) {
+ const t = useTranslations("dashboard.menu.scan");
  const fileInputRef = useRef<HTMLInputElement>(null);
 
  const [stage, setStage] = useState<Stage>("upload");
@@ -64,7 +66,6 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
  const [error, setError] = useState("");
  const [parsed, setParsed] = useState<ScanMenuCategory[]>([]);
  const [selected, setSelected] = useState<Record<string, boolean>>({});
- const [resultMessage, setResultMessage] = useState("");
 
  function handleClose() {
   photoPool.forEach((p) => {
@@ -75,7 +76,6 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   setError("");
   setParsed([]);
   setSelected({});
-  setResultMessage("");
   onClose();
  }
 
@@ -83,13 +83,13 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   if (!files || files.length === 0) return;
   const remaining = MAX_FILES - photoPool.length;
   if (remaining <= 0) {
-   setError("Maximum 5 files");
+   setError(t("upload.errorTooMany"));
    return;
   }
   const accepted = Array.from(files).slice(0, remaining);
   for (const file of accepted) {
    if (file.size > MAX_SIZE) {
-    setError("File too large (max 20 MB)");
+    setError(t("upload.errorTooLarge"));
     return;
    }
   }
@@ -141,10 +141,10 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    );
    const result = await scanMenuParse(images);
    if (!result.ok) {
-    if (result.error === "not_a_menu") setError("Image is not a menu");
-    else if (result.error === "too_large") setError("File too large");
-    else if (result.error === "too_many_images") setError("Maximum 5 files");
-    else setError("Failed to scan menu");
+    if (result.error === "not_a_menu") setError(t("upload.errorNotMenu"));
+    else if (result.error === "too_large") setError(t("upload.errorTooLarge"));
+    else if (result.error === "too_many_images") setError(t("upload.errorTooMany"));
+    else setError(t("upload.errorScan"));
     setStage("upload");
     return;
    }
@@ -159,10 +159,10 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    setSelected(sel);
    setStage("review");
   } catch {
-   setError("Failed to scan menu");
+   setError(t("upload.errorScan"));
    setStage("upload");
   }
- }, [photoPool]);
+ }, [photoPool, t]);
 
  function toggleItem(key: string) {
   setSelected((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -200,7 +200,6 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    setStage("review");
    return;
   }
-  setResultMessage(`Added ${result.itemsCount} items in ${result.categoriesCount} categories`);
   // Auto-dismiss banner after a successful scan — user is done with the feature.
   try { await dismissScanBanner(); } catch { /* ignore */ }
   onSaved();
@@ -211,11 +210,11 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
  const totalItems = parsed.reduce((sum, c) => sum + c.items.length, 0);
 
  const title =
-  stage === "upload" ? "Upload menu" :
-  stage === "loading" ? "Analyzing menu…" :
-  stage === "review" ? "Review parsed menu" :
-  stage === "confirm" ? "Replace existing menu?" :
-  "Saving…";
+  stage === "upload" ? t("title.upload") :
+  stage === "loading" ? t("title.loading") :
+  stage === "review" ? t("title.review") :
+  stage === "confirm" ? t("title.confirm") :
+  t("title.saving");
 
  const footer =
   stage === "upload" ? (
@@ -225,7 +224,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
     disabled={photoPool.length === 0}
     onClick={() => void handleStartScan()}
    >
-    Scan
+    {t("upload.scan")}
    </button>
   ) : stage === "review" ? (
    <button
@@ -234,7 +233,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
     disabled={selectedCount === 0}
     onClick={proceedFromReview}
    >
-    Continue ({selectedCount} selected)
+    {t("review.continue", { n: selectedCount })}
    </button>
   ) : null;
 
@@ -242,9 +241,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   <Modal open={open} onClose={handleClose} title={title} size="lg" footer={footer}>
    {stage === "upload" && (
     <div className="flex flex-col gap-3">
-     <p className="text-sm text-muted-foreground">
-      Upload photos or a PDF of your paper menu. AI will parse it into categories and items.
-     </p>
+     <p className="text-sm text-muted-foreground">{t("upload.description")}</p>
      <input
       ref={fileInputRef}
       type="file"
@@ -280,7 +277,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
         onClick={() => fileInputRef.current?.click()}
         className="flex items-center justify-center gap-2 w-full rounded-xl border-2 border-dashed border-border p-4 hover:border-muted-foreground/30 transition-all"
        >
-        <span className="text-sm font-medium text-muted-foreground/70">+ Add file</span>
+        <span className="text-sm font-medium text-muted-foreground/70">{t("upload.addFile")}</span>
        </button>
       )}
      </div>
@@ -291,15 +288,15 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    {stage === "loading" && (
     <div className="flex flex-col items-center gap-4 py-12">
      <div className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-     <p className="text-sm font-medium">Analyzing your menu…</p>
-     <p className="text-xs text-muted-foreground/60">This may take up to a minute</p>
+     <p className="text-sm font-medium">{t("loading.primary")}</p>
+     <p className="text-xs text-muted-foreground/60">{t("loading.secondary")}</p>
     </div>
    )}
 
    {stage === "review" && (
     <div className="flex flex-col gap-4">
      <p className="text-sm text-muted-foreground">
-      AI parsed {totalItems} items in {parsed.length} categories. Uncheck the ones you don&apos;t want.
+      {t("review.description", { total: totalItems, cats: parsed.length })}
      </p>
      {parsed.map((cat, i) => (
       <div key={i} className="rounded-xl border border-border overflow-hidden">
@@ -339,19 +336,16 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
 
    {stage === "confirm" && (
     <div className="flex flex-col gap-4 py-2">
-     <p className="text-sm">
-      You have <span className="font-semibold">{existingRealItemsCount}</span> items already in your menu.
-      What should happen with them?
-     </p>
+     <p className="text-sm">{t("confirm.prompt", { existing: existingRealItemsCount })}</p>
      <div className="flex flex-col gap-2">
       <button
        type="button"
        onClick={() => void save(true)}
        className="w-full rounded-xl border border-destructive/40 bg-destructive/10 hover:bg-destructive/20 p-4 text-left transition-colors"
       >
-       <div className="text-sm font-semibold text-destructive">Replace existing menu</div>
+       <div className="text-sm font-semibold text-destructive">{t("confirm.replaceTitle")}</div>
        <div className="text-xs text-muted-foreground mt-1">
-        Delete all {existingRealItemsCount} existing items and keep only the new {selectedCount}.
+        {t("confirm.replaceDescription", { existing: existingRealItemsCount, selected: selectedCount })}
        </div>
       </button>
       <button
@@ -359,22 +353,20 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
        onClick={() => void save(false)}
        className="w-full rounded-xl border border-border hover:bg-muted/30 p-4 text-left transition-colors"
       >
-       <div className="text-sm font-semibold">Keep existing &amp; add new</div>
+       <div className="text-sm font-semibold">{t("confirm.keepTitle")}</div>
        <div className="text-xs text-muted-foreground mt-1">
-        Add the new {selectedCount} items on top of your current menu.
+        {t("confirm.keepDescription", { selected: selectedCount })}
        </div>
       </button>
      </div>
-     <p className="text-[11px] text-muted-foreground text-center">
-      Example items will be removed in both cases.
-     </p>
+     <p className="text-[11px] text-muted-foreground text-center">{t("confirm.examplesNote")}</p>
     </div>
    )}
 
    {stage === "saving" && (
     <div className="flex flex-col items-center gap-4 py-12">
      <div className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-     <p className="text-sm font-medium">{resultMessage || "Saving menu…"}</p>
+     <p className="text-sm font-medium">{t("saving.primary")}</p>
     </div>
    )}
   </Modal>

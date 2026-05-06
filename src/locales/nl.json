@@ -109,6 +109,52 @@
           "back": "Terug",
           "close": "Onboarding sluiten"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Upload je papieren menu",
+          "subtitle": "Maak een foto of upload een PDF — de AI verdeelt alles in categorieën.",
+          "cta": "Menu uploaden",
+          "dismiss": "Sluiten"
+        },
+        "title": {
+          "upload": "Menu uploaden",
+          "loading": "Menu analyseren…",
+          "review": "Herkend menu controleren",
+          "confirm": "Bestaand menu vervangen?",
+          "saving": "Opslaan…"
+        },
+        "upload": {
+          "description": "Upload foto's of een PDF van je papieren menu. De AI maakt er categorieën en gerechten van.",
+          "addFile": "+ Bestand toevoegen",
+          "scan": "Scannen",
+          "errorTooMany": "Maximaal 5 bestanden",
+          "errorTooLarge": "Bestand te groot (max. 20 MB)",
+          "errorNotMenu": "Afbeelding is geen menu",
+          "errorScan": "Menu kon niet gescand worden"
+        },
+        "loading": {
+          "primary": "Je menu wordt geanalyseerd…",
+          "secondary": "Dit kan tot een minuut duren"
+        },
+        "review": {
+          "description": "AI vond {total} gerechten in {cats} categorieën. Vink uit wat je niet wilt.",
+          "continue": "Doorgaan ({n} geselecteerd)"
+        },
+        "confirm": {
+          "prompt": "Je hebt al {existing} gerechten in je menu. Wat doen we daarmee?",
+          "replaceTitle": "Bestaand menu vervangen",
+          "replaceDescription": "Verwijder alle {existing} bestaande gerechten en houd alleen de {selected} nieuwe.",
+          "keepTitle": "Behouden en nieuwe toevoegen",
+          "keepDescription": "Voeg de {selected} nieuwe gerechten toe aan je huidige menu.",
+          "examplesNote": "Voorbeeldgerechten worden in beide gevallen verwijderd."
+        },
+        "saving": {
+          "primary": "Menu opslaan…"
+        },
+        "toast": {
+          "saved": "{items} gerechten toegevoegd in {cats} categorieën"
+        }
       }
     },
     "categoryForm": {

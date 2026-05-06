@@ -109,6 +109,52 @@
           "back": "Nazaj",
           "close": "Zapri uvod"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Naloži svoj papirnati meni",
+          "subtitle": "Slikaj ali naloži PDF — UI bo vse razvrstil v kategorije.",
+          "cta": "Naloži meni",
+          "dismiss": "Zapri"
+        },
+        "title": {
+          "upload": "Naloži meni",
+          "loading": "Analiziram meni…",
+          "review": "Preglej prepoznan meni",
+          "confirm": "Zamenjaj obstoječi meni?",
+          "saving": "Shranjujem…"
+        },
+        "upload": {
+          "description": "Naloži fotografije ali PDF papirnatega menija. UI ga bo razvrstil v kategorije in jedi.",
+          "addFile": "+ Dodaj datoteko",
+          "scan": "Skeniraj",
+          "errorTooMany": "Največ 5 datotek",
+          "errorTooLarge": "Datoteka je prevelika (največ 20 MB)",
+          "errorNotMenu": "Slika ni meni",
+          "errorScan": "Menija ni mogoče skenirati"
+        },
+        "loading": {
+          "primary": "Analiziram tvoj meni…",
+          "secondary": "To lahko traja do ene minute"
+        },
+        "review": {
+          "description": "UI je našel {total} jedi v {cats} kategorijah. Odkljukaj tiste, ki jih ne želiš.",
+          "continue": "Naprej (izbranih: {n})"
+        },
+        "confirm": {
+          "prompt": "V meniju že imaš {existing} jedi. Kaj naj se z njimi zgodi?",
+          "replaceTitle": "Zamenjaj obstoječi meni",
+          "replaceDescription": "Izbriši vse {existing} obstoječih jedi in obdrži samo {selected} novih.",
+          "keepTitle": "Obdrži in dodaj nove",
+          "keepDescription": "Dodaj {selected} novih jedi obstoječemu meniju.",
+          "examplesNote": "Primeri bodo odstranjeni v obeh primerih."
+        },
+        "saving": {
+          "primary": "Shranjujem meni…"
+        },
+        "toast": {
+          "saved": "Dodano {items} jedi v {cats} kategorijah"
+        }
       }
     },
     "categoryForm": {

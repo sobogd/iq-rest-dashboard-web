@@ -109,6 +109,52 @@
           "back": "Tilbage",
           "close": "Luk introduktionen"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Upload dit papirmenu",
+          "subtitle": "Tag et foto eller upload en PDF — AI sorterer alle retter i kategorier.",
+          "cta": "Upload menu",
+          "dismiss": "Luk"
+        },
+        "title": {
+          "upload": "Upload menu",
+          "loading": "Analyserer menuen…",
+          "review": "Gennemse genkendt menu",
+          "confirm": "Erstat eksisterende menu?",
+          "saving": "Gemmer…"
+        },
+        "upload": {
+          "description": "Upload fotos eller en PDF af dit papirmenu. AI sorterer det i kategorier og retter.",
+          "addFile": "+ Tilføj fil",
+          "scan": "Scan",
+          "errorTooMany": "Højst 5 filer",
+          "errorTooLarge": "Filen er for stor (maks. 20 MB)",
+          "errorNotMenu": "Billedet er ikke en menu",
+          "errorScan": "Kunne ikke scanne menuen"
+        },
+        "loading": {
+          "primary": "Analyserer din menu…",
+          "secondary": "Det kan tage op til et minut"
+        },
+        "review": {
+          "description": "AI fandt {total} retter i {cats} kategorier. Fjern flueben fra dem du ikke vil have.",
+          "continue": "Fortsæt ({n} valgt)"
+        },
+        "confirm": {
+          "prompt": "Du har allerede {existing} retter i menuen. Hvad skal der ske med dem?",
+          "replaceTitle": "Erstat eksisterende menu",
+          "replaceDescription": "Slet alle {existing} eksisterende retter og behold kun de {selected} nye.",
+          "keepTitle": "Behold og tilføj nye",
+          "keepDescription": "Tilføj de {selected} nye retter oven på den nuværende menu.",
+          "examplesNote": "Eksempelretter fjernes i begge tilfælde."
+        },
+        "saving": {
+          "primary": "Gemmer menu…"
+        },
+        "toast": {
+          "saved": "{items} retter tilføjet i {cats} kategorier"
+        }
       }
     },
     "categoryForm": {

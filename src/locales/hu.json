@@ -109,6 +109,52 @@
           "back": "Vissza",
           "close": "Bevezető bezárása"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Töltsd fel a papír étlapot",
+          "subtitle": "Készíts fotót vagy tölts fel PDF-et — az AI kategóriákba rendezi az ételeket.",
+          "cta": "Étlap feltöltése",
+          "dismiss": "Bezárás"
+        },
+        "title": {
+          "upload": "Étlap feltöltése",
+          "loading": "Étlap elemzése…",
+          "review": "Felismert étlap ellenőrzése",
+          "confirm": "Cseréljük a meglévő étlapot?",
+          "saving": "Mentés…"
+        },
+        "upload": {
+          "description": "Tölts fel fotókat vagy PDF-et a papír étlapodról. Az AI kategóriákra és ételekre bontja.",
+          "addFile": "+ Fájl hozzáadása",
+          "scan": "Beolvasás",
+          "errorTooMany": "Legfeljebb 5 fájl",
+          "errorTooLarge": "A fájl túl nagy (max. 20 MB)",
+          "errorNotMenu": "A kép nem étlap",
+          "errorScan": "Nem sikerült beolvasni az étlapot"
+        },
+        "loading": {
+          "primary": "Elemzem az étlapodat…",
+          "secondary": "Akár egy percig is tarthat"
+        },
+        "review": {
+          "description": "Az AI {cats} kategóriában {total} tételt talált. Vedd ki azokat, amiket nem akarsz.",
+          "continue": "Tovább ({n} kiválasztva)"
+        },
+        "confirm": {
+          "prompt": "Már van {existing} tétel az étlapon. Mit csináljunk velük?",
+          "replaceTitle": "Meglévő étlap cseréje",
+          "replaceDescription": "Töröld mind a(z) {existing} meglévő tételt, és tartsd meg csak a(z) {selected} újat.",
+          "keepTitle": "Megtartás és újak hozzáadása",
+          "keepDescription": "Add hozzá a(z) {selected} új tételt a jelenlegi étlaphoz.",
+          "examplesNote": "A példa tételek mindkét esetben törlődnek."
+        },
+        "saving": {
+          "primary": "Étlap mentése…"
+        },
+        "toast": {
+          "saved": "Hozzáadva {items} tétel {cats} kategóriában"
+        }
       }
     },
     "categoryForm": {

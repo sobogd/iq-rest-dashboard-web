@@ -109,6 +109,52 @@
           "back": "返回",
           "close": "关闭引导"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "上传你的纸质菜单",
+          "subtitle": "拍照或上传 PDF — AI 会将所有菜品分类整理。",
+          "cta": "上传菜单",
+          "dismiss": "关闭"
+        },
+        "title": {
+          "upload": "上传菜单",
+          "loading": "正在分析菜单…",
+          "review": "查看识别后的菜单",
+          "confirm": "替换现有菜单？",
+          "saving": "正在保存…"
+        },
+        "upload": {
+          "description": "上传纸质菜单的照片或 PDF。AI 会将其分类为类别和菜品。",
+          "addFile": "+ 添加文件",
+          "scan": "扫描",
+          "errorTooMany": "最多 5 个文件",
+          "errorTooLarge": "文件过大（最大 20 MB）",
+          "errorNotMenu": "图片不是菜单",
+          "errorScan": "无法扫描菜单"
+        },
+        "loading": {
+          "primary": "正在分析你的菜单…",
+          "secondary": "可能需要最多一分钟"
+        },
+        "review": {
+          "description": "AI 在 {cats} 个类别中找到了 {total} 个菜品。取消勾选你不想要的。",
+          "continue": "继续（已选 {n}）"
+        },
+        "confirm": {
+          "prompt": "菜单中已有 {existing} 个菜品。要怎么处理它们？",
+          "replaceTitle": "替换现有菜单",
+          "replaceDescription": "删除全部 {existing} 个现有菜品，仅保留新的 {selected} 个。",
+          "keepTitle": "保留并添加新菜品",
+          "keepDescription": "在当前菜单基础上添加 {selected} 个新菜品。",
+          "examplesNote": "示例菜品在两种情况下都会被删除。"
+        },
+        "saving": {
+          "primary": "正在保存菜单…"
+        },
+        "toast": {
+          "saved": "已添加 {items} 个菜品到 {cats} 个类别"
+        }
       }
     },
     "categoryForm": {

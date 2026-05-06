@@ -109,6 +109,52 @@
           "back": "Natrag",
           "close": "Zatvori uvod"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Učitaj svoj papirnati jelovnik",
+          "subtitle": "Slikaj ili učitaj PDF — AI će sve podijeliti u kategorije.",
+          "cta": "Učitaj jelovnik",
+          "dismiss": "Zatvori"
+        },
+        "title": {
+          "upload": "Učitaj jelovnik",
+          "loading": "Analiziram jelovnik…",
+          "review": "Pregledaj prepoznati jelovnik",
+          "confirm": "Zamijeniti postojeći jelovnik?",
+          "saving": "Spremam…"
+        },
+        "upload": {
+          "description": "Učitaj fotografije ili PDF papirnatog jelovnika. AI će ga podijeliti u kategorije i jela.",
+          "addFile": "+ Dodaj datoteku",
+          "scan": "Skeniraj",
+          "errorTooMany": "Najviše 5 datoteka",
+          "errorTooLarge": "Datoteka je prevelika (maks. 20 MB)",
+          "errorNotMenu": "Slika nije jelovnik",
+          "errorScan": "Jelovnik nije moguće skenirati"
+        },
+        "loading": {
+          "primary": "Analiziram tvoj jelovnik…",
+          "secondary": "Može potrajati do minute"
+        },
+        "review": {
+          "description": "AI je pronašao {total} jela u {cats} kategorija. Odznači ono što ne želiš.",
+          "continue": "Dalje (odabrano: {n})"
+        },
+        "confirm": {
+          "prompt": "U jelovniku već imaš {existing} jela. Što s njima?",
+          "replaceTitle": "Zamijeni postojeći jelovnik",
+          "replaceDescription": "Izbriši svih {existing} postojećih jela i zadrži samo {selected} novih.",
+          "keepTitle": "Zadrži i dodaj nova",
+          "keepDescription": "Dodaj {selected} novih jela u trenutni jelovnik.",
+          "examplesNote": "Primjerna jela bit će uklonjena u oba slučaja."
+        },
+        "saving": {
+          "primary": "Spremam jelovnik…"
+        },
+        "toast": {
+          "saved": "Dodano {items} jela u {cats} kategorija"
+        }
       }
     },
     "categoryForm": {

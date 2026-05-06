@@ -109,6 +109,52 @@
           "back": "Zurück",
           "close": "Onboarding schließen"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Lade deine Papierkarte hoch",
+          "subtitle": "Mache ein Foto oder lade ein PDF hoch — die KI sortiert alle Gerichte in Kategorien.",
+          "cta": "Karte hochladen",
+          "dismiss": "Schließen"
+        },
+        "title": {
+          "upload": "Karte hochladen",
+          "loading": "Karte wird analysiert…",
+          "review": "Erkannte Karte prüfen",
+          "confirm": "Bestehende Karte ersetzen?",
+          "saving": "Speichern…"
+        },
+        "upload": {
+          "description": "Lade Fotos oder ein PDF deiner Papierkarte hoch. Die KI erstellt daraus Kategorien und Gerichte.",
+          "addFile": "+ Datei hinzufügen",
+          "scan": "Scannen",
+          "errorTooMany": "Maximal 5 Dateien",
+          "errorTooLarge": "Datei zu groß (max. 20 MB)",
+          "errorNotMenu": "Das Bild ist keine Speisekarte",
+          "errorScan": "Karte konnte nicht gescannt werden"
+        },
+        "loading": {
+          "primary": "Deine Karte wird analysiert…",
+          "secondary": "Das kann bis zu einer Minute dauern"
+        },
+        "review": {
+          "description": "KI hat {total} Gerichte in {cats} Kategorien erkannt. Hake die ab, die du nicht willst.",
+          "continue": "Weiter ({n} ausgewählt)"
+        },
+        "confirm": {
+          "prompt": "Du hast bereits {existing} Gerichte in deiner Karte. Was soll damit passieren?",
+          "replaceTitle": "Bestehende Karte ersetzen",
+          "replaceDescription": "Lösche alle {existing} bestehenden Gerichte und behalte nur die neuen {selected}.",
+          "keepTitle": "Behalten & neue hinzufügen",
+          "keepDescription": "Füge die {selected} neuen Gerichte zur bestehenden Karte hinzu.",
+          "examplesNote": "Beispielgerichte werden in beiden Fällen entfernt."
+        },
+        "saving": {
+          "primary": "Karte wird gespeichert…"
+        },
+        "toast": {
+          "saved": "{items} Gerichte in {cats} Kategorien hinzugefügt"
+        }
       }
     },
     "categoryForm": {

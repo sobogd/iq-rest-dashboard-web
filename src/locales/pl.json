@@ -109,6 +109,52 @@
           "back": "Wstecz",
           "close": "Zamknij wprowadzenie"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Wgraj swoje menu z papieru",
+          "subtitle": "Zrób zdjęcie lub wgraj PDF — AI podzieli wszystkie pozycje na kategorie.",
+          "cta": "Wgraj menu",
+          "dismiss": "Zamknij"
+        },
+        "title": {
+          "upload": "Wgraj menu",
+          "loading": "Analiza menu…",
+          "review": "Sprawdź rozpoznane menu",
+          "confirm": "Zastąpić istniejące menu?",
+          "saving": "Zapisywanie…"
+        },
+        "upload": {
+          "description": "Wgraj zdjęcia lub PDF papierowego menu. AI podzieli je na kategorie i dania.",
+          "addFile": "+ Dodaj plik",
+          "scan": "Skanuj",
+          "errorTooMany": "Maksymalnie 5 plików",
+          "errorTooLarge": "Plik zbyt duży (max. 20 MB)",
+          "errorNotMenu": "Obraz nie jest menu",
+          "errorScan": "Nie udało się zeskanować menu"
+        },
+        "loading": {
+          "primary": "Analizuję Twoje menu…",
+          "secondary": "Może to potrwać do minuty"
+        },
+        "review": {
+          "description": "AI znalazła {total} pozycji w {cats} kategoriach. Odznacz te, których nie chcesz.",
+          "continue": "Dalej (zaznaczono: {n})"
+        },
+        "confirm": {
+          "prompt": "Masz już {existing} pozycji w menu. Co z nimi zrobić?",
+          "replaceTitle": "Zastąp istniejące menu",
+          "replaceDescription": "Usuń wszystkie {existing} istniejących pozycji i zostaw tylko {selected} nowe.",
+          "keepTitle": "Zachowaj i dodaj nowe",
+          "keepDescription": "Dodaj {selected} nowych pozycji do obecnego menu.",
+          "examplesNote": "Pozycje przykładowe zostaną usunięte w obu przypadkach."
+        },
+        "saving": {
+          "primary": "Zapisywanie menu…"
+        },
+        "toast": {
+          "saved": "Dodano {items} pozycji w {cats} kategoriach"
+        }
       }
     },
     "categoryForm": {

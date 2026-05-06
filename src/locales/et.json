@@ -109,6 +109,52 @@
           "back": "Tagasi",
           "close": "Sulge tutvustus"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Lae üles paber-menüü",
+          "subtitle": "Tee foto või lae PDF — tehisintellekt jaotab kõik kategooriatesse.",
+          "cta": "Lae menüü üles",
+          "dismiss": "Sulge"
+        },
+        "title": {
+          "upload": "Lae menüü üles",
+          "loading": "Menüü analüüs…",
+          "review": "Kontrolli tuvastatud menüüd",
+          "confirm": "Asenda olemasolev menüü?",
+          "saving": "Salvestan…"
+        },
+        "upload": {
+          "description": "Lae üles fotosid või PDF paber-menüüst. Tehisintellekt jaotab selle kategooriateks ja roogadeks.",
+          "addFile": "+ Lisa fail",
+          "scan": "Skanni",
+          "errorTooMany": "Kuni 5 faili",
+          "errorTooLarge": "Fail on liiga suur (max 20 MB)",
+          "errorNotMenu": "Pilt ei ole menüü",
+          "errorScan": "Menüü skannimine ebaõnnestus"
+        },
+        "loading": {
+          "primary": "Analüüsin sinu menüüd…",
+          "secondary": "See võib kesta kuni minuti"
+        },
+        "review": {
+          "description": "Tehisintellekt leidis {total} rooga {cats} kategoorias. Eemalda märk soovimatutelt.",
+          "continue": "Jätka (valitud: {n})"
+        },
+        "confirm": {
+          "prompt": "Menüüs on juba {existing} rooga. Mida nendega teha?",
+          "replaceTitle": "Asenda olemasolev menüü",
+          "replaceDescription": "Kustuta kõik {existing} olemasolevat rooga ja jäta ainult {selected} uut.",
+          "keepTitle": "Säilita ja lisa uued",
+          "keepDescription": "Lisa {selected} uut rooga olemasoleva menüü juurde.",
+          "examplesNote": "Näiteroad eemaldatakse mõlemal juhul."
+        },
+        "saving": {
+          "primary": "Salvestan menüüd…"
+        },
+        "toast": {
+          "saved": "Lisatud {items} rooga {cats} kategoorias"
+        }
       }
     },
     "categoryForm": {

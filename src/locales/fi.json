@@ -109,6 +109,52 @@
           "back": "Takaisin",
           "close": "Sulje opastus"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Lataa paperinen ruokalistasi",
+          "subtitle": "Ota kuva tai lataa PDF — tekoäly jakaa kaikki annokset luokkiin.",
+          "cta": "Lataa ruokalista",
+          "dismiss": "Sulje"
+        },
+        "title": {
+          "upload": "Lataa ruokalista",
+          "loading": "Analysoidaan ruokalistaa…",
+          "review": "Tarkasta tunnistettu ruokalista",
+          "confirm": "Korvataanko nykyinen ruokalista?",
+          "saving": "Tallennetaan…"
+        },
+        "upload": {
+          "description": "Lataa kuvia tai PDF paperisesta ruokalistasta. Tekoäly jakaa sen luokkiin ja annoksiin.",
+          "addFile": "+ Lisää tiedosto",
+          "scan": "Skannaa",
+          "errorTooMany": "Enintään 5 tiedostoa",
+          "errorTooLarge": "Tiedosto on liian suuri (enint. 20 Mt)",
+          "errorNotMenu": "Kuva ei ole ruokalista",
+          "errorScan": "Ruokalistaa ei voitu skannata"
+        },
+        "loading": {
+          "primary": "Analysoidaan ruokalistaasi…",
+          "secondary": "Tämä voi kestää noin minuutin"
+        },
+        "review": {
+          "description": "Tekoäly löysi {total} annosta {cats} luokassa. Poista valinta niiltä, joita et halua.",
+          "continue": "Jatka (valittu: {n})"
+        },
+        "confirm": {
+          "prompt": "Sinulla on jo {existing} annosta ruokalistalla. Mitä niille tehdään?",
+          "replaceTitle": "Korvaa nykyinen ruokalista",
+          "replaceDescription": "Poista kaikki {existing} olemassa olevaa annosta ja säilytä vain {selected} uutta.",
+          "keepTitle": "Säilytä ja lisää uudet",
+          "keepDescription": "Lisää {selected} uutta annosta nykyisen ruokalistan päälle.",
+          "examplesNote": "Esimerkkiannokset poistetaan kummassakin tapauksessa."
+        },
+        "saving": {
+          "primary": "Tallennetaan ruokalistaa…"
+        },
+        "toast": {
+          "saved": "Lisätty {items} annosta {cats} luokkaan"
+        }
       }
     },
     "categoryForm": {

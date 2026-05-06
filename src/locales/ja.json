@@ -109,6 +109,52 @@
           "back": "戻る",
           "close": "オンボーディングを閉じる"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "紙のメニューをアップロード",
+          "subtitle": "写真を撮るか PDF をアップロード — AI がすべての項目をカテゴリーに振り分けます。",
+          "cta": "メニューをアップロード",
+          "dismiss": "閉じる"
+        },
+        "title": {
+          "upload": "メニューをアップロード",
+          "loading": "メニューを解析中…",
+          "review": "認識されたメニューを確認",
+          "confirm": "現在のメニューを置き換える？",
+          "saving": "保存中…"
+        },
+        "upload": {
+          "description": "紙のメニューの写真または PDF をアップロードしてください。AI がカテゴリーと項目に分けます。",
+          "addFile": "+ ファイルを追加",
+          "scan": "スキャン",
+          "errorTooMany": "最大 5 ファイル",
+          "errorTooLarge": "ファイルが大きすぎます（最大 20 MB）",
+          "errorNotMenu": "画像はメニューではありません",
+          "errorScan": "メニューをスキャンできませんでした"
+        },
+        "loading": {
+          "primary": "メニューを解析しています…",
+          "secondary": "最大 1 分ほどかかります"
+        },
+        "review": {
+          "description": "AI が {cats} カテゴリーで {total} 項目を見つけました。不要なもののチェックを外してください。",
+          "continue": "続ける（{n} 選択中）"
+        },
+        "confirm": {
+          "prompt": "メニューにはすでに {existing} 項目があります。どうしますか？",
+          "replaceTitle": "現在のメニューを置き換える",
+          "replaceDescription": "既存の {existing} 項目をすべて削除し、新しい {selected} 項目のみを保持します。",
+          "keepTitle": "残して新しいものを追加",
+          "keepDescription": "現在のメニューに {selected} 件の新しい項目を追加します。",
+          "examplesNote": "例の項目はどちらの場合も削除されます。"
+        },
+        "saving": {
+          "primary": "メニューを保存中…"
+        },
+        "toast": {
+          "saved": "{cats} カテゴリーに {items} 項目を追加しました"
+        }
       }
     },
     "categoryForm": {

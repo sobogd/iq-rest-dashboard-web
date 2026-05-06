@@ -109,6 +109,52 @@
           "back": "Înapoi",
           "close": "Închide ghidul"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Încarcă meniul tău pe hârtie",
+          "subtitle": "Fă o poză sau încarcă un PDF — AI împarte totul pe categorii.",
+          "cta": "Încarcă meniul",
+          "dismiss": "Închide"
+        },
+        "title": {
+          "upload": "Încarcă meniul",
+          "loading": "Se analizează meniul…",
+          "review": "Verifică meniul recunoscut",
+          "confirm": "Înlocuiești meniul existent?",
+          "saving": "Se salvează…"
+        },
+        "upload": {
+          "description": "Încarcă fotografii sau PDF-ul meniului tău pe hârtie. AI îl împarte pe categorii și produse.",
+          "addFile": "+ Adaugă fișier",
+          "scan": "Scanează",
+          "errorTooMany": "Maxim 5 fișiere",
+          "errorTooLarge": "Fișier prea mare (max. 20 MB)",
+          "errorNotMenu": "Imaginea nu este un meniu",
+          "errorScan": "Nu am putut scana meniul"
+        },
+        "loading": {
+          "primary": "Se analizează meniul tău…",
+          "secondary": "Poate dura până la un minut"
+        },
+        "review": {
+          "description": "AI a găsit {total} produse în {cats} categorii. Debifează ce nu vrei.",
+          "continue": "Continuă ({n} selectate)"
+        },
+        "confirm": {
+          "prompt": "Ai deja {existing} produse în meniu. Ce facem cu ele?",
+          "replaceTitle": "Înlocuiește meniul existent",
+          "replaceDescription": "Șterge toate cele {existing} produse existente și păstrează doar cele {selected} noi.",
+          "keepTitle": "Păstrează și adaugă cele noi",
+          "keepDescription": "Adaugă cele {selected} produse noi peste meniul actual.",
+          "examplesNote": "Produsele exemplu vor fi șterse în ambele cazuri."
+        },
+        "saving": {
+          "primary": "Se salvează meniul…"
+        },
+        "toast": {
+          "saved": "Adăugate {items} produse în {cats} categorii"
+        }
       }
     },
     "categoryForm": {

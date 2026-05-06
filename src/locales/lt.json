@@ -109,6 +109,52 @@
           "back": "Atgal",
           "close": "Uždaryti įvadą"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Įkelk savo popierinį meniu",
+          "subtitle": "Nufotografuok arba įkelk PDF — DI suskirstys viską į kategorijas.",
+          "cta": "Įkelti meniu",
+          "dismiss": "Uždaryti"
+        },
+        "title": {
+          "upload": "Įkelti meniu",
+          "loading": "Analizuoju meniu…",
+          "review": "Peržiūrėk atpažintą meniu",
+          "confirm": "Pakeisti esamą meniu?",
+          "saving": "Saugoma…"
+        },
+        "upload": {
+          "description": "Įkelk popierinio meniu nuotraukas arba PDF. DI suskirstys jį į kategorijas ir patiekalus.",
+          "addFile": "+ Pridėti failą",
+          "scan": "Skenuoti",
+          "errorTooMany": "Daugiausia 5 failai",
+          "errorTooLarge": "Failas per didelis (maks. 20 MB)",
+          "errorNotMenu": "Vaizdas nėra meniu",
+          "errorScan": "Nepavyko nuskaityti meniu"
+        },
+        "loading": {
+          "primary": "Analizuoju tavo meniu…",
+          "secondary": "Tai gali užtrukti iki minutės"
+        },
+        "review": {
+          "description": "DI rado {total} patiekalų {cats} kategorijose. Atžymėk tuos, kurių nenori.",
+          "continue": "Tęsti (pasirinkta: {n})"
+        },
+        "confirm": {
+          "prompt": "Meniu jau turi {existing} patiekalų. Ką su jais daryti?",
+          "replaceTitle": "Pakeisti esamą meniu",
+          "replaceDescription": "Ištrinti visus {existing} esamus patiekalus ir palikti tik {selected} naujus.",
+          "keepTitle": "Palikti ir pridėti naujus",
+          "keepDescription": "Pridėti {selected} naujus patiekalus prie esamo meniu.",
+          "examplesNote": "Pavyzdžiai bus pašalinti abiem atvejais."
+        },
+        "saving": {
+          "primary": "Saugoma meniu…"
+        },
+        "toast": {
+          "saved": "Pridėta {items} patiekalų į {cats} kategorijas"
+        }
       }
     },
     "categoryForm": {

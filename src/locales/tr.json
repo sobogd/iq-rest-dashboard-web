@@ -109,6 +109,52 @@
           "back": "Geri",
           "close": "Tanıtımı kapat"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Kâğıt menünü yükle",
+          "subtitle": "Fotoğraf çek ya da PDF yükle — yapay zekâ tüm öğeleri kategorilere ayırır.",
+          "cta": "Menüyü yükle",
+          "dismiss": "Kapat"
+        },
+        "title": {
+          "upload": "Menüyü yükle",
+          "loading": "Menü analiz ediliyor…",
+          "review": "Tanınan menüyü gözden geçir",
+          "confirm": "Mevcut menü değiştirilsin mi?",
+          "saving": "Kaydediliyor…"
+        },
+        "upload": {
+          "description": "Kâğıt menünün fotoğraflarını veya PDF'sini yükle. AI bunu kategorilere ve ürünlere ayırır.",
+          "addFile": "+ Dosya ekle",
+          "scan": "Tara",
+          "errorTooMany": "En fazla 5 dosya",
+          "errorTooLarge": "Dosya çok büyük (maks. 20 MB)",
+          "errorNotMenu": "Görsel bir menü değil",
+          "errorScan": "Menü taranamadı"
+        },
+        "loading": {
+          "primary": "Menün analiz ediliyor…",
+          "secondary": "Bu bir dakika kadar sürebilir"
+        },
+        "review": {
+          "description": "AI {cats} kategoride {total} ürün buldu. İstemediklerinin işaretini kaldır.",
+          "continue": "Devam ({n} seçili)"
+        },
+        "confirm": {
+          "prompt": "Menünde zaten {existing} ürün var. Onlarla ne yapılsın?",
+          "replaceTitle": "Mevcut menüyü değiştir",
+          "replaceDescription": "Mevcut {existing} ürünün tamamını sil ve yalnızca {selected} yeniyi tut.",
+          "keepTitle": "Koru ve yenileri ekle",
+          "keepDescription": "{selected} yeni ürünü mevcut menüye ekle.",
+          "examplesNote": "Örnek ürünler her iki durumda da kaldırılır."
+        },
+        "saving": {
+          "primary": "Menü kaydediliyor…"
+        },
+        "toast": {
+          "saved": "{cats} kategoriye {items} ürün eklendi"
+        }
       }
     },
     "categoryForm": {

@@ -109,6 +109,52 @@
           "back": "Indietro",
           "close": "Chiudi onboarding"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Carica il tuo menù cartaceo",
+          "subtitle": "Scatta una foto o carica un PDF — l'IA dividerà tutti i piatti in categorie.",
+          "cta": "Carica menù",
+          "dismiss": "Chiudi"
+        },
+        "title": {
+          "upload": "Carica menù",
+          "loading": "Analisi del menù…",
+          "review": "Controlla il menù riconosciuto",
+          "confirm": "Sostituire il menù esistente?",
+          "saving": "Salvataggio…"
+        },
+        "upload": {
+          "description": "Carica foto o un PDF del tuo menù cartaceo. L'IA lo dividerà in categorie e piatti.",
+          "addFile": "+ Aggiungi file",
+          "scan": "Scansiona",
+          "errorTooMany": "Massimo 5 file",
+          "errorTooLarge": "File troppo grande (max 20 MB)",
+          "errorNotMenu": "L'immagine non è un menù",
+          "errorScan": "Impossibile scansionare il menù"
+        },
+        "loading": {
+          "primary": "Analisi del tuo menù…",
+          "secondary": "Può richiedere fino a un minuto"
+        },
+        "review": {
+          "description": "L'IA ha trovato {total} piatti in {cats} categorie. Deseleziona quelli che non vuoi.",
+          "continue": "Continua ({n} selezionati)"
+        },
+        "confirm": {
+          "prompt": "Hai già {existing} piatti nel menù. Cosa vuoi fare?",
+          "replaceTitle": "Sostituisci il menù esistente",
+          "replaceDescription": "Elimina tutti i {existing} piatti esistenti e tieni solo i {selected} nuovi.",
+          "keepTitle": "Mantieni e aggiungi i nuovi",
+          "keepDescription": "Aggiungi i {selected} piatti nuovi al menù attuale.",
+          "examplesNote": "I piatti di esempio verranno rimossi in entrambi i casi."
+        },
+        "saving": {
+          "primary": "Salvataggio menù…"
+        },
+        "toast": {
+          "saved": "Aggiunti {items} piatti in {cats} categorie"
+        }
       }
     },
     "categoryForm": {

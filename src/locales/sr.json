@@ -109,6 +109,52 @@
           "back": "Nazad",
           "close": "Zatvori uvod"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Otpremi papirni meni",
+          "subtitle": "Slikaj ili otpremi PDF — VI će sve razvrstati u kategorije.",
+          "cta": "Otpremi meni",
+          "dismiss": "Zatvori"
+        },
+        "title": {
+          "upload": "Otpremi meni",
+          "loading": "Analiziram meni…",
+          "review": "Pregledaj prepoznati meni",
+          "confirm": "Zameniti postojeći meni?",
+          "saving": "Čuvam…"
+        },
+        "upload": {
+          "description": "Otpremi fotografije ili PDF papirnog menija. VI će ga razvrstati u kategorije i jela.",
+          "addFile": "+ Dodaj fajl",
+          "scan": "Skeniraj",
+          "errorTooMany": "Najviše 5 fajlova",
+          "errorTooLarge": "Fajl je prevelik (maks. 20 MB)",
+          "errorNotMenu": "Slika nije meni",
+          "errorScan": "Meni nije moguće skenirati"
+        },
+        "loading": {
+          "primary": "Analiziram tvoj meni…",
+          "secondary": "Može potrajati do minut"
+        },
+        "review": {
+          "description": "VI je pronašla {total} jela u {cats} kategorija. Skini čekić sa onih koje ne želiš.",
+          "continue": "Dalje (izabrano: {n})"
+        },
+        "confirm": {
+          "prompt": "U meniju već imaš {existing} jela. Šta s njima?",
+          "replaceTitle": "Zameni postojeći meni",
+          "replaceDescription": "Obriši svih {existing} postojećih jela i zadrži samo {selected} novih.",
+          "keepTitle": "Zadrži i dodaj nova",
+          "keepDescription": "Dodaj {selected} novih jela u trenutni meni.",
+          "examplesNote": "Primeri će biti uklonjeni u oba slučaja."
+        },
+        "saving": {
+          "primary": "Čuvam meni…"
+        },
+        "toast": {
+          "saved": "Dodato {items} jela u {cats} kategorija"
+        }
       }
     },
     "categoryForm": {

@@ -109,6 +109,52 @@
           "back": "Atpakaļ",
           "close": "Aizvērt ievadu"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Augšupielādē savu papīra ēdienkarti",
+          "subtitle": "Uzfotografē vai augšupielādē PDF — MI sašķiros visu pa kategorijām.",
+          "cta": "Augšupielādēt ēdienkarti",
+          "dismiss": "Aizvērt"
+        },
+        "title": {
+          "upload": "Augšupielādēt ēdienkarti",
+          "loading": "Analizē ēdienkarti…",
+          "review": "Pārbaudi atpazīto ēdienkarti",
+          "confirm": "Aizstāt esošo ēdienkarti?",
+          "saving": "Saglabā…"
+        },
+        "upload": {
+          "description": "Augšupielādē fotogrāfijas vai PDF papīra ēdienkartei. MI to sadalīs kategorijās un ēdienos.",
+          "addFile": "+ Pievienot failu",
+          "scan": "Skenēt",
+          "errorTooMany": "Maksimums 5 faili",
+          "errorTooLarge": "Fails pārāk liels (maks. 20 MB)",
+          "errorNotMenu": "Attēls nav ēdienkarte",
+          "errorScan": "Neizdevās noskenēt ēdienkarti"
+        },
+        "loading": {
+          "primary": "Analizē tavu ēdienkarti…",
+          "secondary": "Tas var aizņemt līdz minūtei"
+        },
+        "review": {
+          "description": "MI atrada {total} ēdienus {cats} kategorijās. Noņem ķeksīšus tiem, kurus nevēlies.",
+          "continue": "Turpināt (atlasīti: {n})"
+        },
+        "confirm": {
+          "prompt": "Ēdienkartē jau ir {existing} ēdieni. Ko ar tiem darīt?",
+          "replaceTitle": "Aizstāt esošo ēdienkarti",
+          "replaceDescription": "Dzēst visus {existing} esošos ēdienus un atstāt tikai {selected} jaunos.",
+          "keepTitle": "Saglabāt un pievienot jaunus",
+          "keepDescription": "Pievienot {selected} jaunus ēdienus esošajai ēdienkartei.",
+          "examplesNote": "Paraugi tiks dzēsti abos gadījumos."
+        },
+        "saving": {
+          "primary": "Saglabā ēdienkarti…"
+        },
+        "toast": {
+          "saved": "Pievienoti {items} ēdieni {cats} kategorijās"
+        }
       }
     },
     "categoryForm": {

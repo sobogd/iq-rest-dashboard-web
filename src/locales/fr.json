@@ -109,6 +109,52 @@
           "back": "Retour",
           "close": "Fermer l'introduction"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Téléchargez votre carte papier",
+          "subtitle": "Prenez une photo ou téléversez un PDF — l'IA classera tous les plats par catégories.",
+          "cta": "Téléverser la carte",
+          "dismiss": "Fermer"
+        },
+        "title": {
+          "upload": "Téléverser la carte",
+          "loading": "Analyse de la carte…",
+          "review": "Vérifier la carte reconnue",
+          "confirm": "Remplacer la carte existante ?",
+          "saving": "Enregistrement…"
+        },
+        "upload": {
+          "description": "Téléversez des photos ou un PDF de votre carte papier. L'IA en extraira les catégories et plats.",
+          "addFile": "+ Ajouter un fichier",
+          "scan": "Scanner",
+          "errorTooMany": "5 fichiers maximum",
+          "errorTooLarge": "Fichier trop volumineux (max. 20 Mo)",
+          "errorNotMenu": "L'image n'est pas une carte",
+          "errorScan": "Échec du scan"
+        },
+        "loading": {
+          "primary": "Analyse de votre carte…",
+          "secondary": "Cela peut prendre jusqu'à une minute"
+        },
+        "review": {
+          "description": "L'IA a trouvé {total} plats dans {cats} catégories. Décochez ceux que vous ne voulez pas.",
+          "continue": "Continuer ({n} sélectionnés)"
+        },
+        "confirm": {
+          "prompt": "Vous avez déjà {existing} plats dans votre carte. Que faire ?",
+          "replaceTitle": "Remplacer la carte existante",
+          "replaceDescription": "Supprimer les {existing} plats existants et garder uniquement les {selected} nouveaux.",
+          "keepTitle": "Conserver et ajouter les nouveaux",
+          "keepDescription": "Ajouter les {selected} nouveaux plats à votre carte actuelle.",
+          "examplesNote": "Les plats d'exemple seront supprimés dans les deux cas."
+        },
+        "saving": {
+          "primary": "Enregistrement de la carte…"
+        },
+        "toast": {
+          "saved": "{items} plats ajoutés dans {cats} catégories"
+        }
       }
     },
     "categoryForm": {

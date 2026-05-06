@@ -109,6 +109,52 @@
           "back": "Back",
           "close": "Close onboarding"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Upload your paper menu",
+          "subtitle": "Snap a photo or upload a PDF — AI will parse all items into categories for you.",
+          "cta": "Upload menu",
+          "dismiss": "Dismiss"
+        },
+        "title": {
+          "upload": "Upload menu",
+          "loading": "Analyzing menu…",
+          "review": "Review parsed menu",
+          "confirm": "Replace existing menu?",
+          "saving": "Saving…"
+        },
+        "upload": {
+          "description": "Upload photos or a PDF of your paper menu. AI will parse it into categories and items.",
+          "addFile": "+ Add file",
+          "scan": "Scan",
+          "errorTooMany": "Maximum 5 files",
+          "errorTooLarge": "File too large (max 20 MB)",
+          "errorNotMenu": "Image is not a menu",
+          "errorScan": "Failed to scan menu"
+        },
+        "loading": {
+          "primary": "Analyzing your menu…",
+          "secondary": "This may take up to a minute"
+        },
+        "review": {
+          "description": "AI parsed {total} items in {cats} categories. Uncheck the ones you don't want.",
+          "continue": "Continue ({n} selected)"
+        },
+        "confirm": {
+          "prompt": "You have {existing} items already in your menu. What should happen with them?",
+          "replaceTitle": "Replace existing menu",
+          "replaceDescription": "Delete all {existing} existing items and keep only the new {selected}.",
+          "keepTitle": "Keep existing & add new",
+          "keepDescription": "Add the new {selected} items on top of your current menu.",
+          "examplesNote": "Example items will be removed in both cases."
+        },
+        "saving": {
+          "primary": "Saving menu…"
+        },
+        "toast": {
+          "saved": "Added {items} items in {cats} categories"
+        }
       }
     },
     "categoryForm": {

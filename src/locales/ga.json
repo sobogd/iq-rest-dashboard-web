@@ -109,6 +109,52 @@
           "back": "Ar ais",
           "close": "Dún an tabhairt isteach"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Uaslódáil do bhiachlár páipéir",
+          "subtitle": "Tóg pictiúr nó uaslódáil PDF — déanfaidh an IS gach mír a roinnt i gcatagóirí.",
+          "cta": "Uaslódáil biachlár",
+          "dismiss": "Dún"
+        },
+        "title": {
+          "upload": "Uaslódáil biachlár",
+          "loading": "Anailís ar an mbiachlár…",
+          "review": "Athbhreithnigh an biachlár aitheanta",
+          "confirm": "Ionadaigh an biachlár atá ann?",
+          "saving": "Á shábháil…"
+        },
+        "upload": {
+          "description": "Uaslódáil grianghraif nó PDF de do bhiachlár páipéir. Roinnfidh an IS é i gcatagóirí agus i míreanna.",
+          "addFile": "+ Cuir comhad leis",
+          "scan": "Scan",
+          "errorTooMany": "Uasmhéid 5 chomhad",
+          "errorTooLarge": "Tá an comhad ró-mhór (uas. 20 MB)",
+          "errorNotMenu": "Ní biachlár é an íomhá",
+          "errorScan": "Theip ar an scanadh"
+        },
+        "loading": {
+          "primary": "Ag déanamh anailíse ar do bhiachlár…",
+          "secondary": "D'fhéadfadh sé seo nóiméad a thógáil"
+        },
+        "review": {
+          "description": "D'aimsigh IS {total} mír i {cats} chatagóir. Díthiceáil iad siúd nach dteastaíonn uait.",
+          "continue": "Ar aghaidh ({n} roghnaithe)"
+        },
+        "confirm": {
+          "prompt": "Tá {existing} mír cheana sa bhiachlár. Cad ba mhaith leat a dhéanamh leo?",
+          "replaceTitle": "Ionadaigh an biachlár atá ann",
+          "replaceDescription": "Scrios na {existing} míreanna atá ann agus coinnigh na {selected} cinn nua amháin.",
+          "keepTitle": "Coinnigh agus cuir cinn nua leis",
+          "keepDescription": "Cuir {selected} mír nua leis an mbiachlár reatha.",
+          "examplesNote": "Bainfear míreanna samplacha amach sa dá chás."
+        },
+        "saving": {
+          "primary": "Á shábháil…"
+        },
+        "toast": {
+          "saved": "Cuireadh {items} mír i {cats} chatagóir"
+        }
       }
     },
     "categoryForm": {

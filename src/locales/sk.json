@@ -109,6 +109,52 @@
           "back": "Späť",
           "close": "Zavrieť onboarding"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Nahraj papierové menu",
+          "subtitle": "Vyfoť alebo nahraj PDF — AI rozdelí všetko do kategórií.",
+          "cta": "Nahrať menu",
+          "dismiss": "Zatvoriť"
+        },
+        "title": {
+          "upload": "Nahrať menu",
+          "loading": "Analyzujem menu…",
+          "review": "Skontroluj rozpoznané menu",
+          "confirm": "Nahradiť existujúce menu?",
+          "saving": "Ukladám…"
+        },
+        "upload": {
+          "description": "Nahraj fotky alebo PDF papierového menu. AI ho rozdelí do kategórií a položiek.",
+          "addFile": "+ Pridať súbor",
+          "scan": "Naskenovať",
+          "errorTooMany": "Maximálne 5 súborov",
+          "errorTooLarge": "Súbor je príliš veľký (max. 20 MB)",
+          "errorNotMenu": "Obrázok nie je menu",
+          "errorScan": "Menu sa nepodarilo naskenovať"
+        },
+        "loading": {
+          "primary": "Analyzujem tvoje menu…",
+          "secondary": "Môže to trvať až minútu"
+        },
+        "review": {
+          "description": "AI našla {total} položiek v {cats} kategóriách. Odškrtni tie, ktoré nechceš.",
+          "continue": "Pokračovať (vybrané: {n})"
+        },
+        "confirm": {
+          "prompt": "V menu už máš {existing} položiek. Čo s nimi?",
+          "replaceTitle": "Nahradiť existujúce menu",
+          "replaceDescription": "Vymaž všetkých {existing} existujúcich položiek a ponechaj len {selected} nových.",
+          "keepTitle": "Ponechať a pridať nové",
+          "keepDescription": "Pridaj {selected} nových položiek do aktuálneho menu.",
+          "examplesNote": "Ukážkové položky sa odstránia v oboch prípadoch."
+        },
+        "saving": {
+          "primary": "Ukladám menu…"
+        },
+        "toast": {
+          "saved": "Pridaných {items} položiek v {cats} kategóriách"
+        }
       }
     },
     "categoryForm": {

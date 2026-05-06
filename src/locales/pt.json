@@ -109,6 +109,52 @@
           "back": "Voltar",
           "close": "Fechar a introdução"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Carrega o teu menu em papel",
+          "subtitle": "Tira uma foto ou carrega um PDF — a IA divide todos os pratos por categorias.",
+          "cta": "Carregar menu",
+          "dismiss": "Fechar"
+        },
+        "title": {
+          "upload": "Carregar menu",
+          "loading": "A analisar o menu…",
+          "review": "Reveja o menu reconhecido",
+          "confirm": "Substituir o menu existente?",
+          "saving": "A guardar…"
+        },
+        "upload": {
+          "description": "Carrega fotos ou um PDF do teu menu em papel. A IA divide-o em categorias e pratos.",
+          "addFile": "+ Adicionar ficheiro",
+          "scan": "Digitalizar",
+          "errorTooMany": "Máximo 5 ficheiros",
+          "errorTooLarge": "Ficheiro demasiado grande (máx. 20 MB)",
+          "errorNotMenu": "A imagem não é um menu",
+          "errorScan": "Não foi possível digitalizar o menu"
+        },
+        "loading": {
+          "primary": "A analisar o teu menu…",
+          "secondary": "Pode demorar até um minuto"
+        },
+        "review": {
+          "description": "A IA encontrou {total} pratos em {cats} categorias. Desmarca os que não queres.",
+          "continue": "Continuar ({n} selecionados)"
+        },
+        "confirm": {
+          "prompt": "Já tens {existing} pratos no menu. O que fazer com eles?",
+          "replaceTitle": "Substituir o menu existente",
+          "replaceDescription": "Eliminar os {existing} pratos existentes e manter apenas os {selected} novos.",
+          "keepTitle": "Manter e adicionar os novos",
+          "keepDescription": "Adicionar os {selected} pratos novos ao menu atual.",
+          "examplesNote": "Os pratos de exemplo serão removidos em ambos os casos."
+        },
+        "saving": {
+          "primary": "A guardar menu…"
+        },
+        "toast": {
+          "saved": "{items} pratos adicionados em {cats} categorias"
+        }
       }
     },
     "categoryForm": {

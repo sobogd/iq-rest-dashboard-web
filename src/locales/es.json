@@ -109,6 +109,52 @@
           "back": "Atrás",
           "close": "Cerrar la introducción"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Sube tu menú en papel",
+          "subtitle": "Haz una foto o sube un PDF — la IA dividirá todos los platos en categorías por ti.",
+          "cta": "Subir menú",
+          "dismiss": "Descartar"
+        },
+        "title": {
+          "upload": "Subir menú",
+          "loading": "Analizando menú…",
+          "review": "Revisa el menú procesado",
+          "confirm": "¿Reemplazar el menú actual?",
+          "saving": "Guardando…"
+        },
+        "upload": {
+          "description": "Sube fotos o un PDF de tu menú en papel. La IA lo dividirá en categorías y platos.",
+          "addFile": "+ Añadir archivo",
+          "scan": "Escanear",
+          "errorTooMany": "Máximo 5 archivos",
+          "errorTooLarge": "Archivo demasiado grande (máx. 20 MB)",
+          "errorNotMenu": "La imagen no es un menú",
+          "errorScan": "No se pudo escanear el menú"
+        },
+        "loading": {
+          "primary": "Analizando tu menú…",
+          "secondary": "Esto puede tardar hasta un minuto"
+        },
+        "review": {
+          "description": "La IA encontró {total} platos en {cats} categorías. Desmarca los que no quieras.",
+          "continue": "Continuar ({n} seleccionados)"
+        },
+        "confirm": {
+          "prompt": "Ya tienes {existing} platos en tu menú. ¿Qué hacemos con ellos?",
+          "replaceTitle": "Reemplazar el menú actual",
+          "replaceDescription": "Elimina los {existing} platos existentes y deja solo los {selected} nuevos.",
+          "keepTitle": "Mantener y añadir los nuevos",
+          "keepDescription": "Añade los {selected} platos nuevos sobre el menú actual.",
+          "examplesNote": "Los platos de ejemplo se eliminan en ambos casos."
+        },
+        "saving": {
+          "primary": "Guardando menú…"
+        },
+        "toast": {
+          "saved": "Añadidos {items} platos en {cats} categorías"
+        }
       }
     },
     "categoryForm": {

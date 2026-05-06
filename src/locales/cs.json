@@ -109,6 +109,52 @@
           "back": "Zpět",
           "close": "Zavřít onboarding"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Nahrajte papírové menu",
+          "subtitle": "Vyfoťte nebo nahrajte PDF — AI rozdělí položky do kategorií.",
+          "cta": "Nahrát menu",
+          "dismiss": "Zavřít"
+        },
+        "title": {
+          "upload": "Nahrát menu",
+          "loading": "Analyzuji menu…",
+          "review": "Zkontrolujte rozpoznané menu",
+          "confirm": "Nahradit stávající menu?",
+          "saving": "Ukládám…"
+        },
+        "upload": {
+          "description": "Nahrajte fotky nebo PDF papírového menu. AI ho rozdělí do kategorií a položek.",
+          "addFile": "+ Přidat soubor",
+          "scan": "Naskenovat",
+          "errorTooMany": "Maximálně 5 souborů",
+          "errorTooLarge": "Soubor je příliš velký (max. 20 MB)",
+          "errorNotMenu": "Obrázek není menu",
+          "errorScan": "Menu se nepodařilo naskenovat"
+        },
+        "loading": {
+          "primary": "Analyzuji vaše menu…",
+          "secondary": "Může to trvat až minutu"
+        },
+        "review": {
+          "description": "AI našla {total} položek v {cats} kategoriích. Odškrtněte ty, které nechcete.",
+          "continue": "Pokračovat (vybráno: {n})"
+        },
+        "confirm": {
+          "prompt": "V menu již máte {existing} položek. Co s nimi?",
+          "replaceTitle": "Nahradit stávající menu",
+          "replaceDescription": "Smazat všech {existing} stávajících položek a ponechat jen {selected} nových.",
+          "keepTitle": "Ponechat a přidat nové",
+          "keepDescription": "Přidat {selected} nových položek do stávajícího menu.",
+          "examplesNote": "Ukázkové položky se odstraní v obou případech."
+        },
+        "saving": {
+          "primary": "Ukládám menu…"
+        },
+        "toast": {
+          "saved": "Přidáno {items} položek do {cats} kategorií"
+        }
       }
     },
     "categoryForm": {

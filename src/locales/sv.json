@@ -109,6 +109,52 @@
           "back": "Tillbaka",
           "close": "Stäng introduktionen"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Ladda upp din pappersmeny",
+          "subtitle": "Ta ett foto eller ladda upp en PDF — AI sorterar allt i kategorier åt dig.",
+          "cta": "Ladda upp meny",
+          "dismiss": "Stäng"
+        },
+        "title": {
+          "upload": "Ladda upp meny",
+          "loading": "Analyserar meny…",
+          "review": "Granska tolkad meny",
+          "confirm": "Ersätta befintlig meny?",
+          "saving": "Sparar…"
+        },
+        "upload": {
+          "description": "Ladda upp foton eller en PDF av din pappersmeny. AI sorterar in dem i kategorier och rätter.",
+          "addFile": "+ Lägg till fil",
+          "scan": "Skanna",
+          "errorTooMany": "Max 5 filer",
+          "errorTooLarge": "Filen är för stor (max 20 MB)",
+          "errorNotMenu": "Bilden är inte en meny",
+          "errorScan": "Kunde inte skanna menyn"
+        },
+        "loading": {
+          "primary": "Analyserar din meny…",
+          "secondary": "Detta kan ta upp till en minut"
+        },
+        "review": {
+          "description": "AI hittade {total} rätter i {cats} kategorier. Avmarkera de du inte vill ha.",
+          "continue": "Fortsätt ({n} valda)"
+        },
+        "confirm": {
+          "prompt": "Du har redan {existing} rätter i menyn. Vad ska hända med dem?",
+          "replaceTitle": "Ersätt befintlig meny",
+          "replaceDescription": "Ta bort alla {existing} befintliga rätter och behåll endast de {selected} nya.",
+          "keepTitle": "Behåll och lägg till nya",
+          "keepDescription": "Lägg till {selected} nya rätter ovanpå nuvarande meny.",
+          "examplesNote": "Exempelrätter tas bort i båda fallen."
+        },
+        "saving": {
+          "primary": "Sparar meny…"
+        },
+        "toast": {
+          "saved": "{items} rätter tillagda i {cats} kategorier"
+        }
       }
     },
     "categoryForm": {

@@ -109,6 +109,52 @@
           "back": "Til baka",
           "close": "Loka kynningu"
         }
+      },
+      "scan": {
+        "banner": {
+          "title": "Hladdu upp pappírsmatseðlinum",
+          "subtitle": "Taktu mynd eða hladdu upp PDF — gervigreindin flokkar allt í flokka.",
+          "cta": "Hlaða upp matseðli",
+          "dismiss": "Loka"
+        },
+        "title": {
+          "upload": "Hlaða upp matseðli",
+          "loading": "Greini matseðil…",
+          "review": "Skoðaðu þekktan matseðil",
+          "confirm": "Skipta út núverandi matseðli?",
+          "saving": "Vista…"
+        },
+        "upload": {
+          "description": "Hladdu upp myndum eða PDF af pappírsmatseðlinum. Gervigreindin flokkar í flokka og rétti.",
+          "addFile": "+ Bæta við skrá",
+          "scan": "Skanna",
+          "errorTooMany": "Hámark 5 skrár",
+          "errorTooLarge": "Skrá of stór (hámark 20 MB)",
+          "errorNotMenu": "Myndin er ekki matseðill",
+          "errorScan": "Tókst ekki að skanna matseðilinn"
+        },
+        "loading": {
+          "primary": "Greini matseðilinn þinn…",
+          "secondary": "Þetta gæti tekið allt að mínútu"
+        },
+        "review": {
+          "description": "Gervigreindin fann {total} rétti í {cats} flokkum. Afhakkaðu þá sem þú vilt ekki.",
+          "continue": "Halda áfram ({n} valdir)"
+        },
+        "confirm": {
+          "prompt": "Þú ert nú þegar með {existing} rétti á matseðlinum. Hvað á að gera við þá?",
+          "replaceTitle": "Skipta út núverandi matseðli",
+          "replaceDescription": "Eyddu öllum {existing} núverandi réttum og haltu aðeins {selected} nýjum.",
+          "keepTitle": "Halda og bæta við nýjum",
+          "keepDescription": "Bættu {selected} nýjum réttum við núverandi matseðil.",
+          "examplesNote": "Sýnishorn verða fjarlægð í báðum tilfellum."
+        },
+        "saving": {
+          "primary": "Vista matseðil…"
+        },
+        "toast": {
+          "saved": "Bætti við {items} réttum í {cats} flokkum"
+        }
       }
     },
     "categoryForm": {
