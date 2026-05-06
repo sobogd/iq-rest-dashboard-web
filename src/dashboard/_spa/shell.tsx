@@ -104,7 +104,6 @@ function ShellBody(props: ShellInitialData) {
       sub={props.initialSub}
       isAdmin={props.isAdmin}
       impersonatedBy={props.impersonatedBy ?? null}
-      userEmail={props.userEmail ?? ""}
       scanBannerDismissed={!!props.scanBannerDismissed}
       backToSettings={backToSettings}
       backToMenu={backToMenu}
@@ -126,7 +125,6 @@ interface SwitchProps {
   sub: ShellInitialData["initialSub"];
   isAdmin: boolean;
   impersonatedBy: string | null;
-  userEmail: string;
   scanBannerDismissed: boolean;
   backToSettings: () => void;
   backToMenu: () => void;
@@ -134,7 +132,7 @@ interface SwitchProps {
 }
 
 function ViewSwitch(p: SwitchProps) {
-  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, userEmail, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
+  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
   const router = useDashboardRouter();
 
   const onSavedMenu = async () => {
@@ -153,7 +151,6 @@ function ViewSwitch(p: SwitchProps) {
           initialCategories={categories}
           initialSub={sub}
           onPersisted={refreshMenu}
-          userEmail={userEmail}
           scanBannerDismissed={scanBannerDismissed}
         />
       );

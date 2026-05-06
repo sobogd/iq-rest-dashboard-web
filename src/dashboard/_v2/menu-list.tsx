@@ -31,19 +31,15 @@ interface SubData {
  trialEndsAt: string | null;
 }
 
-const SCAN_BANNER_ALLOWED_EMAIL = "sobogd@gmail.com";
-
 export function MenuList({
  initialCategories,
  initialSub = null,
  onPersisted,
- userEmail = "",
  scanBannerDismissed = false,
 }: {
  initialCategories: Category[];
  initialSub?: SubData | null;
  onPersisted?: () => void;
- userEmail?: string;
  scanBannerDismissed?: boolean;
 }) {
  const t = useTranslations("dashboard.menu");
@@ -62,9 +58,7 @@ export function MenuList({
  });
  const [shareOpen, setShareOpen] = useState(false);
  const [sub, setSub] = useState<SubData | null>(initialSub);
- const [scanBannerVisible, setScanBannerVisible] = useState(
-  userEmail === SCAN_BANNER_ALLOWED_EMAIL && !scanBannerDismissed,
- );
+ const [scanBannerVisible, setScanBannerVisible] = useState(!scanBannerDismissed);
  const [scanModalOpen, setScanModalOpen] = useState(false);
 
  const existingRealItemsCount = categories.reduce(
@@ -344,7 +338,6 @@ export function MenuList({
  url={menuUrl}
  restaurantName={restaurant.name}
  />
- {userEmail === SCAN_BANNER_ALLOWED_EMAIL && (
  <ScanModal
  open={scanModalOpen}
  onClose={() => setScanModalOpen(false)}
@@ -354,7 +347,6 @@ export function MenuList({
  onPersisted?.();
  }}
  />
- )}
  {categories.length > 0 ? <MenuOnboarding /> : null}
  </>
  );
