@@ -58,7 +58,7 @@ export function MenuList({
  });
  const [shareOpen, setShareOpen] = useState(false);
  const [sub, setSub] = useState<SubData | null>(initialSub);
- const [scanBannerVisible, setScanBannerVisible] = useState(!scanBannerDismissed);
+ const [bannerLocallyDismissed, setBannerLocallyDismissed] = useState(scanBannerDismissed);
  const [scanModalOpen, setScanModalOpen] = useState(false);
 
  const existingRealItemsCount = categories.reduce(
@@ -66,8 +66,13 @@ export function MenuList({
   0,
  );
 
+ // Always show when the menu is empty (no categories at all),
+ // otherwise honour the per-restaurant dismissed flag.
+ const noCategories = categories.length === 0;
+ const scanBannerVisible = noCategories || !bannerLocallyDismissed;
+
  async function handleDismissBanner() {
-  setScanBannerVisible(false);
+  setBannerLocallyDismissed(true);
   try {
    await dismissScanBanner();
   } catch {
@@ -244,7 +249,8 @@ export function MenuList({
  />
 
  {scanBannerVisible && (
- <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 pr-10 mb-3">
+ <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-3 ${noCategories ? "" : "pr-10"}`}>
+ {!noCategories && (
  <button
  type="button"
  onClick={() => void handleDismissBanner()}
@@ -253,6 +259,7 @@ export function MenuList({
  >
  ×
  </button>
+ )}
  <div className="flex items-start gap-3">
  <div
  className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white text-lg"
@@ -343,7 +350,7 @@ export function MenuList({
  onClose={() => setScanModalOpen(false)}
  existingRealItemsCount={existingRealItemsCount}
  onSaved={() => {
- setScanBannerVisible(false);
+ setBannerLocallyDismissed(true);
  onPersisted?.();
  }}
  />
