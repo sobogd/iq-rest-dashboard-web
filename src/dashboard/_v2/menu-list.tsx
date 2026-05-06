@@ -72,6 +72,7 @@ export function MenuList({
  const scanBannerVisible = noCategories || !bannerLocallyDismissed;
 
  async function handleDismissBanner() {
+  track("dash_scan_banner_dismiss");
   setBannerLocallyDismissed(true);
   try {
    await dismissScanBanner();
@@ -272,7 +273,7 @@ export function MenuList({
  <p className="text-xs text-muted-foreground mt-0.5">{t("scan.banner.subtitle")}</p>
  <button
  type="button"
- onClick={() => setScanModalOpen(true)}
+ onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
  className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
  style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
  >

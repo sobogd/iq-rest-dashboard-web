@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { Modal } from "./ui";
 import { primaryBtn } from "./tokens";
 import { dismissScanBanner, scanMenuParse, scanMenuSave, type ScanMenuCategory } from "./api";
+import { track } from "@/lib/dashboard-events";
 
 const MAX_SIZE = 20 * 1024 * 1024;
 const MAX_FILES = 5;
@@ -67,7 +68,12 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
  const [parsed, setParsed] = useState<ScanMenuCategory[]>([]);
  const [selected, setSelected] = useState<Record<string, boolean>>({});
 
+ useEffect(() => {
+  if (open) track("dash_scan_modal_open");
+ }, [open]);
+
  function handleClose() {
+  track("dash_scan_modal_close", { stage });
   photoPool.forEach((p) => {
    if (p.preview.startsWith("blob:")) URL.revokeObjectURL(p.preview);
   });
@@ -83,16 +89,19 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   if (!files || files.length === 0) return;
   const remaining = MAX_FILES - photoPool.length;
   if (remaining <= 0) {
+   track("dash_scan_file_error", { reason: "too_many" });
    setError(t("upload.errorTooMany"));
    return;
   }
   const accepted = Array.from(files).slice(0, remaining);
   for (const file of accepted) {
    if (file.size > MAX_SIZE) {
+    track("dash_scan_file_error", { reason: "too_large" });
     setError(t("upload.errorTooLarge"));
     return;
    }
   }
+  track("dash_scan_file_added", { count: String(accepted.length) });
   const newPhotos: PoolPhoto[] = accepted.map((file) => {
    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
    return {
@@ -121,6 +130,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
  }
 
  function removeFromPool(id: string) {
+  track("dash_scan_file_removed");
   setPhotoPool((prev) => {
    const removed = prev.find((p) => p.id === id);
    if (removed && removed.preview.startsWith("blob:")) URL.revokeObjectURL(removed.preview);
@@ -130,6 +140,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
 
  const handleStartScan = useCallback(async () => {
   if (photoPool.length === 0) return;
+  track("dash_scan_start", { files: String(photoPool.length) });
   setError("");
   setStage("loading");
   try {
@@ -141,6 +152,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    );
    const result = await scanMenuParse(images);
    if (!result.ok) {
+    track("dash_scan_parse_error", { error: result.error });
     if (result.error === "not_a_menu") setError(t("upload.errorNotMenu"));
     else if (result.error === "too_large") setError(t("upload.errorTooLarge"));
     else if (result.error === "too_many_images") setError(t("upload.errorTooMany"));
@@ -149,6 +161,8 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
     return;
    }
    const categories = result.categories;
+   const totalItems = categories.reduce((s, c) => s + c.items.length, 0);
+   track("dash_scan_parse_success", { cats: String(categories.length), items: String(totalItems) });
    setParsed(categories);
    const sel: Record<string, boolean> = {};
    categories.forEach((cat, i) => {
@@ -158,7 +172,8 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
    });
    setSelected(sel);
    setStage("review");
-  } catch {
+  } catch (e) {
+   track("dash_scan_parse_error", { error: "exception", detail: String(e) });
    setError(t("upload.errorScan"));
    setStage("upload");
   }
@@ -183,6 +198,10 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
 
  function proceedFromReview() {
   if (getSelectedCount() === 0) return;
+  track("dash_scan_review_continue", {
+   selected: String(getSelectedCount()),
+   needsConfirm: existingRealItemsCount > 0 ? "1" : "0",
+  });
   if (existingRealItemsCount > 0) {
    setStage("confirm");
   } else {
@@ -193,13 +212,23 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
  async function save(replaceExisting: boolean) {
   const categories = buildSelectedCategories();
   if (categories.length === 0) return;
+  track("dash_scan_save_start", {
+   mode: replaceExisting ? "replace" : "keep",
+   cats: String(categories.length),
+  });
   setStage("saving");
   const result = await scanMenuSave(categories, replaceExisting);
   if (!result.ok) {
+   track("dash_scan_save_error", { error: result.error });
    setError(result.error);
    setStage("review");
    return;
   }
+  track("dash_scan_save_success", {
+   mode: replaceExisting ? "replace" : "keep",
+   cats: String(result.categoriesCount),
+   items: String(result.itemsCount),
+  });
   // Auto-dismiss banner after a successful scan — user is done with the feature.
   try { await dismissScanBanner(); } catch { /* ignore */ }
   onSaved();
