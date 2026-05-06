@@ -299,6 +299,7 @@
       "subtitleOther": "Tens {count} reserves properes.",
       "noBookings": "Encara no hi ha reserves",
       "noBookingsSub": "Quan els clients reservin taula, els veuràs aquí.",
+      "error": "No s'ha pogut actualitzar la reserva",
       "today": "Avui",
       "noToday": "No hi ha reserves per avui.",
       "bookingOne": "{count} reserva",
@@ -312,8 +313,7 @@
       "statusPending": "Pendent",
       "statusConfirmed": "Confirmada",
       "statusCancelled": "Cancel·lada",
-      "statusCompleted": "Completada",
-      "statusNoShow": "No s'ha presentat"
+      "statusCompleted": "Completada"
     },
     "tables": {
       "table": "Taula",

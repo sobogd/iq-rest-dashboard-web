@@ -299,6 +299,7 @@
       "subtitleOther": "لديك {count} حجز قادم.",
       "noBookings": "لا توجد حجوزات بعد",
       "noBookingsSub": "عندما يحجز الضيوف طاولة، سترونهم هنا.",
+      "error": "فشل تحديث الحجز",
       "today": "اليوم",
       "noToday": "لا توجد حجوزات لليوم.",
       "bookingOne": "{count} حجز",
@@ -312,8 +313,7 @@
       "statusPending": "قيد الانتظار",
       "statusConfirmed": "مؤكد",
       "statusCancelled": "ملغى",
-      "statusCompleted": "مكتمل",
-      "statusNoShow": "لم يحضر"
+      "statusCompleted": "مكتمل"
     },
     "tables": {
       "table": "طاولة",

@@ -299,6 +299,7 @@
       "subtitleOther": "Sie haben {count} bevorstehende Reservierungen.",
       "noBookings": "Noch keine Reservierungen",
       "noBookingsSub": "Sobald Gäste einen Tisch reservieren, sehen Sie sie hier.",
+      "error": "Reservierung konnte nicht aktualisiert werden",
       "today": "Heute",
       "noToday": "Heute keine Reservierungen.",
       "bookingOne": "{count} Reservierung",
@@ -312,8 +313,7 @@
       "statusPending": "Ausstehend",
       "statusConfirmed": "Bestätigt",
       "statusCancelled": "Storniert",
-      "statusCompleted": "Abgeschlossen",
-      "statusNoShow": "Nicht erschienen"
+      "statusCompleted": "Abgeschlossen"
     },
     "tables": {
       "table": "Tisch",

@@ -299,6 +299,7 @@
       "subtitleOther": "Du har {count} kommende bookinger.",
       "noBookings": "Ingen bookinger ennå",
       "noBookingsSub": "Når gjester booker bord, ser du dem her.",
+      "error": "Kunne ikke oppdatere reservasjonen",
       "today": "I dag",
       "noToday": "Ingen bookinger i dag.",
       "bookingOne": "{count} booking",
@@ -312,8 +313,7 @@
       "statusPending": "Venter",
       "statusConfirmed": "Bekreftet",
       "statusCancelled": "Kansellert",
-      "statusCompleted": "Fullført",
-      "statusNoShow": "Møtte ikke"
+      "statusCompleted": "Fullført"
     },
     "tables": {
       "table": "Bord",

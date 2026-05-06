@@ -299,6 +299,7 @@
       "subtitleOther": "Sinulla on {count} tulevaa varausta.",
       "noBookings": "Ei varauksia vielä",
       "noBookingsSub": "Kun vieraat varaavat pöydän, näet ne tässä.",
+      "error": "Varauksen päivitys epäonnistui",
       "today": "Tänään",
       "noToday": "Ei varauksia tänään.",
       "bookingOne": "{count} varaus",
@@ -312,8 +313,7 @@
       "statusPending": "Odottaa",
       "statusConfirmed": "Vahvistettu",
       "statusCancelled": "Peruttu",
-      "statusCompleted": "Päättynyt",
-      "statusNoShow": "Ei saapunut"
+      "statusCompleted": "Päättynyt"
     },
     "tables": {
       "table": "Pöytä",

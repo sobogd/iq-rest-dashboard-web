@@ -299,6 +299,7 @@
       "subtitleOther": "Jums ir {count} gaidāmas rezervācijas.",
       "noBookings": "Vēl nav rezervāciju",
       "noBookingsSub": "Kad viesi rezervēs galdu, jūs viņus redzēsiet šeit.",
+      "error": "Neizdevās atjaunināt rezervāciju",
       "today": "Šodien",
       "noToday": "Šodien nav rezervāciju.",
       "bookingOne": "{count} rezervācija",
@@ -312,8 +313,7 @@
       "statusPending": "Gaida",
       "statusConfirmed": "Apstiprināts",
       "statusCancelled": "Atcelts",
-      "statusCompleted": "Pabeigts",
-      "statusNoShow": "Neieradās"
+      "statusCompleted": "Pabeigts"
     },
     "tables": {
       "table": "Galds",

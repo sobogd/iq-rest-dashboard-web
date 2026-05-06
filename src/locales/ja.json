@@ -299,6 +299,7 @@
       "subtitleOther": "今後の予約が {count} 件あります。",
       "noBookings": "予約がまだありません",
       "noBookingsSub": "ゲストがテーブルを予約するとここに表示されます。",
+      "error": "予約の更新に失敗しました",
       "today": "今日",
       "noToday": "今日の予約はありません。",
       "bookingOne": "{count} 件の予約",
@@ -312,8 +313,7 @@
       "statusPending": "保留中",
       "statusConfirmed": "確認済み",
       "statusCancelled": "キャンセル",
-      "statusCompleted": "完了",
-      "statusNoShow": "未来店"
+      "statusCompleted": "完了"
     },
     "tables": {
       "table": "テーブル",

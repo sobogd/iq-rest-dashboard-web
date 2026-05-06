@@ -299,6 +299,7 @@
       "subtitleOther": "예정된 예약이 {count}건 있습니다.",
       "noBookings": "아직 예약이 없습니다",
       "noBookingsSub": "손님이 테이블을 예약하면 여기에서 볼 수 있습니다.",
+      "error": "예약 업데이트에 실패했습니다",
       "today": "오늘",
       "noToday": "오늘 예약이 없습니다.",
       "bookingOne": "{count}건 예약",
@@ -312,8 +313,7 @@
       "statusPending": "대기 중",
       "statusConfirmed": "확정",
       "statusCancelled": "취소",
-      "statusCompleted": "완료",
-      "statusNoShow": "노쇼"
+      "statusCompleted": "완료"
     },
     "tables": {
       "table": "테이블",

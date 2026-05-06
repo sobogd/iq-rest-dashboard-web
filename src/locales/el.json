@@ -299,6 +299,7 @@
       "subtitleOther": "Έχετε {count} επερχόμενες κρατήσεις.",
       "noBookings": "Δεν υπάρχουν κρατήσεις",
       "noBookingsSub": "Όταν οι πελάτες κρατήσουν τραπέζι, θα τους δείτε εδώ.",
+      "error": "Αποτυχία ενημέρωσης κράτησης",
       "today": "Σήμερα",
       "noToday": "Καμία κράτηση για σήμερα.",
       "bookingOne": "{count} κράτηση",
@@ -312,8 +313,7 @@
       "statusPending": "Εκκρεμεί",
       "statusConfirmed": "Επιβεβαιώθηκε",
       "statusCancelled": "Ακυρώθηκε",
-      "statusCompleted": "Ολοκληρώθηκε",
-      "statusNoShow": "Δεν εμφανίστηκε"
+      "statusCompleted": "Ολοκληρώθηκε"
     },
     "tables": {
       "table": "Τραπέζι",

@@ -299,6 +299,7 @@
       "subtitleOther": "Tá {count} áirithint le teacht agat.",
       "noBookings": "Gan áirithintí fós",
       "noBookingsSub": "Nuair a dhéanann cuairteoirí áirithint, feicfidh tú anseo iad.",
+      "error": "Theip ar an áirithint a nuashonrú",
       "today": "Inniu",
       "noToday": "Gan áirithintí inniu.",
       "bookingOne": "{count} áirithint",
@@ -312,8 +313,7 @@
       "statusPending": "Ar feitheamh",
       "statusConfirmed": "Deimhnithe",
       "statusCancelled": "Cealaithe",
-      "statusCompleted": "Críochnaithe",
-      "statusNoShow": "Níor tháinig"
+      "statusCompleted": "Críochnaithe"
     },
     "tables": {
       "table": "Bord",

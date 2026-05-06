@@ -299,6 +299,7 @@
       "subtitleOther": "您有 {count} 个即将到来的预订。",
       "noBookings": "尚无预订",
       "noBookingsSub": "顾客预订桌台后，您将在此处看到他们。",
+      "error": "更新预订失败",
       "today": "今天",
       "noToday": "今日无预订。",
       "bookingOne": "{count} 个预订",
@@ -312,8 +313,7 @@
       "statusPending": "待处理",
       "statusConfirmed": "已确认",
       "statusCancelled": "已取消",
-      "statusCompleted": "已完成",
-      "statusNoShow": "未出现"
+      "statusCompleted": "已完成"
     },
     "tables": {
       "table": "桌台",

@@ -299,6 +299,7 @@
       "subtitleOther": "U heeft {count} aankomende reserveringen.",
       "noBookings": "Nog geen reserveringen",
       "noBookingsSub": "Zodra gasten een tafel reserveren, ziet u ze hier.",
+      "error": "Reservering bijwerken mislukt",
       "today": "Vandaag",
       "noToday": "Geen reserveringen voor vandaag.",
       "bookingOne": "{count} reservering",
@@ -312,8 +313,7 @@
       "statusPending": "In afwachting",
       "statusConfirmed": "Bevestigd",
       "statusCancelled": "Geannuleerd",
-      "statusCompleted": "Voltooid",
-      "statusNoShow": "Niet verschenen"
+      "statusCompleted": "Voltooid"
     },
     "tables": {
       "table": "Tafel",

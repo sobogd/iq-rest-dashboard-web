@@ -88,7 +88,7 @@ export interface Booking {
  datetime: string;
  guests: number;
  tableId: string | null;
- status: "pending" | "confirmed" | "cancelled" | "completed" | "no-show";
+ status: "pending" | "confirmed" | "cancelled" | "completed";
  notes: string;
 }
 

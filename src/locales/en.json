@@ -299,6 +299,7 @@
       "subtitleOther": "You have {count} upcoming bookings.",
       "noBookings": "No bookings yet",
       "noBookingsSub": "Once guests book a table, you'll see them here.",
+      "error": "Failed to update booking",
       "today": "Today",
       "noToday": "No bookings for today.",
       "bookingOne": "{count} booking",
@@ -312,8 +313,7 @@
       "statusPending": "Pending",
       "statusConfirmed": "Confirmed",
       "statusCancelled": "Cancelled",
-      "statusCompleted": "Completed",
-      "statusNoShow": "No-show"
+      "statusCompleted": "Completed"
     },
     "tables": {
       "table": "Table",

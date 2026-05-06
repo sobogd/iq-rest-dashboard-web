@@ -299,6 +299,7 @@
       "subtitleOther": "Turite {count} būsimų rezervacijų.",
       "noBookings": "Dar nėra rezervacijų",
       "noBookingsSub": "Kai svečiai rezervuos stalą, juos pamatysite čia.",
+      "error": "Nepavyko atnaujinti rezervacijos",
       "today": "Šiandien",
       "noToday": "Šiandienai rezervacijų nėra.",
       "bookingOne": "{count} rezervacija",
@@ -312,8 +313,7 @@
       "statusPending": "Laukia",
       "statusConfirmed": "Patvirtinta",
       "statusCancelled": "Atšaukta",
-      "statusCompleted": "Užbaigta",
-      "statusNoShow": "Neatvyko"
+      "statusCompleted": "Užbaigta"
     },
     "tables": {
       "table": "Stalas",

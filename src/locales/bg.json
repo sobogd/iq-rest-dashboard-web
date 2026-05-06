@@ -299,6 +299,7 @@
       "subtitleOther": "Имате {count} предстоящи резервации.",
       "noBookings": "Все още няма резервации",
       "noBookingsSub": "Когато гостите резервират маса, ще ги видите тук.",
+      "error": "Неуспешно обновяване на резервацията",
       "today": "Днес",
       "noToday": "Няма резервации за днес.",
       "bookingOne": "{count} резервация",
@@ -312,8 +313,7 @@
       "statusPending": "Чакаща",
       "statusConfirmed": "Потвърдена",
       "statusCancelled": "Отказана",
-      "statusCompleted": "Завършена",
-      "statusNoShow": "Не се яви"
+      "statusCompleted": "Завършена"
     },
     "tables": {
       "table": "Маса",

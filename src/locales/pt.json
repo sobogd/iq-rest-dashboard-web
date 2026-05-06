@@ -299,6 +299,7 @@
       "subtitleOther": "Tem {count} reservas próximas.",
       "noBookings": "Ainda sem reservas",
       "noBookingsSub": "Quando os clientes reservarem uma mesa, vai vê-las aqui.",
+      "error": "Falha ao atualizar a reserva",
       "today": "Hoje",
       "noToday": "Sem reservas para hoje.",
       "bookingOne": "{count} reserva",
@@ -312,8 +313,7 @@
       "statusPending": "Pendente",
       "statusConfirmed": "Confirmada",
       "statusCancelled": "Cancelada",
-      "statusCompleted": "Concluída",
-      "statusNoShow": "Não compareceu"
+      "statusCompleted": "Concluída"
     },
     "tables": {
       "table": "Mesa",

@@ -299,6 +299,7 @@
       "subtitleOther": "Hai {count} prenotazioni in arrivo.",
       "noBookings": "Nessuna prenotazione",
       "noBookingsSub": "Quando gli ospiti prenoteranno un tavolo, li vedrai qui.",
+      "error": "Aggiornamento prenotazione non riuscito",
       "today": "Oggi",
       "noToday": "Nessuna prenotazione per oggi.",
       "bookingOne": "{count} prenotazione",
@@ -312,8 +313,7 @@
       "statusPending": "In attesa",
       "statusConfirmed": "Confermata",
       "statusCancelled": "Annullata",
-      "statusCompleted": "Completata",
-      "statusNoShow": "Non presentato"
+      "statusCompleted": "Completata"
     },
     "tables": {
       "table": "Tavolo",

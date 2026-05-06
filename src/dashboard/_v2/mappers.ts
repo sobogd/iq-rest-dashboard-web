@@ -216,7 +216,7 @@ export function apiReservationToBooking(r: ApiReservation): Booking {
  const datePart = r.date.includes("T") ? r.date.slice(0, 10) : r.date;
  const dt = new Date(`${datePart}T${r.startTime}:00`);
  const status: Booking["status"] =
- r.status === "confirmed" || r.status === "cancelled" || r.status === "completed" || r.status === "no-show"
+ r.status === "confirmed" || r.status === "cancelled" || r.status === "completed"
  ? r.status
  : "pending";
  return {

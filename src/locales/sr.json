@@ -299,6 +299,7 @@
       "subtitleOther": "Imate {count} predstojećih rezervacija.",
       "noBookings": "Još nema rezervacija",
       "noBookingsSub": "Kad gosti rezervišu sto, videćete ih ovde.",
+      "error": "Ажурирање резервације није успело",
       "today": "Danas",
       "noToday": "Nema rezervacija za danas.",
       "bookingOne": "{count} rezervacija",
@@ -312,8 +313,7 @@
       "statusPending": "Na čekanju",
       "statusConfirmed": "Potvrđeno",
       "statusCancelled": "Otkazano",
-      "statusCompleted": "Završeno",
-      "statusNoShow": "Nije se pojavio"
+      "statusCompleted": "Završeno"
     },
     "tables": {
       "table": "Sto",

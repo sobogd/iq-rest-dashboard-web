@@ -299,6 +299,7 @@
       "subtitleOther": "Máte {count} nadcházejících rezervací.",
       "noBookings": "Žádné rezervace",
       "noBookingsSub": "Až si hosté zarezervují stůl, uvidíte je zde.",
+      "error": "Nepodařilo se aktualizovat rezervaci",
       "today": "Dnes",
       "noToday": "Žádné rezervace na dnes.",
       "bookingOne": "{count} rezervace",
@@ -312,8 +313,7 @@
       "statusPending": "Čeká",
       "statusConfirmed": "Potvrzeno",
       "statusCancelled": "Zrušeno",
-      "statusCompleted": "Dokončeno",
-      "statusNoShow": "Nedostavil se"
+      "statusCompleted": "Dokončeno"
     },
     "tables": {
       "table": "Stůl",

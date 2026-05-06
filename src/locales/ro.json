@@ -299,6 +299,7 @@
       "subtitleOther": "Ai {count} rezervări viitoare.",
       "noBookings": "Nicio rezervare încă",
       "noBookingsSub": "Când clienții rezervă o masă, le vei vedea aici.",
+      "error": "Actualizarea rezervării a eșuat",
       "today": "Astăzi",
       "noToday": "Fără rezervări pentru astăzi.",
       "bookingOne": "{count} rezervare",
@@ -312,8 +313,7 @@
       "statusPending": "În așteptare",
       "statusConfirmed": "Confirmată",
       "statusCancelled": "Anulată",
-      "statusCompleted": "Finalizată",
-      "statusNoShow": "Nu s-a prezentat"
+      "statusCompleted": "Finalizată"
     },
     "tables": {
       "table": "Masa",

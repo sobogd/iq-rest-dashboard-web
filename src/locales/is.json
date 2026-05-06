@@ -299,6 +299,7 @@
       "subtitleOther": "Þú átt {count} komandi bókanir.",
       "noBookings": "Engar bókanir enn",
       "noBookingsSub": "Þegar gestir bóka borð muntu sjá þá hér.",
+      "error": "Mistókst að uppfæra bókun",
       "today": "Í dag",
       "noToday": "Engar bókanir í dag.",
       "bookingOne": "{count} bókun",
@@ -312,8 +313,7 @@
       "statusPending": "Bíður",
       "statusConfirmed": "Staðfest",
       "statusCancelled": "Aflýst",
-      "statusCompleted": "Lokið",
-      "statusNoShow": "Mætti ekki"
+      "statusCompleted": "Lokið"
     },
     "tables": {
       "table": "Borð",

@@ -299,6 +299,7 @@
       "subtitleOther": "{count} yaklaşan rezervasyonunuz var.",
       "noBookings": "Henüz rezervasyon yok",
       "noBookingsSub": "Misafirler masa rezervasyonu yaptığında onları burada göreceksiniz.",
+      "error": "Rezervasyon güncellenemedi",
       "today": "Bugün",
       "noToday": "Bugün için rezervasyon yok.",
       "bookingOne": "{count} rezervasyon",
@@ -312,8 +313,7 @@
       "statusPending": "Beklemede",
       "statusConfirmed": "Onaylandı",
       "statusCancelled": "İptal edildi",
-      "statusCompleted": "Tamamlandı",
-      "statusNoShow": "Gelmedi"
+      "statusCompleted": "Tamamlandı"
     },
     "tables": {
       "table": "Masa",

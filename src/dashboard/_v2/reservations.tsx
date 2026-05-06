@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { MapPinIcon, UsersIcon } from "./icons";
-import { ConfirmDialog, EmptyState, PageHeader } from "./ui";
+import { EmptyState, PageHeader } from "./ui";
 import { formatDayLabel, formatTime, isSameDay } from "./helpers";
 import { patchReservation } from "./api";
 import type { Booking, TableEntity } from "./types";
 import { track } from "@/lib/dashboard-events";
 
-const BOOKING_STATUS_KEYS: Record<Booking["status"], "statusPending" | "statusConfirmed" | "statusCancelled" | "statusCompleted" | "statusNoShow"> = {
+const BOOKING_STATUS_KEYS: Record<Booking["status"], "statusPending" | "statusConfirmed" | "statusCancelled" | "statusCompleted"> = {
  pending: "statusPending",
  confirmed: "statusConfirmed",
  cancelled: "statusCancelled",
  completed: "statusCompleted",
- "no-show": "statusNoShow",
 };
 
 const BOOKING_STATUS_CLS: Record<Booking["status"], string> = {
@@ -22,7 +21,6 @@ const BOOKING_STATUS_CLS: Record<Booking["status"], string> = {
  confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/50",
  cancelled: "bg-secondary text-muted-foreground border-border",
  completed: "bg-secondary text-muted-foreground border-border",
- "no-show": "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/50",
 };
 
 export function ReservationsPage({
@@ -35,12 +33,6 @@ export function ReservationsPage({
  tables: TableEntity[];
 }) {
  const t = useTranslations("dashboard.reservations");
- const [confirmState, setConfirmState] = useState<{
- open: boolean;
- title?: string;
- message?: string;
- onConfirm?: () => void;
- }>({ open: false });
 
  const grouped = (() => {
  const today = new Date();
@@ -67,9 +59,6 @@ export function ReservationsPage({
  const todayGroup = grouped.find((g) => isSameDay(g.date, today));
  const upcomingGroups = grouped.filter((g) => !isSameDay(g.date, today));
 
- useEffect(() => {
- }, []);
-
  async function setBookingStatus(id: string, status: Booking["status"]) {
  if (status === "confirmed") track("dash_booking_accept");
  else if (status === "cancelled") track("dash_booking_reject");
@@ -79,6 +68,7 @@ export function ReservationsPage({
  await patchReservation(id, { status });
  } catch {
  setBookings(before);
+ toast.error(t("error"));
  }
  }
 
@@ -88,7 +78,6 @@ export function ReservationsPage({
  const upcomingCount = grouped.reduce((sum, g) => sum + g.items.length, 0);
 
  return (
- <>
  <div className="max-w-2xl mx-auto">
  <PageHeader
  title={t("title")}
@@ -131,15 +120,6 @@ export function ReservationsPage({
  </div>
  )}
  </div>
-
- <ConfirmDialog
- open={confirmState.open}
- title={confirmState.title}
- message={confirmState.message}
- onConfirm={confirmState.onConfirm}
- onCancel={() => setConfirmState({ open: false })}
- />
- </>
  );
 }
 

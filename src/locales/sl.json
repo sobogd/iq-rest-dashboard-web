@@ -299,6 +299,7 @@
       "subtitleOther": "Imate {count} prihajajočih rezervacij.",
       "noBookings": "Še ni rezervacij",
       "noBookingsSub": "Ko bodo gostje rezervirali mizo, jih boste videli tukaj.",
+      "error": "Posodobitev rezervacije ni uspela",
       "today": "Danes",
       "noToday": "Za danes ni rezervacij.",
       "bookingOne": "{count} rezervacija",
@@ -312,8 +313,7 @@
       "statusPending": "Čaka",
       "statusConfirmed": "Potrjeno",
       "statusCancelled": "Preklicano",
-      "statusCompleted": "Zaključeno",
-      "statusNoShow": "Ni prišel"
+      "statusCompleted": "Zaključeno"
     },
     "tables": {
       "table": "Miza",

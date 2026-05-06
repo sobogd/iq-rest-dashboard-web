@@ -299,6 +299,7 @@
       "subtitleOther": "{count} رزرو پیش‌رو دارید.",
       "noBookings": "هنوز رزروی نیست",
       "noBookingsSub": "وقتی مهمانان میز رزرو کنند، آن‌ها را اینجا خواهید دید.",
+      "error": "به‌روزرسانی رزرو ناموفق بود",
       "today": "امروز",
       "noToday": "برای امروز رزروی نیست.",
       "bookingOne": "{count} رزرو",
@@ -312,8 +313,7 @@
       "statusPending": "در انتظار",
       "statusConfirmed": "تأیید شد",
       "statusCancelled": "لغو شد",
-      "statusCompleted": "تکمیل شد",
-      "statusNoShow": "حاضر نشد"
+      "statusCompleted": "تکمیل شد"
     },
     "tables": {
       "table": "میز",

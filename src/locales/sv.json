@@ -299,6 +299,7 @@
       "subtitleOther": "Du har {count} kommande bokningar.",
       "noBookings": "Inga bokningar än",
       "noBookingsSub": "När gäster bokar bord kommer du se dem här.",
+      "error": "Det gick inte att uppdatera bokningen",
       "today": "Idag",
       "noToday": "Inga bokningar idag.",
       "bookingOne": "{count} bokning",
@@ -312,8 +313,7 @@
       "statusPending": "Väntande",
       "statusConfirmed": "Bekräftad",
       "statusCancelled": "Avbokad",
-      "statusCompleted": "Slutförd",
-      "statusNoShow": "Kom inte"
+      "statusCompleted": "Slutförd"
     },
     "tables": {
       "table": "Bord",

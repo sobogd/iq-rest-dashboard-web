@@ -299,6 +299,7 @@
       "subtitleOther": "У вас {count} майбутніх бронювань.",
       "noBookings": "Бронювань ще немає",
       "noBookingsSub": "Коли гості забронюють стіл, ви побачите їх тут.",
+      "error": "Не вдалося оновити бронювання",
       "today": "Сьогодні",
       "noToday": "На сьогодні бронювань немає.",
       "bookingOne": "{count} бронювання",
@@ -312,8 +313,7 @@
       "statusPending": "Очікує",
       "statusConfirmed": "Підтверджено",
       "statusCancelled": "Скасовано",
-      "statusCompleted": "Завершено",
-      "statusNoShow": "Не з'явився"
+      "statusCompleted": "Завершено"
     },
     "tables": {
       "table": "Стіл",

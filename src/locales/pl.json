@@ -299,6 +299,7 @@
       "subtitleOther": "Masz {count} nadchodzących rezerwacji.",
       "noBookings": "Brak rezerwacji",
       "noBookingsSub": "Gdy goście zarezerwują stolik, zobaczysz ich tutaj.",
+      "error": "Nie udało się zaktualizować rezerwacji",
       "today": "Dziś",
       "noToday": "Brak rezerwacji na dziś.",
       "bookingOne": "{count} rezerwacja",
@@ -312,8 +313,7 @@
       "statusPending": "Oczekująca",
       "statusConfirmed": "Potwierdzona",
       "statusCancelled": "Anulowana",
-      "statusCompleted": "Zakończona",
-      "statusNoShow": "Nie przyszedł"
+      "statusCompleted": "Zakończona"
     },
     "tables": {
       "table": "Stolik",

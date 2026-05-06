@@ -299,6 +299,7 @@
       "subtitleOther": "{count} közelgő foglalásod van.",
       "noBookings": "Még nincs foglalás",
       "noBookingsSub": "Amint a vendégek lefoglalnak egy asztalt, itt látod őket.",
+      "error": "A foglalás frissítése sikertelen",
       "today": "Ma",
       "noToday": "Mára nincs foglalás.",
       "bookingOne": "{count} foglalás",
@@ -312,8 +313,7 @@
       "statusPending": "Függőben",
       "statusConfirmed": "Megerősítve",
       "statusCancelled": "Lemondva",
-      "statusCompleted": "Befejezve",
-      "statusNoShow": "Nem jelent meg"
+      "statusCompleted": "Befejezve"
     },
     "tables": {
       "table": "Asztal",

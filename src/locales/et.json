@@ -299,6 +299,7 @@
       "subtitleOther": "Sul on {count} eelseisvat broneeringut.",
       "noBookings": "Broneeringuid pole veel",
       "noBookingsSub": "Kui külalised broneerivad laua, näed neid siin.",
+      "error": "Broneeringu uuendamine ebaõnnestus",
       "today": "Täna",
       "noToday": "Tänaseks broneeringuid pole.",
       "bookingOne": "{count} broneering",
@@ -312,8 +313,7 @@
       "statusPending": "Ootel",
       "statusConfirmed": "Kinnitatud",
       "statusCancelled": "Tühistatud",
-      "statusCompleted": "Lõpetatud",
-      "statusNoShow": "Ei ilmunud"
+      "statusCompleted": "Lõpetatud"
     },
     "tables": {
       "table": "Laud",

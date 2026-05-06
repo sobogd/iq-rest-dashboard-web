@@ -299,6 +299,7 @@
       "subtitleOther": "У вас {count} предстоящих бронирований.",
       "noBookings": "Бронирований пока нет",
       "noBookingsSub": "Когда гости забронируют стол, вы увидите их здесь.",
+      "error": "Не удалось обновить бронирование",
       "today": "Сегодня",
       "noToday": "Бронирований на сегодня нет.",
       "bookingOne": "{count} бронирование",
@@ -312,8 +313,7 @@
       "statusPending": "Ожидает",
       "statusConfirmed": "Подтверждено",
       "statusCancelled": "Отменено",
-      "statusCompleted": "Завершено",
-      "statusNoShow": "Не пришёл"
+      "statusCompleted": "Завершено"
     },
     "tables": {
       "table": "Стол",
