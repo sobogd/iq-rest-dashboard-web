@@ -5,6 +5,7 @@ import { apiUrl } from "@/lib/api";
 import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
 import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
+import { getMenuUrl } from "@/lib/menu-url";
 import { useDashboardRouter } from "../_spa/router";
 import { UsageEventsTable } from "./usage-events-table";
 
@@ -378,7 +379,7 @@ export function AdminCompanyPage({ companyId }: Props) {
     if (restaurant.reservationsEnabled) restaurantRows.push({ label: "Reservations", value: "Enabled" });
   }
 
-  const menuLink = restaurant?.slug ? `/m/${restaurant.slug}` : null;
+  const menuLink = restaurant?.slug ? getMenuUrl(restaurant.slug) : null;
 
 
   return (
