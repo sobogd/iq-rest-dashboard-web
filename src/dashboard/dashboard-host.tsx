@@ -125,6 +125,8 @@ export function DashboardHost() {
           initialSub={initialSub}
           isAdmin={isAdminEmail(authData.email)}
           impersonatedBy={authData.impersonatedBy ?? null}
+          userEmail={authData.email ?? ""}
+          scanBannerDismissed={!!restaurant.scanBannerDismissed}
         />
       </DashboardChrome>
     </DashboardSpaWrapper>

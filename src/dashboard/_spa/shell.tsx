@@ -45,6 +45,8 @@ export interface ShellInitialData {
   initialSub: { plan: string | null; subscriptionStatus: string | null; trialEndsAt: string | null } | null;
   isAdmin: boolean;
   impersonatedBy?: string | null;
+  userEmail?: string;
+  scanBannerDismissed?: boolean;
 }
 
 export function Shell(props: ShellInitialData) {
@@ -102,6 +104,8 @@ function ShellBody(props: ShellInitialData) {
       sub={props.initialSub}
       isAdmin={props.isAdmin}
       impersonatedBy={props.impersonatedBy ?? null}
+      userEmail={props.userEmail ?? ""}
+      scanBannerDismissed={!!props.scanBannerDismissed}
       backToSettings={backToSettings}
       backToMenu={backToMenu}
       refreshMenu={refreshMenu}
@@ -122,13 +126,15 @@ interface SwitchProps {
   sub: ShellInitialData["initialSub"];
   isAdmin: boolean;
   impersonatedBy: string | null;
+  userEmail: string;
+  scanBannerDismissed: boolean;
   backToSettings: () => void;
   backToMenu: () => void;
   refreshMenu: () => Promise<void>;
 }
 
 function ViewSwitch(p: SwitchProps) {
-  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, backToSettings, backToMenu, refreshMenu } = p;
+  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, userEmail, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
   const router = useDashboardRouter();
 
   const onSavedMenu = async () => {
@@ -142,7 +148,15 @@ function ViewSwitch(p: SwitchProps) {
     case "auth.logout":
       return <AuthPage />;
     case "menu":
-      return <MenuList initialCategories={categories} initialSub={sub} onPersisted={refreshMenu} />;
+      return (
+        <MenuList
+          initialCategories={categories}
+          initialSub={sub}
+          onPersisted={refreshMenu}
+          userEmail={userEmail}
+          scanBannerDismissed={scanBannerDismissed}
+        />
+      );
     case "orders":
     case "orders.detail":
     case "orders.addItem" as never: // legacy; orders page handles its own internal nav

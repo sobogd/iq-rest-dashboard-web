@@ -18,11 +18,12 @@ import { EmptyState, PageHeader, PreviewButton, ShareButton, ShareModal, Subscri
 import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
 import { currencySymbolOf, moveItem } from "./helpers";
-import { fetchSubscriptionStatus, patchItem, reorderCategories, reorderItem } from "./api";
+import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItem } from "./api";
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
 import { track } from "@/lib/dashboard-events";
 import { MenuOnboarding } from "./menu-onboarding";
+import { ScanModal } from "./scan-modal";
 
 interface SubData {
  plan: string | null;
@@ -30,7 +31,21 @@ interface SubData {
  trialEndsAt: string | null;
 }
 
-export function MenuList({ initialCategories, initialSub = null, onPersisted }: { initialCategories: Category[]; initialSub?: SubData | null; onPersisted?: () => void }) {
+const SCAN_BANNER_ALLOWED_EMAIL = "sobogd@gmail.com";
+
+export function MenuList({
+ initialCategories,
+ initialSub = null,
+ onPersisted,
+ userEmail = "",
+ scanBannerDismissed = false,
+}: {
+ initialCategories: Category[];
+ initialSub?: SubData | null;
+ onPersisted?: () => void;
+ userEmail?: string;
+ scanBannerDismissed?: boolean;
+}) {
  const t = useTranslations("dashboard.menu");
  const restaurant = useRestaurant();
  const router = useDashboardRouter();
@@ -47,6 +62,24 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  });
  const [shareOpen, setShareOpen] = useState(false);
  const [sub, setSub] = useState<SubData | null>(initialSub);
+ const [scanBannerVisible, setScanBannerVisible] = useState(
+  userEmail === SCAN_BANNER_ALLOWED_EMAIL && !scanBannerDismissed,
+ );
+ const [scanModalOpen, setScanModalOpen] = useState(false);
+
+ const existingRealItemsCount = categories.reduce(
+  (sum, c) => sum + c.dishes.filter((d) => !d.isExample).length,
+  0,
+ );
+
+ async function handleDismissBanner() {
+  setScanBannerVisible(false);
+  try {
+   await dismissScanBanner();
+  } catch {
+   // ignore — UI already hidden
+  }
+ }
 
  useEffect(() => {
  if (!initialSub) {
@@ -216,6 +249,41 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  }
  />
 
+ {scanBannerVisible && (
+ <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 pr-10 mb-3">
+ <button
+ type="button"
+ onClick={() => void handleDismissBanner()}
+ className="absolute top-2 right-2 h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted/50"
+ aria-label="Dismiss"
+ >
+ ×
+ </button>
+ <div className="flex items-start gap-3">
+ <div
+ className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white text-lg"
+ style={{ background: "linear-gradient(to bottom right, hsl(9,100%,58%), #f59e0b)" }}
+ >
+ ✨
+ </div>
+ <div className="flex-1 min-w-0">
+ <p className="text-sm font-semibold">Upload your paper menu</p>
+ <p className="text-xs text-muted-foreground mt-0.5">
+ Snap a photo or upload a PDF — AI will parse all items into categories for you.
+ </p>
+ <button
+ type="button"
+ onClick={() => setScanModalOpen(true)}
+ className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
+ style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
+ >
+ Upload menu
+ </button>
+ </div>
+ </div>
+ </div>
+ )}
+
  {categories.length === 0 ? (
  <EmptyState
  title={t("noCategories")}
@@ -278,6 +346,14 @@ export function MenuList({ initialCategories, initialSub = null, onPersisted }: 
  url={menuUrl}
  restaurantName={restaurant.name}
  />
+ {userEmail === SCAN_BANNER_ALLOWED_EMAIL && (
+ <ScanModal
+ open={scanModalOpen}
+ onClose={() => setScanModalOpen(false)}
+ existingRealItemsCount={existingRealItemsCount}
+ onSaved={() => onPersisted?.()}
+ />
+ )}
  {categories.length > 0 ? <MenuOnboarding /> : null}
  </>
  );

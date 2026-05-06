@@ -35,6 +35,7 @@ export interface ApiRestaurant {
  orderPhoneEnabled: boolean;
  orderAddressEnabled: boolean;
  orderMode: string;
+ scanBannerDismissed?: boolean;
 }
 
 export async function fetchRestaurant(): Promise<ApiRestaurant | null> {
@@ -69,6 +70,61 @@ export async function updateRestaurantLanguages(
  });
  if (!res.ok) throw new Error("Failed to update languages");
  return (await res.json()) as ApiRestaurant;
+}
+
+export async function dismissScanBanner(): Promise<void> {
+ await fetch(apiUrl("/api/restaurant/dismiss-scan-banner"), {
+  credentials: "include",
+  method: "POST",
+ });
+}
+
+// ── Scan menu ──
+
+export interface ScanMenuItem {
+ name: string;
+ price: number;
+ description?: string;
+}
+export interface ScanMenuCategory {
+ name: string;
+ items: ScanMenuItem[];
+}
+
+export async function scanMenuParse(images: string[]): Promise<{
+ ok: true;
+ categories: ScanMenuCategory[];
+} | { ok: false; error: string }> {
+ const res = await fetch(apiUrl("/api/scan-menu/parse"), {
+  credentials: "include",
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ images }),
+ });
+ if (!res.ok) {
+  const data: { message?: string } = await res.json().catch(() => ({}));
+  return { ok: false, error: data.message ?? `HTTP ${res.status}` };
+ }
+ const data = (await res.json()) as { categories: ScanMenuCategory[] };
+ return { ok: true, categories: data.categories };
+}
+
+export async function scanMenuSave(
+ categories: ScanMenuCategory[],
+ replaceExisting: boolean,
+): Promise<{ ok: true; categoriesCount: number; itemsCount: number } | { ok: false; error: string }> {
+ const res = await fetch(apiUrl("/api/scan-menu/save"), {
+  credentials: "include",
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ categories, replaceExisting }),
+ });
+ if (!res.ok) {
+  const data: { message?: string } = await res.json().catch(() => ({}));
+  return { ok: false, error: data.message ?? `HTTP ${res.status}` };
+ }
+ const data = (await res.json()) as { categoriesCount: number; itemsCount: number };
+ return { ok: true, categoriesCount: data.categoriesCount, itemsCount: data.itemsCount };
 }
 
 // ── Categories ──
