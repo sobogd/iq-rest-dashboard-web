@@ -72,6 +72,11 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
     label: "Personal welcome from Bogdan",
     description: "Friendly intro offering setup help. Sent in owner's preferred language.",
   },
+  {
+    id: "menu_almost_ready",
+    label: "Menu almost ready reminder",
+    description: "Nudge for owners who started setup but haven't finished. Sent in owner's preferred language.",
+  },
 ];
 
 interface Message {
