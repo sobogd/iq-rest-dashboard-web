@@ -171,7 +171,6 @@ export function ReservationsPage({
      <MonthView
       focusDate={focusDate}
       bookings={monthBookings}
-      onClickBooking={setSelected}
       onClickDay={(d) => {
        track("dash_booking_drill_to_day");
        setFocusDate(d);
@@ -195,7 +194,11 @@ export function ReservationsPage({
      booking={selected}
      tables={tables}
      onClose={() => setSelected(null)}
-     onStatusChange={(status) => setBookingStatus(selected.id, status)}
+     onStatusChange={async (status) => {
+      const id = selected.id;
+      setSelected(null);
+      await setBookingStatus(id, status);
+     }}
     />
    ) : null}
   </>
@@ -264,12 +267,10 @@ function CtaState({ title, body, cta, onClick }: { title: string; body: string; 
 function MonthView({
  focusDate,
  bookings,
- onClickBooking,
  onClickDay,
 }: {
  focusDate: Date;
  bookings: Booking[];
- onClickBooking: (b: Booking) => void;
  onClickDay: (d: Date) => void;
 }) {
  const t = useTranslations("dashboard.reservations");
@@ -341,21 +342,8 @@ function MonthView({
         {cellItems.slice(0, 3).map((b) => (
          <span
           key={b.id}
-          role="button"
-          tabIndex={0}
-          onClick={(e) => {
-           e.stopPropagation();
-           onClickBooking(b);
-          }}
-          onKeyDown={(e) => {
-           if (e.key === "Enter" || e.key === " ") {
-            e.stopPropagation();
-            e.preventDefault();
-            onClickBooking(b);
-           }
-          }}
           className={
-           "rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight truncate cursor-pointer transition-colors " +
+           "rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight truncate transition-colors pointer-events-none " +
            STATUS_BAR[b.status]
           }
          >
