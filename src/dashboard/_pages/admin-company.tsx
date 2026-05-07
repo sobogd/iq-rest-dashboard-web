@@ -322,10 +322,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       <div>
         <SubpageStickyBar onBack={() => goBack()} hideSave />
         <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-          <div className="mb-5">
-            <div className="text-xs text-muted-foreground">Settings / Companies</div>
-            <h2 className="text-xl font-medium text-foreground mt-1">Company</h2>
-          </div>
           <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
             Loading…
           </div>
@@ -339,10 +335,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       <div>
         <SubpageStickyBar onBack={() => goBack()} hideSave />
         <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-          <div className="mb-5">
-            <div className="text-xs text-muted-foreground">Settings / Companies</div>
-            <h2 className="text-xl font-medium text-foreground mt-1">Company</h2>
-          </div>
           <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
             {error || "Not found"}
           </div>
@@ -352,7 +344,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   }
 
   const restaurant = company.restaurants[0];
-  const title = restaurant?.title || company.name || "No name";
 
   const companyRows: { label: string; value: string }[] = [
     { label: "Plan", value: `${company.plan}${company.subscriptionStatus === "ACTIVE" ? " (Active)" : ""}` },
@@ -432,11 +423,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
           (tab === "messages" ? "flex-1 flex flex-col min-h-0" : "")
         }
       >
-        <div className={tab === "messages" ? "mb-3 shrink-0" : "mb-5"}>
-          <div className="text-xs text-muted-foreground">Settings / Companies</div>
-          <h2 className="text-xl font-medium text-foreground mt-1">{title}</h2>
-        </div>
-
       {tab === "info" ? (
         <div className="space-y-4">
           {/* Company info */}
