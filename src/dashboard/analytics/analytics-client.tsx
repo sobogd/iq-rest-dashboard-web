@@ -15,9 +15,6 @@ interface Stats {
  byDayPrev: { day: string; views: number; scans: number }[];
  byLanguage: { language: string; scans: number; views: number }[];
  byPage: { page: string; views: number; sessions: number }[];
- monthlyScans: number;
- plan: string | null;
- scanLimit: number | null;
 }
 
 const PERIODS: { id: string; labelKey: "periodToday" | "period7d" | "period30d" }[] = [
@@ -420,36 +417,6 @@ function PageBreakdown({ byPage }: { byPage: Stats["byPage"] }) {
  </div>
  );
  })}
- </div>
- </div>
- );
-}
-
-function LimitCard({ stats }: { stats: Stats }) {
- const t = useTranslations("dashboard.analyticsDashboard");
- const limit = stats.scanLimit ?? 0;
- const used = stats.monthlyScans;
- const pct = limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0;
- return (
- <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
- <div className="flex items-center justify-between gap-3 mb-2">
- <div>
- <div className="text-sm font-medium text-foreground">{t("freePlanUsage")}</div>
- <div className="text-xs text-muted-foreground mt-0.5">
- {t("scansThisMonth")}
- </div>
- </div>
- <div className="text-sm font-medium text-foreground tabular-nums">
- {used} / {limit}
- </div>
- </div>
- <div className="h-2 bg-secondary rounded-full overflow-hidden">
- <div
- className={
- "h-full rounded-full " + (pct >= 100 ? "bg-red-500" : "bg-primary/80")
- }
- style={{ width: `${pct}%` }}
- />
  </div>
  </div>
  );

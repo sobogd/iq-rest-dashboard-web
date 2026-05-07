@@ -106,7 +106,7 @@ export function AboutSettingsPage({
  try {
  await updateRestaurant({
     title: draft.name.trim(),
-    subtitle: draft.subtitle.trim() || null,
+    description: draft.subtitle.trim() || null,
    });
  } catch {
  return;

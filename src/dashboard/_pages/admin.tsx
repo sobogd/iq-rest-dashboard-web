@@ -5,6 +5,7 @@ import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { BoxIcon, EyeIcon, FolderIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
+import { Mail } from "lucide-react";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AdminCompanyPage } from "./admin-company";
@@ -20,7 +21,7 @@ interface Company {
   monthlyViews: number;
   todayScans: number;
   lastVisit: string | null;
-  scanLimit: number | null;
+  emailsSentCount: number;
 }
 
 export function AdminPage() {
@@ -106,68 +107,72 @@ export function AdminPage() {
                   : company.subscriptionStatus === "ACTIVE" && company.plan === "BASIC"
                   ? "text-blue-500"
                   : "";
-              const overLimit =
-                company.scanLimit !== null && company.monthlyViews >= (company.scanLimit ?? 0);
               return (
                 <button
                   key={company.id}
                   type="button"
                   onClick={() => openCompany(company.id)}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-left transition-colors"
+                  className="w-full block px-3 py-2 text-left transition-colors"
                 >
-                  <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
                     <div
                       className={
-                        "text-sm font-medium truncate " +
+                        "text-sm font-medium truncate min-w-0 flex-1 " +
                         (nameColor ||
                           (company.name ? "text-foreground" : "text-muted-foreground italic"))
                       }
                     >
                       {company.name || t("noName")}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 tabular-nums">
-                      <span className="inline-flex items-center gap-0.5">
-                        <FolderIcon size={11} />
-                        {company.categoriesCount}
+                    {company.lastVisit ? (
+                      <span className="text-[11px] text-muted-foreground tabular-nums shrink-0">
+                        {formatDateShort(company.lastVisit)}
                       </span>
-                      <span className="inline-flex items-center gap-0.5">
-                        <BoxIcon size={11} />
-                        {company.itemsCount}
-                      </span>
-                      {company.monthlyViews > 0 ? (
-                        <span
-                          className={
-                            "inline-flex items-center gap-0.5 " +
-                            (overLimit ? "text-red-500" : "text-blue-500")
-                          }
-                          title="Scans this month"
-                        >
-                          <EyeIcon size={11} />
-                          {company.monthlyViews}
-                        </span>
-                      ) : null}
-                      {company.todayScans > 0 ? (
-                        <span
-                          className="inline-flex items-center gap-0.5 text-emerald-600"
-                          title="Scans today"
-                        >
-                          <EyeIcon size={11} />
-                          {company.todayScans}
-                        </span>
-                      ) : null}
-                      {company.messagesCount > 0 ? (
-                        <span className="inline-flex items-center gap-0.5 text-red-500 font-medium">
-                          <MessageIcon size={11} />
-                          {company.messagesCount}
-                        </span>
-                      ) : null}
-                    </div>
+                    ) : null}
                   </div>
-                  {company.lastVisit ? (
-                    <span className="text-[11px] text-muted-foreground tabular-nums shrink-0">
-                      {formatDateShort(company.lastVisit)}
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1 tabular-nums">
+                    <span className="inline-flex items-center gap-0.5">
+                      <FolderIcon size={11} />
+                      {company.categoriesCount}
                     </span>
-                  ) : null}
+                    <span className="inline-flex items-center gap-0.5">
+                      <BoxIcon size={11} />
+                      {company.itemsCount}
+                    </span>
+                    {company.monthlyViews > 0 ? (
+                      <span
+                        className="inline-flex items-center gap-0.5 text-blue-500"
+                        title="Scans, last 30 days"
+                      >
+                        <EyeIcon size={11} />
+                        {company.monthlyViews}
+                      </span>
+                    ) : null}
+                    {company.todayScans > 0 ? (
+                      <span
+                        className="inline-flex items-center gap-0.5 text-emerald-600"
+                        title="Scans today"
+                      >
+                        <EyeIcon size={11} />
+                        {company.todayScans}
+                      </span>
+                    ) : null}
+                    {company.messagesCount > 0 ? (
+                      <span className="inline-flex items-center gap-0.5 text-red-500 font-medium">
+                        <MessageIcon size={11} />
+                        {company.messagesCount}
+                      </span>
+                    ) : null}
+                    {company.emailsSentCount > 0 ? (
+                      <span
+                        className="inline-flex items-center gap-0.5 text-amber-500"
+                        title="Email templates sent"
+                      >
+                        <Mail size={11} />
+                        {company.emailsSentCount}
+                      </span>
+                    ) : null}
+                  </div>
                 </button>
               );
             })}

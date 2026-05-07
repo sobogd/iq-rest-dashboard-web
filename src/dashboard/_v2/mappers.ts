@@ -186,7 +186,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  return {
  id: r.id,
  name: r.title || "",
- subtitle: r.subtitle || "",
+ subtitle: r.description || "",
  showTitleOnHomepage: !r.hideTitle,
  slug,
  currency: r.currency,
