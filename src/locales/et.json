@@ -39,7 +39,10 @@
       "tableLink": "Lauaviit",
       "selected": "valitud",
       "qrCode": "QR-kood",
-      "willUse": "Kasutab"
+      "willUse": "Kasutab",
+      "unsavedTitle": "Sul on salvestamata muudatused",
+      "unsavedMessage": "Need lähevad kaotsi, kui sa praegu lahkud.",
+      "discard": "Loobu"
     },
     "subscriptionChip": {
       "plan": "Plaan",

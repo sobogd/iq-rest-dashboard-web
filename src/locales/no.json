@@ -39,7 +39,10 @@
       "tableLink": "Bordlenke",
       "selected": "valgt",
       "qrCode": "QR-kode",
-      "willUse": "Bruker"
+      "willUse": "Bruker",
+      "unsavedTitle": "Du har ulagrede endringer",
+      "unsavedMessage": "De går tapt hvis du forlater nå.",
+      "discard": "Forkast"
     },
     "subscriptionChip": {
       "plan": "Plan",

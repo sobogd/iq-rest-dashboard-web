@@ -39,7 +39,10 @@
       "tableLink": "Tafellink",
       "selected": "geselecteerd",
       "qrCode": "QR-code",
-      "willUse": "Gebruikt"
+      "willUse": "Gebruikt",
+      "unsavedTitle": "Je hebt niet-opgeslagen wijzigingen",
+      "unsavedMessage": "Ze gaan verloren als je nu vertrekt.",
+      "discard": "Negeren"
     },
     "subscriptionChip": {
       "plan": "Abonnement",

@@ -39,7 +39,10 @@
       "tableLink": "Masa bağlantısı",
       "selected": "seçildi",
       "qrCode": "QR kodu",
-      "willUse": "Kullanılacak"
+      "willUse": "Kullanılacak",
+      "unsavedTitle": "Kaydedilmemiş değişiklikleriniz var",
+      "unsavedMessage": "Şimdi çıkarsan kaybolur.",
+      "discard": "Yoksay"
     },
     "subscriptionChip": {
       "plan": "Plan",

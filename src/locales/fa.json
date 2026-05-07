@@ -39,7 +39,10 @@
       "tableLink": "لینک میز",
       "selected": "انتخاب‌شده",
       "qrCode": "کد QR",
-      "willUse": "استفاده می‌کند"
+      "willUse": "استفاده می‌کند",
+      "unsavedTitle": "تغییرات ذخیره‌نشده دارید",
+      "unsavedMessage": "در صورت خروج اکنون از بین می‌روند.",
+      "discard": "نادیده بگیر"
     },
     "subscriptionChip": {
       "plan": "طرح",

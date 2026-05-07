@@ -3,7 +3,7 @@
 // Standalone form components for category / dish / option editing.
 // Each one lives in its own Next.js route and uses router.push for navigation.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
@@ -239,18 +239,21 @@ export function DishForm({
  const isNew = dish === null;
 
  const [lang, setLang] = useState<string>(defaultLang);
- const [form, setForm] = useState<DishFormState>(() => ({
+ const initialForm = useMemo<DishFormState>(() => ({
  name: dish ? dish.name : emptyMl(languages),
  description: dish && dish.description ? dish.description : emptyMl(languages),
  price: dish ? dish.price : "",
  photoUrl: dish?.photoUrl ?? null,
  visible: dish ? dish.visible : true,
  allergens: dish?.allergens ?? [],
- }));
+ }), [dish, languages]);
+ const [form, setForm] = useState<DishFormState>(initialForm);
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
+ const [unsavedOpen, setUnsavedOpen] = useState(false);
  const [aiOpen, setAiOpen] = useState(false);
+ const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm);
  const langMetas = (() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
  const def = enabled.find((l) => l.code === defaultLang);
@@ -404,7 +407,11 @@ export function DishForm({
  return (
  <div>
  <EditPageHeader
- onBack={() => { track("dash_item_click_back"); onBack(); }}
+ onBack={() => {
+ track("dash_item_click_back");
+ if (isDirty && !saving) { setUnsavedOpen(true); return; }
+ onBack();
+ }}
  title={titleText}
  breadcrumb={categoryName ? t("breadcrumb") + " / " + categoryName : t("breadcrumb")}
  lang={lang}
@@ -610,6 +617,14 @@ export function DishForm({
  defaultPrompt={getMl(form.name, defaultLang)}
  aspect="square"
  eventPrefix="dash_item"
+ />
+
+ <UnsavedChangesDialog
+ open={unsavedOpen}
+ saving={saving}
+ onDiscard={() => { setUnsavedOpen(false); onBack(); }}
+ onSave={save}
+ onClose={() => setUnsavedOpen(false)}
  />
  </div>
  );
@@ -1180,4 +1195,50 @@ async function persistDishOptions(dish: Dish, nextOptions: DishOption[], default
  allergens: dish.allergens,
  options: nextOptions,
  });
+}
+
+function UnsavedChangesDialog({
+ open,
+ saving,
+ onDiscard,
+ onSave,
+ onClose,
+}: {
+ open: boolean;
+ saving: boolean;
+ onDiscard: () => void;
+ onSave: () => void | Promise<void>;
+ onClose: () => void;
+}) {
+ const t = useTranslations("dashboard.common");
+ if (!open) return null;
+ return (
+ <div onClick={() => !saving && onClose()} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+ <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-2xl shadow-xl">
+ <div className="px-5 py-4 border-b border-border">
+ <h3 className="text-base font-semibold text-foreground">{t("unsavedTitle")}</h3>
+ </div>
+ <p className="px-5 py-4 text-sm text-muted-foreground leading-relaxed">{t("unsavedMessage")}</p>
+ <div className="px-5 py-4 border-t border-border flex items-center gap-2">
+ <button
+ type="button"
+ onClick={onDiscard}
+ disabled={saving}
+ className="flex-1 h-10 text-sm font-medium text-foreground bg-card border border-border rounded-md hover:bg-muted/40 disabled:opacity-50"
+ >
+ {t("discard")}
+ </button>
+ <button
+ type="button"
+ onClick={() => void onSave()}
+ disabled={saving}
+ className="flex-1 h-10 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:bg-primary/90 inline-flex items-center justify-center gap-2 disabled:opacity-60"
+ >
+ {saving ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : null}
+ {t("save")}
+ </button>
+ </div>
+ </div>
+ </div>
+ );
 }

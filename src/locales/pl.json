@@ -39,7 +39,10 @@
       "tableLink": "Link stolika",
       "selected": "wybrane",
       "qrCode": "Kod QR",
-      "willUse": "Użyje"
+      "willUse": "Użyje",
+      "unsavedTitle": "Masz niezapisane zmiany",
+      "unsavedMessage": "Zostaną utracone, jeśli wyjdziesz teraz.",
+      "discard": "Odrzuć"
     },
     "subscriptionChip": {
       "plan": "Plan",

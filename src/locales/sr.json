@@ -39,7 +39,10 @@
       "tableLink": "Link stola",
       "selected": "izabrano",
       "qrCode": "QR kod",
-      "willUse": "Koristi"
+      "willUse": "Koristi",
+      "unsavedTitle": "Имате несачуване промене",
+      "unsavedMessage": "Биће изгубљене ако сада изађете.",
+      "discard": "Одбаци"
     },
     "subscriptionChip": {
       "plan": "Plan",

@@ -39,7 +39,10 @@
       "tableLink": "Odkaz stola",
       "selected": "vybrané",
       "qrCode": "QR kód",
-      "willUse": "Použije"
+      "willUse": "Použije",
+      "unsavedTitle": "Máte neuložené zmeny",
+      "unsavedMessage": "Stratia sa, ak teraz odídete.",
+      "discard": "Zahodiť"
     },
     "subscriptionChip": {
       "plan": "Plán",

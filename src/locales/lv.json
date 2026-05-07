@@ -39,7 +39,10 @@
       "tableLink": "Galda saite",
       "selected": "atlasīts",
       "qrCode": "QR kods",
-      "willUse": "Izmantos"
+      "willUse": "Izmantos",
+      "unsavedTitle": "Jums ir nesaglabātas izmaiņas",
+      "unsavedMessage": "Tās tiks zaudētas, ja tagad iziesiet.",
+      "discard": "Atmest"
     },
     "subscriptionChip": {
       "plan": "Plāns",

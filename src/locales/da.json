@@ -39,7 +39,10 @@
       "tableLink": "Bordlink",
       "selected": "valgt",
       "qrCode": "QR-kode",
-      "willUse": "Bruger"
+      "willUse": "Bruger",
+      "unsavedTitle": "Du har ugemte ændringer",
+      "unsavedMessage": "De går tabt, hvis du forlader siden nu.",
+      "discard": "Kassér"
     },
     "subscriptionChip": {
       "plan": "Plan",

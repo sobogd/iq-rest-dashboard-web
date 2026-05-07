@@ -39,7 +39,10 @@
       "tableLink": "Посилання столу",
       "selected": "вибрано",
       "qrCode": "QR-код",
-      "willUse": "Використає"
+      "willUse": "Використає",
+      "unsavedTitle": "Є незбережені зміни",
+      "unsavedMessage": "Вони будуть втрачені, якщо вийти зараз.",
+      "discard": "Скасувати"
     },
     "subscriptionChip": {
       "plan": "Тариф",

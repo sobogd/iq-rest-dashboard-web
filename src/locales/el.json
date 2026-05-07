@@ -39,7 +39,10 @@
       "tableLink": "Σύνδεσμος τραπεζιού",
       "selected": "επιλεγμένο",
       "qrCode": "Κωδικός QR",
-      "willUse": "Θα χρησιμοποιήσει"
+      "willUse": "Θα χρησιμοποιήσει",
+      "unsavedTitle": "Έχεις μη αποθηκευμένες αλλαγές",
+      "unsavedMessage": "Θα χαθούν αν φύγεις τώρα.",
+      "discard": "Απόρριψη"
     },
     "subscriptionChip": {
       "plan": "Πλάνο",

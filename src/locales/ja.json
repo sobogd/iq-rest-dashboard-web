@@ -39,7 +39,10 @@
       "tableLink": "テーブルリンク",
       "selected": "選択済み",
       "qrCode": "QRコード",
-      "willUse": "使用します"
+      "willUse": "使用します",
+      "unsavedTitle": "未保存の変更があります",
+      "unsavedMessage": "今ページを離れると失われます。",
+      "discard": "破棄"
     },
     "subscriptionChip": {
       "plan": "プラン",

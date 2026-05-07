@@ -39,7 +39,10 @@
       "tableLink": "رابط الطاولة",
       "selected": "محدد",
       "qrCode": "رمز QR",
-      "willUse": "سيستخدم"
+      "willUse": "سيستخدم",
+      "unsavedTitle": "لديك تغييرات غير محفوظة",
+      "unsavedMessage": "سيتم فقدان التغييرات إذا غادرت الآن.",
+      "discard": "تجاهل"
     },
     "subscriptionChip": {
       "plan": "الخطة",

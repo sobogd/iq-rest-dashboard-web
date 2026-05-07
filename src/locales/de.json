@@ -39,7 +39,10 @@
       "tableLink": "Tisch-Link",
       "selected": "ausgewählt",
       "qrCode": "QR-Code",
-      "willUse": "Nutzt"
+      "willUse": "Nutzt",
+      "unsavedTitle": "Ungespeicherte Änderungen",
+      "unsavedMessage": "Sie gehen verloren, wenn du die Seite jetzt verlässt.",
+      "discard": "Verwerfen"
     },
     "subscriptionChip": {
       "plan": "Tarif",

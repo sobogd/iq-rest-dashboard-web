@@ -39,7 +39,10 @@
       "tableLink": "Ссылка стола",
       "selected": "выбрано",
       "qrCode": "QR-код",
-      "willUse": "Будет использовано"
+      "willUse": "Будет использовано",
+      "unsavedTitle": "Есть несохранённые изменения",
+      "unsavedMessage": "Они будут потеряны, если выйти сейчас.",
+      "discard": "Сбросить"
     },
     "subscriptionChip": {
       "plan": "Тариф",

@@ -39,7 +39,10 @@
       "tableLink": "Bordslänk",
       "selected": "valda",
       "qrCode": "QR-kod",
-      "willUse": "Använder"
+      "willUse": "Använder",
+      "unsavedTitle": "Du har osparade ändringar",
+      "unsavedMessage": "De försvinner om du lämnar nu.",
+      "discard": "Kassera"
     },
     "subscriptionChip": {
       "plan": "Plan",

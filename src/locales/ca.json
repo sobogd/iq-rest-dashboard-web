@@ -39,7 +39,10 @@
       "tableLink": "Enllaç de taula",
       "selected": "seleccionat",
       "qrCode": "Codi QR",
-      "willUse": "Usarà"
+      "willUse": "Usarà",
+      "unsavedTitle": "Tens canvis sense desar",
+      "unsavedMessage": "Es perdran si surts ara.",
+      "discard": "Descarta"
     },
     "subscriptionChip": {
       "plan": "Pla",

@@ -39,7 +39,10 @@
       "tableLink": "Stalo nuoroda",
       "selected": "pasirinkta",
       "qrCode": "QR kodas",
-      "willUse": "Naudos"
+      "willUse": "Naudos",
+      "unsavedTitle": "Turite neišsaugotų pakeitimų",
+      "unsavedMessage": "Jie bus prarasti, jei dabar išeisite.",
+      "discard": "Atmesti"
     },
     "subscriptionChip": {
       "plan": "Planas",

@@ -39,7 +39,10 @@
       "tableLink": "Asztal link",
       "selected": "kiválasztva",
       "qrCode": "QR-kód",
-      "willUse": "Használja"
+      "willUse": "Használja",
+      "unsavedTitle": "Mentetlen módosítások",
+      "unsavedMessage": "Elvesznek, ha most kilépsz.",
+      "discard": "Elvet"
     },
     "subscriptionChip": {
       "plan": "Csomag",

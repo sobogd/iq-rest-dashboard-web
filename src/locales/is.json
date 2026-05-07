@@ -39,7 +39,10 @@
       "tableLink": "Tengill borðs",
       "selected": "valið",
       "qrCode": "QR-kóði",
-      "willUse": "Mun nota"
+      "willUse": "Mun nota",
+      "unsavedTitle": "Óvistaðar breytingar",
+      "unsavedMessage": "Þær glatast ef þú ferð núna.",
+      "discard": "Hætta við"
     },
     "subscriptionChip": {
       "plan": "Áskrift",

@@ -39,7 +39,10 @@
       "tableLink": "桌台链接",
       "selected": "已选",
       "qrCode": "二维码",
-      "willUse": "将使用"
+      "willUse": "将使用",
+      "unsavedTitle": "您有未保存的更改",
+      "unsavedMessage": "如果现在离开将会丢失。",
+      "discard": "放弃"
     },
     "subscriptionChip": {
       "plan": "套餐",

@@ -39,7 +39,10 @@
       "tableLink": "Pöytälinkki",
       "selected": "valittu",
       "qrCode": "QR-koodi",
-      "willUse": "Käyttää"
+      "willUse": "Käyttää",
+      "unsavedTitle": "Sinulla on tallentamattomia muutoksia",
+      "unsavedMessage": "Ne menetetään, jos lähdet nyt.",
+      "discard": "Hylkää"
     },
     "subscriptionChip": {
       "plan": "Tilaus",

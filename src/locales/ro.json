@@ -39,7 +39,10 @@
       "tableLink": "Link masă",
       "selected": "selectat",
       "qrCode": "Cod QR",
-      "willUse": "Va folosi"
+      "willUse": "Va folosi",
+      "unsavedTitle": "Ai modificări nesalvate",
+      "unsavedMessage": "Vor fi pierdute dacă ieși acum.",
+      "discard": "Renunță"
     },
     "subscriptionChip": {
       "plan": "Plan",

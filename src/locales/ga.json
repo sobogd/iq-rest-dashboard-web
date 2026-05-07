@@ -39,7 +39,10 @@
       "tableLink": "Nasc bord",
       "selected": "roghnaithe",
       "qrCode": "Cód QR",
-      "willUse": "Úsáidfidh"
+      "willUse": "Úsáidfidh",
+      "unsavedTitle": "Tá athruithe gan sábháil agat",
+      "unsavedMessage": "Caillfear iad má fhágann tú anois.",
+      "discard": "Caith uait"
     },
     "subscriptionChip": {
       "plan": "Plean",

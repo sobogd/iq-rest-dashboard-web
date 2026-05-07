@@ -39,7 +39,10 @@
       "tableLink": "Table link",
       "selected": "selected",
       "qrCode": "QR code",
-      "willUse": "Will use"
+      "willUse": "Will use",
+      "unsavedTitle": "You have unsaved changes",
+      "unsavedMessage": "They will be lost if you leave now.",
+      "discard": "Discard"
     },
     "subscriptionChip": {
       "plan": "Plan",

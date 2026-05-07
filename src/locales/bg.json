@@ -39,7 +39,10 @@
       "tableLink": "Линк за маса",
       "selected": "избрано",
       "qrCode": "QR код",
-      "willUse": "Ще използва"
+      "willUse": "Ще използва",
+      "unsavedTitle": "Имате незапазени промени",
+      "unsavedMessage": "Промените ще бъдат загубени, ако излезете сега.",
+      "discard": "Отхвърли"
     },
     "subscriptionChip": {
       "plan": "План",

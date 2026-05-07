@@ -39,7 +39,10 @@
       "tableLink": "Link tavolo",
       "selected": "selezionato",
       "qrCode": "Codice QR",
-      "willUse": "Userà"
+      "willUse": "Userà",
+      "unsavedTitle": "Hai modifiche non salvate",
+      "unsavedMessage": "Andranno perse se esci ora.",
+      "discard": "Annulla"
     },
     "subscriptionChip": {
       "plan": "Piano",

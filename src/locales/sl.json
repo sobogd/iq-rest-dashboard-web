@@ -39,7 +39,10 @@
       "tableLink": "Povezava mize",
       "selected": "izbrano",
       "qrCode": "Koda QR",
-      "willUse": "Uporabi"
+      "willUse": "Uporabi",
+      "unsavedTitle": "Imate neshranjene spremembe",
+      "unsavedMessage": "Izgubile se bodo, če zdaj odidete.",
+      "discard": "Zavrzi"
     },
     "subscriptionChip": {
       "plan": "Paket",
