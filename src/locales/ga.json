@@ -466,7 +466,10 @@
         "availableTip": "Roghnaigh teangacha don bhiachlár. Tapáil chun cur leis nó a bhaint.",
         "noneError": "Roghnaigh teanga amháin ar a laghad.",
         "defaultLabel": "Teanga réamhshocraithe",
-        "defaultTip": "An teanga ina scríobhann tú an biachlár ar dtús. Is aistriúcháin den teanga sin iad teangacha eile."
+        "defaultTip": "An teanga ina scríobhann tú an biachlár ar dtús. Is aistriúcháin den teanga sin iad teangacha eile.",
+        "translatingTitle": "Ag aistriú do bhiachláir",
+        "translatingBody": "Fan tamall, le do thoil. Tá gach mias agus catagóir á n-aistriú againn go dtí na teangacha a chuir tú leis. Ná dún an fhuinneog.",
+        "translateErrorTitle": "Theip ar an aistriúchán"
       },
       "billing": {
         "title": "Billeáil",

@@ -466,7 +466,10 @@
         "availableTip": "Izaberite jezike za meni. Dodirnite za dodavanje ili uklanjanje.",
         "noneError": "Izaberite bar jedan jezik.",
         "defaultLabel": "Podrazumevani jezik",
-        "defaultTip": "Jezik na kojem prvo pišete meni. Drugi jezici su prevodi tog."
+        "defaultTip": "Jezik na kojem prvo pišete meni. Drugi jezici su prevodi tog.",
+        "translatingTitle": "Преводимо ваш мени",
+        "translatingBody": "Сачекајте. Преводимо сва јела и категорије на додате језике. Не затварајте прозор.",
+        "translateErrorTitle": "Превод није успео"
       },
       "billing": {
         "title": "Naplata",

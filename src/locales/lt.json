@@ -466,7 +466,10 @@
         "availableTip": "Pasirinkite meniu kalbas. Bakstelėkite, kad pridėtumėte arba pašalintumėte.",
         "noneError": "Pasirinkite bent vieną kalbą.",
         "defaultLabel": "Numatytoji kalba",
-        "defaultTip": "Kalba, kuria pirmiausia rašote meniu. Kitos kalbos yra jos vertimai."
+        "defaultTip": "Kalba, kuria pirmiausia rašote meniu. Kitos kalbos yra jos vertimai.",
+        "translatingTitle": "Verčiame jūsų meniu",
+        "translatingBody": "Palaukite. Verčiame visus patiekalus ir kategorijas į pridėtas kalbas. Neuždarykite lango.",
+        "translateErrorTitle": "Vertimas nepavyko"
       },
       "billing": {
         "title": "Atsiskaitymas",

@@ -466,7 +466,10 @@
         "availableTip": "メニューの言語を選択。タップで追加または削除。",
         "noneError": "少なくとも1つの言語を選択してください。",
         "defaultLabel": "デフォルト言語",
-        "defaultTip": "メニューを最初に書く言語。他の言語はその翻訳です。"
+        "defaultTip": "メニューを最初に書く言語。他の言語はその翻訳です。",
+        "translatingTitle": "メニューを翻訳しています",
+        "translatingBody": "しばらくお待ちください。追加した言語にすべての料理とカテゴリを翻訳しています。このウィンドウを閉じないでください。",
+        "translateErrorTitle": "翻訳に失敗しました"
       },
       "billing": {
         "title": "請求",

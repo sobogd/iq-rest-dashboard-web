@@ -466,7 +466,10 @@
         "availableTip": "Odaberite jezike za jelovnik. Dodirnite za dodavanje ili uklanjanje.",
         "noneError": "Odaberite barem jedan jezik.",
         "defaultLabel": "Zadani jezik",
-        "defaultTip": "Jezik na kojem prvo pišete jelovnik. Drugi jezici su prijevodi tog."
+        "defaultTip": "Jezik na kojem prvo pišete jelovnik. Drugi jezici su prijevodi tog.",
+        "translatingTitle": "Prevodimo vaš jelovnik",
+        "translatingBody": "Pričekajte. Prevodimo sva jela i kategorije na dodane jezike. Nemojte zatvarati prozor.",
+        "translateErrorTitle": "Prijevod nije uspio"
       },
       "billing": {
         "title": "Naplata",

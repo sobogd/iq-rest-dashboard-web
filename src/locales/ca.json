@@ -466,7 +466,10 @@
         "availableTip": "Tria els idiomes per al menú. Toca per afegir o eliminar.",
         "noneError": "Tria almenys un idioma.",
         "defaultLabel": "Idioma per defecte",
-        "defaultTip": "L'idioma en què escrius el menú primer. Els altres són traduccions d'aquest."
+        "defaultTip": "L'idioma en què escrius el menú primer. Els altres són traduccions d'aquest.",
+        "translatingTitle": "Traduint el teu menú",
+        "translatingBody": "Espera, si us plau. Estem traduint tots els plats i categories als idiomes afegits. No tanquis la finestra.",
+        "translateErrorTitle": "La traducció ha fallat"
       },
       "billing": {
         "title": "Facturació",

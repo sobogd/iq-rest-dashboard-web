@@ -466,7 +466,10 @@
         "availableTip": "Vali menüü jaoks keeled. Vajuta lisamiseks või eemaldamiseks.",
         "noneError": "Vali vähemalt üks keel.",
         "defaultLabel": "Vaikekeel",
-        "defaultTip": "Keel, milles kirjutad menüüd esimesena. Teised keeled on selle tõlked."
+        "defaultTip": "Keel, milles kirjutad menüüd esimesena. Teised keeled on selle tõlked.",
+        "translatingTitle": "Tõlgime teie menüü",
+        "translatingBody": "Palun oodake. Tõlgime kõik road ja kategooriad lisatud keeltesse. Ärge sulgege akent.",
+        "translateErrorTitle": "Tõlge ebaõnnestus"
       },
       "billing": {
         "title": "Arveldus",

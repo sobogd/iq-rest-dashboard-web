@@ -1072,6 +1072,8 @@ export function LanguagesSettingsPage({
  defaultLang: restaurant.defaultLang,
  });
  const [saving, setSaving] = useState(false);
+ const [translating, setTranslating] = useState(false);
+ const [translateError, setTranslateError] = useState<string | null>(null);
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
@@ -1082,12 +1084,17 @@ export function LanguagesSettingsPage({
  async function save() {
  track("dash_settings_langs_save");
  if (!canSave) return;
+ const addedLangs = draft.languages.filter((l) => !restaurant.languages.includes(l));
+ const willBackfill = addedLangs.length > 0;
  setSaving(true);
+ if (willBackfill) setTranslating(true);
  try {
  await updateRestaurantLanguages(draft.languages, draft.defaultLang);
  setRestaurant((r) => ({ ...r, languages: draft.languages, defaultLang: draft.defaultLang }));
+ setTranslating(false);
  onBack();
- } catch {
+ } catch (err) {
+ if (willBackfill) setTranslateError(err instanceof Error ? err.message : String(err));
  setSaving(false);
  }
  }
@@ -1177,6 +1184,31 @@ export function LanguagesSettingsPage({
  </p>
  </div>
  </div>
+ {translating || translateError ? (
+ <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+ <div className="w-full max-w-sm bg-card border border-border rounded-2xl shadow-xl p-6 text-center">
+ {translateError ? (
+ <>
+ <div className="text-base font-semibold text-foreground mb-2">{tl("translateErrorTitle")}</div>
+ <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{translateError}</p>
+ <button
+ type="button"
+ onClick={() => { setTranslateError(null); }}
+ className="w-full h-10 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90"
+ >
+ {tc("close")}
+ </button>
+ </>
+ ) : (
+ <>
+ <div className="w-10 h-10 mx-auto mb-4 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+ <div className="text-base font-semibold text-foreground mb-2">{tl("translatingTitle")}</div>
+ <p className="text-sm text-muted-foreground leading-relaxed">{tl("translatingBody")}</p>
+ </>
+ )}
+ </div>
+ </div>
+ ) : null}
  </div>
  );
 }

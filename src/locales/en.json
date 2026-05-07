@@ -466,7 +466,10 @@
         "availableTip": "Pick the languages you want for your menu. Tap to add or remove.",
         "noneError": "Pick at least one language.",
         "defaultLabel": "Default language",
-        "defaultTip": "The language you write your menu in first. Other languages are translations of this one."
+        "defaultTip": "The language you write your menu in first. Other languages are translations of this one.",
+        "translatingTitle": "Translating your menu",
+        "translatingBody": "Please wait — we're translating every dish and category into the languages you added. Don't close this window.",
+        "translateErrorTitle": "Translation failed"
       },
       "billing": {
         "title": "Billing",

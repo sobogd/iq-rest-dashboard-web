@@ -466,7 +466,10 @@
         "availableTip": "选择菜单的语言。点击添加或删除。",
         "noneError": "请至少选择一种语言。",
         "defaultLabel": "默认语言",
-        "defaultTip": "您首先编写菜单的语言。其他语言是其翻译。"
+        "defaultTip": "您首先编写菜单的语言。其他语言是其翻译。",
+        "translatingTitle": "正在翻译您的菜单",
+        "translatingBody": "请稍候。我们正在将所有菜品和类别翻译为您添加的语言。请勿关闭窗口。",
+        "translateErrorTitle": "翻译失败"
       },
       "billing": {
         "title": "计费",

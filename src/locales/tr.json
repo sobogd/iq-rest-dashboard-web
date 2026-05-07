@@ -466,7 +466,10 @@
         "availableTip": "Menü için diller seçin. Eklemek veya kaldırmak için dokunun.",
         "noneError": "En az bir dil seçin.",
         "defaultLabel": "Varsayılan dil",
-        "defaultTip": "Menüyü ilk yazdığınız dil. Diğer diller bunun çevirileridir."
+        "defaultTip": "Menüyü ilk yazdığınız dil. Diğer diller bunun çevirileridir.",
+        "translatingTitle": "Menünüz çevriliyor",
+        "translatingBody": "Lütfen bekleyin. Tüm yemekleri ve kategorileri eklediğiniz dillere çeviriyoruz. Pencereyi kapatmayın.",
+        "translateErrorTitle": "Çeviri başarısız"
       },
       "billing": {
         "title": "Faturalama",

@@ -466,7 +466,10 @@
         "availableTip": "Wählen Sie die Sprachen für Ihre Karte. Tippen zum Hinzufügen oder Entfernen.",
         "noneError": "Mindestens eine Sprache wählen.",
         "defaultLabel": "Standardsprache",
-        "defaultTip": "Die Sprache, in der Sie Ihre Karte zuerst schreiben. Andere Sprachen sind Übersetzungen davon."
+        "defaultTip": "Die Sprache, in der Sie Ihre Karte zuerst schreiben. Andere Sprachen sind Übersetzungen davon.",
+        "translatingTitle": "Wir übersetzen Ihr Menü",
+        "translatingBody": "Bitte warten. Wir übersetzen alle Gerichte und Kategorien in die hinzugefügten Sprachen. Schließe das Fenster nicht.",
+        "translateErrorTitle": "Übersetzung fehlgeschlagen"
       },
       "billing": {
         "title": "Abrechnung",

@@ -466,7 +466,10 @@
         "availableTip": "Izvēlieties valodas ēdienkartei. Pieskarieties, lai pievienotu vai noņemtu.",
         "noneError": "Izvēlieties vismaz vienu valodu.",
         "defaultLabel": "Noklusējuma valoda",
-        "defaultTip": "Valoda, kurā vispirms rakstāt ēdienkarti. Citas valodas ir tās tulkojumi."
+        "defaultTip": "Valoda, kurā vispirms rakstāt ēdienkarti. Citas valodas ir tās tulkojumi.",
+        "translatingTitle": "Tulkojam jūsu ēdienkarti",
+        "translatingBody": "Lūdzu, uzgaidiet. Mēs tulkojam visus ēdienus un kategorijas pievienotajās valodās. Neaizveriet logu.",
+        "translateErrorTitle": "Tulkojums neizdevās"
       },
       "billing": {
         "title": "Norēķini",

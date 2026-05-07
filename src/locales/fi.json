@@ -466,7 +466,10 @@
         "availableTip": "Valitse menun kielet. Napauta lisätäksesi tai poistaaksesi.",
         "noneError": "Valitse vähintään yksi kieli.",
         "defaultLabel": "Oletuskieli",
-        "defaultTip": "Kieli, jolla kirjoitat menun ensin. Muut kielet ovat sen käännöksiä."
+        "defaultTip": "Kieli, jolla kirjoitat menun ensin. Muut kielet ovat sen käännöksiä.",
+        "translatingTitle": "Käännämme menua",
+        "translatingBody": "Odota hetki. Käännämme kaikki ruokalajit ja kategoriat lisätyille kielille. Älä sulje ikkunaa.",
+        "translateErrorTitle": "Käännös epäonnistui"
       },
       "billing": {
         "title": "Laskutus",

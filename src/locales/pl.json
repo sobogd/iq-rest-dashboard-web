@@ -466,7 +466,10 @@
         "availableTip": "Wybierz języki dla swojego menu. Stuknij, aby dodać lub usunąć.",
         "noneError": "Wybierz co najmniej jeden język.",
         "defaultLabel": "Język domyślny",
-        "defaultTip": "Język, w którym najpierw piszesz menu. Pozostałe języki są jego tłumaczeniami."
+        "defaultTip": "Język, w którym najpierw piszesz menu. Pozostałe języki są jego tłumaczeniami.",
+        "translatingTitle": "Tłumaczymy Twoje menu",
+        "translatingBody": "Czekaj — tłumaczymy wszystkie dania i kategorie na dodane języki. Nie zamykaj okna.",
+        "translateErrorTitle": "Tłumaczenie nie powiodło się"
       },
       "billing": {
         "title": "Rozliczenia",

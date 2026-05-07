@@ -466,7 +466,10 @@
         "availableTip": "Kies de talen voor uw menu. Tik om toe te voegen of te verwijderen.",
         "noneError": "Kies minstens één taal.",
         "defaultLabel": "Standaardtaal",
-        "defaultTip": "De taal waarin u uw menu eerst schrijft. Andere talen zijn vertalingen daarvan."
+        "defaultTip": "De taal waarin u uw menu eerst schrijft. Andere talen zijn vertalingen daarvan.",
+        "translatingTitle": "Je menu wordt vertaald",
+        "translatingBody": "Even geduld. We vertalen alle gerechten en categorieën naar de toegevoegde talen. Sluit dit venster niet.",
+        "translateErrorTitle": "Vertaling mislukt"
       },
       "billing": {
         "title": "Facturering",

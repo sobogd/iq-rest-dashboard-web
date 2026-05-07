@@ -466,7 +466,10 @@
         "availableTip": "Vælg sprog til menuen. Tryk for at tilføje eller fjerne.",
         "noneError": "Vælg mindst ét sprog.",
         "defaultLabel": "Standardsprog",
-        "defaultTip": "Det sprog du skriver din menu på først. Andre sprog er oversættelser af det."
+        "defaultTip": "Det sprog du skriver din menu på først. Andre sprog er oversættelser af det.",
+        "translatingTitle": "Oversætter din menu",
+        "translatingBody": "Vent venligst. Vi oversætter alle retter og kategorier til de tilføjede sprog. Luk ikke vinduet.",
+        "translateErrorTitle": "Oversættelsen mislykkedes"
       },
       "billing": {
         "title": "Fakturering",

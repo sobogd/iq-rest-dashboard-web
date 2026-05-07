@@ -466,7 +466,10 @@
         "availableTip": "Vyberte jazyky pre menu. Klepnutím pridáte alebo odoberiete.",
         "noneError": "Vyberte aspoň jeden jazyk.",
         "defaultLabel": "Predvolený jazyk",
-        "defaultTip": "Jazyk, v ktorom píšete menu ako prvé. Ostatné jazyky sú jeho preklady."
+        "defaultTip": "Jazyk, v ktorom píšete menu ako prvé. Ostatné jazyky sú jeho preklady.",
+        "translatingTitle": "Prekladáme vaše menu",
+        "translatingBody": "Počkajte, prosím. Prekladáme všetky jedlá a kategórie do pridaných jazykov. Nezatvárajte okno.",
+        "translateErrorTitle": "Preklad zlyhal"
       },
       "billing": {
         "title": "Fakturácia",

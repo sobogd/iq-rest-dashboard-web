@@ -466,7 +466,10 @@
         "availableTip": "Izberite jezike za meni. Tapnite za dodajanje ali odstranjevanje.",
         "noneError": "Izberite vsaj en jezik.",
         "defaultLabel": "Privzeti jezik",
-        "defaultTip": "Jezik, v katerem najprej napišete meni. Drugi jeziki so prevodi tega."
+        "defaultTip": "Jezik, v katerem najprej napišete meni. Drugi jeziki so prevodi tega.",
+        "translatingTitle": "Prevajamo vaš meni",
+        "translatingBody": "Prosimo, počakajte. Prevajamo vse jedi in kategorije v dodane jezike. Ne zaprite okna.",
+        "translateErrorTitle": "Prevod ni uspel"
       },
       "billing": {
         "title": "Obračun",

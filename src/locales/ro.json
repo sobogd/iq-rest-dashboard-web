@@ -466,7 +466,10 @@
         "availableTip": "Alege limbile pentru meniu. Atinge pentru a adăuga sau elimina.",
         "noneError": "Alege cel puțin o limbă.",
         "defaultLabel": "Limbă implicită",
-        "defaultTip": "Limba în care scrii meniul prima dată. Celelalte sunt traduceri ale acesteia."
+        "defaultTip": "Limba în care scrii meniul prima dată. Celelalte sunt traduceri ale acesteia.",
+        "translatingTitle": "Traducem meniul",
+        "translatingBody": "Te rugăm să aștepți. Traducem toate preparatele și categoriile în limbile adăugate. Nu închide fereastra.",
+        "translateErrorTitle": "Traducerea a eșuat"
       },
       "billing": {
         "title": "Facturare",

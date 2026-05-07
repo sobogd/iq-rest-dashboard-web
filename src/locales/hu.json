@@ -466,7 +466,10 @@
         "availableTip": "Válaszd ki az étlap nyelveit. Érintéssel hozzáadhatsz vagy eltávolíthatsz.",
         "noneError": "Válassz legalább egy nyelvet.",
         "defaultLabel": "Alapértelmezett nyelv",
-        "defaultTip": "Az a nyelv, amelyen elsőként megírod az étlapot. A többi nyelv ennek a fordítása."
+        "defaultTip": "Az a nyelv, amelyen elsőként megírod az étlapot. A többi nyelv ennek a fordítása.",
+        "translatingTitle": "Étlapod fordítása",
+        "translatingBody": "Egy pillanat — minden ételt és kategóriát lefordítunk a hozzáadott nyelvekre. Ne zárd be az ablakot.",
+        "translateErrorTitle": "A fordítás sikertelen"
       },
       "billing": {
         "title": "Számlázás",

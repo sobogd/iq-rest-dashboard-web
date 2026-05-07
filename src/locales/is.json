@@ -466,7 +466,10 @@
         "availableTip": "Veldu tungumál fyrir matseðilinn. Smelltu til að bæta við eða fjarlægja.",
         "noneError": "Veldu að minnsta kosti eitt tungumál.",
         "defaultLabel": "Sjálfgefið tungumál",
-        "defaultTip": "Tungumálið sem þú skrifar matseðilinn fyrst á. Önnur tungumál eru þýðingar af því."
+        "defaultTip": "Tungumálið sem þú skrifar matseðilinn fyrst á. Önnur tungumál eru þýðingar af því.",
+        "translatingTitle": "Þýðum matseðilinn",
+        "translatingBody": "Vinsamlegast bíddu. Við þýðum alla rétti og flokka yfir á tungumálin sem þú bættir við. Ekki loka glugganum.",
+        "translateErrorTitle": "Þýðing tókst ekki"
       },
       "billing": {
         "title": "Reikningagerð",

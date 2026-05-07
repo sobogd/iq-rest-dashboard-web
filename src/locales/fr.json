@@ -466,7 +466,10 @@
         "availableTip": "Choisissez les langues pour votre menu. Appuyez pour ajouter ou retirer.",
         "noneError": "Choisissez au moins une langue.",
         "defaultLabel": "Langue par défaut",
-        "defaultTip": "La langue dans laquelle vous écrivez votre menu en premier. Les autres langues en sont des traductions."
+        "defaultTip": "La langue dans laquelle vous écrivez votre menu en premier. Les autres langues en sont des traductions.",
+        "translatingTitle": "Traduction de votre menu",
+        "translatingBody": "Veuillez patienter — nous traduisons tous les plats et catégories dans les langues ajoutées. Ne fermez pas la fenêtre.",
+        "translateErrorTitle": "La traduction a échoué"
       },
       "billing": {
         "title": "Facturation",
