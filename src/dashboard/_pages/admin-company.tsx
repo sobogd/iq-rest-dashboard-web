@@ -646,26 +646,71 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         onConfirm={handleDelete}
       />
 
-      <ConfirmDialog
-        open={confirmTemplate !== null}
-        title={`Send "${confirmTemplate?.label}"?`}
-        message={
-          confirmTemplate
-            ? `Sends the email to ${company.users[0]?.email ?? "owner"} in their preferred language.`
-            : ""
-        }
-        confirmLabel="Send"
-        onCancel={() => (sendingTemplate ? null : setConfirmTemplate(null))}
-        onConfirm={() => confirmTemplate && sendEmailTemplate(confirmTemplate)}
-      />
+      {confirmTemplate ? (
+        <div
+          onClick={() => (sendingTemplate ? null : setConfirmTemplate(null))}
+          className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl"
+          >
+            <div className="px-4 py-3 border-b border-border">
+              <h3 className="text-sm font-semibold text-foreground">{`Send "${confirmTemplate.label}"?`}</h3>
+            </div>
+            <p className="px-4 py-3 text-sm text-muted-foreground leading-snug">
+              Sends the email to {company.users[0]?.email ?? "owner"} in their preferred language.
+            </p>
+            <div className="px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setConfirmTemplate(null)}
+                disabled={!!sendingTemplate}
+                className="h-9 px-3 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => sendEmailTemplate(confirmTemplate)}
+                disabled={!!sendingTemplate}
+                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary rounded-md inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {sendingTemplate ? (
+                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : null}
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
-      <ConfirmDialog
-        open={alert !== null}
-        singleButton
-        title={alert?.title}
-        message={alert?.message}
-        onCancel={() => setAlert(null)}
-      />
+      {alert ? (
+        <div
+          onClick={() => setAlert(null)}
+          className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl"
+          >
+            <div className="px-4 py-3 border-b border-border">
+              <h3 className="text-sm font-semibold text-foreground">{alert.title}</h3>
+            </div>
+            <p className="px-4 py-3 text-sm text-muted-foreground leading-snug">{alert.message}</p>
+            <div className="px-4 py-3 border-t border-border flex justify-end">
+              <button
+                type="button"
+                onClick={() => setAlert(null)}
+                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary rounded-md"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {menuLink ? (
         <MenuPreviewModal menuUrl={menuLink} open={previewOpen} onOpenChange={setPreviewOpen} />
