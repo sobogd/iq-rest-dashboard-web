@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { BoxIcon, EyeIcon, FolderIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
-import { Mail } from "lucide-react";
+import { Mail, Clock } from "lucide-react";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AdminCompanyPage } from "./admin-company";
@@ -32,6 +32,16 @@ export function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
+  const [sortByLastVisit, setSortByLastVisit] = useState(false);
+
+  const visibleCompanies = useMemo(() => {
+    if (!sortByLastVisit) return companies;
+    return [...companies].sort((a, b) => {
+      const aT = a.lastVisit ? new Date(a.lastVisit).getTime() : 0;
+      const bT = b.lastVisit ? new Date(b.lastVisit).getTime() : 0;
+      return bT - aT;
+    });
+  }, [companies, sortByLastVisit]);
 
   const fetchCompanies = useCallback(
     async (mode: "initial" | "refresh") => {
@@ -67,26 +77,40 @@ export function AdminPage() {
 
   return (
     <div>
-      <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave />
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-        <div className="mb-5 flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
-            <h2 className="text-xl font-medium text-foreground mt-1">{t("companiesTitle")}</h2>
-          </div>
+      <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setSortByLastVisit((v) => !v)}
+            title="Sort by last visit"
+            className={
+              "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+              (sortByLastVisit
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-muted-foreground hover:text-foreground")
+            }
+          >
+            <Clock className="h-3.5 w-3.5" />
+          </button>
           <button
             type="button"
             onClick={refresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-muted-foreground bg-secondary rounded-md transition-colors shrink-0 disabled:opacity-60"
+            title={t("refresh")}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
           >
             {refreshing ? (
               <span className="w-3.5 h-3.5 border-2 border-input border-t-foreground rounded-full animate-spin" />
             ) : (
               <RefreshIcon size={13} />
             )}
-            {t("refresh")}
           </button>
+        </div>
+      </SubpageStickyBar>
+      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+        <div className="mb-5">
+          <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
+          <h2 className="text-xl font-medium text-foreground mt-1">{t("companiesTitle")}</h2>
         </div>
 
         {loading && companies.length === 0 ? (
@@ -100,7 +124,7 @@ export function AdminPage() {
           </div>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-            {companies.map((company) => {
+            {visibleCompanies.map((company) => {
               const nameColor =
                 company.subscriptionStatus === "ACTIVE" && company.plan === "PRO"
                   ? "text-emerald-600"
