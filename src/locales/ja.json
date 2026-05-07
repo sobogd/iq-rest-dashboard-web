@@ -331,7 +331,8 @@
       "noTablesTitle": "テーブルがまだありません",
       "noTablesBody": "予約を受け付ける前に、設定でテーブルを追加してください。",
       "noTablesCta": "テーブルを追加",
-      "dayClosedBanner": "この日は休業日です。"
+      "dayClosedBanner": "この日は休業日です。",
+      "pendingHeader": "確認待ち ({count})"
     },
     "tables": {
       "table": "テーブル",

@@ -331,7 +331,8 @@
       "noTablesTitle": "Engin borð ennþá",
       "noTablesBody": "Bættu við borðum í stillingum áður en þú samþykkir bókanir.",
       "noTablesCta": "Bæta við borðum",
-      "dayClosedBanner": "Veitingastaðurinn er lokaður þennan dag."
+      "dayClosedBanner": "Veitingastaðurinn er lokaður þennan dag.",
+      "pendingHeader": "Bíður staðfestingar ({count})"
     },
     "tables": {
       "table": "Borð",

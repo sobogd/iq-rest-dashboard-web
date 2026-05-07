@@ -331,7 +331,8 @@
       "noTablesTitle": "Nessun tavolo",
       "noTablesBody": "Aggiungi i tuoi tavoli nelle impostazioni prima di accettare prenotazioni.",
       "noTablesCta": "Aggiungi tavoli",
-      "dayClosedBanner": "Il ristorante è chiuso in questo giorno."
+      "dayClosedBanner": "Il ristorante è chiuso in questo giorno.",
+      "pendingHeader": "In attesa di conferma ({count})"
     },
     "tables": {
       "table": "Tavolo",

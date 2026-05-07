@@ -331,7 +331,8 @@
       "noTablesTitle": "Ei vielä pöytiä",
       "noTablesBody": "Lisää pöydät asetuksiin ennen varausten vastaanottamista.",
       "noTablesCta": "Lisää pöydät",
-      "dayClosedBanner": "Ravintola on suljettu tänä päivänä."
+      "dayClosedBanner": "Ravintola on suljettu tänä päivänä.",
+      "pendingHeader": "Odottavat vahvistusta ({count})"
     },
     "tables": {
       "table": "Pöytä",

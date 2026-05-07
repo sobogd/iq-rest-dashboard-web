@@ -331,7 +331,8 @@
       "noTablesTitle": "لا توجد طاولات بعد",
       "noTablesBody": "أضف طاولاتك في الإعدادات قبل قبول الحجوزات.",
       "noTablesCta": "إضافة طاولات",
-      "dayClosedBanner": "المطعم مغلق هذا اليوم."
+      "dayClosedBanner": "المطعم مغلق هذا اليوم.",
+      "pendingHeader": "بانتظار التأكيد ({count})"
     },
     "tables": {
       "table": "طاولة",

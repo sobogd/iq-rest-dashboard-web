@@ -331,7 +331,8 @@
       "noTablesTitle": "Ще немає столів",
       "noTablesBody": "Додайте столи в налаштуваннях перед прийомом бронювань.",
       "noTablesCta": "Додати столи",
-      "dayClosedBanner": "Ресторан зачинений цього дня."
+      "dayClosedBanner": "Ресторан зачинений цього дня.",
+      "pendingHeader": "Очікують підтвердження ({count})"
     },
     "tables": {
       "table": "Стіл",

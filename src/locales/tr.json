@@ -331,7 +331,8 @@
       "noTablesTitle": "Henüz masa yok",
       "noTablesBody": "Rezervasyon kabul etmeden önce ayarlardan masa ekleyin.",
       "noTablesCta": "Masa ekle",
-      "dayClosedBanner": "Restoran bu gün kapalı."
+      "dayClosedBanner": "Restoran bu gün kapalı.",
+      "pendingHeader": "Onay bekleniyor ({count})"
     },
     "tables": {
       "table": "Masa",

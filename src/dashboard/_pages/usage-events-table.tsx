@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { Trash2, Building2, Check, UserCheck, UserX } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 
@@ -68,15 +69,35 @@ interface Props {
   initialScope?: UsageScope;
   /** Reports the current row count to the parent so it can render it in its own header. */
   onCountChange?: (count: number) => void;
+  /** When provided, date is controlled by the parent and the in-table stepper is hidden. */
+  date?: string;
+  onDateChange?: (date: string) => void;
 }
 
-const SCOPE_LABEL: Record<UsageScope, string> = {
-  anonymous: "Anon",
-  identified: "ID",
+const SCOPE_ICON: Record<UsageScope, typeof UserX> = {
+  anonymous: UserX,
+  identified: UserCheck,
 };
 
-export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange }: Props) {
-  const [date, setDate] = useState<string>(() => todayUtcStr());
+const SCOPE_TITLE: Record<UsageScope, string> = {
+  anonymous: "Anonymous",
+  identified: "Identified",
+};
+
+type BulkMode = "none" | "delete" | "company";
+
+export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange, date: dateProp, onDateChange }: Props) {
+  const [internalDate, setInternalDate] = useState<string>(() => todayUtcStr());
+  const date = dateProp ?? internalDate;
+  const setDate = (d: string | ((prev: string) => string)) => {
+    if (onDateChange) {
+      const next = typeof d === "function" ? d(date) : d;
+      onDateChange(next);
+    } else {
+      setInternalDate(d);
+    }
+  };
+  const dateControlled = dateProp !== undefined;
   const [scope, setScope] = useState<UsageScope>(initialScope);
   const [rows, setRows] = useState<UsageRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +106,13 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [selected, setSelected] = useState<UsageRow | null>(null);
+  const [mode, setMode] = useState<BulkMode>("none");
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
+  const [bulkBusy, setBulkBusy] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const selectedCount = selectedIds.size;
 
   const isToday = date === todayUtcStr();
 
@@ -150,8 +177,60 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   }, [cursor, hasMore, loadingMore, fetchPage]);
 
   useEffect(() => {
+    // Refresh / page reload / scope change resets bulk mode and selection.
+    setMode("none");
+    setSelectedIds(new Set());
     void load("initial");
   }, [load]);
+
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  async function applyDelete() {
+    if (selectedIds.size === 0) return;
+    setBulkBusy(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/events/delete"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [...selectedIds] }),
+      });
+      if (!res.ok) return;
+      setSelectedIds(new Set());
+      setMode("none");
+      void load("refresh");
+    } finally {
+      setBulkBusy(false);
+      setConfirmDelete(false);
+    }
+  }
+
+  async function applyLinkCompany(targetCompanyId: string) {
+    if (selectedIds.size === 0) return;
+    setBulkBusy(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/events/link-company"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [...selectedIds], companyId: targetCompanyId }),
+      });
+      if (!res.ok) return;
+      setSelectedIds(new Set());
+      setMode("none");
+      setCompanyPickerOpen(false);
+      void load("refresh");
+    } finally {
+      setBulkBusy(false);
+    }
+  }
 
   // IntersectionObserver — fires loadMore when sentinel scrolls into view.
   useEffect(() => {
@@ -170,58 +249,139 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 flex-wrap">
-        {/* Date stepper */}
-        <button
-          type="button"
-          onClick={() => setDate((d) => shiftDate(d, -1))}
-          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-          title="Previous day"
-        >
-          ‹
-        </button>
-        <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
-          {fmtDateLabel(date)}
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            const next = shiftDate(date, 1);
-            if (next <= todayUtcStr()) setDate(next);
-          }}
-          disabled={isToday}
-          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
-          title="Next day"
-        >
-          ›
-        </button>
+        {/* Date stepper — three separate blocks; hidden when date is controlled
+            from outside (parent puts the stepper in its own header). */}
+        {!dateControlled && (
+          <>
+            <button
+              type="button"
+              onClick={() => setDate((d) => shiftDate(d, -1))}
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              title="Previous day"
+            >
+              ‹
+            </button>
+            <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
+              {fmtDateLabel(date)}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const next = shiftDate(date, 1);
+                if (next <= todayUtcStr()) setDate(next);
+              }}
+              disabled={isToday}
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
+              title="Next day"
+            >
+              ›
+            </button>
+          </>
+        )}
 
-        {!companyId && (
-          <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg ml-2">
-            {(["anonymous", "identified"] as UsageScope[]).map((s) => (
+        {!companyId &&
+          (["anonymous", "identified"] as UsageScope[]).map((s) => {
+            const Icon = SCOPE_ICON[s];
+            const active = scope === s;
+            return (
               <button
                 key={s}
                 type="button"
                 onClick={() => setScope(s)}
+                title={SCOPE_TITLE[s]}
                 className={
-                  "h-7 px-2.5 inline-flex items-center rounded-md text-[11px] font-medium transition-colors " +
-                  (scope === s ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
+                  "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+                  (active
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground")
                 }
               >
-                {SCOPE_LABEL[s]}
+                <Icon className="h-3.5 w-3.5" />
               </button>
-            ))}
-          </div>
-        )}
+            );
+          })}
 
-        <button
-          type="button"
-          onClick={() => void load("refresh")}
-          disabled={refreshing || loading}
-          className="h-8 w-8 ml-auto inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-          title="Refresh"
-        >
-          <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
-        </button>
+        <div className="ml-auto flex items-center gap-1">
+          {/* Delete-mode toggle (or Apply + Cancel, when delete mode is on) */}
+          {mode === "delete" ? (
+            <div className="inline-flex items-center h-8 bg-red-50 dark:bg-red-950/40 rounded-md overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                disabled={selectedCount === 0 || bulkBusy}
+                className="h-8 px-2.5 inline-flex items-center gap-1 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-900/40 disabled:opacity-50"
+                title={`Delete ${selectedCount}`}
+              >
+                <Check className="h-3.5 w-3.5" />
+                <span className="tabular-nums">{selectedCount}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("none");
+                  setSelectedIds(new Set());
+                }}
+                className="h-8 w-7 inline-flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40"
+                title="Cancel"
+              >
+                ✕
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setMode("delete")}
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              title="Bulk delete"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+          {/* Company-link mode toggle (or Apply + Cancel) */}
+          {mode === "company" ? (
+            <div className="inline-flex items-center h-8 bg-blue-50 dark:bg-blue-950/40 rounded-md overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setCompanyPickerOpen(true)}
+                disabled={selectedCount === 0 || bulkBusy}
+                className="h-8 px-2.5 inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 disabled:opacity-50"
+                title={`Link ${selectedCount} to company`}
+              >
+                <Check className="h-3.5 w-3.5" />
+                <span className="tabular-nums">{selectedCount}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("none");
+                  setSelectedIds(new Set());
+                }}
+                className="h-8 w-7 inline-flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                title="Cancel"
+              >
+                ✕
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setMode("company")}
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              title="Bulk link to company"
+            >
+              <Building2 className="h-3.5 w-3.5" />
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => void load("refresh")}
+            disabled={refreshing || loading}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+            title="Refresh"
+          >
+            <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -234,9 +394,28 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
             <button
               key={row.id}
               type="button"
-              onClick={() => setSelected(row)}
+              onClick={() => {
+                if (mode !== "none") {
+                  toggleSelect(row.id);
+                  return;
+                }
+                setSelected(row);
+              }}
               className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
             >
+              {mode !== "none" ? (
+                <span
+                  className={
+                    "shrink-0 inline-flex items-center justify-center w-3.5 h-3.5 rounded border " +
+                    (selectedIds.has(row.id)
+                      ? "bg-primary border-primary text-primary-foreground"
+                      : "border-border bg-card")
+                  }
+                  aria-hidden
+                >
+                  {selectedIds.has(row.id) ? <Check className="w-2.5 h-2.5" /> : null}
+                </span>
+              ) : null}
               <span
                 className="inline-block w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
@@ -295,6 +474,152 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       )}
 
       <UsageEventDetail event={selected} onClose={() => setSelected(null)} />
+
+      {confirmDelete ? (
+        <ConfirmDialogInline
+          title="Delete events"
+          message={`Delete ${selectedCount} selected event${selectedCount === 1 ? "" : "s"}? This cannot be undone.`}
+          onCancel={() => setConfirmDelete(false)}
+          onConfirm={() => void applyDelete()}
+          busy={bulkBusy}
+        />
+      ) : null}
+
+      {companyPickerOpen ? (
+        <CompanyPickerModal
+          onClose={() => setCompanyPickerOpen(false)}
+          onPick={(id) => void applyLinkCompany(id)}
+          busy={bulkBusy}
+          count={selectedCount}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ConfirmDialogInline({
+  title,
+  message,
+  onCancel,
+  onConfirm,
+  busy,
+}: {
+  title: string;
+  message: string;
+  onCancel: () => void;
+  onConfirm: () => void;
+  busy?: boolean;
+}) {
+  return (
+    <div onClick={onCancel} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
+        <div className="px-4 py-3 border-b border-border">
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+        </div>
+        <p className="px-4 py-3 text-sm text-muted-foreground">{message}</p>
+        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
+          <button type="button" onClick={onCancel} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={busy}
+            className="flex-1 h-9 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-60"
+          >
+            {busy ? "…" : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface CompanyOption {
+  id: string;
+  name: string | null;
+}
+
+function CompanyPickerModal({
+  onClose,
+  onPick,
+  busy,
+  count,
+}: {
+  onClose: () => void;
+  onPick: (id: string) => void;
+  busy?: boolean;
+  count: number;
+}) {
+  const [q, setQ] = useState("");
+  const [items, setItems] = useState<CompanyOption[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(apiUrl("/api/admin/companies"), { credentials: "include" });
+        if (!res.ok) {
+          if (!cancelled) setItems([]);
+          return;
+        }
+        const j = (await res.json()) as { companies?: Array<{ id: string; name: string | null }> };
+        if (!cancelled) setItems(j.companies ?? []);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const list = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    if (!term) return items;
+    return items.filter((c) => (c.name || "").toLowerCase().includes(term) || c.id.toLowerCase().includes(term));
+  }, [items, q]);
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Link {count} event{count === 1 ? "" : "s"} to company</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
+            ✕
+          </button>
+        </div>
+        <div className="p-3 border-b border-border">
+          <input
+            autoFocus
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search by name or email…"
+            className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          />
+        </div>
+        <div className="max-h-80 overflow-y-auto divide-y divide-border">
+          {loading ? (
+            <div className="text-xs text-muted-foreground py-6 text-center">Loading…</div>
+          ) : list.length === 0 ? (
+            <div className="text-xs text-muted-foreground py-6 text-center">No companies</div>
+          ) : (
+            list.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => onPick(c.id)}
+                disabled={busy}
+                className="w-full text-left px-4 py-2.5 hover:bg-muted/40 disabled:opacity-50"
+              >
+                <div className="text-sm font-medium text-foreground truncate">{c.name || "(unnamed)"}</div>
+                <div className="text-[11px] text-muted-foreground/60 font-mono truncate">{c.id}</div>
+              </button>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

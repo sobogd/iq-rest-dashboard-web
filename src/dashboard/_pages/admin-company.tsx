@@ -79,6 +79,8 @@ type Tab = "info" | "messages" | "events";
 
 interface Props {
   companyId: string;
+  /** When provided, used instead of the router-based back nav (modal mode). */
+  onClose?: () => void;
 }
 
 function formatDate(iso: string, withTime = false): string {
@@ -99,9 +101,12 @@ function formatDate(iso: string, withTime = false): string {
   });
 }
 
-export function AdminCompanyPage({ companyId }: Props) {
+export function AdminCompanyPage({ companyId, onClose }: Props) {
   const router = useDashboardRouter();
-  const goBack = () => router.push({ name: "settings.admin.companies" });
+  const goBack = () => {
+    if (onClose) onClose();
+    else router.push({ name: "settings.admin.companies" });
+  };
 
   const [tab, setTab] = useState<Tab>("info");
   const [company, setCompany] = useState<Company | null>(null);

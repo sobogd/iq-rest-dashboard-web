@@ -331,7 +331,8 @@
       "noTablesTitle": "Níl boird ann fós",
       "noTablesBody": "Cuir boird isteach sna socruithe sular ghlac tú áirithintí.",
       "noTablesCta": "Cuir boird leis",
-      "dayClosedBanner": "Tá an bhialann dúnta an lá seo."
+      "dayClosedBanner": "Tá an bhialann dúnta an lá seo.",
+      "pendingHeader": "Ag fanacht le deimhniú ({count})"
     },
     "tables": {
       "table": "Bord",

@@ -331,7 +331,8 @@
       "noTablesTitle": "Ingen bord ennå",
       "noTablesBody": "Legg til bord i innstillingene før du tar imot reservasjoner.",
       "noTablesCta": "Legg til bord",
-      "dayClosedBanner": "Restauranten er stengt denne dagen."
+      "dayClosedBanner": "Restauranten er stengt denne dagen.",
+      "pendingHeader": "Venter på bekreftelse ({count})"
     },
     "tables": {
       "table": "Bord",

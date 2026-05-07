@@ -331,7 +331,8 @@
       "noTablesTitle": "아직 테이블이 없습니다",
       "noTablesBody": "예약을 받기 전에 설정에서 테이블을 추가하세요.",
       "noTablesCta": "테이블 추가",
-      "dayClosedBanner": "이날은 영업하지 않습니다."
+      "dayClosedBanner": "이날은 영업하지 않습니다.",
+      "pendingHeader": "확인 대기 ({count})"
     },
     "tables": {
       "table": "테이블",

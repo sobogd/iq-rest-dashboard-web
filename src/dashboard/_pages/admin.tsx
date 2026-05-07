@@ -7,6 +7,7 @@ import { SubpageStickyBar } from "../_v2/ui";
 import { BoxIcon, EyeIcon, FolderIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
+import { AdminCompanyPage } from "./admin-company";
 
 interface Company {
   id: string;
@@ -37,6 +38,7 @@ export function AdminPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
 
   const fetchCompanies = useCallback(
     async (f: Filter, mode: "initial" | "refresh") => {
@@ -67,7 +69,7 @@ export function AdminPage() {
   }
 
   function openCompany(id: string) {
-    router.push({ name: "settings.admin.company", id });
+    setModalCompanyId(id);
   }
 
   return (
@@ -199,6 +201,17 @@ export function AdminPage() {
           </div>
         )}
       </div>
+
+      {modalCompanyId ? (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 sm:p-8">
+          <div
+            className="w-full max-w-3xl bg-background border border-border rounded-2xl shadow-xl my-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

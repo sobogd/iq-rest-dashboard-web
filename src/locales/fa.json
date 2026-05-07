@@ -331,7 +331,8 @@
       "noTablesTitle": "هنوز میزی نیست",
       "noTablesBody": "قبل از پذیرش رزرو، میزها را در تنظیمات اضافه کنید.",
       "noTablesCta": "افزودن میز",
-      "dayClosedBanner": "رستوران در این روز بسته است."
+      "dayClosedBanner": "رستوران در این روز بسته است.",
+      "pendingHeader": "در انتظار تأیید ({count})"
     },
     "tables": {
       "table": "میز",

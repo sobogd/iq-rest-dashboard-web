@@ -331,7 +331,8 @@
       "noTablesTitle": "Brak stolików",
       "noTablesBody": "Dodaj stoliki w ustawieniach, zanim zaczniesz przyjmować rezerwacje.",
       "noTablesCta": "Dodaj stoliki",
-      "dayClosedBanner": "Restauracja jest tego dnia zamknięta."
+      "dayClosedBanner": "Restauracja jest tego dnia zamknięta.",
+      "pendingHeader": "Oczekują potwierdzenia ({count})"
     },
     "tables": {
       "table": "Stolik",

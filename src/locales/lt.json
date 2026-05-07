@@ -331,7 +331,8 @@
       "noTablesTitle": "Stalų dar nėra",
       "noTablesBody": "Pridėkite stalus nustatymuose prieš priimdami rezervacijas.",
       "noTablesCta": "Pridėti stalus",
-      "dayClosedBanner": "Restoranas šią dieną uždarytas."
+      "dayClosedBanner": "Restoranas šią dieną uždarytas.",
+      "pendingHeader": "Laukia patvirtinimo ({count})"
     },
     "tables": {
       "table": "Stalas",

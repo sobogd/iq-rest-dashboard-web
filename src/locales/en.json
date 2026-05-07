@@ -331,7 +331,8 @@
       "noTablesTitle": "No tables yet",
       "noTablesBody": "Add your tables in settings before accepting bookings.",
       "noTablesCta": "Add tables",
-      "dayClosedBanner": "Restaurant is closed on this day."
+      "dayClosedBanner": "Restaurant is closed on this day.",
+      "pendingHeader": "Awaiting confirmation ({count})"
     },
     "tables": {
       "table": "Table",

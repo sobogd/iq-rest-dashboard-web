@@ -331,7 +331,8 @@
       "noTablesTitle": "Inga bord ännu",
       "noTablesBody": "Lägg till bord i inställningarna innan du accepterar bokningar.",
       "noTablesCta": "Lägg till bord",
-      "dayClosedBanner": "Restaurangen är stängd den här dagen."
+      "dayClosedBanner": "Restaurangen är stängd den här dagen.",
+      "pendingHeader": "Väntar på bekräftelse ({count})"
     },
     "tables": {
       "table": "Bord",

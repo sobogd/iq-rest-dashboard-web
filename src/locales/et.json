@@ -331,7 +331,8 @@
       "noTablesTitle": "Laudu veel pole",
       "noTablesBody": "Lisa lauad seadetesse, enne kui võtad vastu broneeringuid.",
       "noTablesCta": "Lisa lauad",
-      "dayClosedBanner": "Restoran on sel päeval suletud."
+      "dayClosedBanner": "Restoran on sel päeval suletud.",
+      "pendingHeader": "Ootavad kinnitust ({count})"
     },
     "tables": {
       "table": "Laud",

@@ -331,7 +331,8 @@
       "noTablesTitle": "Још нема столова",
       "noTablesBody": "Додајте столове у подешавањима пре прихватања резервација.",
       "noTablesCta": "Додај столове",
-      "dayClosedBanner": "Ресторан је овог дана затворен."
+      "dayClosedBanner": "Ресторан је овог дана затворен.",
+      "pendingHeader": "Чекају потврду ({count})"
     },
     "tables": {
       "table": "Sto",

@@ -331,7 +331,8 @@
       "noTablesTitle": "Encara no hi ha taules",
       "noTablesBody": "Afegeix taules a la configuració abans d'acceptar reserves.",
       "noTablesCta": "Afegir taules",
-      "dayClosedBanner": "El restaurant està tancat aquest dia."
+      "dayClosedBanner": "El restaurant està tancat aquest dia.",
+      "pendingHeader": "Pendents de confirmació ({count})"
     },
     "tables": {
       "table": "Taula",

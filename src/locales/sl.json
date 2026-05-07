@@ -331,7 +331,8 @@
       "noTablesTitle": "Še ni miz",
       "noTablesBody": "Preden sprejemate rezervacije, dodajte mize v nastavitvah.",
       "noTablesCta": "Dodaj mize",
-      "dayClosedBanner": "Restavracija je ta dan zaprta."
+      "dayClosedBanner": "Restavracija je ta dan zaprta.",
+      "pendingHeader": "Čakajo na potrditev ({count})"
     },
     "tables": {
       "table": "Miza",

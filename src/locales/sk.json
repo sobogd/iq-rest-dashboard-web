@@ -331,7 +331,8 @@
       "noTablesTitle": "Zatiaľ žiadne stoly",
       "noTablesBody": "Pridajte stoly v nastaveniach skôr ako budete prijímať rezervácie.",
       "noTablesCta": "Pridať stoly",
-      "dayClosedBanner": "Reštaurácia je v tento deň zatvorená."
+      "dayClosedBanner": "Reštaurácia je v tento deň zatvorená.",
+      "pendingHeader": "Čakajú na potvrdenie ({count})"
     },
     "tables": {
       "table": "Stôl",

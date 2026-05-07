@@ -331,7 +331,8 @@
       "noTablesTitle": "Nicio masă încă",
       "noTablesBody": "Adaugă mese în setări înainte de a accepta rezervări.",
       "noTablesCta": "Adaugă mese",
-      "dayClosedBanner": "Restaurantul este închis în această zi."
+      "dayClosedBanner": "Restaurantul este închis în această zi.",
+      "pendingHeader": "În așteptare de confirmare ({count})"
     },
     "tables": {
       "table": "Masa",

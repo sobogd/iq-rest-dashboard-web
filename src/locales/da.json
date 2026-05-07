@@ -331,7 +331,8 @@
       "noTablesTitle": "Ingen borde endnu",
       "noTablesBody": "Tilføj borde i indstillingerne, før du accepterer reservationer.",
       "noTablesCta": "Tilføj borde",
-      "dayClosedBanner": "Restauranten er lukket på denne dag."
+      "dayClosedBanner": "Restauranten er lukket på denne dag.",
+      "pendingHeader": "Afventer bekræftelse ({count})"
     },
     "tables": {
       "table": "Bord",

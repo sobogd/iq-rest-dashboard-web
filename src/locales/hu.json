@@ -331,7 +331,8 @@
       "noTablesTitle": "Még nincsenek asztalok",
       "noTablesBody": "Adj hozzá asztalokat a beállításokban, mielőtt foglalásokat fogadnál.",
       "noTablesCta": "Asztalok hozzáadása",
-      "dayClosedBanner": "Az étterem ezen a napon zárva van."
+      "dayClosedBanner": "Az étterem ezen a napon zárva van.",
+      "pendingHeader": "Megerősítésre várnak ({count})"
     },
     "tables": {
       "table": "Asztal",

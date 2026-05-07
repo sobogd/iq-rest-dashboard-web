@@ -144,7 +144,7 @@ export function ReservationsPage({
     className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
     style={{ top: "var(--topbar-h, 0px)" }}
    >
-    <div className="w-full max-w-5xl mx-auto flex items-center justify-between gap-3">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 w-full flex items-center justify-between gap-3">
      <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">
       <ViewBtn active={view === "month"} onClick={() => { track("dash_booking_view_month"); setView("month"); }}>
        {t("viewMonth")}
@@ -164,29 +164,54 @@ export function ReservationsPage({
     </div>
    </div>
 
-   <div className="max-w-5xl mx-auto pt-5">
-    <PageHeader title={title} subtitle={subtitle} />
-    <div className="mt-6">
+   <div className="max-w-5xl mx-auto px-4 md:px-6 pt-5 md:pt-4">
     {view === "month" ? (
-     <MonthView
-      focusDate={focusDate}
-      bookings={monthBookings}
-      onClickDay={(d) => {
-       track("dash_booking_drill_to_day");
-       setFocusDate(d);
-       setView("day");
-      }}
-     />
+     <div className="lg:flex lg:gap-8 lg:items-stretch">
+      <div className="lg:flex-1 lg:min-w-0 lg:flex lg:flex-col lg:h-[calc(100dvh-var(--topbar-h,0px)-160px)]">
+       <PageHeader title={title} subtitle={subtitle} />
+       <div className="mt-6 hidden lg:flex lg:flex-1 lg:min-h-[200px] lg:overflow-y-auto pr-1">
+        <div className="w-full">
+         <PendingList
+          bookings={bookings}
+          tables={tables}
+          onClickBooking={setSelected}
+         />
+        </div>
+       </div>
+      </div>
+      <div className="mt-6 lg:mt-0 lg:shrink-0 lg:h-[calc(100dvh-var(--topbar-h,0px)-160px)] lg:aspect-[1.2/1] lg:max-h-[calc((100vw-360px)/1.2)]">
+       <MonthView
+        focusDate={focusDate}
+        bookings={monthBookings}
+        onClickDay={(d) => {
+         track("dash_booking_drill_to_day");
+         setFocusDate(d);
+         setView("day");
+        }}
+       />
+      </div>
+      <div className="mt-6 lg:hidden">
+       <PendingList
+        bookings={bookings}
+        tables={tables}
+        onClickBooking={setSelected}
+       />
+      </div>
+     </div>
     ) : (
-     <DayView
-      focusDate={focusDate}
-      bookings={dayBookings}
-      tables={tables}
-      schedule={restaurant.bookingSettings.schedule}
-      onClickBooking={setSelected}
-     />
+     <>
+      <PageHeader title={title} subtitle={subtitle} />
+      <div className="mt-6">
+       <DayView
+        focusDate={focusDate}
+        bookings={dayBookings}
+        tables={tables}
+        schedule={restaurant.bookingSettings.schedule}
+        onClickBooking={setSelected}
+       />
+      </div>
+     </>
     )}
-    </div>
    </div>
 
    {selected ? (
@@ -239,7 +264,7 @@ function NavBtn({ children, onClick, ...rest }: { children: React.ReactNode; onC
 
 function CtaWrapper({ title, children }: { title: string; children: React.ReactNode }) {
  return (
-  <div className="max-w-2xl mx-auto">
+  <div className="max-w-5xl mx-auto px-4 md:px-6">
    <PageHeader title={title} />
    {children}
   </div>
@@ -258,6 +283,65 @@ function CtaState({ title, body, cta, onClick }: { title: string; body: string; 
    >
     {cta}
    </button>
+  </div>
+ );
+}
+
+// ---------- Pending list ----------
+
+function PendingList({
+ bookings,
+ tables,
+ onClickBooking,
+}: {
+ bookings: Booking[];
+ tables: TableEntity[];
+ onClickBooking: (b: Booking) => void;
+}) {
+ const t = useTranslations("dashboard.reservations");
+ const items = useMemo(() => {
+  return bookings
+   .filter((b) => b.status === "pending")
+   .sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
+ }, [bookings]);
+
+ if (items.length === 0) return null;
+
+ return (
+  <div>
+   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
+    {t("pendingHeader", { count: items.length })}
+   </div>
+   <div className="space-y-2">
+    {items.map((b) => {
+     const dt = new Date(b.datetime);
+     const tbl = tables.find((tt) => tt.id === b.tableId);
+     return (
+      <button
+       key={b.id}
+       type="button"
+       onClick={() => onClickBooking(b)}
+       className="w-full bg-card border border-border rounded-xl p-3 text-left hover:border-primary/40 hover:bg-muted/30 transition-colors"
+      >
+       <div className="flex items-center gap-2 flex-wrap">
+        <div className="text-sm font-medium tabular-nums">{formatTime(dt)}</div>
+        <div className="text-xs text-muted-foreground tabular-nums">
+         {dt.toLocaleDateString([], { day: "numeric", month: "short" })}
+        </div>
+        <span className={"ml-auto inline-flex items-center h-5 px-2 text-[10px] font-medium border rounded-full " + STATUS_PILL.pending}>
+         {t("statusPending")}
+        </span>
+       </div>
+       <div className="text-sm text-foreground mt-1 truncate">{b.guestName}</div>
+       <div className="text-xs text-muted-foreground truncate">
+        {tbl ? t("tableLabel", { number: tbl.number }) : t("notAssigned")}
+        {" · "}
+        {b.guests === 1 ? t("guestOne", { count: b.guests }) : t("guestOther", { count: b.guests })}
+       </div>
+      </button>
+     );
+    })}
+   </div>
   </div>
  );
 }
@@ -310,17 +394,22 @@ function MonthView({
   });
  }, []);
 
+ const weeks = Math.max(1, cells.length / 7);
+
  return (
-  <div>
+  <div className="flex flex-col lg:h-full lg:min-h-[420px]">
    <div className="grid grid-cols-7 gap-1 mb-2 text-center text-[11px] font-medium text-muted-foreground/50 uppercase tracking-wider">
     {weekdayLabels.map((w, i) => (
      <div key={i}>{w}</div>
     ))}
    </div>
-   <div className="grid grid-cols-7 gap-1">
+   <div
+    className="grid grid-cols-7 gap-1 flex-1 min-h-0"
+    style={{ gridTemplateRows: `repeat(${weeks}, minmax(0, 1fr))` }}
+   >
     {cells.map((cell, i) => {
      if (cell.kind === "empty") {
-      return <div key={i} className="aspect-square sm:aspect-[5/4]" />;
+      return <div key={i} className="aspect-square sm:aspect-auto" />;
      }
      const isToday = isSameDay(cell.date, today);
      const cellDate = cell.date;
@@ -331,7 +420,7 @@ function MonthView({
        type="button"
        onClick={() => onClickDay(cellDate)}
        className={
-        "aspect-square sm:aspect-[5/4] rounded-lg border bg-card p-1.5 flex flex-col gap-0.5 overflow-hidden text-left transition-colors hover:border-primary/60 hover:bg-muted/40 " +
+        "aspect-square sm:aspect-[5/4] lg:aspect-auto lg:h-full rounded-lg border bg-card p-1.5 flex flex-col gap-0.5 overflow-hidden text-left transition-colors hover:border-primary/60 hover:bg-muted/40 " +
         (isToday ? "border-primary/60" : "border-border")
        }
       >
@@ -495,8 +584,8 @@ function DayView({
          />
         );
        })() : null}
-       {/* Table watermark label — centered, behind bookings. */}
-       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-[11px] sm:text-xs font-medium text-muted-foreground/40 tabular-nums">
+       {/* Table label — at the start of the row, muted, behind bookings. */}
+       <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none text-[11px] sm:text-xs font-medium text-muted-foreground/50 tabular-nums">
         {t("tableLabel", { number: tbl.number })}
        </div>
        {items.map((b) => {
