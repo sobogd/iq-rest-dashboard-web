@@ -316,7 +316,22 @@
       "statusCompleted": "Lõpetatud",
       "markComplete": "Lõpeta",
       "showPast": "Näita varasemaid broneeringuid ({count})",
-      "hidePast": "Peida varasemad broneeringud"
+      "hidePast": "Peida varasemad broneeringud",
+      "viewMonth": "Kuu",
+      "viewDay": "Päev",
+      "prev": "Eelmine",
+      "next": "Järgmine",
+      "noBookingsHere": "Broneeringuid pole.",
+      "plusMore": "+{count} veel",
+      "tableColumn": "Laud",
+      "bookingDetailsTitle": "Broneeringu üksikasjad",
+      "disabledTitle": "Broneeringud on välja lülitatud",
+      "disabledBody": "Lülita broneeringud sisse seadetes, et neid vastu võtta.",
+      "disabledCta": "Mine seadetesse",
+      "noTablesTitle": "Laudu veel pole",
+      "noTablesBody": "Lisa lauad seadetesse, enne kui võtad vastu broneeringuid.",
+      "noTablesCta": "Lisa lauad",
+      "dayClosedBanner": "Restoran on sel päeval suletud."
     },
     "tables": {
       "table": "Laud",

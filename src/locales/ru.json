@@ -316,7 +316,22 @@
       "statusCompleted": "Завершено",
       "markComplete": "Завершить",
       "showPast": "Показать прошлые брони ({count})",
-      "hidePast": "Скрыть прошлые брони"
+      "hidePast": "Скрыть прошлые брони",
+      "viewMonth": "Месяц",
+      "viewDay": "День",
+      "prev": "Назад",
+      "next": "Вперёд",
+      "noBookingsHere": "Здесь нет броней.",
+      "plusMore": "+{count} ещё",
+      "tableColumn": "Стол",
+      "bookingDetailsTitle": "Детали брони",
+      "disabledTitle": "Бронирования отключены",
+      "disabledBody": "Включите приём броней в настройках.",
+      "disabledCta": "К настройкам",
+      "noTablesTitle": "Пока нет столов",
+      "noTablesBody": "Добавьте столы в настройках, чтобы начать принимать брони.",
+      "noTablesCta": "Добавить столы",
+      "dayClosedBanner": "Ресторан закрыт в этот день."
     },
     "tables": {
       "table": "Стол",

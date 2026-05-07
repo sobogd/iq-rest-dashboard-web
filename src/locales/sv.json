@@ -316,7 +316,22 @@
       "statusCompleted": "Slutförd",
       "markComplete": "Slutför",
       "showPast": "Visa tidigare bokningar ({count})",
-      "hidePast": "Dölj tidigare bokningar"
+      "hidePast": "Dölj tidigare bokningar",
+      "viewMonth": "Månad",
+      "viewDay": "Dag",
+      "prev": "Föregående",
+      "next": "Nästa",
+      "noBookingsHere": "Inga bokningar här.",
+      "plusMore": "+{count} fler",
+      "tableColumn": "Bord",
+      "bookingDetailsTitle": "Bokningsdetaljer",
+      "disabledTitle": "Bokningar är inaktiverade",
+      "disabledBody": "Aktivera bokningar i inställningarna för att börja ta emot dem.",
+      "disabledCta": "Gå till inställningar",
+      "noTablesTitle": "Inga bord ännu",
+      "noTablesBody": "Lägg till bord i inställningarna innan du accepterar bokningar.",
+      "noTablesCta": "Lägg till bord",
+      "dayClosedBanner": "Restaurangen är stängd den här dagen."
     },
     "tables": {
       "table": "Bord",

@@ -316,7 +316,22 @@
       "statusCompleted": "Fullført",
       "markComplete": "Fullfør",
       "showPast": "Vis tidligere reservasjoner ({count})",
-      "hidePast": "Skjul tidligere reservasjoner"
+      "hidePast": "Skjul tidligere reservasjoner",
+      "viewMonth": "Måned",
+      "viewDay": "Dag",
+      "prev": "Forrige",
+      "next": "Neste",
+      "noBookingsHere": "Ingen reservasjoner her.",
+      "plusMore": "+{count} flere",
+      "tableColumn": "Bord",
+      "bookingDetailsTitle": "Reservasjonsdetaljer",
+      "disabledTitle": "Reservasjoner er deaktivert",
+      "disabledBody": "Aktiver reservasjoner i innstillingene for å motta dem.",
+      "disabledCta": "Gå til innstillinger",
+      "noTablesTitle": "Ingen bord ennå",
+      "noTablesBody": "Legg til bord i innstillingene før du tar imot reservasjoner.",
+      "noTablesCta": "Legg til bord",
+      "dayClosedBanner": "Restauranten er stengt denne dagen."
     },
     "tables": {
       "table": "Bord",

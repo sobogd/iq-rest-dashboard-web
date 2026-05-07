@@ -251,6 +251,7 @@ export function apiReservationToBooking(r: ApiReservation): Booking {
  guestEmail: r.guestEmail,
  guestPhone: r.guestPhone,
  datetime: dt.toISOString(),
+ duration: r.duration,
  guests: r.guestsCount,
  tableId: r.tableId,
  status,

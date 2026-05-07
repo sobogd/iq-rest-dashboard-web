@@ -316,7 +316,22 @@
       "statusCompleted": "Päättynyt",
       "markComplete": "Merkitse valmiiksi",
       "showPast": "Näytä menneet varaukset ({count})",
-      "hidePast": "Piilota menneet varaukset"
+      "hidePast": "Piilota menneet varaukset",
+      "viewMonth": "Kuukausi",
+      "viewDay": "Päivä",
+      "prev": "Edellinen",
+      "next": "Seuraava",
+      "noBookingsHere": "Ei varauksia.",
+      "plusMore": "+{count} lisää",
+      "tableColumn": "Pöytä",
+      "bookingDetailsTitle": "Varauksen tiedot",
+      "disabledTitle": "Varaukset eivät ole käytössä",
+      "disabledBody": "Ota varaukset käyttöön asetuksissa.",
+      "disabledCta": "Avaa asetukset",
+      "noTablesTitle": "Ei vielä pöytiä",
+      "noTablesBody": "Lisää pöydät asetuksiin ennen varausten vastaanottamista.",
+      "noTablesCta": "Lisää pöydät",
+      "dayClosedBanner": "Ravintola on suljettu tänä päivänä."
     },
     "tables": {
       "table": "Pöytä",

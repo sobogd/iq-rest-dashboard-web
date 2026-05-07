@@ -316,7 +316,22 @@
       "statusCompleted": "완료",
       "markComplete": "완료",
       "showPast": "지난 예약 보기 ({count})",
-      "hidePast": "지난 예약 숨기기"
+      "hidePast": "지난 예약 숨기기",
+      "viewMonth": "월",
+      "viewDay": "일",
+      "prev": "이전",
+      "next": "다음",
+      "noBookingsHere": "예약이 없습니다.",
+      "plusMore": "+{count}개 더",
+      "tableColumn": "테이블",
+      "bookingDetailsTitle": "예약 상세",
+      "disabledTitle": "예약이 비활성화됨",
+      "disabledBody": "설정에서 예약을 활성화하여 접수를 시작하세요.",
+      "disabledCta": "설정으로 이동",
+      "noTablesTitle": "아직 테이블이 없습니다",
+      "noTablesBody": "예약을 받기 전에 설정에서 테이블을 추가하세요.",
+      "noTablesCta": "테이블 추가",
+      "dayClosedBanner": "이날은 영업하지 않습니다."
     },
     "tables": {
       "table": "테이블",

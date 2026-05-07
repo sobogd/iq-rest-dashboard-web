@@ -316,7 +316,22 @@
       "statusCompleted": "تکمیل شد",
       "markComplete": "اتمام",
       "showPast": "نمایش رزروهای گذشته ({count})",
-      "hidePast": "پنهان کردن رزروهای گذشته"
+      "hidePast": "پنهان کردن رزروهای گذشته",
+      "viewMonth": "ماه",
+      "viewDay": "روز",
+      "prev": "قبلی",
+      "next": "بعدی",
+      "noBookingsHere": "رزروی اینجا نیست.",
+      "plusMore": "+{count} مورد دیگر",
+      "tableColumn": "میز",
+      "bookingDetailsTitle": "جزئیات رزرو",
+      "disabledTitle": "رزروها غیرفعال هستند",
+      "disabledBody": "رزروها را در تنظیمات فعال کنید تا دریافت آن‌ها شروع شود.",
+      "disabledCta": "رفتن به تنظیمات",
+      "noTablesTitle": "هنوز میزی نیست",
+      "noTablesBody": "قبل از پذیرش رزرو، میزها را در تنظیمات اضافه کنید.",
+      "noTablesCta": "افزودن میز",
+      "dayClosedBanner": "رستوران در این روز بسته است."
     },
     "tables": {
       "table": "میز",

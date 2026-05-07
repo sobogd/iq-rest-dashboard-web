@@ -316,7 +316,22 @@
       "statusCompleted": "完了",
       "markComplete": "完了",
       "showPast": "過去の予約を表示 ({count})",
-      "hidePast": "過去の予約を非表示"
+      "hidePast": "過去の予約を非表示",
+      "viewMonth": "月",
+      "viewDay": "日",
+      "prev": "前へ",
+      "next": "次へ",
+      "noBookingsHere": "予約はありません。",
+      "plusMore": "他+{count}件",
+      "tableColumn": "テーブル",
+      "bookingDetailsTitle": "予約の詳細",
+      "disabledTitle": "予約は無効です",
+      "disabledBody": "設定で予約を有効にして受付を開始してください。",
+      "disabledCta": "設定へ",
+      "noTablesTitle": "テーブルがまだありません",
+      "noTablesBody": "予約を受け付ける前に、設定でテーブルを追加してください。",
+      "noTablesCta": "テーブルを追加",
+      "dayClosedBanner": "この日は休業日です。"
     },
     "tables": {
       "table": "テーブル",

@@ -316,7 +316,22 @@
       "statusCompleted": "Tamamlandı",
       "markComplete": "Tamamla",
       "showPast": "Geçmiş rezervasyonları göster ({count})",
-      "hidePast": "Geçmiş rezervasyonları gizle"
+      "hidePast": "Geçmiş rezervasyonları gizle",
+      "viewMonth": "Ay",
+      "viewDay": "Gün",
+      "prev": "Önceki",
+      "next": "Sonraki",
+      "noBookingsHere": "Burada rezervasyon yok.",
+      "plusMore": "+{count} daha",
+      "tableColumn": "Masa",
+      "bookingDetailsTitle": "Rezervasyon detayları",
+      "disabledTitle": "Rezervasyonlar kapalı",
+      "disabledBody": "Rezervasyonları almaya başlamak için ayarlardan etkinleştirin.",
+      "disabledCta": "Ayarlara git",
+      "noTablesTitle": "Henüz masa yok",
+      "noTablesBody": "Rezervasyon kabul etmeden önce ayarlardan masa ekleyin.",
+      "noTablesCta": "Masa ekle",
+      "dayClosedBanner": "Restoran bu gün kapalı."
     },
     "tables": {
       "table": "Masa",

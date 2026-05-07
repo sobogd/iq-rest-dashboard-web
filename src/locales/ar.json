@@ -316,7 +316,22 @@
       "statusCompleted": "مكتمل",
       "markComplete": "إنهاء",
       "showPast": "عرض الحجوزات السابقة ({count})",
-      "hidePast": "إخفاء الحجوزات السابقة"
+      "hidePast": "إخفاء الحجوزات السابقة",
+      "viewMonth": "الشهر",
+      "viewDay": "اليوم",
+      "prev": "السابق",
+      "next": "التالي",
+      "noBookingsHere": "لا توجد حجوزات هنا.",
+      "plusMore": "+{count} أخرى",
+      "tableColumn": "الطاولة",
+      "bookingDetailsTitle": "تفاصيل الحجز",
+      "disabledTitle": "الحجوزات معطلة",
+      "disabledBody": "قم بتفعيل الحجوزات في الإعدادات لبدء استقبالها.",
+      "disabledCta": "اذهب إلى الإعدادات",
+      "noTablesTitle": "لا توجد طاولات بعد",
+      "noTablesBody": "أضف طاولاتك في الإعدادات قبل قبول الحجوزات.",
+      "noTablesCta": "إضافة طاولات",
+      "dayClosedBanner": "المطعم مغلق هذا اليوم."
     },
     "tables": {
       "table": "طاولة",

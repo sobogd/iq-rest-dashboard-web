@@ -316,7 +316,22 @@
       "statusCompleted": "Pabeigts",
       "markComplete": "Pabeigt",
       "showPast": "Rādīt iepriekšējās rezervācijas ({count})",
-      "hidePast": "Slēpt iepriekšējās rezervācijas"
+      "hidePast": "Slēpt iepriekšējās rezervācijas",
+      "viewMonth": "Mēnesis",
+      "viewDay": "Diena",
+      "prev": "Iepriekšējais",
+      "next": "Nākamais",
+      "noBookingsHere": "Šeit nav rezervāciju.",
+      "plusMore": "+{count} vēl",
+      "tableColumn": "Galds",
+      "bookingDetailsTitle": "Rezervācijas dati",
+      "disabledTitle": "Rezervācijas ir izslēgtas",
+      "disabledBody": "Ieslēdziet rezervācijas iestatījumos, lai sāktu tās saņemt.",
+      "disabledCta": "Doties uz iestatījumiem",
+      "noTablesTitle": "Galdu vēl nav",
+      "noTablesBody": "Pievienojiet galdus iestatījumos pirms rezervāciju pieņemšanas.",
+      "noTablesCta": "Pievienot galdus",
+      "dayClosedBanner": "Restorāns šajā dienā ir slēgts."
     },
     "tables": {
       "table": "Galds",

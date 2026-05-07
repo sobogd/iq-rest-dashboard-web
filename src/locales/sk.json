@@ -316,7 +316,22 @@
       "statusCompleted": "Dokončené",
       "markComplete": "Dokončiť",
       "showPast": "Zobraziť minulé rezervácie ({count})",
-      "hidePast": "Skryť minulé rezervácie"
+      "hidePast": "Skryť minulé rezervácie",
+      "viewMonth": "Mesiac",
+      "viewDay": "Deň",
+      "prev": "Predchádzajúci",
+      "next": "Ďalší",
+      "noBookingsHere": "Žiadne rezervácie.",
+      "plusMore": "+{count} ďalších",
+      "tableColumn": "Stôl",
+      "bookingDetailsTitle": "Detail rezervácie",
+      "disabledTitle": "Rezervácie sú vypnuté",
+      "disabledBody": "Zapnite rezervácie v nastaveniach, aby ste ich mohli prijímať.",
+      "disabledCta": "Prejsť do nastavení",
+      "noTablesTitle": "Zatiaľ žiadne stoly",
+      "noTablesBody": "Pridajte stoly v nastaveniach skôr ako budete prijímať rezervácie.",
+      "noTablesCta": "Pridať stoly",
+      "dayClosedBanner": "Reštaurácia je v tento deň zatvorená."
     },
     "tables": {
       "table": "Stôl",

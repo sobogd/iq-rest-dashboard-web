@@ -168,7 +168,7 @@ function ViewSwitch(p: SwitchProps) {
         />
       );
     case "reservations":
-      return <ReservationsPage bookings={bookings} setBookings={setBookings} tables={tables} />;
+      return <ReservationsPage restaurant={restaurant} bookings={bookings} setBookings={setBookings} tables={tables} />;
     case "kitchen":
       return (
         <KitchenPage

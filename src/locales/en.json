@@ -316,7 +316,22 @@
       "statusCompleted": "Completed",
       "markComplete": "Mark complete",
       "showPast": "Show past bookings ({count})",
-      "hidePast": "Hide past bookings"
+      "hidePast": "Hide past bookings",
+      "viewMonth": "Month",
+      "viewDay": "Day",
+      "prev": "Previous",
+      "next": "Next",
+      "noBookingsHere": "No bookings here.",
+      "plusMore": "+{count} more",
+      "tableColumn": "Table",
+      "bookingDetailsTitle": "Booking details",
+      "disabledTitle": "Bookings are disabled",
+      "disabledBody": "Enable bookings in settings to start receiving them.",
+      "disabledCta": "Go to settings",
+      "noTablesTitle": "No tables yet",
+      "noTablesBody": "Add your tables in settings before accepting bookings.",
+      "noTablesCta": "Add tables",
+      "dayClosedBanner": "Restaurant is closed on this day."
     },
     "tables": {
       "table": "Table",

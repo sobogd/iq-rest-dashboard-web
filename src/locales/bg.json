@@ -316,7 +316,22 @@
       "statusCompleted": "Завършена",
       "markComplete": "Завърши",
       "showPast": "Покажи минали резервации ({count})",
-      "hidePast": "Скрий минали резервации"
+      "hidePast": "Скрий минали резервации",
+      "viewMonth": "Месец",
+      "viewDay": "Ден",
+      "prev": "Назад",
+      "next": "Напред",
+      "noBookingsHere": "Няма резервации тук.",
+      "plusMore": "+{count} още",
+      "tableColumn": "Маса",
+      "bookingDetailsTitle": "Детайли за резервацията",
+      "disabledTitle": "Резервациите са изключени",
+      "disabledBody": "Включете резервациите в настройките, за да започнете да ги приемате.",
+      "disabledCta": "Към настройките",
+      "noTablesTitle": "Все още няма маси",
+      "noTablesBody": "Добавете масите си в настройките, преди да приемате резервации.",
+      "noTablesCta": "Добавяне на маси",
+      "dayClosedBanner": "Ресторантът е затворен на този ден."
     },
     "tables": {
       "table": "Маса",

@@ -316,7 +316,22 @@
       "statusCompleted": "Dokončeno",
       "markComplete": "Dokončit",
       "showPast": "Zobrazit minulé rezervace ({count})",
-      "hidePast": "Skrýt minulé rezervace"
+      "hidePast": "Skrýt minulé rezervace",
+      "viewMonth": "Měsíc",
+      "viewDay": "Den",
+      "prev": "Předchozí",
+      "next": "Další",
+      "noBookingsHere": "Žádné rezervace zde.",
+      "plusMore": "+{count} další",
+      "tableColumn": "Stůl",
+      "bookingDetailsTitle": "Detail rezervace",
+      "disabledTitle": "Rezervace jsou vypnuté",
+      "disabledBody": "Zapněte rezervace v nastavení, abyste je mohli přijímat.",
+      "disabledCta": "Přejít do nastavení",
+      "noTablesTitle": "Zatím nemáte stoly",
+      "noTablesBody": "Přidejte stoly v nastavení, než začnete přijímat rezervace.",
+      "noTablesCta": "Přidat stoly",
+      "dayClosedBanner": "Restaurace je v tento den zavřená."
     },
     "tables": {
       "table": "Stůl",

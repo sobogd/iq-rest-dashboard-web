@@ -316,7 +316,22 @@
       "statusCompleted": "Finalizată",
       "markComplete": "Finalizează",
       "showPast": "Afișează rezervările anterioare ({count})",
-      "hidePast": "Ascunde rezervările anterioare"
+      "hidePast": "Ascunde rezervările anterioare",
+      "viewMonth": "Lună",
+      "viewDay": "Zi",
+      "prev": "Înapoi",
+      "next": "Înainte",
+      "noBookingsHere": "Nu sunt rezervări aici.",
+      "plusMore": "+{count} altele",
+      "tableColumn": "Masa",
+      "bookingDetailsTitle": "Detalii rezervare",
+      "disabledTitle": "Rezervările sunt dezactivate",
+      "disabledBody": "Activează rezervările în setări pentru a începe să le primești.",
+      "disabledCta": "Mergi la setări",
+      "noTablesTitle": "Nicio masă încă",
+      "noTablesBody": "Adaugă mese în setări înainte de a accepta rezervări.",
+      "noTablesCta": "Adaugă mese",
+      "dayClosedBanner": "Restaurantul este închis în această zi."
     },
     "tables": {
       "table": "Masa",

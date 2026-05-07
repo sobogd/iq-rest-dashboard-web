@@ -316,7 +316,22 @@
       "statusCompleted": "Lokið",
       "markComplete": "Ljúka",
       "showPast": "Sýna fyrri bókanir ({count})",
-      "hidePast": "Fela fyrri bókanir"
+      "hidePast": "Fela fyrri bókanir",
+      "viewMonth": "Mánuður",
+      "viewDay": "Dagur",
+      "prev": "Fyrri",
+      "next": "Næsti",
+      "noBookingsHere": "Engar bókanir hér.",
+      "plusMore": "+{count} til viðbótar",
+      "tableColumn": "Borð",
+      "bookingDetailsTitle": "Bókunarupplýsingar",
+      "disabledTitle": "Bókanir eru óvirkar",
+      "disabledBody": "Kveiktu á bókunum í stillingum til að taka á móti þeim.",
+      "disabledCta": "Fara í stillingar",
+      "noTablesTitle": "Engin borð ennþá",
+      "noTablesBody": "Bættu við borðum í stillingum áður en þú samþykkir bókanir.",
+      "noTablesCta": "Bæta við borðum",
+      "dayClosedBanner": "Veitingastaðurinn er lokaður þennan dag."
     },
     "tables": {
       "table": "Borð",

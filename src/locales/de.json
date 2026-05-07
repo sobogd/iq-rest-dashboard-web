@@ -316,7 +316,22 @@
       "statusCompleted": "Abgeschlossen",
       "markComplete": "Abschließen",
       "showPast": "Vergangene Reservierungen anzeigen ({count})",
-      "hidePast": "Vergangene Reservierungen ausblenden"
+      "hidePast": "Vergangene Reservierungen ausblenden",
+      "viewMonth": "Monat",
+      "viewDay": "Tag",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "noBookingsHere": "Keine Reservierungen hier.",
+      "plusMore": "+{count} weitere",
+      "tableColumn": "Tisch",
+      "bookingDetailsTitle": "Reservierungsdetails",
+      "disabledTitle": "Reservierungen sind deaktiviert",
+      "disabledBody": "Aktiviere Reservierungen in den Einstellungen, um sie zu empfangen.",
+      "disabledCta": "Zu den Einstellungen",
+      "noTablesTitle": "Noch keine Tische",
+      "noTablesBody": "Füge Tische in den Einstellungen hinzu, bevor du Reservierungen annimmst.",
+      "noTablesCta": "Tische hinzufügen",
+      "dayClosedBanner": "Das Restaurant ist an diesem Tag geschlossen."
     },
     "tables": {
       "table": "Tisch",

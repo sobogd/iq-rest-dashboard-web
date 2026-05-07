@@ -316,7 +316,22 @@
       "statusCompleted": "Zakończona",
       "markComplete": "Zakończ",
       "showPast": "Pokaż wcześniejsze rezerwacje ({count})",
-      "hidePast": "Ukryj wcześniejsze rezerwacje"
+      "hidePast": "Ukryj wcześniejsze rezerwacje",
+      "viewMonth": "Miesiąc",
+      "viewDay": "Dzień",
+      "prev": "Poprzedni",
+      "next": "Następny",
+      "noBookingsHere": "Brak rezerwacji.",
+      "plusMore": "+{count} więcej",
+      "tableColumn": "Stolik",
+      "bookingDetailsTitle": "Szczegóły rezerwacji",
+      "disabledTitle": "Rezerwacje są wyłączone",
+      "disabledBody": "Włącz rezerwacje w ustawieniach, aby je przyjmować.",
+      "disabledCta": "Przejdź do ustawień",
+      "noTablesTitle": "Brak stolików",
+      "noTablesBody": "Dodaj stoliki w ustawieniach, zanim zaczniesz przyjmować rezerwacje.",
+      "noTablesCta": "Dodaj stoliki",
+      "dayClosedBanner": "Restauracja jest tego dnia zamknięta."
     },
     "tables": {
       "table": "Stolik",

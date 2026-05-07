@@ -316,7 +316,22 @@
       "statusCompleted": "Críochnaithe",
       "markComplete": "Críochnaigh",
       "showPast": "Taispeáin áirithintí roimhe seo ({count})",
-      "hidePast": "Folaigh áirithintí roimhe seo"
+      "hidePast": "Folaigh áirithintí roimhe seo",
+      "viewMonth": "Mí",
+      "viewDay": "Lá",
+      "prev": "Roimhe",
+      "next": "Ar aghaidh",
+      "noBookingsHere": "Níl áirithintí ann.",
+      "plusMore": "+{count} eile",
+      "tableColumn": "Bord",
+      "bookingDetailsTitle": "Sonraí na háirithinte",
+      "disabledTitle": "Tá áirithintí díchumasaithe",
+      "disabledBody": "Cumasaigh áirithintí sna socruithe chun iad a fháil.",
+      "disabledCta": "Téigh chuig socruithe",
+      "noTablesTitle": "Níl boird ann fós",
+      "noTablesBody": "Cuir boird isteach sna socruithe sular ghlac tú áirithintí.",
+      "noTablesCta": "Cuir boird leis",
+      "dayClosedBanner": "Tá an bhialann dúnta an lá seo."
     },
     "tables": {
       "table": "Bord",

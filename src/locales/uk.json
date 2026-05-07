@@ -316,7 +316,22 @@
       "statusCompleted": "Завершено",
       "markComplete": "Завершити",
       "showPast": "Показати минулі бронювання ({count})",
-      "hidePast": "Сховати минулі бронювання"
+      "hidePast": "Сховати минулі бронювання",
+      "viewMonth": "Місяць",
+      "viewDay": "День",
+      "prev": "Назад",
+      "next": "Далі",
+      "noBookingsHere": "Тут немає бронювань.",
+      "plusMore": "+{count} ще",
+      "tableColumn": "Стіл",
+      "bookingDetailsTitle": "Деталі бронювання",
+      "disabledTitle": "Бронювання вимкнені",
+      "disabledBody": "Увімкніть бронювання в налаштуваннях, щоб почати їх приймати.",
+      "disabledCta": "До налаштувань",
+      "noTablesTitle": "Ще немає столів",
+      "noTablesBody": "Додайте столи в налаштуваннях перед прийомом бронювань.",
+      "noTablesCta": "Додати столи",
+      "dayClosedBanner": "Ресторан зачинений цього дня."
     },
     "tables": {
       "table": "Стіл",

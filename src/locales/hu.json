@@ -316,7 +316,22 @@
       "statusCompleted": "Befejezve",
       "markComplete": "Befejezés",
       "showPast": "Korábbi foglalások megjelenítése ({count})",
-      "hidePast": "Korábbi foglalások elrejtése"
+      "hidePast": "Korábbi foglalások elrejtése",
+      "viewMonth": "Hónap",
+      "viewDay": "Nap",
+      "prev": "Előző",
+      "next": "Következő",
+      "noBookingsHere": "Nincs foglalás itt.",
+      "plusMore": "+{count} további",
+      "tableColumn": "Asztal",
+      "bookingDetailsTitle": "Foglalás részletei",
+      "disabledTitle": "A foglalások le vannak tiltva",
+      "disabledBody": "Engedélyezd a foglalásokat a beállításokban a fogadásukhoz.",
+      "disabledCta": "Beállításokhoz",
+      "noTablesTitle": "Még nincsenek asztalok",
+      "noTablesBody": "Adj hozzá asztalokat a beállításokban, mielőtt foglalásokat fogadnál.",
+      "noTablesCta": "Asztalok hozzáadása",
+      "dayClosedBanner": "Az étterem ezen a napon zárva van."
     },
     "tables": {
       "table": "Asztal",

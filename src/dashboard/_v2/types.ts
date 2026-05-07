@@ -86,6 +86,9 @@ export interface Booking {
  guestEmail: string;
  guestPhone: string | null;
  datetime: string;
+ // Slot length in minutes. Inherited from restaurant.reservationSlotMinutes
+ // when the booking was created.
+ duration: number;
  guests: number;
  tableId: string | null;
  status: "pending" | "confirmed" | "cancelled" | "completed";

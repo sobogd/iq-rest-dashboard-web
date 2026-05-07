@@ -316,7 +316,22 @@
       "statusCompleted": "Završeno",
       "markComplete": "Заврши",
       "showPast": "Прикажи прошле резервације ({count})",
-      "hidePast": "Сакриј прошле резервације"
+      "hidePast": "Сакриј прошле резервације",
+      "viewMonth": "Месец",
+      "viewDay": "Дан",
+      "prev": "Претходно",
+      "next": "Следеће",
+      "noBookingsHere": "Овде нема резервација.",
+      "plusMore": "+{count} више",
+      "tableColumn": "Сто",
+      "bookingDetailsTitle": "Детаљи резервације",
+      "disabledTitle": "Резервације су искључене",
+      "disabledBody": "Укључите резервације у подешавањима да их почнете примати.",
+      "disabledCta": "Иди у подешавања",
+      "noTablesTitle": "Још нема столова",
+      "noTablesBody": "Додајте столове у подешавањима пре прихватања резервација.",
+      "noTablesCta": "Додај столове",
+      "dayClosedBanner": "Ресторан је овог дана затворен."
     },
     "tables": {
       "table": "Sto",

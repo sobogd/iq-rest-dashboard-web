@@ -316,7 +316,22 @@
       "statusCompleted": "已完成",
       "markComplete": "完成",
       "showPast": "显示历史预订 ({count})",
-      "hidePast": "隐藏历史预订"
+      "hidePast": "隐藏历史预订",
+      "viewMonth": "月",
+      "viewDay": "日",
+      "prev": "上一个",
+      "next": "下一个",
+      "noBookingsHere": "此处无预订。",
+      "plusMore": "还有 {count} 个",
+      "tableColumn": "餐桌",
+      "bookingDetailsTitle": "预订详情",
+      "disabledTitle": "预订已禁用",
+      "disabledBody": "在设置中启用预订以开始接收。",
+      "disabledCta": "前往设置",
+      "noTablesTitle": "暂无餐桌",
+      "noTablesBody": "在接受预订前，请在设置中添加餐桌。",
+      "noTablesCta": "添加餐桌",
+      "dayClosedBanner": "本日餐厅休息。"
     },
     "tables": {
       "table": "桌台",

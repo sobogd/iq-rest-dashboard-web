@@ -316,7 +316,22 @@
       "statusCompleted": "Zaključeno",
       "markComplete": "Zaključi",
       "showPast": "Prikaži pretekle rezervacije ({count})",
-      "hidePast": "Skrij pretekle rezervacije"
+      "hidePast": "Skrij pretekle rezervacije",
+      "viewMonth": "Mesec",
+      "viewDay": "Dan",
+      "prev": "Prejšnji",
+      "next": "Naslednji",
+      "noBookingsHere": "Tu ni rezervacij.",
+      "plusMore": "+{count} več",
+      "tableColumn": "Miza",
+      "bookingDetailsTitle": "Podrobnosti rezervacije",
+      "disabledTitle": "Rezervacije so onemogočene",
+      "disabledBody": "Vklopite rezervacije v nastavitvah, da jih začnete prejemati.",
+      "disabledCta": "V nastavitve",
+      "noTablesTitle": "Še ni miz",
+      "noTablesBody": "Preden sprejemate rezervacije, dodajte mize v nastavitvah.",
+      "noTablesCta": "Dodaj mize",
+      "dayClosedBanner": "Restavracija je ta dan zaprta."
     },
     "tables": {
       "table": "Miza",

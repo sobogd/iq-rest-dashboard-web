@@ -1,290 +1,673 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { MapPinIcon, UsersIcon } from "./icons";
-import { EmptyState, PageHeader } from "./ui";
-import { formatDayLabel, formatTime, isSameDay } from "./helpers";
+import {
+ ChevronLeftIcon,
+ ChevronRightIcon,
+ MapPinIcon,
+ UsersIcon,
+} from "./icons";
+import { Modal, PageHeader } from "./ui";
+import { formatTime, isSameDay } from "./helpers";
 import { patchReservation } from "./api";
-import type { Booking, TableEntity } from "./types";
+import { useDashboardRouter } from "../_spa/router";
+import type { Booking, Restaurant, TableEntity } from "./types";
 import { track } from "@/lib/dashboard-events";
 
-const BOOKING_STATUS_KEYS: Record<Booking["status"], "statusPending" | "statusConfirmed" | "statusCancelled" | "statusCompleted"> = {
+type ViewMode = "month" | "day";
+
+const STATUS_KEY: Record<Booking["status"], "statusPending" | "statusConfirmed" | "statusCancelled" | "statusCompleted"> = {
  pending: "statusPending",
  confirmed: "statusConfirmed",
  cancelled: "statusCancelled",
  completed: "statusCompleted",
 };
 
-const BOOKING_STATUS_CLS: Record<Booking["status"], string> = {
+const STATUS_BAR: Record<Booking["status"], string> = {
+ pending: "bg-amber-500/85 text-white border border-amber-600 hover:bg-amber-500",
+ confirmed: "bg-emerald-500/85 text-white border border-emerald-600 hover:bg-emerald-500",
+ completed: "bg-secondary text-foreground/70 border border-border hover:bg-muted",
+ cancelled: "bg-secondary text-muted-foreground border border-border",
+};
+
+const STATUS_PILL: Record<Booking["status"], string> = {
  pending: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/50",
  confirmed: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/50",
- cancelled: "bg-secondary text-muted-foreground border-border",
  completed: "bg-secondary text-muted-foreground border-border",
+ cancelled: "bg-secondary text-muted-foreground border-border",
 };
 
 export function ReservationsPage({
+ restaurant,
  bookings,
  setBookings,
  tables,
 }: {
+ restaurant: Restaurant;
  bookings: Booking[];
  setBookings: React.Dispatch<React.SetStateAction<Booking[]>>;
  tables: TableEntity[];
 }) {
  const t = useTranslations("dashboard.reservations");
+ const router = useDashboardRouter();
 
- const [showPast, setShowPast] = useState(false);
-
- const { upcoming, past } = (() => {
- const today = new Date();
- today.setHours(0, 0, 0, 0);
- const upcomingMap = new Map<string, { date: Date; items: Booking[] }>();
- const pastMap = new Map<string, { date: Date; items: Booking[] }>();
- bookings.forEach((b) => {
- if (b.status === "cancelled") return;
- const d = new Date(b.datetime);
- d.setHours(0, 0, 0, 0);
- const key = d.toISOString().slice(0, 10);
- const targetMap = d < today ? pastMap : upcomingMap;
- if (!targetMap.has(key)) targetMap.set(key, { date: d, items: [] });
- targetMap.get(key)!.items.push(b);
+ const [view, setView] = useState<ViewMode>("month");
+ const [focusDate, setFocusDate] = useState<Date>(() => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
  });
- const upcomingDays = [...upcomingMap.values()].sort((a, b) => a.date.getTime() - b.date.getTime());
- const pastDays = [...pastMap.values()].sort((a, b) => b.date.getTime() - a.date.getTime());
- const sortItems = (d: { items: Booking[] }) =>
- d.items.sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
- upcomingDays.forEach(sortItems);
- pastDays.forEach(sortItems);
- return { upcoming: upcomingDays, past: pastDays };
- })();
+ const [selected, setSelected] = useState<Booking | null>(null);
 
- const today = new Date();
- today.setHours(0, 0, 0, 0);
- const todayGroup = upcoming.find((g) => isSameDay(g.date, today));
- const upcomingGroups = upcoming.filter((g) => !isSameDay(g.date, today));
+ const monthBookings = useMemo(
+  () =>
+   bookings.filter((b) => {
+    if (b.status === "cancelled") return false;
+    const d = new Date(b.datetime);
+    return d.getFullYear() === focusDate.getFullYear() && d.getMonth() === focusDate.getMonth();
+   }),
+  [bookings, focusDate],
+ );
+
+ const dayBookings = useMemo(
+  () => bookings.filter((b) => b.status !== "cancelled" && isSameDay(new Date(b.datetime), focusDate)),
+  [bookings, focusDate],
+ );
+
+ // Empty / disabled states — render late so all hooks above run unconditionally.
+ if (!restaurant.bookingSettings.enabled) {
+  return (
+   <CtaWrapper title={t("title")}>
+    <CtaState
+     title={t("disabledTitle")}
+     body={t("disabledBody")}
+     cta={t("disabledCta")}
+     onClick={() => router.push({ name: "settings.bookings" })}
+    />
+   </CtaWrapper>
+  );
+ }
+ if (tables.length === 0) {
+  return (
+   <CtaWrapper title={t("title")}>
+    <CtaState
+     title={t("noTablesTitle")}
+     body={t("noTablesBody")}
+     cta={t("noTablesCta")}
+     onClick={() => router.push({ name: "settings.tables" })}
+    />
+   </CtaWrapper>
+  );
+ }
+
+ const title = view === "month"
+  ? capitalize(focusDate.toLocaleDateString([], { month: "long", year: "numeric" }))
+  : capitalize(focusDate.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long", year: "numeric" }));
+
+ const count = view === "month" ? monthBookings.length : dayBookings.length;
+ const subtitle = count === 0
+  ? t("noBookingsHere")
+  : count === 1 ? t("subtitleOne", { count }) : t("subtitleOther", { count });
+
+ function shift(delta: number) {
+  setFocusDate((d) => {
+   const next = new Date(d);
+   if (view === "month") {
+    next.setDate(1);
+    next.setMonth(d.getMonth() + delta);
+   } else {
+    next.setDate(d.getDate() + delta);
+   }
+   return next;
+  });
+ }
 
  async function setBookingStatus(id: string, status: Booking["status"]) {
- if (status === "confirmed") track("dash_booking_accept");
- else if (status === "cancelled") track("dash_booking_reject");
- const before = bookings;
- setBookings((bks) => bks.map((b) => (b.id === id ? { ...b, status } : b)));
- try {
- await patchReservation(id, { status });
- } catch {
- setBookings(before);
- toast.error(t("error"));
+  if (status === "confirmed") track("dash_booking_accept");
+  else if (status === "cancelled") track("dash_booking_reject");
+  const before = bookings;
+  setBookings((bks) => bks.map((b) => (b.id === id ? { ...b, status } : b)));
+  try {
+   await patchReservation(id, { status });
+  } catch {
+   setBookings(before);
+   toast.error(t("error"));
+  }
  }
- }
-
- // Count must match the grouped list — only today and future, non-cancelled.
- // Otherwise the subtitle ("Tiene 2 reservas próximas") can disagree with
- // the empty-state body when all reservations are in the past.
- const upcomingCount = upcoming.reduce((sum, g) => sum + g.items.length, 0);
- const pastCount = past.reduce((sum, g) => sum + g.items.length, 0);
 
  return (
- <div className="max-w-2xl mx-auto">
- <PageHeader
- title={t("title")}
- subtitle={upcomingCount === 1 ? t("subtitleOne", { count: upcomingCount }) : t("subtitleOther", { count: upcomingCount })}
- />
+  <>
+   {/* Sticky sub-header — view toggle on the left, prev/next on the right. */}
+   <div
+    className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+    style={{ top: "var(--topbar-h, 0px)" }}
+   >
+    <div className="w-full max-w-5xl mx-auto flex items-center justify-between gap-3">
+     <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">
+      <ViewBtn active={view === "month"} onClick={() => { track("dash_booking_view_month"); setView("month"); }}>
+       {t("viewMonth")}
+      </ViewBtn>
+      <ViewBtn active={view === "day"} onClick={() => { track("dash_booking_view_day"); setView("day"); }}>
+       {t("viewDay")}
+      </ViewBtn>
+     </div>
+     <div className="flex items-center gap-1">
+      <NavBtn onClick={() => shift(-1)} aria-label={t("prev")}>
+       <ChevronLeftIcon size={16} />
+      </NavBtn>
+      <NavBtn onClick={() => shift(1)} aria-label={t("next")}>
+       <ChevronRightIcon size={16} />
+      </NavBtn>
+     </div>
+    </div>
+   </div>
 
- {upcoming.length === 0 && past.length === 0 ? (
- <EmptyState
- title={t("noBookings")}
- subtitle={t("noBookingsSub")}
- />
- ) : (
- <div className="space-y-6">
- {upcoming.length === 0 ? (
- <EmptyState
- title={t("noBookings")}
- subtitle={t("noBookingsSub")}
- />
- ) : (
- <>
- {todayGroup ? (
- <BookingGroup
- date={todayGroup.date}
- items={todayGroup.items}
- tables={tables}
- onStatusChange={setBookingStatus}
- isToday
- />
- ) : (
- <div>
- <div className="text-sm font-medium text-foreground mb-2">{t("today")}</div>
- <div className="text-xs text-muted-foreground text-center py-6 px-3 bg-card border border-border rounded-xl">
- {t("noToday")}
- </div>
- </div>
- )}
+   <div className="max-w-5xl mx-auto pt-5">
+    <PageHeader title={title} subtitle={subtitle} />
+    <div className="mt-6">
+    {view === "month" ? (
+     <MonthView
+      focusDate={focusDate}
+      bookings={monthBookings}
+      onClickBooking={setSelected}
+      onClickDay={(d) => {
+       track("dash_booking_drill_to_day");
+       setFocusDate(d);
+       setView("day");
+      }}
+     />
+    ) : (
+     <DayView
+      focusDate={focusDate}
+      bookings={dayBookings}
+      tables={tables}
+      schedule={restaurant.bookingSettings.schedule}
+      onClickBooking={setSelected}
+     />
+    )}
+    </div>
+   </div>
 
- {upcomingGroups.map((g) => (
- <BookingGroup
- key={g.date.toISOString()}
- date={g.date}
- items={g.items}
- tables={tables}
- onStatusChange={setBookingStatus}
- />
- ))}
- </>
- )}
-
- {past.length > 0 ? (
- <div className="pt-4 border-t border-border">
- <button
- type="button"
- onClick={() => setShowPast((v) => !v)}
- className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
- >
- {showPast ? t("hidePast") : t("showPast", { count: pastCount })}
- </button>
- {showPast ? (
- <div className="space-y-6 mt-4">
- {past.map((g) => (
- <BookingGroup
- key={g.date.toISOString()}
- date={g.date}
- items={g.items}
- tables={tables}
- onStatusChange={setBookingStatus}
- />
- ))}
- </div>
- ) : null}
- </div>
- ) : null}
- </div>
- )}
- </div>
+   {selected ? (
+    <BookingDetailModal
+     booking={selected}
+     tables={tables}
+     onClose={() => setSelected(null)}
+     onStatusChange={(status) => setBookingStatus(selected.id, status)}
+    />
+   ) : null}
+  </>
  );
 }
 
-function BookingGroup({
- date,
- items,
- tables,
- onStatusChange,
- isToday,
+// ---------- Sub-header buttons ----------
+
+function ViewBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+ return (
+  <button
+   type="button"
+   onClick={onClick}
+   className={
+    "h-8 px-3 text-xs font-medium transition-colors " +
+    (active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+   }
+  >
+   {children}
+  </button>
+ );
+}
+
+function NavBtn({ children, onClick, ...rest }: { children: React.ReactNode; onClick: () => void } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+ return (
+  <button
+   type="button"
+   onClick={onClick}
+   className="h-8 w-8 rounded-md hover:bg-muted/50 inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+   {...rest}
+  >
+   {children}
+  </button>
+ );
+}
+
+// ---------- Empty / disabled states ----------
+
+function CtaWrapper({ title, children }: { title: string; children: React.ReactNode }) {
+ return (
+  <div className="max-w-2xl mx-auto">
+   <PageHeader title={title} />
+   {children}
+  </div>
+ );
+}
+
+function CtaState({ title, body, cta, onClick }: { title: string; body: string; cta: string; onClick: () => void }) {
+ return (
+  <div className="bg-card border border-border rounded-2xl px-6 py-12 flex flex-col items-center text-center">
+   <div className="text-sm font-semibold text-foreground mb-2">{title}</div>
+   <p className="text-sm text-muted-foreground mb-6 max-w-md leading-relaxed">{body}</p>
+   <button
+    type="button"
+    onClick={onClick}
+    className="inline-flex items-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+   >
+    {cta}
+   </button>
+  </div>
+ );
+}
+
+// ---------- Month view ----------
+
+function MonthView({
+ focusDate,
+ bookings,
+ onClickBooking,
+ onClickDay,
 }: {
- date: Date;
- items: Booking[];
- tables: TableEntity[];
- onStatusChange: (id: string, status: Booking["status"]) => void;
- isToday?: boolean;
+ focusDate: Date;
+ bookings: Booking[];
+ onClickBooking: (b: Booking) => void;
+ onClickDay: (d: Date) => void;
 }) {
  const t = useTranslations("dashboard.reservations");
+ const today = todayMidnight();
+
+ // Build day cells for the visible month only. Leading empty slots are
+ // inserted so weekdays line up; trailing empty cells are not needed —
+ // weekday alignment is what matters visually.
+ const cells = useMemo(() => {
+  const year = focusDate.getFullYear();
+  const month = focusDate.getMonth();
+  const firstOfMonth = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const leadingEmpty = (firstOfMonth.getDay() + 6) % 7; // ISO weekday: Mon=0
+  type Cell = { kind: "empty" } | { kind: "day"; date: Date; items: Booking[] };
+  const list: Cell[] = [];
+  for (let i = 0; i < leadingEmpty; i++) list.push({ kind: "empty" });
+  for (let d = 1; d <= daysInMonth; d++) {
+   const date = new Date(year, month, d);
+   const items = bookings
+    .filter((b) => isSameDay(new Date(b.datetime), date))
+    .sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
+   list.push({ kind: "day", date, items });
+  }
+  // Pad to whole weeks — trailing empties for clean grid.
+  while (list.length % 7 !== 0) list.push({ kind: "empty" });
+  return list;
+ }, [focusDate, bookings]);
+
+ const weekdayLabels = useMemo(() => {
+  // ISO week starting Mon. Use a known Monday and step.
+  const start = new Date(2024, 0, 1); // 2024-01-01 is Monday.
+  return Array.from({ length: 7 }, (_, i) => {
+   const d = new Date(start);
+   d.setDate(start.getDate() + i);
+   return d.toLocaleDateString([], { weekday: "short" });
+  });
+ }, []);
+
  return (
- <div>
- <div className="flex items-baseline gap-2 mb-2">
- <div className="text-sm font-medium text-foreground">{formatDayLabel(date)}</div>
- {!isToday ? (
- <div className="text-xs text-muted-foreground">
- {date.toLocaleDateString([], { day: "numeric", month: "short" })}
- </div>
- ) : null}
- <div className="ml-auto text-xs text-muted-foreground tabular-nums">
- {items.length === 1 ? t("bookingOne", { count: items.length }) : t("bookingOther", { count: items.length })}
- </div>
- </div>
- <div className="space-y-2">
- {items.map((b) => (
- <BookingCard key={b.id} booking={b} tables={tables} onStatusChange={onStatusChange} />
- ))}
- </div>
- </div>
+  <div>
+   <div className="grid grid-cols-7 gap-1 mb-2 text-center text-[11px] font-medium text-muted-foreground/50 uppercase tracking-wider">
+    {weekdayLabels.map((w, i) => (
+     <div key={i}>{w}</div>
+    ))}
+   </div>
+   <div className="grid grid-cols-7 gap-1">
+    {cells.map((cell, i) => {
+     if (cell.kind === "empty") {
+      return <div key={i} className="aspect-square sm:aspect-[5/4]" />;
+     }
+     const isToday = isSameDay(cell.date, today);
+     const cellDate = cell.date;
+     const cellItems = cell.items;
+     return (
+      <button
+       key={i}
+       type="button"
+       onClick={() => onClickDay(cellDate)}
+       className={
+        "aspect-square sm:aspect-[5/4] rounded-lg border bg-card p-1.5 flex flex-col gap-0.5 overflow-hidden text-left transition-colors hover:border-primary/60 hover:bg-muted/40 " +
+        (isToday ? "border-primary/60" : "border-border")
+       }
+      >
+       <div className={"text-xs tabular-nums " + (isToday ? "font-bold text-primary" : "text-foreground")}>
+        {cellDate.getDate()}
+       </div>
+       <div className="flex flex-col gap-0.5 min-h-0 overflow-hidden">
+        {cellItems.slice(0, 3).map((b) => (
+         <span
+          key={b.id}
+          role="button"
+          tabIndex={0}
+          onClick={(e) => {
+           e.stopPropagation();
+           onClickBooking(b);
+          }}
+          onKeyDown={(e) => {
+           if (e.key === "Enter" || e.key === " ") {
+            e.stopPropagation();
+            e.preventDefault();
+            onClickBooking(b);
+           }
+          }}
+          className={
+           "rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight truncate cursor-pointer transition-colors " +
+           STATUS_BAR[b.status]
+          }
+         >
+          <span className="tabular-nums">{formatTime(new Date(b.datetime))}</span>
+          {" "}
+          <span>{b.guestName}</span>
+         </span>
+        ))}
+        {cellItems.length > 3 ? (
+         <div className="text-[10px] text-muted-foreground/80">
+          {t("plusMore", { count: cellItems.length - 3 })}
+         </div>
+        ) : null}
+       </div>
+      </button>
+     );
+    })}
+   </div>
+  </div>
  );
 }
 
-function BookingCard({
+// ---------- Day view ----------
+
+const TABLE_ROW_PX = 44;
+const TABLE_COL_PX_RESPONSIVE = 36;
+
+function DayView({
+ focusDate,
+ bookings,
+ tables,
+ schedule,
+ onClickBooking,
+}: {
+ focusDate: Date;
+ bookings: Booking[];
+ tables: TableEntity[];
+ schedule: import("./types").ReservationSchedule;
+ onClickBooking: (b: Booking) => void;
+}) {
+ const t = useTranslations("dashboard.reservations");
+
+ const sortedTables = useMemo(
+  () => [...tables].sort((a, b) => a.number - b.number),
+  [tables],
+ );
+
+ // Pick today's schedule slot. Mon=0...Sun=6 (matches save format).
+ const weekdayIdx = (focusDate.getDay() + 6) % 7;
+ const day = schedule[weekdayIdx];
+ // For closed days the grid still renders — using the nearest open day's
+ // working hours as the visible range — and the whole day is striped so the
+ // user sees the day is off but in the same context as open days.
+ const isClosed = !!day?.closed;
+ const baseDay = day && !day.closed
+  ? day
+  : findNearestOpenDay(schedule, weekdayIdx) || day;
+
+ const dayStart = baseDay ? parseHour(baseDay.from) : 9;
+ const dayEnd = baseDay ? Math.max(parseHourCeil(baseDay.to), dayStart + 1) : 24;
+ const lunchStart = !isClosed && day?.lunchFrom ? parseHour(day.lunchFrom) : null;
+ const lunchEnd = !isClosed && day?.lunchTo ? parseHourCeil(day.lunchTo) : null;
+
+ const hours: number[] = [];
+ for (let h = dayStart; h < dayEnd; h++) hours.push(h);
+
+ const DAY_START_HOUR = dayStart;
+ const DAY_END_HOUR = dayEnd;
+
+ // Build map tableId → bookings sorted by start time.
+ const byTable = new Map<string, Booking[]>();
+ for (const b of bookings) {
+  if (!b.tableId) continue;
+  const list = byTable.get(b.tableId) || [];
+  list.push(b);
+  byTable.set(b.tableId, list);
+ }
+
+ const totalMinutes = (DAY_END_HOUR - DAY_START_HOUR) * 60;
+ const pct = (min: number) => ((min - DAY_START_HOUR * 60) / totalMinutes) * 100;
+
+ const stripesBg =
+  "repeating-linear-gradient(45deg, rgba(148,163,184,0.2) 0 4px, transparent 4px 10px)";
+
+ return (
+  <div className="space-y-2">
+   {/* Hour strip — boundary labels straddling the grid lines. Day open
+       from 9 reads 9, 10, … 22 along the scale. */}
+   <div className="flex pb-1">
+    {hours.map((h, i) => (
+     <div
+      key={h}
+      className="flex-1 h-12 relative text-[10px] sm:text-xs text-muted-foreground/50 tabular-nums min-w-0"
+     >
+      {i === 0 ? (
+       <span
+        className="absolute bottom-0 left-0"
+        style={{ writingMode: "vertical-rl", transform: "translateX(-50%) rotate(180deg)" }}
+       >
+        {String(h).padStart(2, "0")}:00
+       </span>
+      ) : null}
+      <span
+       className="absolute bottom-0 right-0"
+       style={{ writingMode: "vertical-rl", transform: "translateX(50%) rotate(180deg)" }}
+      >
+       {String(h + 1).padStart(2, "0")}:00
+      </span>
+     </div>
+    ))}
+   </div>
+
+   {/* One card per table. */}
+   {sortedTables.map((tbl) => {
+    const items = byTable.get(tbl.id) || [];
+    return (
+     <div key={tbl.id} className="relative bg-card border border-border rounded-xl overflow-hidden" style={{ height: TABLE_ROW_PX }}>
+       {/* Hour grid lines */}
+       {hours.map((h, i) => (
+        <div
+         key={h}
+         className="absolute top-0 bottom-0 border-l border-border/40 first:border-l-0"
+         style={{ left: `${(i / (DAY_END_HOUR - DAY_START_HOUR)) * 100}%` }}
+        />
+       ))}
+       {/* Closed day — stripes over the entire row. */}
+       {isClosed ? (
+        <div
+         className="absolute inset-0 pointer-events-none"
+         style={{
+          backgroundImage:
+           stripesBg,
+         }}
+        />
+       ) : null}
+       {/* Lunch break — diagonal stripes (visible on dark theme). */}
+       {!isClosed && lunchStart !== null && lunchEnd !== null && day?.lunchFrom && day?.lunchTo ? (() => {
+        const lLeft = pct(parseLooseMinutes(day.lunchFrom));
+        const lWidth = pct(parseLooseMinutes(day.lunchTo)) - lLeft;
+        return (
+         <div
+          className="absolute top-0 bottom-0 pointer-events-none"
+          style={{
+           left: `${Math.max(0, lLeft)}%`,
+           width: `${Math.max(0, lWidth)}%`,
+           backgroundImage:
+            stripesBg,
+          }}
+         />
+        );
+       })() : null}
+       {/* Table watermark label — centered, behind bookings. */}
+       <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-[11px] sm:text-xs font-medium text-muted-foreground/40 tabular-nums">
+        {t("tableLabel", { number: tbl.number })}
+       </div>
+       {items.map((b) => {
+         const dt = new Date(b.datetime);
+         const startMin = dt.getHours() * 60 + dt.getMinutes();
+         const left = pct(startMin);
+         const width = (b.duration / totalMinutes) * 100;
+         if (left + width <= 0 || left >= 100) return null;
+         return (
+          <button
+           key={b.id}
+           type="button"
+           onClick={() => onClickBooking(b)}
+           className={
+            "absolute top-1 bottom-1 rounded-md px-1.5 text-[10px] sm:text-[11px] font-medium text-left truncate transition-colors " +
+            STATUS_BAR[b.status]
+           }
+           style={{ left: `${Math.max(0, left)}%`, width: `${Math.min(100 - Math.max(0, left), width)}%` }}
+          >
+           <span className="tabular-nums">{formatTime(dt)}</span>
+           {" "}
+           <span>{b.guestName}</span>
+          </button>
+         );
+        })}
+      </div>
+     );
+    })}
+  </div>
+ );
+}
+
+// ---------- Detail modal ----------
+
+function BookingDetailModal({
  booking,
  tables,
+ onClose,
  onStatusChange,
 }: {
  booking: Booking;
  tables: TableEntity[];
- onStatusChange: (id: string, status: Booking["status"]) => void;
+ onClose: () => void;
+ onStatusChange: (status: Booking["status"]) => void;
 }) {
  const t = useTranslations("dashboard.reservations");
- const statusKey = BOOKING_STATUS_KEYS[booking.status] || BOOKING_STATUS_KEYS.pending;
- const statusCls = BOOKING_STATUS_CLS[booking.status] || BOOKING_STATUS_CLS.pending;
- const time = formatTime(new Date(booking.datetime));
- const table = tables.find((tbl) => tbl.id === booking.tableId);
+ const dt = new Date(booking.datetime);
+ const table = tables.find((tb) => tb.id === booking.tableId);
+ const statusKey = STATUS_KEY[booking.status];
+ const statusCls = STATUS_PILL[booking.status];
+
+ const footer = booking.status === "pending" ? (
+  <div className="flex items-center gap-2">
+   <button
+    type="button"
+    onClick={() => onStatusChange("cancelled")}
+    className="flex-1 h-10 text-sm font-medium text-red-700 bg-red-50 rounded-md transition-colors dark:bg-red-950/40 dark:text-red-400"
+   >
+    {t("reject")}
+   </button>
+   <button
+    type="button"
+    onClick={() => onStatusChange("confirmed")}
+    className="flex-1 h-10 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-md transition-colors dark:bg-emerald-950/40 dark:text-emerald-400"
+   >
+    {t("confirm")}
+   </button>
+  </div>
+ ) : booking.status === "confirmed" ? (
+  <button
+   type="button"
+   onClick={() => onStatusChange("completed")}
+   className="w-full h-10 text-sm font-medium text-foreground bg-secondary rounded-md transition-colors hover:bg-muted"
+  >
+   {t("markComplete")}
+  </button>
+ ) : null;
 
  return (
- <div className="bg-card border border-border rounded-xl p-3.5">
- <div className="mb-2">
- <div className="flex items-center gap-2 flex-wrap">
- <div className="text-sm font-medium text-foreground tabular-nums">{time}</div>
- <span
- className={
- "inline-flex items-center h-5 px-2 text-[10px] font-medium border rounded-full " +
- statusCls
- }
- >
- {t(statusKey)}
- </span>
- </div>
- <div className="text-sm text-foreground mt-1 truncate">{booking.guestName}</div>
- <div className="text-xs text-muted-foreground truncate">
- {booking.guestEmail}
- {booking.guestPhone ? ` · ${booking.guestPhone}` : ""}
- </div>
- </div>
+  <Modal open={true} onClose={onClose} title={t("bookingDetailsTitle")} size="md" footer={footer}>
+   <div className="space-y-4">
+    <div className="flex items-center gap-2 flex-wrap">
+     <div className="text-base font-semibold tabular-nums">
+      {capitalize(dt.toLocaleDateString([], { weekday: "long", day: "numeric", month: "long" }))} · {formatTime(dt)}
+     </div>
+     <span className={"inline-flex items-center h-5 px-2 text-[10px] font-medium border rounded-full " + statusCls}>
+      {t(statusKey)}
+     </span>
+    </div>
 
- <div className="flex items-center gap-3 text-xs text-muted-foreground">
- <div className="inline-flex items-center gap-1">
- <UsersIcon size={12} />
- <span>
- {booking.guests === 1 ? t("guestOne", { count: booking.guests }) : t("guestOther", { count: booking.guests })}
- </span>
- </div>
- <div className="inline-flex items-center gap-1">
- <MapPinIcon size={12} />
- <span>
- {table ? t("tableLabel", { number: table.number }) + (table.name ? " · " + table.name : "") : t("notAssigned")}
- </span>
- </div>
- </div>
+    <div>
+     <div className="text-sm font-medium text-foreground">{booking.guestName}</div>
+     <div className="text-xs text-muted-foreground">
+      {booking.guestEmail}
+      {booking.guestPhone ? ` · ${booking.guestPhone}` : ""}
+     </div>
+    </div>
 
- {booking.notes ? (
- <div className="text-xs text-muted-foreground mt-2 px-2 py-1.5 bg-secondary rounded-md">
- {booking.notes}
- </div>
- ) : null}
+    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+     <div className="inline-flex items-center gap-1.5">
+      <UsersIcon size={14} />
+      <span>
+       {booking.guests === 1 ? t("guestOne", { count: booking.guests }) : t("guestOther", { count: booking.guests })}
+      </span>
+     </div>
+     <div className="inline-flex items-center gap-1.5">
+      <MapPinIcon size={14} />
+      <span>
+       {table ? t("tableLabel", { number: table.number }) + (table.name ? " · " + table.name : "") : t("notAssigned")}
+      </span>
+     </div>
+    </div>
 
- {booking.status === "pending" ? (
- <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
- <button
- type="button"
- onClick={() => onStatusChange(booking.id, "cancelled")}
- className="flex-1 h-8 text-xs font-medium text-red-700 bg-red-50 rounded-md transition-colors dark:bg-red-950/40 dark:text-red-400"
- >
- {t("reject")}
- </button>
- <button
- type="button"
- onClick={() => onStatusChange(booking.id, "confirmed")}
- className="flex-1 h-8 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-md transition-colors dark:bg-emerald-950/40 dark:text-emerald-400"
- >
- {t("confirm")}
- </button>
- </div>
- ) : booking.status === "confirmed" ? (
- <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
- <button
- type="button"
- onClick={() => onStatusChange(booking.id, "completed")}
- className="flex-1 h-8 text-xs font-medium text-foreground bg-secondary rounded-md transition-colors hover:bg-muted"
- >
- {t("markComplete")}
- </button>
- </div>
- ) : null}
- </div>
+    {booking.notes ? (
+     <div className="text-sm text-muted-foreground px-3 py-2 bg-secondary rounded-md leading-relaxed">
+      {booking.notes}
+     </div>
+    ) : null}
+   </div>
+  </Modal>
  );
+}
+
+// ---------- Helpers ----------
+
+function findNearestOpenDay(
+ schedule: import("./types").ReservationSchedule,
+ fromIdx: number,
+): import("./types").ScheduleDay | null {
+ // Walk forwards through the week starting from fromIdx+1 (skip current day).
+ for (let step = 1; step <= 7; step++) {
+  const idx = (fromIdx + step) % 7;
+  const d = schedule[idx];
+  if (d && !d.closed) return d;
+ }
+ return null;
+}
+
+function parseLooseMinutes(hhmm: string): number {
+ const [h, m] = hhmm.split(":").map(Number);
+ return h * 60 + (m || 0);
+}
+
+function parseHour(hhmm: string): number {
+ const [h] = hhmm.split(":").map(Number);
+ return Math.max(0, Math.min(24, h));
+}
+
+function parseHourCeil(hhmm: string): number {
+ const [h, m] = hhmm.split(":").map(Number);
+ return Math.max(0, Math.min(24, h + (m > 0 ? 1 : 0)));
+}
+
+function todayMidnight() {
+ const d = new Date();
+ d.setHours(0, 0, 0, 0);
+ return d;
+}
+
+function capitalize(s: string) {
+ return s.charAt(0).toUpperCase() + s.slice(1);
 }

@@ -316,7 +316,22 @@
       "statusCompleted": "Concluída",
       "markComplete": "Concluir",
       "showPast": "Mostrar reservas anteriores ({count})",
-      "hidePast": "Ocultar reservas anteriores"
+      "hidePast": "Ocultar reservas anteriores",
+      "viewMonth": "Mês",
+      "viewDay": "Dia",
+      "prev": "Anterior",
+      "next": "Seguinte",
+      "noBookingsHere": "Sem reservas aqui.",
+      "plusMore": "+{count} mais",
+      "tableColumn": "Mesa",
+      "bookingDetailsTitle": "Detalhes da reserva",
+      "disabledTitle": "As reservas estão desativadas",
+      "disabledBody": "Ative as reservas nas definições para começar a recebê-las.",
+      "disabledCta": "Ir para definições",
+      "noTablesTitle": "Sem mesas ainda",
+      "noTablesBody": "Adicione mesas nas definições antes de aceitar reservas.",
+      "noTablesCta": "Adicionar mesas",
+      "dayClosedBanner": "O restaurante está fechado neste dia."
     },
     "tables": {
       "table": "Mesa",

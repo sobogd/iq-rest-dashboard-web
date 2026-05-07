@@ -316,7 +316,22 @@
       "statusCompleted": "Užbaigta",
       "markComplete": "Užbaigti",
       "showPast": "Rodyti ankstesnes rezervacijas ({count})",
-      "hidePast": "Slėpti ankstesnes rezervacijas"
+      "hidePast": "Slėpti ankstesnes rezervacijas",
+      "viewMonth": "Mėnuo",
+      "viewDay": "Diena",
+      "prev": "Atgal",
+      "next": "Pirmyn",
+      "noBookingsHere": "Rezervacijų čia nėra.",
+      "plusMore": "+{count} dar",
+      "tableColumn": "Stalas",
+      "bookingDetailsTitle": "Rezervacijos informacija",
+      "disabledTitle": "Rezervacijos išjungtos",
+      "disabledBody": "Įjunkite rezervacijas nustatymuose, kad pradėtumėte jas priimti.",
+      "disabledCta": "Eiti į nustatymus",
+      "noTablesTitle": "Stalų dar nėra",
+      "noTablesBody": "Pridėkite stalus nustatymuose prieš priimdami rezervacijas.",
+      "noTablesCta": "Pridėti stalus",
+      "dayClosedBanner": "Restoranas šią dieną uždarytas."
     },
     "tables": {
       "table": "Stalas",

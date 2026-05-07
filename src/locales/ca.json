@@ -316,7 +316,22 @@
       "statusCompleted": "Completada",
       "markComplete": "Completar",
       "showPast": "Mostrar reserves passades ({count})",
-      "hidePast": "Amagar reserves passades"
+      "hidePast": "Amagar reserves passades",
+      "viewMonth": "Mes",
+      "viewDay": "Dia",
+      "prev": "Anterior",
+      "next": "Següent",
+      "noBookingsHere": "No hi ha reserves aquí.",
+      "plusMore": "+{count} més",
+      "tableColumn": "Taula",
+      "bookingDetailsTitle": "Detalls de la reserva",
+      "disabledTitle": "Reserves desactivades",
+      "disabledBody": "Activa les reserves a la configuració per començar a rebre-les.",
+      "disabledCta": "Anar a la configuració",
+      "noTablesTitle": "Encara no hi ha taules",
+      "noTablesBody": "Afegeix taules a la configuració abans d'acceptar reserves.",
+      "noTablesCta": "Afegir taules",
+      "dayClosedBanner": "El restaurant està tancat aquest dia."
     },
     "tables": {
       "table": "Taula",

@@ -316,7 +316,22 @@
       "statusCompleted": "Completata",
       "markComplete": "Completa",
       "showPast": "Mostra prenotazioni passate ({count})",
-      "hidePast": "Nascondi prenotazioni passate"
+      "hidePast": "Nascondi prenotazioni passate",
+      "viewMonth": "Mese",
+      "viewDay": "Giorno",
+      "prev": "Precedente",
+      "next": "Successivo",
+      "noBookingsHere": "Nessuna prenotazione qui.",
+      "plusMore": "+{count} altre",
+      "tableColumn": "Tavolo",
+      "bookingDetailsTitle": "Dettagli della prenotazione",
+      "disabledTitle": "Le prenotazioni sono disabilitate",
+      "disabledBody": "Abilita le prenotazioni nelle impostazioni per iniziare a riceverle.",
+      "disabledCta": "Vai alle impostazioni",
+      "noTablesTitle": "Nessun tavolo",
+      "noTablesBody": "Aggiungi i tuoi tavoli nelle impostazioni prima di accettare prenotazioni.",
+      "noTablesCta": "Aggiungi tavoli",
+      "dayClosedBanner": "Il ristorante è chiuso in questo giorno."
     },
     "tables": {
       "table": "Tavolo",
