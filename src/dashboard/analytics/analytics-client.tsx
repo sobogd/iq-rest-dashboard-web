@@ -281,12 +281,12 @@ function DayChart({ byDay, byDayPrev }: { byDay: Stats["byDay"]; byDayPrev: Stat
  <div className="h-32 flex items-end justify-center gap-1">
  <div
  className="bg-muted-foreground/50 rounded-sm w-[10px]"
- style={{ height: `${Math.max(hPrev, d.prevScans > 0 ? 2 : 0)}%` }}
+ style={{ height: `${Math.max(hPrev, 2)}%` }}
  title={`Prev ${d.prevDay ?? "—"}: ${d.prevScans}`}
  />
  <div
  className="bg-primary rounded-sm w-[10px]"
- style={{ height: `${Math.max(hCur, d.scans > 0 ? 2 : 0)}%` }}
+ style={{ height: `${Math.max(hCur, 2)}%` }}
  title={t("dayTooltip", { day: d.day, scans: d.scans, views: d.views })}
  />
  </div>
