@@ -568,7 +568,12 @@
       "pageLanguage": "Kielen valinta",
       "pageContacts": "Yhteystiedot",
       "pageMenu": "Menu",
-      "dayTooltip": "{day} · {scans} skannausta · {views} näyttöä"
+      "dayTooltip": "{day} · {scans} skannausta · {views} näyttöä",
+      "prevPeriod": "Edellinen jakso",
+      "currentPeriod": "Nykyinen jakso",
+      "pageReserve": "Varaukset",
+      "pageOrder": "Tilaukset",
+      "pageOther": "Muut"
     },
     "auth": {
       "title": "Luo menusi",

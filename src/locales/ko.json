@@ -568,7 +568,12 @@
       "pageLanguage": "언어 선택",
       "pageContacts": "연락처",
       "pageMenu": "메뉴",
-      "dayTooltip": "{day} · {scans} 스캔 · {views} 조회"
+      "dayTooltip": "{day} · {scans} 스캔 · {views} 조회",
+      "prevPeriod": "이전 기간",
+      "currentPeriod": "현재 기간",
+      "pageReserve": "예약",
+      "pageOrder": "주문",
+      "pageOther": "기타"
     },
     "auth": {
       "title": "메뉴 만들기",

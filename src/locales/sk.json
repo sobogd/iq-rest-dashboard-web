@@ -568,7 +568,12 @@
       "pageLanguage": "Výber jazyka",
       "pageContacts": "Kontakty",
       "pageMenu": "Menu",
-      "dayTooltip": "{day} · {scans} skenovaní · {views} zobrazení"
+      "dayTooltip": "{day} · {scans} skenovaní · {views} zobrazení",
+      "prevPeriod": "Predchádzajúce obdobie",
+      "currentPeriod": "Aktuálne obdobie",
+      "pageReserve": "Rezervácie",
+      "pageOrder": "Objednávky",
+      "pageOther": "Ostatné"
     },
     "auth": {
       "title": "Vytvorte si menu",

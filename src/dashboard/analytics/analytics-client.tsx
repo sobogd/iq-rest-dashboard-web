@@ -4,15 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { EmptyState, PageHeader } from "../_v2/ui";
+import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
 import { track } from "@/lib/dashboard-events";
 
 interface Stats {
  period: string;
  totalScans: number;
  totalViews: number;
- avgPagesPerSession: number;
- returningScans: number;
  byDay: { day: string; views: number; scans: number }[];
+ byDayPrev: { day: string; views: number; scans: number }[];
  byLanguage: { language: string; scans: number; views: number }[];
  byPage: { page: string; views: number; sessions: number }[];
  monthlyScans: number;
@@ -20,19 +20,41 @@ interface Stats {
  scanLimit: number | null;
 }
 
-const PERIODS: { id: string; labelKey: "periodToday" | "period7d" | "period30d" | "period90d" }[] = [
+const PERIODS: { id: string; labelKey: "periodToday" | "period7d" | "period30d" }[] = [
  { id: "today", labelKey: "periodToday" },
  { id: "7d", labelKey: "period7d" },
  { id: "30d", labelKey: "period30d" },
- { id: "90d", labelKey: "period90d" },
 ];
 
-const PAGE_LABEL_KEYS: Record<string, "pageHome" | "pageLanguage" | "pageContacts" | "pageMenu"> = {
+type PageCategory = "home" | "menu" | "reserve" | "order" | "contacts" | "language" | "other";
+
+const PAGE_CATEGORY_LABEL_KEY: Record<
+ PageCategory,
+ "pageHome" | "pageMenu" | "pageReserve" | "pageOrder" | "pageContacts" | "pageLanguage" | "pageOther"
+> = {
  home: "pageHome",
- language: "pageLanguage",
- contacts: "pageContacts",
  menu: "pageMenu",
+ reserve: "pageReserve",
+ order: "pageOrder",
+ contacts: "pageContacts",
+ language: "pageLanguage",
+ other: "pageOther",
 };
+
+// Path looks like `/<locale>/m/<slug>` or `/<locale>/m/<slug>/<sub>...`.
+// Bucket the URL by its sub-page so the chart shows logical sections, not
+// raw URLs.
+function categorizePage(path: string): PageCategory {
+ const m = path.match(/^\/[a-z]{2,3}\/m\/[^/?#]+(.*)$/i);
+ const suffix = (m?.[1] || "").replace(/[?#].*$/, "").replace(/\/+$/, "");
+ if (suffix === "" || suffix === "/") return "home";
+ if (suffix.startsWith("/menu")) return "menu";
+ if (suffix.startsWith("/reserve")) return "reserve";
+ if (suffix.startsWith("/order")) return "order";
+ if (suffix.startsWith("/contacts")) return "contacts";
+ if (suffix.startsWith("/language")) return "language";
+ return "other";
+}
 
 export function AnalyticsClient() {
  const t = useTranslations("dashboard.analyticsDashboard");
@@ -91,7 +113,7 @@ export function AnalyticsClient() {
  ) : (
  <div className="space-y-4">
  <KpiGrid stats={stats} />
- <DayChart byDay={stats.byDay} />
+ <DayChart byDay={stats.byDay} byDayPrev={stats.byDayPrev} />
  <LanguageBreakdown byLanguage={stats.byLanguage} />
  <PageBreakdown byPage={stats.byPage} />
  </div>
@@ -152,7 +174,7 @@ function PeriodDropdown({
  {open ? (
  <div
  role="listbox"
- className="absolute right-0 mt-1 z-20 min-w-[140px] bg-card border border-border rounded-lg shadow-lg py-1"
+ className="absolute right-0 mt-1 z-20 min-w-[180px] max-h-64 overflow-y-auto bg-card border border-border rounded-lg shadow-lg py-1"
  >
  {PERIODS.map((p) => {
  const isActive = p.id === period;
@@ -167,11 +189,11 @@ function PeriodDropdown({
  setOpen(false);
  }}
  className={
- "w-full text-left px-3 h-8 text-[12px] transition-colors " +
+ "w-full flex items-center justify-between gap-3 px-3 h-8 text-[12px] text-left transition-colors " +
  (isActive ? "text-foreground" : "text-muted-foreground")
  }
  >
- {t(p.labelKey)}
+ <span className="truncate">{t(p.labelKey)}</span>
  </button>
  );
  })}
@@ -186,11 +208,9 @@ function KpiGrid({ stats }: { stats: Stats }) {
  const items = [
  { labelKey: "scans" as const, value: stats.totalScans },
  { labelKey: "pageViews" as const, value: stats.totalViews },
- { labelKey: "pagesPerScan" as const, value: stats.avgPagesPerSession.toFixed(1) },
- { labelKey: "returning" as const, value: stats.returningScans },
  ];
  return (
- <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+ <div className="grid grid-cols-2 gap-2.5">
  {items.map((i) => (
  <div
  key={i.labelKey}
@@ -206,37 +226,123 @@ function KpiGrid({ stats }: { stats: Stats }) {
  );
 }
 
-function DayChart({ byDay }: { byDay: Stats["byDay"] }) {
+function DayChart({ byDay, byDayPrev }: { byDay: Stats["byDay"]; byDayPrev: Stats["byDayPrev"] }) {
  const t = useTranslations("dashboard.analyticsDashboard");
- if (byDay.length === 0) return null;
- const max = Math.max(...byDay.map((d) => d.scans), 1);
+ const containerRef = useRef<HTMLDivElement | null>(null);
+ const [labelStep, setLabelStep] = useState(1);
+
+ // Build dense daily series so missing days still render as zero columns and
+ // the previous-period bar lines up with the current bar by index.
+ const dense = denseDailySeries(byDay, byDayPrev);
+
+ // Adaptive label thinning: a horizontal date label like "01 May" needs
+ // ~38px to stay readable. If columns are narrower, snap step to nice values
+ // (1 → 2 → 3 → 5 → 7) so labels don't overlap on 30/90-day views.
+ useEffect(() => {
+ const el = containerRef.current;
+ if (!el || dense.length === 0) return;
+ const NICE_STEPS = [1, 2, 3, 5, 7, 10, 14];
+ const compute = () => {
+ // Use scrollWidth so the chart can scroll horizontally on narrow viewports
+ // and still show every label — clientWidth would be capped to the viewport
+ // and trigger label thinning even when the bars themselves fit.
+ const width = el.scrollWidth;
+ const colWidth = width / dense.length;
+ const minColForLabel = 30;
+ const raw = Math.max(1, Math.ceil(minColForLabel / Math.max(colWidth, 1)));
+ const next = NICE_STEPS.find((n) => n >= raw) ?? raw;
+ setLabelStep(next);
+ };
+ compute();
+ const ro = new ResizeObserver(compute);
+ ro.observe(el);
+ return () => ro.disconnect();
+ }, [dense.length]);
+
+ if (byDay.length === 0 && byDayPrev.length === 0) return null;
+ const max = Math.max(
+ ...dense.map((d) => Math.max(d.scans, d.prevScans)),
+ 1,
+ );
+ // Anchor the visible labels to the LAST column so the latest day is always
+ // shown, regardless of step.
+ const lastIdx = dense.length - 1;
  return (
  <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
  <div className="text-sm font-medium text-foreground mb-3">{t("scansPerDay")}</div>
- <div className="flex items-end gap-1 h-32">
- {byDay.map((d) => {
- const h = Math.round((d.scans / max) * 100);
+ <div className="overflow-x-auto -mx-4 md:-mx-5 px-4 md:px-5">
+ <div ref={containerRef} className="flex items-stretch gap-2">
+ {dense.map((d, i) => {
+ const hCur = Math.round((d.scans / max) * 100);
+ const hPrev = Math.round((d.prevScans / max) * 100);
+ const showLabel = (lastIdx - i) % labelStep === 0;
  return (
- <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+ <div key={d.day} className="flex-1 flex flex-col gap-1.5 min-w-[28px]">
+ <div className="h-32 flex items-end justify-center gap-1">
  <div
- className="w-full bg-primary/80 rounded-sm relative group"
- style={{ height: `${Math.max(h, 2)}%`, minHeight: "2px" }}
+ className="bg-muted-foreground/50 rounded-sm w-[10px]"
+ style={{ height: `${Math.max(hPrev, d.prevScans > 0 ? 2 : 0)}%` }}
+ title={`Prev ${d.prevDay ?? "—"}: ${d.prevScans}`}
+ />
+ <div
+ className="bg-primary rounded-sm w-[10px]"
+ style={{ height: `${Math.max(hCur, d.scans > 0 ? 2 : 0)}%` }}
  title={t("dayTooltip", { day: d.day, scans: d.scans, views: d.views })}
  />
- <div className="text-[9px] text-muted-foreground tabular-nums truncate w-full text-center">
- {formatDayShort(d.day)}
+ </div>
+ <div className="h-3 text-[9px] text-muted-foreground tabular-nums text-center truncate">
+ {showLabel ? formatDayShort(d.day) : null}
  </div>
  </div>
  );
  })}
  </div>
  </div>
+ <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+ <span className="inline-flex items-center gap-1.5">
+ <span className="inline-block w-2.5 h-2.5 rounded-sm bg-muted-foreground/50" />
+ {t("prevPeriod")}
+ </span>
+ <span className="inline-flex items-center gap-1.5">
+ <span className="inline-block w-2.5 h-2.5 rounded-sm bg-primary" />
+ {t("currentPeriod")}
+ </span>
+ </div>
+ </div>
  );
 }
 
+interface DenseDay {
+ day: string;
+ prevDay: string | null;
+ scans: number;
+ views: number;
+ prevScans: number;
+}
+
+function denseDailySeries(curr: Stats["byDay"], prev: Stats["byDayPrev"]): DenseDay[] {
+ // Pair by index: current i ↔ previous i. If current period has no rows
+ // (all days zero), fall back to prev length to still render columns.
+ const length = Math.max(curr.length, prev.length);
+ if (length === 0) return [];
+ const result: DenseDay[] = [];
+ for (let i = 0; i < length; i++) {
+ const c = curr[i];
+ const p = prev[i];
+ result.push({
+ day: c?.day ?? p?.day ?? String(i),
+ prevDay: p?.day ?? null,
+ scans: c?.scans ?? 0,
+ views: c?.views ?? 0,
+ prevScans: p?.scans ?? 0,
+ });
+ }
+ return result;
+}
+
 function formatDayShort(iso: string): string {
- const d = new Date(iso + "T00:00:00Z");
- return d.toLocaleDateString([], { day: "numeric", month: "short" });
+ const [, m, day] = iso.split("-");
+ return `${day}.${m}`;
 }
 
 function LanguageBreakdown({ byLanguage }: { byLanguage: Stats["byLanguage"] }) {
@@ -249,10 +355,12 @@ function LanguageBreakdown({ byLanguage }: { byLanguage: Stats["byLanguage"] }) 
  <div className="space-y-2">
  {byLanguage.map((l) => {
  const pct = Math.round((l.scans / max) * 100);
+ const meta = AVAILABLE_LANGUAGES.find((al) => al.code === l.language);
+ const label = meta?.label ?? l.language.toUpperCase();
  return (
  <div key={l.language} className="flex items-center gap-3">
- <div className="text-xs text-foreground uppercase tabular-nums w-8 shrink-0">
- {l.language}
+ <div className="text-xs text-foreground w-24 truncate shrink-0">
+ {label}
  </div>
  <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
  <div
@@ -274,17 +382,29 @@ function LanguageBreakdown({ byLanguage }: { byLanguage: Stats["byLanguage"] }) 
 function PageBreakdown({ byPage }: { byPage: Stats["byPage"] }) {
  const t = useTranslations("dashboard.analyticsDashboard");
  if (byPage.length === 0) return null;
- const max = Math.max(...byPage.map((p) => p.views), 1);
+
+ const grouped = new Map<PageCategory, { views: number; sessions: number }>();
+ for (const p of byPage) {
+ const cat = categorizePage(p.page);
+ const cur = grouped.get(cat) ?? { views: 0, sessions: 0 };
+ cur.views += p.views;
+ cur.sessions += p.sessions;
+ grouped.set(cat, cur);
+ }
+ const rows = [...grouped.entries()]
+ .map(([cat, agg]) => ({ cat, ...agg }))
+ .sort((a, b) => b.views - a.views);
+ const max = Math.max(...rows.map((r) => r.views), 1);
+
  return (
  <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
  <div className="text-sm font-medium text-foreground mb-3">{t("pages")}</div>
  <div className="space-y-2">
- {byPage.map((p) => {
- const pct = Math.round((p.views / max) * 100);
- const labelKey = PAGE_LABEL_KEYS[p.page];
- const label = labelKey ? t(labelKey) : p.page;
+ {rows.map((r) => {
+ const pct = Math.round((r.views / max) * 100);
+ const label = t(PAGE_CATEGORY_LABEL_KEY[r.cat]);
  return (
- <div key={p.page} className="flex items-center gap-3">
+ <div key={r.cat} className="flex items-center gap-3">
  <div className="text-xs text-foreground w-28 truncate shrink-0">
  {label}
  </div>
@@ -295,7 +415,7 @@ function PageBreakdown({ byPage }: { byPage: Stats["byPage"] }) {
  />
  </div>
  <div className="text-xs text-muted-foreground tabular-nums w-12 text-right shrink-0">
- {p.views}
+ {r.views}
  </div>
  </div>
  );

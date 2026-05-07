@@ -568,7 +568,12 @@
       "pageLanguage": "Odabir jezika",
       "pageContacts": "Kontakti",
       "pageMenu": "Jelovnik",
-      "dayTooltip": "{day} · {scans} skeniranja · {views} pregleda"
+      "dayTooltip": "{day} · {scans} skeniranja · {views} pregleda",
+      "prevPeriod": "Prethodno razdoblje",
+      "currentPeriod": "Trenutno razdoblje",
+      "pageReserve": "Rezervacije",
+      "pageOrder": "Narudžbe",
+      "pageOther": "Ostalo"
     },
     "auth": {
       "title": "Stvorite svoj jelovnik",

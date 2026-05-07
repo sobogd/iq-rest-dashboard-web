@@ -568,7 +568,12 @@
       "pageLanguage": "Språkväljare",
       "pageContacts": "Kontakter",
       "pageMenu": "Meny",
-      "dayTooltip": "{day} · {scans} skanningar · {views} visningar"
+      "dayTooltip": "{day} · {scans} skanningar · {views} visningar",
+      "prevPeriod": "Föregående period",
+      "currentPeriod": "Nuvarande period",
+      "pageReserve": "Bokningar",
+      "pageOrder": "Beställningar",
+      "pageOther": "Annat"
     },
     "auth": {
       "title": "Skapa din meny",

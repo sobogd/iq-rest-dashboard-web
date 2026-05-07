@@ -59,7 +59,10 @@ export function UsagePage() {
           </button>
         </div>
       </SubpageStickyBar>
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+      <div
+        className="max-w-2xl mx-auto pt-5 md:pt-4"
+        style={{ "--events-sticky-top": "calc(var(--topbar-h, 0px) + 56px)" } as React.CSSProperties}
+      >
         <UsageEventsTable date={date} onDateChange={setDate} onCountChange={setCount} />
       </div>
     </div>

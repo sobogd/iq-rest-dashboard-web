@@ -568,7 +568,12 @@
       "pageLanguage": "Izbor jezika",
       "pageContacts": "Kontakti",
       "pageMenu": "Meni",
-      "dayTooltip": "{day} · {scans} skeniranja · {views} pregleda"
+      "dayTooltip": "{day} · {scans} skeniranja · {views} pregleda",
+      "prevPeriod": "Претходни период",
+      "currentPeriod": "Тренутни период",
+      "pageReserve": "Резервације",
+      "pageOrder": "Поруџбине",
+      "pageOther": "Остало"
     },
     "auth": {
       "title": "Napravite svoj meni",

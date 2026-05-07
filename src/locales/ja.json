@@ -568,7 +568,12 @@
       "pageLanguage": "言語選択",
       "pageContacts": "連絡先",
       "pageMenu": "メニュー",
-      "dayTooltip": "{day} · {scans} スキャン · {views} 表示"
+      "dayTooltip": "{day} · {scans} スキャン · {views} 表示",
+      "prevPeriod": "前の期間",
+      "currentPeriod": "現在の期間",
+      "pageReserve": "予約",
+      "pageOrder": "注文",
+      "pageOther": "その他"
     },
     "auth": {
       "title": "メニューを作成",

@@ -568,7 +568,12 @@
       "pageLanguage": "Sprogvælger",
       "pageContacts": "Kontakter",
       "pageMenu": "Menu",
-      "dayTooltip": "{day} · {scans} scanninger · {views} visninger"
+      "dayTooltip": "{day} · {scans} scanninger · {views} visninger",
+      "prevPeriod": "Forrige periode",
+      "currentPeriod": "Nuværende periode",
+      "pageReserve": "Reservationer",
+      "pageOrder": "Bestillinger",
+      "pageOther": "Andet"
     },
     "auth": {
       "title": "Lav din menu",

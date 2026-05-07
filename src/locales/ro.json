@@ -568,7 +568,12 @@
       "pageLanguage": "Selector limbă",
       "pageContacts": "Contacte",
       "pageMenu": "Meniu",
-      "dayTooltip": "{day} · {scans} scanări · {views} vizualizări"
+      "dayTooltip": "{day} · {scans} scanări · {views} vizualizări",
+      "prevPeriod": "Perioada anterioară",
+      "currentPeriod": "Perioada curentă",
+      "pageReserve": "Rezervări",
+      "pageOrder": "Comenzi",
+      "pageOther": "Altele"
     },
     "auth": {
       "title": "Creează-ți meniul",

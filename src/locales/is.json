@@ -568,7 +568,12 @@
       "pageLanguage": "Tungumálaval",
       "pageContacts": "Tengiliðir",
       "pageMenu": "Matseðill",
-      "dayTooltip": "{day} · {scans} skannanir · {views} skoðanir"
+      "dayTooltip": "{day} · {scans} skannanir · {views} skoðanir",
+      "prevPeriod": "Fyrra tímabil",
+      "currentPeriod": "Núverandi tímabil",
+      "pageReserve": "Pantanir",
+      "pageOrder": "Pantanir",
+      "pageOther": "Annað"
     },
     "auth": {
       "title": "Búðu til matseðilinn þinn",

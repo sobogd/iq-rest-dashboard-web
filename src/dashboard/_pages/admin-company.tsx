@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import {
+  Activity,
+  ExternalLink,
+  LogIn,
+  Mail,
+  MessageSquare,
+  Trash2,
+  X as CloseIcon,
+} from "lucide-react";
 import { apiUrl } from "@/lib/api";
-import { ConfirmDialog, SubpageStickyBar } from "../_v2/ui";
+import { ConfirmDialog } from "../_v2/ui";
 import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
@@ -46,8 +55,6 @@ interface Company {
   categoriesCount: number;
   itemsCount: number;
   messagesCount: number;
-  monthlyViews: number;
-  scanLimit: number;
   users: User[];
   restaurants: Restaurant[];
   emailsSent: Record<string, string> | null;
@@ -75,7 +82,7 @@ interface Message {
   user: { email: string };
 }
 
-type Tab = "info" | "messages" | "events";
+type NestedView = "messages" | "events" | "email" | null;
 
 interface Props {
   companyId: string;
@@ -103,12 +110,8 @@ function formatDate(iso: string, withTime = false): string {
 
 export function AdminCompanyPage({ companyId, onClose }: Props) {
   const router = useDashboardRouter();
-  const goBack = () => {
-    if (onClose) onClose();
-    else router.push({ name: "settings.admin.companies" });
-  };
 
-  const [tab, setTab] = useState<Tab>("info");
+  const [nested, setNested] = useState<NestedView>(null);
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -173,18 +176,18 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   }, [companyId]);
 
   useEffect(() => {
-    if (tab === "messages" && messages.length === 0) {
+    if (nested === "messages" && messages.length === 0) {
       fetchMessages();
     }
-  }, [tab, messages.length, fetchMessages]);
+  }, [nested, messages.length, fetchMessages]);
 
   useEffect(() => {
-    if (tab !== "messages") return;
+    if (nested !== "messages") return;
     const id = setInterval(() => {
       fetchMessages(true);
     }, 15000);
     return () => clearInterval(id);
-  }, [tab, fetchMessages]);
+  }, [nested, fetchMessages]);
 
   useEffect(() => {
     const lastMsg = messages[messages.length - 1];
@@ -203,7 +206,8 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), {
         credentials: "include", method: "DELETE" });
       if (res.ok) {
-        router.push({ name: "settings.admin.companies" });
+        if (onClose) onClose();
+        else router.push({ name: "settings.admin.companies" });
       } else {
         const data = await res.json().catch(() => ({}));
         setAlert({ title: "Delete failed", message: data.error || "Could not delete company." });
@@ -319,12 +323,9 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
   if (loading && !company) {
     return (
-      <div>
-        <SubpageStickyBar onBack={() => goBack()} hideSave />
-        <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-          <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
-            Loading…
-          </div>
+      <div className="flex-1 overflow-y-auto p-5">
+        <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
+          Loading…
         </div>
       </div>
     );
@@ -332,28 +333,22 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
   if (error || !company) {
     return (
-      <div>
-        <SubpageStickyBar onBack={() => goBack()} hideSave />
-        <div className="max-w-2xl mx-auto pt-5 md:pt-4">
-          <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
-            {error || "Not found"}
-          </div>
+      <div className="flex-1 overflow-y-auto p-5">
+        <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
+          {error || "Not found"}
         </div>
       </div>
     );
   }
 
   const restaurant = company.restaurants[0];
+  const title = restaurant?.title || company.name || "No name";
 
   const companyRows: { label: string; value: string }[] = [
     { label: "Plan", value: `${company.plan}${company.subscriptionStatus === "ACTIVE" ? " (Active)" : ""}` },
     { label: "Created", value: formatDate(company.createdAt, true) },
     { label: "Categories", value: String(company.categoriesCount) },
     { label: "Items", value: String(company.itemsCount) },
-    {
-      label: "Monthly Views",
-      value: `${company.monthlyViews} / ${company.plan === "FREE" ? String(company.scanLimit) : "∞"}`,
-    },
     { label: "Restaurants", value: String(company.restaurants.length) },
   ];
 
@@ -378,52 +373,27 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   const menuLink = restaurant?.slug ? getMenuUrl(restaurant.slug) : null;
 
 
+  const ownerHandle = company.users[0]?.email.split("@")[0] ?? "";
+
   return (
-    <div className={tab === "messages" ? "flex flex-col h-[calc(100dvh-var(--topbar-h,0px)-116px)] md:h-[calc(100dvh-var(--topbar-h,0px)-56px)]" : ""}>
-      <SubpageStickyBar onBack={() => goBack()} hideSave>
-        <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
+    <>
+      {/* Header */}
+      <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
+        <h3 className="text-sm font-semibold text-foreground truncate">{title}</h3>
+        {onClose ? (
           <button
             type="button"
-            onClick={() => setTab("info")}
-            className={
-              "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
-              (tab === "info" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-            }
+            onClick={onClose}
+            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
+            title="Close"
           >
-            Info
+            <CloseIcon className="h-4 w-4" />
           </button>
-          <button
-            type="button"
-            onClick={() => setTab("messages")}
-            className={
-              "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
-              (tab === "messages" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-            }
-          >
-            Messages
-            {company.messagesCount > 0 ? (
-              <span className="ml-1 opacity-70">({company.messagesCount})</span>
-            ) : null}
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("events")}
-            className={
-              "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
-              (tab === "events" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-            }
-          >
-            Events
-          </button>
-        </div>
-      </SubpageStickyBar>
-      <div
-        className={
-          "max-w-2xl mx-auto w-full pt-5 md:pt-4 " +
-          (tab === "messages" ? "flex-1 flex flex-col min-h-0" : "")
-        }
-      >
-      {tab === "info" ? (
+        ) : null}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-5">
         <div className="space-y-4">
           {/* Company info */}
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
@@ -464,42 +434,177 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
               ))}
             </div>
           ) : null}
+        </div>
+      </div>
 
-          {/* Action buttons */}
-          <div className="space-y-2">
-            {menuLink ? (
+      {/* Footer — icon-only action row */}
+      <div className="shrink-0 px-5 py-3 border-t border-border flex items-center gap-2">
+        <FooterIconButton
+          title="Messages"
+          onClick={() => setNested("messages")}
+          badge={company.messagesCount}
+        >
+          <MessageSquare className="h-4 w-4" />
+        </FooterIconButton>
+
+        {menuLink ? (
+          <FooterIconButton title="View menu" onClick={() => setPreviewOpen(true)}>
+            <ExternalLink className="h-4 w-4" />
+          </FooterIconButton>
+        ) : null}
+
+        <FooterIconButton title="Events" onClick={() => setNested("events")}>
+          <Activity className="h-4 w-4" />
+        </FooterIconButton>
+
+        {company.users[0] ? (
+          <FooterIconButton
+            title={impersonating ? "Logging in…" : `Login as ${ownerHandle}`}
+            onClick={handleImpersonate}
+            disabled={impersonating}
+          >
+            <LogIn className="h-4 w-4" />
+          </FooterIconButton>
+        ) : null}
+
+        <FooterIconButton title="Send email" onClick={() => setNested("email")}>
+          <Mail className="h-4 w-4" />
+        </FooterIconButton>
+
+        <div className="ml-auto" />
+
+        <FooterIconButton
+          title="Delete company"
+          onClick={() => setConfirmDelete(true)}
+          variant="danger"
+        >
+          <Trash2 className="h-4 w-4" />
+        </FooterIconButton>
+      </div>
+
+      {nested === "messages" ? (
+        <div
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setNested(null)}
+        >
+          <div
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-foreground truncate">Messages</h3>
               <button
                 type="button"
-                onClick={() => setPreviewOpen(true)}
-                className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors flex items-center justify-center"
+                onClick={() => setNested(null)}
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
+                title="Close"
               >
-                View Menu
+                <CloseIcon className="h-4 w-4" />
               </button>
-            ) : null}
+            </div>
+            <div
+              ref={scrollRef}
+              className="overflow-y-auto p-4 space-y-3 flex-1 min-h-0"
+            >
+              {loadingMessages && messages.length === 0 ? (
+                <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4">
+                  Loading…
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4">
+                  No messages yet
+                </div>
+              ) : (
+                messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)
+              )}
+            </div>
 
-            {company.users[0] ? (
+            <div className="shrink-0 flex items-start gap-2 p-3 border-t border-border">
+              <textarea
+                ref={taRef}
+                value={newMessage}
+                onChange={(e) => {
+                  setNewMessage(e.target.value);
+                  autoresize(e.currentTarget);
+                }}
+                onKeyDown={handleKey}
+                placeholder="Type a message..."
+                rows={1}
+                className="flex-1 h-[40px] min-h-[40px] max-h-[70px] px-3 py-2 text-sm leading-5 text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors resize-none box-border"
+              />
               <button
                 type="button"
-                onClick={handleImpersonate}
-                disabled={impersonating}
-                className="w-full h-10 px-4 text-sm font-medium text-foreground bg-card border border-border rounded-lg transition-colors disabled:opacity-60"
+                onClick={sendMessage}
+                disabled={!newMessage.trim() || sending}
+                className="shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
               >
-                {impersonating ? "Logging in…" : `Login as ${company.users[0].email.split("@")[0]}`}
+                {sending ? (
+                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <SendIcon size={14} />
+                )}
+                Send
               </button>
-            ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
 
-            {/* Email templates */}
-            <div className="bg-card border border-border rounded-2xl p-4 space-y-3">
-              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Email templates
-              </div>
+      {nested === "events" ? (
+        <div
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setNested(null)}
+        >
+          <div
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-foreground truncate">Events</h3>
+              <button
+                type="button"
+                onClick={() => setNested(null)}
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
+                title="Close"
+              >
+                <CloseIcon className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <UsageEventsTable companyId={companyId} />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {nested === "email" ? (
+        <div
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setNested(null)}
+        >
+          <div
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-foreground truncate">Send email</h3>
+              <button
+                type="button"
+                onClick={() => setNested(null)}
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
+                title="Close"
+              >
+                <CloseIcon className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {EMAIL_TEMPLATES.map((tpl) => {
                 const sentAt = company.emailsSent?.[tpl.id];
                 const sentLabel = sentAt
                   ? `Sent ${new Date(sentAt).toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}`
                   : null;
                 return (
-                  <div key={tpl.id} className="flex items-center justify-between gap-3">
+                  <div key={tpl.id} className="flex items-center justify-between gap-3 bg-card border border-border rounded-xl p-3">
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium text-foreground">{tpl.label}</div>
                       <div className="text-xs text-muted-foreground leading-snug mt-0.5">{tpl.description}</div>
@@ -519,66 +624,9 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
                 );
               })}
             </div>
-
-            <button
-              type="button"
-              onClick={() => setConfirmDelete(true)}
-              className="w-full h-10 px-4 text-sm font-medium text-white bg-red-600 rounded-lg transition-colors"
-            >
-              Delete company
-            </button>
           </div>
         </div>
-      ) : tab === "events" ? (
-        <UsageEventsTable companyId={companyId} />
-      ) : (
-        <>
-          <div
-            ref={scrollRef}
-            className="bg-card border border-border rounded-2xl overflow-y-auto p-4 space-y-3 flex-1 min-h-0"
-          >
-            {loadingMessages && messages.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4">
-                Loading…
-              </div>
-            ) : messages.length === 0 ? (
-              <div className="h-full flex items-center justify-center text-sm text-muted-foreground text-center px-4">
-                No messages yet
-              </div>
-            ) : (
-              messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)
-            )}
-          </div>
-
-          <div className="mt-3 shrink-0 flex items-start gap-2 h-[70px]">
-            <textarea
-              ref={taRef}
-              value={newMessage}
-              onChange={(e) => {
-                setNewMessage(e.target.value);
-                autoresize(e.currentTarget);
-              }}
-              onKeyDown={handleKey}
-              placeholder="Type a message..."
-              rows={1}
-              className="flex-1 h-[40px] min-h-[40px] max-h-[70px] px-3 py-2 text-sm leading-5 text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none transition-colors resize-none box-border"
-            />
-            <button
-              type="button"
-              onClick={sendMessage}
-              disabled={!newMessage.trim() || sending}
-              className="shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
-            >
-              {sending ? (
-                <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              ) : (
-                <SendIcon size={14} />
-              )}
-              Send message
-            </button>
-          </div>
-        </>
-      )}
+      ) : null}
 
       <ConfirmDialog
         open={confirmDelete}
@@ -617,8 +665,40 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       {menuLink ? (
         <MenuPreviewModal menuUrl={menuLink} open={previewOpen} onOpenChange={setPreviewOpen} />
       ) : null}
-      </div>
-    </div>
+    </>
+  );
+}
+
+function FooterIconButton({
+  title,
+  onClick,
+  disabled,
+  badge,
+  variant = "default",
+  children,
+}: {
+  title: string;
+  onClick: () => void;
+  disabled?: boolean;
+  badge?: number;
+  variant?: "default" | "danger";
+  children: React.ReactNode;
+}) {
+  const base =
+    "relative h-9 w-9 inline-flex items-center justify-center rounded-md transition-colors disabled:opacity-50";
+  const cls =
+    variant === "danger"
+      ? `${base} bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40`
+      : `${base} bg-secondary text-muted-foreground hover:text-foreground`;
+  return (
+    <button type="button" onClick={onClick} disabled={disabled} title={title} className={cls}>
+      {children}
+      {badge && badge > 0 ? (
+        <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-semibold tabular-nums">
+          {badge}
+        </span>
+      ) : null}
+    </button>
   );
 }
 

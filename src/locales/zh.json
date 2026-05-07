@@ -568,7 +568,12 @@
       "pageLanguage": "语言选择",
       "pageContacts": "联系方式",
       "pageMenu": "菜单",
-      "dayTooltip": "{day} · {scans} 次扫描 · {views} 次浏览"
+      "dayTooltip": "{day} · {scans} 次扫描 · {views} 次浏览",
+      "prevPeriod": "上一周期",
+      "currentPeriod": "当前周期",
+      "pageReserve": "预订",
+      "pageOrder": "订单",
+      "pageOther": "其他"
     },
     "auth": {
       "title": "创建您的菜单",

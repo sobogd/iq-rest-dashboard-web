@@ -568,7 +568,12 @@
       "pageLanguage": "Roghnóir teanga",
       "pageContacts": "Teagmhálacha",
       "pageMenu": "Biachlár",
-      "dayTooltip": "{day} · {scans} scananna · {views} amhairc"
+      "dayTooltip": "{day} · {scans} scananna · {views} amhairc",
+      "prevPeriod": "Tréimhse roimhe",
+      "currentPeriod": "Tréimhse reatha",
+      "pageReserve": "Áirithintí",
+      "pageOrder": "Orduithe",
+      "pageOther": "Eile"
     },
     "auth": {
       "title": "Cruthaigh do bhiachlár",

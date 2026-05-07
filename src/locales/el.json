@@ -568,7 +568,12 @@
       "pageLanguage": "Επιλογή γλώσσας",
       "pageContacts": "Επικοινωνία",
       "pageMenu": "Μενού",
-      "dayTooltip": "{day} · {scans} σαρώσεις · {views} προβολές"
+      "dayTooltip": "{day} · {scans} σαρώσεις · {views} προβολές",
+      "prevPeriod": "Προηγούμενη περίοδος",
+      "currentPeriod": "Τρέχουσα περίοδος",
+      "pageReserve": "Κρατήσεις",
+      "pageOrder": "Παραγγελίες",
+      "pageOther": "Άλλα"
     },
     "auth": {
       "title": "Δημιουργήστε το μενού σας",

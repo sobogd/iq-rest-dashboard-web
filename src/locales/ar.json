@@ -568,7 +568,12 @@
       "pageLanguage": "اختيار اللغة",
       "pageContacts": "جهات الاتصال",
       "pageMenu": "القائمة",
-      "dayTooltip": "{day} · {scans} مسح · {views} مشاهدة"
+      "dayTooltip": "{day} · {scans} مسح · {views} مشاهدة",
+      "prevPeriod": "الفترة السابقة",
+      "currentPeriod": "الفترة الحالية",
+      "pageReserve": "الحجوزات",
+      "pageOrder": "الطلبات",
+      "pageOther": "أخرى"
     },
     "auth": {
       "title": "أنشئ قائمتك",

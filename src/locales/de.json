@@ -568,7 +568,12 @@
       "pageLanguage": "Sprachauswahl",
       "pageContacts": "Kontakt",
       "pageMenu": "Speisekarte",
-      "dayTooltip": "{day} · {scans} Scans · {views} Aufrufe"
+      "dayTooltip": "{day} · {scans} Scans · {views} Aufrufe",
+      "prevPeriod": "Vorperiode",
+      "currentPeriod": "Aktueller Zeitraum",
+      "pageReserve": "Reservierungen",
+      "pageOrder": "Bestellungen",
+      "pageOther": "Sonstiges"
     },
     "auth": {
       "title": "Erstellen Sie Ihre Karte",

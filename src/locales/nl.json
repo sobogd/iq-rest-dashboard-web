@@ -568,7 +568,12 @@
       "pageLanguage": "Taalkeuze",
       "pageContacts": "Contacten",
       "pageMenu": "Menu",
-      "dayTooltip": "{day} · {scans} scans · {views} weergaven"
+      "dayTooltip": "{day} · {scans} scans · {views} weergaven",
+      "prevPeriod": "Vorige periode",
+      "currentPeriod": "Huidige periode",
+      "pageReserve": "Reserveringen",
+      "pageOrder": "Bestellingen",
+      "pageOther": "Overig"
     },
     "auth": {
       "title": "Maak uw menu",

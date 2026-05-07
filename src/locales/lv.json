@@ -568,7 +568,12 @@
       "pageLanguage": "Valodas izvēlne",
       "pageContacts": "Kontakti",
       "pageMenu": "Ēdienkarte",
-      "dayTooltip": "{day} · {scans} skenējumi · {views} skatījumi"
+      "dayTooltip": "{day} · {scans} skenējumi · {views} skatījumi",
+      "prevPeriod": "Iepriekšējais periods",
+      "currentPeriod": "Pašreizējais periods",
+      "pageReserve": "Rezervācijas",
+      "pageOrder": "Pasūtījumi",
+      "pageOther": "Citi"
     },
     "auth": {
       "title": "Izveidojiet savu ēdienkarti",

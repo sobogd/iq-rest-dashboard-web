@@ -568,7 +568,12 @@
       "pageLanguage": "Dil seçici",
       "pageContacts": "İletişim",
       "pageMenu": "Menü",
-      "dayTooltip": "{day} · {scans} tarama · {views} görüntüleme"
+      "dayTooltip": "{day} · {scans} tarama · {views} görüntüleme",
+      "prevPeriod": "Önceki dönem",
+      "currentPeriod": "Mevcut dönem",
+      "pageReserve": "Rezervasyonlar",
+      "pageOrder": "Siparişler",
+      "pageOther": "Diğer"
     },
     "auth": {
       "title": "Menünüzü oluşturun",

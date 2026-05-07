@@ -568,7 +568,12 @@
       "pageLanguage": "Keelevalik",
       "pageContacts": "Kontaktid",
       "pageMenu": "Menüü",
-      "dayTooltip": "{day} · {scans} skannimist · {views} vaatamist"
+      "dayTooltip": "{day} · {scans} skannimist · {views} vaatamist",
+      "prevPeriod": "Eelmine periood",
+      "currentPeriod": "Praegune periood",
+      "pageReserve": "Broneeringud",
+      "pageOrder": "Tellimused",
+      "pageOther": "Muud"
     },
     "auth": {
       "title": "Loo oma menüü",

@@ -568,7 +568,12 @@
       "pageLanguage": "Selector de idioma",
       "pageContacts": "Contactos",
       "pageMenu": "Menú",
-      "dayTooltip": "{day} · {scans} escaneos · {views} vistas"
+      "dayTooltip": "{day} · {scans} escaneos · {views} vistas",
+      "prevPeriod": "Período anterior",
+      "currentPeriod": "Período actual",
+      "pageReserve": "Reservas",
+      "pageOrder": "Pedidos",
+      "pageOther": "Otros"
     },
     "auth": {
       "title": "Crea tu menú",

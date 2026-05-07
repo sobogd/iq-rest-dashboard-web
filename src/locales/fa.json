@@ -568,7 +568,12 @@
       "pageLanguage": "انتخاب زبان",
       "pageContacts": "تماس",
       "pageMenu": "منو",
-      "dayTooltip": "{day} · {scans} اسکن · {views} بازدید"
+      "dayTooltip": "{day} · {scans} اسکن · {views} بازدید",
+      "prevPeriod": "دوره قبل",
+      "currentPeriod": "دوره فعلی",
+      "pageReserve": "رزروها",
+      "pageOrder": "سفارش‌ها",
+      "pageOther": "سایر"
     },
     "auth": {
       "title": "منوی خود را بسازید",

@@ -568,7 +568,12 @@
       "pageLanguage": "Språkvelger",
       "pageContacts": "Kontakter",
       "pageMenu": "Meny",
-      "dayTooltip": "{day} · {scans} skanninger · {views} visninger"
+      "dayTooltip": "{day} · {scans} skanninger · {views} visninger",
+      "prevPeriod": "Forrige periode",
+      "currentPeriod": "Nåværende periode",
+      "pageReserve": "Reservasjoner",
+      "pageOrder": "Bestillinger",
+      "pageOther": "Annet"
     },
     "auth": {
       "title": "Lag menyen din",

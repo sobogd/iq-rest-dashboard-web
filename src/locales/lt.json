@@ -568,7 +568,12 @@
       "pageLanguage": "Kalbos pasirinkimas",
       "pageContacts": "Kontaktai",
       "pageMenu": "Meniu",
-      "dayTooltip": "{day} · {scans} skenavimai · {views} peržiūros"
+      "dayTooltip": "{day} · {scans} skenavimai · {views} peržiūros",
+      "prevPeriod": "Ankstesnis laikotarpis",
+      "currentPeriod": "Dabartinis laikotarpis",
+      "pageReserve": "Rezervacijos",
+      "pageOrder": "Užsakymai",
+      "pageOther": "Kita"
     },
     "auth": {
       "title": "Sukurkite savo meniu",

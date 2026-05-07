@@ -248,7 +248,10 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 flex-wrap">
+      <div
+        className="sticky z-10 bg-background py-2 flex items-center gap-2 flex-wrap"
+        style={{ top: "var(--events-sticky-top, 0px)" }}
+      >
         {/* Date stepper — three separate blocks; hidden when date is controlled
             from outside (parent puts the stepper in its own header). */}
         {!dateControlled && (

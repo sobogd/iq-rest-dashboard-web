@@ -568,7 +568,12 @@
       "pageLanguage": "Вибір мови",
       "pageContacts": "Контакти",
       "pageMenu": "Меню",
-      "dayTooltip": "{day} · {scans} сканів · {views} переглядів"
+      "dayTooltip": "{day} · {scans} сканів · {views} переглядів",
+      "prevPeriod": "Попередній період",
+      "currentPeriod": "Поточний період",
+      "pageReserve": "Резервації",
+      "pageOrder": "Замовлення",
+      "pageOther": "Інше"
     },
     "auth": {
       "title": "Створіть своє меню",

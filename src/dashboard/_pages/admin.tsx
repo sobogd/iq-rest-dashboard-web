@@ -23,29 +23,21 @@ interface Company {
   scanLimit: number | null;
 }
 
-type Filter = "active" | "all";
-
 export function AdminPage() {
   const t = useTranslations("dashboard.admin");
   const router = useDashboardRouter();
 
-  const TABS: { value: Filter; labelKey: "active" | "all" }[] = [
-    { value: "all", labelKey: "all" },
-    { value: "active", labelKey: "active" },
-  ];
-
-  const [filter, setFilter] = useState<Filter>("all");
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
 
   const fetchCompanies = useCallback(
-    async (f: Filter, mode: "initial" | "refresh") => {
+    async (mode: "initial" | "refresh") => {
       if (mode === "initial") setLoading(true);
       else setRefreshing(true);
       try {
-        const res = await fetch(apiUrl(`/api/admin/companies?filter=${f}`), {
+        const res = await fetch(apiUrl(`/api/admin/companies`), {
           credentials: "include",
         });
         if (!res.ok) return;
@@ -60,12 +52,12 @@ export function AdminPage() {
   );
 
   useEffect(() => {
-    void fetchCompanies(filter, "initial");
-  }, [filter, fetchCompanies]);
+    void fetchCompanies("initial");
+  }, [fetchCompanies]);
 
   function refresh() {
     if (refreshing) return;
-    void fetchCompanies(filter, "refresh");
+    void fetchCompanies("refresh");
   }
 
   function openCompany(id: string) {
@@ -74,26 +66,7 @@ export function AdminPage() {
 
   return (
     <div>
-      <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
-        <div className="inline-flex items-center gap-0.5 p-0.5 bg-secondary rounded-lg">
-          {TABS.map((tab) => {
-            const isActive = filter === tab.value;
-            return (
-              <button
-                key={tab.value}
-                type="button"
-                onClick={() => setFilter(tab.value)}
-                className={
-                  "h-7 px-2.5 text-[11px] font-medium rounded-md transition-colors " +
-                  (isActive ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")
-                }
-              >
-                {t(tab.labelKey)}
-              </button>
-            );
-          })}
-        </div>
-      </SubpageStickyBar>
+      <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave />
       <div className="max-w-2xl mx-auto pt-5 md:pt-4">
         <div className="mb-5 flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -203,9 +176,12 @@ export function AdminPage() {
       </div>
 
       {modalCompanyId ? (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center overflow-y-auto p-4 sm:p-8">
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setModalCompanyId(null)}
+        >
           <div
-            className="w-full max-w-3xl bg-background border border-border rounded-2xl shadow-xl my-4"
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />

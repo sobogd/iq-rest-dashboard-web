@@ -568,7 +568,12 @@
       "pageLanguage": "Nyelvválasztó",
       "pageContacts": "Kapcsolat",
       "pageMenu": "Étlap",
-      "dayTooltip": "{day} · {scans} beolvasás · {views} megtekintés"
+      "dayTooltip": "{day} · {scans} beolvasás · {views} megtekintés",
+      "prevPeriod": "Előző időszak",
+      "currentPeriod": "Jelenlegi időszak",
+      "pageReserve": "Foglalások",
+      "pageOrder": "Rendelések",
+      "pageOther": "Egyéb"
     },
     "auth": {
       "title": "Hozd létre az étlapod",

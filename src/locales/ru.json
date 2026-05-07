@@ -568,7 +568,12 @@
       "pageLanguage": "Выбор языка",
       "pageContacts": "Контакты",
       "pageMenu": "Меню",
-      "dayTooltip": "{day} · {scans} сканов · {views} просмотров"
+      "dayTooltip": "{day} · {scans} сканов · {views} просмотров",
+      "prevPeriod": "Предыдущий период",
+      "currentPeriod": "Текущий период",
+      "pageReserve": "Резервации",
+      "pageOrder": "Заказы",
+      "pageOther": "Другое"
     },
     "auth": {
       "title": "Создайте своё меню",

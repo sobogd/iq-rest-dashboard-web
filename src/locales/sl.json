@@ -568,7 +568,12 @@
       "pageLanguage": "Izbirnik jezika",
       "pageContacts": "Kontakti",
       "pageMenu": "Meni",
-      "dayTooltip": "{day} · {scans} skeniranj · {views} ogledov"
+      "dayTooltip": "{day} · {scans} skeniranj · {views} ogledov",
+      "prevPeriod": "Prejšnje obdobje",
+      "currentPeriod": "Trenutno obdobje",
+      "pageReserve": "Rezervacije",
+      "pageOrder": "Naročila",
+      "pageOther": "Drugo"
     },
     "auth": {
       "title": "Ustvarite svoj meni",
