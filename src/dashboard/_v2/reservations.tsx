@@ -436,7 +436,14 @@ function MonthView({
        <div className={"text-xs tabular-nums " + (isToday ? "font-bold text-primary" : "text-foreground")}>
         {cellDate.getDate()}
        </div>
-       <div className="flex flex-col gap-0.5 min-h-0 overflow-hidden">
+       {/* Mobile: a single dot if any bookings — keeps the cell compact. */}
+       {cellItems.length > 0 ? (
+        <div className="sm:hidden flex-1 flex items-center justify-center">
+         <span className="block w-1.5 h-1.5 rounded-full bg-primary" />
+        </div>
+       ) : null}
+       {/* Desktop: list up to 3 booking pills + overflow counter. */}
+       <div className="hidden sm:flex flex-col gap-0.5 min-h-0 overflow-hidden">
         {cellItems.slice(0, 3).map((b) => (
          <span
           key={b.id}
