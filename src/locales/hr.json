@@ -332,7 +332,9 @@
       "noTablesBody": "Dodajte stolove u postavke prije prihvaćanja rezervacija.",
       "noTablesCta": "Dodaj stolove",
       "dayClosedBanner": "Restoran je ovog dana zatvoren.",
-      "pendingHeader": "Čekaju potvrdu ({count})"
+      "pendingHeader": "Čekaju potvrdu ({count})",
+      "pendingEmptyTitle": "Nema rezervacija na čekanju",
+      "pendingEmptyBody": "Ovdje će se prikazati nove rezervacije koje čekaju vašu potvrdu."
     },
     "tables": {
       "table": "Stol",

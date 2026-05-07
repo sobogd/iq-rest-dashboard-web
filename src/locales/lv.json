@@ -332,7 +332,9 @@
       "noTablesBody": "Pievienojiet galdus iestatījumos pirms rezervāciju pieņemšanas.",
       "noTablesCta": "Pievienot galdus",
       "dayClosedBanner": "Restorāns šajā dienā ir slēgts.",
-      "pendingHeader": "Gaida apstiprinājumu ({count})"
+      "pendingHeader": "Gaida apstiprinājumu ({count})",
+      "pendingEmptyTitle": "Nav neapstiprinātu rezervāciju",
+      "pendingEmptyBody": "Šeit parādīsies jaunas rezervācijas, kas gaida jūsu apstiprinājumu."
     },
     "tables": {
       "table": "Galds",

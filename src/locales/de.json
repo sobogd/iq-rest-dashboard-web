@@ -332,7 +332,9 @@
       "noTablesBody": "Füge Tische in den Einstellungen hinzu, bevor du Reservierungen annimmst.",
       "noTablesCta": "Tische hinzufügen",
       "dayClosedBanner": "Das Restaurant ist an diesem Tag geschlossen.",
-      "pendingHeader": "Warten auf Bestätigung ({count})"
+      "pendingHeader": "Warten auf Bestätigung ({count})",
+      "pendingEmptyTitle": "Keine ausstehenden Reservierungen",
+      "pendingEmptyBody": "Hier erscheinen neue Reservierungen, die auf deine Bestätigung warten."
     },
     "tables": {
       "table": "Tisch",

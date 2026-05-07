@@ -332,7 +332,9 @@
       "noTablesBody": "Adicione mesas nas definições antes de aceitar reservas.",
       "noTablesCta": "Adicionar mesas",
       "dayClosedBanner": "O restaurante está fechado neste dia.",
-      "pendingHeader": "À espera de confirmação ({count})"
+      "pendingHeader": "À espera de confirmação ({count})",
+      "pendingEmptyTitle": "Sem reservas pendentes",
+      "pendingEmptyBody": "As novas reservas à espera da sua confirmação aparecerão aqui."
     },
     "tables": {
       "table": "Mesa",

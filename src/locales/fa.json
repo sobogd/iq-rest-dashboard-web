@@ -332,7 +332,9 @@
       "noTablesBody": "قبل از پذیرش رزرو، میزها را در تنظیمات اضافه کنید.",
       "noTablesCta": "افزودن میز",
       "dayClosedBanner": "رستوران در این روز بسته است.",
-      "pendingHeader": "در انتظار تأیید ({count})"
+      "pendingHeader": "در انتظار تأیید ({count})",
+      "pendingEmptyTitle": "رزرو در انتظاری نیست",
+      "pendingEmptyBody": "رزروهای جدید در انتظار تأیید شما اینجا نمایش داده می‌شوند."
     },
     "tables": {
       "table": "میز",

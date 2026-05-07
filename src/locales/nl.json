@@ -332,7 +332,9 @@
       "noTablesBody": "Voeg tafels toe in de instellingen voordat je reserveringen accepteert.",
       "noTablesCta": "Tafels toevoegen",
       "dayClosedBanner": "Het restaurant is op deze dag gesloten.",
-      "pendingHeader": "Wacht op bevestiging ({count})"
+      "pendingHeader": "Wacht op bevestiging ({count})",
+      "pendingEmptyTitle": "Geen openstaande reserveringen",
+      "pendingEmptyBody": "Nieuwe reserveringen die op je bevestiging wachten verschijnen hier."
     },
     "tables": {
       "table": "Tafel",

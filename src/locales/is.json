@@ -332,7 +332,9 @@
       "noTablesBody": "Bættu við borðum í stillingum áður en þú samþykkir bókanir.",
       "noTablesCta": "Bæta við borðum",
       "dayClosedBanner": "Veitingastaðurinn er lokaður þennan dag.",
-      "pendingHeader": "Bíður staðfestingar ({count})"
+      "pendingHeader": "Bíður staðfestingar ({count})",
+      "pendingEmptyTitle": "Engar bókanir í bið",
+      "pendingEmptyBody": "Nýjar bókanir sem bíða staðfestingar þínar birtast hér."
     },
     "tables": {
       "table": "Borð",

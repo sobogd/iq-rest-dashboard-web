@@ -332,7 +332,9 @@
       "noTablesBody": "在接受预订前，请在设置中添加餐桌。",
       "noTablesCta": "添加餐桌",
       "dayClosedBanner": "本日餐厅休息。",
-      "pendingHeader": "等待确认 ({count})"
+      "pendingHeader": "等待确认 ({count})",
+      "pendingEmptyTitle": "暂无待确认预订",
+      "pendingEmptyBody": "等待您确认的新预订会显示在这里。"
     },
     "tables": {
       "table": "桌台",

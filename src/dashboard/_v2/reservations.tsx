@@ -305,10 +305,19 @@ function PendingList({
    .sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
  }, [bookings]);
 
- if (items.length === 0) return null;
+ if (items.length === 0) {
+  return (
+   <div className="w-full h-full min-h-[200px] flex items-center justify-center bg-card border border-border rounded-xl px-6 py-10 text-center">
+    <div>
+     <div className="text-sm font-medium text-foreground mb-1">{t("pendingEmptyTitle")}</div>
+     <div className="text-xs text-muted-foreground">{t("pendingEmptyBody")}</div>
+    </div>
+   </div>
+  );
+ }
 
  return (
-  <div>
+  <div className="w-full">
    <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">
     {t("pendingHeader", { count: items.length })}
    </div>

@@ -332,7 +332,9 @@
       "noTablesBody": "Přidejte stoly v nastavení, než začnete přijímat rezervace.",
       "noTablesCta": "Přidat stoly",
       "dayClosedBanner": "Restaurace je v tento den zavřená.",
-      "pendingHeader": "Čekající na potvrzení ({count})"
+      "pendingHeader": "Čekající na potvrzení ({count})",
+      "pendingEmptyTitle": "Žádné čekající rezervace",
+      "pendingEmptyBody": "Zde se objeví nové rezervace čekající na vaše potvrzení."
     },
     "tables": {
       "table": "Stůl",

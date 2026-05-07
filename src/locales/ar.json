@@ -332,7 +332,9 @@
       "noTablesBody": "أضف طاولاتك في الإعدادات قبل قبول الحجوزات.",
       "noTablesCta": "إضافة طاولات",
       "dayClosedBanner": "المطعم مغلق هذا اليوم.",
-      "pendingHeader": "بانتظار التأكيد ({count})"
+      "pendingHeader": "بانتظار التأكيد ({count})",
+      "pendingEmptyTitle": "لا حجوزات قيد الانتظار",
+      "pendingEmptyBody": "ستظهر هنا الحجوزات الجديدة التي تنتظر تأكيدك."
     },
     "tables": {
       "table": "طاولة",

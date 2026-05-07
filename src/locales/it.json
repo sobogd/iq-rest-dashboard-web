@@ -332,7 +332,9 @@
       "noTablesBody": "Aggiungi i tuoi tavoli nelle impostazioni prima di accettare prenotazioni.",
       "noTablesCta": "Aggiungi tavoli",
       "dayClosedBanner": "Il ristorante è chiuso in questo giorno.",
-      "pendingHeader": "In attesa di conferma ({count})"
+      "pendingHeader": "In attesa di conferma ({count})",
+      "pendingEmptyTitle": "Nessuna prenotazione in sospeso",
+      "pendingEmptyBody": "Le nuove prenotazioni in attesa di conferma appariranno qui."
     },
     "tables": {
       "table": "Tavolo",

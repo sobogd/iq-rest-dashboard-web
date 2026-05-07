@@ -332,7 +332,9 @@
       "noTablesBody": "Ajoutez vos tables dans les paramètres avant d'accepter des réservations.",
       "noTablesCta": "Ajouter des tables",
       "dayClosedBanner": "Le restaurant est fermé ce jour-là.",
-      "pendingHeader": "En attente de confirmation ({count})"
+      "pendingHeader": "En attente de confirmation ({count})",
+      "pendingEmptyTitle": "Aucune réservation en attente",
+      "pendingEmptyBody": "Les nouvelles réservations en attente de confirmation s'afficheront ici."
     },
     "tables": {
       "table": "Table",

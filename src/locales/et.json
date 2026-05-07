@@ -332,7 +332,9 @@
       "noTablesBody": "Lisa lauad seadetesse, enne kui võtad vastu broneeringuid.",
       "noTablesCta": "Lisa lauad",
       "dayClosedBanner": "Restoran on sel päeval suletud.",
-      "pendingHeader": "Ootavad kinnitust ({count})"
+      "pendingHeader": "Ootavad kinnitust ({count})",
+      "pendingEmptyTitle": "Pole ootavaid broneeringuid",
+      "pendingEmptyBody": "Siia ilmuvad uued broneeringud, mis ootavad teie kinnitust."
     },
     "tables": {
       "table": "Laud",

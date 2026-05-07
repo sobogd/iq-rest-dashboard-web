@@ -332,7 +332,9 @@
       "noTablesBody": "Adaugă mese în setări înainte de a accepta rezervări.",
       "noTablesCta": "Adaugă mese",
       "dayClosedBanner": "Restaurantul este închis în această zi.",
-      "pendingHeader": "În așteptare de confirmare ({count})"
+      "pendingHeader": "În așteptare de confirmare ({count})",
+      "pendingEmptyTitle": "Nicio rezervare în așteptare",
+      "pendingEmptyBody": "Aici vor apărea noile rezervări care așteaptă confirmarea ta."
     },
     "tables": {
       "table": "Masa",

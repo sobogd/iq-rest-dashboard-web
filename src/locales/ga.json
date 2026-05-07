@@ -332,7 +332,9 @@
       "noTablesBody": "Cuir boird isteach sna socruithe sular ghlac tú áirithintí.",
       "noTablesCta": "Cuir boird leis",
       "dayClosedBanner": "Tá an bhialann dúnta an lá seo.",
-      "pendingHeader": "Ag fanacht le deimhniú ({count})"
+      "pendingHeader": "Ag fanacht le deimhniú ({count})",
+      "pendingEmptyTitle": "Níl áirithintí ar feitheamh",
+      "pendingEmptyBody": "Taispeánfar áirithintí nua atá ag feitheamh le do dheimhniú anseo."
     },
     "tables": {
       "table": "Bord",
