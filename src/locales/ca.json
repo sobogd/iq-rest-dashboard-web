@@ -294,7 +294,8 @@
       "kitchenClearSub": "Els articles apareixeran aquí quan els clients comandin.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Encara no hi ha taules",
-      "noTablesSub": "Afegeix taules a la configuració per fer seguiment de comandes per taula."
+      "noTablesSub": "Afegeix taules a la configuració per fer seguiment de comandes per taula.",
+      "noTableLabel": "Sense taula"
     },
     "reservations": {
       "title": "Reserves",

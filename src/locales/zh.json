@@ -294,7 +294,8 @@
       "kitchenClearSub": "顾客下单时项目会出现在这里。",
       "elapsed": "{time} · {minutes} 分钟",
       "noTablesTitle": "尚无桌台",
-      "noTablesSub": "在设置中添加桌台以按桌台跟踪订单。"
+      "noTablesSub": "在设置中添加桌台以按桌台跟踪订单。",
+      "noTableLabel": "无桌位"
     },
     "reservations": {
       "title": "预订",

@@ -294,7 +294,8 @@
       "kitchenClearSub": "Misafirler sipariş verdikçe ürünler burada görünecek.",
       "elapsed": "{time} · {minutes} dk",
       "noTablesTitle": "Henüz masa yok",
-      "noTablesSub": "Masa başına siparişleri takip etmek için ayarlardan masa ekleyin."
+      "noTablesSub": "Masa başına siparişleri takip etmek için ayarlardan masa ekleyin.",
+      "noTableLabel": "Masasız"
     },
     "reservations": {
       "title": "Rezervasyonlar",

@@ -294,7 +294,8 @@
       "kitchenClearSub": "Los artículos aparecerán aquí cuando los clientes hagan pedidos.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Aún no hay mesas",
-      "noTablesSub": "Añade mesas en ajustes para empezar a rastrear pedidos por mesa."
+      "noTablesSub": "Añade mesas en ajustes para empezar a rastrear pedidos por mesa.",
+      "noTableLabel": "Sin mesa"
     },
     "reservations": {
       "title": "Reservas",

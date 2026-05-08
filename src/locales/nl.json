@@ -294,7 +294,8 @@
       "kitchenClearSub": "Items verschijnen hier zodra gasten bestellen.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Nog geen tafels",
-      "noTablesSub": "Voeg tafels toe in instellingen om bestellingen per tafel te volgen."
+      "noTablesSub": "Voeg tafels toe in instellingen om bestellingen per tafel te volgen.",
+      "noTableLabel": "Zonder tafel"
     },
     "reservations": {
       "title": "Reserveringen",

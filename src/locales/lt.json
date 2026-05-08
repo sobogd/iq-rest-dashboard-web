@@ -294,7 +294,8 @@
       "kitchenClearSub": "Prekės pasirodys čia, kai svečiai užsakys.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Dar nėra stalų",
-      "noTablesSub": "Pridėkite stalus nustatymuose, kad galėtumėte sekti užsakymus pagal stalą."
+      "noTablesSub": "Pridėkite stalus nustatymuose, kad galėtumėte sekti užsakymus pagal stalą.",
+      "noTableLabel": "Be stalo"
     },
     "reservations": {
       "title": "Rezervacijos",

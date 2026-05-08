@@ -294,7 +294,8 @@
       "kitchenClearSub": "Items will appear here as guests place orders.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "No tables yet",
-      "noTablesSub": "Add tables in settings to start tracking orders by table."
+      "noTablesSub": "Add tables in settings to start tracking orders by table.",
+      "noTableLabel": "No table"
     },
     "reservations": {
       "title": "Bookings",

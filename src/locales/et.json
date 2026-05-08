@@ -294,7 +294,8 @@
       "kitchenClearSub": "Esemed ilmuvad siia, kui külalised tellivad.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Laudu pole veel",
-      "noTablesSub": "Lisa seadetes laud, et jälgida tellimusi laua kaupa."
+      "noTablesSub": "Lisa seadetes laud, et jälgida tellimusi laua kaupa.",
+      "noTableLabel": "Lauata"
     },
     "reservations": {
       "title": "Broneeringud",

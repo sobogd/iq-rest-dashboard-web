@@ -294,7 +294,8 @@
       "kitchenClearSub": "Izdelki se bodo prikazali, ko gostje naročijo.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Še ni miz",
-      "noTablesSub": "Dodajte mize v nastavitvah za sledenje naročilom po mizi."
+      "noTablesSub": "Dodajte mize v nastavitvah za sledenje naročilom po mizi.",
+      "noTableLabel": "Brez mize"
     },
     "reservations": {
       "title": "Rezervacije",

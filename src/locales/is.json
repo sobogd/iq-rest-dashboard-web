@@ -294,7 +294,8 @@
       "kitchenClearSub": "Hlutir munu birtast hér þegar gestir panta.",
       "elapsed": "{time} · {minutes} mín",
       "noTablesTitle": "Engin borð enn",
-      "noTablesSub": "Bættu borðum við í stillingum til að rekja pantanir eftir borði."
+      "noTablesSub": "Bættu borðum við í stillingum til að rekja pantanir eftir borði.",
+      "noTableLabel": "Án borðs"
     },
     "reservations": {
       "title": "Bókanir",

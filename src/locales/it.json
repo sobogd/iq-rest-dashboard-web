@@ -294,7 +294,8 @@
       "kitchenClearSub": "Gli articoli appariranno qui quando gli ospiti ordineranno.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Nessun tavolo",
-      "noTablesSub": "Aggiungi tavoli nelle impostazioni per tracciare gli ordini per tavolo."
+      "noTablesSub": "Aggiungi tavoli nelle impostazioni per tracciare gli ordini per tavolo.",
+      "noTableLabel": "Senza tavolo"
     },
     "reservations": {
       "title": "Prenotazioni",

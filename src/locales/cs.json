@@ -294,7 +294,8 @@
       "kitchenClearSub": "Položky se zde objeví, jakmile hosté objednají.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Žádné stoly",
-      "noTablesSub": "Přidejte stoly v nastavení a sledujte objednávky podle stolů."
+      "noTablesSub": "Přidejte stoly v nastavení a sledujte objednávky podle stolů.",
+      "noTableLabel": "Bez stolu"
     },
     "reservations": {
       "title": "Rezervace",

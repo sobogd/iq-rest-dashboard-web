@@ -294,7 +294,8 @@
       "kitchenClearSub": "Articolele vor apărea aici când clienții comandă.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Nicio masă încă",
-      "noTablesSub": "Adaugă mese în setări pentru a urmări comenzile pe masă."
+      "noTablesSub": "Adaugă mese în setări pentru a urmări comenzile pe masă.",
+      "noTableLabel": "Fără masă"
     },
     "reservations": {
       "title": "Rezervări",

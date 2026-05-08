@@ -294,7 +294,8 @@
       "kitchenClearSub": "Varer dukker opp her når gjester bestiller.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Ingen bord ennå",
-      "noTablesSub": "Legg til bord i innstillinger for å spore bestillinger per bord."
+      "noTablesSub": "Legg til bord i innstillinger for å spore bestillinger per bord.",
+      "noTableLabel": "Uten bord"
     },
     "reservations": {
       "title": "Bookinger",

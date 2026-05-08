@@ -294,7 +294,8 @@
       "kitchenClearSub": "A tételek itt jelennek meg, ahogy a vendégek rendelnek.",
       "elapsed": "{time} · {minutes} perc",
       "noTablesTitle": "Még nincs asztal",
-      "noTablesSub": "Adj hozzá asztalokat a beállításokban a rendelések asztalonkénti követéséhez."
+      "noTablesSub": "Adj hozzá asztalokat a beállításokban a rendelések asztalonkénti követéséhez.",
+      "noTableLabel": "Asztal nélkül"
     },
     "reservations": {
       "title": "Foglalások",

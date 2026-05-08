@@ -294,7 +294,8 @@
       "kitchenClearSub": "손님이 주문하면 항목이 여기에 나타납니다.",
       "elapsed": "{time} · {minutes}분",
       "noTablesTitle": "아직 테이블이 없습니다",
-      "noTablesSub": "테이블별 주문을 추적하려면 설정에서 테이블을 추가하세요."
+      "noTablesSub": "테이블별 주문을 추적하려면 설정에서 테이블을 추가하세요.",
+      "noTableLabel": "테이블 없음"
     },
     "reservations": {
       "title": "예약",

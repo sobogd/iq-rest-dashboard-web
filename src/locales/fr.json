@@ -294,7 +294,8 @@
       "kitchenClearSub": "Les articles apparaîtront ici quand les clients commanderont.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Aucune table pour l'instant",
-      "noTablesSub": "Ajoutez des tables dans les paramètres pour suivre les commandes par table."
+      "noTablesSub": "Ajoutez des tables dans les paramètres pour suivre les commandes par table.",
+      "noTableLabel": "Sans table"
     },
     "reservations": {
       "title": "Réservations",

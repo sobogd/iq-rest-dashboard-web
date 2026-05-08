@@ -294,7 +294,8 @@
       "kitchenClearSub": "Tuotteet ilmestyvät tähän, kun vieraat tekevät tilauksia.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Ei pöytiä vielä",
-      "noTablesSub": "Lisää pöytiä asetuksissa seurataksesi tilauksia pöytäkohtaisesti."
+      "noTablesSub": "Lisää pöytiä asetuksissa seurataksesi tilauksia pöytäkohtaisesti.",
+      "noTableLabel": "Ei pöytää"
     },
     "reservations": {
       "title": "Varaukset",

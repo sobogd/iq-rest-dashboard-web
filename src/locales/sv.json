@@ -294,7 +294,8 @@
       "kitchenClearSub": "Artiklar dyker upp här när gäster beställer.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Inga bord än",
-      "noTablesSub": "Lägg till bord i inställningarna för att spåra beställningar per bord."
+      "noTablesSub": "Lägg till bord i inställningarna för att spåra beställningar per bord.",
+      "noTableLabel": "Utan bord"
     },
     "reservations": {
       "title": "Bokningar",

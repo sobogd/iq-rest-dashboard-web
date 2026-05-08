@@ -294,7 +294,8 @@
       "kitchenClearSub": "Positionen erscheinen hier, sobald Gäste bestellen.",
       "elapsed": "{time} · {minutes} Min.",
       "noTablesTitle": "Noch keine Tische",
-      "noTablesSub": "Fügen Sie in den Einstellungen Tische hinzu, um Bestellungen pro Tisch zu verfolgen."
+      "noTablesSub": "Fügen Sie in den Einstellungen Tische hinzu, um Bestellungen pro Tisch zu verfolgen.",
+      "noTableLabel": "Ohne Tisch"
     },
     "reservations": {
       "title": "Reservierungen",

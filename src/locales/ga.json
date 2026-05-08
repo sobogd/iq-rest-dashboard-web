@@ -294,7 +294,8 @@
       "kitchenClearSub": "Beidh míreanna le feiceáil anseo nuair a chuireann cuairteoirí orduithe.",
       "elapsed": "{time} · {minutes} nóim",
       "noTablesTitle": "Gan boird fós",
-      "noTablesSub": "Cuir boird leis i socruithe chun orduithe in aghaidh an bhoird a rianú."
+      "noTablesSub": "Cuir boird leis i socruithe chun orduithe in aghaidh an bhoird a rianú.",
+      "noTableLabel": "Gan bord"
     },
     "reservations": {
       "title": "Áirithintí",

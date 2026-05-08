@@ -294,7 +294,8 @@
       "kitchenClearSub": "Preces parādīsies šeit, kad viesi pasūtīs.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Vēl nav galdu",
-      "noTablesSub": "Pievienojiet galdus iestatījumos, lai izsekotu pasūtījumiem pa galdiem."
+      "noTablesSub": "Pievienojiet galdus iestatījumos, lai izsekotu pasūtījumiem pa galdiem.",
+      "noTableLabel": "Bez galda"
     },
     "reservations": {
       "title": "Rezervācijas",

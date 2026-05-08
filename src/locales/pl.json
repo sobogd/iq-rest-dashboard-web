@@ -294,7 +294,8 @@
       "kitchenClearSub": "Pozycje pojawią się tutaj, gdy goście zamówią.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Brak stolików",
-      "noTablesSub": "Dodaj stoliki w ustawieniach, aby śledzić zamówienia per stolik."
+      "noTablesSub": "Dodaj stoliki w ustawieniach, aby śledzić zamówienia per stolik.",
+      "noTableLabel": "Bez stolika"
     },
     "reservations": {
       "title": "Rezerwacje",

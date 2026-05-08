@@ -294,7 +294,8 @@
       "kitchenClearSub": "ستظهر العناصر هنا عندما يطلب الضيوف.",
       "elapsed": "{time} · {minutes} دقيقة",
       "noTablesTitle": "لا توجد طاولات بعد",
-      "noTablesSub": "أضف طاولات في الإعدادات لتتبع الطلبات حسب الطاولة."
+      "noTablesSub": "أضف طاولات في الإعدادات لتتبع الطلبات حسب الطاولة.",
+      "noTableLabel": "بدون طاولة"
     },
     "reservations": {
       "title": "الحجوزات",

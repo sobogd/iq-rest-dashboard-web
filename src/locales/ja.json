@@ -294,7 +294,8 @@
       "kitchenClearSub": "ゲストが注文するとここにアイテムが表示されます。",
       "elapsed": "{time} · {minutes} 分",
       "noTablesTitle": "テーブルがまだありません",
-      "noTablesSub": "テーブルごとの注文を追跡するには設定でテーブルを追加してください。"
+      "noTablesSub": "テーブルごとの注文を追跡するには設定でテーブルを追加してください。",
+      "noTableLabel": "テーブルなし"
     },
     "reservations": {
       "title": "予約",

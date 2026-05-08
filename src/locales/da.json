@@ -294,7 +294,8 @@
       "kitchenClearSub": "Varer dukker op her, når gæster bestiller.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Ingen borde endnu",
-      "noTablesSub": "Tilføj borde i indstillinger for at spore bestillinger pr. bord."
+      "noTablesSub": "Tilføj borde i indstillinger for at spore bestillinger pr. bord.",
+      "noTableLabel": "Uden bord"
     },
     "reservations": {
       "title": "Reservationer",

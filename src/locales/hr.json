@@ -294,7 +294,8 @@
       "kitchenClearSub": "Stavke će se pojaviti ovdje kad gosti naruče.",
       "elapsed": "{time} · {minutes} min",
       "noTablesTitle": "Još nema stolova",
-      "noTablesSub": "Dodajte stolove u postavkama za praćenje narudžbi po stolu."
+      "noTablesSub": "Dodajte stolove u postavkama za praćenje narudžbi po stolu.",
+      "noTableLabel": "Bez stola"
     },
     "reservations": {
       "title": "Rezervacije",
