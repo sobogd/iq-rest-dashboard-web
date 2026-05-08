@@ -28,8 +28,6 @@ export type View =
   | { name: "settings.admin.companies" }
   | { name: "settings.admin.company"; id: string }
   | { name: "settings.admin.usage" }
-  | { name: "settings.admin.google-ads" }
-  | { name: "settings.admin.google-ads-negatives" }
   | { name: "category.new" }
   | { name: "category.edit"; id: string }
   | { name: "item.new"; categoryId?: string }
