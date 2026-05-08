@@ -218,8 +218,17 @@ export function OrdersPage({
  const occupiedIds = new Set(
  activeOrders.map((o) => o.tableId).filter((x): x is string => !!x),
  );
- const selectedTable = selectedTableId ? tables.find((t) => t.id === selectedTableId) : null;
- const selectedTableOrders = selectedTableId
+ // Orders submitted without a table (e.g. takeaway / pickup, or guests who
+ // didn't pick a table on the public menu) need a place to live, since the
+ // table-grid view filters by tableId.
+ const noTableOrders = activeOrders.filter((o) => !o.tableId);
+ const NO_TABLE = "__no_table__";
+ const isNoTableView = selectedTableId === NO_TABLE;
+ const selectedTable =
+ selectedTableId && !isNoTableView ? tables.find((t) => t.id === selectedTableId) : null;
+ const selectedTableOrders = isNoTableView
+ ? noTableOrders
+ : selectedTableId
  ? activeOrders.filter((o) => o.tableId === selectedTableId)
  : [];
 
@@ -260,17 +269,42 @@ export function OrdersPage({
  <div className="orders-col-left">
  <FloorMap
  tables={tables}
- selectedId={selectedTableId}
+ selectedId={isNoTableView ? null : selectedTableId}
  onSelectTable={(id) => {
  track("dash_orders_click_table");
  setSelectedTableId(id);
  }}
  occupiedIds={occupiedIds}
  />
+ {noTableOrders.length > 0 ? (
+ <button
+ type="button"
+ onClick={() => {
+ track("dash_orders_click_no_table");
+ setSelectedTableId(NO_TABLE);
+ }}
+ className={
+ "w-full mt-2 h-11 rounded-xl border text-sm font-medium flex items-center justify-between px-3 transition-colors " +
+ (isNoTableView
+ ? "bg-foreground text-background border-foreground"
+ : "bg-card text-foreground border-border")
+ }
+ >
+ <span>{t("noTableLabel", { defaultValue: "No table" })}</span>
+ <span
+ className={
+ "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-semibold rounded-full " +
+ (isNoTableView ? "bg-background text-foreground" : "bg-foreground text-background")
+ }
+ >
+ {noTableOrders.length}
+ </span>
+ </button>
+ ) : null}
  </div>
 
  <div className="orders-col-right">
- {!selectedTable ? (
+ {!selectedTable && !isNoTableView ? (
  activeOrders.length === 0 ? (
  <EmptyState
  title={t("noActive")}
@@ -287,9 +321,11 @@ export function OrdersPage({
  <div className="flex items-baseline justify-between gap-3 mb-3">
  <div>
  <div className="text-sm font-medium text-foreground">
- {t("tableLabel", { number: selectedTable.number })}
- {selectedTable.name ? (
- <span className="text-muted-foreground font-normal"> · {selectedTable.name}</span>
+ {isNoTableView
+ ? t("noTableLabel", { defaultValue: "No table" })
+ : t("tableLabel", { number: selectedTable!.number })}
+ {!isNoTableView && selectedTable!.name ? (
+ <span className="text-muted-foreground font-normal"> · {selectedTable!.name}</span>
  ) : null}
  </div>
  <div className="text-xs text-muted-foreground mt-0.5">
@@ -320,9 +356,10 @@ export function OrdersPage({
  ) : null}
  </div>
 
+ {!isNoTableView ? (
  <button
  type="button"
- onClick={() => startOrderForTable(selectedTable.id)}
+ onClick={() => startOrderForTable(selectedTable!.id)}
  disabled={creating}
  className="w-full h-11 mt-3 text-sm font-medium text-muted-foreground border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
  >
@@ -333,6 +370,7 @@ export function OrdersPage({
  )}
  {selectedTableOrders.length === 0 ? t("startOrder") : t("newOrder")}
  </button>
+ ) : null}
  </div>
  )}
  </div>
