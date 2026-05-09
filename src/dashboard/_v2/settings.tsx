@@ -606,9 +606,6 @@ export function GeneralSettingsPage({
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <label htmlFor="gen-slug" className="block text-sm font-medium text-foreground mb-2.5">{tg("menuLinkLabel")}</label>
  <div className="relative flex items-center w-full h-10 bg-card border border-input rounded-lg overflow-hidden">
- <span className="pl-3 text-sm text-muted-foreground whitespace-nowrap select-none">
- {getMenuUrlPrefix()}
- </span>
  <input
  id="gen-slug"
  type="text"
@@ -616,8 +613,11 @@ export function GeneralSettingsPage({
  onChange={(e) => setDraft((d) => ({ ...d, slug: slugify(e.target.value) }))}
  onFocus={() => track("dash_settings_general_focus_link")}
  placeholder={tg("slugPlaceholder")}
- className="flex-1 min-w-0 h-full px-0 text-sm text-foreground bg-transparent border-0 placeholder:text-muted-foreground focus:outline-none pr-10"
+ className="flex-1 min-w-0 h-full pl-3 text-sm text-foreground bg-transparent border-0 placeholder:text-muted-foreground focus:outline-none"
  />
+ <span className="pr-12 text-sm text-muted-foreground whitespace-nowrap select-none">
+ {getMenuUrlPrefix()}
+ </span>
  <button
  type="button"
  onClick={copyUrl}

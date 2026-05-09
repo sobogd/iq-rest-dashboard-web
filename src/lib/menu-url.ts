@@ -8,18 +8,20 @@ export function getAppOrigin(): string {
   return env.VITE_APP_URL || env.NEXT_PUBLIC_APP_URL || window.location.origin;
 }
 
-/** Origin of the public QR menu site (separate Next.js app). Defaults to dashboard origin. */
-export function getPublicMenuOrigin(): string {
+/** Apex domain of the public QR menu (e.g. "iq-rest.com"). Each restaurant
+ *  is served from `<slug>.<apex>` by the new public-menu SPA. */
+function getPublicMenuApex(): string {
   const env = viteEnv();
-  return env.VITE_PUBLIC_MENU_URL || getAppOrigin();
+  // VITE_PUBLIC_MENU_APEX overrides for local/dev. Falls back to iq-rest.com.
+  return env.VITE_PUBLIC_MENU_APEX || "iq-rest.com";
 }
 
+/** Full URL of a restaurant's public menu — `https://<slug>.iq-rest.com`. */
 export function getMenuUrl(slug: string): string {
-  return getPublicMenuOrigin() + "/m/" + slug;
+  return "https://" + slug + "." + getPublicMenuApex();
 }
 
-/** Display-friendly prefix without scheme: "iq-rest.com/m/" */
+/** Display-friendly suffix shown after the slug input in settings, e.g. ".iq-rest.com" */
 export function getMenuUrlPrefix(): string {
-  const origin = getPublicMenuOrigin().replace(/^https?:\/\//, "");
-  return origin + "/m/";
+  return "." + getPublicMenuApex();
 }
