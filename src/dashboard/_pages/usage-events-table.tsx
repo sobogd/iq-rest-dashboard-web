@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, UserCheck, UserX } from "lucide-react";
+import { Trash2, Building2, Check, UserCheck, UserX, Filter } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 
@@ -85,8 +85,12 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
   const [bulkBusy, setBulkBusy] = useState(false);
+  const [filterFrom, setFilterFrom] = useState<string>("");
+  const [filterTo, setFilterTo] = useState<string>("");
+  const [filterOpen, setFilterOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
+  const filterActive = Boolean(filterFrom || filterTo);
 
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
@@ -94,6 +98,8 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       if (companyId) qs.set("companyId", companyId);
       else qs.set("scope", scope);
       if (cursorParam) qs.set("cursor", cursorParam);
+      if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
+      if (filterTo) qs.set("to", new Date(filterTo).toISOString());
       const res = await fetch(apiUrl(`/api/admin/usage/timeline?${qs.toString()}`), {
         credentials: "include",
       });
@@ -105,7 +111,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         total?: number;
       };
     },
-    [scope, companyId],
+    [scope, companyId, filterFrom, filterTo],
   );
 
   const load = useCallback(
@@ -299,6 +305,19 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       </button>
       <button
         type="button"
+        onClick={() => setFilterOpen(true)}
+        className={
+          "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+          (filterActive
+            ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+            : "bg-secondary text-muted-foreground hover:text-foreground")
+        }
+        title={filterActive ? `Filter: ${filterFrom || "…"} → ${filterTo || "…"}` : "Filter by date"}
+      >
+        <Filter className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
         onClick={() => void load("refresh")}
         disabled={refreshing || loading}
         className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
@@ -311,8 +330,8 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
 
   const toolbarPortalContent = (
     <>
-      {scopeButtons}
       {actionButtons}
+      {scopeButtons}
     </>
   );
 
@@ -322,11 +341,11 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         ? createPortal(toolbarPortalContent, toolbarHost)
         : (
           <div
-            className="sticky z-10 bg-background py-2 flex items-center gap-2 flex-wrap"
+            className="sticky z-10 bg-background py-2 flex items-center gap-1 flex-wrap"
             style={{ top: "var(--events-sticky-top, 0px)" }}
           >
+            {actionButtons}
             {scopeButtons}
-            <div className="ml-auto flex items-center gap-1">{actionButtons}</div>
           </div>
         )}
 
@@ -427,6 +446,85 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
           count={selectedCount}
         />
       ) : null}
+
+      {filterOpen ? (
+        <FilterModal
+          from={filterFrom}
+          to={filterTo}
+          onClose={() => setFilterOpen(false)}
+          onApply={(f, t) => {
+            setFilterFrom(f);
+            setFilterTo(t);
+            setFilterOpen(false);
+          }}
+          onClear={() => {
+            setFilterFrom("");
+            setFilterTo("");
+            setFilterOpen(false);
+          }}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function FilterModal({
+  from,
+  to,
+  onClose,
+  onApply,
+  onClear,
+}: {
+  from: string;
+  to: string;
+  onClose: () => void;
+  onApply: (from: string, to: string) => void;
+  onClear: () => void;
+}) {
+  const [draftFrom, setDraftFrom] = useState(from);
+  const [draftTo, setDraftTo] = useState(to);
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Filter by date</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
+            ✕
+          </button>
+        </div>
+        <div className="p-4 space-y-3">
+          <label className="block">
+            <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">From</span>
+            <input
+              type="datetime-local"
+              value={draftFrom}
+              onChange={(e) => setDraftFrom(e.target.value)}
+              className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
+            />
+          </label>
+          <label className="block">
+            <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">To</span>
+            <input
+              type="datetime-local"
+              value={draftTo}
+              onChange={(e) => setDraftTo(e.target.value)}
+              className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
+            />
+          </label>
+        </div>
+        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
+          <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
+            Clear
+          </button>
+          <button
+            type="button"
+            onClick={() => onApply(draftFrom, draftTo)}
+            className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
