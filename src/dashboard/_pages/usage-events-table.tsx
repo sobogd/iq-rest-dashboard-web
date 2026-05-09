@@ -20,17 +20,17 @@ export interface UsageRow {
   companyLabel: string | null;
 }
 
-function truncate(s: string, max: number): string {
-  return s.length <= max ? s : s.slice(0, max) + "…";
-}
-
-/** Stable hash → HSL hue. Rows sharing country|region|device|platform get the
- *  same colour dot so likely-same-visitor anonymous sessions cluster visually. */
+/** Stable hash → HSL hue. Anonymous rows sharing
+ *  country|region|device|platform get the same colour dot. */
 function sessionHueFor(row: UsageRow): number {
   const key = `${row.country}|${row.region}|${row.device || ""}|${row.platform || ""}`;
   let h = 5381;
   for (let i = 0; i < key.length; i++) h = ((h << 5) + h + key.charCodeAt(i)) >>> 0;
   return h % 360;
+}
+
+function truncate8(s: string): string {
+  return s.length <= 8 ? s : s.slice(0, 8) + "..";
 }
 
 export type UsageScope = "anonymous" | "identified";
@@ -381,24 +381,27 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
                   {selectedIds.has(row.id) ? <Check className="w-2.5 h-2.5" /> : null}
                 </span>
               ) : null}
-              <span
-                className="inline-block w-2 h-2 rounded-full shrink-0"
-                style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
-                title={`Session group: ${row.country} ${row.region || "—"} / ${row.device || "—"} / ${row.platform || "—"}`}
-              />
-              <span className="text-base shrink-0" title={row.country}>
-                {countryToFlag(row.country)}
-              </span>
-              <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
-              {row.companyId && !companyId && (
+              {row.companyId ? (
                 <span
                   className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0"
                   title={row.companyLabel || row.companyId}
                 >
-                  {truncate(row.companyLabel || row.companyId, 10)}
+                  {truncate8(row.companyLabel || row.companyId)}
                 </span>
+              ) : (
+                <>
+                  <span
+                    className="inline-block w-2 h-2 rounded-full shrink-0"
+                    style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
+                    title={`Session group: ${row.country} ${row.region || "—"} / ${row.device || "—"} / ${row.platform || "—"}`}
+                  />
+                  <span className="text-base shrink-0" title={row.country}>
+                    {countryToFlag(row.country)}
+                  </span>
+                </>
               )}
-              {row.device && (
+              <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
+              {row.device && !row.companyId && (
                 <span className="text-[10px] text-muted-foreground shrink-0" title={`${row.device} / ${row.platform || "—"}`}>
                   {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
                 </span>
@@ -468,6 +471,14 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   );
 }
 
+function todayRangeDefaults(): { from: string; to: string } {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return { from: `${y}-${m}-${day}T00:00`, to: `${y}-${m}-${day}T23:59` };
+}
+
 function FilterModal({
   from,
   to,
@@ -481,8 +492,9 @@ function FilterModal({
   onApply: (from: string, to: string) => void;
   onClear: () => void;
 }) {
-  const [draftFrom, setDraftFrom] = useState(from);
-  const [draftTo, setDraftTo] = useState(to);
+  const defaults = todayRangeDefaults();
+  const [draftFrom, setDraftFrom] = useState(from || defaults.from);
+  const [draftTo, setDraftTo] = useState(to || defaults.to);
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
