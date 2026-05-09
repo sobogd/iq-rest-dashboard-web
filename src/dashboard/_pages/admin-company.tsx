@@ -15,6 +15,7 @@ import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
 import { useDashboardRouter } from "../_spa/router";
+import { ConversionUploadButtons } from "./usage-events-table";
 
 interface User {
   id: string;
@@ -44,6 +45,7 @@ interface Company {
   id: string;
   name: string;
   createdAt: string;
+  gclid: string | null;
   plan: string;
   subscriptionStatus: string;
   billingCycle: string | null;
@@ -469,6 +471,8 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         >
           <MessageSquare className="h-4 w-4" />
         </FooterIconButton>
+
+        {company.gclid ? <ConversionUploadButtons gclid={company.gclid} /> : null}
 
         <div className="ml-auto" />
 

@@ -702,6 +702,9 @@ function parseAdParams(raw: string | null): Array<[string, string]> {
 }
 
 function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [uploadResult, setUploadResult] = useState<unknown | null>(null);
+
   if (!event) return null;
   const at = new Date(event.at);
   const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
@@ -719,6 +722,26 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ...adParamFields,
     ["Event ID", event.id],
   ];
+
+  async function uploadConv(type: "T1" | "T2" | "T3") {
+    if (!event?.gclid || uploading) return;
+    setUploading(type);
+    setUploadResult(null);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/upload-conversion"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gclid: event.gclid, type }),
+      });
+      const json: unknown = await res.json().catch(() => ({}));
+      setUploadResult(json);
+    } catch (err) {
+      setUploadResult({ error: String(err) });
+    } finally {
+      setUploading(null);
+    }
+  }
 
   return (
     <div
@@ -750,7 +773,114 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
             </div>
           ))}
         </div>
+
+        {event.gclid ? (
+          <div className="px-4 py-3 border-t border-border space-y-2">
+            <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Upload conversion</div>
+            <div className="flex gap-2">
+              {(["T1", "T2", "T3"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  disabled={!!uploading}
+                  onClick={() => void uploadConv(t)}
+                  className="flex-1 h-9 text-sm font-semibold bg-secondary hover:bg-muted rounded-md disabled:opacity-40 transition-colors"
+                >
+                  {uploading === t ? "…" : t}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      {uploadResult !== null ? (
+        <UploadResultModal result={uploadResult} onClose={() => setUploadResult(null)} />
+      ) : null}
+    </div>
+  );
+}
+
+function UploadResultModal({ result, onClose }: { result: unknown; onClose: () => void }) {
+  const isOk = result && typeof result === "object" && (result as Record<string, unknown>).ok === true;
+  return (
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-lg bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[80vh]"
+      >
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <span className={`text-sm font-semibold ${isOk ? "text-emerald-500" : "text-red-500"}`}>
+            {isOk ? "✓ Success" : "✗ Error"}
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+          >
+            ✕
+          </button>
+        </div>
+        <pre className="p-4 text-xs font-mono text-foreground overflow-auto whitespace-pre-wrap break-all">
+          {JSON.stringify(result, null, 2)}
+        </pre>
       </div>
     </div>
+  );
+}
+
+export function ConversionUploadButtons({
+  gclid,
+  className,
+}: {
+  gclid: string;
+  className?: string;
+}) {
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [uploadResult, setUploadResult] = useState<unknown | null>(null);
+
+  async function uploadConv(type: "T1" | "T2" | "T3") {
+    if (!gclid || uploading) return;
+    setUploading(type);
+    setUploadResult(null);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/upload-conversion"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gclid, type }),
+      });
+      const json: unknown = await res.json().catch(() => ({}));
+      setUploadResult(json);
+    } catch (err) {
+      setUploadResult({ error: String(err) });
+    } finally {
+      setUploading(null);
+    }
+  }
+
+  return (
+    <>
+      <div className={"flex items-center gap-1 " + (className || "")}>
+        {(["T1", "T2", "T3"] as const).map((t) => (
+          <button
+            key={t}
+            type="button"
+            disabled={!!uploading}
+            onClick={() => void uploadConv(t)}
+            title={`Upload ${t} conversion`}
+            className="h-8 px-2 text-xs font-semibold bg-secondary hover:bg-muted rounded-md disabled:opacity-40 transition-colors"
+          >
+            {uploading === t ? "…" : t}
+          </button>
+        ))}
+      </div>
+      {uploadResult !== null ? (
+        <UploadResultModal result={uploadResult} onClose={() => setUploadResult(null)} />
+      ) : null}
+    </>
   );
 }
