@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import {
-  Activity,
   ExternalLink,
   LogIn,
   Mail,
@@ -16,7 +15,6 @@ import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
 import { useDashboardRouter } from "../_spa/router";
-import { UsageEventsTable } from "./usage-events-table";
 
 interface User {
   id: string;
@@ -87,7 +85,7 @@ interface Message {
   user: { email: string };
 }
 
-type NestedView = "messages" | "events" | "email" | null;
+type NestedView = "messages" | "email" | null;
 
 interface Props {
   companyId: string;
@@ -444,23 +442,11 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
       {/* Footer — icon-only action row */}
       <div className="shrink-0 px-5 py-3 border-t border-border flex items-center gap-2">
-        <FooterIconButton
-          title="Messages"
-          onClick={() => setNested("messages")}
-          badge={company.messagesCount}
-        >
-          <MessageSquare className="h-4 w-4" />
-        </FooterIconButton>
-
         {menuLink ? (
           <FooterIconButton title="View menu" onClick={() => setPreviewOpen(true)}>
             <ExternalLink className="h-4 w-4" />
           </FooterIconButton>
         ) : null}
-
-        <FooterIconButton title="Events" onClick={() => setNested("events")}>
-          <Activity className="h-4 w-4" />
-        </FooterIconButton>
 
         {company.users[0] ? (
           <FooterIconButton
@@ -474,6 +460,14 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
         <FooterIconButton title="Send email" onClick={() => setNested("email")}>
           <Mail className="h-4 w-4" />
+        </FooterIconButton>
+
+        <FooterIconButton
+          title="Messages"
+          onClick={() => setNested("messages")}
+          badge={company.messagesCount}
+        >
+          <MessageSquare className="h-4 w-4" />
         </FooterIconButton>
 
         <div className="ml-auto" />
@@ -550,33 +544,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
                 )}
                 Send
               </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {nested === "events" ? (
-        <div
-          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setNested(null)}
-        >
-          <div
-            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
-              <h3 className="text-sm font-semibold text-foreground truncate">Events</h3>
-              <button
-                type="button"
-                onClick={() => setNested(null)}
-                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-                title="Close"
-              >
-                <CloseIcon className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              <UsageEventsTable companyId={companyId} />
             </div>
           </div>
         </div>

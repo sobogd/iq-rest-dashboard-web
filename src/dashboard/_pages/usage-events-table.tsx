@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Trash2, Building2, Check, UserCheck, UserX, Filter } from "lucide-react";
 import { apiUrl } from "@/lib/api";
@@ -87,15 +87,17 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const [bulkBusy, setBulkBusy] = useState(false);
   const [filterFrom, setFilterFrom] = useState<string>("");
   const [filterTo, setFilterTo] = useState<string>("");
+  const [filterCompanyId, setFilterCompanyId] = useState<string>("");
   const [filterOpen, setFilterOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
-  const filterActive = Boolean(filterFrom || filterTo);
+  const filterActive = Boolean(filterFrom || filterTo || filterCompanyId);
 
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
       const qs = new URLSearchParams();
       if (companyId) qs.set("companyId", companyId);
+      else if (filterCompanyId) qs.set("companyId", filterCompanyId);
       else qs.set("scope", scope);
       if (cursorParam) qs.set("cursor", cursorParam);
       if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
@@ -111,7 +113,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         total?: number;
       };
     },
-    [scope, companyId, filterFrom, filterTo],
+    [scope, companyId, filterCompanyId, filterFrom, filterTo],
   );
 
   const load = useCallback(
@@ -459,15 +461,19 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         <FilterModal
           from={filterFrom}
           to={filterTo}
+          companyId={filterCompanyId}
+          showCompany={!companyId}
           onClose={() => setFilterOpen(false)}
-          onApply={(f, t) => {
+          onApply={(f, t, c) => {
             setFilterFrom(f);
             setFilterTo(t);
+            setFilterCompanyId(c);
             setFilterOpen(false);
           }}
           onClear={() => {
             setFilterFrom("");
             setFilterTo("");
+            setFilterCompanyId("");
             setFilterOpen(false);
           }}
         />
@@ -487,24 +493,30 @@ function todayRangeDefaults(): { from: string; to: string } {
 function FilterModal({
   from,
   to,
+  companyId,
+  showCompany,
   onClose,
   onApply,
   onClear,
 }: {
   from: string;
   to: string;
+  companyId: string;
+  showCompany: boolean;
   onClose: () => void;
-  onApply: (from: string, to: string) => void;
+  onApply: (from: string, to: string, companyId: string) => void;
   onClear: () => void;
 }) {
   const defaults = todayRangeDefaults();
   const [draftFrom, setDraftFrom] = useState(from || defaults.from);
   const [draftTo, setDraftTo] = useState(to || defaults.to);
+  const [draftCompanyId, setDraftCompanyId] = useState(companyId);
+  const { items: companies, loading: companiesLoading } = useCompanyList();
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-foreground">Filter by date</h3>
+          <h3 className="text-sm font-semibold text-foreground">Filter</h3>
           <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
             ✕
           </button>
@@ -528,6 +540,24 @@ function FilterModal({
               className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
             />
           </label>
+          {showCompany ? (
+            <label className="block">
+              <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Company</span>
+              <select
+                value={draftCompanyId}
+                onChange={(e) => setDraftCompanyId(e.target.value)}
+                disabled={companiesLoading}
+                className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
+              >
+                <option value="">Any company</option>
+                {companies.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name || "(unnamed)"}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
         </div>
         <div className="px-4 py-3 border-t border-border flex items-center gap-2">
           <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
@@ -535,7 +565,7 @@ function FilterModal({
           </button>
           <button
             type="button"
-            onClick={() => onApply(draftFrom, draftTo)}
+            onClick={() => onApply(draftFrom, draftTo, draftCompanyId)}
             className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
           >
             Apply
@@ -589,21 +619,9 @@ interface CompanyOption {
   name: string | null;
 }
 
-function CompanyPickerModal({
-  onClose,
-  onPick,
-  busy,
-  count,
-}: {
-  onClose: () => void;
-  onPick: (id: string) => void;
-  busy?: boolean;
-  count: number;
-}) {
-  const [q, setQ] = useState("");
+function useCompanyList() {
   const [items, setItems] = useState<CompanyOption[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -623,13 +641,21 @@ function CompanyPickerModal({
       cancelled = true;
     };
   }, []);
+  return { items, loading };
+}
 
-  const list = useMemo(() => {
-    const term = q.trim().toLowerCase();
-    if (!term) return items;
-    return items.filter((c) => (c.name || "").toLowerCase().includes(term) || c.id.toLowerCase().includes(term));
-  }, [items, q]);
-
+function CompanyPickerModal({
+  onClose,
+  onPick,
+  busy,
+  count,
+}: {
+  onClose: () => void;
+  onPick: (id: string) => void;
+  busy?: boolean;
+  count: number;
+}) {
+  const { items, loading } = useCompanyList();
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl">
@@ -639,22 +665,13 @@ function CompanyPickerModal({
             ✕
           </button>
         </div>
-        <div className="p-3 border-b border-border">
-          <input
-            autoFocus
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by name or email…"
-            className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-          />
-        </div>
         <div className="max-h-80 overflow-y-auto divide-y divide-border">
           {loading ? (
             <div className="text-xs text-muted-foreground py-6 text-center">Loading…</div>
-          ) : list.length === 0 ? (
+          ) : items.length === 0 ? (
             <div className="text-xs text-muted-foreground py-6 text-center">No companies</div>
           ) : (
-            list.map((c) => (
+            items.map((c) => (
               <button
                 key={c.id}
                 type="button"
@@ -685,9 +702,6 @@ function parseAdParams(raw: string | null): Array<[string, string]> {
 }
 
 function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
-  const [uploading, setUploading] = useState<string | null>(null);
-  const [uploadResult, setUploadResult] = useState<unknown | null>(null);
-
   if (!event) return null;
   const at = new Date(event.at);
   const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
@@ -705,26 +719,6 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ...adParamFields,
     ["Event ID", event.id],
   ];
-
-  async function uploadConv(type: "T1" | "T2" | "T3") {
-    if (!event?.gclid || uploading) return;
-    setUploading(type);
-    setUploadResult(null);
-    try {
-      const res = await fetch(apiUrl("/api/admin/usage/upload-conversion"), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gclid: event.gclid, type }),
-      });
-      const json: unknown = await res.json().catch(() => ({}));
-      setUploadResult(json);
-    } catch (err) {
-      setUploadResult({ error: String(err) });
-    } finally {
-      setUploading(null);
-    }
-  }
 
   return (
     <div
@@ -756,60 +750,6 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
             </div>
           ))}
         </div>
-
-        {event.gclid ? (
-          <div className="px-4 py-3 border-t border-border space-y-2">
-            <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Upload conversion</div>
-            <div className="flex gap-2">
-              {(["T1", "T2", "T3"] as const).map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  disabled={!!uploading}
-                  onClick={() => void uploadConv(t)}
-                  className="flex-1 h-9 text-sm font-semibold bg-secondary hover:bg-muted rounded-md disabled:opacity-40 transition-colors"
-                >
-                  {uploading === t ? "…" : t}
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      {uploadResult !== null ? (
-        <UploadResultModal result={uploadResult} onClose={() => setUploadResult(null)} />
-      ) : null}
-    </div>
-  );
-}
-
-function UploadResultModal({ result, onClose }: { result: unknown; onClose: () => void }) {
-  const isOk = result && typeof result === "object" && (result as Record<string, unknown>).ok === true;
-  return (
-    <div
-      onClick={onClose}
-      className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[80vh]"
-      >
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
-          <span className={`text-sm font-semibold ${isOk ? "text-emerald-500" : "text-red-500"}`}>
-            {isOk ? "✓ Success" : "✗ Error"}
-          </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-          >
-            ✕
-          </button>
-        </div>
-        <pre className="p-4 text-xs font-mono text-foreground overflow-auto whitespace-pre-wrap break-all">
-          {JSON.stringify(result, null, 2)}
-        </pre>
       </div>
     </div>
   );
