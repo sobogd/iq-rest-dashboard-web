@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useDashboardRouter } from "../_spa/router";
 import {
@@ -49,7 +49,17 @@ export function MenuList({
  const currencySymbol = currencySymbolOf(currency);
 
  const [categories, setCategories] = useState<Category[]>(initialCategories);
+ // Persist menu UI state (open categories + scroll position) across
+ // navigations to the item / category edit pages. sessionStorage so it
+ // resets per tab.
+ const STATE_KEY = "dash_menu_list_state_v1";
  const [openIds, setOpenIds] = useState<Record<string, boolean>>(() => {
+ try {
+ const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
+ if (saved && typeof saved.openIds === "object" && saved.openIds) return saved.openIds;
+ } catch {
+ // ignore corrupt JSON
+ }
  const map: Record<string, boolean> = {};
  initialCategories.forEach((c) => {
  map[c.id] = true;
@@ -88,6 +98,35 @@ export function MenuList({
  });
  }
  }, [initialSub]);
+
+ // Persist openIds whenever they change.
+ useEffect(() => {
+ try {
+ const prev = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
+ sessionStorage.setItem(STATE_KEY, JSON.stringify({ ...prev, openIds }));
+ } catch {
+ // sessionStorage might be disabled; OK to drop persistence.
+ }
+ }, [openIds]);
+
+ // Restore window scroll on mount; save on unmount (i.e. when navigating
+ // to edit pages). Layout effect to avoid a visual flash of scroll-0.
+ useLayoutEffect(() => {
+ try {
+ const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
+ if (typeof saved.scrollY === "number") window.scrollTo(0, saved.scrollY);
+ } catch {
+ // ignore
+ }
+ return () => {
+ try {
+ const prev = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
+ sessionStorage.setItem(STATE_KEY, JSON.stringify({ ...prev, scrollY: window.scrollY }));
+ } catch {
+ // ignore
+ }
+ };
+ }, []);
 
  useEffect(() => {
  setCategories(initialCategories);
