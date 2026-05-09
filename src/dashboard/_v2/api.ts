@@ -27,6 +27,7 @@ export interface ApiRestaurant {
  address: string | null;
  x: string | null;
  y: string | null;
+ googlePlaceId: string | null;
  phone: string | null;
  instagram: string | null;
  whatsapp: string | null;

@@ -105,6 +105,9 @@ export interface RestaurantLocation {
  address: string;
  lat: number | null;
  lng: number | null;
+ // Google Places ID captured by the map picker. Null when user clicked the
+ // map without picking a search result.
+ placeId: string | null;
 }
 
 export interface ScheduleDay {

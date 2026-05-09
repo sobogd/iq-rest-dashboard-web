@@ -187,6 +187,7 @@ export function ContactsSettingsPage({
  address: draft.location.address.trim() || null,
  x: draft.location.lng !== null ? String(draft.location.lng) : null,
  y: draft.location.lat !== null ? String(draft.location.lat) : null,
+ googlePlaceId: draft.location.placeId,
  });
  } catch {
  return;
@@ -202,6 +203,7 @@ export function ContactsSettingsPage({
  address: draft.location.address.trim(),
  lat: draft.location.lat,
  lng: draft.location.lng,
+ placeId: draft.location.placeId,
  },
  }));
  onBack();
@@ -274,9 +276,9 @@ export function ContactsSettingsPage({
  <MapPicker
  lat={draft.location.lat ?? undefined}
  lng={draft.location.lng ?? undefined}
- onLocationSelect={(lat, lng) => {
+ onLocationSelect={(lat, lng, placeId) => {
  track("dash_settings_contacts_location_change");
- setDraft((d) => ({ ...d, location: { ...d.location, lat, lng } }));
+ setDraft((d) => ({ ...d, location: { ...d.location, lat, lng, placeId } }));
  }}
  />
  </div>

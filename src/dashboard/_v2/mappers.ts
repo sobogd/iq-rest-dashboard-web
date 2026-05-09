@@ -209,6 +209,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  address: r.address || "",
  lat: r.y ? parseFloat(r.y) : null,
  lng: r.x ? parseFloat(r.x) : null,
+ placeId: r.googlePlaceId || null,
  },
  languages: r.languages?.length ? r.languages : ["en"],
  defaultLang: r.defaultLanguage || "en",

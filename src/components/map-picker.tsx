@@ -6,7 +6,9 @@ import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from "@react-google-m
 interface MapPickerProps {
   lat?: number;
   lng?: number;
-  onLocationSelect: (lat: number, lng: number) => void;
+  // placeId is non-null only when the user picked a result from the
+  // Autocomplete search box. Map clicks emit null (just lat/lng).
+  onLocationSelect: (lat: number, lng: number, placeId: string | null) => void;
 }
 
 const containerStyle = { width: "100%", height: "300px" };
@@ -69,7 +71,7 @@ export function MapPicker({ lat, lng, onLocationSelect }: MapPickerProps) {
         const newLat = e.latLng.lat();
         const newLng = e.latLng.lng();
         setMarker({ lat: newLat, lng: newLng });
-        onLocationSelect(newLat, newLng);
+        onLocationSelect(newLat, newLng, null);
       }
     },
     [onLocationSelect],
@@ -89,7 +91,7 @@ export function MapPicker({ lat, lng, onLocationSelect }: MapPickerProps) {
       const newLat = place.geometry.location.lat();
       const newLng = place.geometry.location.lng();
       setMarker({ lat: newLat, lng: newLng });
-      onLocationSelect(newLat, newLng);
+      onLocationSelect(newLat, newLng, place.place_id ?? null);
       map?.panTo({ lat: newLat, lng: newLng });
       map?.setZoom(15);
     }
