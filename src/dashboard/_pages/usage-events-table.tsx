@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, UserCheck, UserX, Filter } from "lucide-react";
+import { Trash2, Building2, Check, Filter, ListChecks, X as XIcon } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 
@@ -33,8 +33,6 @@ function truncate8(s: string): string {
   return s.length <= 8 ? s : s.slice(0, 8) + "..";
 }
 
-export type UsageScope = "anonymous" | "identified";
-
 function countryToFlag(code: string): string {
   if (!code || code === "XX" || code.length !== 2) return "🌐";
   const A = 0x1f1e6;
@@ -48,31 +46,15 @@ function fmtAt(iso: string): string {
 }
 
 interface Props {
-  /** When set, the table is scoped to a single company and the scope toggle is hidden. */
+  /** When set, the table is scoped to a single company. */
   companyId?: string;
-  /** Default scope; ignored when companyId is set. */
-  initialScope?: UsageScope;
   /** Reports the current row count to the parent so it can render it in its own header. */
   onCountChange?: (count: number) => void;
-  /** When provided, the toolbar (scope toggle + bulk-mode buttons + refresh) is
-   *  portalled into this host element instead of rendered above the rows. */
+  /** When provided, the toolbar buttons are portalled into this host element. */
   toolbarHost?: HTMLElement | null;
 }
 
-const SCOPE_ICON: Record<UsageScope, typeof UserX> = {
-  anonymous: UserX,
-  identified: UserCheck,
-};
-
-const SCOPE_TITLE: Record<UsageScope, string> = {
-  anonymous: "Anonymous",
-  identified: "Identified",
-};
-
-type BulkMode = "none" | "delete" | "company";
-
-export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange, toolbarHost }: Props) {
-  const [scope, setScope] = useState<UsageScope>(initialScope);
+export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Props) {
   const [rows, setRows] = useState<UsageRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -80,7 +62,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [selected, setSelected] = useState<UsageRow | null>(null);
-  const [mode, setMode] = useState<BulkMode>("none");
+  const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
@@ -88,17 +70,18 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const [filterFrom, setFilterFrom] = useState<string>("");
   const [filterTo, setFilterTo] = useState<string>("");
   const [filterCompanyId, setFilterCompanyId] = useState<string>("");
+  const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
-  const filterActive = Boolean(filterFrom || filterTo || filterCompanyId);
+  const filterActive = Boolean(filterFrom || filterTo || filterCompanyId || filterOnlyAnonymous);
 
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
       const qs = new URLSearchParams();
       if (companyId) qs.set("companyId", companyId);
       else if (filterCompanyId) qs.set("companyId", filterCompanyId);
-      else qs.set("scope", scope);
+      else qs.set("scope", filterOnlyAnonymous ? "anonymous" : "all");
       if (cursorParam) qs.set("cursor", cursorParam);
       if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
       if (filterTo) qs.set("to", new Date(filterTo).toISOString());
@@ -113,7 +96,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         total?: number;
       };
     },
-    [scope, companyId, filterCompanyId, filterFrom, filterTo],
+    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo],
   );
 
   const load = useCallback(
@@ -178,7 +161,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
 
   useEffect(() => {
     // Refresh / page reload / scope change resets bulk mode and selection.
-    setMode("none");
+    setSelectMode(false);
     setSelectedIds(new Set());
     void load("initial");
   }, [load]);
@@ -204,7 +187,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       });
       if (!res.ok) return;
       setSelectedIds(new Set());
-      setMode("none");
+      setSelectMode(false);
       void load("refresh");
     } finally {
       setBulkBusy(false);
@@ -224,7 +207,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       });
       if (!res.ok) return;
       setSelectedIds(new Set());
-      setMode("none");
+      setSelectMode(false);
       setCompanyPickerOpen(false);
       void load("refresh");
     } finally {
@@ -247,87 +230,34 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     return () => obs.disconnect();
   }, [hasMore, loadMore]);
 
-  const scopeButtons = !companyId
-    ? (["anonymous", "identified"] as UsageScope[]).map((s) => {
-        const Icon = SCOPE_ICON[s];
-        const active = scope === s;
-        return (
-          <button
-            key={s}
-            type="button"
-            onClick={() => setScope(s)}
-            title={SCOPE_TITLE[s]}
-            className={
-              "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
-              (active
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-muted-foreground hover:text-foreground")
-            }
-          >
-            <Icon className="h-3.5 w-3.5" />
-          </button>
-        );
-      })
-    : null;
+  const selectToggle = (
+    <button
+      type="button"
+      onClick={() => {
+        setSelectMode(true);
+        setSelectedIds(new Set());
+      }}
+      className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+      title="Select events"
+    >
+      <ListChecks className="h-3.5 w-3.5" />
+    </button>
+  );
 
-  function handleModeButtonClick(target: "delete" | "company") {
-    if (mode !== target) {
-      setMode(target);
-      setSelectedIds(new Set());
-      return;
-    }
-    if (selectedCount === 0) {
-      setMode("none");
-      return;
-    }
-    if (target === "delete") setConfirmDelete(true);
-    else setCompanyPickerOpen(true);
-  }
-
-  const bulkButtons = (
-    <>
-      <button
-        type="button"
-        onClick={() => handleModeButtonClick("delete")}
-        disabled={bulkBusy}
-        className={
-          "h-8 w-8 inline-flex items-center justify-center rounded-md disabled:opacity-50 " +
-          (mode === "delete"
-            ? "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40"
-            : "bg-secondary text-muted-foreground hover:text-foreground")
-        }
-        title={mode === "delete" ? `Delete ${selectedCount}` : "Bulk delete"}
-      >
-        {mode === "delete" ? <Check className="h-3.5 w-3.5" /> : <Trash2 className="h-3.5 w-3.5" />}
-      </button>
-      <button
-        type="button"
-        onClick={() => handleModeButtonClick("company")}
-        disabled={bulkBusy}
-        className={
-          "h-8 w-8 inline-flex items-center justify-center rounded-md disabled:opacity-50 " +
-          (mode === "company"
-            ? "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40"
-            : "bg-secondary text-muted-foreground hover:text-foreground")
-        }
-        title={mode === "company" ? `Link ${selectedCount} to company` : "Bulk link to company"}
-      >
-        {mode === "company" ? <Check className="h-3.5 w-3.5" /> : <Building2 className="h-3.5 w-3.5" />}
-      </button>
-      <button
-        type="button"
-        onClick={() => setFilterOpen(true)}
-        className={
-          "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-          (filterActive
-            ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
-            : "bg-secondary text-muted-foreground hover:text-foreground")
-        }
-        title={filterActive ? `Filter: ${filterFrom || "…"} → ${filterTo || "…"}` : "Filter by date"}
-      >
-        <Filter className="h-3.5 w-3.5" />
-      </button>
-    </>
+  const filterButton = (
+    <button
+      type="button"
+      onClick={() => setFilterOpen(true)}
+      className={
+        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+        (filterActive
+          ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+          : "bg-secondary text-muted-foreground hover:text-foreground")
+      }
+      title={filterActive ? "Filter active" : "Filter"}
+    >
+      <Filter className="h-3.5 w-3.5" />
+    </button>
   );
 
   const refreshButton = (
@@ -342,10 +272,46 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     </button>
   );
 
-  const toolbarPortalContent = (
+  const selectionActions = (
     <>
-      {bulkButtons}
-      {scopeButtons}
+      <button
+        type="button"
+        onClick={() => selectedCount > 0 && setConfirmDelete(true)}
+        disabled={selectedCount === 0 || bulkBusy}
+        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 disabled:opacity-40"
+        title={`Delete ${selectedCount}`}
+      >
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
+        onClick={() => selectedCount > 0 && setCompanyPickerOpen(true)}
+        disabled={selectedCount === 0 || bulkBusy}
+        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 disabled:opacity-40"
+        title={`Link ${selectedCount} to company`}
+      >
+        <Building2 className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setSelectMode(false);
+          setSelectedIds(new Set());
+        }}
+        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-secondary text-muted-foreground hover:text-foreground"
+        title="Clear"
+      >
+        <XIcon className="h-3.5 w-3.5" />
+      </button>
+    </>
+  );
+
+  const toolbarPortalContent = selectMode ? (
+    selectionActions
+  ) : (
+    <>
+      {selectToggle}
+      {filterButton}
       {refreshButton}
     </>
   );
@@ -359,9 +325,13 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
             className="sticky z-10 bg-background py-2 flex items-center gap-1 flex-wrap"
             style={{ top: "var(--events-sticky-top, 0px)" }}
           >
-            {bulkButtons}
-            {scopeButtons}
-            {refreshButton}
+            {selectMode ? selectionActions : (
+              <>
+                {selectToggle}
+                {filterButton}
+                          {refreshButton}
+              </>
+            )}
           </div>
         )}
 
@@ -376,7 +346,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
               key={row.id}
               type="button"
               onClick={() => {
-                if (mode !== "none") {
+                if (selectMode) {
                   toggleSelect(row.id);
                   return;
                 }
@@ -384,7 +354,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
               }}
               className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
             >
-              {mode !== "none" ? (
+              {selectMode ? (
                 <span
                   className={
                     "shrink-0 inline-flex items-center justify-center w-3.5 h-3.5 rounded border " +
@@ -471,18 +441,21 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
           from={filterFrom}
           to={filterTo}
           companyId={filterCompanyId}
+          onlyAnonymous={filterOnlyAnonymous}
           showCompany={!companyId}
           onClose={() => setFilterOpen(false)}
-          onApply={(f, t, c) => {
+          onApply={(f, t, c, anon) => {
             setFilterFrom(f);
             setFilterTo(t);
             setFilterCompanyId(c);
+            setFilterOnlyAnonymous(anon);
             setFilterOpen(false);
           }}
           onClear={() => {
             setFilterFrom("");
             setFilterTo("");
             setFilterCompanyId("");
+            setFilterOnlyAnonymous(false);
             setFilterOpen(false);
           }}
         />
@@ -503,6 +476,7 @@ function FilterModal({
   from,
   to,
   companyId,
+  onlyAnonymous,
   showCompany,
   onClose,
   onApply,
@@ -511,15 +485,17 @@ function FilterModal({
   from: string;
   to: string;
   companyId: string;
+  onlyAnonymous: boolean;
   showCompany: boolean;
   onClose: () => void;
-  onApply: (from: string, to: string, companyId: string) => void;
+  onApply: (from: string, to: string, companyId: string, onlyAnonymous: boolean) => void;
   onClear: () => void;
 }) {
   const defaults = todayRangeDefaults();
   const [draftFrom, setDraftFrom] = useState(from || defaults.from);
   const [draftTo, setDraftTo] = useState(to || defaults.to);
   const [draftCompanyId, setDraftCompanyId] = useState(companyId);
+  const [draftOnlyAnonymous, setDraftOnlyAnonymous] = useState(onlyAnonymous);
   const { items: companies, loading: companiesLoading } = useCompanyList();
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -567,6 +543,18 @@ function FilterModal({
               </select>
             </label>
           ) : null}
+          {showCompany ? (
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={draftOnlyAnonymous}
+                onChange={(e) => setDraftOnlyAnonymous(e.target.checked)}
+                disabled={Boolean(draftCompanyId)}
+                className="h-4 w-4"
+              />
+              <span className="text-sm text-foreground">Only anonymous events</span>
+            </label>
+          ) : null}
         </div>
         <div className="px-4 py-3 border-t border-border flex items-center gap-2">
           <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
@@ -574,7 +562,7 @@ function FilterModal({
           </button>
           <button
             type="button"
-            onClick={() => onApply(draftFrom, draftTo, draftCompanyId)}
+            onClick={() => onApply(draftFrom, draftTo, draftCompanyId, draftOnlyAnonymous)}
             className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
           >
             Apply
