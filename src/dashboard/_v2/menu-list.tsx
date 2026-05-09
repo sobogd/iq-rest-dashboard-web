@@ -109,23 +109,35 @@ export function MenuList({
  }
  }, [openIds]);
 
- // Restore window scroll on mount; save on unmount (i.e. when navigating
- // to edit pages). Layout effect to avoid a visual flash of scroll-0.
+ // Restore window scroll on mount, then continuously persist scrollY on
+ // scroll. Continuous-save (rather than save-on-unmount) is required
+ // because the SPA router scrolls the window to 0 on push() *before*
+ // React unmounts this component — by the time our cleanup fires, the
+ // saved scrollY would already be 0.
  useLayoutEffect(() => {
- try {
- const saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
- if (typeof saved.scrollY === "number") window.scrollTo(0, saved.scrollY);
- } catch {
- // ignore
+ let saved: { scrollY?: number } = {};
+ try { saved = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}"); } catch { /* ignore */ }
+ if (typeof saved.scrollY === "number") {
+ // Defer to next frame so list rows have committed full layout, otherwise
+ // the page is still short and scrollTo clamps to a smaller value.
+ requestAnimationFrame(() => window.scrollTo(0, saved.scrollY!));
  }
- return () => {
+ let last = 0;
+ let pending = false;
+ const onScroll = () => {
+ last = window.scrollY;
+ if (pending) return;
+ pending = true;
+ requestAnimationFrame(() => {
+ pending = false;
  try {
  const prev = JSON.parse(sessionStorage.getItem(STATE_KEY) || "{}");
- sessionStorage.setItem(STATE_KEY, JSON.stringify({ ...prev, scrollY: window.scrollY }));
- } catch {
- // ignore
- }
+ sessionStorage.setItem(STATE_KEY, JSON.stringify({ ...prev, scrollY: last }));
+ } catch { /* ignore */ }
+ });
  };
+ window.addEventListener("scroll", onScroll, { passive: true });
+ return () => window.removeEventListener("scroll", onScroll);
  }, []);
 
  useEffect(() => {
