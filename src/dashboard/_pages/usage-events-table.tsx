@@ -43,23 +43,7 @@ function countryToFlag(code: string): string {
 
 function fmtAt(iso: string): string {
   const d = new Date(iso);
-  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
-}
-
-function todayUtcStr(): string {
-  const d = new Date();
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
-}
-
-function shiftDate(d: string, days: number): string {
-  const [y, m, day] = d.split("-").map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, day + days));
-  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, "0")}-${String(dt.getUTCDate()).padStart(2, "0")}`;
-}
-
-function fmtDateLabel(d: string): string {
-  const [, m, day] = d.split("-");
-  return `${day}.${m}`;
+  return `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
 }
 
 interface Props {
@@ -69,9 +53,6 @@ interface Props {
   initialScope?: UsageScope;
   /** Reports the current row count to the parent so it can render it in its own header. */
   onCountChange?: (count: number) => void;
-  /** When provided, date is controlled by the parent and the in-table stepper is hidden. */
-  date?: string;
-  onDateChange?: (date: string) => void;
 }
 
 const SCOPE_ICON: Record<UsageScope, typeof UserX> = {
@@ -86,18 +67,7 @@ const SCOPE_TITLE: Record<UsageScope, string> = {
 
 type BulkMode = "none" | "delete" | "company";
 
-export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange, date: dateProp, onDateChange }: Props) {
-  const [internalDate, setInternalDate] = useState<string>(() => todayUtcStr());
-  const date = dateProp ?? internalDate;
-  const setDate = (d: string | ((prev: string) => string)) => {
-    if (onDateChange) {
-      const next = typeof d === "function" ? d(date) : d;
-      onDateChange(next);
-    } else {
-      setInternalDate(d);
-    }
-  };
-  const dateControlled = dateProp !== undefined;
+export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange }: Props) {
   const [scope, setScope] = useState<UsageScope>(initialScope);
   const [rows, setRows] = useState<UsageRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -114,11 +84,9 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
 
-  const isToday = date === todayUtcStr();
-
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
-      const qs = new URLSearchParams({ date });
+      const qs = new URLSearchParams();
       if (companyId) qs.set("companyId", companyId);
       else qs.set("scope", scope);
       if (cursorParam) qs.set("cursor", cursorParam);
@@ -133,7 +101,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         total?: number;
       };
     },
-    [date, scope, companyId],
+    [scope, companyId],
   );
 
   const load = useCallback(
@@ -246,42 +214,24 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     return () => obs.disconnect();
   }, [hasMore, loadMore]);
 
+  // Auto-chain: after rows update or any state change, if sentinel is still
+  // in view (e.g. short list, or observer never re-fires after a non-scroll
+  // re-render like toggling bulk-select checkboxes), trigger another load.
+  useEffect(() => {
+    if (!hasMore || loadingMore || !cursor) return;
+    const el = sentinelRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight + 200 && rect.bottom > -200;
+    if (inView) void loadMore();
+  }, [rows, hasMore, loadingMore, cursor, loadMore]);
+
   return (
     <div className="space-y-3">
       <div
         className="sticky z-10 bg-background py-2 flex items-center gap-2 flex-wrap"
         style={{ top: "var(--events-sticky-top, 0px)" }}
       >
-        {/* Date stepper — three separate blocks; hidden when date is controlled
-            from outside (parent puts the stepper in its own header). */}
-        {!dateControlled && (
-          <>
-            <button
-              type="button"
-              onClick={() => setDate((d) => shiftDate(d, -1))}
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-              title="Previous day"
-            >
-              ‹
-            </button>
-            <div className="h-8 px-3 inline-flex items-center bg-secondary rounded-md text-xs font-medium tabular-nums">
-              {fmtDateLabel(date)}
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                const next = shiftDate(date, 1);
-                if (next <= todayUtcStr()) setDate(next);
-              }}
-              disabled={isToday}
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:cursor-not-allowed"
-              title="Next day"
-            >
-              ›
-            </button>
-          </>
-        )}
-
         {!companyId &&
           (["anonymous", "identified"] as UsageScope[]).map((s) => {
             const Icon = SCOPE_ICON[s];
@@ -390,7 +340,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       {loading ? (
         <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
       ) : rows.length === 0 ? (
-        <div className="text-xs text-muted-foreground py-8 text-center">No events on this day</div>
+        <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
       ) : (
         <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
           {rows.map((row) => (
