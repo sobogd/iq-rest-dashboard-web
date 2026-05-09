@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { Trash2, Building2, Check, UserCheck, UserX } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
@@ -53,6 +54,9 @@ interface Props {
   initialScope?: UsageScope;
   /** Reports the current row count to the parent so it can render it in its own header. */
   onCountChange?: (count: number) => void;
+  /** When provided, the toolbar (scope toggle + bulk-mode buttons + refresh) is
+   *  portalled into this host element instead of rendered above the rows. */
+  toolbarHost?: HTMLElement | null;
 }
 
 const SCOPE_ICON: Record<UsageScope, typeof UserX> = {
@@ -67,7 +71,7 @@ const SCOPE_TITLE: Record<UsageScope, string> = {
 
 type BulkMode = "none" | "delete" | "company";
 
-export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange }: Props) {
+export function UsageEventsTable({ companyId, initialScope = "anonymous", onCountChange, toolbarHost }: Props) {
   const [scope, setScope] = useState<UsageScope>(initialScope);
   const [rows, setRows] = useState<UsageRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -226,116 +230,105 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     if (inView) void loadMore();
   }, [rows, hasMore, loadingMore, cursor, loadMore]);
 
+  const scopeButtons = !companyId
+    ? (["anonymous", "identified"] as UsageScope[]).map((s) => {
+        const Icon = SCOPE_ICON[s];
+        const active = scope === s;
+        return (
+          <button
+            key={s}
+            type="button"
+            onClick={() => setScope(s)}
+            title={SCOPE_TITLE[s]}
+            className={
+              "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+              (active
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-muted-foreground hover:text-foreground")
+            }
+          >
+            <Icon className="h-3.5 w-3.5" />
+          </button>
+        );
+      })
+    : null;
+
+  function handleModeButtonClick(target: "delete" | "company") {
+    if (mode !== target) {
+      setMode(target);
+      setSelectedIds(new Set());
+      return;
+    }
+    if (selectedCount === 0) {
+      setMode("none");
+      return;
+    }
+    if (target === "delete") setConfirmDelete(true);
+    else setCompanyPickerOpen(true);
+  }
+
+  const actionButtons = (
+    <>
+      <button
+        type="button"
+        onClick={() => handleModeButtonClick("delete")}
+        disabled={bulkBusy}
+        className={
+          "h-8 w-8 inline-flex items-center justify-center rounded-md disabled:opacity-50 " +
+          (mode === "delete"
+            ? "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40"
+            : "bg-secondary text-muted-foreground hover:text-foreground")
+        }
+        title={mode === "delete" ? `Delete ${selectedCount}` : "Bulk delete"}
+      >
+        {mode === "delete" ? <Check className="h-3.5 w-3.5" /> : <Trash2 className="h-3.5 w-3.5" />}
+      </button>
+      <button
+        type="button"
+        onClick={() => handleModeButtonClick("company")}
+        disabled={bulkBusy}
+        className={
+          "h-8 w-8 inline-flex items-center justify-center rounded-md disabled:opacity-50 " +
+          (mode === "company"
+            ? "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40"
+            : "bg-secondary text-muted-foreground hover:text-foreground")
+        }
+        title={mode === "company" ? `Link ${selectedCount} to company` : "Bulk link to company"}
+      >
+        {mode === "company" ? <Check className="h-3.5 w-3.5" /> : <Building2 className="h-3.5 w-3.5" />}
+      </button>
+      <button
+        type="button"
+        onClick={() => void load("refresh")}
+        disabled={refreshing || loading}
+        className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+        title="Refresh"
+      >
+        <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
+      </button>
+    </>
+  );
+
+  const toolbarPortalContent = (
+    <>
+      {scopeButtons}
+      {actionButtons}
+    </>
+  );
+
   return (
     <div className="space-y-3">
-      <div
-        className="sticky z-10 bg-background py-2 flex items-center gap-2 flex-wrap"
-        style={{ top: "var(--events-sticky-top, 0px)" }}
-      >
-        {!companyId &&
-          (["anonymous", "identified"] as UsageScope[]).map((s) => {
-            const Icon = SCOPE_ICON[s];
-            const active = scope === s;
-            return (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setScope(s)}
-                title={SCOPE_TITLE[s]}
-                className={
-                  "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
-                  (active
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground hover:text-foreground")
-                }
-              >
-                <Icon className="h-3.5 w-3.5" />
-              </button>
-            );
-          })}
-
-        <div className="ml-auto flex items-center gap-1">
-          {/* Delete-mode toggle (or Apply + Cancel, when delete mode is on) */}
-          {mode === "delete" ? (
-            <div className="inline-flex items-center h-8 bg-red-50 dark:bg-red-950/40 rounded-md overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setConfirmDelete(true)}
-                disabled={selectedCount === 0 || bulkBusy}
-                className="h-8 px-2.5 inline-flex items-center gap-1 text-red-600 dark:text-red-400 text-xs font-medium hover:bg-red-100 dark:hover:bg-red-900/40 disabled:opacity-50"
-                title={`Delete ${selectedCount}`}
-              >
-                <Check className="h-3.5 w-3.5" />
-                <span className="tabular-nums">{selectedCount}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("none");
-                  setSelectedIds(new Set());
-                }}
-                className="h-8 w-7 inline-flex items-center justify-center text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40"
-                title="Cancel"
-              >
-                ✕
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setMode("delete")}
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-              title="Bulk delete"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          )}
-          {/* Company-link mode toggle (or Apply + Cancel) */}
-          {mode === "company" ? (
-            <div className="inline-flex items-center h-8 bg-blue-50 dark:bg-blue-950/40 rounded-md overflow-hidden">
-              <button
-                type="button"
-                onClick={() => setCompanyPickerOpen(true)}
-                disabled={selectedCount === 0 || bulkBusy}
-                className="h-8 px-2.5 inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 text-xs font-medium hover:bg-blue-100 dark:hover:bg-blue-900/40 disabled:opacity-50"
-                title={`Link ${selectedCount} to company`}
-              >
-                <Check className="h-3.5 w-3.5" />
-                <span className="tabular-nums">{selectedCount}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("none");
-                  setSelectedIds(new Set());
-                }}
-                className="h-8 w-7 inline-flex items-center justify-center text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40"
-                title="Cancel"
-              >
-                ✕
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setMode("company")}
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-              title="Bulk link to company"
-            >
-              <Building2 className="h-3.5 w-3.5" />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={() => void load("refresh")}
-            disabled={refreshing || loading}
-            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-            title="Refresh"
+      {toolbarHost
+        ? createPortal(toolbarPortalContent, toolbarHost)
+        : (
+          <div
+            className="sticky z-10 bg-background py-2 flex items-center gap-2 flex-wrap"
+            style={{ top: "var(--events-sticky-top, 0px)" }}
           >
-            <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
-          </button>
-        </div>
-      </div>
+            {scopeButtons}
+            <div className="ml-auto flex items-center gap-1">{actionButtons}</div>
+          </div>
+        )}
 
       {loading ? (
         <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
