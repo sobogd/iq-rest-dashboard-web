@@ -137,6 +137,13 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
         setLoading(false);
         setRefreshing(false);
       }
+      // Chain: page may be short — if sentinel still in view, keep loading.
+      setTimeout(() => {
+        const el = sentinelRef.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight + 200 && r.bottom > -200) void loadMore();
+      }, 0);
     },
     [fetchPage, onCountChange],
   );
