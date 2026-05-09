@@ -141,11 +141,17 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     [fetchPage, onCountChange],
   );
 
+  // Stable loadMore via refs — observer attaches once and reads latest state
+  // without identity churn that would re-render the rows during click events.
+  const stateRef = useRef({ cursor, hasMore, loadingMore, fetchPage });
+  stateRef.current = { cursor, hasMore, loadingMore, fetchPage };
+
   const loadMore = useCallback(async () => {
-    if (!cursor || !hasMore || loadingMore) return;
+    const s = stateRef.current;
+    if (!s.cursor || !s.hasMore || s.loadingMore) return;
     setLoadingMore(true);
     try {
-      const j = await fetchPage(cursor);
+      const j = await s.fetchPage(s.cursor);
       if (j) {
         setRows((prev) => [...prev, ...j.events]);
         setHasMore(j.hasMore);
@@ -154,7 +160,14 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     } finally {
       setLoadingMore(false);
     }
-  }, [cursor, hasMore, loadingMore, fetchPage]);
+    // Chain: if sentinel still in view after this load, trigger another.
+    setTimeout(() => {
+      const el = sentinelRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight + 200 && r.bottom > -200) void loadMore();
+    }, 0);
+  }, []);
 
   useEffect(() => {
     // Refresh / page reload / scope change resets bulk mode and selection.
@@ -213,6 +226,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
   }
 
   // IntersectionObserver — fires loadMore when sentinel scrolls into view.
+  // Attaches once per hasMore transition; loadMore is stable via stateRef.
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el || !hasMore) return;
@@ -225,18 +239,6 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     obs.observe(el);
     return () => obs.disconnect();
   }, [hasMore, loadMore]);
-
-  // Auto-chain: after rows update or any state change, if sentinel is still
-  // in view (e.g. short list, or observer never re-fires after a non-scroll
-  // re-render like toggling bulk-select checkboxes), trigger another load.
-  useEffect(() => {
-    if (!hasMore || loadingMore || !cursor) return;
-    const el = sentinelRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const inView = rect.top < window.innerHeight + 200 && rect.bottom > -200;
-    if (inView) void loadMore();
-  }, [rows, hasMore, loadingMore, cursor, loadMore]);
 
   const scopeButtons = !companyId
     ? (["anonymous", "identified"] as UsageScope[]).map((s) => {
