@@ -5,10 +5,11 @@ import { apiUrl } from "@/lib/api";
 import { useTranslations } from "next-intl";
 import { SubpageStickyBar } from "../_v2/ui";
 import { BoxIcon, EyeIcon, FolderIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
-import { Mail, Clock } from "lucide-react";
+import { Mail, Clock, MousePointerClick } from "lucide-react";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AdminCompanyPage } from "./admin-company";
+import { AdminGoogleAdsClicksPage } from "./admin-gads-clicks";
 
 interface Company {
   id: string;
@@ -33,6 +34,7 @@ export function AdminPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
   const [sortByLastVisit, setSortByLastVisit] = useState(false);
+  const [showGadsClicks, setShowGadsClicks] = useState(false);
 
   const visibleCompanies = useMemo(() => {
     if (!sortByLastVisit) return companies;
@@ -79,6 +81,14 @@ export function AdminPage() {
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
         <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setShowGadsClicks(true)}
+            title="Google Ads clicks"
+            className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-secondary text-muted-foreground hover:text-foreground"
+          >
+            <MousePointerClick className="h-3.5 w-3.5" />
+          </button>
           <button
             type="button"
             onClick={() => setSortByLastVisit((v) => !v)}
@@ -214,6 +224,20 @@ export function AdminPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
+          </div>
+        </div>
+      ) : null}
+
+      {showGadsClicks ? (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setShowGadsClicks(false)}
+        >
+          <div
+            className="w-full max-w-3xl bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AdminGoogleAdsClicksPage onClose={() => setShowGadsClicks(false)} />
           </div>
         </div>
       ) : null}
