@@ -273,7 +273,7 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
     else setCompanyPickerOpen(true);
   }
 
-  const actionButtons = (
+  const bulkButtons = (
     <>
       <button
         type="button"
@@ -316,22 +316,26 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
       >
         <Filter className="h-3.5 w-3.5" />
       </button>
-      <button
-        type="button"
-        onClick={() => void load("refresh")}
-        disabled={refreshing || loading}
-        className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-        title="Refresh"
-      >
-        <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
-      </button>
     </>
+  );
+
+  const refreshButton = (
+    <button
+      type="button"
+      onClick={() => void load("refresh")}
+      disabled={refreshing || loading}
+      className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+      title="Refresh"
+    >
+      <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
+    </button>
   );
 
   const toolbarPortalContent = (
     <>
-      {actionButtons}
+      {bulkButtons}
       {scopeButtons}
+      {refreshButton}
     </>
   );
 
@@ -344,8 +348,9 @@ export function UsageEventsTable({ companyId, initialScope = "anonymous", onCoun
             className="sticky z-10 bg-background py-2 flex items-center gap-1 flex-wrap"
             style={{ top: "var(--events-sticky-top, 0px)" }}
           >
-            {actionButtons}
+            {bulkButtons}
             {scopeButtons}
+            {refreshButton}
           </div>
         )}
 
