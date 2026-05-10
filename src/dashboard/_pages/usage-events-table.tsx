@@ -492,8 +492,11 @@ function FilterModal({
   onClear: () => void;
 }) {
   const defaults = todayRangeDefaults();
+  // Drafts pre-filled with today as a starting point. If the user does not
+  // touch them, Apply commits empty strings (no date filter).
   const [draftFrom, setDraftFrom] = useState(from || defaults.from);
   const [draftTo, setDraftTo] = useState(to || defaults.to);
+  const [datesTouched, setDatesTouched] = useState(Boolean(from || to));
   const [draftCompanyId, setDraftCompanyId] = useState(companyId);
   const [draftOnlyAnonymous, setDraftOnlyAnonymous] = useState(onlyAnonymous);
   const { items: companies, loading: companiesLoading } = useCompanyList();
@@ -512,7 +515,7 @@ function FilterModal({
             <input
               type="datetime-local"
               value={draftFrom}
-              onChange={(e) => setDraftFrom(e.target.value)}
+              onChange={(e) => { setDraftFrom(e.target.value); setDatesTouched(true); }}
               className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
             />
           </label>
@@ -521,7 +524,7 @@ function FilterModal({
             <input
               type="datetime-local"
               value={draftTo}
-              onChange={(e) => setDraftTo(e.target.value)}
+              onChange={(e) => { setDraftTo(e.target.value); setDatesTouched(true); }}
               className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
             />
           </label>
@@ -562,7 +565,12 @@ function FilterModal({
           </button>
           <button
             type="button"
-            onClick={() => onApply(draftFrom, draftTo, draftCompanyId, draftOnlyAnonymous)}
+            onClick={() => onApply(
+              datesTouched ? draftFrom : "",
+              datesTouched ? draftTo : "",
+              draftCompanyId,
+              draftOnlyAnonymous,
+            )}
             className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
           >
             Apply
