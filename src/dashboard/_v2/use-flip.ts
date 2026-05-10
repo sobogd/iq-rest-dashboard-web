@@ -5,7 +5,7 @@ const REDUCED_MOTION = typeof window !== "undefined"
 
 export function useFlip<T extends HTMLElement>(deps: unknown[]) {
  const ref = useRef<T>(null);
- const prev = useRef<Map<string, DOMRect>>(new Map());
+ const prev = useRef<Map<string, { top: number; height: number }>>(new Map());
 
  useLayoutEffect(() => {
    const root = ref.current;
@@ -15,16 +15,23 @@ export function useFlip<T extends HTMLElement>(deps: unknown[]) {
    // run gets fresh measurements.
    const rootRect = root.getBoundingClientRect();
    if (rootRect.width === 0 || rootRect.height === 0) return;
+   // Measure positions RELATIVE to the root container, not the viewport.
+   // Viewport-relative rects shift on scroll, which makes the first reorder
+   // after scrolling animate every child by scrollDelta instead of only the
+   // ones that actually moved.
+   const rootTop = rootRect.top;
    const children = root.querySelectorAll<HTMLElement>(":scope > [data-flip-id]");
-   const next = new Map<string, DOMRect>();
-   children.forEach((el) => next.set(el.dataset.flipId!, el.getBoundingClientRect()));
+   const next = new Map<string, { top: number; height: number }>();
+   children.forEach((el) => {
+     const r = el.getBoundingClientRect();
+     next.set(el.dataset.flipId!, { top: r.top - rootTop, height: r.height });
+   });
    if (!REDUCED_MOTION) {
      children.forEach((el) => {
        const id = el.dataset.flipId!;
        const before = prev.current.get(id);
        const after = next.get(id)!;
        if (!before) return;
-       // Skip if either rect was captured while hidden (zero size).
        if (before.height === 0 || after.height === 0) return;
        const dy = before.top - after.top;
        if (dy === 0) return;
