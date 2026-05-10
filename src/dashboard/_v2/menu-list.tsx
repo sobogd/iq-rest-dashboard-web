@@ -3,17 +3,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useFlip } from "./use-flip";
+import { Collapsible } from "./collapsible";
 import { useDashboardRouter } from "../_spa/router";
 import {
  ArrowDownIcon,
  ArrowUpIcon,
  ChevronDownIcon,
+ ClockIcon,
  CollapseIcon,
  EditIcon,
  ExpandIcon,
  EyeIcon,
  EyeOffIcon,
  PlusIcon,
+ SparklesIcon,
 } from "./icons";
 import { EmptyState, PreviewButton, ShareButton, ShareModal, SubscriptionChip } from "./ui";
 import { iconBtn, primaryBtn } from "./tokens";
@@ -44,6 +47,8 @@ export function MenuList({
  scanBannerDismissed?: boolean;
 }) {
  const t = useTranslations("dashboard.menu");
+ const tsub = useTranslations("dashboard.subscriptionChip");
+ const tBilling = useTranslations("dashboard.settings.billing");
  const restaurant = useRestaurant();
  const router = useDashboardRouter();
  const { defaultLang, currency, menuUrl } = restaurant;
@@ -72,6 +77,21 @@ export function MenuList({
  const [sub, setSub] = useState<SubData | null>(initialSub);
  const [bannerLocallyDismissed, setBannerLocallyDismissed] = useState(scanBannerDismissed);
  const [scanModalOpen, setScanModalOpen] = useState(false);
+ const TRIAL_DISMISS_KEY = "dash_trial_banner_dismissed_until";
+ const [trialDismissedUntil, setTrialDismissedUntil] = useState<number>(() => {
+ try {
+ const raw = localStorage.getItem(TRIAL_DISMISS_KEY);
+ return raw ? Number(raw) || 0 : 0;
+ } catch {
+ return 0;
+ }
+ });
+ function dismissTrialBanner() {
+ track("dash_trial_banner_dismiss");
+ const until = Date.now() + 86400_000;
+ try { localStorage.setItem(TRIAL_DISMISS_KEY, String(until)); } catch { /* ignore */ }
+ setTrialDismissedUntil(until);
+ }
 
  const existingRealItemsCount = categories.reduce(
   (sum, c) => sum + c.dishes.filter((d) => !d.isExample).length,
@@ -314,15 +334,6 @@ export function MenuList({
  onboardingTarget="share"
  />
  ) : null}
- {sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE" ? null : (
- <SubscriptionChip
- sub={sub}
- onClick={() => {
- track("dash_menu_plan");
- router.push({ name: "settings.billing" });
- }}
- />
- )}
  </div>
  {categories.length > 0 ? (
  <button
@@ -330,7 +341,7 @@ export function MenuList({
  onClick={anyOpen ? collapseAll : expandAll}
  className="relative inline-flex items-center justify-center h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary hover:text-foreground rounded-md transition-colors shrink-0"
  >
- {/* width reservation: stack both labels, longer one fixes the width */}
+ {/* width reservation: longer label fixes the width */}
  <span className="invisible inline-flex items-center gap-1.5" aria-hidden>
  <ExpandIcon size={14} />
  {t("expand").length >= t("collapse").length ? t("expand") : t("collapse")}
@@ -344,7 +355,63 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-2xl mx-auto pt-2.5">
+ {(() => {
+ const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
+ if (isPaid) return null;
+ const trialEndsAt = sub?.trialEndsAt ? new Date(sub.trialEndsAt) : null;
+ const trialing = !isPaid && trialEndsAt !== null && trialEndsAt > new Date();
+ const trialExpired = !isPaid && trialEndsAt !== null && trialEndsAt <= new Date();
+ if (!trialing && !trialExpired) return null;
+ // Expired banner cannot be dismissed (menu blocked).
+ if (trialing && trialDismissedUntil > Date.now()) return null;
+ const daysLeft = trialing && trialEndsAt
+ ? Math.max(1, Math.ceil((trialEndsAt.getTime() - Date.now()) / 86400000))
+ : 0;
+ const goBilling = () => {
+ track("dash_menu_plan");
+ router.push({ name: "settings.billing", from: "menu" });
+ };
+ return (
+ <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${trialing ? "pr-10" : ""}`}>
+ {trialing && (
+ <button
+ type="button"
+ onClick={dismissTrialBanner}
+ className="absolute top-2 right-2 h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted/50"
+ aria-label={t("scan.banner.dismiss")}
+ >
+ ×
+ </button>
+ )}
+ <div className="flex items-start gap-3">
+ <div
+ className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white"
+ style={{ background: "linear-gradient(to bottom right, hsl(9,100%,58%), #f59e0b)" }}
+ >
+ <ClockIcon size={16} />
+ </div>
+ <div className="flex-1 min-w-0">
+ <p className="text-sm font-semibold">
+ {trialExpired ? tsub("trialExpired") : tsub("trialDays", { days: daysLeft })}
+ </p>
+ <p className="text-xs text-muted-foreground mt-0.5">
+ {trialExpired ? tBilling("menuUnavailableTip") : tBilling("trialEnds", { date: trialEndsAt!.toLocaleDateString() })}
+ </p>
+ <button
+ type="button"
+ onClick={goBilling}
+ className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
+ style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
+ >
+ {tBilling("manage")}
+ </button>
+ </div>
+ </div>
+ </div>
+ );
+ })()}
+
  {scanBannerVisible && (
  <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${noCategories ? "" : "pr-10"}`}>
  {!noCategories && (
@@ -359,10 +426,10 @@ export function MenuList({
  )}
  <div className="flex items-start gap-3">
  <div
- className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white text-lg"
+ className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white"
  style={{ background: "linear-gradient(to bottom right, hsl(9,100%,58%), #f59e0b)" }}
  >
- ✨
+ <SparklesIcon size={16} />
  </div>
  <div className="flex-1 min-w-0">
  <p className="text-sm font-semibold">{t("scan.banner.title")}</p>
@@ -452,7 +519,7 @@ export function MenuList({
  onPersisted?.();
  }}
  />
- {categories.length > 0 ? <MenuOnboarding /> : null}
+ {categories.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
  </>
  );
 }
@@ -559,7 +626,7 @@ function CategoryAccordion({
  </div>
  </div>
 
- {isOpen ? (
+ <Collapsible open={isOpen}>
  <div className="border-t border-border">
  {category.dishes.length === 0 ? (
  <p className="text-sm text-muted-foreground h-12 flex items-center justify-center">
@@ -600,7 +667,7 @@ function CategoryAccordion({
  {t("addDish")}
  </button>
  </div>
- ) : null}
+ </Collapsible>
  </div>
  );
 }

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { primaryBtn, secondaryBtn } from "./tokens";
-import { ChevronRightIcon, CloseIcon } from "./icons";
+import { ChevronRightIcon } from "./icons";
 import { track } from "@/lib/dashboard-events";
 
 const STORAGE_KEY = "iq-onboarding:menu:v3";
@@ -23,7 +23,7 @@ const STEPS: Step[] = [
  { name: "share", selector: '[data-onboarding-target="share"]', textKey: "step.share" },
 ];
 
-export function MenuOnboarding() {
+export function MenuOnboarding({ onActive }: { onActive?: () => void } = {}) {
  const t = useTranslations("dashboard.menu.onboarding");
  const [done, setDone] = useState<boolean>(() => {
  if (typeof window === "undefined") return true;
@@ -41,8 +41,8 @@ export function MenuOnboarding() {
 
  useLayoutEffect(() => {
  if (done) return;
- let raf = 0;
  let skipTimer = 0;
+ let trackRaf = 0;
  const update = () => {
  const el = document.querySelector(step.selector) as HTMLElement | null;
  if (!el) {
@@ -52,7 +52,17 @@ export function MenuOnboarding() {
  setRect(el.getBoundingClientRect());
  };
  update();
- raf = window.requestAnimationFrame(update);
+
+ // Track rect for ~500ms after step changes to follow accordion expand
+ // animations and other layout shifts (e.g. Collapsible's height transition).
+ const trackUntil = performance.now() + 500;
+ const trackLoop = () => {
+ update();
+ if (performance.now() < trackUntil) {
+ trackRaf = window.requestAnimationFrame(trackLoop);
+ }
+ };
+ trackRaf = window.requestAnimationFrame(trackLoop);
 
  // If target is missing after ~400ms, skip this step
  skipTimer = window.setTimeout(() => {
@@ -75,11 +85,29 @@ export function MenuOnboarding() {
  const onResize = () => update();
  window.addEventListener("resize", onResize);
  window.addEventListener("scroll", onResize, true);
+
+ // Observe target subtree for layout changes (Collapsible expand etc).
+ let resizeObs: ResizeObserver | null = null;
+ const targetEl = document.querySelector(step.selector) as HTMLElement | null;
+ if (targetEl && typeof ResizeObserver !== "undefined") {
+ resizeObs = new ResizeObserver(() => update());
+ // Observe target + nearest ancestors that could resize and shift target.
+ resizeObs.observe(targetEl);
+ let p: HTMLElement | null = targetEl.parentElement;
+ let depth = 0;
+ while (p && depth < 6) {
+ resizeObs.observe(p);
+ p = p.parentElement;
+ depth++;
+ }
+ }
+
  return () => {
- window.cancelAnimationFrame(raf);
+ window.cancelAnimationFrame(trackRaf);
  window.clearTimeout(skipTimer);
  window.removeEventListener("resize", onResize);
  window.removeEventListener("scroll", onResize, true);
+ resizeObs?.disconnect();
  };
  }, [done, step.selector, isLast]);
 
@@ -107,6 +135,7 @@ export function MenuOnboarding() {
  if (done) return;
  if (stepIdx !== 0) return;
  track("dash_onboarding_start");
+ onActive?.();
  // Only fire once on first mount before user has finished
  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
@@ -202,11 +231,6 @@ export function MenuOnboarding() {
  setRect(null);
  }
 
- function close() {
- track("dash_onboarding_close", { step: step.name });
- persistDone();
- }
-
  const dimCls = "fixed bg-black/90 pointer-events-auto";
 
  return createPortal(
@@ -257,24 +281,6 @@ export function MenuOnboarding() {
  />
  )}
  <p className="text-sm leading-relaxed relative">{t(step.textKey)}</p>
- </div>
-
- {/* Step counter + Close — pinned top-right */}
- <div
- className="fixed pointer-events-auto flex items-center gap-3"
- style={{ top: "5dvh", right: "10dvw" }}
- >
- <span className="text-sm font-medium text-foreground/80 tabular-nums px-2 py-1 rounded-md bg-card border border-border shadow-2xl">
- {stepIdx + 1} / {STEPS.length}
- </span>
- <button
- type="button"
- onClick={close}
- aria-label={t("button.close")}
- className={secondaryBtn + " inline-flex items-center justify-center !w-10 !px-0 shadow-2xl"}
- >
- <CloseIcon size={16} />
- </button>
  </div>
 
  {/* Back + Continue — pinned 10% from bottom, 10dvw from right edge */}

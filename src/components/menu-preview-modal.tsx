@@ -102,7 +102,7 @@ export function MenuPreviewModal({ menuUrl, children, className, open: controlle
                     transform: "scale(0.8)",
                   }}
                   title="Menu Preview"
-                  onLoad={() => setTimeout(() => setLoading(false), 500)}
+                  onLoad={() => setLoading(false)}
                 />
               </div>
             </div>

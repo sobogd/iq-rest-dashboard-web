@@ -233,7 +233,7 @@ function ViewSwitch(p: SwitchProps) {
     case "settings.languages":
       return <SettingsLanguagesWrapper onBack={backToSettings} />;
     case "settings.billing":
-      return <SettingsBillingWrapper onBack={backToSettings} />;
+      return <SettingsBillingWrapper onBack={view.from === "menu" ? backToMenu : backToSettings} />;
     case "settings.support":
       return <SettingsSupportWrapper onBack={backToSettings} />;
 

@@ -23,7 +23,7 @@ export type View =
   | { name: "settings.orders" }
   | { name: "settings.bookings" }
   | { name: "settings.languages" }
-  | { name: "settings.billing" }
+  | { name: "settings.billing"; from?: "menu" }
   | { name: "settings.support" }
   | { name: "settings.admin.companies" }
   | { name: "settings.admin.company"; id: string }
