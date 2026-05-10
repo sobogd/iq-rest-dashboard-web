@@ -15,7 +15,7 @@ import {
  EyeOffIcon,
  PlusIcon,
 } from "./icons";
-import { EmptyState, PageHeader, PreviewButton, ShareButton, ShareModal, SubscriptionChip } from "./ui";
+import { EmptyState, PreviewButton, ShareButton, ShareModal, SubscriptionChip } from "./ui";
 import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
 import { currencySymbolOf, moveItem } from "./helpers";
@@ -217,7 +217,9 @@ export function MenuList({
  catReorderAborterRef.current = ac;
  try {
  await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })), ac.signal);
- onPersisted?.();
+ // No onPersisted refetch — local optimistic state is authoritative.
+ // A refetch here would race with concurrent ops and overwrite newer
+ // local state with a stale server snapshot.
  } catch (e) {
  if (isAbort(e)) return;
  // Server failed — local state stays optimistic.
@@ -237,7 +239,6 @@ export function MenuList({
  dishReorderAbortersRef.current.set(categoryId, ac);
  try {
  await reorderItemsBulk(reordered.map((d, i) => ({ id: d.id, sortOrder: i })), ac.signal);
- onPersisted?.();
  } catch (e) {
  if (isAbort(e)) return;
  }
@@ -268,7 +269,6 @@ export function MenuList({
  visibilityAbortersRef.current.set(dishId, ac);
  try {
  await patchItem(dishId, { isActive: nextVisible }, ac.signal);
- onPersisted?.();
  visibilityOriginalRef.current.delete(dishId);
  } catch (e) {
  if (isAbort(e)) return;
@@ -293,7 +293,7 @@ export function MenuList({
  return (
  <>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%)] border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
@@ -314,7 +314,7 @@ export function MenuList({
  onboardingTarget="share"
  />
  ) : null}
- </div>
+ {sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE" ? null : (
  <SubscriptionChip
  sub={sub}
  onClick={() => {
@@ -322,15 +322,9 @@ export function MenuList({
  router.push({ name: "settings.billing" });
  }}
  />
+ )}
  </div>
- </div>
-
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
- <PageHeader
- title={t("title")}
- subtitle={t("subtitle")}
- action={
- categories.length > 0 ? (
+ {categories.length > 0 ? (
  <button
  type="button"
  onClick={anyOpen ? collapseAll : expandAll}
@@ -346,12 +340,13 @@ export function MenuList({
  {anyOpen ? t("collapse") : t("expand")}
  </span>
  </button>
- ) : null
- }
- />
+ ) : null}
+ </div>
+ </div>
 
+ <div className="max-w-2xl mx-auto pt-5 md:pt-4">
  {scanBannerVisible && (
- <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-3 ${noCategories ? "" : "pr-10"}`}>
+ <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${noCategories ? "" : "pr-10"}`}>
  {!noCategories && (
  <button
  type="button"
@@ -493,7 +488,7 @@ function CategoryAccordion({
  const router = useDashboardRouter();
  const dishesFlipRef = useFlip<HTMLDivElement>([category.dishes.map((d) => d.id).join(",")]);
  return (
- <div className="bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border border-border/60 rounded-xl overflow-hidden">
+ <div className="bg-[hsl(0_0%_6.5%)] border border-border/60 rounded-xl overflow-hidden">
  <div
  role="button"
  tabIndex={0}
@@ -564,13 +559,7 @@ function CategoryAccordion({
  </div>
  </div>
 
- <div
- className={
- "grid transition-[grid-template-rows] duration-200 ease-out " +
- (isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]")
- }
- >
- <div className="overflow-hidden">
+ {isOpen ? (
  <div className="border-t border-border">
  {category.dishes.length === 0 ? (
  <p className="text-sm text-muted-foreground h-12 flex items-center justify-center">
@@ -611,8 +600,7 @@ function CategoryAccordion({
  {t("addDish")}
  </button>
  </div>
- </div>
- </div>
+ ) : null}
  </div>
  );
 }
@@ -643,8 +631,8 @@ function DishRow({
  const tBadge = useTranslations("dashboard");
  const router = useDashboardRouter();
  const rowCls =
- "flex items-center gap-2.5 pl-2 pr-3 py-2 transition-colors cursor-pointer select-none " +
- (dish.visible ? "" : "opacity-50");
+ "flex items-center gap-2.5 pl-2 pr-3 py-2 transition-colors cursor-pointer select-none";
+ const dimCls = dish.visible ? "" : "opacity-50";
  const openDish = () => {
  track("dash_menu_item_click");
  router.push({ name: "item.edit", id: dish.id });
@@ -684,7 +672,7 @@ function DishRow({
  </button>
  </div>
 
- <div className="flex-1 min-w-0 text-left flex items-center gap-2">
+ <div className={"flex-1 min-w-0 text-left flex items-center gap-2 " + dimCls}>
  <div className="min-w-0 flex-1 flex items-center gap-1.5">
  <span className="text-sm font-medium text-foreground truncate">
  {getMlWithFallback(dish.name, defaultLang, defaultLang)}
@@ -695,7 +683,9 @@ function DishRow({
  </span>
  )}
  </div>
+ {Number(dish.price) > 0 ? (
  <div className="text-sm text-muted-foreground tabular-nums shrink-0">{currencySymbol + dish.price}</div>
+ ) : null}
  </div>
 
  <div className="flex items-center gap-0.5 shrink-0 pl-1">
