@@ -6,11 +6,9 @@ import {
   LogIn,
   Mail,
   MessageSquare,
-  Trash2,
   X as CloseIcon,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
-import { ConfirmDialog } from "../_v2/ui";
 import { SendIcon } from "../_v2/icons";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
@@ -121,8 +119,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const [impersonating, setImpersonating] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [alert, setAlert] = useState<{ title: string; message: string } | null>(null);
@@ -203,27 +199,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       }
     }
   }, [messages]);
-
-  async function handleDelete() {
-    if (!company) return;
-    setDeleting(true);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${company.id}`), {
-        credentials: "include", method: "DELETE" });
-      if (res.ok) {
-        if (onClose) onClose();
-        else router.push({ name: "settings.admin.companies" });
-      } else {
-        const data = await res.json().catch(() => ({}));
-        setAlert({ title: "Delete failed", message: data.error || "Could not delete company." });
-      }
-    } catch {
-      setAlert({ title: "Delete failed", message: "Network error" });
-    } finally {
-      setDeleting(false);
-      setConfirmDelete(false);
-    }
-  }
 
   async function handleImpersonate() {
     if (!company || impersonating) return;
@@ -473,16 +448,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         </FooterIconButton>
 
         {company.gclid ? <ConversionUploadButtons gclid={company.gclid} /> : null}
-
-        <div className="ml-auto" />
-
-        <FooterIconButton
-          title="Delete company"
-          onClick={() => setConfirmDelete(true)}
-          variant="danger"
-        >
-          <Trash2 className="h-4 w-4" />
-        </FooterIconButton>
       </div>
 
       {nested === "messages" ? (
@@ -603,19 +568,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
           </div>
         </div>
       ) : null}
-
-      <ConfirmDialog
-        open={confirmDelete}
-        title="Delete company?"
-        message={
-          `This permanently deletes ${company.restaurants.length} restaurant(s), ` +
-          `${company.categoriesCount} categories, ${company.itemsCount} items, ` +
-          `${company.users.length} user(s), and all related data. Cannot be undone.`
-        }
-        confirmLabel="Delete"
-        onCancel={() => (deleting ? null : setConfirmDelete(false))}
-        onConfirm={handleDelete}
-      />
 
       {confirmTemplate ? (
         <div
