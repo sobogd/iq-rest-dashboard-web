@@ -20,6 +20,7 @@ import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { track } from "@/lib/dashboard-events";
+import { QRCodeCanvas } from "qrcode.react";
 
 // Modal — Escape closes, body scroll lock while open.
 
@@ -804,14 +805,7 @@ export function ShareModal({
  const tp = useTranslations("dashboard.preview");
  const [copied, setCopied] = useState(false);
  const fullUrl = url && url.startsWith("http") ? url : "https://" + (url || "");
- const qrSize = 480;
- const qrSrc =
- "https://api.qrserver.com/v1/create-qr-code/?size=" +
- qrSize +
- "x" +
- qrSize +
- "&margin=8&data=" +
- encodeURIComponent(fullUrl);
+ const qrCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
  function copyLink() {
  track("dash_menu_share_copy");
@@ -828,14 +822,19 @@ export function ShareModal({
 
  function downloadQr() {
  track("dash_menu_share_download");
+ const canvas = qrCanvasRef.current;
+ if (!canvas) return;
+ canvas.toBlob((blob) => {
+ if (!blob) return;
+ const objectUrl = URL.createObjectURL(blob);
  const a = document.createElement("a");
- a.href = qrSrc;
+ a.href = objectUrl;
  a.download = "menu-qr.png";
- a.target = "_blank";
- a.rel = "noreferrer noopener";
  document.body.appendChild(a);
  a.click();
  document.body.removeChild(a);
+ setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+ }, "image/png");
  }
 
  function openInNewTab() {
@@ -855,7 +854,14 @@ export function ShareModal({
  className="w-[180px] h-[180px] p-5 bg-white rounded-2xl shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
  onClick={() => track("dash_menu_share_qr_image")}
  >
- <img src={qrSrc} alt={tc("qrCode")} width="140" height="140" className="block w-[140px] h-[140px]" />
+ <QRCodeCanvas
+ ref={qrCanvasRef}
+ value={fullUrl}
+ size={480}
+ marginSize={2}
+ level="M"
+ className="block w-[140px] h-[140px]"
+ />
  </div>
  </div>
  <p className="text-xs text-muted-foreground text-center mt-3">
@@ -916,12 +922,10 @@ export function TableQrModal({
  const tp = useTranslations("dashboard.preview");
  const tt = useTranslations("dashboard.tables");
  const [copied, setCopied] = useState(false);
+ const tableQrCanvasRef = useRef<HTMLCanvasElement | null>(null);
  if (tableNumber === null) return null;
  const baseUrl = menuUrl && menuUrl.startsWith("http") ? menuUrl : "https://" + (menuUrl || "");
  const fullUrl = baseUrl + "?table=" + tableNumber;
- const qrSrc =
- "https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=8&data=" +
- encodeURIComponent(fullUrl);
 
  function copyLink() {
  if (navigator.clipboard?.writeText) {
@@ -936,14 +940,19 @@ export function TableQrModal({
  }
 
  function downloadQr() {
+ const canvas = tableQrCanvasRef.current;
+ if (!canvas) return;
+ canvas.toBlob((blob) => {
+ if (!blob) return;
+ const objectUrl = URL.createObjectURL(blob);
  const a = document.createElement("a");
- a.href = qrSrc;
+ a.href = objectUrl;
  a.download = "table-" + tableNumber + "-qr.png";
- a.target = "_blank";
- a.rel = "noreferrer noopener";
  document.body.appendChild(a);
  a.click();
  document.body.removeChild(a);
+ setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+ }, "image/png");
  }
 
  function openInNewTab() {
@@ -954,7 +963,14 @@ export function TableQrModal({
  <Modal open={open} onClose={onClose} title={tt("qrModalTitle", { number: tableNumber, label: tableLabel ? " · " + tableLabel : "" })}>
  <div className="flex justify-center">
  <div className="p-3 bg-card border border-border rounded-xl">
- <img src={qrSrc} alt={tt("qrForTable", { number: tableNumber })} width="192" height="192" className="block w-48 h-48" />
+ <QRCodeCanvas
+ ref={tableQrCanvasRef}
+ value={fullUrl}
+ size={480}
+ marginSize={2}
+ level="M"
+ className="block w-48 h-48"
+ />
  </div>
  </div>
  <p className="text-xs text-muted-foreground text-center mt-3">
