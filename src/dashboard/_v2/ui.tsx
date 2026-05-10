@@ -855,12 +855,21 @@ export function ShareModal({
  onClick={() => track("dash_menu_share_qr_image")}
  >
  <QRCodeCanvas
- ref={qrCanvasRef}
  value={fullUrl}
- size={480}
+ size={140}
  marginSize={2}
  level="M"
- className="block w-[140px] h-[140px]"
+ style={{ width: 140, height: 140, display: "block" }}
+ />
+ </div>
+ {/* Hidden high-res canvas for download */}
+ <div style={{ position: "absolute", left: -99999, top: -99999, opacity: 0, pointerEvents: "none" }} aria-hidden>
+ <QRCodeCanvas
+ ref={qrCanvasRef}
+ value={fullUrl}
+ size={640}
+ marginSize={2}
+ level="M"
  />
  </div>
  </div>
@@ -964,12 +973,21 @@ export function TableQrModal({
  <div className="flex justify-center">
  <div className="p-3 bg-card border border-border rounded-xl">
  <QRCodeCanvas
- ref={tableQrCanvasRef}
  value={fullUrl}
- size={480}
+ size={192}
  marginSize={2}
  level="M"
- className="block w-48 h-48"
+ style={{ width: 192, height: 192, display: "block" }}
+ />
+ </div>
+ {/* Hidden high-res canvas for download */}
+ <div style={{ position: "absolute", left: -99999, top: -99999, opacity: 0, pointerEvents: "none" }} aria-hidden>
+ <QRCodeCanvas
+ ref={tableQrCanvasRef}
+ value={fullUrl}
+ size={640}
+ marginSize={2}
+ level="M"
  />
  </div>
  </div>
