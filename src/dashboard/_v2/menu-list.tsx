@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useFlip } from "./use-flip";
 import { useDashboardRouter } from "../_spa/router";
 import {
  ArrowDownIcon,
@@ -18,7 +19,7 @@ import { EmptyState, PageHeader, PreviewButton, ShareButton, ShareModal, Subscri
 import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
 import { currencySymbolOf, moveItem } from "./helpers";
-import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItem } from "./api";
+import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItemsBulk } from "./api";
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
 import { track } from "@/lib/dashboard-events";
@@ -49,6 +50,7 @@ export function MenuList({
  const currencySymbol = currencySymbolOf(currency);
 
  const [categories, setCategories] = useState<Category[]>(initialCategories);
+ const categoriesFlipRef = useFlip<HTMLDivElement>([categories.map((c) => c.id).join(",")]);
  // Persist menu UI state (open categories + scroll position) across
  // navigations to the item / category edit pages. sessionStorage so it
  // resets per tab.
@@ -155,7 +157,7 @@ export function MenuList({
  });
  }, [initialCategories]);
 
- const allOpen = categories.length > 0 && categories.every((c) => openIds[c.id]);
+ const anyOpen = categories.length > 0 && categories.some((c) => openIds[c.id]);
 
  function toggleCategory(id: string) {
  setOpenIds((p) => {
@@ -185,14 +187,40 @@ export function MenuList({
  setOpenIds(map);
  }
 
+ // ── Race-safe writes via AbortController ─────────────────────────────────
+ //
+ // Each rapid click cancels the previous in-flight request for the same
+ // resource and fires a fresh one with the latest desired state. The server
+ // sees only one live operation per resource (per-dish for visibility,
+ // per-category for dish reorder, single for category reorder). PATCH/bulk
+ // endpoints are idempotent — last-arriving response is the authoritative
+ // state. AbortError is silently ignored (request superseded by user).
+ const catReorderAborterRef = useRef<AbortController | null>(null);
+ const dishReorderAbortersRef = useRef<Map<string, AbortController>>(new Map());
+ const visibilityAbortersRef = useRef<Map<string, AbortController>>(new Map());
+ const visibilityOriginalRef = useRef<Map<string, { visible: boolean; categoryId: string }>>(new Map());
+
+ useEffect(() => () => {
+ catReorderAborterRef.current?.abort();
+ dishReorderAbortersRef.current.forEach((ac) => ac.abort());
+ visibilityAbortersRef.current.forEach((ac) => ac.abort());
+ }, []);
+
+ const isAbort = (e: unknown) => (e as { name?: string } | null)?.name === "AbortError";
+
  async function moveCategory(idx: number, dir: number) {
  track(dir < 0 ? "dash_menu_category_sort_up" : "dash_menu_category_sort_down");
  const next = moveItem(categories, idx, dir);
  setCategories(next);
+ catReorderAborterRef.current?.abort();
+ const ac = new AbortController();
+ catReorderAborterRef.current = ac;
  try {
- await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })));
+ await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })), ac.signal);
  onPersisted?.();
- } catch {
+ } catch (e) {
+ if (isAbort(e)) return;
+ // Server failed — local state stays optimistic.
  }
  }
 
@@ -200,17 +228,18 @@ export function MenuList({
  track(dir < 0 ? "dash_menu_item_sort_up" : "dash_menu_item_sort_down");
  const cat = categories.find((c) => c.id === categoryId);
  if (!cat) return;
- const dish = cat.dishes[idx];
- if (!dish) return;
+ const reordered = moveItem(cat.dishes, idx, dir);
  setCategories((cats) =>
- cats.map((c) =>
- c.id === categoryId ? { ...c, dishes: moveItem(c.dishes, idx, dir) } : c,
- ),
+ cats.map((c) => (c.id === categoryId ? { ...c, dishes: reordered } : c)),
  );
+ dishReorderAbortersRef.current.get(categoryId)?.abort();
+ const ac = new AbortController();
+ dishReorderAbortersRef.current.set(categoryId, ac);
  try {
- await reorderItem(dish.id, dir < 0 ? "up" : "down");
+ await reorderItemsBulk(reordered.map((d, i) => ({ id: d.id, sortOrder: i })), ac.signal);
  onPersisted?.();
- } catch {
+ } catch (e) {
+ if (isAbort(e)) return;
  }
  }
 
@@ -220,6 +249,10 @@ export function MenuList({
  const dish = cat?.dishes.find((d) => d.id === dishId);
  if (!dish) return;
  const nextVisible = !dish.visible;
+ // Capture original (pre-burst) state once per dish for revert-on-error.
+ if (!visibilityOriginalRef.current.has(dishId)) {
+ visibilityOriginalRef.current.set(dishId, { visible: dish.visible, categoryId });
+ }
  setCategories((cats) =>
  cats.map((c) =>
  c.id === categoryId
@@ -230,20 +263,30 @@ export function MenuList({
  : c,
  ),
  );
+ visibilityAbortersRef.current.get(dishId)?.abort();
+ const ac = new AbortController();
+ visibilityAbortersRef.current.set(dishId, ac);
  try {
- await patchItem(dishId, { isActive: nextVisible });
+ await patchItem(dishId, { isActive: nextVisible }, ac.signal);
  onPersisted?.();
- } catch {
+ visibilityOriginalRef.current.delete(dishId);
+ } catch (e) {
+ if (isAbort(e)) return;
+ // Final request failed — revert to original pre-burst state.
+ const orig = visibilityOriginalRef.current.get(dishId);
+ if (orig) {
  setCategories((cats) =>
  cats.map((c) =>
- c.id === categoryId
+ c.id === orig.categoryId
  ? {
  ...c,
- dishes: c.dishes.map((d) => (d.id === dishId ? { ...d, visible: !nextVisible } : d)),
+ dishes: c.dishes.map((d) => (d.id === dishId ? { ...d, visible: orig.visible } : d)),
  }
  : c,
  ),
  );
+ visibilityOriginalRef.current.delete(dishId);
+ }
  }
  }
 
@@ -290,11 +333,18 @@ export function MenuList({
  categories.length > 0 ? (
  <button
  type="button"
- onClick={allOpen ? collapseAll : expandAll}
- className="inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium text-muted-foreground rounded-lg transition-colors shrink-0"
+ onClick={anyOpen ? collapseAll : expandAll}
+ className="relative inline-flex items-center justify-center h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary hover:text-foreground rounded-md transition-colors shrink-0"
  >
- {allOpen ? <CollapseIcon size={14} /> : <ExpandIcon size={14} />}
- {allOpen ? t("collapse") : t("expand")}
+ {/* width reservation: stack both labels, longer one fixes the width */}
+ <span className="invisible inline-flex items-center gap-1.5" aria-hidden>
+ <ExpandIcon size={14} />
+ {t("expand").length >= t("collapse").length ? t("expand") : t("collapse")}
+ </span>
+ <span className="absolute inset-0 inline-flex items-center justify-center gap-1.5">
+ {anyOpen ? <CollapseIcon size={14} /> : <ExpandIcon size={14} />}
+ {anyOpen ? t("collapse") : t("expand")}
+ </span>
  </button>
  ) : null
  }
@@ -355,10 +405,10 @@ export function MenuList({
  />
  ) : (
  <div>
- <div className="space-y-2.5">
+ <div ref={categoriesFlipRef} className="space-y-2.5">
  {categories.map((cat, idx) => (
+ <div key={cat.id} data-flip-id={cat.id}>
  <CategoryAccordion
- key={cat.id}
  category={cat}
  defaultLang={defaultLang}
  currencySymbol={currencySymbol}
@@ -372,6 +422,7 @@ export function MenuList({
  onMoveDish={moveDish}
  onToggleDishVisible={toggleDishVisible}
  />
+ </div>
  ))}
  </div>
 
@@ -382,7 +433,7 @@ export function MenuList({
  router.push({ name: "category.new" });
  }}
  data-onboarding-target="add-category"
- className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="w-full mt-2.5 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addCategory")}
@@ -440,51 +491,67 @@ function CategoryAccordion({
 }) {
  const t = useTranslations("dashboard.menu");
  const router = useDashboardRouter();
+ const dishesFlipRef = useFlip<HTMLDivElement>([category.dishes.map((d) => d.id).join(",")]);
  return (
- <div className="bg-card border border-border rounded-xl overflow-hidden">
- <div className="flex items-center gap-1 pl-2 pr-3 py-2.5">
- <button
- type="button"
- onClick={onToggle}
- className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground transition-colors shrink-0"
+ <div className="bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border border-border/60 rounded-xl overflow-hidden">
+ <div
+ role="button"
+ tabIndex={0}
+ onClick={() => {
+ track("dash_menu_category_click");
+ onToggle();
+ }}
+ onKeyDown={(e) => {
+ if (e.key === "Enter" || e.key === " ") {
+ e.preventDefault();
+ track("dash_menu_category_click");
+ onToggle();
+ }
+ }}
  aria-expanded={isOpen}
  aria-label={isOpen ? t("collapseCategory") : t("expandCategory")}
+ className="flex items-center gap-1.5 pl-2 pr-3 py-2 cursor-pointer select-none"
  >
+ <span className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground shrink-0">
  <span
  className="transition-transform duration-150 inline-flex"
  style={{ transform: isOpen ? "rotate(0deg)" : "rotate(-90deg)" }}
  >
  <ChevronDownIcon size={14} />
  </span>
- </button>
- <button
- type="button"
- onClick={() => {
- track("dash_menu_category_click");
- router.push({ name: "category.edit", id: category.id });
- }}
- className="flex-1 min-w-0 text-left"
- >
- <span className="text-base font-medium text-foreground truncate block">
+ </span>
+ <span className="flex-1 min-w-0 text-sm font-semibold uppercase tracking-wide text-foreground/70 truncate block">
  {getMlWithFallback(category.name, defaultLang, defaultLang)}
  </span>
- </button>
 
  <div className="flex items-center gap-0.5 shrink-0">
  <span
- className="inline-flex items-center gap-0.5"
+ className="inline-flex items-center gap-0"
  data-onboarding-target={isFirstCategory ? "sort" : undefined}
  >
- <button type="button" onClick={onMoveUp} disabled={isFirst} className={iconBtn} aria-label={t("moveCategoryUp")}>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); onMoveUp(); }}
+ disabled={isFirst}
+ className={iconBtn}
+ aria-label={t("moveCategoryUp")}
+ >
  <ArrowUpIcon size={14} />
  </button>
- <button type="button" onClick={onMoveDown} disabled={isLast} className={iconBtn} aria-label={t("moveCategoryDown")}>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); onMoveDown(); }}
+ disabled={isLast}
+ className={iconBtn}
+ aria-label={t("moveCategoryDown")}
+ >
  <ArrowDownIcon size={14} />
  </button>
  </span>
  <button
  type="button"
- onClick={() => {
+ onClick={(e) => {
+ e.stopPropagation();
  track("dash_menu_category_edit");
  router.push({ name: "category.edit", id: category.id });
  }}
@@ -497,17 +564,23 @@ function CategoryAccordion({
  </div>
  </div>
 
- {isOpen ? (
+ <div
+ className={
+ "grid transition-[grid-template-rows] duration-200 ease-out " +
+ (isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]")
+ }
+ >
+ <div className="overflow-hidden">
  <div className="border-t border-border">
  {category.dishes.length === 0 ? (
  <p className="text-sm text-muted-foreground h-12 flex items-center justify-center">
  {t("noDishes")}
  </p>
  ) : (
- <div className="divide-y divide-border">
+ <div ref={dishesFlipRef} className="divide-y divide-border">
  {category.dishes.map((dish, idx) => (
+ <div key={dish.id} data-flip-id={dish.id}>
  <DishRow
- key={dish.id}
  dish={dish}
  defaultLang={defaultLang}
  currencySymbol={currencySymbol}
@@ -518,6 +591,7 @@ function CategoryAccordion({
  onMoveDown={() => onMoveDish(category.id, idx, 1)}
  onToggleVisible={() => onToggleDishVisible(category.id, dish.id)}
  />
+ </div>
  ))}
  </div>
  )}
@@ -537,7 +611,8 @@ function CategoryAccordion({
  {t("addDish")}
  </button>
  </div>
- ) : null}
+ </div>
+ </div>
  </div>
  );
 }
@@ -568,27 +643,48 @@ function DishRow({
  const tBadge = useTranslations("dashboard");
  const router = useDashboardRouter();
  const rowCls =
- "flex items-center gap-2 pl-2 pr-3 py-2 transition-colors " +
+ "flex items-center gap-2.5 pl-2 pr-3 py-2 transition-colors cursor-pointer select-none " +
  (dish.visible ? "" : "opacity-50");
+ const openDish = () => {
+ track("dash_menu_item_click");
+ router.push({ name: "item.edit", id: dish.id });
+ };
  return (
- <div className={rowCls}>
- <div className="flex items-center gap-0.5 shrink-0">
- <button type="button" onClick={onMoveUp} disabled={isFirst} className={iconBtn} aria-label={tc("moveUp")}>
+ <div
+ role="button"
+ tabIndex={0}
+ onClick={openDish}
+ onKeyDown={(e) => {
+ if (e.key === "Enter" || e.key === " ") {
+ e.preventDefault();
+ openDish();
+ }
+ }}
+ aria-label={t("editDish")}
+ className={rowCls}
+ >
+ <div className="flex items-center gap-0 shrink-0">
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); onMoveUp(); }}
+ disabled={isFirst}
+ className={iconBtn}
+ aria-label={tc("moveUp")}
+ >
  <ArrowUpIcon size={14} />
  </button>
- <button type="button" onClick={onMoveDown} disabled={isLast} className={iconBtn} aria-label={tc("moveDown")}>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); onMoveDown(); }}
+ disabled={isLast}
+ className={iconBtn}
+ aria-label={tc("moveDown")}
+ >
  <ArrowDownIcon size={14} />
  </button>
  </div>
 
- <button
- type="button"
- onClick={() => {
- track("dash_menu_item_click");
- router.push({ name: "item.edit", id: dish.id });
- }}
- className="flex-1 min-w-0 text-left flex items-center gap-2"
- >
+ <div className="flex-1 min-w-0 text-left flex items-center gap-2">
  <div className="min-w-0 flex-1 flex items-center gap-1.5">
  <span className="text-sm font-medium text-foreground truncate">
  {getMlWithFallback(dish.name, defaultLang, defaultLang)}
@@ -600,12 +696,12 @@ function DishRow({
  )}
  </div>
  <div className="text-sm text-muted-foreground tabular-nums shrink-0">{currencySymbol + dish.price}</div>
- </button>
+ </div>
 
  <div className="flex items-center gap-0.5 shrink-0 pl-1">
  <button
  type="button"
- onClick={onToggleVisible}
+ onClick={(e) => { e.stopPropagation(); onToggleVisible(); }}
  data-onboarding-target={isFirstDishOfFirstCategory ? "toggle-dish" : undefined}
  className={iconBtn}
  aria-label={dish.visible ? t("hideDish") : t("showDish")}
@@ -614,7 +710,8 @@ function DishRow({
  </button>
  <button
  type="button"
- onClick={() => {
+ onClick={(e) => {
+ e.stopPropagation();
  track("dash_menu_item_edit");
  router.push({ name: "item.edit", id: dish.id });
  }}

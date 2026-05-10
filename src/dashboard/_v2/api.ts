@@ -194,12 +194,14 @@ export async function deleteCategory(id: string): Promise<void> {
 
 export async function reorderCategories(
  items: { id: string; sortOrder: number }[],
+ signal?: AbortSignal,
 ): Promise<ApiCategory[]> {
  const res = await fetch(apiUrl("/api/categories/reorder"), {
         credentials: "include",
  method: "POST",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ items }),
+ signal,
  });
  if (!res.ok) throw new Error("Failed to reorder categories");
  return (await res.json()) as ApiCategory[];
@@ -281,12 +283,14 @@ export async function updateItem(
 export async function patchItem(
  id: string,
  payload: { isActive?: boolean },
+ signal?: AbortSignal,
 ): Promise<ApiItem> {
  const res = await fetch(apiUrl(`/api/items/${id}`), {
         credentials: "include",
  method: "PATCH",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify(payload),
+ signal,
  });
  if (!res.ok) throw new Error("Failed to update item");
  return (await res.json()) as ApiItem;
@@ -322,6 +326,20 @@ export async function reorderItem(
  }
  if (data && Array.isArray(data.swapped)) return data.swapped as ReorderSwap[];
  return [];
+}
+
+export async function reorderItemsBulk(
+ items: { id: string; sortOrder: number }[],
+ signal?: AbortSignal,
+): Promise<void> {
+ const res = await fetch(apiUrl("/api/items/reorder-bulk"), {
+   credentials: "include",
+   method: "POST",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({ items }),
+   signal,
+ });
+ if (!res.ok) throw new Error("Failed to reorder items");
 }
 
 // ── Tables ──
