@@ -204,17 +204,22 @@ export function AdminPage() {
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
             {visibleCompanies.map((company) => {
+              const trialEndMs = company.trialEndsAt ? new Date(company.trialEndsAt).getTime() : null;
+              const trialActive =
+                company.subscriptionStatus !== "ACTIVE" &&
+                trialEndMs !== null &&
+                trialEndMs >= Date.now();
               const trialExpired =
                 company.subscriptionStatus !== "ACTIVE" &&
-                company.trialEndsAt !== null &&
-                new Date(company.trialEndsAt).getTime() < Date.now();
+                trialEndMs !== null &&
+                trialEndMs < Date.now();
               const nameColor =
-                company.subscriptionStatus === "ACTIVE" && company.plan === "PRO"
+                company.subscriptionStatus === "ACTIVE"
                   ? "text-emerald-600"
-                  : company.subscriptionStatus === "ACTIVE" && company.plan === "BASIC"
-                  ? "text-blue-500"
+                  : trialActive
+                  ? "text-orange-500"
                   : trialExpired
-                  ? "text-yellow-500"
+                  ? "text-muted-foreground"
                   : "";
               return (
                 <button
