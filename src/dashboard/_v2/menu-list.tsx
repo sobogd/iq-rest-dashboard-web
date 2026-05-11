@@ -355,7 +355,7 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-2.5">
+ <div className="max-w-2xl mx-auto pt-5">
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -467,7 +467,7 @@ export function MenuList({
  />
  ) : (
  <div>
- <div ref={categoriesFlipRef} className="space-y-2.5">
+ <div ref={categoriesFlipRef} className="space-y-3">
  {categories.map((cat, idx) => (
  <div key={cat.id} data-flip-id={cat.id}>
  <CategoryAccordion
@@ -495,7 +495,7 @@ export function MenuList({
  router.push({ name: "category.new" });
  }}
  data-onboarding-target="add-category"
- className="w-full mt-2.5 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addCategory")}
