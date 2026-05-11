@@ -16,6 +16,7 @@ interface Company {
   name: string | null;
   plan: string;
   subscriptionStatus: string;
+  trialEndsAt: string | null;
   categoriesCount: number;
   itemsCount: number;
   messagesCount: number;
@@ -203,11 +204,17 @@ export function AdminPage() {
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
             {visibleCompanies.map((company) => {
+              const trialExpired =
+                company.subscriptionStatus !== "ACTIVE" &&
+                company.trialEndsAt !== null &&
+                new Date(company.trialEndsAt).getTime() < Date.now();
               const nameColor =
                 company.subscriptionStatus === "ACTIVE" && company.plan === "PRO"
                   ? "text-emerald-600"
                   : company.subscriptionStatus === "ACTIVE" && company.plan === "BASIC"
                   ? "text-blue-500"
+                  : trialExpired
+                  ? "text-yellow-500"
                   : "";
               return (
                 <button
