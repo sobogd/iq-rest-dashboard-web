@@ -1218,8 +1218,9 @@ export function AiImageModal({
  setStatus("loading");
  setError(null);
  try {
- const res = await fetch(endpoint, {
+ const res = await fetch(apiUrl(endpoint), {
  method: "POST",
+ credentials: "include",
  headers: { "Content-Type": "application/json" },
  body: JSON.stringify({ prompt: prompt.trim(), ...(extraBody || {}) }),
  });
