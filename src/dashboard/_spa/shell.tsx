@@ -31,6 +31,7 @@ import { SettingsHubView } from "./views/settings-hub";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { UsagePage } from "../_pages/usage";
+import { GoogleAdsPage } from "../_pages/google-ads";
 import { AuthPage } from "../../auth/auth-page";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -243,6 +244,8 @@ function ViewSwitch(p: SwitchProps) {
       return <AdminCompanyPage companyId={view.id} />;
     case "settings.admin.usage":
       return <UsagePage />;
+    case "settings.admin.googleAds":
+      return <GoogleAdsPage />;
 
     case "category.new":
       return (
