@@ -21,6 +21,9 @@ interface Company {
   messagesCount: number;
   monthlyViews: number;
   todayScans: number;
+  scans45d: number;
+  scans60d: number;
+  scans85d: number;
   lastVisit: string | null;
   emailsSentCount: number;
 }
@@ -35,6 +38,7 @@ export function AdminPage() {
   const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
   useScrollLock(Boolean(modalCompanyId));
   const [sortByLastVisit, setSortByLastVisit] = useState(false);
+  const [scanDetails, setScanDetails] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -163,6 +167,19 @@ export function AdminPage() {
               </button>
               <button
                 type="button"
+                onClick={() => setScanDetails((v) => !v)}
+                title="Scan details (1d/30d/45d/60d/85d)"
+                className={
+                  "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+                  (scanDetails
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground")
+                }
+              >
+                <EyeIcon size={13} />
+              </button>
+              <button
+                type="button"
                 onClick={refresh}
                 disabled={refreshing}
                 title={t("refresh")}
@@ -236,18 +253,45 @@ export function AdminPage() {
                       <BoxIcon size={10} />
                       {company.itemsCount}
                     </span>
-                    {company.monthlyViews > 0 ? (
-                      <span className="inline-flex items-center gap-0.5 text-blue-500" title="Scans, last 30 days">
-                        <EyeIcon size={10} />
-                        {company.monthlyViews}
-                      </span>
-                    ) : null}
-                    {company.todayScans > 0 ? (
-                      <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Scans today">
-                        <EyeIcon size={10} />
-                        {company.todayScans}
-                      </span>
-                    ) : null}
+                    {scanDetails ? (
+                      <>
+                        <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Scans today (1d)">
+                          <EyeIcon size={10} />
+                          {company.todayScans}
+                        </span>
+                        <span className="inline-flex items-center gap-0.5 text-blue-500" title="Scans last 30 days">
+                          <EyeIcon size={10} />
+                          {company.monthlyViews}
+                        </span>
+                        <span className="inline-flex items-center gap-0.5 text-purple-500" title="Scans last 45 days">
+                          <EyeIcon size={10} />
+                          {company.scans45d}
+                        </span>
+                        <span className="inline-flex items-center gap-0.5 text-amber-500" title="Scans last 60 days">
+                          <EyeIcon size={10} />
+                          {company.scans60d}
+                        </span>
+                        <span className="inline-flex items-center gap-0.5 text-rose-500" title="Scans last 85 days">
+                          <EyeIcon size={10} />
+                          {company.scans85d}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {company.monthlyViews > 0 ? (
+                          <span className="inline-flex items-center gap-0.5 text-blue-500" title="Scans, last 30 days">
+                            <EyeIcon size={10} />
+                            {company.monthlyViews}
+                          </span>
+                        ) : null}
+                        {company.todayScans > 0 ? (
+                          <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Scans today">
+                            <EyeIcon size={10} />
+                            {company.todayScans}
+                          </span>
+                        ) : null}
+                      </>
+                    )}
                     {company.messagesCount > 0 ? (
                       <span className="inline-flex items-center gap-0.5 text-red-500 font-medium">
                         <MessageIcon size={10} />
