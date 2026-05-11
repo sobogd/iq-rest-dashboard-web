@@ -337,9 +337,14 @@ function AdGroupRowEl({ a, onOpen, onView }: { a: AdGroupRow; onOpen: () => void
       </div>
       {a.suffix ? (
         <div>
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground font-mono">
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); void navigator.clipboard.writeText(a.suffix!); }}
+            title="Copy"
+            className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground font-mono hover:bg-secondary transition-colors cursor-pointer"
+          >
             <span className="truncate max-w-[260px]">{a.suffix}</span>
-          </span>
+          </button>
         </div>
       ) : null}
     </div>
