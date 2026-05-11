@@ -34,6 +34,7 @@ import {
 import { AllergenIcon } from "./allergen-icon";
 import { moveItem, newId, currencySymbolOf, parseDecimal, sanitizePriceInput } from "./helpers";
 import { buildCategoryTranslations, buildItemTranslations } from "./mappers";
+import { useScrollLock } from "./use-scroll-lock";
 import {
  createCategory,
  createItem,
@@ -1211,6 +1212,7 @@ function UnsavedChangesDialog({
  onClose: () => void;
 }) {
  const t = useTranslations("dashboard.common");
+ useScrollLock(open);
  if (!open) return null;
  return (
  <div onClick={() => !saving && onClose()} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">

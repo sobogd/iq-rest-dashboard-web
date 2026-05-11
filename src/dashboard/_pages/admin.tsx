@@ -9,6 +9,7 @@ import { Mail, ArrowUpDown, ListChecks, Trash2, X as XIcon, Check } from "lucide
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AdminCompanyPage } from "./admin-company";
+import { useScrollLock } from "../_v2/use-scroll-lock";
 
 interface Company {
   id: string;
@@ -32,6 +33,7 @@ export function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
+  useScrollLock(Boolean(modalCompanyId));
   const [sortByLastVisit, setSortByLastVisit] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());

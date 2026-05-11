@@ -64,6 +64,31 @@ export function SettingsHubView({
 
   return (
     <div className="max-w-2xl mx-auto">
+      {isAdmin ? (
+        <div className="mb-4 flex items-center gap-1.5 flex-wrap">
+          <button
+            type="button"
+            onClick={() => router.push({ name: "settings.admin.companies" })}
+            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
+          >
+            Companies
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push({ name: "settings.admin.usage" })}
+            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
+          >
+            Usage
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push({ name: "settings.admin.googleAds" })}
+            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
+          >
+            Google Ads
+          </button>
+        </div>
+      ) : null}
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
       <div className="space-y-2.5">
         {CARDS.map((card) => (
@@ -83,53 +108,6 @@ export function SettingsHubView({
             <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
           </button>
         ))}
-        {isAdmin ? (
-          <>
-            <button
-              type="button"
-              onClick={() => {
-                router.push({ name: "settings.admin.companies" });
-              }}
-              className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
-            >
-              <div className="min-w-0">
-                <div className="text-sm font-medium text-foreground">{t("rows.companies")}</div>
-                <div className="text-xs text-muted-foreground leading-snug mt-0.5">{t("rows.companiesDesc")}</div>
-              </div>
-              <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                router.push({ name: "settings.admin.usage" });
-              }}
-              className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
-            >
-              <div className="min-w-0">
-                <div className="text-sm font-medium text-foreground">Usage events</div>
-                <div className="text-xs text-muted-foreground leading-snug mt-0.5">
-                  Unified analytics (anon + by company, by day)
-                </div>
-              </div>
-              <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                router.push({ name: "settings.admin.googleAds" });
-              }}
-              className="w-full text-left p-4 bg-card border border-border rounded-xl transition-colors flex items-center justify-between gap-3"
-            >
-              <div className="min-w-0">
-                <div className="text-sm font-medium text-foreground">Google Ads</div>
-                <div className="text-xs text-muted-foreground leading-snug mt-0.5">
-                  Campaigns, ad groups, ads, keywords and negatives
-                </div>
-              </div>
-              <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
-            </button>
-          </>
-        ) : null}
         {impersonatedBy ? (
           <button
             type="button"

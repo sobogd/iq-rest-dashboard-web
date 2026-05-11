@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Loader2 } from "lucide-react";
 import { track } from "@/lib/dashboard-events";
+import { useScrollLock } from "@/dashboard/_v2/use-scroll-lock";
 
 interface MenuPreviewModalProps {
   menuUrl: string;
@@ -33,21 +34,9 @@ export function MenuPreviewModal({ menuUrl, children, className, open: controlle
   }, []);
 
   useEffect(() => {
-    if (open) {
-      setLoading(true);
-      const scrollbarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    };
+    if (open) setLoading(true);
   }, [open]);
+  useScrollLock(open);
 
   const handleClose = () => {
     track("dash_menu_preview_close");

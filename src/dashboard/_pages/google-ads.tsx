@@ -15,6 +15,7 @@ import {
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
+import { useScrollLock } from "../_v2/use-scroll-lock";
 
 type Status = "ENABLED" | "PAUSED";
 type DateRange = "today" | "yesterday" | "last7days";
@@ -627,6 +628,7 @@ function TabGroup({ options, selected, onSelect }: { options: Array<{ value: str
 }
 
 function DetailModal({ req, onClose }: { req: DetailRequest; onClose: () => void }) {
+  useScrollLock(true);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

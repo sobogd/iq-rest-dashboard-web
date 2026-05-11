@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { Trash2, Building2, Check, Filter, ListChecks, X as XIcon } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
+import { useScrollLock } from "../_v2/use-scroll-lock";
 
 export interface UsageRow {
   id: string;
@@ -18,12 +19,14 @@ export interface UsageRow {
   adParams: string | null;
   companyId: string | null;
   companyLabel: string | null;
+  ip: string | null;
 }
 
-/** Stable hash → HSL hue. Anonymous rows sharing
- *  country|region|device|platform get the same colour dot. */
+/** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
+ *  IP preferred when present (server-anonymized), region as legacy fallback. */
 function sessionHueFor(row: UsageRow): number {
-  const key = `${row.country}|${row.region}|${row.device || ""}|${row.platform || ""}`;
+  const tail = row.ip || row.region || "";
+  const key = `${row.country}|${row.device || ""}|${row.platform || ""}|${tail}`;
   let h = 5381;
   for (let i = 0; i < key.length; i++) h = ((h << 5) + h + key.charCodeAt(i)) >>> 0;
   return h % 360;
@@ -379,7 +382,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                   <span
                     className="inline-block w-2 h-2 rounded-full shrink-0"
                     style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
-                    title={`Session group: ${row.country} ${row.region || "—"} / ${row.device || "—"} / ${row.platform || "—"}`}
+                    title={`Session group: ${row.country} / ${row.device || "—"} / ${row.platform || "—"} / ${row.ip || "—"}`}
                   />
                   <span className="text-base shrink-0" title={row.country}>
                     {countryToFlag(row.country)}
@@ -491,6 +494,7 @@ function FilterModal({
   onApply: (from: string, to: string, companyId: string, onlyAnonymous: boolean) => void;
   onClear: () => void;
 }) {
+  useScrollLock(true);
   const defaults = todayRangeDefaults();
   // Drafts pre-filled with today as a starting point. If the user does not
   // touch them, Apply commits empty strings (no date filter).
@@ -594,6 +598,7 @@ function ConfirmDialogInline({
   onConfirm: () => void;
   busy?: boolean;
 }) {
+  useScrollLock(true);
   return (
     <div onClick={onCancel} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
@@ -660,6 +665,7 @@ function CompanyPickerModal({
   busy?: boolean;
   count: number;
 }) {
+  useScrollLock(true);
   const { items, loading } = useCompanyList();
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -707,6 +713,7 @@ function parseAdParams(raw: string | null): Array<[string, string]> {
 }
 
 function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
+  useScrollLock(Boolean(event));
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadResult, setUploadResult] = useState<unknown | null>(null);
 
@@ -719,6 +726,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["When", dt],
     ["Country", event.country || "—"],
     ["Region", event.region || "—"],
+    ["IP", event.ip || "—"],
     ["Device", event.device || "—"],
     ["Platform", event.platform || "—"],
     ["Company", event.companyLabel || event.companyId || "—"],
@@ -807,6 +815,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
 }
 
 function UploadResultModal({ result, onClose }: { result: unknown; onClose: () => void }) {
+  useScrollLock(true);
   const isOk = result && typeof result === "object" && (result as Record<string, unknown>).ok === true;
   return (
     <div

@@ -19,6 +19,7 @@ import { getMl, setMl, translateText } from "./i18n";
 import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
+import { useScrollLock } from "./use-scroll-lock";
 import { track } from "@/lib/dashboard-events";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -48,14 +49,7 @@ export function Modal({
  return () => window.removeEventListener("keydown", onKey);
  }, [open, onClose]);
 
- useEffect(() => {
- if (!open) return;
- const prev = document.body.style.overflow;
- document.body.style.overflow = "hidden";
- return () => {
- document.body.style.overflow = prev;
- };
- }, [open]);
+ useScrollLock(open);
 
  const tc = useTranslations("dashboard.common");
  if (!open) return null;
