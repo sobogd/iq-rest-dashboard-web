@@ -716,6 +716,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
   useScrollLock(Boolean(event));
   const [uploading, setUploading] = useState<string | null>(null);
   const [uploadResult, setUploadResult] = useState<unknown | null>(null);
+  const [similarOpen, setSimilarOpen] = useState(false);
 
   if (!event) return null;
   const at = new Date(event.at);
@@ -805,11 +806,99 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
             </div>
           </div>
         ) : null}
+
+        <div className="px-4 py-3 border-t border-border">
+          <button
+            type="button"
+            onClick={() => setSimilarOpen(true)}
+            className="w-full h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
+          >
+            Show similar events
+          </button>
+        </div>
       </div>
 
       {uploadResult !== null ? (
         <UploadResultModal result={uploadResult} onClose={() => setUploadResult(null)} />
       ) : null}
+      {similarOpen ? (
+        <SimilarEventsModal eventId={event.id} onClose={() => setSimilarOpen(false)} />
+      ) : null}
+    </div>
+  );
+}
+
+function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: () => void }) {
+  useScrollLock(true);
+  const [rows, setRows] = useState<UsageRow[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(apiUrl(`/api/admin/usage/similar/${eventId}`), { credentials: "include" });
+        if (!res.ok) { if (!cancelled) setError(`Error ${res.status}`); return; }
+        const j = await res.json();
+        if (!cancelled) setRows(j.events ?? []);
+      } catch (e: any) {
+        if (!cancelled) setError(String(e));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [eventId]);
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[85vh]">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground">
+            Similar events {rows ? `(${rows.length})` : ""}
+          </h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
+            ✕
+          </button>
+        </div>
+        <div className="overflow-y-auto">
+          {loading ? (
+            <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
+          ) : error ? (
+            <div className="text-xs text-red-500 py-8 text-center">{error}</div>
+          ) : !rows || rows.length === 0 ? (
+            <div className="text-xs text-muted-foreground py-8 text-center">No matches</div>
+          ) : (
+            <div className="divide-y divide-border">
+              {rows.map((r) => (
+                <div
+                  key={r.id}
+                  className="w-full flex items-center gap-2 px-3 py-1.5 text-xs"
+                >
+                  {r.companyId ? (
+                    <span className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0" title={r.companyLabel || r.companyId}>
+                      {truncate8(r.companyLabel || r.companyId)}
+                    </span>
+                  ) : (
+                    <>
+                      <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `hsl(${sessionHueFor(r)} 70% 55%)` }} />
+                      <span className="text-base shrink-0">{countryToFlag(r.country)}</span>
+                    </>
+                  )}
+                  <span className="font-mono text-foreground truncate flex-1">{r.event}</span>
+                  {r.gclid && (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
+                  )}
+                  <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
+                    {fmtAt(r.at)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
