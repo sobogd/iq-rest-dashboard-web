@@ -169,6 +169,7 @@ const TAG_COLOR = {
   negative: "bg-red-500/10 text-red-500",
 };
 
+
 export function GoogleAdsPage() {
   const router = useDashboardRouter();
   const [filterStatus, setFilterStatus] = useState<Status>("ENABLED");
@@ -376,7 +377,7 @@ function CampaignRow({ c, onOpen, onView }: { c: CampaignRow; onOpen: () => void
       <div className="flex items-center gap-1.5 flex-wrap min-w-0">
         <MetricPill icon={<Eye className="w-3 h-3" />} value={c.impressions} label="impressions" />
         <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={c.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={c.conversions} label="conversions" />
+        <MetricPill icon={<Target className="w-3 h-3" />} value={c.conversions} label="conversions" highlight={Number(c.conversions) > 0} />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={c.cost.toFixed(2)} label="cost €" />
       </div>
     </div>
@@ -394,7 +395,7 @@ function AdGroupRowEl({ a, onOpen, onView }: { a: AdGroupRow; onOpen: () => void
       <div className="flex items-center gap-1.5 flex-wrap min-w-0">
         <MetricPill icon={<Eye className="w-3 h-3" />} value={a.impressions} label="impressions" />
         <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={a.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={a.conversions} label="conversions" />
+        <MetricPill icon={<Target className="w-3 h-3" />} value={a.conversions} label="conversions" highlight={Number(a.conversions) > 0} />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={a.cost.toFixed(2)} label="cost €" />
       </div>
       {a.suffix ? (
@@ -475,8 +476,7 @@ function AdGroupDetail({
             sortedKeywords.map((k) => {
               const mtLetter = k.matchType === "EXACT" ? "E" : k.matchType === "PHRASE" ? "P" : k.matchType === "BROAD" ? "B" : "?";
               const mtClass = MT_BADGE_COLOR[k.matchType ?? ""] ?? "bg-secondary text-foreground";
-              const hasConv = k.conversions > 0;
-              const titleColor = hasConv ? "bg-emerald-500/15 text-emerald-500" : TAG_COLOR.keyword;
+              const titleColor = TAG_COLOR.keyword;
               return (
               <div
                 key={k.id}
@@ -496,7 +496,7 @@ function AdGroupDetail({
                 <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                   <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" />
                   <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={k.clicks} label="clicks" />
-                  <MetricPill icon={<Target className="w-3 h-3" />} value={k.conversions} label="conversions" />
+                  <MetricPill icon={<Target className="w-3 h-3" />} value={k.conversions} label="conversions" highlight={Number(k.conversions) > 0} />
                   <MetricPill icon={<Euro className="w-3 h-3" />} value={k.cost.toFixed(2)} label="cost €" />
                   <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.qualityScore ?? "—"} label="QS" />
                   <button
@@ -614,7 +614,7 @@ function SearchTermsList({ items, loading, header }: { items?: SearchTerm[]; loa
             <div className="flex items-center gap-1.5 flex-wrap min-w-0">
               <MetricPill icon={<Eye className="w-3 h-3" />} value={st.impressions} label="impressions" />
               <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={st.clicks} label="clicks" />
-              <MetricPill icon={<Target className="w-3 h-3" />} value={st.conversions} label="conversions" />
+              <MetricPill icon={<Target className="w-3 h-3" />} value={st.conversions} label="conversions" highlight={Number(st.conversions) > 0} />
               <MetricPill icon={<Euro className="w-3 h-3" />} value={st.cost.toFixed(2)} label="cost €" />
             </div>
           </div>
@@ -642,7 +642,7 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
         </span>
         <MetricPill icon={<Eye className="w-3 h-3" />} value={total.impressions} label="impressions" />
         <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={total.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={total.conversions} label="conversions" />
+        <MetricPill icon={<Target className="w-3 h-3" />} value={total.conversions} label="conversions" highlight={Number(total.conversions) > 0} />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={total.cost.toFixed(2)} label="cost €" />
       </div>
       {timeline.map((b) => (
@@ -652,7 +652,7 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
           </span>
           <MetricPill icon={<Eye className="w-3 h-3" />} value={b.impressions} label="impressions" />
           <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={b.clicks} label="clicks" />
-          <MetricPill icon={<Target className="w-3 h-3" />} value={b.conversions} label="conversions" />
+          <MetricPill icon={<Target className="w-3 h-3" />} value={b.conversions} label="conversions" highlight={Number(b.conversions) > 0} />
           <MetricPill icon={<Euro className="w-3 h-3" />} value={b.cost.toFixed(2)} label="cost €" />
         </div>
       ))}
@@ -716,10 +716,13 @@ function ViewTag({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
   );
 }
 
-function MetricPill({ icon, value, label }: { icon: React.ReactNode; value: number | string; label: string }) {
+function MetricPill({ icon, value, label, highlight }: { icon: React.ReactNode; value: number | string; label: string; highlight?: boolean }) {
+  const cls = highlight
+    ? "bg-emerald-500/10 text-emerald-500"
+    : "bg-muted text-muted-foreground";
   return (
     <span
-      className="shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground tabular-nums min-w-[64px]"
+      className={"shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider tabular-nums min-w-[64px] " + cls}
       title={`${value} ${label}`}
     >
       {icon}
