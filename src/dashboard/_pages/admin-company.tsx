@@ -745,6 +745,7 @@ function ConversionsModal({
   const [selected, setSelected] = useState<"T2" | "T3" | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState<string | null>(null);
+  const [response, setResponse] = useState<unknown | null>(null);
 
   async function saveGclid() {
     const v = gclidInput.trim();
@@ -776,6 +777,7 @@ function ConversionsModal({
     setSending(true);
     setError(null);
     setSent(null);
+    setResponse(null);
     try {
       const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/send-conversion`), {
         method: "POST",
@@ -783,15 +785,17 @@ function ConversionsModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: selected }),
       });
+      const json: unknown = await res.json().catch(() => ({}));
+      setResponse(json);
       if (!res.ok) {
-        const txt = await res.text();
-        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        setError(`Error ${res.status}`);
         return;
       }
       setSent(selected);
       setSelected(null);
     } catch (e) {
       setError(String(e));
+      setResponse({ error: String(e) });
     } finally {
       setSending(false);
     }
@@ -864,6 +868,9 @@ function ConversionsModal({
             </div>
             {error ? <div className="px-4 py-2 text-[11px] text-red-500 break-all">{error}</div> : null}
             {sent ? <div className="px-4 py-2 text-[11px] text-emerald-500">✓ {sent} sent</div> : null}
+            {response !== null ? (
+              <pre className="mx-4 mb-2 p-2 text-[10px] font-mono bg-secondary rounded-md text-foreground overflow-auto max-h-48 whitespace-pre-wrap break-all">{JSON.stringify(response, null, 2)}</pre>
+            ) : null}
             <div className="px-4 py-3 border-t border-border">
               <button
                 type="button"
