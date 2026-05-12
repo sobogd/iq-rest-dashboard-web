@@ -5,7 +5,6 @@ import {
   ChevronRight,
   Eye,
   MousePointerClick,
-  Target,
   Euro,
   Gauge,
   Coins,
@@ -18,6 +17,9 @@ import {
   Check,
   Plus,
   Trash2,
+  Calendar,
+  UserPlus,
+  ShoppingCart,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -25,7 +27,7 @@ import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 
 type Status = "ENABLED" | "PAUSED";
-type DateRange = "today" | "yesterday" | "last7days";
+type DateRange = "today" | "yesterday" | "last7days" | "last30days";
 
 interface CampaignRow {
   id: string;
@@ -36,6 +38,8 @@ interface CampaignRow {
   impressions: number;
   clicks: number;
   conversions: number;
+  convT2: number;
+  convT3: number;
   cost: number;
 }
 
@@ -48,6 +52,8 @@ interface AdGroupRow {
   impressions: number;
   clicks: number;
   conversions: number;
+  convT2: number;
+  convT3: number;
   cost: number;
 }
 
@@ -62,6 +68,8 @@ interface KeywordRow {
   impressions: number;
   clicks: number;
   conversions: number;
+  convT2: number;
+  convT3: number;
   cost: number;
   qualityScore?: number;
   bid?: number;
@@ -103,6 +111,8 @@ interface TimelineBucket {
   impressions: number;
   clicks: number;
   conversions: number;
+  convT2: number;
+  convT3: number;
   cost: number;
 }
 
@@ -138,6 +148,8 @@ interface SearchTerm {
   impressions: number;
   clicks: number;
   conversions: number;
+  convT2?: number;
+  convT3?: number;
   cost: number;
 }
 
@@ -147,8 +159,18 @@ type DetailRequest =
   | { kind: "ad"; adGroupId: string; adId: string }
   | { kind: "negative"; scope: "campaign" | "ad_group"; id: string; campaignId?: string; adGroupId?: string };
 
-const DATE_ORDER: DateRange[] = ["today", "yesterday", "last7days"];
-const DATE_SHORT: Record<DateRange, React.ReactNode> = { today: "T", yesterday: "Y", last7days: "7" };
+const DATE_OPTIONS: Array<{ value: DateRange; label: string }> = [
+  { value: "today", label: "Today" },
+  { value: "yesterday", label: "Yesterday" },
+  { value: "last7days", label: "Last 7 days" },
+  { value: "last30days", label: "Last 30 days" },
+];
+const DATE_LABEL: Record<DateRange, string> = {
+  today: "Today",
+  yesterday: "Yesterday",
+  last7days: "Last 7 days",
+  last30days: "Last 30 days",
+};
 const STATUS_ORDER: Status[] = ["ENABLED", "PAUSED"];
 const STATUS_SHORT: Record<Status, React.ReactNode> = {
   ENABLED: <Play className="w-3 h-3" />,
@@ -183,6 +205,7 @@ export function GoogleAdsPage() {
   const [plannerOpen, setPlannerOpen] = useState(false);
   const plannerState = usePlannerState();
   const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [addKwAdGroupId, setAddKwAdGroupId] = useState<string | null>(null);
   const [addKwFromPlanner, setAddKwFromPlanner] = useState<{ adGroupId: string; text: string } | null>(null);
   const [deleteKwReq, setDeleteKwReq] = useState<{ adGroupId: string; critId: string; keyword: string } | null>(null);
@@ -237,11 +260,15 @@ export function GoogleAdsPage() {
     <div>
       <SubpageStickyBar onBack={handleBack} hideSave>
         <div className="flex items-center gap-1.5">
-          <TabGroup
-            options={DATE_ORDER.map((d) => ({ value: d, label: DATE_SHORT[d] }))}
-            selected={filterDateRange}
-            onSelect={(v) => setFilterDateRange(v as DateRange)}
-          />
+          <button
+            type="button"
+            onClick={() => setDatePickerOpen(true)}
+            className="h-8 inline-flex items-center gap-1.5 px-2 rounded-md bg-secondary text-foreground hover:bg-muted transition-colors text-[11px] font-medium"
+            title="Date range"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{DATE_LABEL[filterDateRange]}</span>
+          </button>
           <TabGroup
             options={STATUS_ORDER.map((s) => ({ value: s, label: STATUS_SHORT[s] }))}
             selected={filterStatus}
@@ -349,6 +376,33 @@ export function GoogleAdsPage() {
       </div>
 
       {detailReq ? <DetailModal req={detailReq} onClose={() => setDetailReq(null)} /> : null}
+      {datePickerOpen ? (
+        <div onClick={() => setDatePickerOpen(false)} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-xs bg-card border border-border rounded-xl shadow-xl flex flex-col">
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+              <h3 className="text-sm font-semibold text-foreground">Date range</h3>
+              <button type="button" onClick={() => setDatePickerOpen(false)} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
+                <XIcon className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="py-1">
+              {DATE_OPTIONS.map((o) => {
+                const selected = filterDateRange === o.value;
+                return (
+                  <button
+                    key={o.value}
+                    type="button"
+                    onClick={() => { setFilterDateRange(o.value); setDatePickerOpen(false); }}
+                    className={"w-full text-left px-4 py-2.5 text-sm transition-colors " + (selected ? "bg-primary/10 text-primary font-medium" : "text-foreground hover:bg-muted/40")}
+                  >
+                    {o.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
       {plannerOpen ? <PlannerModal state={plannerState} campaignId={currentCampaign?.id ?? null} targeting={currentCampaign?.id ? data?.campaignTargeting?.[currentCampaign.id] ?? null : null} adGroupId={(view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") ? view.adGroupId : null} onAddKeyword={(text, adGroupId) => setAddKwFromPlanner({ adGroupId, text })} onClose={() => setPlannerOpen(false)} /> : null}
       {addKwFromPlanner ? (
         <AddKeywordModal
@@ -375,9 +429,10 @@ function CampaignRow({ c, onOpen, onView }: { c: CampaignRow; onOpen: () => void
         <ViewTag onClick={(e) => { e.stopPropagation(); onView(); }} />
       </div>
       <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-        <MetricPill icon={<Eye className="w-3 h-3" />} value={c.impressions} label="impressions" />
-        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={c.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={c.conversions} label="conversions" highlight={Number(c.conversions) > 0} />
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={c.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={c.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<UserPlus className="w-3 h-3" />} value={c.convT2} label="T2 registrations" highlight={Number(c.convT2) > 0} width="narrow" />
+        <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={c.convT3} label="T3 purchases" highlight={Number(c.convT3) > 0} width="narrow" />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={c.cost.toFixed(2)} label="cost €" />
       </div>
     </div>
@@ -393,9 +448,10 @@ function AdGroupRowEl({ a, onOpen, onView }: { a: AdGroupRow; onOpen: () => void
         <ViewTag onClick={(e) => { e.stopPropagation(); onView(); }} />
       </div>
       <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-        <MetricPill icon={<Eye className="w-3 h-3" />} value={a.impressions} label="impressions" />
-        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={a.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={a.conversions} label="conversions" highlight={Number(a.conversions) > 0} />
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={a.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={a.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<UserPlus className="w-3 h-3" />} value={a.convT2} label="T2 registrations" highlight={Number(a.convT2) > 0} width="narrow" />
+        <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={a.convT3} label="T3 purchases" highlight={Number(a.convT3) > 0} width="narrow" />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={a.cost.toFixed(2)} label="cost €" />
       </div>
       {a.suffix ? (
@@ -494,11 +550,12 @@ function AdGroupDetail({
                   <DeleteTag onClick={(e) => { e.stopPropagation(); onDeleteKeyword(k); }} />
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-                  <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" />
-                  <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={k.clicks} label="clicks" />
-                  <MetricPill icon={<Target className="w-3 h-3" />} value={k.conversions} label="conversions" highlight={Number(k.conversions) > 0} />
+                  <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" width="wide" />
+                  <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={k.clicks} label="clicks" width="narrow" />
+                  <MetricPill icon={<UserPlus className="w-3 h-3" />} value={k.convT2} label="T2 registrations" highlight={Number(k.convT2) > 0} width="narrow" />
+                  <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={k.convT3} label="T3 purchases" highlight={Number(k.convT3) > 0} width="narrow" />
                   <MetricPill icon={<Euro className="w-3 h-3" />} value={k.cost.toFixed(2)} label="cost €" />
-                  <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.qualityScore ?? "—"} label="QS" />
+                  <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.qualityScore ?? "—"} label="QS" width="narrow" />
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); onBidEdit(k); }}
@@ -612,9 +669,10 @@ function SearchTermsList({ items, loading, header }: { items?: SearchTerm[]; loa
               <CopyTag value={st.searchTerm} />
             </div>
             <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-              <MetricPill icon={<Eye className="w-3 h-3" />} value={st.impressions} label="impressions" />
-              <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={st.clicks} label="clicks" />
-              <MetricPill icon={<Target className="w-3 h-3" />} value={st.conversions} label="conversions" highlight={Number(st.conversions) > 0} />
+              <MetricPill icon={<Eye className="w-3 h-3" />} value={st.impressions} label="impressions" width="wide" />
+              <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={st.clicks} label="clicks" width="narrow" />
+              <MetricPill icon={<UserPlus className="w-3 h-3" />} value={st.convT2 ?? 0} label="T2 registrations" highlight={Number(st.convT2 ?? 0) > 0} width="narrow" />
+              <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={st.convT3 ?? 0} label="T3 purchases" highlight={Number(st.convT3 ?? 0) > 0} width="narrow" />
               <MetricPill icon={<Euro className="w-3 h-3" />} value={st.cost.toFixed(2)} label="cost €" />
             </div>
           </div>
@@ -630,9 +688,11 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
       impressions: acc.impressions + e.impressions,
       clicks: acc.clicks + e.clicks,
       conversions: acc.conversions + e.conversions,
+      convT2: acc.convT2 + (e.convT2 ?? 0),
+      convT3: acc.convT3 + (e.convT3 ?? 0),
       cost: acc.cost + e.cost,
     }),
-    { impressions: 0, clicks: 0, conversions: 0, cost: 0 },
+    { impressions: 0, clicks: 0, conversions: 0, convT2: 0, convT3: 0, cost: 0 },
   );
   return (
     <>
@@ -640,9 +700,10 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
         <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-emerald-500/10 text-emerald-500">
           Total
         </span>
-        <MetricPill icon={<Eye className="w-3 h-3" />} value={total.impressions} label="impressions" />
-        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={total.clicks} label="clicks" />
-        <MetricPill icon={<Target className="w-3 h-3" />} value={total.conversions} label="conversions" highlight={Number(total.conversions) > 0} />
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={total.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={total.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<UserPlus className="w-3 h-3" />} value={total.convT2} label="T2 registrations" highlight={Number(total.convT2) > 0} width="narrow" />
+        <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={total.convT3} label="T3 purchases" highlight={Number(total.convT3) > 0} width="narrow" />
         <MetricPill icon={<Euro className="w-3 h-3" />} value={total.cost.toFixed(2)} label="cost €" />
       </div>
       {timeline.map((b) => (
@@ -650,9 +711,10 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
           <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-purple-500/10 text-purple-500 tabular-nums">
             {formatTimeTag(b.time)}
           </span>
-          <MetricPill icon={<Eye className="w-3 h-3" />} value={b.impressions} label="impressions" />
-          <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={b.clicks} label="clicks" />
-          <MetricPill icon={<Target className="w-3 h-3" />} value={b.conversions} label="conversions" highlight={Number(b.conversions) > 0} />
+          <MetricPill icon={<Eye className="w-3 h-3" />} value={b.impressions} label="impressions" width="wide" />
+          <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={b.clicks} label="clicks" width="narrow" />
+          <MetricPill icon={<UserPlus className="w-3 h-3" />} value={b.convT2} label="T2 registrations" highlight={Number(b.convT2) > 0} width="narrow" />
+          <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={b.convT3} label="T3 purchases" highlight={Number(b.convT3) > 0} width="narrow" />
           <MetricPill icon={<Euro className="w-3 h-3" />} value={b.cost.toFixed(2)} label="cost €" />
         </div>
       ))}
@@ -716,13 +778,18 @@ function ViewTag({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
   );
 }
 
-function MetricPill({ icon, value, label, highlight }: { icon: React.ReactNode; value: number | string; label: string; highlight?: boolean }) {
+function MetricPill({ icon, value, label, highlight, width = "default" }: { icon: React.ReactNode; value: number | string; label: string; highlight?: boolean; width?: "narrow" | "wide" | "default" }) {
   const cls = highlight
     ? "bg-emerald-500/10 text-emerald-500"
     : "bg-muted text-muted-foreground";
+  const size = width === "narrow"
+    ? "px-1 w-[36px] gap-0.5 overflow-hidden"
+    : width === "wide"
+    ? "px-1 w-[54px] gap-0.5 overflow-hidden"
+    : "px-2 min-w-[64px] gap-1";
   return (
     <span
-      className={"shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider tabular-nums min-w-[64px] " + cls}
+      className={"shrink-0 inline-flex items-center justify-center py-0.5 rounded text-[10px] font-medium uppercase tracking-wider tabular-nums " + size + " " + cls}
       title={`${value} ${label}`}
     >
       {icon}
