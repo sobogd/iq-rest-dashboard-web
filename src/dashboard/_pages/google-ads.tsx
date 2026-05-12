@@ -608,6 +608,15 @@ function AdCard({ ad, onView }: { ad: AdRow; onView: () => void }) {
   );
 }
 
+function searchTermStatusClass(status: string): string {
+  switch (status) {
+    case "added": return "bg-emerald-500/15 text-emerald-500";
+    case "excluded": return "bg-red-500/15 text-red-500";
+    case "added_excluded": return "bg-amber-500/15 text-amber-500";
+    default: return "bg-muted text-muted-foreground";
+  }
+}
+
 function SearchTermsList({ items, loading, header }: { items?: SearchTerm[]; loading: boolean; header: string }) {
   if (loading && !items) return <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>;
   if (!items || items.length === 0) return (
@@ -626,7 +635,7 @@ function SearchTermsList({ items, loading, header }: { items?: SearchTerm[]; loa
               <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-amber-500/10 text-amber-500">
                 <span className="truncate max-w-[300px]">{st.searchTerm}</span>
               </span>
-              <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-muted text-muted-foreground">
+              <span className={"shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider " + searchTermStatusClass(st.status)}>
                 {st.status}
               </span>
               <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-foreground" title={st.matchedKeyword}>

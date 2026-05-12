@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, Filter, ListChecks, X as XIcon } from "lucide-react";
+import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { useScrollLock } from "../_v2/use-scroll-lock";
@@ -74,10 +74,12 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [filterTo, setFilterTo] = useState<string>("");
   const [filterCompanyId, setFilterCompanyId] = useState<string>("");
   const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterModal, setFilterModal] = useState<"dates" | "company" | null>(null);
+  const { items: companies, loading: companiesLoading } = useCompanyList();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
-  const filterActive = Boolean(filterFrom || filterTo || filterCompanyId || filterOnlyAnonymous);
+  const dateFilterActive = Boolean(filterFrom || filterTo);
+  const companyFilterActive = Boolean(filterCompanyId);
 
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
@@ -178,6 +180,13 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     });
   }
 
+  function resetListAndScrollTop() {
+    setRows([]);
+    setCursor(null);
+    setHasMore(false);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+  }
+
   async function applyDelete() {
     if (selectedIds.size === 0) return;
     setBulkBusy(true);
@@ -191,7 +200,8 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       if (!res.ok) return;
       setSelectedIds(new Set());
       setSelectMode(false);
-      void load("refresh");
+      resetListAndScrollTop();
+      void load("initial");
     } finally {
       setBulkBusy(false);
       setConfirmDelete(false);
@@ -212,7 +222,8 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       setSelectedIds(new Set());
       setSelectMode(false);
       setCompanyPickerOpen(false);
-      void load("refresh");
+      resetListAndScrollTop();
+      void load("initial");
     } finally {
       setBulkBusy(false);
     }
@@ -247,21 +258,56 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     </button>
   );
 
-  const filterButton = (
+  const anonButton = (
     <button
       type="button"
-      onClick={() => setFilterOpen(true)}
+      onClick={() => {
+        const next = !filterOnlyAnonymous;
+        setFilterOnlyAnonymous(next);
+        if (next) setFilterCompanyId("");
+      }}
       className={
         "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-        (filterActive
-          ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40"
+        (filterOnlyAnonymous
+          ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40"
           : "bg-secondary text-muted-foreground hover:text-foreground")
       }
-      title={filterActive ? "Filter active" : "Filter"}
+      title={filterOnlyAnonymous ? "Anonymous only — on" : "Show anonymous only"}
     >
-      <Filter className="h-3.5 w-3.5" />
+      <UserX className="h-3.5 w-3.5" />
     </button>
   );
+
+  const dateButton = (
+    <button
+      type="button"
+      onClick={() => setFilterModal("dates")}
+      className={
+        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+        (dateFilterActive
+          ? "bg-primary/15 text-primary hover:bg-primary/25"
+          : "bg-secondary text-muted-foreground hover:text-foreground")
+      }
+      title={dateFilterActive ? "Date filter active" : "Date filter"}
+    >
+      <Calendar className="h-3.5 w-3.5" />
+    </button>
+  );
+  const companyFilterButton = !companyId ? (
+    <button
+      type="button"
+      onClick={() => setFilterModal("company")}
+      className={
+        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+        (companyFilterActive
+          ? "bg-primary/15 text-primary hover:bg-primary/25"
+          : "bg-secondary text-muted-foreground hover:text-foreground")
+      }
+      title={companyFilterActive ? "Company filter active" : "Company filter"}
+    >
+      <Building2 className="h-3.5 w-3.5" />
+    </button>
+  ) : null;
 
   const refreshButton = (
     <button
@@ -314,7 +360,9 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   ) : (
     <>
       {selectToggle}
-      {filterButton}
+      {anonButton}
+      {companyFilterButton}
+      {dateButton}
       {refreshButton}
     </>
   );
@@ -331,8 +379,10 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
             {selectMode ? selectionActions : (
               <>
                 {selectToggle}
-                {filterButton}
-                          {refreshButton}
+                {anonButton}
+                {companyFilterButton}
+                {dateButton}
+                {refreshButton}
               </>
             )}
           </div>
@@ -432,35 +482,51 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
 
       {companyPickerOpen ? (
         <CompanyPickerModal
+          title={`Link ${selectedCount} event${selectedCount === 1 ? "" : "s"} to company`}
+          companies={companies}
+          loading={companiesLoading}
           onClose={() => setCompanyPickerOpen(false)}
           onPick={(id) => void applyLinkCompany(id)}
           busy={bulkBusy}
-          count={selectedCount}
+          showSearch
         />
       ) : null}
 
-      {filterOpen ? (
+      {filterModal === "dates" ? (
         <FilterModal
           from={filterFrom}
           to={filterTo}
-          companyId={filterCompanyId}
-          onlyAnonymous={filterOnlyAnonymous}
-          showCompany={!companyId}
-          onClose={() => setFilterOpen(false)}
-          onApply={(f, t, c, anon) => {
+          onClose={() => setFilterModal(null)}
+          onApply={(f, t) => {
             setFilterFrom(f);
             setFilterTo(t);
-            setFilterCompanyId(c);
-            setFilterOnlyAnonymous(anon);
-            setFilterOpen(false);
+            setFilterModal(null);
           }}
           onClear={() => {
             setFilterFrom("");
             setFilterTo("");
-            setFilterCompanyId("");
-            setFilterOnlyAnonymous(false);
-            setFilterOpen(false);
+            setFilterModal(null);
           }}
+        />
+      ) : null}
+
+      {filterModal === "company" ? (
+        <CompanyPickerModal
+          title="Filter by company"
+          companies={companies}
+          loading={companiesLoading}
+          initialSelected={filterCompanyId}
+          onClose={() => setFilterModal(null)}
+          onPick={(id) => {
+            setFilterCompanyId(id);
+            if (id) setFilterOnlyAnonymous(false);
+            setFilterModal(null);
+          }}
+          onClear={() => {
+            setFilterCompanyId("");
+            setFilterModal(null);
+          }}
+          showSearch
         />
       ) : null}
     </div>
@@ -478,37 +544,26 @@ function todayRangeDefaults(): { from: string; to: string } {
 function FilterModal({
   from,
   to,
-  companyId,
-  onlyAnonymous,
-  showCompany,
   onClose,
   onApply,
   onClear,
 }: {
   from: string;
   to: string;
-  companyId: string;
-  onlyAnonymous: boolean;
-  showCompany: boolean;
   onClose: () => void;
-  onApply: (from: string, to: string, companyId: string, onlyAnonymous: boolean) => void;
+  onApply: (from: string, to: string) => void;
   onClear: () => void;
 }) {
   useScrollLock(true);
   const defaults = todayRangeDefaults();
-  // Drafts pre-filled with today as a starting point. If the user does not
-  // touch them, Apply commits empty strings (no date filter).
   const [draftFrom, setDraftFrom] = useState(from || defaults.from);
   const [draftTo, setDraftTo] = useState(to || defaults.to);
   const [datesTouched, setDatesTouched] = useState(Boolean(from || to));
-  const [draftCompanyId, setDraftCompanyId] = useState(companyId);
-  const [draftOnlyAnonymous, setDraftOnlyAnonymous] = useState(onlyAnonymous);
-  const { items: companies, loading: companiesLoading } = useCompanyList();
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
         <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-foreground">Filter</h3>
+          <h3 className="text-sm font-semibold text-foreground">Date filter</h3>
           <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
             ✕
           </button>
@@ -532,36 +587,6 @@ function FilterModal({
               className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
             />
           </label>
-          {showCompany ? (
-            <label className="block">
-              <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Company</span>
-              <select
-                value={draftCompanyId}
-                onChange={(e) => setDraftCompanyId(e.target.value)}
-                disabled={companiesLoading}
-                className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
-              >
-                <option value="">Any company</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name || "(unnamed)"}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ) : null}
-          {showCompany ? (
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={draftOnlyAnonymous}
-                onChange={(e) => setDraftOnlyAnonymous(e.target.checked)}
-                disabled={Boolean(draftCompanyId)}
-                className="h-4 w-4"
-              />
-              <span className="text-sm text-foreground">Only anonymous events</span>
-            </label>
-          ) : null}
         </div>
         <div className="px-4 py-3 border-t border-border flex items-center gap-2">
           <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
@@ -572,8 +597,6 @@ function FilterModal({
             onClick={() => onApply(
               datesTouched ? draftFrom : "",
               datesTouched ? draftTo : "",
-              draftCompanyId,
-              draftOnlyAnonymous,
             )}
             className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
           >
@@ -655,47 +678,91 @@ function useCompanyList() {
 }
 
 function CompanyPickerModal({
+  title,
+  companies,
+  loading,
+  initialSelected,
   onClose,
   onPick,
+  onClear,
   busy,
-  count,
+  showSearch,
 }: {
+  title: string;
+  companies: CompanyOption[];
+  loading: boolean;
+  initialSelected?: string;
   onClose: () => void;
   onPick: (id: string) => void;
+  onClear?: () => void;
   busy?: boolean;
-  count: number;
+  showSearch?: boolean;
 }) {
   useScrollLock(true);
-  const { items, loading } = useCompanyList();
+  const [query, setQuery] = useState("");
+  const [draft, setDraft] = useState(initialSelected ?? "");
+  const q = query.trim().toLowerCase();
+  const filtered = q
+    ? companies.filter((c) => (c.name || "").toLowerCase().includes(q))
+    : companies;
+  const applyMode = Boolean(onClear);
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl">
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-foreground">Link {count} event{count === 1 ? "" : "s"} to company</h3>
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[80vh]">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
           <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
             ✕
           </button>
         </div>
-        <div className="max-h-80 overflow-y-auto divide-y divide-border">
+        {showSearch ? (
+          <div className="px-4 py-2.5 border-b border-border shrink-0">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search…"
+              className="w-full h-9 px-3 rounded-md bg-secondary text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+          </div>
+        ) : null}
+        <div className="overflow-y-auto divide-y divide-border">
           {loading ? (
             <div className="text-xs text-muted-foreground py-6 text-center">Loading…</div>
-          ) : items.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <div className="text-xs text-muted-foreground py-6 text-center">No companies</div>
           ) : (
-            items.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => onPick(c.id)}
-                disabled={busy}
-                className="w-full text-left px-4 py-2.5 hover:bg-muted/40 disabled:opacity-50"
-              >
-                <div className="text-sm font-medium text-foreground truncate">{c.name || "(unnamed)"}</div>
-                <div className="text-[11px] text-muted-foreground/60 font-mono truncate">{c.id}</div>
-              </button>
-            ))
+            filtered.map((c) => {
+              const selected = applyMode && draft === c.id;
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => applyMode ? setDraft(c.id) : onPick(c.id)}
+                  disabled={busy}
+                  className={"w-full text-left px-4 py-2.5 disabled:opacity-50 transition-colors " + (selected ? "bg-primary/10 text-primary" : "hover:bg-muted/40")}
+                >
+                  <div className={"text-sm font-medium truncate " + (selected ? "" : "text-foreground")}>{c.name || "(unnamed)"}</div>
+                </button>
+              );
+            })
           )}
         </div>
+        {applyMode ? (
+          <div className="px-4 py-3 border-t border-border flex items-center gap-2 shrink-0">
+            <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
+              Clear
+            </button>
+            <button
+              type="button"
+              onClick={() => onPick(draft)}
+              disabled={!draft}
+              className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90 disabled:opacity-50"
+            >
+              Apply
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
