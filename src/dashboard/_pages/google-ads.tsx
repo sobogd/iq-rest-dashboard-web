@@ -17,10 +17,7 @@ import {
   Copy,
   Check,
   Plus,
-  MoreHorizontal,
   Trash2,
-  ArrowUp,
-  ArrowDown,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -158,6 +155,12 @@ const STATUS_SHORT: Record<Status, React.ReactNode> = {
   PAUSED: <Pause className="w-3 h-3" />,
 };
 
+const MT_BADGE_COLOR: Record<string, string> = {
+  EXACT: "bg-red-500/15 text-red-500",
+  PHRASE: "bg-amber-500/15 text-amber-500",
+  BROAD: "bg-blue-500/15 text-blue-500",
+};
+
 const TAG_COLOR = {
   campaign: "bg-blue-500/10 text-blue-500",
   ad_group: "bg-purple-500/10 text-purple-500",
@@ -180,6 +183,7 @@ export function GoogleAdsPage() {
   const plannerState = usePlannerState();
   const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
   const [addKwAdGroupId, setAddKwAdGroupId] = useState<string | null>(null);
+  const [addKwFromPlanner, setAddKwFromPlanner] = useState<{ adGroupId: string; text: string } | null>(null);
   const [deleteKwReq, setDeleteKwReq] = useState<{ adGroupId: string; critId: string; keyword: string } | null>(null);
 
   const load = async (mode: "initial" | "refresh") => {
@@ -344,7 +348,15 @@ export function GoogleAdsPage() {
       </div>
 
       {detailReq ? <DetailModal req={detailReq} onClose={() => setDetailReq(null)} /> : null}
-      {plannerOpen ? <PlannerModal state={plannerState} campaignId={currentCampaign?.id ?? null} targeting={currentCampaign?.id ? data?.campaignTargeting?.[currentCampaign.id] ?? null : null} onClose={() => setPlannerOpen(false)} /> : null}
+      {plannerOpen ? <PlannerModal state={plannerState} campaignId={currentCampaign?.id ?? null} targeting={currentCampaign?.id ? data?.campaignTargeting?.[currentCampaign.id] ?? null : null} adGroupId={(view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") ? view.adGroupId : null} onAddKeyword={(text, adGroupId) => setAddKwFromPlanner({ adGroupId, text })} onClose={() => setPlannerOpen(false)} /> : null}
+      {addKwFromPlanner ? (
+        <AddKeywordModal
+          adGroupId={addKwFromPlanner.adGroupId}
+          initialText={addKwFromPlanner.text}
+          onClose={() => setAddKwFromPlanner(null)}
+          onSaved={() => { setAddKwFromPlanner(null); setPlannerOpen(false); void load("refresh"); }}
+        />
+      ) : null}
       {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
       {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
       {deleteKwReq ? <DeleteKeywordModal req={deleteKwReq} onClose={() => setDeleteKwReq(null)} onDeleted={() => { setDeleteKwReq(null); void load("refresh"); }} /> : null}
@@ -439,57 +451,17 @@ function AdGroupDetail({
   negatives: NegativeRow[];
   onNegativeView: (n: NegativeRow) => void;
 }) {
-  const [sortMap, setSortMap] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(apiUrl(`/api/admin/google-ads/keyword-sort/${adGroupId}`), { credentials: "include" });
-        if (!res.ok) return;
-        const j = (await res.json()) as { map: Record<string, number> };
-        if (!cancelled) setSortMap(j.map ?? {});
-      } catch { /* ignore */ }
-    })();
-    return () => { cancelled = true; };
-  }, [adGroupId]);
-
   const sortedKeywords = useMemo(() => {
+    const MT_ORDER: Record<string, number> = { BROAD: 0, PHRASE: 1, EXACT: 2 };
     const arr = [...keywords];
     arr.sort((a, b) => {
-      const ai = sortMap[a.id];
-      const bi = sortMap[b.id];
-      if (ai != null && bi != null) return ai - bi;
-      if (ai != null) return -1;
-      if (bi != null) return 1;
-      // fallback: id desc
-      const aId = BigInt(a.id), bId = BigInt(b.id);
-      return bId > aId ? 1 : bId < aId ? -1 : 0;
+      const ai = MT_ORDER[a.matchType ?? ""] ?? 99;
+      const bi = MT_ORDER[b.matchType ?? ""] ?? 99;
+      if (ai !== bi) return ai - bi;
+      return b.impressions - a.impressions;
     });
     return arr;
-  }, [keywords, sortMap]);
-
-  async function moveKeyword(critId: string, dir: "up" | "down") {
-    const idx = sortedKeywords.findIndex((k) => k.id === critId);
-    if (idx < 0) return;
-    const swapIdx = dir === "up" ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= sortedKeywords.length) return;
-    const next = [...sortedKeywords];
-    [next[idx], next[swapIdx]] = [next[swapIdx], next[idx]];
-    const order = next.map((k) => k.id);
-    // Optimistic update
-    const newMap: Record<string, number> = {};
-    order.forEach((id, i) => { newMap[id] = i; });
-    setSortMap(newMap);
-    try {
-      await fetch(apiUrl(`/api/admin/google-ads/keyword-sort/${adGroupId}`), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order }),
-      });
-    } catch { /* keep optimistic */ }
-  }
+  }, [keywords]);
   return (
     <div className="space-y-4">
       <div>
@@ -500,10 +472,11 @@ function AdGroupDetail({
           {sortedKeywords.length === 0 ? (
             <div className="text-xs text-muted-foreground py-4 text-center">No keywords</div>
           ) : (
-            sortedKeywords.map((k, i) => {
-              const mt = k.matchType ? (k.matchType === "EXACT" ? "E" : k.matchType === "PHRASE" ? "P" : k.matchType === "BROAD" ? "B" : "?") : "?";
-              const isFirst = i === 0;
-              const isLast = i === sortedKeywords.length - 1;
+            sortedKeywords.map((k) => {
+              const mtLetter = k.matchType === "EXACT" ? "E" : k.matchType === "PHRASE" ? "P" : k.matchType === "BROAD" ? "B" : "?";
+              const mtClass = MT_BADGE_COLOR[k.matchType ?? ""] ?? "bg-secondary text-foreground";
+              const hasConv = k.conversions > 0;
+              const titleColor = hasConv ? "bg-emerald-500/15 text-emerald-500" : TAG_COLOR.keyword;
               return (
               <div
                 key={k.id}
@@ -514,17 +487,11 @@ function AdGroupDetail({
                 className="px-3 py-2 space-y-1.5 hover:bg-muted/40 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-foreground">{mt}</span>
-                  <TitleTag text={k.text ?? k.title} color={TAG_COLOR.keyword} paused={k.status === "PAUSED"} />
+                  <span className={"shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider " + mtClass}>{mtLetter}</span>
+                  <TitleTag text={k.text ?? k.title} color={titleColor} paused={k.status === "PAUSED"} />
                   <span className="ml-auto" />
                   <CopyTag value={k.text ?? k.title} />
-                  <KeywordMenu
-                    canUp={!isFirst}
-                    canDown={!isLast}
-                    onUp={() => void moveKeyword(k.id, "up")}
-                    onDown={() => void moveKeyword(k.id, "down")}
-                    onDelete={() => onDeleteKeyword(k)}
-                  />
+                  <DeleteTag onClick={(e) => { e.stopPropagation(); onDeleteKeyword(k); }} />
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                   <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" />
@@ -909,7 +876,7 @@ function usePlannerState(): PlannerState {
 
 const COUNTRY_TO_LANG: Record<string, string> = { US: "EN", ES: "ES", PT: "PT", DE: "DE", IT: "IT" };
 
-function PlannerModal({ state, campaignId, targeting, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; onClose: () => void }) {
+function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; adGroupId: string | null; onAddKeyword: (text: string, adGroupId: string) => void; onClose: () => void }) {
   useScrollLock(true);
 
   const { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
@@ -1023,6 +990,18 @@ function PlannerModal({ state, campaignId, targeting, onClose }: { state: Planne
             ) : null}
           </form>
           <KeywordPlanContent data={result} />
+          {adGroupId && phrase.trim() ? (
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => onAddKeyword(phrase.trim(), adGroupId)}
+                className="w-full h-9 rounded-md bg-secondary border border-border text-xs font-medium uppercase tracking-wider text-foreground hover:bg-muted transition-colors inline-flex items-center justify-center gap-1.5"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                Add this keyword to ad group
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -1213,95 +1192,15 @@ function BidEditModal({
   );
 }
 
-function KeywordMenu({
-  canUp,
-  canDown,
-  onUp,
-  onDown,
-  onDelete,
-}: {
-  canUp: boolean;
-  canDown: boolean;
-  onUp: () => void;
-  onDown: () => void;
-  onDelete: () => void;
-}) {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (!open) return;
-    const handler = () => setOpen(false);
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
-  return (
-    <div className="relative shrink-0" onMouseDown={(e) => e.stopPropagation()}>
-      <button
-        type="button"
-        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
-        title="Actions"
-        className="shrink-0 inline-flex items-center justify-center h-5 w-6 rounded bg-secondary text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-      >
-        <MoreHorizontal className="w-3 h-3" />
-      </button>
-      {open ? (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="absolute right-0 top-full mt-1 z-50 min-w-[160px] bg-card border border-border rounded-md shadow-lg py-1"
-        >
-          <MenuItem
-            disabled={!canUp}
-            icon={<ArrowUp className="w-3.5 h-3.5" />}
-            label="Move up"
-            onClick={() => { setOpen(false); onUp(); }}
-          />
-          <MenuItem
-            disabled={!canDown}
-            icon={<ArrowDown className="w-3.5 h-3.5" />}
-            label="Move down"
-            onClick={() => { setOpen(false); onDown(); }}
-          />
-          <div className="my-1 border-t border-border" />
-          <MenuItem
-            icon={<Trash2 className="w-3.5 h-3.5" />}
-            label="Delete"
-            danger
-            onClick={() => { setOpen(false); onDelete(); }}
-          />
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function MenuItem({
-  icon,
-  label,
-  onClick,
-  disabled,
-  danger,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  danger?: boolean;
-}) {
+function DeleteTag({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
   return (
     <button
       type="button"
-      disabled={disabled}
-      onClick={(e) => { e.stopPropagation(); onClick(); }}
-      className={
-        "w-full text-left px-3 py-1.5 text-xs inline-flex items-center gap-2 transition-colors " +
-        (disabled
-          ? "text-muted-foreground opacity-40 cursor-not-allowed"
-          : danger
-          ? "text-red-500 hover:bg-red-500/10"
-          : "text-foreground hover:bg-muted")
-      }
+      onClick={onClick}
+      title="Delete"
+      className="shrink-0 inline-flex items-center justify-center h-5 w-6 rounded text-[10px] bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
     >
-      {icon}
-      {label}
+      <Trash2 className="w-3 h-3" />
     </button>
   );
 }
@@ -1382,34 +1281,41 @@ function DeleteKeywordModal({
 
 function AddKeywordModal({
   adGroupId,
+  initialText,
   onClose,
   onSaved,
 }: {
   adGroupId: string;
+  initialText?: string;
   onClose: () => void;
   onSaved: () => void;
 }) {
   useScrollLock(true);
-  const [text, setText] = useState("");
-  const [matchType, setMatchType] = useState<"EXACT" | "PHRASE" | "BROAD">("BROAD");
+  const [text, setText] = useState(initialText ?? "");
+  const [matchType, setMatchType] = useState<"EXACT" | "PHRASE" | "BROAD">("EXACT");
   const [negative, setNegative] = useState(false);
+  const [bidStr, setBidStr] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canSave = text.trim().length > 0 && !saving;
+  const parsedBid = parseBid(bidStr);
+  const bidValid = !bidStr || (parsedBid != null && parsedBid > 0);
+  const canSave = text.trim().length > 0 && !saving && bidValid;
 
   async function save() {
     if (!canSave) return;
     setSaving(true);
     setError(null);
     try {
+      const payload: Record<string, unknown> = { text: text.trim(), matchType, negative };
+      if (parsedBid != null && parsedBid > 0) payload.bidMicros = Math.round(parsedBid * 1_000_000);
       const res = await fetch(
         apiUrl(`/api/admin/google-ads/keyword/${adGroupId}`),
         {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text.trim(), matchType, negative }),
+          body: JSON.stringify(payload),
         },
       );
       if (!res.ok) {
@@ -1462,6 +1368,21 @@ function AddKeywordModal({
               ))}
             </div>
           </FormLabel>
+          {!negative ? (
+            <FormLabel label="CPC bid (€) — optional">
+              <input
+                type="text"
+                inputMode="decimal"
+                value={bidStr}
+                onChange={(e) => setBidStr(e.target.value.replace(/[^0-9.,]/g, ""))}
+                placeholder="0.25"
+                className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+              />
+              {bidStr && !bidValid ? (
+                <div className="text-[10px] text-amber-500 mt-1">Invalid number</div>
+              ) : null}
+            </FormLabel>
+          ) : null}
           <FormLabel label="Polarity">
             <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
               {([
