@@ -479,7 +479,7 @@ function OrderDetailPage({
  return (
  <div>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
@@ -820,7 +820,7 @@ function PickerStep({
  return (
  <div>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
@@ -1000,7 +1000,7 @@ function DishWizard({
  return (
  <div>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
@@ -1250,7 +1250,7 @@ export function KitchenPage({
  `}</style>
 
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-card/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="flex items-center gap-1.5 overflow-x-auto px-4 md:px-6 py-2 no-scrollbar">

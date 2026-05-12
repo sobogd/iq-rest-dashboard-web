@@ -141,7 +141,7 @@ export function ReservationsPage({
   <>
    {/* Sticky sub-header — view toggle on the left, prev/next on the right. */}
    <div
-    className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%/0.9)] backdrop-blur-md border-b border-border/60"
+    className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card/90 backdrop-blur-md border-b border-border/60"
     style={{ top: "var(--topbar-h, 0px)" }}
    >
     <div className="max-w-5xl mx-auto px-4 md:px-6 w-full flex items-center justify-between gap-3">

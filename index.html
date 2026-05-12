@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" translate="no" class="dark">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
@@ -7,9 +7,22 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
     <link rel="apple-touch-icon" href="/apple-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#0d0d0d" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="googlebot" content="noindex, nofollow, noarchive" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("iq-theme");
+          var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark =
+            stored === "dark" ||
+            ((stored === null || stored === "system") && systemDark);
+          if (isDark) document.documentElement.classList.add("dark");
+        } catch (e) {}
+      })();
+    </script>
     <title>IQ Rest</title>
   </head>
   <body>

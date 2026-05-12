@@ -313,7 +313,7 @@ export function MenuList({
  return (
  <>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-[hsl(0_0%_6.5%)] border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
@@ -555,7 +555,7 @@ function CategoryAccordion({
  const router = useDashboardRouter();
  const dishesFlipRef = useFlip<HTMLDivElement>([category.dishes.map((d) => d.id).join(",")]);
  return (
- <div className="bg-[hsl(0_0%_6.5%)] border border-border/60 rounded-xl overflow-hidden">
+ <div className="bg-card border border-border/60 rounded-xl overflow-hidden">
  <div
  role="button"
  tabIndex={0}
