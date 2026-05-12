@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar } from "lucide-react";
+import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { useScrollLock } from "../_v2/use-scroll-lock";
@@ -75,6 +75,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [filterCompanyId, setFilterCompanyId] = useState<string>("");
   const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
   const [filterModal, setFilterModal] = useState<"dates" | "company" | null>(null);
+  const [sortAsc, setSortAsc] = useState(false);
   const { items: companies, loading: companiesLoading } = useCompanyList();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
@@ -90,6 +91,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       if (cursorParam) qs.set("cursor", cursorParam);
       if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
       if (filterTo) qs.set("to", new Date(filterTo).toISOString());
+      if (sortAsc) qs.set("sort", "asc");
       const res = await fetch(apiUrl(`/api/admin/usage/timeline?${qs.toString()}`), {
         credentials: "include",
       });
@@ -101,7 +103,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         total?: number;
       };
     },
-    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo],
+    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc],
   );
 
   const load = useCallback(
@@ -278,6 +280,22 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     </button>
   );
 
+  const sortButton = (
+    <button
+      type="button"
+      onClick={() => setSortAsc((v) => !v)}
+      className={
+        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+        (sortAsc
+          ? "bg-primary/15 text-primary hover:bg-primary/25"
+          : "bg-secondary text-muted-foreground hover:text-foreground")
+      }
+      title={sortAsc ? "Oldest first (asc)" : "Newest first (desc)"}
+    >
+      {sortAsc ? <ArrowUpNarrowWide className="h-3.5 w-3.5" /> : <ArrowDownNarrowWide className="h-3.5 w-3.5" />}
+    </button>
+  );
+
   const dateButton = (
     <button
       type="button"
@@ -363,6 +381,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       {anonButton}
       {companyFilterButton}
       {dateButton}
+      {sortButton}
       {refreshButton}
     </>
   );
