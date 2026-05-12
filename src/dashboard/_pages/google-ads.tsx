@@ -11,6 +11,16 @@ import {
   Coins,
   RefreshCw,
   X as XIcon,
+  BarChart3,
+  Play,
+  Pause,
+  Copy,
+  Check,
+  Plus,
+  MoreHorizontal,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -99,6 +109,11 @@ interface TimelineBucket {
   cost: number;
 }
 
+interface CampaignTargeting {
+  geos: Array<{ name: string; code: string | null }>;
+  languages: Array<{ name: string; code: string | null }>;
+}
+
 interface AllData {
   campaigns: CampaignRow[];
   adGroups: AdGroupRow[];
@@ -107,6 +122,7 @@ interface AllData {
   negatives: NegativeRow[];
   timeline: TimelineBucket[];
   campaignAssets: Record<string, CampAssets>;
+  campaignTargeting: Record<string, CampaignTargeting>;
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
 }
 
@@ -132,13 +148,15 @@ type DetailRequest =
   | { kind: "campaign"; id: string }
   | { kind: "ad_group"; id: string }
   | { kind: "ad"; adGroupId: string; adId: string }
-  | { kind: "keyword"; adGroupId: string; critId: string }
   | { kind: "negative"; scope: "campaign" | "ad_group"; id: string; campaignId?: string; adGroupId?: string };
 
 const DATE_ORDER: DateRange[] = ["today", "yesterday", "last7days"];
-const DATE_SHORT: Record<DateRange, string> = { today: "tod", yesterday: "yes", last7days: "7d" };
+const DATE_SHORT: Record<DateRange, React.ReactNode> = { today: "T", yesterday: "Y", last7days: "7" };
 const STATUS_ORDER: Status[] = ["ENABLED", "PAUSED"];
-const STATUS_SHORT: Record<Status, string> = { ENABLED: "on", PAUSED: "off" };
+const STATUS_SHORT: Record<Status, React.ReactNode> = {
+  ENABLED: <Play className="w-3 h-3" />,
+  PAUSED: <Pause className="w-3 h-3" />,
+};
 
 const TAG_COLOR = {
   campaign: "bg-blue-500/10 text-blue-500",
@@ -158,6 +176,11 @@ export function GoogleAdsPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [detailReq, setDetailReq] = useState<DetailRequest | null>(null);
+  const [plannerOpen, setPlannerOpen] = useState(false);
+  const plannerState = usePlannerState();
+  const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
+  const [addKwAdGroupId, setAddKwAdGroupId] = useState<string | null>(null);
+  const [deleteKwReq, setDeleteKwReq] = useState<{ adGroupId: string; critId: string; keyword: string } | null>(null);
 
   const load = async (mode: "initial" | "refresh") => {
     if (mode === "initial") setInitialLoading(true);
@@ -219,6 +242,26 @@ export function GoogleAdsPage() {
             selected={filterStatus}
             onSelect={(v) => setFilterStatus(v as Status)}
           />
+          {view.kind === "ad_group_detail" ? (
+            <button
+              type="button"
+              onClick={() => setAddKwAdGroupId(view.adGroupId)}
+              title="Add keyword"
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
+          {view.kind === "ad_group_detail" || view.kind === "keyword_search_terms" ? (
+            <button
+              type="button"
+              onClick={() => setPlannerOpen(true)}
+              title="Keyword Planner"
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={() => void load("refresh")}
@@ -281,6 +324,8 @@ export function GoogleAdsPage() {
             adGroupId={view.adGroupId}
             campaignId={view.campaignId}
             onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
+            onBidEdit={(k) => setBidEditReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, currentBid: k.bid ?? null })}
+            onDeleteKeyword={(k) => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title })}
             searchTerms={data?.searchTermsByAdGroup[view.adGroupId]}
             negatives={filtered.negatives.filter((n) => n.adGroupId === view.adGroupId && n.scope === "ad_group")}
             onNegativeView={(n) => setDetailReq({ kind: "negative", scope: n.scope, id: n.rawId, campaignId: n.campaignId, adGroupId: n.adGroupId })}
@@ -299,6 +344,10 @@ export function GoogleAdsPage() {
       </div>
 
       {detailReq ? <DetailModal req={detailReq} onClose={() => setDetailReq(null)} /> : null}
+      {plannerOpen ? <PlannerModal state={plannerState} campaignId={currentCampaign?.id ?? null} targeting={currentCampaign?.id ? data?.campaignTargeting?.[currentCampaign.id] ?? null : null} onClose={() => setPlannerOpen(false)} /> : null}
+      {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
+      {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
+      {deleteKwReq ? <DeleteKeywordModal req={deleteKwReq} onClose={() => setDeleteKwReq(null)} onDeleted={() => { setDeleteKwReq(null); void load("refresh"); }} /> : null}
     </div>
   );
 }
@@ -371,6 +420,8 @@ function AdGroupDetail({
   onView,
   adGroupId,
   onKeywordOpen,
+  onBidEdit,
+  onDeleteKeyword,
   searchTerms,
   negatives,
   onNegativeView,
@@ -382,22 +433,77 @@ function AdGroupDetail({
   adGroupId: string;
   campaignId: string;
   onKeywordOpen: (k: KeywordRow) => void;
+  onBidEdit: (k: KeywordRow) => void;
+  onDeleteKeyword: (k: KeywordRow) => void;
   searchTerms?: SearchTerm[];
   negatives: NegativeRow[];
   onNegativeView: (n: NegativeRow) => void;
 }) {
+  const [sortMap, setSortMap] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(apiUrl(`/api/admin/google-ads/keyword-sort/${adGroupId}`), { credentials: "include" });
+        if (!res.ok) return;
+        const j = (await res.json()) as { map: Record<string, number> };
+        if (!cancelled) setSortMap(j.map ?? {});
+      } catch { /* ignore */ }
+    })();
+    return () => { cancelled = true; };
+  }, [adGroupId]);
+
+  const sortedKeywords = useMemo(() => {
+    const arr = [...keywords];
+    arr.sort((a, b) => {
+      const ai = sortMap[a.id];
+      const bi = sortMap[b.id];
+      if (ai != null && bi != null) return ai - bi;
+      if (ai != null) return -1;
+      if (bi != null) return 1;
+      // fallback: id desc
+      const aId = BigInt(a.id), bId = BigInt(b.id);
+      return bId > aId ? 1 : bId < aId ? -1 : 0;
+    });
+    return arr;
+  }, [keywords, sortMap]);
+
+  async function moveKeyword(critId: string, dir: "up" | "down") {
+    const idx = sortedKeywords.findIndex((k) => k.id === critId);
+    if (idx < 0) return;
+    const swapIdx = dir === "up" ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sortedKeywords.length) return;
+    const next = [...sortedKeywords];
+    [next[idx], next[swapIdx]] = [next[swapIdx], next[idx]];
+    const order = next.map((k) => k.id);
+    // Optimistic update
+    const newMap: Record<string, number> = {};
+    order.forEach((id, i) => { newMap[id] = i; });
+    setSortMap(newMap);
+    try {
+      await fetch(apiUrl(`/api/admin/google-ads/keyword-sort/${adGroupId}`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order }),
+      });
+    } catch { /* keep optimistic */ }
+  }
   return (
     <div className="space-y-4">
       <div>
         <div className="px-3 md:px-0 text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5">
-          Keywords ({keywords.length})
+          Keywords ({sortedKeywords.length})
         </div>
-        <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-          {keywords.length === 0 ? (
+        <div className="bg-card border border-border rounded-xl divide-y divide-border">
+          {sortedKeywords.length === 0 ? (
             <div className="text-xs text-muted-foreground py-4 text-center">No keywords</div>
           ) : (
-            keywords.map((k) => {
+            sortedKeywords.map((k, i) => {
               const mt = k.matchType ? (k.matchType === "EXACT" ? "E" : k.matchType === "PHRASE" ? "P" : k.matchType === "BROAD" ? "B" : "?") : "?";
+              const isFirst = i === 0;
+              const isLast = i === sortedKeywords.length - 1;
               return (
               <div
                 key={k.id}
@@ -411,7 +517,14 @@ function AdGroupDetail({
                   <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-foreground">{mt}</span>
                   <TitleTag text={k.text ?? k.title} color={TAG_COLOR.keyword} paused={k.status === "PAUSED"} />
                   <span className="ml-auto" />
-                  <ViewTag onClick={(e) => { e.stopPropagation(); onView({ kind: "keyword", adGroupId: k.adGroupId, critId: k.id }); }} />
+                  <CopyTag value={k.text ?? k.title} />
+                  <KeywordMenu
+                    canUp={!isFirst}
+                    canDown={!isLast}
+                    onUp={() => void moveKeyword(k.id, "up")}
+                    onDown={() => void moveKeyword(k.id, "down")}
+                    onDelete={() => onDeleteKeyword(k)}
+                  />
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                   <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" />
@@ -419,7 +532,15 @@ function AdGroupDetail({
                   <MetricPill icon={<Target className="w-3 h-3" />} value={k.conversions} label="conversions" />
                   <MetricPill icon={<Euro className="w-3 h-3" />} value={k.cost.toFixed(2)} label="cost €" />
                   <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.qualityScore ?? "—"} label="QS" />
-                  <MetricPill icon={<Coins className="w-3 h-3" />} value={k.bid != null ? k.bid.toFixed(2) : "—"} label="bid €" />
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onBidEdit(k); }}
+                    title="Edit bid"
+                    className="shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-colors cursor-pointer tabular-nums min-w-[64px]"
+                  >
+                    <Coins className="w-3 h-3" />
+                    {k.bid != null ? k.bid.toFixed(2) : "—"}
+                  </button>
                 </div>
               </div>
               );
@@ -511,6 +632,8 @@ function SearchTermsList({ items, loading, header }: { items?: SearchTerm[]; loa
               <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-foreground" title={st.matchedKeyword}>
                 <span className="truncate max-w-[200px]">{st.matchedKeyword}</span>
               </span>
+              <span className="ml-auto" />
+              <CopyTag value={st.searchTerm} />
             </div>
             <div className="flex items-center gap-1.5 flex-wrap min-w-0">
               <MetricPill icon={<Eye className="w-3 h-3" />} value={st.impressions} label="impressions" />
@@ -586,6 +709,25 @@ function TitleTag({ text, color, paused, onClick }: { text: string; color: strin
   );
 }
 
+function CopyTag({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        void navigator.clipboard.writeText(value);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      }}
+      title={copied ? "Copied" : "Copy"}
+      className={"shrink-0 inline-flex items-center justify-center h-5 w-6 rounded text-[10px] transition-colors cursor-pointer " + (copied ? "bg-emerald-500/10 text-emerald-500" : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-muted")}
+    >
+      {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+    </button>
+  );
+}
+
 function ViewTag({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
   return (
     <button
@@ -610,7 +752,7 @@ function MetricPill({ icon, value, label }: { icon: React.ReactNode; value: numb
   );
 }
 
-function TabGroup({ options, selected, onSelect }: { options: Array<{ value: string; label: string }>; selected: string; onSelect: (v: string) => void }) {
+function TabGroup({ options, selected, onSelect }: { options: Array<{ value: string; label: React.ReactNode }>; selected: string; onSelect: (v: string) => void }) {
   return (
     <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
       {options.map((o) => (
@@ -618,7 +760,7 @@ function TabGroup({ options, selected, onSelect }: { options: Array<{ value: str
           key={o.value}
           type="button"
           onClick={() => onSelect(o.value)}
-          className={"h-7 px-2 rounded text-[11px] font-medium uppercase tracking-wider tabular-nums transition-colors " + (selected === o.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+          className={"h-7 min-w-7 px-2 rounded text-[11px] font-medium uppercase tracking-wider tabular-nums transition-colors inline-flex items-center justify-center " + (selected === o.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
         >
           {o.label}
         </button>
@@ -643,7 +785,6 @@ function DetailModal({ req, onClose }: { req: DetailRequest; onClose: () => void
         if (req.kind === "campaign") url = `/api/admin/google-ads/detail/campaign/${req.id}`;
         else if (req.kind === "ad_group") url = `/api/admin/google-ads/detail/ad-group/${req.id}`;
         else if (req.kind === "ad") url = `/api/admin/google-ads/detail/ad/${req.adGroupId}/${req.adId}`;
-        else if (req.kind === "keyword") url = `/api/admin/google-ads/detail/keyword/${req.adGroupId}/${req.critId}`;
         else {
           const qs = new URLSearchParams();
           if (req.campaignId) qs.set("campaignId", req.campaignId);
@@ -698,6 +839,672 @@ function DetailModal({ req, onClose }: { req: DetailRequest; onClose: () => void
       </div>
     </div>
   );
+}
+
+interface KeywordPlanData {
+  keyword: string;
+  bidMicros: number | null;
+  geoTargets: string[];
+  language: string | null;
+  avgMonthlySearches: number | null;
+  competition: string | null;
+  competitionIndex: number | null;
+  lowTopOfPageBidMicros: number | null;
+  highTopOfPageBidMicros: number | null;
+  monthlySearchVolumes: Array<{ year: number; monthName: string; monthNum: number; searches: number }>;
+  minMonth: { year: number; monthName: string; monthNum: number; searches: number } | null;
+  maxMonth: { year: number; monthName: string; monthNum: number; searches: number } | null;
+  yoyPct: number | null;
+  foundExactMatch: boolean;
+}
+
+const GEO_OPTIONS = [
+  { label: "USA", code: "US", resource: "geoTargetConstants/2840" },
+  { label: "Spain", code: "ES", resource: "geoTargetConstants/2724" },
+  { label: "Portugal", code: "PT", resource: "geoTargetConstants/2620" },
+  { label: "Germany", code: "DE", resource: "geoTargetConstants/2276" },
+  { label: "Italy", code: "IT", resource: "geoTargetConstants/2380" },
+];
+const LANG_OPTIONS = [
+  { label: "English", code: "EN", resource: "languageConstants/1000" },
+  { label: "Spanish", code: "ES", resource: "languageConstants/1003" },
+  { label: "Portuguese", code: "PT", resource: "languageConstants/1014" },
+  { label: "German", code: "DE", resource: "languageConstants/1001" },
+  { label: "Italian", code: "IT", resource: "languageConstants/1004" },
+];
+
+interface PlannerState {
+  phrase: string;
+  setPhrase: (v: string) => void;
+  geo: string;
+  setGeo: (v: string) => void;
+  language: string;
+  setLanguage: (v: string) => void;
+  result: KeywordPlanData | null;
+  setResult: (v: KeywordPlanData | null) => void;
+  resultError: string | null;
+  setResultError: (v: string | null) => void;
+  appliedCampaignId: string | null;
+  setAppliedCampaignId: (v: string | null) => void;
+}
+
+function usePlannerState(): PlannerState {
+  const [phrase, setPhrase] = useState("");
+  const [geo, setGeo] = useState<string>(GEO_OPTIONS[4].resource);
+  const [language, setLanguage] = useState<string>(LANG_OPTIONS[4].resource);
+  const [result, setResult] = useState<KeywordPlanData | null>(null);
+  const [resultError, setResultError] = useState<string | null>(null);
+  const [appliedCampaignId, setAppliedCampaignId] = useState<string | null>(null);
+  return { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
+}
+
+const COUNTRY_TO_LANG: Record<string, string> = { US: "EN", ES: "ES", PT: "PT", DE: "DE", IT: "IT" };
+
+function PlannerModal({ state, campaignId, targeting, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; onClose: () => void }) {
+  useScrollLock(true);
+
+  const { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
+  const [submitting, setSubmitting] = useState(false);
+
+  // Auto-pick country + language from current campaign targeting (once per campaign).
+  useEffect(() => {
+    if (!campaignId || campaignId === appliedCampaignId) return;
+    if (!targeting) return;
+    const firstGeoCode = targeting.geos[0]?.code?.toUpperCase();
+    if (firstGeoCode) {
+      const geoMatch = GEO_OPTIONS.find((g) => g.code === firstGeoCode);
+      if (geoMatch) setGeo(geoMatch.resource);
+      const langCode = COUNTRY_TO_LANG[firstGeoCode];
+      if (langCode) {
+        const langMatch = LANG_OPTIONS.find((l) => l.code === langCode);
+        if (langMatch) setLanguage(langMatch.resource);
+      }
+    }
+    setAppliedCampaignId(campaignId);
+  }, [campaignId, targeting, appliedCampaignId, setGeo, setLanguage, setAppliedCampaignId]);
+
+  const canSubmit = phrase.trim().length > 0 && !submitting;
+
+  async function submit() {
+    if (!canSubmit) return;
+    setSubmitting(true);
+    setResultError(null);
+    setResult(null);
+    try {
+      const qs = new URLSearchParams({
+        phrase: phrase.trim(),
+        geo,
+        language,
+      });
+      const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
+      if (!res.ok) {
+        const txt = await res.text();
+        setResultError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      const j = (await res.json()) as KeywordPlanData;
+      setResult(j);
+    } catch (e: any) {
+      setResultError(String(e));
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[85vh]">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground inline-flex items-center gap-2">
+            <BarChart3 className="w-4 h-4" />
+            Keyword Planner
+          </h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <div className="overflow-y-auto p-4 space-y-3">
+          <form
+            onSubmit={(e) => { e.preventDefault(); void submit(); }}
+            className="space-y-3"
+          >
+            <FormLabel label="Keyword">
+              <input
+                type="text"
+                value={phrase}
+                onChange={(e) => setPhrase(e.target.value)}
+                placeholder="e.g. qr menu ristorante"
+                autoFocus
+                className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+            </FormLabel>
+            <div className="flex items-end gap-2">
+              <FormLabel label="Country" className="flex-1">
+                <select
+                  value={geo}
+                  onChange={(e) => setGeo(e.target.value)}
+                  className="w-full h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  {GEO_OPTIONS.map((g) => (
+                    <option key={g.resource} value={g.resource}>{g.label} ({g.code})</option>
+                  ))}
+                </select>
+              </FormLabel>
+              <FormLabel label="Language" className="flex-1">
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="w-full h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  {LANG_OPTIONS.map((l) => (
+                    <option key={l.resource} value={l.resource}>{l.label} ({l.code})</option>
+                  ))}
+                </select>
+              </FormLabel>
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
+              >
+                {submitting ? "Analyzing…" : "Analyze"}
+              </button>
+            </div>
+            {resultError ? (
+              <div className="text-[11px] text-red-500 break-all">{resultError}</div>
+            ) : null}
+          </form>
+          <KeywordPlanContent data={result} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FormLabel({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={"space-y-1 " + (className ?? "")}>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      {children}
+    </div>
+  );
+}
+
+function KeywordPlanContent({ data }: { data: KeywordPlanData | null }) {
+  const lowCpc = data?.lowTopOfPageBidMicros != null ? data.lowTopOfPageBidMicros / 1e6 : null;
+  const highCpc = data?.highTopOfPageBidMicros != null ? data.highTopOfPageBidMicros / 1e6 : null;
+
+  const compColor = (c: string | null | undefined) => {
+    if (c === "LOW") return "text-emerald-500 bg-emerald-500/10";
+    if (c === "MEDIUM") return "text-amber-500 bg-amber-500/10";
+    if (c === "HIGH") return "text-red-500 bg-red-500/10";
+    return "text-muted-foreground bg-muted";
+  };
+
+  const yoy = data?.yoyPct ?? null;
+  const yoyStr = yoy == null ? null : (yoy > 0 ? "+" : "") + yoy.toFixed(1) + "% YoY";
+  const yoyClass = yoy == null ? "" : yoy > 5 ? "text-emerald-500" : yoy < -5 ? "text-red-500" : "text-muted-foreground";
+
+  return (
+    <div className="space-y-2 text-xs">
+      {data && !data.foundExactMatch ? (
+        <div className="px-2 py-1.5 rounded bg-amber-500/10 text-amber-500 text-[10px]">
+          Exact match not found — showing closest idea
+        </div>
+      ) : null}
+      <div className="bg-secondary/40 border border-border rounded-lg divide-y divide-border">
+        <Row
+          label="Avg searches / month"
+          value={
+            <span>
+              <span className="font-semibold">{fmtNum(data?.avgMonthlySearches ?? null)}</span>
+              {yoyStr ? <span className={`ml-2 ${yoyClass}`}>({yoyStr})</span> : null}
+            </span>
+          }
+        />
+        <Row
+          label="Competition"
+          value={
+            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider ${compColor(data?.competition)}`}>
+              {data?.competition ?? "—"}
+            </span>
+          }
+        />
+        <Row label="Index (0-100)" value={data?.competitionIndex != null ? String(data.competitionIndex) : "—"} />
+        <Row label="CPC low" value={lowCpc != null ? `€${lowCpc.toFixed(2)}` : "—"} />
+        <Row label="CPC high" value={highCpc != null ? `€${highCpc.toFixed(2)}` : "—"} />
+      </div>
+    </div>
+  );
+}
+
+function Row({
+  label,
+  value,
+  bold,
+  mono,
+  valueClass,
+}: {
+  label: string;
+  value: React.ReactNode;
+  bold?: boolean;
+  mono?: boolean;
+  valueClass?: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 px-3 py-1.5">
+      <span className="text-[11px] text-muted-foreground shrink-0 w-44">{label}</span>
+      <span className={`text-xs flex-1 break-all ${bold ? "font-semibold text-foreground" : "text-foreground"} ${mono ? "font-mono" : ""} ${valueClass ?? ""}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function fmtNum(n: number | null): string {
+  if (n == null) return "—";
+  return n.toLocaleString();
+}
+
+function BidEditModal({
+  req,
+  onClose,
+  onSaved,
+}: {
+  req: { adGroupId: string; critId: string; keyword: string; currentBid: number | null };
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  useScrollLock(true);
+  const [input, setInput] = useState(req.currentBid != null ? req.currentBid.toFixed(2) : "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const parsed = parseBid(input);
+  const canSave = parsed != null && parsed > 0 && !saving;
+
+  async function save() {
+    if (!canSave) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const bidMicros = Math.round(parsed! * 1_000_000);
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/keyword/${req.adGroupId}/${req.critId}/bid`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bidMicros }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onSaved();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground truncate" title={req.keyword}>
+            Edit bid — {req.keyword}
+          </h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <form
+          onSubmit={(e) => { e.preventDefault(); void save(); }}
+          className="p-4 space-y-3"
+        >
+          <FormLabel label="CPC bid (€)">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                inputMode="decimal"
+                value={input}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/[^0-9.,]/g, "");
+                  setInput(cleaned);
+                }}
+                placeholder="0.25"
+                autoFocus
+                className="flex-1 h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+              />
+              <button
+                type="submit"
+                disabled={!canSave}
+                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
+              >
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </div>
+          </FormLabel>
+          {parsed != null ? (
+            <div className="text-[11px] text-muted-foreground">
+              Will be saved as <span className="font-mono text-foreground">€{parsed.toFixed(2)}</span>
+            </div>
+          ) : input ? (
+            <div className="text-[11px] text-amber-500">Invalid number</div>
+          ) : null}
+          {error ? (
+            <div className="text-[11px] text-red-500 break-all">{error}</div>
+          ) : null}
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function KeywordMenu({
+  canUp,
+  canDown,
+  onUp,
+  onDown,
+  onDelete,
+}: {
+  canUp: boolean;
+  canDown: boolean;
+  onUp: () => void;
+  onDown: () => void;
+  onDelete: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const handler = () => setOpen(false);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+  return (
+    <div className="relative shrink-0" onMouseDown={(e) => e.stopPropagation()}>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        title="Actions"
+        className="shrink-0 inline-flex items-center justify-center h-5 w-6 rounded bg-secondary text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+      >
+        <MoreHorizontal className="w-3 h-3" />
+      </button>
+      {open ? (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="absolute right-0 top-full mt-1 z-50 min-w-[160px] bg-card border border-border rounded-md shadow-lg py-1"
+        >
+          <MenuItem
+            disabled={!canUp}
+            icon={<ArrowUp className="w-3.5 h-3.5" />}
+            label="Move up"
+            onClick={() => { setOpen(false); onUp(); }}
+          />
+          <MenuItem
+            disabled={!canDown}
+            icon={<ArrowDown className="w-3.5 h-3.5" />}
+            label="Move down"
+            onClick={() => { setOpen(false); onDown(); }}
+          />
+          <div className="my-1 border-t border-border" />
+          <MenuItem
+            icon={<Trash2 className="w-3.5 h-3.5" />}
+            label="Delete"
+            danger
+            onClick={() => { setOpen(false); onDelete(); }}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function MenuItem({
+  icon,
+  label,
+  onClick,
+  disabled,
+  danger,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  danger?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      className={
+        "w-full text-left px-3 py-1.5 text-xs inline-flex items-center gap-2 transition-colors " +
+        (disabled
+          ? "text-muted-foreground opacity-40 cursor-not-allowed"
+          : danger
+          ? "text-red-500 hover:bg-red-500/10"
+          : "text-foreground hover:bg-muted")
+      }
+    >
+      {icon}
+      {label}
+    </button>
+  );
+}
+
+function DeleteKeywordModal({
+  req,
+  onClose,
+  onDeleted,
+}: {
+  req: { adGroupId: string; critId: string; keyword: string };
+  onClose: () => void;
+  onDeleted: () => void;
+}) {
+  useScrollLock(true);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function confirm() {
+    setDeleting(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/keyword/${req.adGroupId}/${req.critId}`),
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onDeleted();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground">Delete keyword</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <div className="p-4 space-y-3 text-xs">
+          <div className="text-foreground">
+            Permanently remove keyword:
+          </div>
+          <div className="px-2 py-1.5 rounded bg-secondary text-foreground font-mono break-all">
+            {req.keyword}
+          </div>
+          {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
+          <div className="flex items-center justify-end gap-2 pt-1">
+            <button
+              type="button"
+              onClick={onClose}
+              className="h-9 px-3 rounded-md bg-secondary text-foreground text-xs font-medium uppercase tracking-wider hover:bg-muted transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => void confirm()}
+              disabled={deleting}
+              className="h-9 px-4 rounded-md bg-red-500 text-white text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:bg-red-600 transition-colors"
+            >
+              {deleting ? "Deleting…" : "Delete"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddKeywordModal({
+  adGroupId,
+  onClose,
+  onSaved,
+}: {
+  adGroupId: string;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  useScrollLock(true);
+  const [text, setText] = useState("");
+  const [matchType, setMatchType] = useState<"EXACT" | "PHRASE" | "BROAD">("BROAD");
+  const [negative, setNegative] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const canSave = text.trim().length > 0 && !saving;
+
+  async function save() {
+    if (!canSave) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/keyword/${adGroupId}`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: text.trim(), matchType, negative }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onSaved();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground">Add keyword</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <form
+          onSubmit={(e) => { e.preventDefault(); void save(); }}
+          className="p-4 space-y-3"
+        >
+          <FormLabel label="Keyword">
+            <input
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="e.g. qr menu ristorante"
+              autoFocus
+              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+          </FormLabel>
+          <FormLabel label="Match type">
+            <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
+              {(["EXACT", "PHRASE", "BROAD"] as const).map((mt) => (
+                <button
+                  key={mt}
+                  type="button"
+                  onClick={() => setMatchType(mt)}
+                  className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (matchType === mt ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+                >
+                  {mt}
+                </button>
+              ))}
+            </div>
+          </FormLabel>
+          <FormLabel label="Polarity">
+            <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
+              {([
+                { value: false, label: "POSITIVE" },
+                { value: true, label: "NEGATIVE" },
+              ] as const).map((p) => {
+                const active = negative === p.value;
+                const activeColor = p.value
+                  ? "bg-red-500 text-white"
+                  : "bg-primary text-primary-foreground";
+                return (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => setNegative(p.value)}
+                    className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (active ? activeColor : "text-muted-foreground hover:text-foreground")}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+          </FormLabel>
+          {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
+          <div className="flex items-center justify-end pt-1">
+            <button
+              type="submit"
+              disabled={!canSave}
+              className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function parseBid(s: string): number | null {
+  const trimmed = s.trim();
+  if (!trimmed) return null;
+  // Allow only digits, dots, commas
+  if (!/^[0-9.,]+$/.test(trimmed)) return null;
+  // Normalize: replace commas with dots
+  const normalized = trimmed.replace(/,/g, ".");
+  // Must have at most one dot
+  const dotCount = (normalized.match(/\./g) ?? []).length;
+  if (dotCount > 1) return null;
+  const n = Number(normalized);
+  if (!Number.isFinite(n)) return null;
+  return n;
 }
 
 function flattenObject(obj: any, prefix = ""): Array<[string, string]> {
