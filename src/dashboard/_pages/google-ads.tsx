@@ -1090,6 +1090,7 @@ function FormLabel({ label, children, className }: { label: string; children: Re
 function KeywordPlanContent({ data }: { data: KeywordPlanData | null }) {
   const lowCpc = data?.lowTopOfPageBidMicros != null ? data.lowTopOfPageBidMicros / 1e6 : null;
   const highCpc = data?.highTopOfPageBidMicros != null ? data.highTopOfPageBidMicros / 1e6 : null;
+  const avgCpc = lowCpc != null && highCpc != null ? (lowCpc + highCpc) / 2 : null;
 
   const compColor = (c: string | null | undefined) => {
     if (c === "LOW") return "text-emerald-500 bg-emerald-500/10";
@@ -1130,6 +1131,7 @@ function KeywordPlanContent({ data }: { data: KeywordPlanData | null }) {
         <Row label="Index (0-100)" value={data?.competitionIndex != null ? String(data.competitionIndex) : "—"} />
         <Row label="CPC low" value={lowCpc != null ? `€${lowCpc.toFixed(2)}` : "—"} />
         <Row label="CPC high" value={highCpc != null ? `€${highCpc.toFixed(2)}` : "—"} />
+        <Row label="CPC avg" value={avgCpc != null ? `€${avgCpc.toFixed(2)}` : "—"} />
       </div>
     </div>
   );
