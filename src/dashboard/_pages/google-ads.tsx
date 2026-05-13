@@ -123,6 +123,14 @@ interface CampaignTargeting {
   languages: Array<{ name: string; code: string | null }>;
 }
 
+interface SitelinkAsset {
+  assetId: string;
+  text: string;
+  desc1?: string;
+  desc2?: string;
+  url: string;
+}
+
 interface AllData {
   campaigns: CampaignRow[];
   adGroups: AdGroupRow[];
@@ -133,6 +141,7 @@ interface AllData {
   campaignAssets: Record<string, CampAssets>;
   campaignTargeting: Record<string, CampaignTargeting>;
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
+  adGroupSitelinks?: Record<string, SitelinkAsset[]>;
 }
 
 type View =
@@ -477,7 +486,19 @@ export function GoogleAdsPage() {
       ) : null}
       {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
       {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
-      {adGroupFormReq ? <AdGroupFormModal req={adGroupFormReq} onClose={() => setAdGroupFormReq(null)} onSaved={() => { setAdGroupFormReq(null); void load("refresh"); }} /> : null}
+      {adGroupFormReq ? (
+        <AdGroupFormModal
+          req={adGroupFormReq}
+          sitelinks={
+            adGroupFormReq.mode === "edit"
+              ? (data?.adGroupSitelinks?.[adGroupFormReq.adGroupId] ?? [])
+              : []
+          }
+          onClose={() => setAdGroupFormReq(null)}
+          onSaved={() => { setAdGroupFormReq(null); void load("refresh"); }}
+          onRefresh={() => { void load("refresh"); }}
+        />
+      ) : null}
       {deleteKwReq ? <DeleteKeywordModal req={deleteKwReq} onClose={() => setDeleteKwReq(null)} onDeleted={() => { setDeleteKwReq(null); void load("refresh"); }} /> : null}
     </div>
   );
@@ -1614,12 +1635,16 @@ const EMPTY_DESCRIPTION: { text: string; pin?: DescriptionPin } = { text: "" };
 
 function AdGroupFormModal({
   req,
+  sitelinks,
   onClose,
   onSaved,
+  onRefresh,
 }: {
   req: AdGroupFormReq;
+  sitelinks: SitelinkAsset[];
   onClose: () => void;
   onSaved: () => void;
+  onRefresh: () => void;
 }) {
   useScrollLock(true);
   const isEdit = req.mode === "edit";
@@ -1636,7 +1661,7 @@ function AdGroupFormModal({
         descriptions: [EMPTY_DESCRIPTION, EMPTY_DESCRIPTION],
       };
 
-  type TabKey = "basic" | "headlines" | "descriptions";
+  type TabKey = "basic" | "headlines" | "descriptions" | "sitelinks";
   const [tab, setTab] = useState<TabKey>("basic");
   const [name, setName] = useState(initial.name);
   const [status, setStatus] = useState<Status>(initial.status);
@@ -1813,6 +1838,7 @@ function AdGroupFormModal({
             <TabBtn k="basic" label="Basic" />
             <TabBtn k="headlines" label="Headlines" badge={`${validHeadlines.length}/15`} />
             <TabBtn k="descriptions" label="Descriptions" badge={`${validDescriptions.length}/4`} />
+            <TabBtn k="sitelinks" label="Sitelinks" badge={`${sitelinks.length}`} />
           </div>
         </div>
 
@@ -2013,6 +2039,20 @@ function AdGroupFormModal({
             </div>
           ) : null}
 
+          {tab === "sitelinks" ? (
+            isEdit ? (
+              <SitelinksTab
+                adGroupId={req.adGroupId}
+                sitelinks={sitelinks}
+                onRefresh={onRefresh}
+              />
+            ) : (
+              <div className="text-[11px] text-muted-foreground py-4 text-center">
+                Save the ad first, then re-open Edit to add sitelinks.
+              </div>
+            )
+          ) : null}
+
           {error ? (
             <div className="text-[11px] text-red-500 break-all">{error}</div>
           ) : null}
@@ -2029,6 +2069,182 @@ function AdGroupFormModal({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function SitelinksTab({
+  adGroupId,
+  sitelinks,
+  onRefresh,
+}: {
+  adGroupId: string;
+  sitelinks: SitelinkAsset[];
+  onRefresh: () => void;
+}) {
+  const [text, setText] = useState("");
+  const [desc1, setDesc1] = useState("");
+  const [desc2, setDesc2] = useState("");
+  const [url, setUrl] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const textValid = text.trim().length > 0 && text.trim().length <= 25;
+  const desc1Valid = desc1.length <= 35;
+  const desc2Valid = desc2.length <= 35;
+  const urlValid = url.trim().length > 0 && /^https?:\/\//i.test(url.trim());
+  const canAdd = !saving && textValid && desc1Valid && desc2Valid && urlValid;
+
+  async function add() {
+    if (!canAdd) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/sitelink`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            linkText: text.trim(),
+            description1: desc1.trim() || undefined,
+            description2: desc2.trim() || undefined,
+            finalUrl: url.trim(),
+          }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      setText("");
+      setDesc1("");
+      setDesc2("");
+      setUrl("");
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function remove(assetId: string) {
+    setDeletingId(assetId);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/sitelink/${assetId}`),
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="text-[11px] text-muted-foreground">
+        4-6 sitelinks recommended. Each: title ≤25, descriptions ≤35 each.
+      </div>
+
+      {sitelinks.length === 0 ? (
+        <div className="text-[11px] text-muted-foreground py-2">No sitelinks yet.</div>
+      ) : (
+        <div className="space-y-2">
+          {sitelinks.map((s) => (
+            <div
+              key={s.assetId}
+              className="border border-border rounded-md p-3 flex items-start gap-2 bg-secondary/40"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-medium text-foreground truncate">{s.text}</div>
+                {s.desc1 ? <div className="text-[11px] text-muted-foreground truncate">{s.desc1}</div> : null}
+                {s.desc2 ? <div className="text-[11px] text-muted-foreground truncate">{s.desc2}</div> : null}
+                <div className="text-[10px] text-muted-foreground/70 font-mono truncate mt-0.5">{s.url}</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => void remove(s.assetId)}
+                disabled={deletingId === s.assetId}
+                title="Delete"
+                className="shrink-0 h-7 w-7 inline-flex items-center justify-center rounded text-[10px] bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="border border-border rounded-md p-3 space-y-2 bg-card">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Add sitelink</div>
+        <div>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Title (e.g. Funzionalità)"
+            maxLength={25}
+            className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          <div className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">{text.length}/25</div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <input
+              type="text"
+              value={desc1}
+              onChange={(e) => setDesc1(e.target.value)}
+              placeholder="Description 1 (optional)"
+              maxLength={35}
+              className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <div className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">{desc1.length}/35</div>
+          </div>
+          <div>
+            <input
+              type="text"
+              value={desc2}
+              onChange={(e) => setDesc2(e.target.value)}
+              placeholder="Description 2 (optional)"
+              maxLength={35}
+              className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <div className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">{desc2.length}/35</div>
+          </div>
+        </div>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="https://iq-rest.com/it/menu-digitale#features"
+          className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+        />
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => void add()}
+            disabled={!canAdd}
+            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {saving ? "Adding…" : "Add"}
+          </button>
+        </div>
+      </div>
+
+      {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
     </div>
   );
 }
