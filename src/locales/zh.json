@@ -462,7 +462,9 @@
           "hours": "开始时间必须早于结束时间。",
           "lunch": "无效的午休时间。",
           "lunchOutside": "午休必须在营业时间内。"
-        }
+        },
+        "timezoneLabel": "时区",
+        "timezoneTip": "用于按本地时间计算预订时间。"
       },
       "languages": {
         "title": "语言",

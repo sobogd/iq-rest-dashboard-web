@@ -462,7 +462,9 @@
           "hours": "Sākumam jābūt pirms beigām.",
           "lunch": "Nepareizs pārtraukuma laiks.",
           "lunchOutside": "Pārtraukumam jābūt darba laikā."
-        }
+        },
+        "timezoneLabel": "Laika josla",
+        "timezoneTip": "Tiek izmantota rezervāciju laiku aprēķināšanai vietējā laikā."
       },
       "languages": {
         "title": "Valodas",

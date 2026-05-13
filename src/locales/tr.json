@@ -462,7 +462,9 @@
           "hours": "Başlangıç bitişten önce olmalı.",
           "lunch": "Geçersiz mola saati.",
           "lunchOutside": "Mola çalışma saatleri içinde olmalı."
-        }
+        },
+        "timezoneLabel": "Saat dilimi",
+        "timezoneTip": "Rezervasyon saatlerini yerel saatte hesaplamak için kullanılır."
       },
       "languages": {
         "title": "Diller",

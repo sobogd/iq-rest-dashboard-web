@@ -462,7 +462,9 @@
           "hours": "Begin moet vóór einde liggen.",
           "lunch": "Ongeldige pauzetijd.",
           "lunchOutside": "Pauze moet binnen openingstijden vallen."
-        }
+        },
+        "timezoneLabel": "Tijdzone",
+        "timezoneTip": "Wordt gebruikt om reserveringstijden in lokale tijd te berekenen."
       },
       "languages": {
         "title": "Talen",

@@ -462,7 +462,9 @@
           "hours": "Alkamisajan on oltava ennen päättymistä.",
           "lunch": "Virheellinen tauon aika.",
           "lunchOutside": "Tauon on oltava aukioloaikojen sisällä."
-        }
+        },
+        "timezoneLabel": "Aikavyöhyke",
+        "timezoneTip": "Käytetään varausaikojen laskemiseen paikallista aikaa käyttäen."
       },
       "languages": {
         "title": "Kielet",

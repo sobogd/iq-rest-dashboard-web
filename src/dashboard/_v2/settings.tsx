@@ -837,6 +837,7 @@ export function BookingSettingsPage({
  reservationMode: draft.approval,
  reservationSlotMinutes: draft.duration,
  reservationSchedule: draft.schedule,
+ timezone: draft.timezone,
  ...(firstOpen
  ? { workingHoursStart: firstOpen.from, workingHoursEnd: firstOpen.to }
  : {}),
@@ -947,10 +948,65 @@ export function BookingSettingsPage({
  </div>
  ))}
  </div>
+
+ {/* Timezone — IANA identifier. Used by reservation logic to compute
+   "is slot in the past" against the restaurant's local clock. */}
+ <div className={"mt-5 bg-card border border-border rounded-2xl p-5 md:p-6 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
+ <div className="flex items-center justify-between gap-3">
+ <div>
+ <div className="text-sm font-medium text-foreground">{tb("timezoneLabel")}</div>
+ <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+ {tb("timezoneTip")}
+ </div>
+ </div>
+ <select
+ value={draft.timezone}
+ onChange={(e) => {
+ track("dash_settings_booking_change_timezone", { tz: e.target.value });
+ setDraft((d) => ({ ...d, timezone: e.target.value }));
+ }}
+ className={inputClass + " w-56"}
+ >
+ {TIMEZONE_OPTIONS.map((tz) => (
+ <option key={tz} value={tz}>{tz}</option>
+ ))}
+ </select>
+ </div>
+ </div>
  </div>
  </div>
  );
 }
+
+// IANA timezone identifiers available at runtime. Falls back to a small
+// curated list on environments that don't expose Intl.supportedValuesOf.
+const TIMEZONE_OPTIONS: string[] = (() => {
+ try {
+ const fn = (Intl as unknown as { supportedValuesOf?: (k: string) => string[] }).supportedValuesOf;
+ if (typeof fn === "function") return fn("timeZone");
+ } catch {
+ // ignore
+ }
+ return [
+ "UTC",
+ "Europe/Madrid", "Europe/Rome", "Europe/Paris", "Europe/Berlin", "Europe/London",
+ "Europe/Lisbon", "Europe/Amsterdam", "Europe/Brussels", "Europe/Zurich",
+ "Europe/Vienna", "Europe/Athens", "Europe/Warsaw", "Europe/Prague",
+ "Europe/Budapest", "Europe/Bucharest", "Europe/Sofia", "Europe/Istanbul",
+ "Europe/Moscow", "Europe/Kyiv", "Europe/Helsinki", "Europe/Stockholm",
+ "Europe/Oslo", "Europe/Copenhagen", "Europe/Dublin", "Asia/Nicosia",
+ "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+ "America/Toronto", "America/Mexico_City", "America/Sao_Paulo",
+ "America/Argentina/Buenos_Aires", "America/Bogota", "America/Lima",
+ "America/Santiago",
+ "Asia/Dubai", "Asia/Riyadh", "Asia/Jerusalem", "Asia/Tokyo", "Asia/Seoul",
+ "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Singapore", "Asia/Bangkok",
+ "Asia/Jakarta", "Asia/Manila", "Asia/Kolkata",
+ "Australia/Sydney", "Australia/Melbourne", "Pacific/Auckland",
+ "Africa/Cairo", "Africa/Johannesburg", "Africa/Lagos", "Africa/Nairobi",
+ "Africa/Casablanca",
+ ];
+})();
 
 const WEEKDAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 

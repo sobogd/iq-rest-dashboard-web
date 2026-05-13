@@ -462,7 +462,9 @@
           "hours": "Începutul trebuie să fie înainte de sfârșit.",
           "lunch": "Oră de pauză invalidă.",
           "lunchOutside": "Pauza trebuie să fie în programul de lucru."
-        }
+        },
+        "timezoneLabel": "Fus orar",
+        "timezoneTip": "Folosit pentru a calcula orele rezervărilor în ora locală."
       },
       "languages": {
         "title": "Limbi",

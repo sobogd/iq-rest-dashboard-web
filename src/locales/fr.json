@@ -462,7 +462,9 @@
           "hours": "L'heure de début doit précéder celle de fin.",
           "lunch": "Heure de pause invalide.",
           "lunchOutside": "La pause doit être dans les horaires d'ouverture."
-        }
+        },
+        "timezoneLabel": "Fuseau horaire",
+        "timezoneTip": "Utilisé pour calculer les horaires des réservations en heure locale."
       },
       "languages": {
         "title": "Langues",

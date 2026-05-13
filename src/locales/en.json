@@ -462,7 +462,9 @@
           "hours": "Start time must be before end time.",
           "lunch": "Invalid lunch break.",
           "lunchOutside": "Lunch break must be within working hours."
-        }
+        },
+        "timezoneLabel": "Time zone",
+        "timezoneTip": "Used to compute reservation slot times in your local clock."
       },
       "languages": {
         "title": "Languages",

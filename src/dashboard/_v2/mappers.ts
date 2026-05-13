@@ -221,6 +221,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  approval: (r.reservationMode === "auto" ? "auto" : "manual") as "auto" | "manual",
  duration: r.reservationSlotMinutes,
  schedule: scheduleFromApi(r.reservationSchedule, r.workingHoursStart, r.workingHoursEnd),
+ timezone: r.timezone || "UTC",
  },
  orderSettings: {
  acceptOrders: r.ordersEnabled,

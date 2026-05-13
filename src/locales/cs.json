@@ -462,7 +462,9 @@
           "hours": "Začátek musí být před koncem.",
           "lunch": "Neplatný čas pauzy.",
           "lunchOutside": "Pauza musí být uvnitř otevírací doby."
-        }
+        },
+        "timezoneLabel": "Časové pásmo",
+        "timezoneTip": "Používá se k výpočtu časů rezervací v místním čase."
       },
       "languages": {
         "title": "Jazyky",

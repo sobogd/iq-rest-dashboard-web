@@ -462,7 +462,9 @@
           "hours": "A kezdésnek a befejezés előtt kell lennie.",
           "lunch": "Érvénytelen szünetidő.",
           "lunchOutside": "A szünetnek a nyitvatartási időn belül kell lennie."
-        }
+        },
+        "timezoneLabel": "Időzóna",
+        "timezoneTip": "A foglalási idők helyi idő szerinti számításához használatos."
       },
       "languages": {
         "title": "Nyelvek",

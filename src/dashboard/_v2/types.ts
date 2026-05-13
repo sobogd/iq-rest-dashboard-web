@@ -126,6 +126,7 @@ export interface BookingSettings {
  approval: "manual" | "auto";
  duration: number;
  schedule: ReservationSchedule;
+ timezone: string;
 }
 
 export interface OrderSettings {

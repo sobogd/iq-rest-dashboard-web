@@ -462,7 +462,9 @@
           "hours": "Początek musi być przed końcem.",
           "lunch": "Nieprawidłowy czas przerwy.",
           "lunchOutside": "Przerwa musi mieścić się w godzinach pracy."
-        }
+        },
+        "timezoneLabel": "Strefa czasowa",
+        "timezoneTip": "Używana do obliczania godzin rezerwacji w czasie lokalnym."
       },
       "languages": {
         "title": "Języki",

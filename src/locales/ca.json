@@ -462,7 +462,9 @@
           "hours": "L'inici ha de ser anterior al final.",
           "lunch": "Hores de la pausa incorrectes.",
           "lunchOutside": "La pausa ha d'estar dins l'horari."
-        }
+        },
+        "timezoneLabel": "Zona horària",
+        "timezoneTip": "S'utilitza per calcular les hores de reserva en hora local."
       },
       "languages": {
         "title": "Idiomes",

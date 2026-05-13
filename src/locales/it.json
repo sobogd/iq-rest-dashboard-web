@@ -462,7 +462,9 @@
           "hours": "L'inizio deve precedere la fine.",
           "lunch": "Orario di pausa non valido.",
           "lunchOutside": "La pausa deve essere all'interno dell'orario."
-        }
+        },
+        "timezoneLabel": "Fuso orario",
+        "timezoneTip": "Usato per calcolare gli orari delle prenotazioni nell'ora locale."
       },
       "languages": {
         "title": "Lingue",

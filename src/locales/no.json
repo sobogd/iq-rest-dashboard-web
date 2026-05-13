@@ -462,7 +462,9 @@
           "hours": "Start må være før slutt.",
           "lunch": "Ugyldig pausetid.",
           "lunchOutside": "Pausen må være innenfor åpningstidene."
-        }
+        },
+        "timezoneLabel": "Tidssone",
+        "timezoneTip": "Brukes til å beregne reservasjonstider i lokal tid."
       },
       "languages": {
         "title": "Språk",

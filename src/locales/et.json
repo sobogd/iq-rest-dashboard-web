@@ -462,7 +462,9 @@
           "hours": "Algus peab olema enne lõppu.",
           "lunch": "Vigane pausi aeg.",
           "lunchOutside": "Paus peab olema lahtiolekuajas."
-        }
+        },
+        "timezoneLabel": "Ajavöönd",
+        "timezoneTip": "Kasutatakse broneeringuaegade arvutamiseks kohaliku aja järgi."
       },
       "languages": {
         "title": "Keeled",

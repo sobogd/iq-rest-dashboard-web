@@ -462,7 +462,9 @@
           "hours": "Ní mór don tús a bheith roimh an deireadh.",
           "lunch": "Am sosa neamhbhailí.",
           "lunchOutside": "Caithfidh an sos a bheith laistigh d'uaireanta oibre."
-        }
+        },
+        "timezoneLabel": "Crios ama",
+        "timezoneTip": "Úsáidte chun amanna áirithinte a ríomh san am áitiúil."
       },
       "languages": {
         "title": "Teangacha",

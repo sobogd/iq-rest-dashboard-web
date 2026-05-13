@@ -462,7 +462,9 @@
           "hours": "Pradžia turi būti anksčiau nei pabaiga.",
           "lunch": "Neteisingas pertraukos laikas.",
           "lunchOutside": "Pertrauka turi būti darbo valandomis."
-        }
+        },
+        "timezoneLabel": "Laiko juosta",
+        "timezoneTip": "Naudojama apskaičiuoti rezervacijų laikus pagal vietos laiką."
       },
       "languages": {
         "title": "Kalbos",

@@ -462,7 +462,9 @@
           "hours": "Upphafstími verður að vera á undan lokatíma.",
           "lunch": "Ógildur hlétími.",
           "lunchOutside": "Hlé verður að vera innan opnunartíma."
-        }
+        },
+        "timezoneLabel": "Tímabelti",
+        "timezoneTip": "Notað til að reikna pöntunartíma í staðartíma."
       },
       "languages": {
         "title": "Tungumál",

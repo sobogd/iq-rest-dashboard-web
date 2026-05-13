@@ -462,7 +462,9 @@
           "hours": "Začetek mora biti pred koncem.",
           "lunch": "Neveljaven čas odmora.",
           "lunchOutside": "Odmor mora biti v delovnem času."
-        }
+        },
+        "timezoneLabel": "Časovni pas",
+        "timezoneTip": "Uporablja se za izračun časov rezervacij v lokalnem času."
       },
       "languages": {
         "title": "Jeziki",
