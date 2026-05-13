@@ -136,6 +136,20 @@ interface CalloutAsset {
   text: string;
 }
 
+interface SnippetAsset {
+  assetId: string;
+  header: string;
+  values: string[];
+}
+
+interface ImageAsset {
+  assetId: string;
+  fieldType: string;
+  url?: string;
+  width?: number;
+  height?: number;
+}
+
 interface AllData {
   campaigns: CampaignRow[];
   adGroups: AdGroupRow[];
@@ -148,6 +162,8 @@ interface AllData {
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
   adGroupSitelinks?: Record<string, SitelinkAsset[]>;
   adGroupCallouts?: Record<string, CalloutAsset[]>;
+  adGroupSnippets?: Record<string, SnippetAsset[]>;
+  adGroupImages?: Record<string, ImageAsset[]>;
 }
 
 type View =
@@ -503,6 +519,16 @@ export function GoogleAdsPage() {
           callouts={
             adGroupFormReq.mode === "edit"
               ? (data?.adGroupCallouts?.[adGroupFormReq.adGroupId] ?? [])
+              : []
+          }
+          snippets={
+            adGroupFormReq.mode === "edit"
+              ? (data?.adGroupSnippets?.[adGroupFormReq.adGroupId] ?? [])
+              : []
+          }
+          images={
+            adGroupFormReq.mode === "edit"
+              ? (data?.adGroupImages?.[adGroupFormReq.adGroupId] ?? [])
               : []
           }
           onClose={() => setAdGroupFormReq(null)}
@@ -1648,6 +1674,8 @@ function AdGroupFormModal({
   req,
   sitelinks,
   callouts,
+  snippets,
+  images,
   onClose,
   onSaved,
   onRefresh,
@@ -1655,6 +1683,8 @@ function AdGroupFormModal({
   req: AdGroupFormReq;
   sitelinks: SitelinkAsset[];
   callouts: CalloutAsset[];
+  snippets: SnippetAsset[];
+  images: ImageAsset[];
   onClose: () => void;
   onSaved: () => void;
   onRefresh: () => void;
@@ -1674,7 +1704,7 @@ function AdGroupFormModal({
         descriptions: [EMPTY_DESCRIPTION, EMPTY_DESCRIPTION],
       };
 
-  type TabKey = "basic" | "headlines" | "descriptions" | "sitelinks" | "callouts";
+  type TabKey = "basic" | "headlines" | "descriptions" | "sitelinks" | "callouts" | "snippet" | "images";
   const [tab, setTab] = useState<TabKey>("basic");
   const [name, setName] = useState(initial.name);
   const [status, setStatus] = useState<Status>(initial.status);
@@ -1853,6 +1883,8 @@ function AdGroupFormModal({
             <TabBtn k="descriptions" label="Descriptions" badge={`${validDescriptions.length}/4`} />
             <TabBtn k="sitelinks" label="Sitelinks" badge={`${sitelinks.length}`} />
             <TabBtn k="callouts" label="Callouts" badge={`${callouts.length}`} />
+            <TabBtn k="snippet" label="Snippet" badge={`${snippets.length}`} />
+            <TabBtn k="images" label="Images" badge={`${images.length}`} />
           </div>
         </div>
 
@@ -2077,6 +2109,34 @@ function AdGroupFormModal({
             ) : (
               <div className="text-[11px] text-muted-foreground py-4 text-center">
                 Save the ad first, then re-open Edit to add callouts.
+              </div>
+            )
+          ) : null}
+
+          {tab === "snippet" ? (
+            isEdit ? (
+              <SnippetTab
+                adGroupId={req.adGroupId}
+                snippets={snippets}
+                onRefresh={onRefresh}
+              />
+            ) : (
+              <div className="text-[11px] text-muted-foreground py-4 text-center">
+                Save the ad first, then re-open Edit to add structured snippets.
+              </div>
+            )
+          ) : null}
+
+          {tab === "images" ? (
+            isEdit ? (
+              <ImagesTab
+                adGroupId={req.adGroupId}
+                images={images}
+                onRefresh={onRefresh}
+              />
+            ) : (
+              <div className="text-[11px] text-muted-foreground py-4 text-center">
+                Save the ad first, then re-open Edit to add images.
               </div>
             )
           ) : null}
@@ -2396,6 +2456,323 @@ function CalloutsTab({
           </button>
         </div>
       </div>
+
+      {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
+    </div>
+  );
+}
+
+const SNIPPET_HEADERS = [
+  "AMENITIES",
+  "BRANDS",
+  "COURSES",
+  "DEGREE_PROGRAMS",
+  "DESTINATIONS",
+  "FEATURED_HOTELS",
+  "INSURANCE_COVERAGE",
+  "MODELS",
+  "NEIGHBORHOODS",
+  "SERVICE_CATALOG",
+  "SHOW_TYPES",
+  "STYLES",
+  "TYPES",
+] as const;
+
+function SnippetTab({
+  adGroupId,
+  snippets,
+  onRefresh,
+}: {
+  adGroupId: string;
+  snippets: SnippetAsset[];
+  onRefresh: () => void;
+}) {
+  const [header, setHeader] = useState<string>("TYPES");
+  const [valuesText, setValuesText] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const parsedValues = valuesText
+    .split(/\n|,/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && s.length <= 25);
+  const canAdd = !saving && parsedValues.length >= 3 && parsedValues.length <= 10;
+
+  async function add() {
+    if (!canAdd) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/snippet`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ header, values: parsedValues }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      setValuesText("");
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function remove(assetId: string) {
+    setDeletingId(assetId);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/snippet/${assetId}`),
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="text-[11px] text-muted-foreground">
+        1+ structured snippet recommended. Header + 3-10 values (each ≤25 chars).
+      </div>
+
+      {snippets.length === 0 ? (
+        <div className="text-[11px] text-muted-foreground py-2">No snippets yet.</div>
+      ) : (
+        <div className="space-y-2">
+          {snippets.map((s) => (
+            <div
+              key={s.assetId}
+              className="border border-border rounded-md p-3 flex items-start gap-2 bg-secondary/40"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] uppercase tracking-wider text-primary font-semibold">{s.header}</div>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {s.values.map((v, i) => (
+                    <span key={i} className="text-[11px] px-2 py-0.5 rounded bg-secondary text-foreground">{v}</span>
+                  ))}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => void remove(s.assetId)}
+                disabled={deletingId === s.assetId}
+                title="Delete"
+                className="shrink-0 h-7 w-7 inline-flex items-center justify-center rounded text-[10px] bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="border border-border rounded-md p-3 space-y-2 bg-card">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Add snippet</div>
+        <div>
+          <div className="text-[10px] text-muted-foreground mb-1">Header</div>
+          <select
+            value={header}
+            onChange={(e) => setHeader(e.target.value)}
+            className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            {SNIPPET_HEADERS.map((h) => (
+              <option key={h} value={h}>{h}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <div className="text-[10px] text-muted-foreground mb-1">Values — one per line or comma-separated</div>
+          <textarea
+            value={valuesText}
+            onChange={(e) => setValuesText(e.target.value)}
+            placeholder={"Menu digitale\nQR Code\nOrdini diretti\n…"}
+            rows={4}
+            className="w-full px-2 py-1.5 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+          />
+          <div className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">
+            {parsedValues.length}/10 valid values
+            {valuesText.trim() && parsedValues.length < 3 ? <span className="text-amber-500"> · need ≥3</span> : null}
+            {parsedValues.length > 10 ? <span className="text-amber-500"> · max 10</span> : null}
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => void add()}
+            disabled={!canAdd}
+            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {saving ? "Adding…" : "Add"}
+          </button>
+        </div>
+      </div>
+
+      {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
+    </div>
+  );
+}
+
+const IMAGE_FIELD_TYPES = [
+  { key: "MARKETING_IMAGE", label: "Landscape (1.91:1)", recommended: 4, note: "≥600×314, jpg/png" },
+  { key: "SQUARE_MARKETING_IMAGE", label: "Square (1:1)", recommended: 4, note: "≥300×300" },
+  { key: "LOGO", label: "Logo (1:1)", recommended: 1, note: "≥128×128, brand mark only" },
+  { key: "LANDSCAPE_LOGO", label: "Logo (4:1)", recommended: 0, note: "≥512×128" },
+] as const;
+
+function ImagesTab({
+  adGroupId,
+  images,
+  onRefresh,
+}: {
+  adGroupId: string;
+  images: ImageAsset[];
+  onRefresh: () => void;
+}) {
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  async function upload(file: File, fieldType: string) {
+    setUploadingField(fieldType);
+    setError(null);
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result as string;
+          resolve(dataUrl.split(",")[1] ?? "");
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+      if (!base64) {
+        setError("Failed to read file");
+        return;
+      }
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/image`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: base64, fieldType, name: file.name }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 300)}`);
+        return;
+      }
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setUploadingField(null);
+    }
+  }
+
+  async function remove(assetId: string, fieldType: string) {
+    setDeletingId(assetId);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/image/${assetId}/${fieldType}`),
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="text-[11px] text-muted-foreground">
+        Upload images per slot. JPG/PNG, ≤5 MB each. Recommended ≥4 landscape + 4 square + 1 logo.
+      </div>
+
+      {IMAGE_FIELD_TYPES.map((slot) => {
+        const slotImages = images.filter((i) => i.fieldType === slot.key);
+        const uploading = uploadingField === slot.key;
+        return (
+          <div key={slot.key} className="border border-border rounded-md p-3 bg-card space-y-2">
+            <div className="flex items-baseline justify-between gap-2">
+              <div>
+                <div className="text-xs font-semibold text-foreground">{slot.label}</div>
+                <div className="text-[10px] text-muted-foreground">{slot.note}</div>
+              </div>
+              <div className="text-[10px] text-muted-foreground tabular-nums shrink-0">
+                {slotImages.length}{slot.recommended ? ` / ${slot.recommended}+` : ""}
+              </div>
+            </div>
+
+            {slotImages.length > 0 ? (
+              <div className="grid grid-cols-3 gap-2">
+                {slotImages.map((img) => (
+                  <div key={img.assetId} className="relative aspect-square rounded-md overflow-hidden bg-secondary border border-border">
+                    {img.url ? (
+                      <img src={img.url} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[10px] text-muted-foreground">no preview</div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => void remove(img.assetId, slot.key)}
+                      disabled={deletingId === img.assetId}
+                      title="Detach"
+                      className="absolute top-1 right-1 h-6 w-6 inline-flex items-center justify-center rounded bg-red-500/80 text-white hover:bg-red-500 transition-colors disabled:opacity-50"
+                    >
+                      <Trash2 className="w-2.5 h-2.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            <label className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md bg-secondary text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer disabled:opacity-50">
+              <Plus className="w-3 h-3" />
+              <span>{uploading ? "Uploading…" : "Upload"}</span>
+              <input
+                type="file"
+                accept="image/png,image/jpeg"
+                disabled={uploading}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) void upload(file, slot.key);
+                  e.currentTarget.value = "";
+                }}
+                className="hidden"
+              />
+            </label>
+          </div>
+        );
+      })}
 
       {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
     </div>
