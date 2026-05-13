@@ -131,6 +131,11 @@ interface SitelinkAsset {
   url: string;
 }
 
+interface CalloutAsset {
+  assetId: string;
+  text: string;
+}
+
 interface AllData {
   campaigns: CampaignRow[];
   adGroups: AdGroupRow[];
@@ -142,6 +147,7 @@ interface AllData {
   campaignTargeting: Record<string, CampaignTargeting>;
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
   adGroupSitelinks?: Record<string, SitelinkAsset[]>;
+  adGroupCallouts?: Record<string, CalloutAsset[]>;
 }
 
 type View =
@@ -492,6 +498,11 @@ export function GoogleAdsPage() {
           sitelinks={
             adGroupFormReq.mode === "edit"
               ? (data?.adGroupSitelinks?.[adGroupFormReq.adGroupId] ?? [])
+              : []
+          }
+          callouts={
+            adGroupFormReq.mode === "edit"
+              ? (data?.adGroupCallouts?.[adGroupFormReq.adGroupId] ?? [])
               : []
           }
           onClose={() => setAdGroupFormReq(null)}
@@ -1636,12 +1647,14 @@ const EMPTY_DESCRIPTION: { text: string; pin?: DescriptionPin } = { text: "" };
 function AdGroupFormModal({
   req,
   sitelinks,
+  callouts,
   onClose,
   onSaved,
   onRefresh,
 }: {
   req: AdGroupFormReq;
   sitelinks: SitelinkAsset[];
+  callouts: CalloutAsset[];
   onClose: () => void;
   onSaved: () => void;
   onRefresh: () => void;
@@ -1661,7 +1674,7 @@ function AdGroupFormModal({
         descriptions: [EMPTY_DESCRIPTION, EMPTY_DESCRIPTION],
       };
 
-  type TabKey = "basic" | "headlines" | "descriptions" | "sitelinks";
+  type TabKey = "basic" | "headlines" | "descriptions" | "sitelinks" | "callouts";
   const [tab, setTab] = useState<TabKey>("basic");
   const [name, setName] = useState(initial.name);
   const [status, setStatus] = useState<Status>(initial.status);
@@ -1839,6 +1852,7 @@ function AdGroupFormModal({
             <TabBtn k="headlines" label="Headlines" badge={`${validHeadlines.length}/15`} />
             <TabBtn k="descriptions" label="Descriptions" badge={`${validDescriptions.length}/4`} />
             <TabBtn k="sitelinks" label="Sitelinks" badge={`${sitelinks.length}`} />
+            <TabBtn k="callouts" label="Callouts" badge={`${callouts.length}`} />
           </div>
         </div>
 
@@ -2053,6 +2067,20 @@ function AdGroupFormModal({
             )
           ) : null}
 
+          {tab === "callouts" ? (
+            isEdit ? (
+              <CalloutsTab
+                adGroupId={req.adGroupId}
+                callouts={callouts}
+                onRefresh={onRefresh}
+              />
+            ) : (
+              <div className="text-[11px] text-muted-foreground py-4 text-center">
+                Save the ad first, then re-open Edit to add callouts.
+              </div>
+            )
+          ) : null}
+
           {error ? (
             <div className="text-[11px] text-red-500 break-all">{error}</div>
           ) : null}
@@ -2238,6 +2266,131 @@ function SitelinksTab({
             onClick={() => void add()}
             disabled={!canAdd}
             className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {saving ? "Adding…" : "Add"}
+          </button>
+        </div>
+      </div>
+
+      {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
+    </div>
+  );
+}
+
+function CalloutsTab({
+  adGroupId,
+  callouts,
+  onRefresh,
+}: {
+  adGroupId: string;
+  callouts: CalloutAsset[];
+  onRefresh: () => void;
+}) {
+  const [text, setText] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const canAdd = !saving && text.trim().length > 0 && text.trim().length <= 25;
+
+  async function add() {
+    if (!canAdd) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/callout`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ calloutText: text.trim() }),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      setText("");
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function remove(assetId: string) {
+    setDeletingId(assetId);
+    setError(null);
+    try {
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/ad-group/${adGroupId}/callout/${assetId}`),
+        { method: "DELETE", credentials: "include" },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onRefresh();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="text-[11px] text-muted-foreground">
+        6-10 callouts recommended. Each ≤25 chars.
+      </div>
+
+      {callouts.length === 0 ? (
+        <div className="text-[11px] text-muted-foreground py-2">No callouts yet.</div>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {callouts.map((c) => (
+            <div
+              key={c.assetId}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary border border-border"
+            >
+              <span className="text-xs text-foreground">{c.text}</span>
+              <button
+                type="button"
+                onClick={() => void remove(c.assetId)}
+                disabled={deletingId === c.assetId}
+                title="Delete"
+                className="shrink-0 h-5 w-5 inline-flex items-center justify-center rounded text-[10px] bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-2.5 h-2.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="border border-border rounded-md p-3 space-y-2 bg-card">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Add callout</div>
+        <div className="flex items-start gap-2">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="e.g. 14 giorni gratis"
+              maxLength={25}
+              className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            <div className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">{text.length}/25</div>
+          </div>
+          <button
+            type="button"
+            onClick={() => void add()}
+            disabled={!canAdd}
+            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
           >
             {saving ? "Adding…" : "Add"}
           </button>
