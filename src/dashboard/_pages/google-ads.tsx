@@ -1739,6 +1739,52 @@ function AdGroupFormModal({
     && !path1OverLimit && !path2OverLimit
     && finalUrlValid;
 
+  // Client-side ad-strength heuristic — mirrors Google's published guidance:
+  // more headlines + descriptions + variety + less pinning + asset coverage.
+  // The real value is computed server-side by Google after save; this gives
+  // a live preview as the user types and toggles pins/assets.
+  const adStrength = useMemo(() => {
+    let score = 0;
+    const validH = headlines.filter((h) => h.text.trim().length > 0 && h.text.trim().length <= 30);
+    const validD = descriptions.filter((d) => d.text.trim().length > 0 && d.text.trim().length <= 90);
+    const hCount = validH.length;
+    const dCount = validD.length;
+    score += Math.max(0, Math.min((hCount - 3) / 12, 1)) * 25;
+    score += Math.max(0, Math.min((dCount - 2) / 2, 1)) * 15;
+    if (hCount > 0) {
+      const firstWords = new Set(
+        validH.map((h) => h.text.trim().split(/\s+/)[0]?.toLowerCase() ?? ""),
+      );
+      score += (firstWords.size / hCount) * 15;
+    }
+    const pinnedTotal = validH.filter((h) => h.pin).length + validD.filter((d) => d.pin).length;
+    const pinnable = hCount + dCount;
+    score += (pinnable > 0 ? 1 - pinnedTotal / pinnable : 1) * 10;
+    score += (Math.min(sitelinks.length, 4) / 4) * 10;
+    score += (Math.min(callouts.length, 6) / 6) * 10;
+    score += Math.min(snippets.length, 1) * 5;
+    const landscape = images.filter((i) => i.fieldType === "MARKETING_IMAGE").length;
+    const square = images.filter((i) => i.fieldType === "SQUARE_MARKETING_IMAGE").length;
+    const logo = images.filter((i) => i.fieldType === "LOGO").length;
+    score += (Math.min(landscape, 4) / 4) * 5;
+    score += (Math.min(square, 4) / 4) * 5;
+    score += Math.min(logo, 1) * 5;
+    const pct = Math.round(Math.min(score, 100));
+    let label = "POOR";
+    let color = "bg-red-500/15 text-red-500";
+    if (pct >= 85) {
+      label = "EXCELLENT";
+      color = "bg-emerald-500/15 text-emerald-500";
+    } else if (pct >= 60) {
+      label = "GOOD";
+      color = "bg-blue-500/15 text-blue-500";
+    } else if (pct >= 30) {
+      label = "AVERAGE";
+      color = "bg-amber-500/15 text-amber-500";
+    }
+    return { pct, label, color };
+  }, [headlines, descriptions, sitelinks, callouts, snippets, images]);
+
   const baseValid = name.trim().length > 0 && bidValid;
   // For create — ad block is required. For edit — ad block is optional (user may only
   // tweak ad-group fields). But if any ad field has user input, the whole ad must be complete.
@@ -1867,10 +1913,17 @@ function AdGroupFormModal({
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[90vh]">
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
-          <h3 className="text-sm font-semibold text-foreground truncate">
+        <div className="px-4 py-3 border-b border-border flex items-center gap-2 shrink-0">
+          <h3 className="text-sm font-semibold text-foreground truncate flex-1 min-w-0">
             {isEdit ? "Edit ad" : "New ad"}
           </h3>
+          <div
+            title={`Live strength preview · Google computes the real value after save`}
+            className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[10px] font-semibold uppercase tracking-wider shrink-0 ${adStrength.color}`}
+          >
+            <span>{adStrength.label}</span>
+            <span className="opacity-70 tabular-nums normal-case tracking-normal">{adStrength.pct}%</span>
+          </div>
           <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
             <XIcon className="w-3.5 h-3.5" />
           </button>
