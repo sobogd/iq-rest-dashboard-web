@@ -40,6 +40,7 @@ export interface ApiRestaurant {
  workingHoursStart: string;
  workingHoursEnd: string;
  reservationSchedule: ApiScheduleDay[] | null;
+ timezone: string;
  ordersEnabled: boolean;
  orderNameEnabled: boolean;
  orderPhoneEnabled: boolean;
