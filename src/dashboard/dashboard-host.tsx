@@ -67,9 +67,6 @@ export function DashboardHost() {
 
   const enabled = !!authData?.authenticated;
 
-  // Auto-fix legacy restaurants that were created before the timezone field
-  // existed. Migration default is "UTC"; here we replace it once with the
-  // browser's detected IANA timezone. Fire-and-forget; failure is silent.
   const data = useQueries({
     queries: [
       { queryKey: ["restaurant"], queryFn: () => api<ApiRestaurant>("/restaurant"), enabled },
@@ -81,18 +78,6 @@ export function DashboardHost() {
       { queryKey: ["sub"], queryFn: () => api<SubData | null>("/restaurant/subscription").catch(() => null), enabled },
     ],
   });
-
-  const restaurantData = data[0].data as ApiRestaurant | undefined;
-  useEffect(() => {
-    if (!restaurantData) return;
-    if (restaurantData.timezone !== "UTC") return;
-    const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (!detected || detected === "UTC") return;
-    api("/restaurant", {
-      method: "POST",
-      body: JSON.stringify({ timezone: detected }),
-    }).catch(() => { /* silent fire-and-forget */ });
-  }, [restaurantData?.id, restaurantData?.timezone]);
 
   if (auth.isLoading || !authData) return <FullPageLoader />;
   if (!authData.authenticated) return <FullPageLoader />;
