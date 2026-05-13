@@ -161,9 +161,26 @@ type DetailRequest =
   | { kind: "ad"; adGroupId: string; adId: string }
   | { kind: "negative"; scope: "campaign" | "ad_group"; id: string; campaignId?: string; adGroupId?: string };
 
+type HeadlinePin = "HEADLINE_1" | "HEADLINE_2" | "HEADLINE_3";
+type DescriptionPin = "DESCRIPTION_1" | "DESCRIPTION_2";
+
+interface AdFormState {
+  finalUrl: string;
+  path1?: string;
+  path2?: string;
+  headlines: Array<{ text: string; pin?: HeadlinePin }>;
+  descriptions: Array<{ text: string; pin?: DescriptionPin }>;
+}
+
 type AdGroupFormReq =
   | { mode: "create"; campaignId: string }
-  | { mode: "edit"; adGroupId: string; campaignId: string; current: { name: string; status: Status; defaultBid?: number; suffix?: string } };
+  | {
+      mode: "edit";
+      adGroupId: string;
+      campaignId: string;
+      current: { name: string; status: Status; defaultBid?: number; suffix?: string };
+      currentAd?: AdFormState;
+    };
 
 const DATE_OPTIONS: Array<{ value: DateRange; label: string }> = [
   { value: "today", label: "Today" },
@@ -354,12 +371,36 @@ export function GoogleAdsPage() {
                     key={a.id}
                     a={a}
                     onOpen={() => setView({ kind: "ad_group_detail", campaignId: view.campaignId, adGroupId: a.id })}
-                    onEdit={() => setAdGroupFormReq({
-                      mode: "edit",
-                      adGroupId: a.id,
-                      campaignId: a.campaignId,
-                      current: { name: a.name, status: a.status, defaultBid: a.defaultBid, suffix: a.suffix },
-                    })}
+                    onEdit={() => {
+                      const ad = data?.ads.find((x) => x.adGroupId === a.id && x.status === "ENABLED")
+                        ?? data?.ads.find((x) => x.adGroupId === a.id);
+                      const currentAd: AdFormState | undefined = ad
+                        ? {
+                            finalUrl: ad.finalUrls[0] ?? "",
+                            path1: ad.path1,
+                            path2: ad.path2,
+                            headlines: ad.headlines.map((h) => ({
+                              text: h.text,
+                              pin: (h.pinned === "HEADLINE_1" || h.pinned === "HEADLINE_2" || h.pinned === "HEADLINE_3")
+                                ? (h.pinned as HeadlinePin)
+                                : undefined,
+                            })),
+                            descriptions: ad.descriptions.map((d) => ({
+                              text: d.text,
+                              pin: (d.pinned === "DESCRIPTION_1" || d.pinned === "DESCRIPTION_2")
+                                ? (d.pinned as DescriptionPin)
+                                : undefined,
+                            })),
+                          }
+                        : undefined;
+                      setAdGroupFormReq({
+                        mode: "edit",
+                        adGroupId: a.id,
+                        campaignId: a.campaignId,
+                        current: { name: a.name, status: a.status, defaultBid: a.defaultBid, suffix: a.suffix },
+                        currentAd,
+                      });
+                    }}
                   />
                 ))}
               </div>
@@ -1568,6 +1609,9 @@ function flattenObject(obj: any, prefix = ""): Array<[string, string]> {
   return out;
 }
 
+const EMPTY_HEADLINE: { text: string; pin?: HeadlinePin } = { text: "" };
+const EMPTY_DESCRIPTION: { text: string; pin?: DescriptionPin } = { text: "" };
+
 function AdGroupFormModal({
   req,
   onClose,
@@ -1582,16 +1626,95 @@ function AdGroupFormModal({
   const initial = isEdit
     ? req.current
     : { name: "", status: "ENABLED" as Status, defaultBid: undefined, suffix: undefined };
+  const initialAd: AdFormState = isEdit && req.currentAd
+    ? req.currentAd
+    : {
+        finalUrl: "",
+        path1: "",
+        path2: "",
+        headlines: [EMPTY_HEADLINE, EMPTY_HEADLINE, EMPTY_HEADLINE],
+        descriptions: [EMPTY_DESCRIPTION, EMPTY_DESCRIPTION],
+      };
+
+  type TabKey = "basic" | "headlines" | "descriptions";
+  const [tab, setTab] = useState<TabKey>("basic");
   const [name, setName] = useState(initial.name);
   const [status, setStatus] = useState<Status>(initial.status);
   const [bidStr, setBidStr] = useState(initial.defaultBid != null ? initial.defaultBid.toFixed(2) : "");
   const [suffix, setSuffix] = useState(initial.suffix ?? "");
+  const [finalUrl, setFinalUrl] = useState(initialAd.finalUrl);
+  const [path1, setPath1] = useState(initialAd.path1 ?? "");
+  const [path2, setPath2] = useState(initialAd.path2 ?? "");
+  const [headlines, setHeadlines] = useState<Array<{ text: string; pin?: HeadlinePin }>>(
+    initialAd.headlines.length >= 3 ? initialAd.headlines : [...initialAd.headlines, ...Array(3 - initialAd.headlines.length).fill(EMPTY_HEADLINE)],
+  );
+  const [descriptions, setDescriptions] = useState<Array<{ text: string; pin?: DescriptionPin }>>(
+    initialAd.descriptions.length >= 2 ? initialAd.descriptions : [...initialAd.descriptions, ...Array(2 - initialAd.descriptions.length).fill(EMPTY_DESCRIPTION)],
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const parsedBid = parseBid(bidStr);
   const bidValid = !bidStr.trim() || (parsedBid != null && parsedBid > 0);
-  const canSave = name.trim().length > 0 && !saving && bidValid;
+
+  const validHeadlines = headlines.filter((h) => h.text.trim().length > 0 && h.text.trim().length <= 30);
+  const validDescriptions = descriptions.filter((d) => d.text.trim().length > 0 && d.text.trim().length <= 90);
+  const anyHeadlineOverLimit = headlines.some((h) => h.text.trim().length > 30);
+  const anyDescriptionOverLimit = descriptions.some((d) => d.text.trim().length > 90);
+  const path1OverLimit = path1.trim().length > 15;
+  const path2OverLimit = path2.trim().length > 15;
+  const finalUrlValid = finalUrl.trim().length === 0 || /^https?:\/\//i.test(finalUrl.trim());
+  const adComplete = finalUrl.trim().length > 0
+    && validHeadlines.length >= 3 && validHeadlines.length <= 15
+    && validDescriptions.length >= 2 && validDescriptions.length <= 4
+    && !anyHeadlineOverLimit && !anyDescriptionOverLimit
+    && !path1OverLimit && !path2OverLimit
+    && finalUrlValid;
+
+  const baseValid = name.trim().length > 0 && bidValid;
+  // For create — ad block is required. For edit — ad block is optional (user may only
+  // tweak ad-group fields). But if any ad field has user input, the whole ad must be complete.
+  const adRequired = !isEdit;
+  const canSave = !saving && baseValid && (adRequired ? adComplete : (adComplete || !hasUserAdInput()));
+
+  function hasUserAdInput(): boolean {
+    if (!isEdit) return true;
+    const cur = req.currentAd;
+    if (!cur) return finalUrl.trim().length > 0 || headlines.some((h) => h.text.trim().length > 0) || descriptions.some((d) => d.text.trim().length > 0);
+    if ((cur.finalUrl ?? "") !== finalUrl) return true;
+    if ((cur.path1 ?? "") !== path1) return true;
+    if ((cur.path2 ?? "") !== path2) return true;
+    if (cur.headlines.length !== headlines.length) return true;
+    for (let i = 0; i < headlines.length; i++) {
+      if ((cur.headlines[i]?.text ?? "") !== headlines[i].text) return true;
+      if ((cur.headlines[i]?.pin ?? "") !== (headlines[i].pin ?? "")) return true;
+    }
+    if (cur.descriptions.length !== descriptions.length) return true;
+    for (let i = 0; i < descriptions.length; i++) {
+      if ((cur.descriptions[i]?.text ?? "") !== descriptions[i].text) return true;
+      if ((cur.descriptions[i]?.pin ?? "") !== (descriptions[i].pin ?? "")) return true;
+    }
+    return false;
+  }
+
+  function updateHeadline(i: number, patch: Partial<{ text: string; pin?: HeadlinePin }>) {
+    setHeadlines((arr) => arr.map((h, idx) => (idx === i ? { ...h, ...patch } : h)));
+  }
+  function addHeadline() {
+    setHeadlines((arr) => (arr.length < 15 ? [...arr, { text: "" }] : arr));
+  }
+  function removeHeadline(i: number) {
+    setHeadlines((arr) => (arr.length > 3 ? arr.filter((_, idx) => idx !== i) : arr));
+  }
+  function updateDescription(i: number, patch: Partial<{ text: string; pin?: DescriptionPin }>) {
+    setDescriptions((arr) => arr.map((d, idx) => (idx === i ? { ...d, ...patch } : d)));
+  }
+  function addDescription() {
+    setDescriptions((arr) => (arr.length < 4 ? [...arr, { text: "" }] : arr));
+  }
+  function removeDescription(i: number) {
+    setDescriptions((arr) => (arr.length > 2 ? arr.filter((_, idx) => idx !== i) : arr));
+  }
 
   async function save() {
     if (!canSave) return;
@@ -1600,6 +1723,8 @@ function AdGroupFormModal({
     try {
       const bidMicros = parsedBid != null && parsedBid > 0 ? Math.round(parsedBid * 1_000_000) : null;
       const payload: Record<string, unknown> = {};
+
+      // Ad-group level diff (edit) or full payload (create).
       if (isEdit) {
         const cur = req.current;
         if (name.trim() !== cur.name) payload.name = name.trim();
@@ -1608,15 +1733,33 @@ function AdGroupFormModal({
         if (bidMicros !== curBidMicros) payload.defaultBidMicros = bidMicros;
         const curSuffix = cur.suffix ?? "";
         if (suffix !== curSuffix) payload.finalUrlSuffix = suffix.length > 0 ? suffix : null;
-        if (Object.keys(payload).length === 0) {
-          onClose();
-          return;
-        }
       } else {
         payload.name = name.trim();
         if (bidMicros) payload.defaultBidMicros = bidMicros;
         if (suffix.trim()) payload.finalUrlSuffix = suffix.trim();
       }
+
+      // Ad block — always for create, only if dirty for edit.
+      const shouldSendAd = !isEdit || hasUserAdInput();
+      if (shouldSendAd && adComplete) {
+        payload.ad = {
+          finalUrl: finalUrl.trim(),
+          headlines: headlines
+            .filter((h) => h.text.trim().length > 0)
+            .map((h) => ({ text: h.text.trim(), ...(h.pin ? { pin: h.pin } : {}) })),
+          descriptions: descriptions
+            .filter((d) => d.text.trim().length > 0)
+            .map((d) => ({ text: d.text.trim(), ...(d.pin ? { pin: d.pin } : {}) })),
+          ...(path1.trim() ? { path1: path1.trim() } : {}),
+          ...(path2.trim() ? { path2: path2.trim() } : {}),
+        };
+      }
+
+      if (isEdit && Object.keys(payload).length === 0) {
+        onClose();
+        return;
+      }
+
       const url = isEdit
         ? apiUrl(`/api/admin/google-ads/ad-group/${req.adGroupId}`)
         : apiUrl(`/api/admin/google-ads/ad-group/${req.campaignId}`);
@@ -1628,7 +1771,7 @@ function AdGroupFormModal({
       });
       if (!res.ok) {
         const txt = await res.text();
-        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        setError(`Error ${res.status}: ${txt.slice(0, 300)}`);
         return;
       }
       onSaved();
@@ -1639,79 +1782,252 @@ function AdGroupFormModal({
     }
   }
 
+  const TabBtn = ({ k, label, badge }: { k: TabKey; label: string; badge?: string }) => (
+    <button
+      type="button"
+      onClick={() => setTab(k)}
+      className={
+        "h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 " +
+        (tab === k ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+      }
+    >
+      <span>{label}</span>
+      {badge ? <span className="text-[9px] opacity-70 normal-case tracking-normal">{badge}</span> : null}
+    </button>
+  );
+
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl flex flex-col">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[90vh]">
         <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
           <h3 className="text-sm font-semibold text-foreground truncate">
-            {isEdit ? "Edit ad group" : "New ad group"}
+            {isEdit ? "Edit ad" : "New ad"}
           </h3>
           <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
             <XIcon className="w-3.5 h-3.5" />
           </button>
         </div>
-        <form onSubmit={(e) => { e.preventDefault(); void save(); }} className="p-4 space-y-3">
-          <FormLabel label="Name">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Menu QR Code [IT]"
-              autoFocus={!isEdit}
-              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-          </FormLabel>
-          {isEdit ? (
-            <FormLabel label="Status">
-              <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
-                {(["ENABLED", "PAUSED"] as const).map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setStatus(s)}
-                    className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (status === s ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
-                  >
-                    {s}
-                  </button>
-                ))}
+
+        <div className="px-4 pt-3 pb-2 border-b border-border shrink-0 overflow-x-auto">
+          <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
+            <TabBtn k="basic" label="Basic" />
+            <TabBtn k="headlines" label="Headlines" badge={`${validHeadlines.length}/15`} />
+            <TabBtn k="descriptions" label="Descriptions" badge={`${validDescriptions.length}/4`} />
+          </div>
+        </div>
+
+        <form onSubmit={(e) => { e.preventDefault(); void save(); }} className="flex-1 overflow-y-auto p-4 space-y-3">
+          {tab === "basic" ? (
+            <>
+              <FormLabel label="Name">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Menu QR Code [IT]"
+                  autoFocus={!isEdit}
+                  className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </FormLabel>
+              {isEdit ? (
+                <FormLabel label="Status">
+                  <div className="inline-flex items-center bg-secondary rounded-md p-0.5 gap-0.5">
+                    {(["ENABLED", "PAUSED"] as const).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setStatus(s)}
+                        className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (status === s ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </FormLabel>
+              ) : null}
+              <FormLabel label="Default CPC bid (€)">
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={bidStr}
+                  onChange={(e) => setBidStr(e.target.value.replace(/[^0-9.,]/g, ""))}
+                  placeholder="0.50"
+                  className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+                />
+                {bidStr.trim() && !bidValid ? (
+                  <div className="text-[11px] text-amber-500 mt-1">Invalid number</div>
+                ) : null}
+              </FormLabel>
+              <FormLabel label="Final URL Suffix">
+                <input
+                  type="text"
+                  value={suffix}
+                  onChange={(e) => setSuffix(e.target.value)}
+                  placeholder="gclid={gclid}&kw={keyword}"
+                  className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                />
+              </FormLabel>
+              <FormLabel label="Final URL">
+                <input
+                  type="text"
+                  value={finalUrl}
+                  onChange={(e) => setFinalUrl(e.target.value)}
+                  placeholder="https://iq-rest.com/it/menu-digitale"
+                  className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                />
+                {finalUrl.trim().length > 0 && !finalUrlValid ? (
+                  <div className="text-[11px] text-amber-500 mt-1">Must start with http:// or https://</div>
+                ) : null}
+              </FormLabel>
+              <div className="grid grid-cols-2 gap-3">
+                <FormLabel label="Path 1">
+                  <input
+                    type="text"
+                    value={path1}
+                    onChange={(e) => setPath1(e.target.value)}
+                    placeholder="menu-digitale"
+                    maxLength={15}
+                    className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <div className="text-[10px] text-muted-foreground mt-1 tabular-nums">{path1.length}/15</div>
+                </FormLabel>
+                <FormLabel label="Path 2">
+                  <input
+                    type="text"
+                    value={path2}
+                    onChange={(e) => setPath2(e.target.value)}
+                    placeholder="ristoranti"
+                    maxLength={15}
+                    className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <div className="text-[10px] text-muted-foreground mt-1 tabular-nums">{path2.length}/15</div>
+                </FormLabel>
               </div>
-            </FormLabel>
+            </>
           ) : null}
-          <FormLabel label="Default CPC bid (€)">
-            <input
-              type="text"
-              inputMode="decimal"
-              value={bidStr}
-              onChange={(e) => setBidStr(e.target.value.replace(/[^0-9.,]/g, ""))}
-              placeholder="0.50"
-              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
-            />
-            {bidStr.trim() && !bidValid ? (
-              <div className="text-[11px] text-amber-500 mt-1">Invalid number</div>
-            ) : null}
-          </FormLabel>
-          <FormLabel label="Final URL Suffix">
-            <input
-              type="text"
-              value={suffix}
-              onChange={(e) => setSuffix(e.target.value)}
-              placeholder="gclid={gclid}&kw={keyword}"
-              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
-            />
-          </FormLabel>
+
+          {tab === "headlines" ? (
+            <div className="space-y-2">
+              <div className="text-[11px] text-muted-foreground">
+                3-15 headlines, each ≤30 chars. Pin to fix position; unpinned rotate.
+              </div>
+              {headlines.map((h, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={h.text}
+                        onChange={(e) => updateHeadline(i, { text: e.target.value })}
+                        placeholder={`Headline ${i + 1}`}
+                        maxLength={30}
+                        className="flex-1 h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                      />
+                      <select
+                        value={h.pin ?? ""}
+                        onChange={(e) => updateHeadline(i, { pin: (e.target.value || undefined) as HeadlinePin | undefined })}
+                        className="h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                      >
+                        <option value="">unpinned</option>
+                        <option value="HEADLINE_1">Pos 1</option>
+                        <option value="HEADLINE_2">Pos 2</option>
+                        <option value="HEADLINE_3">Pos 3</option>
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => removeHeadline(i)}
+                        disabled={headlines.length <= 3}
+                        className="h-9 w-9 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-1 tabular-nums">{h.text.length}/30</div>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addHeadline}
+                disabled={headlines.length >= 15}
+                className="h-8 px-3 rounded-md bg-secondary text-xs text-muted-foreground hover:text-foreground disabled:opacity-30 inline-flex items-center gap-1.5"
+              >
+                <Plus className="w-3 h-3" /> Add headline
+              </button>
+              {anyHeadlineOverLimit ? (
+                <div className="text-[11px] text-amber-500">Some headlines exceed 30 chars</div>
+              ) : null}
+            </div>
+          ) : null}
+
+          {tab === "descriptions" ? (
+            <div className="space-y-2">
+              <div className="text-[11px] text-muted-foreground">
+                2-4 descriptions, each ≤90 chars. Pin to fix position; unpinned rotate.
+              </div>
+              {descriptions.map((d, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <textarea
+                        value={d.text}
+                        onChange={(e) => updateDescription(i, { text: e.target.value })}
+                        placeholder={`Description ${i + 1}`}
+                        maxLength={90}
+                        rows={2}
+                        className="flex-1 px-3 py-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                      />
+                      <select
+                        value={d.pin ?? ""}
+                        onChange={(e) => updateDescription(i, { pin: (e.target.value || undefined) as DescriptionPin | undefined })}
+                        className="h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                      >
+                        <option value="">unpinned</option>
+                        <option value="DESCRIPTION_1">Pos 1</option>
+                        <option value="DESCRIPTION_2">Pos 2</option>
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => removeDescription(i)}
+                        disabled={descriptions.length <= 2}
+                        className="h-9 w-9 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-1 tabular-nums">{d.text.length}/90</div>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addDescription}
+                disabled={descriptions.length >= 4}
+                className="h-8 px-3 rounded-md bg-secondary text-xs text-muted-foreground hover:text-foreground disabled:opacity-30 inline-flex items-center gap-1.5"
+              >
+                <Plus className="w-3 h-3" /> Add description
+              </button>
+              {anyDescriptionOverLimit ? (
+                <div className="text-[11px] text-amber-500">Some descriptions exceed 90 chars</div>
+              ) : null}
+            </div>
+          ) : null}
+
           {error ? (
             <div className="text-[11px] text-red-500 break-all">{error}</div>
           ) : null}
-          <div className="flex justify-end pt-1">
-            <button
-              type="submit"
-              disabled={!canSave}
-              className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
-            >
-              {saving ? "Saving…" : isEdit ? "Save" : "Create"}
-            </button>
-          </div>
         </form>
+
+        <div className="px-4 py-3 border-t border-border flex justify-end shrink-0">
+          <button
+            type="button"
+            onClick={() => void save()}
+            disabled={!canSave}
+            className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {saving ? "Saving…" : isEdit ? "Save" : "Create"}
+          </button>
+        </div>
       </div>
     </div>
   );
