@@ -447,7 +447,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 {anonButton}
                 {companyFilterButton}
                 {dateButton}
-                {categoryButton}
                 {similarPill}
                 {refreshButton}
               </>
