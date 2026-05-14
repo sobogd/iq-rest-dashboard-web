@@ -582,10 +582,18 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 >
                   B
                 </span>
-              ) : row.isGoogleAds || row.gclid ? (
+              ) : row.gclid ? (
+                <span
+                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#34A853] text-[8px] font-bold text-white shrink-0"
+                  title={row.gclid}
+                  aria-hidden
+                >
+                  G
+                </span>
+              ) : row.isGoogleAds ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0"
-                  title={row.gclid ?? "Google Ads"}
+                  title="Google Ads (flag, no gclid on this row)"
                   aria-hidden
                 >
                   G
@@ -1088,8 +1096,10 @@ function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: ()
                   <span className="font-mono text-foreground truncate flex-1">{r.event}</span>
                   {r.isBot ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0" title="Bot">B</span>
-                  ) : r.isGoogleAds || r.gclid ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid ?? "Google Ads"}>G</span>
+                  ) : r.gclid ? (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#34A853] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
+                  ) : r.isGoogleAds ? (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title="Google Ads (flag, no gclid)">G</span>
                   ) : isSearchSource(r.referrerSource) ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0" title={`From search: ${r.referrerSource}`}>S</span>
                   ) : null}
