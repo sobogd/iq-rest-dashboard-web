@@ -85,6 +85,8 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
   const [shiftPending, setShiftPending] = useState(false);
   const [pivotId, setPivotId] = useState<string | null>(null);
+  const [similarToId, setSimilarToId] = useState<string | null>(null);
+  const [similarToLabel, setSimilarToLabel] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
   const [bulkBusy, setBulkBusy] = useState(false);
@@ -125,6 +127,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       if (catSearch) cats.push("search");
       if (catOther) cats.push("other");
       if (cats.length < 4) qs.set("cats", cats.join(","));
+      if (similarToId) qs.set("similarTo", similarToId);
       const res = await fetch(apiUrl(`/api/admin/usage/timeline?${qs.toString()}`), {
         credentials: "include",
       });
@@ -136,7 +139,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         total?: number;
       };
     },
-    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, catBots, catGads, catSearch, catOther],
+    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, catBots, catGads, catSearch, catOther, similarToId],
   );
 
   const load = useCallback(
@@ -440,6 +443,21 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     </button>
   ) : null;
 
+  const similarPill = similarToId ? (
+    <button
+      type="button"
+      onClick={() => {
+        setSimilarToId(null);
+        setSimilarToLabel(null);
+      }}
+      className="h-8 inline-flex items-center gap-1.5 px-2 rounded-md bg-primary/15 text-primary hover:bg-primary/25 transition-colors text-[11px] font-medium"
+      title="Clear similar-events filter"
+    >
+      <span className="font-mono truncate max-w-[140px]">~ {similarToLabel ?? "event"}</span>
+      <XIcon className="h-3 w-3" />
+    </button>
+  ) : null;
+
   const refreshButton = (
     <button
       type="button"
@@ -495,6 +513,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       {companyFilterButton}
       {dateButton}
       {categoryButton}
+      {similarPill}
       {sortButton}
       {refreshButton}
     </>
@@ -516,6 +535,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 {companyFilterButton}
                 {dateButton}
                 {categoryButton}
+                {similarPill}
                 {refreshButton}
               </>
             )}
@@ -626,7 +646,15 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         </div>
       )}
 
-      <UsageEventDetail event={selected} onClose={() => setSelected(null)} />
+      <UsageEventDetail
+        event={selected}
+        onClose={() => setSelected(null)}
+        onShowSimilar={(ev) => {
+          setSimilarToId(ev.id);
+          setSimilarToLabel(ev.event);
+          setSelected(null);
+        }}
+      />
 
       {confirmDelete ? (
         <ConfirmDialogInline
@@ -960,9 +988,16 @@ function parseAdParams(raw: string | null): Array<[string, string]> {
   }
 }
 
-function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose: () => void }) {
+function UsageEventDetail({
+  event,
+  onClose,
+  onShowSimilar,
+}: {
+  event: UsageRow | null;
+  onClose: () => void;
+  onShowSimilar: (event: UsageRow) => void;
+}) {
   useScrollLock(Boolean(event));
-  const [similarOpen, setSimilarOpen] = useState(false);
 
   if (!event) return null;
   const at = new Date(event.at);
@@ -1020,96 +1055,11 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
         <div className="px-4 py-3 border-t border-border">
           <button
             type="button"
-            onClick={() => setSimilarOpen(true)}
+            onClick={() => onShowSimilar(event)}
             className="w-full h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
           >
             Show similar events
           </button>
-        </div>
-      </div>
-
-      {similarOpen ? (
-        <SimilarEventsModal eventId={event.id} onClose={() => setSimilarOpen(false)} />
-      ) : null}
-    </div>
-  );
-}
-
-function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: () => void }) {
-  useScrollLock(true);
-  const [rows, setRows] = useState<UsageRow[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(apiUrl(`/api/admin/usage/similar/${eventId}`), { credentials: "include" });
-        if (!res.ok) { if (!cancelled) setError(`Error ${res.status}`); return; }
-        const j = await res.json();
-        if (!cancelled) setRows(j.events ?? []);
-      } catch (e: any) {
-        if (!cancelled) setError(String(e));
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [eventId]);
-
-  return (
-    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[85vh]">
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
-          <h3 className="text-sm font-semibold text-foreground">
-            Similar events {rows ? `(${rows.length})` : ""}
-          </h3>
-          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
-            ✕
-          </button>
-        </div>
-        <div className="overflow-y-auto">
-          {loading ? (
-            <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-          ) : error ? (
-            <div className="text-xs text-red-500 py-8 text-center">{error}</div>
-          ) : !rows || rows.length === 0 ? (
-            <div className="text-xs text-muted-foreground py-8 text-center">No matches</div>
-          ) : (
-            <div className="divide-y divide-border">
-              {rows.map((r) => (
-                <div
-                  key={r.id}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-xs"
-                >
-                  {r.companyId ? (
-                    <span className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0" title={r.companyLabel || r.companyId}>
-                      {truncate8(r.companyLabel || r.companyId)}
-                    </span>
-                  ) : (
-                    <>
-                      <span className="inline-block w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `hsl(${sessionHueFor(r)} 70% 55%)` }} />
-                      <span className="text-base shrink-0">{countryToFlag(r.country)}</span>
-                    </>
-                  )}
-                  <span className="font-mono text-foreground truncate flex-1">{r.event}</span>
-                  {r.isBot ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0" title="Bot">B</span>
-                  ) : r.gclid ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#34A853] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
-                  ) : r.isGoogleAds ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title="Google Ads (flag, no gclid)">G</span>
-                  ) : isSearchSource(r.referrerSource) ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0" title={`From search: ${r.referrerSource}`}>S</span>
-                  ) : null}
-                  <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
-                    {fmtAt(r.at)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </div>
