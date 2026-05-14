@@ -22,6 +22,7 @@ export interface UsageRow {
   ip: string | null;
   isBot: boolean;
   referrerSource: string | null;
+  isGoogleAds: boolean;
 }
 
 const SEARCH_SOURCES = new Set([
@@ -557,10 +558,10 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 >
                   B
                 </span>
-              ) : row.gclid ? (
+              ) : row.isGoogleAds || row.gclid ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0"
-                  title={row.gclid}
+                  title={row.gclid ?? "Google Ads"}
                   aria-hidden
                 >
                   G
@@ -924,6 +925,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
     ["Bot", event.isBot ? "yes" : "no"],
+    ["Google Ads", event.isGoogleAds ? "yes" : "no"],
     ["Referrer", event.referrerSource || "—"],
     ...adParamFields,
     ["Event ID", event.id],
@@ -1039,8 +1041,8 @@ function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: ()
                   <span className="font-mono text-foreground truncate flex-1">{r.event}</span>
                   {r.isBot ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0" title="Bot">B</span>
-                  ) : r.gclid ? (
-                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
+                  ) : r.isGoogleAds || r.gclid ? (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid ?? "Google Ads"}>G</span>
                   ) : isSearchSource(r.referrerSource) ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0" title={`From search: ${r.referrerSource}`}>S</span>
                   ) : null}
