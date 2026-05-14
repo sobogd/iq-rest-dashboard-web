@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
+import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide, Filter } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { useScrollLock } from "../_v2/use-scroll-lock";
@@ -91,6 +91,12 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
   const [filterModal, setFilterModal] = useState<"dates" | "company" | null>(null);
   const [sortAsc, setSortAsc] = useState(false);
+  const [catBots, setCatBots] = useState(true);
+  const [catGads, setCatGads] = useState(true);
+  const [catSearch, setCatSearch] = useState(true);
+  const [catOther, setCatOther] = useState(true);
+  const [catMenuOpen, setCatMenuOpen] = useState(false);
+  const catMenuRef = useRef<HTMLDivElement>(null);
   const { items: companies, loading: companiesLoading } = useCompanyList();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
@@ -107,6 +113,15 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
       if (filterTo) qs.set("to", new Date(filterTo).toISOString());
       if (sortAsc) qs.set("sort", "asc");
+      // Send the category filter only when the user has narrowed away from
+      // "all four checked" — keeps the default URL clean and the request
+      // identical to what the previous (filter-less) UI sent.
+      const cats: string[] = [];
+      if (catBots) cats.push("bots");
+      if (catGads) cats.push("gads");
+      if (catSearch) cats.push("search");
+      if (catOther) cats.push("other");
+      if (cats.length < 4) qs.set("cats", cats.join(","));
       const res = await fetch(apiUrl(`/api/admin/usage/timeline?${qs.toString()}`), {
         credentials: "include",
       });
@@ -118,7 +133,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         total?: number;
       };
     },
-    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc],
+    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, catBots, catGads, catSearch, catOther],
   );
 
   const load = useCallback(
@@ -295,6 +310,64 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     </button>
   );
 
+  const catsActive = !(catBots && catGads && catSearch && catOther);
+  useEffect(() => {
+    if (!catMenuOpen) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (!catMenuRef.current) return;
+      if (!catMenuRef.current.contains(e.target as Node)) setCatMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [catMenuOpen]);
+
+  const categoryButton = (
+    <div ref={catMenuRef} className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setCatMenuOpen((v) => !v)}
+        className={
+          "h-8 w-8 inline-flex items-center justify-center rounded-md " +
+          (catsActive
+            ? "bg-primary/15 text-primary hover:bg-primary/25"
+            : "bg-secondary text-muted-foreground hover:text-foreground")
+        }
+        title={catsActive ? "Category filter active" : "Filter by category"}
+      >
+        <Filter className="h-3.5 w-3.5" />
+      </button>
+      {catMenuOpen ? (
+        <div className="absolute right-0 mt-1 z-20 w-44 bg-card border border-border rounded-md shadow-lg p-1 text-xs">
+          {[
+            { key: "bots", label: "Боты", get: catBots, set: setCatBots },
+            { key: "gads", label: "Google Ads", get: catGads, set: setCatGads },
+            { key: "search", label: "Поиск", get: catSearch, set: setCatSearch },
+            { key: "other", label: "Прочее", get: catOther, set: setCatOther },
+          ].map((opt) => (
+            <button
+              key={opt.key}
+              type="button"
+              onClick={() => opt.set(!opt.get)}
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-secondary text-start"
+            >
+              <span
+                className={
+                  "h-3.5 w-3.5 rounded border flex items-center justify-center shrink-0 " +
+                  (opt.get
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "border-border bg-background")
+                }
+              >
+                {opt.get ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
+              </span>
+              <span className="text-foreground">{opt.label}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+
   const sortButton = (
     <button
       type="button"
@@ -396,6 +469,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       {anonButton}
       {companyFilterButton}
       {dateButton}
+      {categoryButton}
       {sortButton}
       {refreshButton}
     </>
@@ -416,6 +490,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 {anonButton}
                 {companyFilterButton}
                 {dateButton}
+                {categoryButton}
                 {refreshButton}
               </>
             )}
