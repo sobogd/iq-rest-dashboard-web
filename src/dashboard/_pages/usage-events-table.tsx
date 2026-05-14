@@ -83,6 +83,8 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [selected, setSelected] = useState<UsageRow | null>(null);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
+  const [shiftPending, setShiftPending] = useState(false);
+  const [pivotId, setPivotId] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
   const [bulkBusy, setBulkBusy] = useState(false);
@@ -201,16 +203,38 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     // Refresh / page reload / scope change resets bulk mode and selection.
     setSelectMode(false);
     setSelectedIds(new Set());
+    setShiftPending(false);
+    setPivotId(null);
     void load("initial");
   }, [load]);
 
   function toggleSelect(id: string) {
+    // Shift-range path — when the shift button is armed and there's a pivot
+    // (anything previously toggled), select every row between pivot and the
+    // current click inclusive. The pivot stays where it was so the user can
+    // re-arm shift and grow the range further.
+    if (shiftPending && pivotId && pivotId !== id) {
+      const a = rows.findIndex((r) => r.id === pivotId);
+      const b = rows.findIndex((r) => r.id === id);
+      if (a !== -1 && b !== -1) {
+        const [lo, hi] = a < b ? [a, b] : [b, a];
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          for (let i = lo; i <= hi; i++) next.add(rows[i].id);
+          return next;
+        });
+        setShiftPending(false);
+        setPivotId(id);
+        return;
+      }
+    }
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
+    setPivotId(id);
   }
 
   function resetListAndScrollTop() {
@@ -654,6 +678,29 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
           }}
           showSearch
         />
+      ) : null}
+      {selectMode && selectedCount > 0 ? (
+        <button
+          type="button"
+          onClick={() => setShiftPending((v) => !v)}
+          className={
+            "fixed bottom-4 right-4 z-30 h-11 px-4 rounded-full shadow-lg text-xs font-semibold tracking-wide inline-flex items-center gap-2 transition-colors " +
+            (shiftPending
+              ? "bg-primary text-primary-foreground shadow-primary/30"
+              : "bg-card border border-border text-foreground hover:border-primary/50")
+          }
+          title={shiftPending ? "Click any event to select the range to it" : "Arm Shift: next click selects the range"}
+        >
+          <span
+            className={
+              "inline-flex items-center justify-center h-5 px-1.5 rounded text-[10px] font-bold " +
+              (shiftPending ? "bg-primary-foreground/15" : "bg-secondary text-muted-foreground")
+            }
+          >
+            ⇧
+          </span>
+          Shift
+        </button>
       ) : null}
     </div>
   );
