@@ -2732,7 +2732,7 @@ function ImagesTab({
       );
       if (!res.ok) {
         const txt = await res.text();
-        setError(`Error ${res.status}: ${txt.slice(0, 300)}`);
+        setError(`Error ${res.status}: ${txt}`);
         return;
       }
       onRefresh();
