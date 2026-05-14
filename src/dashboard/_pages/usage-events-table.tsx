@@ -20,6 +20,7 @@ export interface UsageRow {
   companyId: string | null;
   companyLabel: string | null;
   ip: string | null;
+  isBot: boolean;
 }
 
 /** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
@@ -464,7 +465,15 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                   {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
                 </span>
               )}
-              {row.gclid && (
+              {row.isBot ? (
+                <span
+                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0"
+                  title="Bot (detected via User-Agent)"
+                  aria-hidden
+                >
+                  B
+                </span>
+              ) : row.gclid ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0"
                   title={row.gclid}
@@ -472,7 +481,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 >
                   G
                 </span>
-              )}
+              ) : null}
               <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                 {fmtAt(row.at)}
               </span>
@@ -817,6 +826,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["Company", event.companyLabel || event.companyId || "—"],
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
+    ["Bot", event.isBot ? "yes" : "no"],
     ...adParamFields,
     ["Event ID", event.id],
   ];
@@ -929,9 +939,11 @@ function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: ()
                     </>
                   )}
                   <span className="font-mono text-foreground truncate flex-1">{r.event}</span>
-                  {r.gclid && (
+                  {r.isBot ? (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0" title="Bot">B</span>
+                  ) : r.gclid ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
-                  )}
+                  ) : null}
                   <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                     {fmtAt(r.at)}
                   </span>
