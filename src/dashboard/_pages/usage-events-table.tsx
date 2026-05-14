@@ -21,6 +21,20 @@ export interface UsageRow {
   companyLabel: string | null;
   ip: string | null;
   isBot: boolean;
+  referrerSource: string | null;
+}
+
+const SEARCH_SOURCES = new Set([
+  "google_search",
+  "bing",
+  "yandex",
+  "duckduckgo",
+  "yahoo",
+  "other_search",
+]);
+
+function isSearchSource(s: string | null): boolean {
+  return s !== null && SEARCH_SOURCES.has(s);
 }
 
 /** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
@@ -460,11 +474,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 </>
               )}
               <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
-              {row.device && !row.companyId && (
-                <span className="text-[10px] text-muted-foreground shrink-0" title={`${row.device} / ${row.platform || "—"}`}>
-                  {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
-                </span>
-              )}
               {row.isBot ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0"
@@ -481,7 +490,20 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 >
                   G
                 </span>
+              ) : isSearchSource(row.referrerSource) ? (
+                <span
+                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0"
+                  title={`From search: ${row.referrerSource}`}
+                  aria-hidden
+                >
+                  S
+                </span>
               ) : null}
+              {row.device && !row.companyId && (
+                <span className="text-[10px] text-muted-foreground shrink-0" title={`${row.device} / ${row.platform || "—"}`}>
+                  {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
+                </span>
+              )}
               <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                 {fmtAt(row.at)}
               </span>
@@ -827,6 +849,7 @@ function UsageEventDetail({ event, onClose }: { event: UsageRow | null; onClose:
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
     ["Bot", event.isBot ? "yes" : "no"],
+    ["Referrer", event.referrerSource || "—"],
     ...adParamFields,
     ["Event ID", event.id],
   ];
@@ -943,6 +966,8 @@ function SimilarEventsModal({ eventId, onClose }: { eventId: string; onClose: ()
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0" title="Bot">B</span>
                   ) : r.gclid ? (
                     <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0" title={r.gclid}>G</span>
+                  ) : isSearchSource(r.referrerSource) ? (
+                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0" title={`From search: ${r.referrerSource}`}>S</span>
                   ) : null}
                   <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                     {fmtAt(r.at)}
