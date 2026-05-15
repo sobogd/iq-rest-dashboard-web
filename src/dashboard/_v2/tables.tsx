@@ -57,6 +57,42 @@ function tableSize(capacity: number): number {
  return Math.round(28 + (c - 1) * 3);
 }
 
+// Find a spot on the floor map (0-100 percent coords) that doesn't overlap
+// any existing table. Scans a coarse grid and accepts the first cell at
+// least MIN_GAP away from every other placed table; falls back to the
+// best (most-isolated) cell we did find, then to the center if there are
+// no tables yet. Unplaced tables (x/y null) are ignored.
+function pickInitialTablePosition(tables: TableEntity[]): [number, number] {
+ const placed = tables.filter(
+ (t): t is TableEntity & { x: number; y: number } =>
+ typeof t.x === "number" && typeof t.y === "number",
+ );
+ if (placed.length === 0) return [50, 50];
+
+ const MIN_GAP = 14; // ~table pin diameter in % of map width
+ const STEP = 7;
+ const MARGIN = 8;
+ let bestSpot: [number, number] = [50, 50];
+ let bestMinDist = -1;
+ for (let y = MARGIN; y <= 100 - MARGIN; y += STEP) {
+ for (let x = MARGIN; x <= 100 - MARGIN; x += STEP) {
+ let minDist = Infinity;
+ for (const t of placed) {
+ const dx = t.x - x;
+ const dy = t.y - y;
+ const d = Math.sqrt(dx * dx + dy * dy);
+ if (d < minDist) minDist = d;
+ }
+ if (minDist >= MIN_GAP) return [x, y];
+ if (minDist > bestMinDist) {
+ bestMinDist = minDist;
+ bestSpot = [x, y];
+ }
+ }
+ }
+ return bestSpot;
+}
+
 export function FloorMap({
  tables,
  selectedId,
@@ -290,17 +326,20 @@ export function TableFormPage({
  const initial: TableEntity =
  mode === "edit" && tableId
  ? tables.find((x) => x.id === tableId) || null!
- : ({
+ : (() => {
+ const [x, y] = pickInitialTablePosition(tables);
+ return {
  id: newId(),
  number: tables.reduce((max, tbl) => Math.max(max, tbl.number || 0), 0) + 1,
  name: "",
  capacity: 2,
- x: 50,
- y: 50,
+ x,
+ y,
  photoUrl: null,
  color: null,
  sortOrder: tables.length,
- } as TableEntity);
+ } as TableEntity;
+ })();
 
  const [draft, setDraft] = useState<TableEntity>(initial);
  const [saving, setSaving] = useState(false);
