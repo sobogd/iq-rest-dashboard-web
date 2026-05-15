@@ -73,6 +73,7 @@ export interface Order {
  id: string;
  tableId: string | null;
  tableNumber: number | null;
+ dailyNumber: number;
  guestName: string;
  createdAt: string;
  status: "active" | "completed" | "cancelled";

@@ -272,6 +272,7 @@ export function apiOrderToOrder(o: ApiOrder, tablesByNumber: Map<number, string>
  id: o.id,
  tableId,
  tableNumber: o.tableNumber,
+ dailyNumber: o.dailyNumber,
  guestName: o.customerName || "",
  createdAt: o.createdAt,
  status,

@@ -144,7 +144,7 @@ export function ReservationsPage({
     className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card/90 backdrop-blur-md border-b border-border/60"
     style={{ top: "var(--topbar-h, 0px)" }}
    >
-    <div className="max-w-5xl mx-auto px-4 md:px-6 w-full flex items-center justify-between gap-3">
+    <div className="max-w-5xl mx-auto md:px-6 w-full flex items-center justify-between gap-3">
      <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">
       <ViewBtn active={view === "month"} onClick={() => { track("dash_booking_view_month"); setView("month"); }}>
        {t("viewMonth")}
@@ -164,7 +164,7 @@ export function ReservationsPage({
     </div>
    </div>
 
-   <div className="max-w-5xl mx-auto px-4 md:px-6 pt-5 md:pt-4">
+   <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
     {view === "month" ? (
      <div className="lg:flex lg:gap-8 lg:items-stretch">
       <div className="lg:flex-1 lg:min-w-0 lg:flex lg:flex-col lg:h-[calc(100dvh-var(--topbar-h,0px)-160px)]">
@@ -264,7 +264,7 @@ function NavBtn({ children, onClick, ...rest }: { children: React.ReactNode; onC
 
 function CtaWrapper({ title, children }: { title: string; children: React.ReactNode }) {
  return (
-  <div className="max-w-5xl mx-auto px-4 md:px-6">
+  <div className="max-w-5xl mx-auto md:px-6">
    <PageHeader title={title} />
    {children}
   </div>

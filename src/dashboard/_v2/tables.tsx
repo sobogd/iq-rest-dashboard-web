@@ -63,15 +63,22 @@ export function FloorMap({
  onSelectTable,
  onPickPosition,
  occupiedIds,
+ readyIds,
+ badgeFor,
+ wide,
 }: {
  tables: TableEntity[];
  selectedId: string | null;
  onSelectTable: (id: string | null) => void;
  onPickPosition?: (x: number, y: number) => void;
  occupiedIds?: Set<string>;
+ readyIds?: Set<string>;
+ badgeFor?: (tableId: string) => number | null | undefined;
+ wide?: boolean;
 }) {
  const tt = useTranslations("dashboard.tables");
  const occupied = occupiedIds || new Set<string>();
+ const ready = readyIds || new Set<string>();
  return (
  <>
  <style>{`
@@ -83,10 +90,9 @@ export function FloorMap({
  border: 1px solid hsl(var(--border));
  border-radius: 0.75rem;
  overflow: hidden;
+ box-sizing: border-box;
  }
- @media (min-width: 768px) {
- .floor-map { width: 280px; height: 280px; aspect-ratio: auto; }
- }
+ ${wide ? ".floor-map { width: 100%; height: 100%; aspect-ratio: auto; }" : "@media (min-width: 768px) { .floor-map { width: 280px; height: 280px; aspect-ratio: auto; } }"}
  `}</style>
  <div
  className={"floor-map" + (onPickPosition ? " cursor-crosshair" : "")}
@@ -108,26 +114,31 @@ export function FloorMap({
  "linear-gradient(to right, hsl(var(--foreground) / 0.08) 1px, transparent 1px)," +
  "linear-gradient(to bottom, hsl(var(--foreground) / 0.08) 1px, transparent 1px)",
  backgroundSize: "10% 10%",
+ clipPath: "inset(1px)",
  }}
  />
  {tables.map((t) => {
  const isSelected = selectedId === t.id;
  const isOccupied = occupied.has(t.id);
+ const isReady = ready.has(t.id);
  const size = tableSize(t.capacity);
  const x = t.x ?? 50;
  const y = t.y ?? 50;
  const stateCls = isSelected
  ? "bg-foreground text-background ring-4 ring-foreground/20 z-10"
+ : isReady
+ ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-400 dark:border-emerald-700"
  : isOccupied
- ? "bg-amber-100 text-amber-900 border border-amber-400"
+ ? "bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-400 dark:border-amber-700"
  : "bg-card text-foreground border border-input";
+ const badge = badgeFor ? badgeFor(t.id) : null;
  return (
  <button
  key={t.id}
  type="button"
  onClick={(e) => { e.stopPropagation(); onSelectTable(t.id); }}
  className={
- "absolute flex items-center justify-center rounded-full font-medium tabular-nums transition-all overflow-hidden " +
+ "absolute flex items-center justify-center rounded-full font-medium tabular-nums transition-all " +
  stateCls
  }
  style={{
@@ -141,11 +152,23 @@ export function FloorMap({
  title={tt("tableLabelAria", { number: t.number }) + (t.name ? " · " + t.name : "")}
  >
  {t.photoUrl ? (
+ <span className="absolute inset-0 rounded-full overflow-hidden">
  <img src={t.photoUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
+ </span>
  ) : null}
  <span className={t.photoUrl ? "relative z-10 px-1 rounded bg-black/40 text-white" : ""}>
  {t.number}
  </span>
+ {badge && badge > 0 ? (
+ <span
+ className={
+ "absolute -top-1 -right-1 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full border-2 border-card " +
+ (isReady ? "bg-emerald-600 text-white" : "bg-red-600 text-white")
+ }
+ >
+ {badge}
+ </span>
+ ) : null}
  </button>
  );
  })}
@@ -194,16 +217,6 @@ export function TablesPage({
  <h2 className="text-xl font-medium text-foreground mt-1">{t("title")}</h2>
  </div>
 
- <style>{`
- .tables-layout { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
- .tables-col-left { width: 100%; }
- .tables-col-right { width: 100%; min-width: 0; }
- @media (min-width: 768px) {
- .tables-layout { flex-direction: row; }
- .tables-col-left { flex: 0 0 280px; width: 280px; }
- .tables-col-right { flex: 1 1 0%; min-width: 0; width: auto; }
- }
- `}</style>
  {tables.length === 0 ? (
       <>
        <EmptyState title={t("emptyTitle")} subtitle={t("emptySubtitle")} />
@@ -217,15 +230,7 @@ export function TablesPage({
        </button>
       </>
      ) : (
- <div className="tables-layout">
- <div className="tables-col-left">
- <FloorMap
- tables={tables}
- selectedId={null}
- onSelectTable={(id) => id && openEdit(id)}
- />
- </div>
- <div className="tables-col-right">
+ <div>
  <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
  {tables
  .slice()
@@ -254,7 +259,6 @@ export function TablesPage({
  <PlusIcon size={14} />
  {t("table")}
  </button>
- </div>
  </div>
  )}
  </div>
@@ -414,16 +418,6 @@ export function TableFormPage({
  </p>
  </div>
 
- <style>{`
- .tables-layout { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
- .tables-col-left { width: 100%; }
- .tables-col-right { width: 100%; min-width: 0; }
- @media (min-width: 768px) {
- .tables-layout { flex-direction: row; }
- .tables-col-left { flex: 0 0 280px; width: 280px; }
- .tables-col-right { flex: 1 1 0%; min-width: 0; width: auto; }
- }
- `}</style>
 
  <div className="tables-layout">
  <div className="tables-col-left">

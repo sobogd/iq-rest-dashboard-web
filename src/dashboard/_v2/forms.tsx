@@ -10,6 +10,7 @@ import {
  ArrowDownIcon,
  ArrowUpIcon,
  ChevronRightIcon,
+ CopyIcon,
  PlusIcon,
  TrashIcon,
 } from "./icons";
@@ -17,6 +18,7 @@ import {
  AiImageModal,
  ConfirmDialog,
  EditPageHeader,
+ Modal,
  PhotoPicker,
  ToggleSwitch,
  TranslatedInput,
@@ -220,6 +222,8 @@ export function DishForm({
  onDeletedRedirect,
  optionRoutePrefix,
  onOpenOption,
+ onPersisted,
+ onOptionsRefresh,
 }: {
  dish: Dish | null;
  categoryId: string;
@@ -229,6 +233,8 @@ export function DishForm({
  onDeletedRedirect: () => void;
  optionRoutePrefix?: (dishId: string) => string;
  onOpenOption?: (dishId: string, optionId: string | null) => void;
+ onPersisted?: (id: string) => void | Promise<void>;
+ onOptionsRefresh?: () => void | Promise<void>;
 }) {
  const t = useTranslations("dashboard.dishForm");
  const tc = useTranslations("dashboard.common");
@@ -251,9 +257,13 @@ export function DishForm({
  const [form, setForm] = useState<DishFormState>(initialForm);
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
+ const [duplicating, setDuplicating] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
  const [unsavedOpen, setUnsavedOpen] = useState(false);
  const [aiOpen, setAiOpen] = useState(false);
+ const [optionModal, setOptionModal] = useState<
+ { kind: "new" } | { kind: "edit"; id: string } | null
+ >(null);
  const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm);
  const langMetas = (() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
@@ -370,6 +380,12 @@ export function DishForm({
  async function handleAddOption() {
  const id = await persist("stay");
  if (!id) return;
+ if (onPersisted) await onPersisted(id);
+ if (onOptionsRefresh) await onOptionsRefresh();
+ if (onPersisted || onOptionsRefresh) {
+ setOptionModal({ kind: "new" });
+ return;
+ }
  if (onOpenOption) {
  onOpenOption(id, null);
  } else if (optionRoutePrefix) {
@@ -380,6 +396,12 @@ export function DishForm({
  async function handleEditOption(optId: string) {
  const id = await persist("stay");
  if (!id) return;
+ if (onPersisted) await onPersisted(id);
+ if (onOptionsRefresh) await onOptionsRefresh();
+ if (onPersisted || onOptionsRefresh) {
+ setOptionModal({ kind: "edit", id: optId });
+ return;
+ }
  if (onOpenOption) {
  onOpenOption(id, optId);
  } else if (optionRoutePrefix) {
@@ -397,6 +419,42 @@ export function DishForm({
  } catch {
  setDeleting(false);
  setConfirmOpen(false);
+ }
+ }
+
+ async function handleDuplicate() {
+ if (!dish || duplicating) return;
+ track("dash_item_click_duplicate");
+ setDuplicating(true);
+ const copySuffix = " (" + tc("copy", { defaultValue: "copy" }) + ")";
+ const newName: Ml = { ...dish.name };
+ for (const code of Object.keys(newName)) {
+ const v = (newName[code] || "").trim();
+ if (v.length > 0) newName[code] = v + copySuffix;
+ }
+ const namePrimary = (newName[defaultLang] || "").trim();
+ const descPrimary = (dish.description?.[defaultLang] || "").trim() || null;
+ const translations = buildItemTranslations(newName, dish.description || emptyMl(languages), defaultLang);
+ const copiedOptions: DishOption[] = (dish.options || []).map((opt) => ({
+ ...opt,
+ id: newId(),
+ variants: opt.variants.map((v) => ({ ...v, id: newId() })),
+ }));
+ try {
+ const created = await createItem({
+ name: namePrimary,
+ description: descPrimary,
+ price: parseDecimal(dish.price),
+ imageUrl: dish.photoUrl,
+ categoryId: dish.categoryId,
+ isActive: dish.visible,
+ translations,
+ allergens: dish.allergens,
+ options: copiedOptions,
+ });
+ onSavedRedirect(created.id);
+ } catch {
+ setDuplicating(false);
  }
  }
 
@@ -535,7 +593,7 @@ export function DishForm({
  {t("optionsTip")}
  </p>
 
- {!(optionRoutePrefix || onOpenOption) ? null : dish ? (
+ {!(optionRoutePrefix || onOpenOption || onPersisted || onOptionsRefresh) ? null : dish ? (
  <DishOptionsInline
  dish={dish}
  defaultLang={defaultLang}
@@ -581,7 +639,16 @@ export function DishForm({
  </div>
 
  {!isNew ? (
- <div className="max-w-2xl mx-auto mt-6 flex justify-center">
+ <div className="max-w-2xl mx-auto mt-6 flex items-center justify-center gap-3">
+ <button
+ type="button"
+ onClick={handleDuplicate}
+ disabled={duplicating}
+ className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-muted-foreground rounded-lg transition-colors disabled:opacity-50"
+ >
+ <CopyIcon size={13} />
+ {duplicating ? tc("saving") : t("duplicateButton", { defaultValue: "Duplicate" })}
+ </button>
  <button
  type="button"
  onClick={() => setConfirmOpen(true)}
@@ -627,6 +694,37 @@ export function DishForm({
  onSave={save}
  onClose={() => setUnsavedOpen(false)}
  />
+
+ {optionModal && dish ? (
+ <Modal
+ open
+ onClose={() => setOptionModal(null)}
+ title={optionModal.kind === "new"
+ ? t("newOptionTitle", { defaultValue: "New option" })
+ : t("editOptionTitle", { defaultValue: "Edit option" })}
+ size="lg"
+ >
+ <OptionForm
+ embedded
+ lang={lang}
+ dish={dish}
+ option={
+ optionModal.kind === "edit"
+ ? dish.options.find((o) => o.id === optionModal.id) || null
+ : null
+ }
+ onBack={() => setOptionModal(null)}
+ onSavedRedirect={async () => {
+ if (onOptionsRefresh) await onOptionsRefresh();
+ setOptionModal(null);
+ }}
+ onDeletedRedirect={async () => {
+ if (onOptionsRefresh) await onOptionsRefresh();
+ setOptionModal(null);
+ }}
+ />
+ </Modal>
+ ) : null}
  </div>
  );
 }
@@ -790,12 +888,16 @@ export function OptionForm({
  onSavedRedirect,
  onBack,
  onDeletedRedirect,
+ embedded,
+ lang: langProp,
 }: {
  dish: Dish;
  option: DishOption | null;
  onSavedRedirect: () => void;
  onBack: () => void;
  onDeletedRedirect: () => void;
+ embedded?: boolean;
+ lang?: string;
 }) {
  const t = useTranslations("dashboard.optionForm");
  const tc = useTranslations("dashboard.common");
@@ -804,7 +906,9 @@ export function OptionForm({
  const currencySymbol = currencySymbolOf(currency);
  const isNew = option === null;
 
- const [lang, setLang] = useState<string>(defaultLang);
+ const [internalLang, setInternalLang] = useState<string>(defaultLang);
+ const lang = langProp ?? internalLang;
+ const setLang = setInternalLang;
  const [form, setForm] = useState<OptionFormState>(() => ({
  name: option ? option.name : emptyMl(languages),
  type: option ? option.type : "single",
@@ -826,8 +930,9 @@ export function OptionForm({
  })();
 
  useEffect(() => {
+ if (embedded) return;
  window.scrollTo({ top: 0, behavior: "auto" });
- }, []);
+ }, [embedded]);
 
  const namePrimary = (form.name[defaultLang] || "").trim();
  const validVariants = form.variants.filter((v) => (v.name?.[defaultLang] || "").trim().length > 0);
@@ -967,6 +1072,7 @@ export function OptionForm({
 
  return (
  <div>
+ {!embedded ? (
  <EditPageHeader
  onBack={onBack}
  title={titleText}
@@ -978,8 +1084,11 @@ export function OptionForm({
  canSave={!saving}
  saving={saving}
  />
+ ) : null}
 
- <div className="max-w-2xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6">
+ <div className={embedded
+ ? ""
+ : "max-w-2xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6"}>
  <TranslatedInput
  id="opt-name"
  label={t("nameLabel")}
@@ -1072,7 +1181,38 @@ export function OptionForm({
  </button>
  </div>
 
+ {embedded ? (
+ <div className="mt-5 flex items-center justify-between gap-2">
  {!isNew ? (
+ <button
+ type="button"
+ onClick={() => setConfirmOpen(true)}
+ className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-red-600 border border-border transition-colors"
+ aria-label={t("deleteButton")}
+ title={t("deleteButton")}
+ >
+ <TrashIcon size={13} />
+ </button>
+ ) : <span />}
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={onBack}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ {tc("cancel")}
+ </button>
+ <button
+ type="button"
+ onClick={save}
+ disabled={saving}
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ >
+ {saving ? tc("saving") : tc("save")}
+ </button>
+ </div>
+ </div>
+ ) : !isNew ? (
  <div className="max-w-2xl mx-auto mt-6 flex justify-center">
  <button
  type="button"

@@ -280,9 +280,8 @@ function ViewSwitch(p: SwitchProps) {
           onBack={backToMenu}
           onSavedRedirect={onSavedMenu}
           onDeletedRedirect={onSavedMenu}
-          onOpenOption={(itemId, optionId) =>
-            router.push(optionId ? { name: "option.edit", itemId, optionId } : { name: "option.new", itemId })
-          }
+          onPersisted={(id) => router.push({ name: "item.edit", id })}
+          onOptionsRefresh={refreshMenu}
         />
       );
     }
@@ -307,9 +306,7 @@ function ViewSwitch(p: SwitchProps) {
           onBack={backToMenu}
           onSavedRedirect={onSavedMenu}
           onDeletedRedirect={onSavedMenu}
-          onOpenOption={(itemId, optionId) =>
-            router.push(optionId ? { name: "option.edit", itemId, optionId } : { name: "option.new", itemId })
-          }
+          onOptionsRefresh={refreshMenu}
         />
       );
     }

@@ -466,6 +466,8 @@ export interface ApiOrder {
  comment: string | null;
  tableNumber: number | null;
  status: string;
+ orderDate: string;
+ dailyNumber: number;
  createdAt: string;
  updatedAt: string;
 }
@@ -495,7 +497,7 @@ export async function createOrder(payload: {
 
 export async function patchOrder(
  id: string,
- payload: { status?: string; items?: ApiOrderItem[]; total?: number },
+ payload: { status?: string; items?: ApiOrderItem[]; total?: number; tableNumber?: number | null },
 ): Promise<ApiOrder> {
  const res = await fetch(apiUrl(`/api/orders/${id}`), {
         credentials: "include",
@@ -505,6 +507,20 @@ export async function patchOrder(
  });
  if (!res.ok) throw new Error("Failed to update order");
  return (await res.json()) as ApiOrder;
+}
+
+export async function splitOrder(
+ id: string,
+ payload: { itemIds: string[]; sourceTotal: number; createdTotal: number },
+): Promise<{ source: ApiOrder; created: ApiOrder }> {
+ const res = await fetch(apiUrl(`/api/orders/${id}/split`), {
+        credentials: "include",
+ method: "POST",
+ headers: { "Content-Type": "application/json" },
+ body: JSON.stringify(payload),
+ });
+ if (!res.ok) throw new Error("Failed to split order");
+ return (await res.json()) as { source: ApiOrder; created: ApiOrder };
 }
 
 export async function deleteOrder(id: string): Promise<void> {

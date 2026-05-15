@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import {
  CheckIcon,
+ ChevronLeftIcon,
  CloseIcon,
  CopyIcon,
  DownloadIcon,
@@ -28,17 +29,23 @@ import { QRCodeCanvas } from "qrcode.react";
 export function Modal({
  open,
  onClose,
+ onBack,
  title,
+ subtitle,
  children,
  size = "md",
  footer,
+ closeOnBackdrop = true,
 }: {
  open: boolean;
  onClose: () => void;
- title: string;
+ onBack?: (() => void) | null;
+ title: ReactNode;
+ subtitle?: ReactNode;
  children: ReactNode;
  size?: "sm" | "md" | "lg";
  footer?: ReactNode;
+ closeOnBackdrop?: boolean;
 }) {
  useEffect(() => {
  if (!open) return;
@@ -59,7 +66,7 @@ export function Modal({
 
  return (
  <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-4 bg-black/50 backdrop-blur-sm">
- <div className="absolute inset-0" onClick={onClose} aria-hidden="true" />
+ <div className="absolute inset-0" onClick={closeOnBackdrop ? onClose : undefined} aria-hidden="true" />
  <div
  className={
  "relative w-full " +
@@ -67,12 +74,27 @@ export function Modal({
  " bg-card border border-border rounded-2xl max-h-[92vh] flex flex-col"
  }
  >
- <div className="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-border">
+ <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border">
+ {onBack ? (
+ <button
+ type="button"
+ onClick={onBack}
+ className="w-8 h-8 -ml-2 flex items-center justify-center rounded-md text-muted-foreground transition-colors shrink-0"
+ aria-label={tc("back")}
+ >
+ <ChevronLeftIcon size={16} />
+ </button>
+ ) : null}
+ <div className="min-w-0 flex-1">
  <h3 className="text-base font-medium text-foreground truncate">{title}</h3>
+ {subtitle ? (
+ <div className="text-xs text-muted-foreground mt-0.5">{subtitle}</div>
+ ) : null}
+ </div>
  <button
  type="button"
  onClick={onClose}
- className="w-8 h-8 -mr-2 flex items-center justify-center rounded-md text-muted-foreground transition-colors"
+ className="w-8 h-8 -mr-2 flex items-center justify-center rounded-md text-muted-foreground transition-colors shrink-0"
  aria-label={tc("close")}
  >
  <CloseIcon size={16} />
@@ -112,15 +134,23 @@ export function ConfirmDialog({
  const label = confirmLabel || (singleButton ? tc("ok") : tc("delete"));
  const isDanger = !singleButton && (!confirmStyle || confirmStyle === "danger");
  const confirmCls = isDanger
- ? "h-10 px-4 text-sm font-medium text-white bg-red-600 rounded-lg transition-colors"
- : "h-10 px-4 text-sm font-medium text-background bg-foreground rounded-lg transition-colors";
+ ? "h-8 px-3 text-xs font-medium text-white bg-red-600 rounded-lg transition-colors"
+ : "h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors";
 
  return (
- <Modal open={open} onClose={onCancel} title={title || tc("confirm")} size="sm">
- <p className="text-sm text-muted-foreground leading-snug mb-5">{message}</p>
- <div className="flex gap-2.5 justify-end">
+ <Modal
+ open={open}
+ onClose={onCancel}
+ title={title || tc("confirm")}
+ size="sm"
+ footer={
+ <div className="flex gap-2 justify-end">
  {!singleButton ? (
- <button type="button" onClick={onCancel} className={secondaryBtn}>
+ <button
+ type="button"
+ onClick={onCancel}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
  {tc("cancel")}
  </button>
  ) : null}
@@ -132,6 +162,9 @@ export function ConfirmDialog({
  {label}
  </button>
  </div>
+ }
+ >
+ <p className="text-sm text-muted-foreground leading-snug">{message}</p>
  </Modal>
  );
 }

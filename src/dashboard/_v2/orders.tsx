@@ -1,15 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChevronLeftIcon, ClockIcon, MessageIcon, PlusIcon, ReceiptIcon, TrashIcon } from "./icons";
-import { ConfirmDialog, EmptyState, PageHeader } from "./ui";
+import {
+ CheckIcon,
+ ChevronLeftIcon,
+ ChevronRightIcon,
+ CopyIcon,
+ MessageIcon,
+ MoreVerticalIcon,
+ PlusIcon,
+ ReceiptIcon,
+ RefreshIcon,
+ SplitIcon,
+ SwapIcon,
+ TrashIcon,
+} from "./icons";
+import { ConfirmDialog, EmptyState, Modal, PageHeader } from "./ui";
 import { FloorMap } from "./tables";
-import { formatPrice, formatTimeShort, minutesSince, currencySymbolOf, parseDecimal, newId } from "./helpers";
+import {
+ formatPrice,
+ formatTimeShort,
+ minutesSince,
+ currencySymbolOf,
+ parseDecimal,
+ newId,
+} from "./helpers";
 import { getMlWithFallback } from "./i18n";
 import { inputClass } from "./tokens";
-import { createOrder, deleteOrder, patchOrder } from "./api";
+import { createOrder, deleteOrder, patchOrder, splitOrder } from "./api";
 import type {
  Category,
  Dish,
@@ -32,10 +53,19 @@ const ITEM_STATUS_KEYS: Record<OrderItemStatus, "statusPending" | "statusCooking
 
 const ITEM_STATUS_CLS: Record<OrderItemStatus, string> = {
  pending: "bg-secondary text-muted-foreground border-border",
- cooking: "bg-amber-50 text-amber-700 border-amber-200",
- ready: "bg-emerald-50 text-emerald-700 border-emerald-200",
+ cooking: "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-900",
+ ready: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900",
  served: "bg-secondary text-muted-foreground border-border",
 };
+
+const STATUS_DOT_CLS: Record<OrderItemStatus, string> = {
+ pending: "bg-slate-700 dark:bg-slate-400",
+ cooking: "bg-amber-500 dark:bg-amber-400",
+ ready: "bg-blue-600 dark:bg-blue-500",
+ served: "bg-emerald-600 dark:bg-emerald-500",
+};
+
+const STATUS_ORDER: OrderItemStatus[] = ["pending", "cooking", "ready", "served"];
 
 function calcItemPrice(item: OrderItem): number {
  const base = parseDecimal(item.basePriceSnapshot) || 0;
@@ -50,12 +80,24 @@ function calcOrderTotal(order: Order): number {
  return order.items.reduce((sum, it) => sum + calcItemPrice(it), 0);
 }
 
-type OrdersView =
- | { name: "list" }
- | { name: "order"; orderId: string }
- | { name: "addItem"; orderId: string; step: "category"; categoryId?: undefined; dishId?: undefined }
- | { name: "addItem"; orderId: string; step: "dish"; categoryId: string; dishId?: undefined }
- | { name: "addItem"; orderId: string; step: "configure"; categoryId: string; dishId: string };
+// ── Modal navigation state ──
+//
+// list      — список заказов выбранного стола (только если есть заказы)
+// order     — деталка одного заказа
+// addItem   — степпер добавления блюда (категория → блюдо → конфиг).
+//             orderId === null означает «order ещё не создан»; будет создан
+//             в БД при сохранении первого блюда.
+
+type ModalView =
+ | { kind: "list" }
+ | { kind: "order"; orderId: string }
+ | {
+ kind: "addItem";
+ orderId: string | null;
+ step: "category" | "dish" | "configure";
+ categoryId?: string;
+ dishId?: string;
+ };
 
 export function OrdersPage({
  orders,
@@ -73,24 +115,79 @@ export function OrdersPage({
  currency: string;
 }) {
  const t = useTranslations("dashboard.orders");
+ const tc = useTranslations("dashboard.common");
  const router = useRouter();
- const [view, setView] = useState<OrdersView>({ name: "list" });
- const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
- const [creating, setCreating] = useState(false);
  const currencySymbol = currencySymbolOf(currency);
 
+ const NO_TABLE = "__no_table__";
+ const [activeTableId, setActiveTableId] = useState<string | null>(null);
+ const [view, setView] = useState<ModalView | null>(null);
+ const [creating, setCreating] = useState(false);
+ const [confirmDeleteOrder, setConfirmDeleteOrder] = useState<string | null>(null);
+ const [confirmCompleteOrder, setConfirmCompleteOrder] = useState<string | null>(null);
+ const [moreOpen, setMoreOpen] = useState(false);
+ const [changeTableForOrder, setChangeTableForOrder] = useState<string | null>(null);
+ const [splitForOrder, setSplitForOrder] = useState<string | null>(null);
+ const [headerBack, setHeaderBack] = useState<(() => void) | null>(null);
+ const [wizardTitle, setWizardTitle] = useState<string | null>(null);
+ const [wizardFooter, setWizardFooter] = useState<React.ReactNode | null>(null);
+ const [openedFrom, setOpenedFrom] = useState<"table" | "list">("table");
+
  const activeOrders = orders.filter((o) => o.status === "active");
- const currentOrder =
- view.name !== "list" ? orders.find((o) => o.id === view.orderId) || null : null;
+ const occupiedIds = useMemo(
+ () => new Set(activeOrders.map((o) => o.tableId).filter((x): x is string => !!x)),
+ [activeOrders],
+ );
+ const noTableOrders = activeOrders.filter((o) => !o.tableId);
 
- useEffect(() => {
- }, []);
-
- useEffect(() => {
- if (view.name !== "list" && !currentOrder) {
- setView({ name: "list" });
+ // Stol → "все позиции ready" (для зелёного тона плитки).
+ const readyIds = useMemo(() => {
+ const result = new Set<string>();
+ for (const tbl of tables) {
+ const tableOrders = activeOrders.filter((o) => o.tableId === tbl.id);
+ if (tableOrders.length === 0) continue;
+ const allItems = tableOrders.flatMap((o) => o.items);
+ if (allItems.length === 0) continue;
+ if (allItems.every((it) => it.status === "ready" || it.status === "served")) {
+ result.add(tbl.id);
  }
- }, [view, currentOrder]);
+ }
+ return result;
+ }, [tables, activeOrders]);
+
+ function tileBadge(tableId: string): number | null {
+ const tableOrders = activeOrders.filter((o) => o.tableId === tableId);
+ return tableOrders.length || null;
+ }
+
+ const activeTable =
+ activeTableId && activeTableId !== NO_TABLE
+ ? tables.find((tbl) => tbl.id === activeTableId) || null
+ : null;
+ const isNoTable = activeTableId === NO_TABLE;
+ const activeTableOrders = isNoTable
+ ? noTableOrders
+ : activeTable
+ ? activeOrders.filter((o) => o.tableId === activeTable.id)
+ : [];
+
+ const currentOrder =
+ view && view.kind !== "list" && view.kind !== "addItem"
+ ? orders.find((o) => o.id === view.orderId) || null
+ : view && view.kind === "addItem" && view.orderId
+ ? orders.find((o) => o.id === view.orderId) || null
+ : null;
+
+ function openTable(id: string) {
+ setActiveTableId(id);
+ setOpenedFrom("table");
+ setView({ kind: "list" });
+ }
+
+ function closeModal() {
+ setView(null);
+ setActiveTableId(null);
+ }
 
  async function persistOrder(orderId: string, patch: Partial<Order>) {
  setOrders((all) => all.map((o) => (o.id === orderId ? { ...o, ...patch } : o)));
@@ -122,16 +219,43 @@ export function OrdersPage({
  persistOrder(orderId, { items });
  }
 
+ function duplicateItem(orderId: string, itemId: string) {
+ track("dash_orders_order_duplicate_item");
+ const order = orders.find((o) => o.id === orderId);
+ if (!order) return;
+ const src = order.items.find((it) => it.id === itemId);
+ if (!src) return;
+ const copy: OrderItem = {
+ ...src,
+ id: newId(),
+ status: "pending",
+ createdAt: new Date().toISOString(),
+ options: src.options.map((o) => ({ ...o })),
+ };
+ persistOrder(orderId, { items: [...order.items, copy] });
+ }
+
  function completeOrder(orderId: string) {
  track("dash_orders_order_complete_order");
  persistOrder(orderId, { status: "completed" });
- setView({ name: "list" });
+ const stillHasOrders = activeTableId
+ ? activeOrders.some((o) => o.id !== orderId && o.tableId === activeTableId)
+ : false;
+ if (openedFrom !== "list" && stillHasOrders) {
+ setView({ kind: "list" });
+ } else {
+ closeModal();
+ }
  }
 
  async function removeOrder(orderId: string) {
  track("dash_orders_order_delete_order");
  setOrders((all) => all.filter((o) => o.id !== orderId));
- setView({ name: "list" });
+ const stillHasOrders = activeTableId
+ ? activeOrders.some((o) => o.id !== orderId && o.tableId === activeTableId)
+ : false;
+ if (openedFrom !== "list" && stillHasOrders) setView({ kind: "list" });
+ else closeModal();
  try {
  await deleteOrder(orderId);
  router.refresh();
@@ -139,25 +263,20 @@ export function OrdersPage({
  }
  }
 
- function appendItem(orderId: string, item: OrderItem) {
- const order = orders.find((o) => o.id === orderId);
- if (!order) return;
- const items = [...order.items, item];
- persistOrder(orderId, { items });
- }
-
- async function startOrderForTable(tableId: string) {
- track("dash_orders_click_start_order");
- if (creating) return;
- const table = tables.find((t) => t.id === tableId);
- if (!table) return;
+ // Лениво создаём заказ, когда сохраняется первое блюдо.
+ async function ensureOrderForFirstItem(): Promise<Order | null> {
+ if (!activeTableId || activeTableId === NO_TABLE) return null;
+ const table = tables.find((tbl) => tbl.id === activeTableId);
+ if (!table) return null;
+ if (creating) return null;
  setCreating(true);
  try {
  const created = await createOrder({ tableNumber: table.number });
  const newOrder: Order = {
  id: created.id,
- tableId,
+ tableId: table.id,
  tableNumber: table.number,
+ dailyNumber: created.dailyNumber,
  guestName: "",
  createdAt: created.createdAt,
  status: "active",
@@ -165,216 +284,493 @@ export function OrdersPage({
  total: 0,
  };
  setOrders((all) => [...all, newOrder]);
- setView({ name: "addItem", orderId: created.id, step: "category" });
  router.refresh();
+ return newOrder;
  } catch {
- // silent
+ return null;
  } finally {
  setCreating(false);
  }
  }
 
- // ── Add-item flow drilldown ──
-
- if (view.name === "addItem" && currentOrder) {
- return (
- <AddItemFlow
- order={currentOrder}
- tables={tables}
- categories={categories}
- defaultLang={defaultLang}
- currencySymbol={currencySymbol}
- view={view}
- setView={setView}
- onCancel={() => setView({ name: "order", orderId: currentOrder.id })}
- onAdd={(item) => {
- appendItem(currentOrder.id, item);
- setView({ name: "order", orderId: currentOrder.id });
- }}
- />
+ async function handleChangeTable(orderId: string, table: TableEntity) {
+ track("dash_orders_order_change_table");
+ setOrders((all) =>
+ all.map((o) =>
+ o.id === orderId ? { ...o, tableId: table.id, tableNumber: table.number } : o,
+ ),
  );
+ closeModal();
+ try {
+ await patchOrder(orderId, { tableNumber: table.number });
+ router.refresh();
+ } catch {
+ }
  }
 
- if (view.name === "order" && currentOrder) {
- return (
- <OrderDetailPage
- order={currentOrder}
- tables={tables}
- defaultLang={defaultLang}
- currencySymbol={currencySymbol}
- onBack={() => setView({ name: "list" })}
- onAddItem={() => {
- track("dash_orders_order_add_item");
- setView({ name: "addItem", orderId: currentOrder.id, step: "category" });
- }}
- onItemStatusChange={(itemId, status) => setItemStatus(currentOrder.id, itemId, status)}
- onRemoveItem={(itemId) => removeItem(currentOrder.id, itemId)}
- onComplete={() => completeOrder(currentOrder.id)}
- onDelete={() => removeOrder(currentOrder.id)}
- />
- );
+ async function handleSplit(orderId: string, itemIds: string[]) {
+ track("dash_orders_order_split");
+ const source = orders.find((o) => o.id === orderId);
+ if (!source) return;
+ const idSet = new Set(itemIds);
+ const taken = source.items.filter((it) => idSet.has(it.id));
+ const kept = source.items.filter((it) => !idSet.has(it.id));
+ if (taken.length === 0) return;
+ const sourceTotal = kept.reduce((sum, it) => sum + calcItemPrice(it), 0);
+ const createdTotal = taken.reduce((sum, it) => sum + calcItemPrice(it), 0);
+ try {
+ const res = await splitOrder(orderId, { itemIds, sourceTotal, createdTotal });
+ const newOrder: Order = {
+ id: res.created.id,
+ tableId: source.tableId,
+ tableNumber: source.tableNumber,
+ dailyNumber: res.created.dailyNumber,
+ guestName: "",
+ createdAt: res.created.createdAt,
+ status: "active",
+ items: taken,
+ total: createdTotal,
+ };
+ setOrders((all) => [
+ ...all.map((o) => (o.id === orderId ? { ...o, items: kept, total: sourceTotal } : o)),
+ newOrder,
+ ]);
+ router.refresh();
+ setView({ kind: "list" });
+ } catch {
+ }
  }
 
- const occupiedIds = new Set(
- activeOrders.map((o) => o.tableId).filter((x): x is string => !!x),
- );
- // Orders submitted without a table (e.g. takeaway / pickup, or guests who
- // didn't pick a table on the public menu) need a place to live, since the
- // table-grid view filters by tableId.
- const noTableOrders = activeOrders.filter((o) => !o.tableId);
- const NO_TABLE = "__no_table__";
- const isNoTableView = selectedTableId === NO_TABLE;
- const selectedTable =
- selectedTableId && !isNoTableView ? tables.find((t) => t.id === selectedTableId) : null;
- const selectedTableOrders = isNoTableView
- ? noTableOrders
- : selectedTableId
- ? activeOrders.filter((o) => o.tableId === selectedTableId)
- : [];
+ async function handleAddItem(itemData: { options: OrderItemOptionSnapshot[]; notes: string }, dish: Dish) {
+ track("dash_orders_order_save_item");
+ const currentView = view;
+ if (!currentView || currentView.kind !== "addItem") return;
+ let orderId = currentView.orderId;
+ if (!orderId) {
+ const newOrder = await ensureOrderForFirstItem();
+ if (!newOrder) return;
+ orderId = newOrder.id;
+ }
+ const newItem: OrderItem = {
+ id: newId(),
+ dishId: dish.id,
+ dishNameSnapshot: dish.name,
+ basePriceSnapshot: dish.price,
+ options: itemData.options,
+ notes: itemData.notes,
+ status: "pending",
+ createdAt: new Date().toISOString(),
+ };
+ const order = orders.find((o) => o.id === orderId) || { items: [] as OrderItem[] };
+ const items = [...order.items, newItem];
+ persistOrder(orderId, { items });
+ setView({ kind: "order", orderId });
+ }
 
  if (tables.length === 0) {
  return (
  <div className="max-w-2xl mx-auto" onClick={() => track("dash_orders_click_map_empty")}>
  <PageHeader
  title={t("title")}
- subtitle={activeOrders.length === 1 ? t("subtitleOne", { count: activeOrders.length }) : t("subtitleOther", { count: activeOrders.length })}
+ subtitle={
+ activeOrders.length === 1
+ ? t("subtitleOne", { count: activeOrders.length })
+ : t("subtitleOther", { count: activeOrders.length })
+ }
  />
- <EmptyState
- title={t("noTablesTitle")}
- subtitle={t("noTablesSub")}
- />
+ <EmptyState title={t("noTablesTitle")} subtitle={t("noTablesSub")} />
  </div>
  );
  }
 
- return (
- <div className="max-w-2xl mx-auto">
- <PageHeader
- title={t("title")}
- subtitle={activeOrders.length === 1 ? t("subtitleOne", { count: activeOrders.length }) : t("subtitleOther", { count: activeOrders.length })}
- />
-
- <style>{`
- .orders-layout { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
- .orders-col-left { width: 100%; }
- .orders-col-right { width: 100%; min-width: 0; }
- @media (min-width: 768px) {
- .orders-layout { flex-direction: row; }
- .orders-col-left { flex: 0 0 280px; width: 280px; }
- .orders-col-right { flex: 1 1 0%; min-width: 0; width: auto; }
- }
- `}</style>
-
- <div className="orders-layout">
- <div className="orders-col-left">
- <FloorMap
- tables={tables}
- selectedId={isNoTableView ? null : selectedTableId}
- onSelectTable={(id) => {
- track("dash_orders_click_table");
- setSelectedTableId(id);
+ // Заголовок, подзаголовок, контент и футер модалки зависят от уровня.
+ let modalTitle: React.ReactNode = "";
+ let modalSubtitle: React.ReactNode = undefined;
+ let modalContent: React.ReactNode = null;
+ let modalFooter: React.ReactNode = null;
+ let modalSize: "sm" | "md" | "lg" = "md";
+ if (view?.kind === "list" || view?.kind === "addItem") modalSize = "sm";
+ if (view) {
+ if (view.kind === "list") {
+ const tableLabel = isNoTable
+ ? t("noTableLabel", { defaultValue: "No table" })
+ : t("tableLabel", { number: activeTable?.number ?? "?" });
+ modalTitle = tableLabel;
+ modalContent = (
+ <OrderListView
+ orders={activeTableOrders}
+ currencySymbol={currencySymbol}
+ onSelect={(orderId) => {
+ track("dash_orders_click_order");
+ setView({ kind: "order", orderId });
  }}
- occupiedIds={occupiedIds}
  />
- {noTableOrders.length > 0 ? (
+ );
+ if (!isNoTable) {
+ modalFooter = (
+ <div className="flex justify-end">
+ <button
+ type="button"
+ onClick={() =>
+ setView({ kind: "addItem", orderId: null, step: "category" })
+ }
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ >
+ <PlusIcon size={13} />
+ {activeTableOrders.length === 0 ? t("startOrder") : t("newOrder")}
+ </button>
+ </div>
+ );
+ }
+ } else if (view.kind === "order" && currentOrder) {
+ const total = calcOrderTotal(currentOrder);
+ const overall = computeOrderStatus(currentOrder);
+ const overallText = overall
+ ? overall === "served"
+ ? t("statusServed")
+ : t("inProgress", { defaultValue: "In progress" })
+ : null;
+ const orderLabel = t("orderLabel", {
+ defaultValue: "Order #{number}",
+ number: currentOrder.dailyNumber,
+ });
+ modalTitle = (
+ <span>
+ {orderLabel}
+ {overall && overallText ? (
+ <>
+ {" · "}
+ <span className={OVERALL_STATUS_TEXT_CLS[overall]}>{overallText}</span>
+ </>
+ ) : null}
+ </span>
+ );
+ modalSubtitle = (
+ <span>
+ {t("createdLabel", { defaultValue: "Created" })}: {formatTimeShort(currentOrder.createdAt)}
+ {" · "}
+ {t("total")}: {formatPrice(total, currencySymbol)}
+ </span>
+ );
+ modalContent = (
+ <OrderDetailView
+ order={currentOrder}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ onItemStatusChange={(itemId, status) =>
+ setItemStatus(currentOrder.id, itemId, status)
+ }
+ onRemoveItem={(itemId) => removeItem(currentOrder.id, itemId)}
+ onDuplicateItem={(itemId) => duplicateItem(currentOrder.id, itemId)}
+ />
+ );
+ const hasUnservedItems =
+ currentOrder.items.length > 0 &&
+ currentOrder.items.some((it) => it.status !== "served");
+ modalFooter = (
+ <div className="flex items-center justify-between gap-2">
+ <div className="relative">
+ <button
+ type="button"
+ onClick={() => setMoreOpen((v) => !v)}
+ className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-foreground bg-card border border-border transition-colors"
+ aria-label="More"
+ title="More"
+ >
+ <MoreVerticalIcon size={14} />
+ </button>
+ {moreOpen ? (
+ <>
+ <div
+ className="fixed inset-0 z-40"
+ onClick={() => setMoreOpen(false)}
+ />
+ <div className="absolute left-0 bottom-full mb-2 z-50 min-w-[180px] bg-card border border-border rounded-lg shadow-lg overflow-hidden">
  <button
  type="button"
  onClick={() => {
- track("dash_orders_click_no_table");
- setSelectedTableId(NO_TABLE);
+ setMoreOpen(false);
+ setChangeTableForOrder(currentOrder.id);
  }}
- className={
- "w-full mt-2 h-11 rounded-xl border text-sm font-medium flex items-center justify-between px-3 transition-colors " +
- (isNoTableView
- ? "bg-foreground text-background border-foreground"
- : "bg-card text-foreground border-border")
- }
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors"
  >
- <span>{t("noTableLabel", { defaultValue: "No table" })}</span>
- <span
- className={
- "inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-semibold rounded-full " +
- (isNoTableView ? "bg-background text-foreground" : "bg-foreground text-background")
- }
- >
- {noTableOrders.length}
- </span>
+ <SwapIcon size={13} />
+ {t("changeTable", { defaultValue: "Change table" })}
  </button>
+ <button
+ type="button"
+ onClick={() => {
+ setMoreOpen(false);
+ setSplitForOrder(currentOrder.id);
+ }}
+ disabled={currentOrder.items.length < 2}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors disabled:opacity-40"
+ >
+ <SplitIcon size={13} />
+ {t("splitOrder", { defaultValue: "Split order" })}
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setMoreOpen(false);
+ setConfirmDeleteOrder(currentOrder.id);
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-red-600 transition-colors"
+ >
+ <TrashIcon size={13} />
+ {t("deleteOrder")}
+ </button>
+ </div>
+ </>
  ) : null}
  </div>
-
- <div className="orders-col-right">
- {!selectedTable && !isNoTableView ? (
- activeOrders.length === 0 ? (
- <EmptyState
- title={t("noActive")}
- subtitle={t("noActiveSub")}
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => {
+ track("dash_orders_order_add_item");
+ setView({
+ kind: "addItem",
+ orderId: currentOrder.id,
+ step: "category",
+ });
+ }}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ <PlusIcon size={13} />
+ {t("dishShort", { defaultValue: "Dish" })}
+ </button>
+ <button
+ type="button"
+ onClick={() => setConfirmCompleteOrder(currentOrder.id)}
+ disabled={currentOrder.items.length === 0}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ >
+ <CheckIcon size={13} />
+ {t("closeShort", { defaultValue: "Close" })}
+ </button>
+ </div>
+ </div>
+ );
+ } else if (view.kind === "addItem") {
+ if (view.step === "category") {
+ modalTitle = t("selectCategory", { defaultValue: "Select category" });
+ } else if (view.step === "dish") {
+ modalTitle = t("selectDish", { defaultValue: "Select dish" });
+ } else {
+ modalTitle = wizardTitle || t("addItem");
+ }
+ if (view.step === "configure") modalFooter = wizardFooter;
+ modalContent = (
+ <AddItemView
+ categories={categories}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ view={view}
+ setView={setView}
+ onBackToOrder={() => {
+ if (view.orderId) setView({ kind: "order", orderId: view.orderId });
+ else setView({ kind: "list" });
+ }}
+ onAdd={handleAddItem}
+ creating={creating}
+ onRegisterBack={(fn) => setHeaderBack(() => fn)}
+ onTitleChange={setWizardTitle}
+ onRegisterFooter={setWizardFooter}
  />
- ) : (
- <div className="text-center py-10 px-4 bg-card border border-border rounded-xl">
- <p className="text-sm text-muted-foreground">{t("tapTable")}</p>
+ );
+ }
+ }
+
+ const reserved = 220;
+ const mapHeight = `calc(100dvh - var(--topbar-h, 0px) - ${reserved}px - env(safe-area-inset-bottom))`;
+
+ function openOrderDirect(order: Order) {
+ setActiveTableId(order.tableId ?? NO_TABLE);
+ setOpenedFrom("list");
+ setView({ kind: "order", orderId: order.id });
+ }
+
+ return (
+ <div className="max-w-5xl mx-auto md:px-6">
+ <PageHeader title={t("title")} subtitle={t("tapTable")} />
+
+ <div className="lg:flex lg:gap-4 lg:items-start">
+ <div
+ className="aspect-square mx-auto lg:mx-0 lg:shrink-0 w-full lg:w-auto lg:h-[var(--map-h)]"
+ style={{ "--map-h": mapHeight } as React.CSSProperties}
+ >
+ <FloorMap
+ tables={tables}
+ selectedId={null}
+ onSelectTable={(id) => {
+ if (!id) return;
+ track("dash_orders_click_table");
+ openTable(id);
+ }}
+ occupiedIds={occupiedIds}
+ readyIds={readyIds}
+ badgeFor={tileBadge}
+ wide
+ />
  </div>
- )
- ) : (
+
+ <div className="lg:flex-1 lg:min-w-0 mt-4 lg:mt-0">
+ {activeOrders.length === 0 ? (
+ <div className="w-full h-full min-h-[200px] flex items-center justify-center bg-card border border-border rounded-xl px-6 py-10 text-center">
  <div>
- <div className="bg-card border border-border rounded-xl p-4">
- <div className="flex items-baseline justify-between gap-3 mb-3">
- <div>
- <div className="text-sm font-medium text-foreground">
- {isNoTableView
- ? t("noTableLabel", { defaultValue: "No table" })
- : t("tableLabel", { number: selectedTable!.number })}
- {!isNoTableView && selectedTable!.name ? (
- <span className="text-muted-foreground font-normal"> · {selectedTable!.name}</span>
- ) : null}
+ <div className="text-sm font-medium text-foreground mb-1">
+ {t("noActiveTitle", { defaultValue: "No active orders" })}
  </div>
- <div className="text-xs text-muted-foreground mt-0.5">
- {selectedTableOrders.length === 0
- ? t("noActiveShort")
- : selectedTableOrders.length === 1
- ? t("activeOrderOne", { count: selectedTableOrders.length })
- : t("activeOrderOther", { count: selectedTableOrders.length })}
+ <div className="text-xs text-muted-foreground">
+ {t("noActiveBody", {
+ defaultValue: "New orders will show up here.",
+ })}
  </div>
+ </div>
+ </div>
+ ) : (
+ <div className="flex flex-col gap-2">
+ {activeOrders.map((o) => (
+ <OrderListCard
+ key={o.id}
+ order={o}
+ currencySymbol={currencySymbol}
+ onClick={() => openOrderDirect(o)}
+ variant="card"
+ />
+ ))}
+ </div>
+ )}
  </div>
  </div>
 
- {selectedTableOrders.length > 0 ? (
- <div className="space-y-2.5">
- {selectedTableOrders.map((order) => (
+
+ <Modal
+ open={!!view}
+ onClose={() => {
+ if (!view) return;
+ if (view.kind === "addItem") {
+ if (view.orderId) setView({ kind: "order", orderId: view.orderId });
+ else if (openedFrom === "list") closeModal();
+ else setView({ kind: "list" });
+ return;
+ }
+ if (view.kind === "order") {
+ if (openedFrom === "list") {
+ closeModal();
+ } else if (activeTableOrders.length > 1) {
+ setView({ kind: "list" });
+ } else {
+ closeModal();
+ }
+ return;
+ }
+ closeModal();
+ }}
+ onBack={view?.kind === "addItem" ? headerBack : null}
+ title={modalTitle}
+ subtitle={modalSubtitle}
+ size={modalSize}
+ footer={modalFooter}
+ closeOnBackdrop={view?.kind !== "addItem"}
+ >
+ {modalContent}
+ </Modal>
+
+ <ConfirmDialog
+ open={!!confirmDeleteOrder}
+ title={t("deleteOrderTitle")}
+ message={t("deleteOrderMessage")}
+ confirmLabel={tc("delete")}
+ onCancel={() => setConfirmDeleteOrder(null)}
+ onConfirm={() => {
+ if (confirmDeleteOrder) removeOrder(confirmDeleteOrder);
+ setConfirmDeleteOrder(null);
+ }}
+ />
+
+ <ConfirmDialog
+ open={!!confirmCompleteOrder}
+ title={t("completeOrder")}
+ message={
+ confirmCompleteOrder &&
+ orders
+ .find((o) => o.id === confirmCompleteOrder)
+ ?.items.some((it) => it.status !== "served")
+ ? t("completeOrderUnservedMessage", {
+ defaultValue: "Some items are not served yet. Complete order anyway?",
+ })
+ : t("completeOrderMessage", {
+ defaultValue: "Close this order?",
+ })
+ }
+ confirmLabel={t("completeOrder")}
+ confirmStyle="primary"
+ onCancel={() => setConfirmCompleteOrder(null)}
+ onConfirm={() => {
+ if (confirmCompleteOrder) completeOrder(confirmCompleteOrder);
+ setConfirmCompleteOrder(null);
+ }}
+ />
+
+ <ChangeTableModal
+ orderId={changeTableForOrder}
+ orders={orders}
+ tables={tables}
+ occupiedIds={occupiedIds}
+ onClose={() => setChangeTableForOrder(null)}
+ onConfirm={async (orderId, table) => {
+ await handleChangeTable(orderId, table);
+ setChangeTableForOrder(null);
+ }}
+ />
+
+ <SplitOrderModal
+ orderId={splitForOrder}
+ orders={orders}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ onClose={() => setSplitForOrder(null)}
+ onConfirm={async (orderId, itemIds) => {
+ await handleSplit(orderId, itemIds);
+ setSplitForOrder(null);
+ }}
+ />
+ </div>
+ );
+}
+
+// ── Level 1: список заказов стола ──
+
+function OrderListView({
+ orders,
+ currencySymbol,
+ onSelect,
+}: {
+ orders: Order[];
+ currencySymbol: string;
+ onSelect: (orderId: string) => void;
+}) {
+ const t = useTranslations("dashboard.orders");
+ if (orders.length === 0) {
+ return (
+ <div className="text-center py-10">
+ <ReceiptIcon size={28} className="mx-auto text-muted-foreground/50 mb-2" />
+ <p className="text-xs text-muted-foreground">{t("noActiveShort")}</p>
+ </div>
+ );
+ }
+ return (
+ <div className="-m-5 divide-y divide-border">
+ {orders.map((order) => (
  <OrderListCard
  key={order.id}
  order={order}
  currencySymbol={currencySymbol}
- onClick={() => {
- track("dash_orders_click_order");
- setView({ name: "order", orderId: order.id });
- }}
- hideTable
+ onClick={() => onSelect(order.id)}
  />
  ))}
- </div>
- ) : null}
- </div>
-
- {!isNoTableView ? (
- <button
- type="button"
- onClick={() => startOrderForTable(selectedTable!.id)}
- disabled={creating}
- className="w-full h-11 mt-3 text-sm font-medium text-muted-foreground border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
- >
- {creating ? (
- <span className="w-4 h-4 border-2 border-input border-t-neutral-900 rounded-full animate-spin" />
- ) : (
- <PlusIcon size={14} />
- )}
- {selectedTableOrders.length === 0 ? t("startOrder") : t("newOrder")}
- </button>
- ) : null}
- </div>
- )}
- </div>
- </div>
  </div>
  );
 }
@@ -383,156 +779,114 @@ function OrderListCard({
  order,
  currencySymbol,
  onClick,
- hideTable,
+ variant = "row",
 }: {
  order: Order;
  currencySymbol: string;
  onClick: () => void;
- hideTable?: boolean;
+ variant?: "row" | "card";
 }) {
  const t = useTranslations("dashboard.orders");
  const total = calcOrderTotal(order);
  const itemsCount = order.items.length;
- const allReady =
- itemsCount > 0 && order.items.every((it) => it.status === "ready" || it.status === "served");
- const anyCooking = order.items.some((it) => it.status === "cooking");
+ const overallStatus = computeOrderStatus(order);
+ const statusLabel = overallStatus === "served"
+ ? t("statusServed")
+ : overallStatus === "inProgress"
+ ? t("inProgress", { defaultValue: "In progress" })
+ : null;
+ const orderLabel = t("orderLabel", {
+ defaultValue: "Order #{number}",
+ number: order.dailyNumber,
+ });
 
+ const cls =
+ variant === "card"
+ ? "w-full text-left bg-card border border-border rounded-xl px-4 py-3 transition-colors"
+ : "w-full text-left px-5 py-3 transition-colors";
  return (
- <button
- type="button"
- onClick={onClick}
- className="w-full text-left bg-card border border-border rounded-xl p-3.5 transition-colors"
- >
- <div className="flex items-center justify-between gap-3 mb-1.5">
- <div className="flex items-center gap-2 min-w-0">
- <div className="text-sm font-medium text-foreground truncate">
- {hideTable
- ? formatTimeShort(order.createdAt)
- : t("tableLabel", { number: order.tableNumber ?? "?" })}
- </div>
- {allReady ? (
- <span className="inline-flex items-center h-5 px-2 text-[10px] font-medium border rounded-full bg-emerald-50 text-emerald-700 border-emerald-200">
- All ready
- </span>
- ) : anyCooking ? (
- <span className="inline-flex items-center h-5 px-2 text-[10px] font-medium border rounded-full bg-amber-50 text-amber-700 border-amber-200">
- Cooking
- </span>
+ <button type="button" onClick={onClick} className={cls}>
+ <div className="flex items-center gap-2">
+ <div className="min-w-0 flex-1 text-sm font-medium text-foreground truncate">
+ {orderLabel}
+ {statusLabel && overallStatus ? (
+ <>
+ <span className="text-muted-foreground font-normal"> · </span>
+ <span className={OVERALL_STATUS_TEXT_CLS[overallStatus]}>{statusLabel}</span>
+ </>
  ) : null}
  </div>
- <div className="text-sm font-medium text-foreground tabular-nums shrink-0">
+ <div className="shrink-0 text-sm font-medium text-foreground tabular-nums">
  {formatPrice(total, currencySymbol)}
  </div>
+ <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </div>
- <div className="flex items-center gap-3 text-xs text-muted-foreground">
- {!hideTable ? (
- <div className="inline-flex items-center gap-1">
- <ClockIcon size={11} />
- <span>{formatTimeShort(order.createdAt)}</span>
- </div>
- ) : null}
- <div className="inline-flex items-center gap-1">
- <ReceiptIcon size={11} />
- <span>
- {itemsCount === 1 ? t("itemOne", { count: itemsCount }) : t("itemOther", { count: itemsCount })}
- </span>
- </div>
+ <div className="text-xs text-muted-foreground mt-0.5 truncate">
+ {t("createdLabel", { defaultValue: "Created" })} {formatTimeShort(order.createdAt)}
+ {" · "}
+ {itemsCount === 1
+ ? t("itemOne", { count: itemsCount })
+ : t("itemOther", { count: itemsCount })}
  </div>
  </button>
  );
 }
 
-function OrderDetailPage({
+type OverallStatus = "served" | "inProgress";
+
+function computeOrderStatus(order: Order): OverallStatus | null {
+ if (order.items.length === 0) return null;
+ if (order.items.every((it) => it.status === "served")) return "served";
+ return "inProgress";
+}
+
+const OVERALL_STATUS_CLS: Record<OverallStatus, string> = {
+ served:
+ "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900",
+ inProgress:
+ "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-900",
+};
+
+const OVERALL_STATUS_TEXT_CLS: Record<OverallStatus, string> = {
+ served: "text-emerald-700 dark:text-emerald-300",
+ inProgress: "text-amber-700 dark:text-amber-300",
+};
+
+// ── Level 2: деталка заказа ──
+
+function OrderDetailView({
  order,
- tables,
  defaultLang,
  currencySymbol,
- onBack,
- onAddItem,
  onItemStatusChange,
  onRemoveItem,
- onComplete,
- onDelete,
+ onDuplicateItem,
 }: {
  order: Order;
- tables: TableEntity[];
  defaultLang: string;
  currencySymbol: string;
- onBack: () => void;
- onAddItem: () => void;
  onItemStatusChange: (itemId: string, status: OrderItemStatus) => void;
  onRemoveItem: (itemId: string) => void;
- onComplete: () => void;
- onDelete: () => void;
+ onDuplicateItem: (itemId: string) => void;
 }) {
  const t = useTranslations("dashboard.orders");
- const tc = useTranslations("dashboard.common");
- const table = tables.find((tbl) => tbl.id === order.tableId);
- const total = calcOrderTotal(order);
- const allServed = order.items.length > 0 && order.items.every((it) => it.status === "served");
- const [confirmDelete, setConfirmDelete] = useState(false);
 
- useEffect(() => {
- window.scrollTo({ top: 0, behavior: "auto" });
- }, []);
-
+ if (order.items.length === 0) {
  return (
- <div>
- <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
- style={{ top: "var(--topbar-h, 0px)" }}
- >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
- <button
- type="button"
- onClick={() => { track("dash_orders_order_back"); onBack(); }}
- className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
- >
- <ChevronLeftIcon size={14} />
- {tc("back")}
- </button>
- <button
- type="button"
- onClick={onComplete}
- disabled={order.items.length === 0}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
- >
- {t("completeOrder")}
- </button>
+ <div className="text-center py-10">
+ <ReceiptIcon size={28} className="mx-auto text-muted-foreground/50 mb-2" />
+ <p className="text-xs text-muted-foreground">{t("noItems")}</p>
  </div>
- </div>
+ );
+ }
 
- <ConfirmDialog
- open={confirmDelete}
- title={t("deleteOrderTitle")}
- message={t("deleteOrderMessage")}
- confirmLabel={tc("delete")}
- onCancel={() => setConfirmDelete(false)}
- onConfirm={() => {
- setConfirmDelete(false);
- onDelete();
- }}
- />
-
- <div className="max-w-2xl mx-auto pt-7 md:pt-6">
- <div className="mb-5">
- <div className="text-xs text-muted-foreground">{t("ordersBreadcrumb")}</div>
- <h2 className="text-xl font-medium text-foreground mt-1">
- {t("tableLabel", { number: table ? table.number : order.tableNumber ?? "?" })}
- {table && table.name ? <span className="text-muted-foreground font-normal"> · {table.name}</span> : null}
- </h2>
- <div className="text-xs text-muted-foreground mt-1">
- {t("startedAt", { time: formatTimeShort(order.createdAt), minutes: minutesSince(order.createdAt) })}
- </div>
- </div>
-
- {order.items.length === 0 ? (
- <div className="text-center py-8 bg-card border border-border rounded-xl mb-3">
- <p className="text-sm text-muted-foreground">{t("noItems")}</p>
- </div>
- ) : (
- <div className="space-y-2 mb-3">
- {order.items.map((item) => (
+ const sortedItems = [...order.items].sort((a, b) => {
+ if (a.dishId !== b.dishId) return a.dishId.localeCompare(b.dishId);
+ return a.createdAt.localeCompare(b.createdAt);
+ });
+ return (
+ <div className="-my-3 divide-y divide-border">
+ {sortedItems.map((item) => (
  <OrderItemCard
  key={item.id}
  item={item}
@@ -540,44 +894,9 @@ function OrderDetailPage({
  currencySymbol={currencySymbol}
  onStatusChange={(status) => onItemStatusChange(item.id, status)}
  onRemove={() => onRemoveItem(item.id)}
+ onDuplicate={() => onDuplicateItem(item.id)}
  />
  ))}
- </div>
- )}
-
- <button
- type="button"
- onClick={onAddItem}
- className="w-full h-11 text-sm font-medium text-muted-foreground border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
- >
- <PlusIcon size={14} />
- {t("addItem")}
- </button>
-
- {order.items.length > 0 ? (
- <div className="mt-5 pt-4 border-t border-border flex items-center justify-between">
- <div className="text-sm font-medium text-foreground">{t("total")}</div>
- <div className="text-lg font-medium text-foreground tabular-nums">
- {formatPrice(total, currencySymbol)}
- </div>
- </div>
- ) : null}
-
- {allServed ? (
- <p className="text-xs text-emerald-700 text-center mt-4">{t("allServed")}</p>
- ) : null}
-
- <div className="mt-6 flex justify-center">
- <button
- type="button"
- onClick={() => setConfirmDelete(true)}
- className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-red-600 rounded-lg transition-colors"
- >
- <TrashIcon size={13} />
- {t("deleteOrder")}
- </button>
- </div>
- </div>
  </div>
  );
 }
@@ -588,146 +907,143 @@ function OrderItemCard({
  currencySymbol,
  onStatusChange,
  onRemove,
+ onDuplicate,
 }: {
  item: OrderItem;
  defaultLang: string;
  currencySymbol: string;
  onStatusChange: (status: OrderItemStatus) => void;
  onRemove: () => void;
+ onDuplicate: () => void;
 }) {
  const t = useTranslations("dashboard.orders");
  const statusKey = ITEM_STATUS_KEYS[item.status] || ITEM_STATUS_KEYS.pending;
- const statusCls = ITEM_STATUS_CLS[item.status] || ITEM_STATUS_CLS.pending;
  const price = calcItemPrice(item);
- const nextStatus: Record<OrderItemStatus, OrderItemStatus> = {
- pending: "cooking",
- cooking: "ready",
- ready: "served",
- served: "pending",
- };
 
  return (
- <div className="bg-card border border-border rounded-xl p-3.5">
- <div className="flex items-start justify-between gap-3 mb-1.5">
- <div className="min-w-0 flex-1">
- <div className="text-sm font-medium text-foreground">
+ <div className="py-3">
+ <div className="flex items-center gap-2">
+ <span
+ className={"shrink-0 w-2 h-2 rounded-full " + STATUS_DOT_CLS[item.status]}
+ title={t(statusKey)}
+ aria-label={t(statusKey)}
+ />
+ <div className="min-w-0 flex-1 flex items-baseline gap-1 text-sm font-medium text-foreground leading-6">
+ <span className="min-w-0 truncate">
  {getMlWithFallback(item.dishNameSnapshot, defaultLang, defaultLang)}
+ </span>
+ <span className="shrink-0 text-[13px] text-muted-foreground font-normal tabular-nums">
+ · {formatPrice(price, currencySymbol)}
+ </span>
+ </div>
+ <ItemMoreMenu
+ currentStatus={item.status}
+ onStatusChange={onStatusChange}
+ onDuplicate={onDuplicate}
+ onRemove={onRemove}
+ statusLabels={{
+ pending: t("statusPending"),
+ cooking: t("statusCooking"),
+ ready: t("statusReady"),
+ served: t("statusServed"),
+ }}
+ duplicateLabel={t("duplicateItem", { defaultValue: "Duplicate" })}
+ removeLabel={t("removeItem")}
+ />
  </div>
  {item.options.length > 0 ? (
- <div className="text-xs text-muted-foreground mt-0.5">
- {item.options.map((o, i) => (
- <span key={i}>
- {i > 0 ? " · " : ""}
- {getMlWithFallback(o.variantName, defaultLang, defaultLang)}
- {(o.quantity ?? 1) > 1 ? ` × ${o.quantity}` : ""}
- </span>
- ))}
+ <div className="text-xs text-muted-foreground mt-0.5 space-y-0.5 pl-4">
+ {item.options.map((o, i) => {
+ const name = getMlWithFallback(o.variantName, defaultLang, defaultLang);
+ const delta = parseDecimal(o.priceDelta) || 0;
+ const qty = o.quantity ?? 1;
+ const parts: string[] = [];
+ if (qty > 1) parts.push(`×${qty}`);
+ parts.push(name);
+ if (delta > 0) parts.push(`+${formatPrice(delta, currencySymbol)}`);
+ return <div key={i}>{parts.join(" · ")}</div>;
+ })}
  </div>
  ) : null}
- </div>
- <div className="text-sm text-foreground tabular-nums shrink-0">
- {formatPrice(price, currencySymbol)}
- </div>
- </div>
-
  {item.notes ? (
- <div className="inline-flex items-start gap-1 text-xs text-muted-foreground mt-1 px-2 py-1 bg-secondary rounded-md">
- <MessageIcon size={11} className="mt-0.5 shrink-0" />
- <span>{item.notes}</span>
+ <div className="text-xs text-muted-foreground mt-0.5 pl-4">
+ {t("notesLabel")}: {item.notes}
  </div>
  ) : null}
-
- <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
- <button
- type="button"
- onClick={() => { track("dash_orders_order_status_click"); onStatusChange(nextStatus[item.status]); }}
- className={
- "inline-flex items-center h-7 px-2.5 text-[11px] font-medium border rounded-full transition-opacity " +
- statusCls
- }
- title={t("tapToChangeStatus")}
- >
- {t(statusKey)}
- </button>
- <div className="flex-1" />
- <button
- type="button"
- onClick={onRemove}
- className="w-7 h-7 flex items-center justify-center rounded-md text-muted-foreground transition-colors"
- aria-label={t("removeItem")}
- title={t("removeItem")}
- >
- <TrashIcon size={13} />
- </button>
- </div>
  </div>
  );
 }
 
-// ── Add-item drilldown: category → dish → configure ──
+// ── Level 3: добавление блюда (степпер) ──
 
-function AddItemFlow({
- order,
- tables,
+function AddItemView({
  categories,
  defaultLang,
  currencySymbol,
  view,
  setView,
+ onBackToOrder,
  onAdd,
- onCancel,
+ creating,
+ onRegisterBack,
+ onTitleChange,
+ onRegisterFooter,
 }: {
- order: Order;
- tables: TableEntity[];
  categories: Category[];
  defaultLang: string;
  currencySymbol: string;
- view: Extract<OrdersView, { name: "addItem" }>;
- setView: React.Dispatch<React.SetStateAction<OrdersView>>;
- onAdd: (item: OrderItem) => void;
- onCancel: () => void;
+ view: Extract<ModalView, { kind: "addItem" }>;
+ setView: React.Dispatch<React.SetStateAction<ModalView | null>>;
+ onBackToOrder: () => void;
+ onAdd: (data: { options: OrderItemOptionSnapshot[]; notes: string }, dish: Dish) => void;
+ creating: boolean;
+ onRegisterBack: (fn: (() => void) | null) => void;
+ onTitleChange: (title: string | null) => void;
+ onRegisterFooter: (node: React.ReactNode | null) => void;
 }) {
  const t = useTranslations("dashboard.orders");
- const tc = useTranslations("dashboard.common");
- const table = tables.find((tbl) => tbl.id === order.tableId);
- const tableLabel = t("tableLabel", { number: table ? table.number : order.tableNumber ?? "?" });
 
  function goCategory() {
- setView({ name: "addItem", orderId: order.id, step: "category" });
+ setView({ kind: "addItem", orderId: view.orderId, step: "category" });
  }
  function goDish(categoryId: string) {
- setView({ name: "addItem", orderId: order.id, step: "dish", categoryId });
+ setView({ kind: "addItem", orderId: view.orderId, step: "dish", categoryId });
  }
  function goConfigure(categoryId: string, dishId: string) {
- setView({ name: "addItem", orderId: order.id, step: "configure", categoryId, dishId });
+ setView({ kind: "addItem", orderId: view.orderId, step: "configure", categoryId, dishId });
  }
+
+ // Register back handler in modal header for category/dish steps.
+ // Configure step delegates to DishWizard which registers its own.
+ useEffect(() => {
+ if (view.step === "dish") {
+ onRegisterBack(goCategory);
+ }
+ // category step: no back; configure: DishWizard registers its own.
+ return () => {
+ if (view.step !== "configure") onRegisterBack(null);
+ };
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [view.step, view.categoryId, view.dishId, view.orderId]);
 
  if (view.step === "configure") {
  const cat = categories.find((c) => c.id === view.categoryId);
  const dish = cat?.dishes.find((d) => d.id === view.dishId);
- if (!dish) {
+ if (!dish || !cat) {
  goCategory();
  return null;
  }
  return (
  <DishWizard
  dish={dish}
- baseBreadcrumb={tableLabel + " / " + t("addItemBreadcrumb")}
  defaultLang={defaultLang}
  currencySymbol={currencySymbol}
- onBack={() => goDish(view.categoryId)}
- onAdd={(itemData) => {
- onAdd({
- id: newId(),
- dishId: dish.id,
- dishNameSnapshot: dish.name,
- basePriceSnapshot: dish.price,
- options: itemData.options,
- notes: itemData.notes,
- status: "pending",
- createdAt: new Date().toISOString(),
- });
- }}
+ creating={creating}
+ onBack={() => goDish(cat.id)}
+ onAdd={(data) => onAdd(data, dish)}
+ onRegisterBack={onRegisterBack}
+ onTitleChange={onTitleChange}
+ onRegisterFooter={onRegisterFooter}
  />
  );
  }
@@ -738,142 +1054,104 @@ function AddItemFlow({
  goCategory();
  return null;
  }
- const visibleDishes = cat.dishes.filter((d) => d.visible !== false);
+  const visibleDishes = cat.dishes.filter((d) => d.visible !== false);
  return (
- <PickerStep
- title={getMlWithFallback(cat.name, defaultLang, defaultLang)}
- breadcrumb={tableLabel + " / " + t("addItemBreadcrumb") + " / " + getMlWithFallback(cat.name, defaultLang, defaultLang)}
- onBack={goCategory}
- onCancel={onCancel}
- >
+ <div>
  {visibleDishes.length === 0 ? (
  <p className="text-sm text-muted-foreground text-center py-6">{t("noDishesInCategory")}</p>
  ) : (
- <div className="space-y-1">
+ <div className="-m-5 divide-y divide-border">
  {visibleDishes.map((d) => (
  <button
  key={d.id}
  type="button"
- onClick={() => { track("dash_orders_order_select_item"); goConfigure(cat.id, d.id); }}
- className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-lg transition-colors"
+ onClick={() => {
+ track("dash_orders_order_select_item");
+ goConfigure(cat.id, d.id);
+ }}
+ className="w-full text-left flex items-center justify-between gap-3 px-5 py-3 transition-colors"
  >
- <span className="text-sm text-foreground truncate">
+ <span className="min-w-0 flex-1 text-sm text-foreground truncate">
  {getMlWithFallback(d.name, defaultLang, defaultLang)}
  </span>
  <span className="text-sm text-muted-foreground tabular-nums shrink-0">
  {currencySymbol + d.price}
  </span>
+ <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </button>
  ))}
  </div>
  )}
- </PickerStep>
+ </div>
  );
  }
 
+ // step === "category"
  return (
- <PickerStep
- title={t("addItem")}
- breadcrumb={tableLabel}
- onBack={onCancel}
- onCancel={onCancel}
- hideCancel
- >
- <div className="space-y-1">
+ <div>
+ {categories.length === 0 ? (
+ <p className="text-sm text-muted-foreground text-center py-6">{t("noDishesInCategory")}</p>
+ ) : (
+ <div className="-m-5 divide-y divide-border">
  {categories.map((c) => (
  <button
  key={c.id}
  type="button"
- onClick={() => { track("dash_orders_order_select_category"); goDish(c.id); }}
- className="w-full text-left flex items-center justify-between gap-3 p-3 rounded-lg transition-colors"
+ onClick={() => {
+ track("dash_orders_order_select_category");
+ goDish(c.id);
+ }}
+ className="w-full text-left flex items-center justify-between gap-3 px-5 py-3 transition-colors"
  >
- <span className="text-sm font-medium text-foreground truncate">
+ <span className="min-w-0 flex-1 text-sm font-medium text-foreground truncate">
  {getMlWithFallback(c.name, defaultLang, defaultLang)}
  </span>
- <span className="text-xs text-muted-foreground tabular-nums shrink-0">{c.dishes.length}</span>
+ <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </button>
  ))}
  </div>
- </PickerStep>
- );
-}
-
-function PickerStep({
- title,
- breadcrumb,
- onBack,
- onCancel,
- hideCancel,
- children,
-}: {
- title: string;
- breadcrumb?: string;
- onBack: () => void;
- onCancel: () => void;
- hideCancel?: boolean;
- children: React.ReactNode;
-}) {
- const tc = useTranslations("dashboard.common");
- useEffect(() => {
- window.scrollTo({ top: 0, behavior: "auto" });
- }, [title]);
- return (
- <div>
- <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
- style={{ top: "var(--topbar-h, 0px)" }}
- >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
- <button
- type="button"
- onClick={onBack}
- className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
- >
- <ChevronLeftIcon size={14} />
- {tc("back")}
- </button>
- </div>
- </div>
-
- <div className="max-w-2xl mx-auto pt-7 md:pt-6">
- <div className="mb-5">
- {breadcrumb ? <div className="text-xs text-muted-foreground">{breadcrumb}</div> : null}
- <h2 className="text-xl font-medium text-foreground mt-1">{title}</h2>
- </div>
- <div className="bg-card border border-border rounded-xl p-2">{children}</div>
- </div>
+ )}
  </div>
  );
 }
 
-type WizardSubstep = { kind: "required"; index: number } | { kind: "final" };
+type WizardSubstep =
+ | { kind: "required"; index: number }
+ | { kind: "extras"; index: number }
+ | { kind: "notes" };
 
 function DishWizard({
  dish,
- baseBreadcrumb,
  defaultLang,
  currencySymbol,
+ creating,
  onBack,
  onAdd,
+ onRegisterBack,
+ onTitleChange,
+ onRegisterFooter,
 }: {
  dish: Dish;
- baseBreadcrumb: string;
  defaultLang: string;
  currencySymbol: string;
+ creating: boolean;
  onBack: () => void;
  onAdd: (data: { options: OrderItemOptionSnapshot[]; notes: string }) => void;
+ onRegisterBack?: (fn: (() => void) | null) => void;
+ onTitleChange?: (title: string | null) => void;
+ onRegisterFooter?: (node: React.ReactNode | null) => void;
 }) {
  const t = useTranslations("dashboard.orders");
- const tc = useTranslations("dashboard.common");
  const requiredOpts = (dish.options || []).filter((o) => o.required);
  const extraOpts = (dish.options || []).filter((o) => !o.required);
 
- const [substep, setSubstep] = useState<WizardSubstep>(
- requiredOpts.length > 0 ? { kind: "required", index: 0 } : { kind: "final" },
- );
-
- useEffect(() => {
- }, []);
+ const initialSubstep: WizardSubstep =
+ requiredOpts.length > 0
+ ? { kind: "required", index: 0 }
+ : extraOpts.length > 0
+ ? { kind: "extras", index: 0 }
+ : { kind: "notes" };
+ const [substep, setSubstep] = useState<WizardSubstep>(initialSubstep);
 
  const [reqSelections, setReqSelections] = useState<Record<string, string | string[] | null>>(() => {
  const init: Record<string, string | string[] | null> = {};
@@ -886,10 +1164,6 @@ function DishWizard({
  const [extraQty, setExtraQty] = useState<Record<string, number>>({});
  const [notes, setNotes] = useState("");
 
- useEffect(() => {
- window.scrollTo({ top: 0, behavior: "auto" });
- }, [substep]);
-
  function setQty(variantId: string, qty: number) {
  setExtraQty((s) => {
  const next = { ...s };
@@ -899,7 +1173,6 @@ function DishWizard({
  });
  }
 
- // Build snapshots for current state (used for totals and final add).
  function buildSnapshots(): OrderItemOptionSnapshot[] {
  const items: OrderItemOptionSnapshot[] = [];
  requiredOpts.forEach((opt) => {
@@ -931,42 +1204,64 @@ function DishWizard({
  (parseDecimal(dish.price) || 0) +
  snapshots.reduce((sum, o) => sum + (parseDecimal(o.priceDelta) || 0) * (o.quantity ?? 1), 0);
 
- // Breadcrumb: dish name + selections from all required options chosen so far.
- const dishName = getMlWithFallback(dish.name, defaultLang, defaultLang);
- const chosenReqLabels: string[] = [];
- const completedReqCount =
- substep.kind === "final" ? requiredOpts.length : substep.index;
- for (let i = 0; i < completedReqCount; i++) {
- const opt = requiredOpts[i];
- const sel = reqSelections[opt.id];
- if (opt.type === "single" && typeof sel === "string") {
- const v = opt.variants.find((vv) => vv.id === sel);
- if (v) chosenReqLabels.push(getMlWithFallback(v.name, defaultLang, defaultLang));
- } else if (opt.type === "multi" && Array.isArray(sel)) {
- const names = sel
- .map((vid) => opt.variants.find((vv) => vv.id === vid))
- .filter((v): v is OptionVariant => !!v)
- .map((v) => getMlWithFallback(v.name, defaultLang, defaultLang));
- if (names.length > 0) chosenReqLabels.push(names.join("+"));
- }
- }
- const breadcrumb = [baseBreadcrumb, dishName, ...chosenReqLabels].join(" / ");
-
- // Navigation.
- function handleBack() {
- if (substep.kind === "required") {
- if (substep.index === 0) onBack();
- else setSubstep({ kind: "required", index: substep.index - 1 });
- } else {
- if (requiredOpts.length > 0) setSubstep({ kind: "required", index: requiredOpts.length - 1 });
- else onBack();
- }
+ function goAfterRequired() {
+ if (extraOpts.length > 0) setSubstep({ kind: "extras", index: 0 });
+ else setSubstep({ kind: "notes" });
  }
 
  function advanceFromRequired(idx: number) {
  if (idx + 1 < requiredOpts.length) setSubstep({ kind: "required", index: idx + 1 });
- else setSubstep({ kind: "final" });
+ else goAfterRequired();
  }
+
+ function advanceFromExtras(idx: number) {
+ if (idx + 1 < extraOpts.length) setSubstep({ kind: "extras", index: idx + 1 });
+ else setSubstep({ kind: "notes" });
+ }
+
+ function handleBack() {
+ if (substep.kind === "required") {
+ if (substep.index === 0) onBack();
+ else setSubstep({ kind: "required", index: substep.index - 1 });
+ } else if (substep.kind === "extras") {
+ if (substep.index > 0) setSubstep({ kind: "extras", index: substep.index - 1 });
+ else if (requiredOpts.length > 0) setSubstep({ kind: "required", index: requiredOpts.length - 1 });
+ else onBack();
+ } else {
+ // notes
+ if (extraOpts.length > 0) setSubstep({ kind: "extras", index: extraOpts.length - 1 });
+ else if (requiredOpts.length > 0) setSubstep({ kind: "required", index: requiredOpts.length - 1 });
+ else onBack();
+ }
+ }
+
+ const stepIndex =
+ substep.kind === "required" || substep.kind === "extras" ? substep.index : -1;
+
+ useEffect(() => {
+ if (!onRegisterBack) return;
+ onRegisterBack(() => handleBack());
+ return () => onRegisterBack(null);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [substep.kind, stepIndex, requiredOpts.length, extraOpts.length]);
+
+ // Set modal title per substep.
+ useEffect(() => {
+ if (!onTitleChange) return;
+ if (substep.kind === "required") {
+ const opt = requiredOpts[substep.index];
+ const name = opt ? getMlWithFallback(opt.name, defaultLang, defaultLang) : "";
+ onTitleChange(t("selectOption", { defaultValue: "Select {name}", name }));
+ } else if (substep.kind === "extras") {
+ const opt = extraOpts[substep.index];
+ const name = opt ? getMlWithFallback(opt.name, defaultLang, defaultLang) : "";
+ onTitleChange(t("selectOption", { defaultValue: "Select {name}", name }));
+ } else {
+ onTitleChange(t("commentStep", { defaultValue: "Comment" }));
+ }
+ return () => onTitleChange(null);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [substep.kind, stepIndex]);
 
  function pickRequiredVariant(opt: DishOption, idx: number, variantId: string) {
  if (opt.type === "single") {
@@ -990,121 +1285,141 @@ function DishWizard({
  }
 
  function handleAdd() {
- track("dash_orders_order_save_item");
  onAdd({ options: snapshots, notes: notes.trim() });
  }
 
- // Render.
  const currentOpt = substep.kind === "required" ? requiredOpts[substep.index] : null;
 
+ // Footer button (registered to modal footer).
+ const multiEnabled =
+ substep.kind === "required" &&
+ currentOpt &&
+ currentOpt.type === "multi" &&
+ Array.isArray(reqSelections[currentOpt.id]) &&
+ (reqSelections[currentOpt.id] as string[]).length > 0;
+ const btnCls =
+ "inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40";
+ const footerNode: React.ReactNode = (() => {
+ if (substep.kind === "required" && currentOpt && currentOpt.type === "multi") {
  return (
- <div>
- <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 py-2 bg-card/90 backdrop-blur-md border-b border-border/60"
- style={{ top: "var(--topbar-h, 0px)" }}
- >
- <div className="max-w-2xl mx-auto flex items-center justify-between gap-3">
- <button
- type="button"
- onClick={handleBack}
- className="inline-flex items-center gap-1 h-8 -ml-1 pl-1 pr-2 text-xs font-medium text-muted-foreground rounded-md transition-colors"
- >
- <ChevronLeftIcon size={14} />
- {tc("back")}
- </button>
- {substep.kind === "required" && currentOpt && currentOpt.type === "multi" ? (
+ <div className="flex justify-end">
  <button
  type="button"
  onClick={() => handleMultiContinue(currentOpt, substep.index)}
- disabled={
- !Array.isArray(reqSelections[currentOpt.id]) ||
- (reqSelections[currentOpt.id] as string[]).length === 0
- }
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ disabled={!multiEnabled}
+ className={btnCls}
  >
  {t("continue")}
  </button>
- ) : null}
- {substep.kind === "final" ? (
+ </div>
+ );
+ }
+ if (substep.kind === "extras") {
+ return (
+ <div className="flex justify-end">
+ <button
+ type="button"
+ onClick={() => advanceFromExtras(substep.index)}
+ className={btnCls}
+ >
+ {t("continue")}
+ </button>
+ </div>
+ );
+ }
+ if (substep.kind === "notes") {
+ return (
+ <div className="flex justify-end">
  <button
  type="button"
  onClick={handleAdd}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ disabled={creating}
+ className={btnCls}
  >
- {t("addPrice", { price: formatPrice(totalPrice, currencySymbol) })}
+ {creating ? (
+ <span className="inline-block w-3 h-3 border-2 border-current border-r-transparent rounded-full animate-spin" />
+ ) : (
+ t("addPrice", { price: formatPrice(totalPrice, currencySymbol) })
+ )}
  </button>
- ) : null}
  </div>
- </div>
+ );
+ }
+ return null;
+ })();
 
- <div className="max-w-2xl mx-auto pt-7 md:pt-6">
- <div className="mb-5">
- <div className="text-xs text-muted-foreground">{breadcrumb}</div>
- <h2 className="text-xl font-medium text-foreground mt-1">
- {substep.kind === "required" && currentOpt
- ? getMlWithFallback(currentOpt.name, defaultLang, defaultLang)
- : t("addExtras")}
- </h2>
- {substep.kind === "required" && currentOpt && currentOpt.type === "multi" ? (
- <p className="text-xs text-muted-foreground mt-1">{t("multiPickHint")}</p>
- ) : null}
- </div>
+ useEffect(() => {
+ if (!onRegisterFooter) return;
+ onRegisterFooter(footerNode);
+ return () => onRegisterFooter(null);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [
+ substep.kind,
+ stepIndex,
+ multiEnabled,
+ creating,
+ totalPrice,
+ notes,
+ ]);
 
- {substep.kind === "required" && currentOpt ? (
- <div className="bg-card border border-border rounded-xl p-2">
- <div className="space-y-1">
+ if (substep.kind === "required" && currentOpt) {
+ const isMulti = currentOpt.type === "multi";
+ return (
+ <div className="-m-5 divide-y divide-border">
  {currentOpt.variants.map((v) => {
  const sel = reqSelections[currentOpt.id];
- const isSelected =
- currentOpt.type === "single"
- ? sel === v.id
- : Array.isArray(sel) && sel.includes(v.id);
+ const isSelected = isMulti
+ ? Array.isArray(sel) && sel.includes(v.id)
+ : sel === v.id;
  const delta = parseDecimal(v.priceDelta) || 0;
  return (
  <button
  key={v.id}
  type="button"
  onClick={() => pickRequiredVariant(currentOpt, substep.index, v.id)}
- className={
- "w-full flex items-center justify-between gap-3 p-3 rounded-lg transition-colors " +
- (isSelected ? "bg-foreground text-background" : "text-foreground")
- }
+ className="w-full text-left flex items-center justify-between gap-3 px-5 py-3 transition-colors"
  >
- <span className="text-sm truncate">
+ <span className={"min-w-0 flex-1 text-sm truncate " + (isSelected ? "font-medium text-foreground" : "text-foreground")}>
  {getMlWithFallback(v.name, defaultLang, defaultLang)}
  </span>
+ {delta > 0 ? (
+ <span className="text-sm text-muted-foreground tabular-nums shrink-0">
+ {`+${delta.toFixed(2)}`}
+ </span>
+ ) : null}
+ {isMulti ? (
  <span
  className={
- "text-sm tabular-nums shrink-0 " +
- (isSelected ? "text-white/80" : "text-muted-foreground")
+ "w-4 h-4 inline-flex items-center justify-center rounded border shrink-0 " +
+ (isSelected
+ ? "bg-primary border-primary text-primary-foreground"
+ : "border-input")
  }
  >
- {delta > 0 ? `+${delta.toFixed(2)}` : ""}
+ {isSelected ? <CheckIcon size={10} /> : null}
  </span>
+ ) : (
+ <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
+ )}
  </button>
  );
  })}
  </div>
- </div>
- ) : null}
+ );
+ }
 
- {substep.kind === "final" ? (
- <div className="space-y-3">
- {extraOpts.length > 0 ? (
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- {extraOpts.map((opt, idx) => (
- <div key={opt.id} className={idx > 0 ? "border-t border-border mt-5 pt-5" : ""}>
- <div className="text-sm font-medium text-foreground mb-2.5">
- {getMlWithFallback(opt.name, defaultLang, defaultLang)}
- </div>
- <div className="space-y-1.5">
+ if (substep.kind === "extras") {
+ const opt = extraOpts[substep.index];
+ if (!opt) return null;
+ return (
+ <div className="-m-5 divide-y divide-border">
  {opt.variants.map((v) => {
  const qty = extraQty[v.id] ?? 0;
  const delta = parseDecimal(v.priceDelta) || 0;
  return (
  <div
  key={v.id}
- className="w-full flex items-center justify-between gap-3 px-3 h-12 rounded-lg border border-border bg-card"
+ className="flex items-center justify-between gap-3 px-5 py-3"
  >
  <div className="min-w-0 flex-1">
  <div className="text-sm text-foreground truncate">
@@ -1142,26 +1457,377 @@ function DishWizard({
  );
  })}
  </div>
+ );
+ }
+
+ // notes
+ const dishNameDisplay = getMlWithFallback(dish.name, defaultLang, defaultLang);
+ return (
+ <div className="-m-5 divide-y divide-border">
+ <div className="px-5 py-3">
+ <div className="flex items-start justify-between gap-3">
+ <div className="text-sm font-medium text-foreground min-w-0 flex-1">
+ {dishNameDisplay}
  </div>
- ))}
+ <div className="text-sm font-medium text-foreground tabular-nums shrink-0">
+ {formatPrice(totalPrice, currencySymbol)}
+ </div>
+ </div>
+ {snapshots.length > 0 ? (
+ <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+ {snapshots.map((o, i) => {
+ const name = getMlWithFallback(o.variantName, defaultLang, defaultLang);
+ const delta = parseDecimal(o.priceDelta) || 0;
+ const qty = o.quantity ?? 1;
+ const parts: string[] = [name];
+ if (delta > 0) parts.push(`+${formatPrice(delta, currencySymbol)}`);
+ if (qty > 1) parts.push(`× ${qty}`);
+ return <div key={i}>{parts.join(" ")}</div>;
+ })}
  </div>
  ) : null}
-
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <label htmlFor="item-notes" className="block text-sm font-medium text-foreground mb-2.5">{t("notesLabel")}</label>
- <textarea
- id="item-notes"
- rows={2}
+ </div>
+ <div className="px-5 py-3">
+ <NotesTextarea
  value={notes}
- onChange={(e) => setNotes(e.target.value)}
- onFocus={() => track("dash_orders_order_focus_note")}
- placeholder={t("notesPlaceholder")}
- className={inputClass + " h-auto py-2 resize-none"}
+ onChange={setNotes}
+ placeholder={t("notesLabel") + ": " + t("notesPlaceholder")}
  />
  </div>
  </div>
- ) : null}
+ );
+}
+
+function NotesTextarea({
+ value,
+ onChange,
+ placeholder,
+}: {
+ value: string;
+ onChange: (v: string) => void;
+ placeholder: string;
+}) {
+ const ref = useRef<HTMLTextAreaElement | null>(null);
+ useEffect(() => {
+ const el = ref.current;
+ if (!el) return;
+ el.style.height = "auto";
+ el.style.height = Math.max(50, el.scrollHeight) + "px";
+ }, [value]);
+ return (
+ <textarea
+ ref={ref}
+ id="item-notes"
+ value={value}
+ onChange={(e) => onChange(e.target.value)}
+ onFocus={() => track("dash_orders_order_focus_note")}
+ placeholder={placeholder}
+ className="w-full bg-transparent border-0 outline-none resize-none text-sm text-foreground placeholder:text-muted-foreground p-0 m-0"
+ style={{ minHeight: 50 }}
+ />
+ );
+}
+
+// ── Change-table modal ──
+
+function ChangeTableModal({
+ orderId,
+ orders,
+ tables,
+ occupiedIds,
+ onClose,
+ onConfirm,
+}: {
+ orderId: string | null;
+ orders: Order[];
+ tables: TableEntity[];
+ occupiedIds: Set<string>;
+ onClose: () => void;
+ onConfirm: (orderId: string, table: TableEntity) => void | Promise<void>;
+}) {
+ const t = useTranslations("dashboard.orders");
+ const tc = useTranslations("dashboard.common");
+ const order = orders.find((o) => o.id === orderId) || null;
+ const [selectedId, setSelectedId] = useState<string | null>(null);
+ useEffect(() => {
+ setSelectedId(order?.tableId ?? null);
+ }, [order?.id, order?.tableId]);
+
+ if (!orderId || !order) return null;
+ const selectedTable = selectedId ? tables.find((tbl) => tbl.id === selectedId) : null;
+ const isSame = selectedTable && selectedTable.id === order.tableId;
+
+ return (
+ <Modal
+ open={!!orderId}
+ onClose={onClose}
+ title={t("changeTable", { defaultValue: "Change table" })}
+ size="sm"
+ closeOnBackdrop={false}
+ footer={
+ <div className="flex items-center justify-end gap-2">
+ <button
+ type="button"
+ onClick={onClose}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ {tc("cancel")}
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ if (selectedTable) onConfirm(orderId, selectedTable);
+ }}
+ disabled={!selectedTable || isSame === true}
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ >
+ {tc("save")}
+ </button>
  </div>
+ }
+ >
+ <div className="-m-5 aspect-square w-auto [&_.floor-map]:border-0 [&_.floor-map]:rounded-none">
+ <FloorMap
+ tables={tables}
+ selectedId={selectedId}
+ onSelectTable={(id) => setSelectedId(id)}
+ occupiedIds={occupiedIds}
+ wide
+ />
+ </div>
+ </Modal>
+ );
+}
+
+// ── Split-order modal ──
+
+function SplitOrderModal({
+ orderId,
+ orders,
+ defaultLang,
+ currencySymbol,
+ onClose,
+ onConfirm,
+}: {
+ orderId: string | null;
+ orders: Order[];
+ defaultLang: string;
+ currencySymbol: string;
+ onClose: () => void;
+ onConfirm: (orderId: string, itemIds: string[]) => void | Promise<void>;
+}) {
+ const t = useTranslations("dashboard.orders");
+ const tc = useTranslations("dashboard.common");
+ const order = orders.find((o) => o.id === orderId) || null;
+ const [picked, setPicked] = useState<Set<string>>(new Set());
+ useEffect(() => {
+ setPicked(new Set());
+ }, [orderId]);
+
+ if (!orderId || !order) return null;
+
+ const items = order.items;
+ const pickedItems = items.filter((it) => picked.has(it.id));
+ const keptItems = items.filter((it) => !picked.has(it.id));
+ const pickedTotal = pickedItems.reduce((sum, it) => sum + calcItemPrice(it), 0);
+ const keptTotal = keptItems.reduce((sum, it) => sum + calcItemPrice(it), 0);
+ const canSplit = pickedItems.length > 0 && keptItems.length > 0;
+
+ function toggle(id: string) {
+ setPicked((cur) => {
+ const next = new Set(cur);
+ if (next.has(id)) next.delete(id);
+ else next.add(id);
+ return next;
+ });
+ }
+
+ return (
+ <Modal
+ open={!!orderId}
+ onClose={onClose}
+ title={t("splitOrder", { defaultValue: "Split order" })}
+ subtitle={t("splitOrderHint", {
+ defaultValue: "Pick items to move into a new order",
+ })}
+ size="sm"
+ closeOnBackdrop={false}
+ footer={
+ <div className="flex items-center justify-between gap-2">
+ <div className="text-xs text-muted-foreground tabular-nums">
+ {formatPrice(keptTotal, currencySymbol)} · {formatPrice(pickedTotal, currencySymbol)}
+ </div>
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={onClose}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ {tc("cancel")}
+ </button>
+ <button
+ type="button"
+ onClick={() => onConfirm(orderId, Array.from(picked))}
+ disabled={!canSplit}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ >
+ <SplitIcon size={13} />
+ {t("splitOrder", { defaultValue: "Split order" })}
+ </button>
+ </div>
+ </div>
+ }
+ >
+ <div className="-m-5 divide-y divide-border">
+ {items.map((item) => {
+ const isPicked = picked.has(item.id);
+ const price = calcItemPrice(item);
+ return (
+ <button
+ key={item.id}
+ type="button"
+ onClick={() => toggle(item.id)}
+ className={
+ "w-full flex items-center gap-3 px-5 py-3 text-left transition-colors " +
+ (isPicked ? "bg-primary/5" : "")
+ }
+ >
+ <span
+ className={
+ "w-4 h-4 rounded border inline-flex items-center justify-center shrink-0 " +
+ (isPicked
+ ? "bg-primary border-primary text-primary-foreground"
+ : "border-input")
+ }
+ >
+ {isPicked ? <CheckIcon size={10} /> : null}
+ </span>
+ <span className="min-w-0 flex-1 text-sm text-foreground truncate">
+ {getMlWithFallback(item.dishNameSnapshot, defaultLang, defaultLang)}
+ </span>
+ <span className="text-sm text-muted-foreground tabular-nums shrink-0">
+ {formatPrice(price, currencySymbol)}
+ </span>
+ </button>
+ );
+ })}
+ </div>
+ </Modal>
+ );
+}
+
+function ItemMoreMenu({
+ currentStatus,
+ onStatusChange,
+ onDuplicate,
+ onRemove,
+ statusLabels,
+ duplicateLabel,
+ removeLabel,
+}: {
+ currentStatus: OrderItemStatus;
+ onStatusChange: (status: OrderItemStatus) => void;
+ onDuplicate: () => void;
+ onRemove: () => void;
+ statusLabels: Record<OrderItemStatus, string>;
+ duplicateLabel: string;
+ removeLabel: string;
+}) {
+ const [open, setOpen] = useState(false);
+ const btnRef = useRef<HTMLButtonElement | null>(null);
+ const [pos, setPos] = useState<
+ { right: number; top?: number; bottom?: number } | null
+ >(null);
+ useEffect(() => {
+ if (!open) {
+ setPos(null);
+ return;
+ }
+ const el = btnRef.current;
+ if (!el) return;
+ const r = el.getBoundingClientRect();
+ const dropdownH = 260;
+ const spaceBelow = window.innerHeight - r.bottom;
+ const right = window.innerWidth - r.right;
+ if (spaceBelow < dropdownH && r.top > spaceBelow) {
+ setPos({ right, bottom: window.innerHeight - r.top + 4 });
+ } else {
+ setPos({ right, top: r.bottom + 4 });
+ }
+ }, [open]);
+ const transitions = STATUS_ORDER.filter((s) => s !== currentStatus);
+ return (
+ <div className="relative shrink-0">
+ <button
+ ref={btnRef}
+ type="button"
+ onClick={() => setOpen((v) => !v)}
+ className="w-7 h-7 flex items-center justify-center rounded-md text-muted-foreground transition-colors"
+ aria-label="More"
+ >
+ <MoreVerticalIcon size={14} />
+ </button>
+ {open && pos
+ ? createPortal(
+ <>
+ <div className="fixed inset-0 z-[60]" onClick={() => setOpen(false)} />
+ <div
+ className="fixed z-[70] min-w-[180px] max-h-[80vh] overflow-y-auto bg-card border border-border rounded-lg shadow-lg"
+ style={{
+ right: pos.right,
+ ...(pos.top !== undefined ? { top: pos.top } : {}),
+ ...(pos.bottom !== undefined ? { bottom: pos.bottom } : {}),
+ }}
+ >
+ <div className="py-1">
+ {transitions.map((s) => (
+ <button
+ key={s}
+ type="button"
+ onClick={() => {
+ setOpen(false);
+ track("dash_orders_order_status_click");
+ onStatusChange(s);
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors"
+ >
+ <span className="w-[13px] h-[13px] inline-flex items-center justify-center shrink-0">
+ <span className={"w-2 h-2 rounded-full " + STATUS_DOT_CLS[s]} />
+ </span>
+ {statusLabels[s]}
+ </button>
+ ))}
+ </div>
+ <div className="border-t border-border" />
+ <div className="py-1">
+ <button
+ type="button"
+ onClick={() => {
+ setOpen(false);
+ onDuplicate();
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors"
+ >
+ <CopyIcon size={13} />
+ {duplicateLabel}
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setOpen(false);
+ onRemove();
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-red-600 transition-colors"
+ >
+ <TrashIcon size={13} />
+ {removeLabel}
+ </button>
+ </div>
+ </div>
+ </>,
+ document.body,
+ )
+ : null}
  </div>
  );
 }
