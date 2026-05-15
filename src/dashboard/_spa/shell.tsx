@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDashboardRouter } from "./router";
 import type { View } from "./types";
@@ -66,6 +66,24 @@ function ShellBody(props: ShellInitialData) {
   const [orders, setOrders] = useState<Order[]>(props.initialOrders);
   const [bookings, setBookings] = useState<Booking[]>(props.initialBookings);
   const [tables, setTables] = useState<TableEntity[]>(props.initialTables);
+
+  // Sync polled data from TanStack Query (dashboard-host refetchInterval: 30s).
+  // Merge keeps locally-created records not yet returned by the server.
+  useEffect(() => {
+    setOrders((prev) => {
+      const serverIds = new Set(props.initialOrders.map((o) => o.id));
+      const localOnly = prev.filter((o) => !serverIds.has(o.id));
+      return [...props.initialOrders, ...localOnly];
+    });
+  }, [props.initialOrders]);
+
+  useEffect(() => {
+    setBookings((prev) => {
+      const serverIds = new Set(props.initialBookings.map((b) => b.id));
+      const localOnly = prev.filter((b) => !serverIds.has(b.id));
+      return [...props.initialBookings, ...localOnly];
+    });
+  }, [props.initialBookings]);
 
   const defaultLang = restaurant?.defaultLang || "en";
   const refreshMenu = useCallback(async () => {
