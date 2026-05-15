@@ -566,6 +566,11 @@ function TableSettings({
  </div>
  </div>
 
+ <TableColorPicker
+ value={table.color}
+ onChange={(color) => onChange({ color })}
+ />
+
  <div>
  <label className="block text-sm font-medium text-foreground mb-2.5">{t("photo")}</label>
  <PhotoPicker
@@ -577,11 +582,6 @@ function TableSettings({
  width="w-full"
  />
  </div>
-
- <TableColorPicker
- value={table.color}
- onChange={(color) => onChange({ color })}
- />
  </div>
  );
 }
