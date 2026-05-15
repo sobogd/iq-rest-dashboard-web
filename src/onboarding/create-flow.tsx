@@ -14,6 +14,19 @@ import {
 
 const TOTAL_STEPS = 3;
 
+// Coerce free-form user input to the `^[a-z0-9_]{1,64}$` shape the tracking
+// endpoint enforces. Keep enough room for a 17-char prefix like
+// `create_flow_name_` so the full event name still fits in 64 chars.
+function sanitizeEventSuffix(raw: string): string {
+  const safe = raw
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/_+/g, "_");
+  return safe.slice(0, 40);
+}
+
 export function CreateFlow() {
   const t = useTranslations("dashboard.createFlow");
   const tAuth = useTranslations("dashboard.auth");
@@ -103,6 +116,8 @@ export function CreateFlow() {
           selected={cuisine}
           onSelect={(c) => {
             track("create_flow_pick_cuisine", { cuisine: c });
+            const suffix = sanitizeEventSuffix(c);
+            if (suffix) track(`create_flow_pick_${suffix}`);
             setCuisine(c);
           }}
           onContinue={() => {
@@ -123,6 +138,8 @@ export function CreateFlow() {
           }}
           onContinue={() => {
             track("create_flow_name_continue");
+            const suffix = sanitizeEventSuffix(restaurantName);
+            if (suffix) track(`create_flow_name_${suffix}`);
             next();
           }}
           t={t}
