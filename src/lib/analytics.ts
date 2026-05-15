@@ -1,16 +1,26 @@
 import { apiUrl } from "@/lib/api";
 
-// Single sink: POST /api/usage/event. credentials:include lets the API attach
-// companyId server-side from the iqr_session cookie when the user is logged in.
-// Server derives geo + device + platform on its own. Visit-origin fields
-// (gclid, is_google_ads, is_search) live only on the first-visit SSR row.
+const SEARCH_HOST_REGEX =
+  /(?:^|\.)(google|bing|yandex|duckduckgo|yahoo|baidu|ecosia|qwant|startpage|mojeek|brave)\.[a-z.]+$/i;
+
+function searchReferrerHost(): string | null {
+  try {
+    const ref = document.referrer;
+    if (!ref) return null;
+    const host = new URL(ref).hostname;
+    return SEARCH_HOST_REGEX.test(host) ? host : null;
+  } catch {
+    return null;
+  }
+}
+
 export function trackEvent(event: string): void {
   if (typeof window === "undefined") return;
-  fetch(apiUrl("/api/usage/event"), {
+  const host = searchReferrerHost();
+  const qs = host ? `?r=${encodeURIComponent(host)}` : "";
+  fetch(apiUrl(`/api/track/${encodeURIComponent(event)}${qs}`), {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event }),
     keepalive: true,
   }).catch(() => {});
 }
