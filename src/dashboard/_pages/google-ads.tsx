@@ -259,6 +259,7 @@ export function GoogleAdsPage() {
   const [plannerOpen, setPlannerOpen] = useState(false);
   const plannerState = usePlannerState();
   const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
+  const [qsReq, setQsReq] = useState<{ adGroupId: string; critId: string; keyword: string; matchType?: string } | null>(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [addKwAdGroupId, setAddKwAdGroupId] = useState<string | null>(null);
   const [addKwFromPlanner, setAddKwFromPlanner] = useState<{ adGroupId: string; text: string } | null>(null);
@@ -451,6 +452,7 @@ export function GoogleAdsPage() {
             campaignId={view.campaignId}
             onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
             onBidEdit={(k) => setBidEditReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, currentBid: k.bid ?? null })}
+            onQsOpen={(k) => setQsReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, matchType: k.matchType })}
             onDeleteKeyword={(k) => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title })}
             searchTerms={data?.searchTermsByAdGroup[view.adGroupId]}
             negatives={filtered.negatives.filter((n) => n.adGroupId === view.adGroupId && n.scope === "ad_group")}
@@ -507,6 +509,7 @@ export function GoogleAdsPage() {
         />
       ) : null}
       {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
+      {qsReq ? <KeywordQsModal req={qsReq} onClose={() => setQsReq(null)} /> : null}
       {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
       {adGroupFormReq ? (
         <AdGroupFormModal
@@ -619,6 +622,7 @@ function AdGroupDetail({
   adGroupId,
   onKeywordOpen,
   onBidEdit,
+  onQsOpen,
   onDeleteKeyword,
   searchTerms,
   negatives,
@@ -632,6 +636,7 @@ function AdGroupDetail({
   campaignId: string;
   onKeywordOpen: (k: KeywordRow) => void;
   onBidEdit: (k: KeywordRow) => void;
+  onQsOpen: (k: KeywordRow) => void;
   onDeleteKeyword: (k: KeywordRow) => void;
   searchTerms?: SearchTerm[];
   negatives: NegativeRow[];
@@ -684,7 +689,15 @@ function AdGroupDetail({
                   <MetricPill icon={<UserPlus className="w-3 h-3" />} value={k.convT2} label="T2 registrations" highlight={Number(k.convT2) > 0} width="narrow" />
                   <MetricPill icon={<ShoppingCart className="w-3 h-3" />} value={k.convT3} label="T3 purchases" highlight={Number(k.convT3) > 0} width="narrow" />
                   <MetricPill icon={<Euro className="w-3 h-3" />} value={k.cost.toFixed(2)} label="cost €" />
-                  <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.qualityScore ?? "—"} label="QS" width="narrow" />
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); onQsOpen(k); }}
+                    title="Open QS breakdown"
+                    className="shrink-0 inline-flex items-center justify-center py-0.5 px-1 w-[36px] gap-0.5 overflow-hidden rounded text-[10px] font-medium uppercase tracking-wider tabular-nums bg-muted text-muted-foreground hover:bg-muted/70 transition-colors cursor-pointer"
+                  >
+                    <Gauge className="w-3 h-3" />
+                    {k.qualityScore ?? "—"}
+                  </button>
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); onBidEdit(k); }}
@@ -1389,6 +1402,147 @@ function BidEditModal({
           ) : null}
         </form>
       </div>
+    </div>
+  );
+}
+
+// Google Ads enum codes for `*_quality_score` fields:
+//   0 = UNSPECIFIED · 1 = UNKNOWN · 2 = BELOW_AVERAGE · 3 = AVERAGE · 4 = ABOVE_AVERAGE
+const QS_LEVEL_LABEL: Record<number, string> = {
+  0: "Unspecified",
+  1: "Unknown",
+  2: "Below average",
+  3: "Average",
+  4: "Above average",
+};
+const QS_LEVEL_CLS: Record<number, string> = {
+  2: "bg-red-500/10 text-red-500",
+  3: "bg-amber-500/10 text-amber-500",
+  4: "bg-emerald-500/10 text-emerald-500",
+};
+
+function qsLevel(value: unknown): { label: string; cls: string } {
+  const n = typeof value === "number" ? value : null;
+  if (n == null || !(n in QS_LEVEL_LABEL)) return { label: "—", cls: "bg-muted text-muted-foreground" };
+  return { label: QS_LEVEL_LABEL[n] || "—", cls: QS_LEVEL_CLS[n] || "bg-muted text-muted-foreground" };
+}
+
+interface QualityInfoLike {
+  qualityScore?: number;
+  quality_score?: number;
+  creativeQualityScore?: number;
+  creative_quality_score?: number;
+  postClickQualityScore?: number;
+  post_click_quality_score?: number;
+  searchPredictedCtr?: number;
+  search_predicted_ctr?: number;
+}
+
+function readQualityInfo(record: unknown): QualityInfoLike | null {
+  if (!record || typeof record !== "object") return null;
+  const r = record as Record<string, unknown>;
+  const agc = (r.adGroupCriterion || r.ad_group_criterion) as Record<string, unknown> | undefined;
+  const qi = (agc?.qualityInfo || agc?.quality_info) as QualityInfoLike | undefined;
+  return qi ?? null;
+}
+
+function KeywordQsModal({
+  req,
+  onClose,
+}: {
+  req: { adGroupId: string; critId: string; keyword: string; matchType?: string };
+  onClose: () => void;
+}) {
+  useScrollLock(true);
+  const [qi, setQi] = useState<QualityInfoLike | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(
+          apiUrl(`/api/admin/google-ads/detail/keyword/${req.adGroupId}/${req.critId}`),
+          { credentials: "include" },
+        );
+        if (!res.ok) {
+          if (!cancelled) setError(`Error ${res.status}`);
+          return;
+        }
+        const j = await res.json();
+        if (!cancelled) setQi(readQualityInfo(j.record));
+      } catch (e) {
+        if (!cancelled) setError(String(e));
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [req.adGroupId, req.critId]);
+
+  const score = qi?.qualityScore ?? qi?.quality_score;
+  const creative = qsLevel(qi?.creativeQualityScore ?? qi?.creative_quality_score);
+  const postClick = qsLevel(qi?.postClickQualityScore ?? qi?.post_click_quality_score);
+  const predCtr = qsLevel(qi?.searchPredictedCtr ?? qi?.search_predicted_ctr);
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b border-border flex items-start justify-between gap-3 shrink-0">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-foreground">Quality Score breakdown</h3>
+            <p className="text-xs text-muted-foreground mt-1 truncate font-mono">
+              {req.matchType ? `[${req.matchType}] ` : ""}{req.keyword}
+            </p>
+          </div>
+          <button type="button" onClick={onClose} className="h-7 w-7 shrink-0 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <div className="p-4">
+          {loading ? (
+            <div className="flex items-center justify-center py-8 gap-2 text-xs text-muted-foreground">
+              <Gauge className="w-3.5 h-3.5 animate-pulse" />
+              Loading…
+            </div>
+          ) : error ? (
+            <div className="text-center text-xs text-red-500 py-6">{error}</div>
+          ) : !qi ? (
+            <div className="text-center text-xs text-muted-foreground py-6">No QS data yet.</div>
+          ) : (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between p-3 bg-muted/40 rounded-lg">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Quality Score</span>
+                <span className="text-2xl font-bold tabular-nums text-foreground">
+                  {typeof score === "number" ? `${score}/10` : "—"}
+                </span>
+              </div>
+              <QsBreakdownRow label="Ad relevance (creative)" badge={creative} />
+              <QsBreakdownRow label="Landing page experience" badge={postClick} />
+              <QsBreakdownRow label="Expected CTR" badge={predCtr} />
+              <p className="text-[10px] text-muted-foreground pt-2 leading-relaxed">
+                "—" or "Unknown" means Google hasn&apos;t collected enough impressions/clicks yet to score this dimension. Estimates stabilize after a week or two of meaningful traffic.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QsBreakdownRow({ label, badge }: { label: string; badge: { label: string; cls: string } }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className={"shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider " + badge.cls}>
+        {badge.label}
+      </span>
     </div>
   );
 }
