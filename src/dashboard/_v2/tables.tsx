@@ -405,7 +405,7 @@ export function TableFormPage({
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_table_click_back"); onBack(); }} onSave={save} canSave={!saving} />
 
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-2xl md:max-w-5xl mx-auto pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">
  {t("settingsBreadcrumb")} / {t("title")}
@@ -419,8 +419,8 @@ export function TableFormPage({
  </div>
 
 
- <div className="tables-layout">
- <div className="tables-col-left">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+ <div className="min-w-0">
  <FloorMap
  tables={mode === "edit"
  ? tables.map((x) => (x.id === draft.id ? draft : x))
@@ -430,7 +430,7 @@ export function TableFormPage({
  onPickPosition={(x, y) => { track("dash_settings_table_click_map"); setDraft((d) => ({ ...d, x, y })); }}
  />
  </div>
- <div className="tables-col-right">
+ <div className="min-w-0">
  <TableSettings
  table={draft}
  onChange={(patch) => setDraft((d) => ({ ...d, ...patch }))}
