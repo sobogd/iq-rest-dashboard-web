@@ -1303,9 +1303,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  track(cycle === "YEARLY" ? "dash_settings_billing_subscribe_year" : "dash_settings_billing_subscribe_month");
  setPendingPlan({ plan, cycle });
  try {
- // Billing is EU-only — always check out in EUR regardless of the
- // restaurant's menu currency setting.
- const url = await createCheckoutSession(plan, cycle, "EUR");
+ const url = await createCheckoutSession(plan, cycle, restaurant.currency);
  if (url) window.location.href = url;
  } catch {
  } finally {
