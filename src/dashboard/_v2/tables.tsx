@@ -16,6 +16,7 @@ import { createTable, deleteTable, updateTable } from "./api";
 import type { Booking, Order, TableEntity } from "./types";
 import { track } from "@/lib/dashboard-events";
 import { useDashboardRouter } from "../_spa/router";
+import { useRestaurantOrNull } from "./restaurant-context";
 
 function Stepper({
  value,
@@ -115,6 +116,7 @@ export function FloorMap({
  const tt = useTranslations("dashboard.tables");
  const occupied = occupiedIds || new Set<string>();
  const ready = readyIds || new Set<string>();
+ const accent = useRestaurantOrNull()?.accentColor || "#000000";
  return (
  <>
  <style>{`
@@ -160,13 +162,18 @@ export function FloorMap({
  const size = tableSize(t.capacity);
  const x = t.x ?? 50;
  const y = t.y ?? 50;
+ // No border on any state — flat fill only. In-progress (occupied but
+ // not all ready) shows the restaurant's accent colour; all-ready stays
+ // emerald; idle uses the regular card background.
  const stateCls = isSelected
  ? "bg-foreground text-background ring-4 ring-foreground/20 z-10"
  : isReady
- ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-400 dark:border-emerald-700"
+ ? "bg-emerald-500 text-white"
  : isOccupied
- ? "bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-400 dark:border-amber-700"
- : "bg-card text-foreground border border-input";
+ ? "text-white"
+ : "bg-card text-foreground";
+ const stateStyle: React.CSSProperties | undefined =
+ !isSelected && !isReady && isOccupied ? { backgroundColor: accent } : undefined;
  const badge = badgeFor ? badgeFor(t.id) : null;
  return (
  <button
@@ -183,6 +190,7 @@ export function FloorMap({
  left: "calc(" + x + "% - " + size / 2 + "px)",
  top: "calc(" + y + "% - " + size / 2 + "px)",
  fontSize: size > 44 ? "14px" : "12px",
+ ...(stateStyle || {}),
  }}
  aria-label={tt("tableLabelAria", { number: t.number })}
  title={tt("tableLabelAria", { number: t.number }) + (t.name ? " · " + t.name : "")}
@@ -196,9 +204,9 @@ export function FloorMap({
  {badge && badge > 0 ? (
  <span
  className={
- "absolute -top-1 -right-1 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full border-2 border-card " +
- (isReady ? "bg-emerald-600 text-white" : "bg-red-600 text-white")
+ "absolute -top-1 -right-1 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full border-2 border-card text-white"
  }
+ style={isReady ? { backgroundColor: "#10b981" } : { backgroundColor: accent }}
  >
  {badge}
  </span>

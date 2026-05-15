@@ -53,9 +53,11 @@ const ITEM_STATUS_KEYS: Record<OrderItemStatus, "statusPending" | "statusCooking
  served: "statusServed",
 };
 
+// `cooking` (in-progress) renders with the restaurant's accent colour via
+// inline style — see KitchenItem. Static class map covers the rest.
 const ITEM_STATUS_CLS: Record<OrderItemStatus, string> = {
  pending: "bg-secondary text-muted-foreground border-border",
- cooking: "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-900",
+ cooking: "border",
  ready: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900",
  served: "bg-secondary text-muted-foreground border-border",
 };
@@ -463,7 +465,12 @@ export function OrdersPage({
  {overall && overallText ? (
  <>
  {" · "}
- <span className={OVERALL_STATUS_TEXT_CLS[overall]}>{overallText}</span>
+ <span
+ className={overall === "served" ? OVERALL_STATUS_TEXT_CLS.served : ""}
+ style={overall === "inProgress" ? { color: restaurant.accentColor || "#000000" } : undefined}
+ >
+ {overallText}
+ </span>
  </>
  ) : null}
  </span>
@@ -810,6 +817,7 @@ function OrderListCard({
  variant?: "row" | "card";
 }) {
  const t = useTranslations("dashboard.orders");
+ const accent = useRestaurant().accentColor || "#000000";
  const total = calcOrderTotal(order);
  const itemsCount = order.items.length;
  const overallStatus = computeOrderStatus(order);
@@ -835,7 +843,12 @@ function OrderListCard({
  {statusLabel && overallStatus ? (
  <>
  <span className="text-muted-foreground font-normal"> · </span>
- <span className={OVERALL_STATUS_TEXT_CLS[overallStatus]}>{statusLabel}</span>
+ <span
+ className={overallStatus === "served" ? OVERALL_STATUS_TEXT_CLS.served : ""}
+ style={overallStatus === "inProgress" ? { color: accent } : undefined}
+ >
+ {statusLabel}
+ </span>
  </>
  ) : null}
  </div>
@@ -2063,6 +2076,7 @@ function KitchenItem({
  onStatusChange: (status: OrderItemStatus) => void;
 }) {
  const t = useTranslations("dashboard.orders");
+ const accent = useRestaurant().accentColor || "#000000";
  const nextStatus: Record<OrderItemStatus, OrderItemStatus> = {
  pending: "cooking",
  cooking: "ready",
@@ -2071,6 +2085,10 @@ function KitchenItem({
  };
  const statusKey = ITEM_STATUS_KEYS[item.status] || ITEM_STATUS_KEYS.pending;
  const statusCls = ITEM_STATUS_CLS[item.status] || ITEM_STATUS_CLS.pending;
+ const statusStyle: React.CSSProperties | undefined =
+ item.status === "cooking"
+ ? { backgroundColor: accent + "1A", color: accent, borderColor: accent + "55" }
+ : undefined;
 
  return (
  <button
@@ -2087,6 +2105,7 @@ function KitchenItem({
  "shrink-0 inline-flex items-center h-5 px-1.5 text-[10px] font-medium border rounded-full " +
  statusCls
  }
+ style={statusStyle}
  >
  {t(statusKey)}
  </span>
