@@ -1406,36 +1406,56 @@ function BidEditModal({
   );
 }
 
-// Google Ads enum codes for `*_quality_score` fields:
-//   0 = UNSPECIFIED · 1 = UNKNOWN · 2 = BELOW_AVERAGE · 3 = AVERAGE · 4 = ABOVE_AVERAGE
-const QS_LEVEL_LABEL: Record<number, string> = {
-  0: "Unspecified",
-  1: "Unknown",
-  2: "Below average",
-  3: "Average",
-  4: "Above average",
+// Google Ads enum for `*_quality_score` fields. The REST surface
+// (googleAds:search via fetch — which is what the admin endpoint uses)
+// returns the value as a string enum name; the google-ads-api npm lib
+// returns it as a numeric code. Accept both so the modal works regardless
+// of which path produced the payload.
+//   0 / "UNSPECIFIED"     → Unspecified
+//   1 / "UNKNOWN"         → Unknown
+//   2 / "BELOW_AVERAGE"   → Below average
+//   3 / "AVERAGE"         → Average
+//   4 / "ABOVE_AVERAGE"   → Above average
+const QS_LEVEL_LABEL: Record<string, string> = {
+  UNSPECIFIED: "Unspecified",
+  UNKNOWN: "Unknown",
+  BELOW_AVERAGE: "Below average",
+  AVERAGE: "Average",
+  ABOVE_AVERAGE: "Above average",
 };
-const QS_LEVEL_CLS: Record<number, string> = {
-  2: "bg-red-500/10 text-red-500",
-  3: "bg-amber-500/10 text-amber-500",
-  4: "bg-emerald-500/10 text-emerald-500",
+const QS_LEVEL_CLS: Record<string, string> = {
+  BELOW_AVERAGE: "bg-red-500/10 text-red-500",
+  AVERAGE: "bg-amber-500/10 text-amber-500",
+  ABOVE_AVERAGE: "bg-emerald-500/10 text-emerald-500",
+};
+const QS_LEVEL_NUM_TO_KEY: Record<number, string> = {
+  0: "UNSPECIFIED",
+  1: "UNKNOWN",
+  2: "BELOW_AVERAGE",
+  3: "AVERAGE",
+  4: "ABOVE_AVERAGE",
 };
 
 function qsLevel(value: unknown): { label: string; cls: string } {
-  const n = typeof value === "number" ? value : null;
-  if (n == null || !(n in QS_LEVEL_LABEL)) return { label: "—", cls: "bg-muted text-muted-foreground" };
-  return { label: QS_LEVEL_LABEL[n] || "—", cls: QS_LEVEL_CLS[n] || "bg-muted text-muted-foreground" };
+  let key: string | null = null;
+  if (typeof value === "number" && value in QS_LEVEL_NUM_TO_KEY) {
+    key = QS_LEVEL_NUM_TO_KEY[value];
+  } else if (typeof value === "string" && value in QS_LEVEL_LABEL) {
+    key = value;
+  }
+  if (!key) return { label: "—", cls: "bg-muted text-muted-foreground" };
+  return { label: QS_LEVEL_LABEL[key] || "—", cls: QS_LEVEL_CLS[key] || "bg-muted text-muted-foreground" };
 }
 
 interface QualityInfoLike {
-  qualityScore?: number;
-  quality_score?: number;
-  creativeQualityScore?: number;
-  creative_quality_score?: number;
-  postClickQualityScore?: number;
-  post_click_quality_score?: number;
-  searchPredictedCtr?: number;
-  search_predicted_ctr?: number;
+  qualityScore?: number | string;
+  quality_score?: number | string;
+  creativeQualityScore?: number | string;
+  creative_quality_score?: number | string;
+  postClickQualityScore?: number | string;
+  post_click_quality_score?: number | string;
+  searchPredictedCtr?: number | string;
+  search_predicted_ctr?: number | string;
 }
 
 function readQualityInfo(record: unknown): QualityInfoLike | null {
@@ -1485,7 +1505,8 @@ function KeywordQsModal({
     };
   }, [req.adGroupId, req.critId]);
 
-  const score = qi?.qualityScore ?? qi?.quality_score;
+  const rawScore = qi?.qualityScore ?? qi?.quality_score;
+  const score = typeof rawScore === "string" ? Number(rawScore) : rawScore;
   const creative = qsLevel(qi?.creativeQualityScore ?? qi?.creative_quality_score);
   const postClick = qsLevel(qi?.postClickQualityScore ?? qi?.post_click_quality_score);
   const predCtr = qsLevel(qi?.searchPredictedCtr ?? qi?.search_predicted_ctr);
