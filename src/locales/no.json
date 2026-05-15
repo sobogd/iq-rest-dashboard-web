@@ -387,7 +387,11 @@
       "deleteMessage": "Bord {number}{label} fjernes fra planen.",
       "emptyTitle": "Ingen bord ennå",
       "emptySubtitle": "Legg til første bord for å aktivere bookinger og QR-koder per bord.",
-      "addFirstTable": "Legg til bord"
+      "addFirstTable": "Legg til bord",
+      "colorLabel": "Bordfarge",
+      "colorTip": "Velg en farge som vises på dashbordets plantegning i stedet for bildet. Gjester på den offentlige menyen ser den ikke.",
+      "colorClear": "Fjern farge",
+      "colorCustom": "Tilpasset"
     },
     "settings": {
       "breadcrumb": "Innstillinger",

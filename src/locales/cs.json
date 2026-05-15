@@ -387,7 +387,11 @@
       "deleteMessage": "Stůl {number}{label} bude odstraněn z plánku.",
       "emptyTitle": "Žádné stoly",
       "emptySubtitle": "Přidejte první stůl a aktivujte rezervace a QR kódy podle stolů.",
-      "addFirstTable": "Přidat stůl"
+      "addFirstTable": "Přidat stůl",
+      "colorLabel": "Barva stolu",
+      "colorTip": "Vyberte barvu, která se zobrazí na plánu v dashboardu místo fotky. Hosté veřejného menu ji neuvidí.",
+      "colorClear": "Odstranit barvu",
+      "colorCustom": "Vlastní"
     },
     "settings": {
       "breadcrumb": "Nastavení",

@@ -46,6 +46,7 @@ export interface TableEntity {
  x: number | null;
  y: number | null;
  photoUrl: string | null;
+ color: string | null;
  sortOrder: number;
 }
 

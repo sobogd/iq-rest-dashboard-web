@@ -387,7 +387,11 @@
       "deleteMessage": "A {number}. asztal{label} eltávolításra kerül a tervrajzról.",
       "emptyTitle": "Még nincs asztal",
       "emptySubtitle": "Adj hozzá egy asztalt a foglalások és asztalonkénti QR-kódok engedélyezéséhez.",
-      "addFirstTable": "Asztal hozzáadása"
+      "addFirstTable": "Asztal hozzáadása",
+      "colorLabel": "Asztal színe",
+      "colorTip": "Válassz egy színt, amely az irányítópult alaprajzán a fotó helyett jelenik meg. A nyilvános menü vendégei nem látják.",
+      "colorClear": "Szín törlése",
+      "colorCustom": "Egyéni"
     },
     "settings": {
       "breadcrumb": "Beállítások",

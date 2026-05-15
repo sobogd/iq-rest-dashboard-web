@@ -387,7 +387,11 @@
       "deleteMessage": "La taula {number}{label} s'eliminarà del plànol.",
       "emptyTitle": "Encara no hi ha taules",
       "emptySubtitle": "Afegeix la primera taula per habilitar reserves i codis QR per taula.",
-      "addFirstTable": "Afegeix taula"
+      "addFirstTable": "Afegeix taula",
+      "colorLabel": "Color de la taula",
+      "colorTip": "Tria un color que es mostrarà al plànol del tauler en lloc de la foto. Els clients del menú públic no el veuen.",
+      "colorClear": "Treu el color",
+      "colorCustom": "Personalitzat"
     },
     "settings": {
       "breadcrumb": "Configuració",

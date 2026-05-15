@@ -387,7 +387,11 @@
       "deleteMessage": "Masa {number}{label} plandan kaldırılacak.",
       "emptyTitle": "Henüz masa yok",
       "emptySubtitle": "Rezervasyonları ve masa başı QR kodlarını etkinleştirmek için ilk masanızı ekleyin.",
-      "addFirstTable": "Masa ekle"
+      "addFirstTable": "Masa ekle",
+      "colorLabel": "Masa rengi",
+      "colorTip": "Panel zemin haritasında fotoğraf yerine gösterilecek bir renk seçin. Genel menü misafirleri bunu görmez.",
+      "colorClear": "Rengi temizle",
+      "colorCustom": "Özel"
     },
     "settings": {
       "breadcrumb": "Ayarlar",

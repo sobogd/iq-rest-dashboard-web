@@ -387,7 +387,11 @@
       "deleteMessage": "میز {number}{label} از پلان حذف می‌شود.",
       "emptyTitle": "هنوز میزی نیست",
       "emptySubtitle": "اولین میز خود را اضافه کنید تا رزرو و کدهای QR هر میز فعال شود.",
-      "addFirstTable": "افزودن میز"
+      "addFirstTable": "افزودن میز",
+      "colorLabel": "رنگ میز",
+      "colorTip": "رنگی را انتخاب کنید که در نقشه‌ی کف داشبورد به جای عکس نمایش داده شود. مهمانان منوی عمومی آن را نمی‌بینند.",
+      "colorClear": "حذف رنگ",
+      "colorCustom": "سفارشی"
     },
     "settings": {
       "breadcrumb": "تنظیمات",

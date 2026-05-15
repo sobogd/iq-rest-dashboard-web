@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { MinusIcon, PlusIcon, QrIcon, TrashIcon } from "./icons";
 import {
@@ -151,12 +151,14 @@ export function FloorMap({
  aria-label={tt("tableLabelAria", { number: t.number })}
  title={tt("tableLabelAria", { number: t.number }) + (t.name ? " · " + t.name : "")}
  >
- {t.photoUrl ? (
+ {t.color ? (
+ <span className="absolute inset-0 rounded-full" style={{ backgroundColor: t.color }} />
+ ) : t.photoUrl ? (
  <span className="absolute inset-0 rounded-full overflow-hidden">
  <img src={t.photoUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
  </span>
  ) : null}
- <span className={t.photoUrl ? "relative z-10 px-1 rounded bg-black/40 text-white" : ""}>
+ <span className={(t.color || t.photoUrl) ? "relative z-10 px-1 rounded bg-black/40 text-white" : ""}>
  {t.number}
  </span>
  {badge && badge > 0 ? (
@@ -300,6 +302,7 @@ export function TableFormPage({
  x: 50,
  y: 50,
  photoUrl: null,
+ color: null,
  sortOrder: tables.length,
  } as TableEntity);
 
@@ -342,6 +345,7 @@ export function TableFormPage({
  capacity: draft.capacity,
  zone: draft.name || null,
  imageUrl: draft.photoUrl,
+ color: draft.color,
  x: draft.x,
  y: draft.y,
  });
@@ -353,6 +357,7 @@ export function TableFormPage({
  x: draft.x,
  y: draft.y,
  photoUrl: draft.photoUrl,
+ color: draft.color,
  sortOrder: draft.sortOrder,
  };
  setTables((prev) => [...prev, entity]);
@@ -362,6 +367,7 @@ export function TableFormPage({
  capacity: draft.capacity,
  zone: draft.name || null,
  imageUrl: draft.photoUrl,
+ color: draft.color,
  x: draft.x,
  y: draft.y,
  });
@@ -534,6 +540,85 @@ function TableSettings({
  onRemoveClick={() => track("dash_settings_table_delete_photo")}
  inputId={"table-photo-" + table.id}
  width="w-full"
+ />
+ </div>
+
+ <TableColorPicker
+ value={table.color}
+ onChange={(color) => onChange({ color })}
+ />
+ </div>
+ );
+}
+
+const TABLE_COLORS = [
+ "#A8174E", "#C8102E", "#D55427", "#92684C", "#A8531A", "#D4A017", "#D9C29A", "#6F8246", "#3D7259", "#1F5959",
+ "#1F3B57", "#314D8C", "#5B6E80", "#7E5F87", "#5E4734", "#9E866B", "#E8541C", "#3B3B3B", "#000000",
+];
+
+function TableColorPicker({
+ value,
+ onChange,
+}: {
+ value: string | null;
+ onChange: (color: string | null) => void;
+}) {
+ const t = useTranslations("dashboard.tables");
+ const colorPickerRef = useRef<HTMLInputElement>(null);
+ const normalized = (value || "").toLowerCase();
+ const hasPreset = TABLE_COLORS.some((c) => c.toLowerCase() === normalized);
+ return (
+ <div>
+ <div className="flex items-center justify-between mb-2.5">
+ <label className="block text-sm font-medium text-foreground">{t("colorLabel")}</label>
+ {value ? (
+ <button
+ type="button"
+ onClick={() => { track("dash_settings_table_color_clear"); onChange(null); }}
+ className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+ >
+ {t("colorClear")}
+ </button>
+ ) : null}
+ </div>
+ <p className="text-xs text-muted-foreground mb-3 leading-snug">{t("colorTip")}</p>
+ <div className="grid grid-cols-8 gap-2 relative">
+ {TABLE_COLORS.map((c) => {
+ const selected = c.toLowerCase() === normalized;
+ return (
+ <button
+ key={c}
+ type="button"
+ onClick={() => { track("dash_settings_table_color_pick"); onChange(c); }}
+ className={
+ "w-full aspect-square rounded-full transition-all " +
+ (selected ? "ring-2 ring-offset-2 ring-foreground" : "")
+ }
+ style={{ backgroundColor: c }}
+ aria-label={c}
+ />
+ );
+ })}
+ <button
+ type="button"
+ onClick={() => colorPickerRef.current?.click()}
+ className={
+ "w-full aspect-square rounded-full transition-all " +
+ (value && !hasPreset ? "ring-2 ring-offset-2 ring-foreground" : "")
+ }
+ style={{
+ background:
+ "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
+ }}
+ aria-label={t("colorCustom")}
+ />
+ <input
+ ref={colorPickerRef}
+ type="color"
+ value={value || "#000000"}
+ onChange={(e) => { track("dash_settings_table_color_pick"); onChange(e.target.value); }}
+ className="absolute opacity-0 pointer-events-none w-0 h-0"
+ aria-hidden="true"
  />
  </div>
  </div>

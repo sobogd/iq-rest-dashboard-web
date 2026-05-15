@@ -387,7 +387,11 @@
       "deleteMessage": "Tisch {number}{label} wird vom Plan entfernt.",
       "emptyTitle": "Noch keine Tische",
       "emptySubtitle": "Fügen Sie Ihren ersten Tisch hinzu, um Reservierungen und tischspezifische QR-Codes zu aktivieren.",
-      "addFirstTable": "Tisch hinzufügen"
+      "addFirstTable": "Tisch hinzufügen",
+      "colorLabel": "Tischfarbe",
+      "colorTip": "Wähle eine Farbe, die im Dashboard-Lageplan anstelle des Fotos angezeigt wird. Gäste der öffentlichen Speisekarte sehen sie nicht.",
+      "colorClear": "Farbe entfernen",
+      "colorCustom": "Eigene"
     },
     "settings": {
       "breadcrumb": "Einstellungen",

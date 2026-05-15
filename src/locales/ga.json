@@ -387,7 +387,11 @@
       "deleteMessage": "Bainfear bord {number}{label} ón bplean.",
       "emptyTitle": "Gan boird fós",
       "emptySubtitle": "Cuir an chéad bhord leis chun áirithintí agus cóid QR in aghaidh an bhoird a chumasú.",
-      "addFirstTable": "Cuir bord leis"
+      "addFirstTable": "Cuir bord leis",
+      "colorLabel": "Dath an bhoird",
+      "colorTip": "Roghnaigh dath a thaispeánfar ar léarscáil urláir an deais in ionad an ghrianghraif. Ní fheicfidh aíonna an roghchláir phoiblí é.",
+      "colorClear": "Glan an dath",
+      "colorCustom": "Saincheaptha"
     },
     "settings": {
       "breadcrumb": "Socruithe",

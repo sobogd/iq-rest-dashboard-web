@@ -387,7 +387,11 @@
       "deleteMessage": "Miza {number}{label} bo odstranjena z načrta.",
       "emptyTitle": "Še ni miz",
       "emptySubtitle": "Dodajte prvo mizo, da omogočite rezervacije in QR kode po mizah.",
-      "addFirstTable": "Dodaj mizo"
+      "addFirstTable": "Dodaj mizo",
+      "colorLabel": "Barva mize",
+      "colorTip": "Izberi barvo, ki se prikaže na tlorisu nadzorne plošče namesto fotografije. Gostje javnega menija je ne vidijo.",
+      "colorClear": "Odstrani barvo",
+      "colorCustom": "Po meri"
     },
     "settings": {
       "breadcrumb": "Nastavitve",

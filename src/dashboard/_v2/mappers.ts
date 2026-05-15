@@ -177,6 +177,7 @@ export function apiTableToTable(t: ApiTable): TableEntity {
  x: typeof t.x === "number" ? t.x : null,
  y: typeof t.y === "number" ? t.y : null,
  photoUrl: t.imageUrl || null,
+ color: t.color || null,
  sortOrder: t.sortOrder,
  };
 }

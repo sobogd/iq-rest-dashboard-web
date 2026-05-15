@@ -387,7 +387,11 @@
       "deleteMessage": "Pöytä {number}{label} poistetaan kartalta.",
       "emptyTitle": "Ei pöytiä vielä",
       "emptySubtitle": "Lisää ensimmäinen pöytä ottaaksesi varaukset ja pöytäkohtaiset QR-koodit käyttöön.",
-      "addFirstTable": "Lisää pöytä"
+      "addFirstTable": "Lisää pöytä",
+      "colorLabel": "Pöydän väri",
+      "colorTip": "Valitse väri, joka näytetään hallintapaneelin pohjapiirroksessa kuvan sijaan. Julkisen menun asiakkaat eivät näe sitä.",
+      "colorClear": "Poista väri",
+      "colorCustom": "Mukautettu"
     },
     "settings": {
       "breadcrumb": "Asetukset",

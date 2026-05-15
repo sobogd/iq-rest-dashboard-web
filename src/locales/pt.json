@@ -387,7 +387,11 @@
       "deleteMessage": "A mesa {number}{label} será removida do plano.",
       "emptyTitle": "Ainda sem mesas",
       "emptySubtitle": "Adicione a primeira mesa para ativar reservas e códigos QR por mesa.",
-      "addFirstTable": "Adicionar mesa"
+      "addFirstTable": "Adicionar mesa",
+      "colorLabel": "Cor da mesa",
+      "colorTip": "Escolhe uma cor mostrada na planta do painel em vez da foto. Os clientes do menu público não a veem.",
+      "colorClear": "Limpar cor",
+      "colorCustom": "Personalizado"
     },
     "settings": {
       "breadcrumb": "Configurações",

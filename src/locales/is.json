@@ -387,7 +387,11 @@
       "deleteMessage": "Borð {number}{label} verður fjarlægt af áætluninni.",
       "emptyTitle": "Engin borð enn",
       "emptySubtitle": "Bættu fyrsta borðinu við til að virkja bókanir og QR-kóða eftir borði.",
-      "addFirstTable": "Bæta borði við"
+      "addFirstTable": "Bæta borði við",
+      "colorLabel": "Borðlitur",
+      "colorTip": "Veldu lit sem birtist á gólfmynd stjórnborðsins í stað myndarinnar. Gestir opinberu matseðilsins sjá hann ekki.",
+      "colorClear": "Hreinsa lit",
+      "colorCustom": "Sérsniðinn"
     },
     "settings": {
       "breadcrumb": "Stillingar",

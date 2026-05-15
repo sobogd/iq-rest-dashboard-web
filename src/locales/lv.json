@@ -387,7 +387,11 @@
       "deleteMessage": "Galds {number}{label} tiks noņemts no plāna.",
       "emptyTitle": "Vēl nav galdu",
       "emptySubtitle": "Pievienojiet pirmo galdu, lai iespējotu rezervācijas un QR kodus pa galdiem.",
-      "addFirstTable": "Pievienot galdu"
+      "addFirstTable": "Pievienot galdu",
+      "colorLabel": "Galda krāsa",
+      "colorTip": "Izvēlies krāsu, kas tiks rādīta vadības paneļa plānā fotoattēla vietā. Publiskās ēdienkartes viesi to neredz.",
+      "colorClear": "Notīrīt krāsu",
+      "colorCustom": "Pielāgota"
     },
     "settings": {
       "breadcrumb": "Iestatījumi",

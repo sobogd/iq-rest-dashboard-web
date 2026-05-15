@@ -387,7 +387,11 @@
       "deleteMessage": "Stalas {number}{label} bus pašalintas iš plano.",
       "emptyTitle": "Dar nėra stalų",
       "emptySubtitle": "Pridėkite pirmąjį stalą, kad įgalintumėte rezervacijas ir QR kodus pagal stalą.",
-      "addFirstTable": "Pridėti stalą"
+      "addFirstTable": "Pridėti stalą",
+      "colorLabel": "Stalo spalva",
+      "colorTip": "Pasirink spalvą, kuri bus rodoma valdymo skydelio plane vietoj nuotraukos. Viešo meniu lankytojai jos nemato.",
+      "colorClear": "Pašalinti spalvą",
+      "colorCustom": "Pasirinktinė"
     },
     "settings": {
       "breadcrumb": "Nustatymai",

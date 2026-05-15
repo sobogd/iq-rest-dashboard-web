@@ -387,7 +387,11 @@
       "deleteMessage": "Tafel {number}{label} wordt van de plattegrond verwijderd.",
       "emptyTitle": "Nog geen tafels",
       "emptySubtitle": "Voeg uw eerste tafel toe om reserveringen en QR-codes per tafel mogelijk te maken.",
-      "addFirstTable": "Tafel toevoegen"
+      "addFirstTable": "Tafel toevoegen",
+      "colorLabel": "Tafelkleur",
+      "colorTip": "Kies een kleur die op de plattegrond in het dashboard wordt getoond in plaats van de foto. Gasten van het openbare menu zien hem niet.",
+      "colorClear": "Kleur wissen",
+      "colorCustom": "Aangepast"
     },
     "settings": {
       "breadcrumb": "Instellingen",

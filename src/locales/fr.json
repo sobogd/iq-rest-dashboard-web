@@ -387,7 +387,11 @@
       "deleteMessage": "La table {number}{label} sera retirée du plan.",
       "emptyTitle": "Aucune table pour l'instant",
       "emptySubtitle": "Ajoutez votre première table pour activer les réservations et les codes QR par table.",
-      "addFirstTable": "Ajouter une table"
+      "addFirstTable": "Ajouter une table",
+      "colorLabel": "Couleur de la table",
+      "colorTip": "Choisis une couleur affichée sur le plan du tableau de bord à la place de la photo. Les clients du menu public ne la voient pas.",
+      "colorClear": "Effacer la couleur",
+      "colorCustom": "Personnalisé"
     },
     "settings": {
       "breadcrumb": "Paramètres",

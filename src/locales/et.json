@@ -387,7 +387,11 @@
       "deleteMessage": "Laud {number}{label} eemaldatakse plaanilt.",
       "emptyTitle": "Laudu pole veel",
       "emptySubtitle": "Lisa esimene laud, et lubada broneeringud ja laua-QR-koodid.",
-      "addFirstTable": "Lisa laud"
+      "addFirstTable": "Lisa laud",
+      "colorLabel": "Laua värv",
+      "colorTip": "Vali värv, mida kuvatakse armatuurlaua põrandaplaanil foto asemel. Avaliku menüü külalised seda ei näe.",
+      "colorClear": "Eemalda värv",
+      "colorCustom": "Kohandatud"
     },
     "settings": {
       "breadcrumb": "Seaded",

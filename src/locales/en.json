@@ -387,7 +387,11 @@
       "deleteMessage": "Table {number}{label} will be removed from the floor plan.",
       "emptyTitle": "No tables yet",
       "emptySubtitle": "Add your first table to enable reservations and per-table QR codes.",
-      "addFirstTable": "Add table"
+      "addFirstTable": "Add table",
+      "colorLabel": "Table color",
+      "colorTip": "Pick a color shown on the dashboard floor map instead of the photo. Public menu guests don't see it.",
+      "colorClear": "Clear color",
+      "colorCustom": "Custom"
     },
     "settings": {
       "breadcrumb": "Settings",

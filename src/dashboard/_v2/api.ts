@@ -351,6 +351,7 @@ export interface ApiTable {
  capacity: number;
  zone: string | null;
  imageUrl: string | null;
+ color: string | null;
  x: number | null;
  y: number | null;
  isActive: boolean;
@@ -369,6 +370,7 @@ export async function createTable(payload: {
  capacity: number;
  zone?: string | null;
  imageUrl?: string | null;
+ color?: string | null;
  x?: number | null;
  y?: number | null;
 }): Promise<ApiTable> {

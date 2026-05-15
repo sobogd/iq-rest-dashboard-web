@@ -387,7 +387,11 @@
       "deleteMessage": "Bord {number}{label} fjernes fra planen.",
       "emptyTitle": "Ingen borde endnu",
       "emptySubtitle": "Tilføj første bord for at aktivere reservationer og QR-koder pr. bord.",
-      "addFirstTable": "Tilføj bord"
+      "addFirstTable": "Tilføj bord",
+      "colorLabel": "Bordfarve",
+      "colorTip": "Vælg en farve, der vises på gulvplanen i dashboardet i stedet for billedet. Gæster på den offentlige menu ser den ikke.",
+      "colorClear": "Fjern farve",
+      "colorCustom": "Tilpasset"
     },
     "settings": {
       "breadcrumb": "Indstillinger",

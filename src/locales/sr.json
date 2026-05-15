@@ -387,7 +387,11 @@
       "deleteMessage": "Sto {number}{label} biće uklonjen iz plana.",
       "emptyTitle": "Još nema stolova",
       "emptySubtitle": "Dodajte prvi sto da omogućite rezervacije i QR kodove po stolu.",
-      "addFirstTable": "Dodaj sto"
+      "addFirstTable": "Dodaj sto",
+      "colorLabel": "Боја стола",
+      "colorTip": "Изабери боју која ће се приказивати на плану табле уместо фотографије. Гости јавног менија је не виде.",
+      "colorClear": "Уклони боју",
+      "colorCustom": "Прилагођено"
     },
     "settings": {
       "breadcrumb": "Podešavanja",

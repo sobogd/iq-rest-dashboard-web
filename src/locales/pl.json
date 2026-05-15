@@ -387,7 +387,11 @@
       "deleteMessage": "Stolik {number}{label} zostanie usunięty z planu.",
       "emptyTitle": "Brak stolików",
       "emptySubtitle": "Dodaj pierwszy stolik, aby włączyć rezerwacje i kody QR per stolik.",
-      "addFirstTable": "Dodaj stolik"
+      "addFirstTable": "Dodaj stolik",
+      "colorLabel": "Kolor stolika",
+      "colorTip": "Wybierz kolor wyświetlany na planie w panelu zamiast zdjęcia. Goście menu publicznego go nie widzą.",
+      "colorClear": "Wyczyść kolor",
+      "colorCustom": "Niestandardowy"
     },
     "settings": {
       "breadcrumb": "Ustawienia",

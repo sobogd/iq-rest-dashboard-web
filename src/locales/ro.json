@@ -387,7 +387,11 @@
       "deleteMessage": "Masa {number}{label} va fi eliminată din plan.",
       "emptyTitle": "Nicio masă încă",
       "emptySubtitle": "Adaugă prima masă pentru a activa rezervările și codurile QR pe masă.",
-      "addFirstTable": "Adaugă masă"
+      "addFirstTable": "Adaugă masă",
+      "colorLabel": "Culoarea mesei",
+      "colorTip": "Alege o culoare afișată pe planul panoului în locul fotografiei. Clienții meniului public nu o văd.",
+      "colorClear": "Șterge culoarea",
+      "colorCustom": "Personalizat"
     },
     "settings": {
       "breadcrumb": "Setări",

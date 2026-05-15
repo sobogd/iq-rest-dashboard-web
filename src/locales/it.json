@@ -387,7 +387,11 @@
       "deleteMessage": "Il tavolo {number}{label} sarà rimosso dalla mappa.",
       "emptyTitle": "Nessun tavolo",
       "emptySubtitle": "Aggiungi il primo tavolo per attivare prenotazioni e codici QR per tavolo.",
-      "addFirstTable": "Aggiungi tavolo"
+      "addFirstTable": "Aggiungi tavolo",
+      "colorLabel": "Colore del tavolo",
+      "colorTip": "Scegli un colore mostrato sulla planimetria della dashboard al posto della foto. I clienti del menu pubblico non lo vedono.",
+      "colorClear": "Rimuovi colore",
+      "colorCustom": "Personalizzato"
     },
     "settings": {
       "breadcrumb": "Impostazioni",

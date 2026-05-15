@@ -387,7 +387,11 @@
       "deleteMessage": "テーブル {number}{label} はプランから削除されます。",
       "emptyTitle": "テーブルがまだありません",
       "emptySubtitle": "予約とテーブルごとのQRコードを有効にするために最初のテーブルを追加します。",
-      "addFirstTable": "テーブルを追加"
+      "addFirstTable": "テーブルを追加",
+      "colorLabel": "テーブルの色",
+      "colorTip": "ダッシュボードのフロアマップで写真の代わりに表示される色を選びます。公開メニューのお客様には表示されません。",
+      "colorClear": "色をクリア",
+      "colorCustom": "カスタム"
     },
     "settings": {
       "breadcrumb": "設定",

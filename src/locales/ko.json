@@ -387,7 +387,11 @@
       "deleteMessage": "테이블 {number}{label}이(가) 평면도에서 제거됩니다.",
       "emptyTitle": "아직 테이블이 없습니다",
       "emptySubtitle": "예약과 테이블별 QR 코드를 활성화하려면 첫 테이블을 추가하세요.",
-      "addFirstTable": "테이블 추가"
+      "addFirstTable": "테이블 추가",
+      "colorLabel": "테이블 색상",
+      "colorTip": "사진 대신 대시보드 평면도에 표시할 색상을 선택하세요. 공개 메뉴 손님에게는 표시되지 않습니다.",
+      "colorClear": "색상 지우기",
+      "colorCustom": "사용자 지정"
     },
     "settings": {
       "breadcrumb": "설정",

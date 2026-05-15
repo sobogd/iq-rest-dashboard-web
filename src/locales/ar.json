@@ -387,7 +387,11 @@
       "deleteMessage": "ستتم إزالة الطاولة {number}{label} من المخطط.",
       "emptyTitle": "لا توجد طاولات بعد",
       "emptySubtitle": "أضف طاولتك الأولى لتمكين الحجوزات ورموز QR لكل طاولة.",
-      "addFirstTable": "إضافة طاولة"
+      "addFirstTable": "إضافة طاولة",
+      "colorLabel": "لون الطاولة",
+      "colorTip": "اختر لونًا ليتم عرضه على لوحة المخطط في لوحة التحكم بدلاً من الصورة. لن يراه ضيوف القائمة العامة.",
+      "colorClear": "مسح اللون",
+      "colorCustom": "مخصص"
     },
     "settings": {
       "breadcrumb": "الإعدادات",
