@@ -193,8 +193,12 @@ export function FloorMap({
  >
  {t.color ? (
  <span className="absolute inset-0 rounded-full" style={{ backgroundColor: t.color }} />
+ ) : t.photoUrl ? (
+ <span className="absolute inset-0 rounded-full overflow-hidden">
+ <img src={t.photoUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
+ </span>
  ) : null}
- <span className={t.color ? "relative z-10 text-white" : ""}>
+ <span className={(t.color || t.photoUrl) ? "relative z-10 text-white" : ""}>
  {t.number}
  </span>
  {badge && badge > 0 ? (
