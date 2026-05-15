@@ -20,7 +20,6 @@ export interface UsageRow {
   companyId: string | null;
   companyLabel: string | null;
   ip: string | null;
-  isBot: boolean;
   isSearch: boolean;
   isGoogleAds: boolean;
 }
@@ -506,15 +505,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 </>
               )}
               <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
-              {row.isBot ? (
-                <span
-                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-yellow-400 text-[8px] font-bold text-black shrink-0"
-                  title="Bot (detected via User-Agent)"
-                  aria-hidden
-                >
-                  B
-                </span>
-              ) : row.gclid ? (
+              {row.gclid ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#34A853] text-[8px] font-bold text-white shrink-0"
                   title={row.gclid}
@@ -926,7 +917,6 @@ function UsageEventDetail({
     ["Company", event.companyLabel || event.companyId || "—"],
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
-    ["Bot", event.isBot ? "yes" : "no"],
     ["Google Ads", event.isGoogleAds ? "yes" : "no"],
     ["From search", event.isSearch ? "yes" : "no"],
     ...adParamFields,
