@@ -391,7 +391,9 @@
       "colorLabel": "Borðlitur",
       "colorTip": "Veldu lit sem birtist á gólfmynd stjórnborðsins í stað myndarinnar. Gestir opinberu matseðilsins sjá hann ekki.",
       "colorClear": "Hreinsa lit",
-      "colorCustom": "Sérsniðinn"
+      "colorCustom": "Sérsniðinn",
+      "descriptionLabel": "Lýsing",
+      "descriptionPlaceholder": "Stutt athugasemd um þetta borð"
     },
     "settings": {
       "breadcrumb": "Stillingar",

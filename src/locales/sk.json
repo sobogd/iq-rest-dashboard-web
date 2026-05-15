@@ -391,7 +391,9 @@
       "colorLabel": "Farba stola",
       "colorTip": "Vyber farbu, ktorá sa zobrazí na pôdoryse v dashboarde namiesto fotky. Hostia verejného menu ju nevidia.",
       "colorClear": "Odstrániť farbu",
-      "colorCustom": "Vlastná"
+      "colorCustom": "Vlastná",
+      "descriptionLabel": "Popis",
+      "descriptionPlaceholder": "Krátka poznámka o tomto stole"
     },
     "settings": {
       "breadcrumb": "Nastavenia",

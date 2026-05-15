@@ -340,6 +340,7 @@ export function TableFormPage({
  id: newId(),
  number: tables.reduce((max, tbl) => Math.max(max, tbl.number || 0), 0) + 1,
  name: "",
+ description: "",
  capacity: 2,
  x,
  y,
@@ -387,6 +388,7 @@ export function TableFormPage({
  number: draft.number,
  capacity: draft.capacity,
  zone: draft.name || null,
+ description: draft.description || null,
  imageUrl: draft.photoUrl,
  color: draft.color,
  x: draft.x,
@@ -396,6 +398,7 @@ export function TableFormPage({
  id: (created as { id: string }).id,
  number: draft.number,
  name: draft.name,
+ description: draft.description,
  capacity: draft.capacity,
  x: draft.x,
  y: draft.y,
@@ -409,6 +412,7 @@ export function TableFormPage({
  number: draft.number,
  capacity: draft.capacity,
  zone: draft.name || null,
+ description: draft.description || null,
  imageUrl: draft.photoUrl,
  color: draft.color,
  x: draft.x,
@@ -547,6 +551,18 @@ function TableSettings({
  onFocus={() => track("dash_settings_table_focus_name")}
  placeholder={t("namePlaceholder")}
  className={inputClass}
+ />
+ </div>
+
+ <div>
+ <label className="block text-sm font-medium text-foreground mb-2.5">{t("descriptionLabel")}</label>
+ <textarea
+ value={table.description}
+ onChange={(e) => onChange({ description: e.target.value })}
+ onFocus={() => track("dash_settings_table_focus_description")}
+ placeholder={t("descriptionPlaceholder")}
+ rows={2}
+ className={inputClass + " resize-none"}
  />
  </div>
 

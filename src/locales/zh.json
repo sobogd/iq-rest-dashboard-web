@@ -391,7 +391,9 @@
       "colorLabel": "桌子颜色",
       "colorTip": "选择一个在仪表盘平面图上代替照片显示的颜色。公开菜单的客户看不到它。",
       "colorClear": "清除颜色",
-      "colorCustom": "自定义"
+      "colorCustom": "自定义",
+      "descriptionLabel": "描述",
+      "descriptionPlaceholder": "关于这张桌子的简短说明"
     },
     "settings": {
       "breadcrumb": "设置",

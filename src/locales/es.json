@@ -391,7 +391,9 @@
       "colorLabel": "Color de la mesa",
       "colorTip": "Elige un color que se mostrará en el plano del panel en lugar de la foto. Los clientes del menú público no lo ven.",
       "colorClear": "Quitar color",
-      "colorCustom": "Personalizado"
+      "colorCustom": "Personalizado",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Una nota breve sobre esta mesa"
     },
     "settings": {
       "breadcrumb": "Ajustes",

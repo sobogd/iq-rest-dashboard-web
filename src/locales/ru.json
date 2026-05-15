@@ -391,7 +391,9 @@
       "colorLabel": "Цвет столика",
       "colorTip": "Выберите цвет, который будет показан на схеме в дашборде вместо фото. Гости публичного меню его не видят.",
       "colorClear": "Убрать цвет",
-      "colorCustom": "Свой"
+      "colorCustom": "Свой",
+      "descriptionLabel": "Описание",
+      "descriptionPlaceholder": "Краткая заметка об этом столике"
     },
     "settings": {
       "breadcrumb": "Настройки",

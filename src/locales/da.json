@@ -391,7 +391,9 @@
       "colorLabel": "Bordfarve",
       "colorTip": "Vælg en farve, der vises på gulvplanen i dashboardet i stedet for billedet. Gæster på den offentlige menu ser den ikke.",
       "colorClear": "Fjern farve",
-      "colorCustom": "Tilpasset"
+      "colorCustom": "Tilpasset",
+      "descriptionLabel": "Beskrivelse",
+      "descriptionPlaceholder": "En kort note om dette bord"
     },
     "settings": {
       "breadcrumb": "Indstillinger",

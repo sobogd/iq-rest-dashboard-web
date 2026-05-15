@@ -391,7 +391,9 @@
       "colorLabel": "Masa rengi",
       "colorTip": "Panel zemin haritasında fotoğraf yerine gösterilecek bir renk seçin. Genel menü misafirleri bunu görmez.",
       "colorClear": "Rengi temizle",
-      "colorCustom": "Özel"
+      "colorCustom": "Özel",
+      "descriptionLabel": "Açıklama",
+      "descriptionPlaceholder": "Bu masa hakkında kısa bir not"
     },
     "settings": {
       "breadcrumb": "Ayarlar",

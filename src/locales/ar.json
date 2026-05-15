@@ -391,7 +391,9 @@
       "colorLabel": "لون الطاولة",
       "colorTip": "اختر لونًا ليتم عرضه على لوحة المخطط في لوحة التحكم بدلاً من الصورة. لن يراه ضيوف القائمة العامة.",
       "colorClear": "مسح اللون",
-      "colorCustom": "مخصص"
+      "colorCustom": "مخصص",
+      "descriptionLabel": "الوصف",
+      "descriptionPlaceholder": "ملاحظة قصيرة عن هذه الطاولة"
     },
     "settings": {
       "breadcrumb": "الإعدادات",

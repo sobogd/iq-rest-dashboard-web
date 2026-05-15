@@ -391,7 +391,9 @@
       "colorLabel": "Asztal színe",
       "colorTip": "Válassz egy színt, amely az irányítópult alaprajzán a fotó helyett jelenik meg. A nyilvános menü vendégei nem látják.",
       "colorClear": "Szín törlése",
-      "colorCustom": "Egyéni"
+      "colorCustom": "Egyéni",
+      "descriptionLabel": "Leírás",
+      "descriptionPlaceholder": "Rövid megjegyzés erről az asztalról"
     },
     "settings": {
       "breadcrumb": "Beállítások",

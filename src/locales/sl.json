@@ -391,7 +391,9 @@
       "colorLabel": "Barva mize",
       "colorTip": "Izberi barvo, ki se prikaže na tlorisu nadzorne plošče namesto fotografije. Gostje javnega menija je ne vidijo.",
       "colorClear": "Odstrani barvo",
-      "colorCustom": "Po meri"
+      "colorCustom": "Po meri",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Kratka opomba o tej mizi"
     },
     "settings": {
       "breadcrumb": "Nastavitve",

@@ -391,7 +391,9 @@
       "colorLabel": "Dath an bhoird",
       "colorTip": "Roghnaigh dath a thaispeánfar ar léarscáil urláir an deais in ionad an ghrianghraif. Ní fheicfidh aíonna an roghchláir phoiblí é.",
       "colorClear": "Glan an dath",
-      "colorCustom": "Saincheaptha"
+      "colorCustom": "Saincheaptha",
+      "descriptionLabel": "Cur síos",
+      "descriptionPlaceholder": "Nóta gairid faoin mbord seo"
     },
     "settings": {
       "breadcrumb": "Socruithe",

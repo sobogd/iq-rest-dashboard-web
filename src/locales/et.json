@@ -391,7 +391,9 @@
       "colorLabel": "Laua värv",
       "colorTip": "Vali värv, mida kuvatakse armatuurlaua põrandaplaanil foto asemel. Avaliku menüü külalised seda ei näe.",
       "colorClear": "Eemalda värv",
-      "colorCustom": "Kohandatud"
+      "colorCustom": "Kohandatud",
+      "descriptionLabel": "Kirjeldus",
+      "descriptionPlaceholder": "Lühike märkus selle laua kohta"
     },
     "settings": {
       "breadcrumb": "Seaded",

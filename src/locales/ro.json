@@ -391,7 +391,9 @@
       "colorLabel": "Culoarea mesei",
       "colorTip": "Alege o culoare afișată pe planul panoului în locul fotografiei. Clienții meniului public nu o văd.",
       "colorClear": "Șterge culoarea",
-      "colorCustom": "Personalizat"
+      "colorCustom": "Personalizat",
+      "descriptionLabel": "Descriere",
+      "descriptionPlaceholder": "O scurtă notă despre această masă"
     },
     "settings": {
       "breadcrumb": "Setări",

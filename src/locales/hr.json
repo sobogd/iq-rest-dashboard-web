@@ -391,7 +391,9 @@
       "colorLabel": "Boja stola",
       "colorTip": "Odaberi boju koja će se prikazivati na planu nadzorne ploče umjesto fotografije. Gosti javnog jelovnika je ne vide.",
       "colorClear": "Ukloni boju",
-      "colorCustom": "Prilagođeno"
+      "colorCustom": "Prilagođeno",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Kratka bilješka o ovom stolu"
     },
     "settings": {
       "breadcrumb": "Postavke",

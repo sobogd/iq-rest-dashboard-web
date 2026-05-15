@@ -391,7 +391,9 @@
       "colorLabel": "Table color",
       "colorTip": "Pick a color shown on the dashboard floor map instead of the photo. Public menu guests don't see it.",
       "colorClear": "Clear color",
-      "colorCustom": "Custom"
+      "colorCustom": "Custom",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "A short note about this table"
     },
     "settings": {
       "breadcrumb": "Settings",

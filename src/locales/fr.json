@@ -391,7 +391,9 @@
       "colorLabel": "Couleur de la table",
       "colorTip": "Choisis une couleur affichée sur le plan du tableau de bord à la place de la photo. Les clients du menu public ne la voient pas.",
       "colorClear": "Effacer la couleur",
-      "colorCustom": "Personnalisé"
+      "colorCustom": "Personnalisé",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Une courte note sur cette table"
     },
     "settings": {
       "breadcrumb": "Paramètres",

@@ -391,7 +391,9 @@
       "colorLabel": "Tischfarbe",
       "colorTip": "Wähle eine Farbe, die im Dashboard-Lageplan anstelle des Fotos angezeigt wird. Gäste der öffentlichen Speisekarte sehen sie nicht.",
       "colorClear": "Farbe entfernen",
-      "colorCustom": "Eigene"
+      "colorCustom": "Eigene",
+      "descriptionLabel": "Beschreibung",
+      "descriptionPlaceholder": "Eine kurze Notiz zu diesem Tisch"
     },
     "settings": {
       "breadcrumb": "Einstellungen",

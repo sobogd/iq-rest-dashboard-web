@@ -42,6 +42,7 @@ export interface TableEntity {
  id: string;
  number: number;
  name: string;
+ description: string;
  capacity: number;
  x: number | null;
  y: number | null;

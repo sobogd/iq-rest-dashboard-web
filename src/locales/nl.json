@@ -391,7 +391,9 @@
       "colorLabel": "Tafelkleur",
       "colorTip": "Kies een kleur die op de plattegrond in het dashboard wordt getoond in plaats van de foto. Gasten van het openbare menu zien hem niet.",
       "colorClear": "Kleur wissen",
-      "colorCustom": "Aangepast"
+      "colorCustom": "Aangepast",
+      "descriptionLabel": "Beschrijving",
+      "descriptionPlaceholder": "Een korte notitie over deze tafel"
     },
     "settings": {
       "breadcrumb": "Instellingen",

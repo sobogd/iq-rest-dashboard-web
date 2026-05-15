@@ -173,6 +173,7 @@ export function apiTableToTable(t: ApiTable): TableEntity {
  id: t.id,
  number: t.number,
  name: t.zone || "",
+ description: t.description || "",
  capacity: t.capacity,
  x: typeof t.x === "number" ? t.x : null,
  y: typeof t.y === "number" ? t.y : null,

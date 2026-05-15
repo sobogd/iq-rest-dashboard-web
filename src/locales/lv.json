@@ -391,7 +391,9 @@
       "colorLabel": "Galda krāsa",
       "colorTip": "Izvēlies krāsu, kas tiks rādīta vadības paneļa plānā fotoattēla vietā. Publiskās ēdienkartes viesi to neredz.",
       "colorClear": "Notīrīt krāsu",
-      "colorCustom": "Pielāgota"
+      "colorCustom": "Pielāgota",
+      "descriptionLabel": "Apraksts",
+      "descriptionPlaceholder": "Īsa piezīme par šo galdu"
     },
     "settings": {
       "breadcrumb": "Iestatījumi",

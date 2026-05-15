@@ -391,7 +391,9 @@
       "colorLabel": "Colore del tavolo",
       "colorTip": "Scegli un colore mostrato sulla planimetria della dashboard al posto della foto. I clienti del menu pubblico non lo vedono.",
       "colorClear": "Rimuovi colore",
-      "colorCustom": "Personalizzato"
+      "colorCustom": "Personalizzato",
+      "descriptionLabel": "Descrizione",
+      "descriptionPlaceholder": "Una breve nota su questo tavolo"
     },
     "settings": {
       "breadcrumb": "Impostazioni",

@@ -391,7 +391,9 @@
       "colorLabel": "Bordfarge",
       "colorTip": "Velg en farge som vises på dashbordets plantegning i stedet for bildet. Gjester på den offentlige menyen ser den ikke.",
       "colorClear": "Fjern farge",
-      "colorCustom": "Tilpasset"
+      "colorCustom": "Tilpasset",
+      "descriptionLabel": "Beskrivelse",
+      "descriptionPlaceholder": "En kort notis om dette bordet"
     },
     "settings": {
       "breadcrumb": "Innstillinger",

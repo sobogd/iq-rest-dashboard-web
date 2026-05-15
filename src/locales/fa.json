@@ -391,7 +391,9 @@
       "colorLabel": "رنگ میز",
       "colorTip": "رنگی را انتخاب کنید که در نقشه‌ی کف داشبورد به جای عکس نمایش داده شود. مهمانان منوی عمومی آن را نمی‌بینند.",
       "colorClear": "حذف رنگ",
-      "colorCustom": "سفارشی"
+      "colorCustom": "سفارشی",
+      "descriptionLabel": "توضیحات",
+      "descriptionPlaceholder": "یادداشتی کوتاه درباره این میز"
     },
     "settings": {
       "breadcrumb": "تنظیمات",

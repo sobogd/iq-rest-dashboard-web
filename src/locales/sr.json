@@ -391,7 +391,9 @@
       "colorLabel": "Боја стола",
       "colorTip": "Изабери боју која ће се приказивати на плану табле уместо фотографије. Гости јавног менија је не виде.",
       "colorClear": "Уклони боју",
-      "colorCustom": "Прилагођено"
+      "colorCustom": "Прилагођено",
+      "descriptionLabel": "Опис",
+      "descriptionPlaceholder": "Кратка белешка о овом столу"
     },
     "settings": {
       "breadcrumb": "Podešavanja",

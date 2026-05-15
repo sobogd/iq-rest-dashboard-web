@@ -391,7 +391,9 @@
       "colorLabel": "Stalo spalva",
       "colorTip": "Pasirink spalvą, kuri bus rodoma valdymo skydelio plane vietoj nuotraukos. Viešo meniu lankytojai jos nemato.",
       "colorClear": "Pašalinti spalvą",
-      "colorCustom": "Pasirinktinė"
+      "colorCustom": "Pasirinktinė",
+      "descriptionLabel": "Aprašymas",
+      "descriptionPlaceholder": "Trumpa pastaba apie šį stalą"
     },
     "settings": {
       "breadcrumb": "Nustatymai",

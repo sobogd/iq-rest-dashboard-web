@@ -391,7 +391,9 @@
       "colorLabel": "Bordsfärg",
       "colorTip": "Välj en färg som visas på dashboardens planritning i stället för bilden. Gäster i den offentliga menyn ser den inte.",
       "colorClear": "Ta bort färg",
-      "colorCustom": "Anpassad"
+      "colorCustom": "Anpassad",
+      "descriptionLabel": "Beskrivning",
+      "descriptionPlaceholder": "En kort anteckning om detta bord"
     },
     "settings": {
       "breadcrumb": "Inställningar",

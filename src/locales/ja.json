@@ -391,7 +391,9 @@
       "colorLabel": "テーブルの色",
       "colorTip": "ダッシュボードのフロアマップで写真の代わりに表示される色を選びます。公開メニューのお客様には表示されません。",
       "colorClear": "色をクリア",
-      "colorCustom": "カスタム"
+      "colorCustom": "カスタム",
+      "descriptionLabel": "説明",
+      "descriptionPlaceholder": "このテーブルについての短いメモ"
     },
     "settings": {
       "breadcrumb": "設定",
