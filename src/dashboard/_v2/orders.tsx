@@ -632,7 +632,7 @@ export function OrdersPage({
  track("dash_orders_click_new_no_table");
  setActiveTableId(NO_TABLE);
  setOpenedFrom("list");
- setView({ kind: "addItem", step: "category" });
+ setView({ kind: "addItem", orderId: null, step: "category" });
  }
 
  return (
