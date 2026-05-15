@@ -57,6 +57,19 @@ function ShellBody(props: ShellInitialData) {
   const { view } = router;
   const restaurant = useRestaurantOrNull();
   const isAuthView = view.name.startsWith("auth.");
+  const queryClient = useQueryClient();
+
+  // Force a fresh fetch the moment the user lands on orders or reservations.
+  // Without this they'd see the snapshot from the last 30-second poll, which
+  // can be stale enough to miss a brand-new order or booking just placed by
+  // staff on another device.
+  useEffect(() => {
+    if (view.name === "orders" || view.name === "orders.detail") {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    } else if (view.name === "reservations") {
+      queryClient.invalidateQueries({ queryKey: ["reservations"] });
+    }
+  }, [view.name, queryClient]);
 
   const backToSettings = useCallback(() => router.push({ name: "settings" }), [router]);
   const backToMenu = useCallback(() => router.resetTo({ name: "menu" }), [router]);
