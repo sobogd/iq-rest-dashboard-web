@@ -196,11 +196,22 @@ export function OrdersPage({
  setActiveTableId(null);
  }
 
- async function persistOrder(orderId: string, patch: Partial<Order>) {
- setOrders((all) => all.map((o) => (o.id === orderId ? { ...o, ...patch } : o)));
- const target = orders.find((o) => o.id === orderId);
+ async function persistOrder(orderId: string, patch: Partial<Order>, base?: Order) {
+ // First-item adds give us `base` explicitly because the closure-captured
+ // `orders` does not yet see the order that ensureOrderForFirstItem just
+ // pushed via setOrders — the state update is async. Without that, we
+ // bail before calling patchOrder and the first item silently fails to
+ // persist server-side; on the next poll the optimistic UI snaps back to
+ // the empty server-side order and the user sees their first dish vanish.
+ const target = base ?? orders.find((o) => o.id === orderId);
  if (!target) return;
- const next = { ...target, ...patch };
+ const next: Order = { ...target, ...patch };
+ setOrders((all) => {
+ if (all.some((o) => o.id === orderId)) {
+ return all.map((o) => (o.id === orderId ? next : o));
+ }
+ return [...all, next];
+ });
  try {
  await patchOrder(orderId, {
  status: next.status === "active" ? "in_progress" : next.status,
@@ -353,10 +364,12 @@ export function OrdersPage({
  const currentView = view;
  if (!currentView || currentView.kind !== "addItem") return;
  let orderId = currentView.orderId;
+ let baseOrder: Order | null = null;
  if (!orderId) {
  const newOrder = await ensureOrderForFirstItem();
  if (!newOrder) return;
  orderId = newOrder.id;
+ baseOrder = newOrder;
  }
  const newItem: OrderItem = {
  id: newId(),
@@ -368,9 +381,12 @@ export function OrdersPage({
  status: "pending",
  createdAt: new Date().toISOString(),
  };
- const order = orders.find((o) => o.id === orderId) || { items: [] as OrderItem[] };
- const items = [...order.items, newItem];
- persistOrder(orderId, { items });
+ // Prefer the fresh order returned by ensureOrderForFirstItem — `orders`
+ // (closure) hasn't seen it yet, so falling back to .find would lose
+ // the new order entirely on the very first dish.
+ const base: Order | undefined = baseOrder ?? orders.find((o) => o.id === orderId);
+ const items = [...(base?.items ?? []), newItem];
+ persistOrder(orderId, { items }, base);
  setView({ kind: "order", orderId });
  }
 
