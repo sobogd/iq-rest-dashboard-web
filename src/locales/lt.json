@@ -316,7 +316,10 @@
       "fromTime": "Nuo {time}",
       "createdLabel": "Sukurta",
       "noActiveTitle": "Nėra aktyvių užsakymų",
-      "noActiveBody": "Nauji užsakymai pasirodys čia."
+      "noActiveBody": "Nauji užsakymai pasirodys čia.",
+      "disabledTitle": "Užsakymai išjungti",
+      "disabledBody": "Įjunkite užsakymus nustatymuose, kad pradėtumėte juos gauti.",
+      "disabledCta": "Eiti į nustatymus"
     },
     "reservations": {
       "title": "Rezervacijos",

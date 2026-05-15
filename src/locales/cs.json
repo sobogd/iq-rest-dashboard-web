@@ -316,7 +316,10 @@
       "fromTime": "Od {time}",
       "createdLabel": "Vytvořeno",
       "noActiveTitle": "Žádné aktivní objednávky",
-      "noActiveBody": "Nové objednávky se zobrazí zde."
+      "noActiveBody": "Nové objednávky se zobrazí zde.",
+      "disabledTitle": "Objednávky jsou vypnuté",
+      "disabledBody": "Zapněte objednávky v nastavení, abyste je začali přijímat.",
+      "disabledCta": "Přejít do nastavení"
     },
     "reservations": {
       "title": "Rezervace",

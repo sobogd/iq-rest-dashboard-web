@@ -316,7 +316,10 @@
       "fromTime": "自{time}",
       "createdLabel": "已创建",
       "noActiveTitle": "没有活跃订单",
-      "noActiveBody": "新订单将显示在这里。"
+      "noActiveBody": "新订单将显示在这里。",
+      "disabledTitle": "订单已禁用",
+      "disabledBody": "在设置中启用订单以开始接收订单。",
+      "disabledCta": "前往设置"
     },
     "reservations": {
       "title": "预订",

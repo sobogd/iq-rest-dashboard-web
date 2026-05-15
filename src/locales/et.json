@@ -316,7 +316,10 @@
       "fromTime": "Alates {time}",
       "createdLabel": "Loodud",
       "noActiveTitle": "Aktiivseid tellimusi pole",
-      "noActiveBody": "Uued tellimused ilmuvad siia."
+      "noActiveBody": "Uued tellimused ilmuvad siia.",
+      "disabledTitle": "Tellimused on välja lülitatud",
+      "disabledBody": "Lülitage tellimused seadetes sisse, et hakata neid vastu võtma.",
+      "disabledCta": "Mine seadetesse"
     },
     "reservations": {
       "title": "Broneeringud",

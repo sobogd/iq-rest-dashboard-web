@@ -316,7 +316,10 @@
       "fromTime": "Fra {time}",
       "createdLabel": "Oprettet",
       "noActiveTitle": "Ingen aktive ordrer",
-      "noActiveBody": "Nye ordrer vises her."
+      "noActiveBody": "Nye ordrer vises her.",
+      "disabledTitle": "Ordrer er deaktiveret",
+      "disabledBody": "Aktivér ordrer i indstillinger for at begynde at modtage dem.",
+      "disabledCta": "Gå til indstillinger"
     },
     "reservations": {
       "title": "Reservationer",

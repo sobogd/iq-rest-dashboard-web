@@ -316,7 +316,10 @@
       "fromTime": "Klo {time}",
       "createdLabel": "Luotu",
       "noActiveTitle": "Ei aktiivisia tilauksia",
-      "noActiveBody": "Uudet tilaukset näkyvät täällä."
+      "noActiveBody": "Uudet tilaukset näkyvät täällä.",
+      "disabledTitle": "Tilaukset on poistettu käytöstä",
+      "disabledBody": "Ota tilaukset käyttöön asetuksissa aloittaaksesi niiden vastaanottamisen.",
+      "disabledCta": "Siirry asetuksiin"
     },
     "reservations": {
       "title": "Varaukset",

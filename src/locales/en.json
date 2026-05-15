@@ -316,7 +316,10 @@
       "fromTime": "From {time}",
       "createdLabel": "Created",
       "noActiveTitle": "No active orders",
-      "noActiveBody": "New orders will show up here."
+      "noActiveBody": "New orders will show up here.",
+      "disabledTitle": "Orders are disabled",
+      "disabledBody": "Enable orders in settings to start receiving them.",
+      "disabledCta": "Go to settings"
     },
     "reservations": {
       "title": "Bookings",

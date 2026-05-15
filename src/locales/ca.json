@@ -316,7 +316,10 @@
       "fromTime": "Des de {time}",
       "createdLabel": "Creat",
       "noActiveTitle": "No hi ha comandes actives",
-      "noActiveBody": "Les noves comandes apareixeran aquí."
+      "noActiveBody": "Les noves comandes apareixeran aquí.",
+      "disabledTitle": "Les comandes estan desactivades",
+      "disabledBody": "Activa les comandes a la configuració per començar a rebre-les.",
+      "disabledCta": "Vés a la configuració"
     },
     "reservations": {
       "title": "Reserves",

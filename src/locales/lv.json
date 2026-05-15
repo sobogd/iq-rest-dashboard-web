@@ -316,7 +316,10 @@
       "fromTime": "No {time}",
       "createdLabel": "Izveidots",
       "noActiveTitle": "Nav aktīvu pasūtījumu",
-      "noActiveBody": "Jaunie pasūtījumi parādīsies šeit."
+      "noActiveBody": "Jaunie pasūtījumi parādīsies šeit.",
+      "disabledTitle": "Pasūtījumi ir izslēgti",
+      "disabledBody": "Iespējojiet pasūtījumus iestatījumos, lai sāktu tos saņemt.",
+      "disabledCta": "Doties uz iestatījumiem"
     },
     "reservations": {
       "title": "Rezervācijas",

@@ -316,7 +316,10 @@
       "fromTime": "Od {time}",
       "createdLabel": "Utworzono",
       "noActiveTitle": "Brak aktywnych zamówień",
-      "noActiveBody": "Nowe zamówienia pojawią się tutaj."
+      "noActiveBody": "Nowe zamówienia pojawią się tutaj.",
+      "disabledTitle": "Zamówienia są wyłączone",
+      "disabledBody": "Włącz zamówienia w ustawieniach, aby zacząć je przyjmować.",
+      "disabledCta": "Przejdź do ustawień"
     },
     "reservations": {
       "title": "Rezerwacje",

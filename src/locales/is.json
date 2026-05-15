@@ -316,7 +316,10 @@
       "fromTime": "Frá {time}",
       "createdLabel": "Búið til",
       "noActiveTitle": "Engar virkar pantanir",
-      "noActiveBody": "Nýjar pantanir munu birtast hér."
+      "noActiveBody": "Nýjar pantanir munu birtast hér.",
+      "disabledTitle": "Pantanir eru óvirkar",
+      "disabledBody": "Virkjaðu pantanir í stillingum til að byrja að taka við þeim.",
+      "disabledCta": "Fara í stillingar"
     },
     "reservations": {
       "title": "Bókanir",

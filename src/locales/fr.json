@@ -316,7 +316,10 @@
       "fromTime": "Dès {time}",
       "createdLabel": "Créé",
       "noActiveTitle": "Aucune commande active",
-      "noActiveBody": "Les nouvelles commandes apparaîtront ici."
+      "noActiveBody": "Les nouvelles commandes apparaîtront ici.",
+      "disabledTitle": "Les commandes sont désactivées",
+      "disabledBody": "Activez les commandes dans les paramètres pour commencer à les recevoir.",
+      "disabledCta": "Aller aux paramètres"
     },
     "reservations": {
       "title": "Réservations",

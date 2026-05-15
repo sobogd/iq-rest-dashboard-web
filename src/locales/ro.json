@@ -316,7 +316,10 @@
       "fromTime": "De la {time}",
       "createdLabel": "Creat",
       "noActiveTitle": "Nicio comandă activă",
-      "noActiveBody": "Comenzile noi vor apărea aici."
+      "noActiveBody": "Comenzile noi vor apărea aici.",
+      "disabledTitle": "Comenzile sunt dezactivate",
+      "disabledBody": "Activează comenzile în setări pentru a începe să le primești.",
+      "disabledCta": "Mergi la setări"
     },
     "reservations": {
       "title": "Rezervări",

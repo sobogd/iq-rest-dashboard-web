@@ -316,7 +316,10 @@
       "fromTime": "От {time}",
       "createdLabel": "Создан",
       "noActiveTitle": "Нет активных заказов",
-      "noActiveBody": "Новые заказы появятся здесь."
+      "noActiveBody": "Новые заказы появятся здесь.",
+      "disabledTitle": "Заказы отключены",
+      "disabledBody": "Включите заказы в настройках, чтобы начать их принимать.",
+      "disabledCta": "Перейти в настройки"
     },
     "reservations": {
       "title": "Бронирования",

@@ -316,7 +316,10 @@
       "fromTime": "{time}'den",
       "createdLabel": "Oluşturuldu",
       "noActiveTitle": "Aktif sipariş yok",
-      "noActiveBody": "Yeni siparişler burada görünecek."
+      "noActiveBody": "Yeni siparişler burada görünecek.",
+      "disabledTitle": "Siparişler kapalı",
+      "disabledBody": "Sipariş almak için ayarlardan siparişleri etkinleştirin.",
+      "disabledCta": "Ayarlara git"
     },
     "reservations": {
       "title": "Rezervasyonlar",

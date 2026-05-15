@@ -316,7 +316,10 @@
       "fromTime": "Från {time}",
       "createdLabel": "Skapad",
       "noActiveTitle": "Inga aktiva beställningar",
-      "noActiveBody": "Nya beställningar visas här."
+      "noActiveBody": "Nya beställningar visas här.",
+      "disabledTitle": "Beställningar är inaktiverade",
+      "disabledBody": "Aktivera beställningar i inställningar för att börja ta emot dem.",
+      "disabledCta": "Gå till inställningar"
     },
     "reservations": {
       "title": "Bokningar",

@@ -316,7 +316,10 @@
       "fromTime": "Dalle {time}",
       "createdLabel": "Creato",
       "noActiveTitle": "Nessun ordine attivo",
-      "noActiveBody": "I nuovi ordini appariranno qui."
+      "noActiveBody": "I nuovi ordini appariranno qui.",
+      "disabledTitle": "Gli ordini sono disattivati",
+      "disabledBody": "Attiva gli ordini nelle impostazioni per iniziare a riceverli.",
+      "disabledCta": "Vai alle impostazioni"
     },
     "reservations": {
       "title": "Prenotazioni",

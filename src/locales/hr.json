@@ -316,7 +316,10 @@
       "fromTime": "Od {time}",
       "createdLabel": "Stvoreno",
       "noActiveTitle": "Nema aktivnih narudžbi",
-      "noActiveBody": "Nove narudžbe će se prikazati ovdje."
+      "noActiveBody": "Nove narudžbe će se prikazati ovdje.",
+      "disabledTitle": "Narudžbe su onemogućene",
+      "disabledBody": "Omogući narudžbe u postavkama da ih počneš primati.",
+      "disabledCta": "Idi u postavke"
     },
     "reservations": {
       "title": "Rezervacije",

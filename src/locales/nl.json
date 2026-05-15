@@ -316,7 +316,10 @@
       "fromTime": "Vanaf {time}",
       "createdLabel": "Aangemaakt",
       "noActiveTitle": "Geen actieve bestellingen",
-      "noActiveBody": "Nieuwe bestellingen verschijnen hier."
+      "noActiveBody": "Nieuwe bestellingen verschijnen hier.",
+      "disabledTitle": "Bestellingen zijn uitgeschakeld",
+      "disabledBody": "Schakel bestellingen in via instellingen om ze te ontvangen.",
+      "disabledCta": "Naar instellingen"
     },
     "reservations": {
       "title": "Reserveringen",

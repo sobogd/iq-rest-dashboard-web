@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useRestaurant } from "./restaurant-context";
+import { useDashboardRouter } from "../_spa/router";
 import {
  CheckIcon,
  ChevronLeftIcon,
@@ -117,6 +119,8 @@ export function OrdersPage({
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
  const router = useRouter();
+ const restaurant = useRestaurant();
+ const dashRouter = useDashboardRouter();
  const currencySymbol = currencySymbolOf(currency);
 
  const NO_TABLE = "__no_table__";
@@ -365,6 +369,25 @@ export function OrdersPage({
  const items = [...order.items, newItem];
  persistOrder(orderId, { items });
  setView({ kind: "order", orderId });
+ }
+
+ if (!restaurant.orderSettings.acceptOrders) {
+ return (
+ <div className="max-w-5xl mx-auto md:px-6">
+ <PageHeader title={t("title")} />
+ <div className="bg-card border border-border rounded-2xl px-6 py-12 flex flex-col items-center text-center">
+ <div className="text-sm font-semibold text-foreground mb-2">{t("disabledTitle")}</div>
+ <p className="text-sm text-muted-foreground mb-6 max-w-md leading-relaxed">{t("disabledBody")}</p>
+ <button
+ type="button"
+ onClick={() => dashRouter.push({ name: "settings.orders" })}
+ className="inline-flex items-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+ >
+ {t("disabledCta")}
+ </button>
+ </div>
+ </div>
+ );
  }
 
  if (tables.length === 0) {

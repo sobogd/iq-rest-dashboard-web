@@ -316,7 +316,10 @@
       "fromTime": "{time}부터",
       "createdLabel": "생성",
       "noActiveTitle": "활성 주문 없음",
-      "noActiveBody": "새 주문이 여기에 표시됩니다."
+      "noActiveBody": "새 주문이 여기에 표시됩니다.",
+      "disabledTitle": "주문이 비활성화되어 있습니다",
+      "disabledBody": "주문을 받으려면 설정에서 활성화하세요.",
+      "disabledCta": "설정으로 이동"
     },
     "reservations": {
       "title": "예약",

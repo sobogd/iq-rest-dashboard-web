@@ -316,7 +316,10 @@
       "fromTime": "من {time}",
       "createdLabel": "تم الإنشاء",
       "noActiveTitle": "لا توجد طلبات نشطة",
-      "noActiveBody": "ستظهر الطلبات الجديدة هنا."
+      "noActiveBody": "ستظهر الطلبات الجديدة هنا.",
+      "disabledTitle": "الطلبات معطلة",
+      "disabledBody": "قم بتفعيل الطلبات في الإعدادات لتبدأ في استلامها.",
+      "disabledCta": "اذهب إلى الإعدادات"
     },
     "reservations": {
       "title": "الحجوزات",

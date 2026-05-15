@@ -316,7 +316,10 @@
       "fromTime": "Fra {time}",
       "createdLabel": "Opprettet",
       "noActiveTitle": "Ingen aktive bestillinger",
-      "noActiveBody": "Nye bestillinger vises her."
+      "noActiveBody": "Nye bestillinger vises her.",
+      "disabledTitle": "Bestillinger er deaktivert",
+      "disabledBody": "Aktiver bestillinger i innstillinger for å begynne å motta dem.",
+      "disabledCta": "Gå til innstillinger"
     },
     "reservations": {
       "title": "Bookinger",

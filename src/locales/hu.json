@@ -316,7 +316,10 @@
       "fromTime": "Tól {time}",
       "createdLabel": "Létrehozva",
       "noActiveTitle": "Nincs aktív rendelés",
-      "noActiveBody": "Az új rendelések itt jelennek meg."
+      "noActiveBody": "Az új rendelések itt jelennek meg.",
+      "disabledTitle": "A rendelések le vannak tiltva",
+      "disabledBody": "Engedélyezd a rendeléseket a beállításokban, hogy fogadhasd őket.",
+      "disabledCta": "Ugrás a beállításokra"
     },
     "reservations": {
       "title": "Foglalások",

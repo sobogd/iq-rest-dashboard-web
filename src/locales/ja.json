@@ -316,7 +316,10 @@
       "fromTime": "{time}から",
       "createdLabel": "作成",
       "noActiveTitle": "アクティブな注文はありません",
-      "noActiveBody": "新しい注文はここに表示されます。"
+      "noActiveBody": "新しい注文はここに表示されます。",
+      "disabledTitle": "注文は無効です",
+      "disabledBody": "注文を受け付けるには、設定で有効にしてください。",
+      "disabledCta": "設定を開く"
     },
     "reservations": {
       "title": "予約",

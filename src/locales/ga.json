@@ -316,7 +316,10 @@
       "fromTime": "Ó {time}",
       "createdLabel": "Cruthaithe",
       "noActiveTitle": "Gan orduithe gníomhacha",
-      "noActiveBody": "Tiocfaidh orduithe nua le feiceáil anseo."
+      "noActiveBody": "Tiocfaidh orduithe nua le feiceáil anseo.",
+      "disabledTitle": "Tá orduithe díchumasaithe",
+      "disabledBody": "Cumasaigh orduithe sna socruithe chun tús a chur leo a fháil.",
+      "disabledCta": "Téigh chuig na socruithe"
     },
     "reservations": {
       "title": "Áirithintí",
