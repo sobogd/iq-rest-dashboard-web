@@ -283,17 +283,20 @@ export function OrdersPage({
 
  // Лениво создаём заказ, когда сохраняется первое блюдо.
  async function ensureOrderForFirstItem(): Promise<Order | null> {
- if (!activeTableId || activeTableId === NO_TABLE) return null;
- const table = tables.find((tbl) => tbl.id === activeTableId);
+ if (!activeTableId) return null;
+ let table: TableEntity | null = null;
+ if (activeTableId !== NO_TABLE) {
+ table = tables.find((tbl) => tbl.id === activeTableId) ?? null;
  if (!table) return null;
+ }
  if (creating) return null;
  setCreating(true);
  try {
- const created = await createOrder({ tableNumber: table.number });
+ const created = await createOrder(table ? { tableNumber: table.number } : {});
  const newOrder: Order = {
  id: created.id,
- tableId: table.id,
- tableNumber: table.number,
+ tableId: table?.id ?? null,
+ tableNumber: table?.number ?? null,
  dailyNumber: created.dailyNumber,
  guestName: "",
  createdAt: created.createdAt,
@@ -409,21 +412,6 @@ export function OrdersPage({
  );
  }
 
- if (tables.length === 0) {
- return (
- <div className="max-w-2xl mx-auto" onClick={() => track("dash_orders_click_map_empty")}>
- <PageHeader
- title={t("title")}
- subtitle={
- activeOrders.length === 1
- ? t("subtitleOne", { count: activeOrders.length })
- : t("subtitleOther", { count: activeOrders.length })
- }
- />
- <EmptyState title={t("noTablesTitle")} subtitle={t("noTablesSub")} />
- </div>
- );
- }
 
  // Заголовок, подзаголовок, контент и футер модалки зависят от уровня.
  let modalTitle: React.ReactNode = "";
@@ -528,6 +516,7 @@ export function OrdersPage({
  onClick={() => setMoreOpen(false)}
  />
  <div className="absolute left-0 bottom-full mb-2 z-50 min-w-[180px] bg-card border border-border rounded-lg shadow-lg overflow-hidden">
+ {tables.length > 0 ? (
  <button
  type="button"
  onClick={() => {
@@ -539,6 +528,7 @@ export function OrdersPage({
  <SwapIcon size={13} />
  {t("changeTable", { defaultValue: "Change table" })}
  </button>
+ ) : null}
  <button
  type="button"
  onClick={() => {
@@ -633,11 +623,24 @@ export function OrdersPage({
  setView({ kind: "order", orderId: order.id });
  }
 
+ const hasTables = tables.length > 0;
+
+ // Tableless restaurants (delivery, takeaway-only, kiosks) still need to
+ // place orders — render a list-only view with a "New order" button that
+ // skips table selection entirely.
+ function startTablelessOrder() {
+ track("dash_orders_click_new_no_table");
+ setActiveTableId(NO_TABLE);
+ setOpenedFrom("list");
+ setView({ kind: "addItem", step: "category" });
+ }
+
  return (
  <div className="max-w-5xl mx-auto md:px-6">
- <PageHeader title={t("title")} subtitle={t("tapTable")} />
+ <PageHeader title={t("title")} subtitle={hasTables ? t("tapTable") : undefined} />
 
- <div className="lg:flex lg:gap-4 lg:items-start">
+ <div className={hasTables ? "lg:flex lg:gap-4 lg:items-start" : ""}>
+ {hasTables ? (
  <div
  className="aspect-square mx-auto lg:mx-0 lg:shrink-0 w-full lg:w-auto lg:h-[var(--map-h)]"
  style={{ "--map-h": mapHeight } as React.CSSProperties}
@@ -656,8 +659,20 @@ export function OrdersPage({
  wide
  />
  </div>
+ ) : null}
 
- <div className="lg:flex-1 lg:min-w-0 mt-4 lg:mt-0">
+ <div className={(hasTables ? "lg:flex-1 lg:min-w-0 mt-4 lg:mt-0" : "mt-4") + " flex flex-col gap-3"}>
+ {!hasTables ? (
+ <button
+ type="button"
+ onClick={startTablelessOrder}
+ disabled={creating}
+ className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition disabled:opacity-50"
+ >
+ <PlusIcon size={16} className="mr-1.5" />
+ {t("newOrder")}
+ </button>
+ ) : null}
  {activeOrders.length === 0 ? (
  <div className="w-full h-full min-h-[200px] flex items-center justify-center bg-card border border-border rounded-xl px-6 py-10 text-center">
  <div>
