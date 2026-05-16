@@ -150,6 +150,19 @@ interface ImageAsset {
   height?: number;
 }
 
+interface StrategyRow {
+  key: string;
+  name: string;
+  type: string;
+  status: string | null;
+  isPortfolio: boolean;
+  campaignCount: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  cost: number;
+}
+
 interface AllData {
   campaigns: CampaignRow[];
   adGroups: AdGroupRow[];
@@ -157,6 +170,7 @@ interface AllData {
   keywords: KeywordRow[];
   negatives: NegativeRow[];
   timeline: TimelineBucket[];
+  strategies?: StrategyRow[];
   campaignAssets: Record<string, CampAssets>;
   campaignTargeting: Record<string, CampaignTargeting>;
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
@@ -390,6 +404,11 @@ export function GoogleAdsPage() {
             {filtered.campaigns.length > 0 ? (
               <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
                 <TotalAndTimeline campaigns={filtered.campaigns} timeline={data?.timeline ?? []} />
+              </div>
+            ) : null}
+            {data?.strategies && data.strategies.length > 0 ? (
+              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+                <StrategiesSummary strategies={data.strategies} />
               </div>
             ) : null}
           </>
@@ -860,6 +879,41 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
           <MetricPill icon={<Euro className="w-3 h-3" />} value={b.cost.toFixed(2)} label="cost €" />
         </div>
       ))}
+    </>
+  );
+}
+
+// Aggregate metrics per bid strategy across the selected date range.
+// Sits beneath the TotalAndTimeline block on the campaigns view —
+// surfaces how each portfolio / inline strategy is performing without
+// having to drill into each campaign individually. Includes strategies
+// from paused campaigns (status filter is REMOVED-only on the API
+// side) so historical comparisons stay intact.
+function StrategiesSummary({ strategies }: { strategies: StrategyRow[] }) {
+  return (
+    <>
+      {strategies.map((s) => {
+        const cpa = s.conversions > 0 ? (s.cost / s.conversions).toFixed(2) : "—";
+        const tagClass = s.isPortfolio
+          ? "bg-amber-500/10 text-amber-500"
+          : "bg-muted text-muted-foreground";
+        const statusBadge = s.status && s.status !== "ENABLED"
+          ? ` · ${s.status}`
+          : "";
+        const subtype = s.isPortfolio ? "portfolio" : "inline";
+        return (
+          <div key={s.key} className="px-3 py-2 flex items-center gap-1.5 flex-wrap min-w-0">
+            <span className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider ${tagClass}`} title={`${s.type}${statusBadge} · ${subtype} · ${s.campaignCount} campaign(s)`}>
+              {s.name}
+            </span>
+            <MetricPill icon={<Eye className="w-3 h-3" />} value={s.impressions} label="impressions" width="wide" />
+            <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={s.clicks} label="clicks" width="narrow" />
+            <MetricPill icon={<UserPlus className="w-3 h-3" />} value={s.conversions} label="conversions" highlight={s.conversions > 0} width="narrow" />
+            <MetricPill icon={<Euro className="w-3 h-3" />} value={s.cost.toFixed(2)} label="cost €" />
+            <MetricPill icon={<Gauge className="w-3 h-3" />} value={cpa} label="CPA €" />
+          </div>
+        );
+      })}
     </>
   );
 }
