@@ -942,7 +942,7 @@ function StrategiesSummary({
             <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={s.clicks} label="clicks" width="narrow" />
             <MetricPill icon={<UserPlus className="w-3 h-3" />} value={s.conversions} label="conversions" highlight={s.conversions > 0} width="narrow" />
             <MetricPill icon={<Euro className="w-3 h-3" />} value={s.cost.toFixed(2)} label="cost €" />
-            <MetricPill icon={<Gauge className="w-3 h-3" />} value={cpa} label="CPA €" />
+            <MetricPill icon={<Coins className="w-3 h-3" />} value={cpa} label="CPA €" />
           </div>
         );
       })}
