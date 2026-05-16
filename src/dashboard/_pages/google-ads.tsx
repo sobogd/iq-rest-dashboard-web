@@ -150,17 +150,12 @@ interface ImageAsset {
   height?: number;
 }
 
-interface StrategyRow {
+interface StrategyMeta {
   key: string;
   name: string;
   type: string;
   status: string | null;
   isPortfolio: boolean;
-  campaignCount: number;
-  impressions: number;
-  clicks: number;
-  conversions: number;
-  cost: number;
 }
 
 interface AllData {
@@ -170,7 +165,7 @@ interface AllData {
   keywords: KeywordRow[];
   negatives: NegativeRow[];
   timeline: TimelineBucket[];
-  strategies?: StrategyRow[];
+  campaignStrategies?: Record<string, StrategyMeta>;
   campaignAssets: Record<string, CampAssets>;
   campaignTargeting: Record<string, CampaignTargeting>;
   searchTermsByAdGroup: Record<string, SearchTerm[]>;
@@ -406,9 +401,12 @@ export function GoogleAdsPage() {
                 <TotalAndTimeline campaigns={filtered.campaigns} timeline={data?.timeline ?? []} />
               </div>
             ) : null}
-            {data?.strategies && data.strategies.length > 0 ? (
+            {filtered.campaigns.length > 0 && data?.campaignStrategies ? (
               <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-                <StrategiesSummary strategies={data.strategies} />
+                <StrategiesSummary
+                  campaigns={filtered.campaigns}
+                  campaignStrategies={data.campaignStrategies}
+                />
               </div>
             ) : null}
           </>
@@ -883,27 +881,61 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
   );
 }
 
-// Aggregate metrics per bid strategy across the selected date range.
-// Sits beneath the TotalAndTimeline block on the campaigns view —
-// surfaces how each portfolio / inline strategy is performing without
-// having to drill into each campaign individually. Includes strategies
-// from paused campaigns (status filter is REMOVED-only on the API
-// side) so historical comparisons stay intact.
-function StrategiesSummary({ strategies }: { strategies: StrategyRow[] }) {
+// Aggregate metrics per bid strategy from the *filtered* campaign list
+// — so when the top-level status filter flips ENABLED ↔ PAUSED the
+// strategy totals follow. Campaign → strategy mapping comes from the
+// API (campaignStrategies); the metrics themselves come from the
+// already-filtered CampaignRow array, which keeps everything in sync.
+function StrategiesSummary({
+  campaigns,
+  campaignStrategies,
+}: {
+  campaigns: CampaignRow[];
+  campaignStrategies: Record<string, StrategyMeta>;
+}) {
+  type Row = StrategyMeta & {
+    impressions: number;
+    clicks: number;
+    conversions: number;
+    cost: number;
+    campaignCount: number;
+  };
+  const byKey = new Map<string, Row>();
+  for (const c of campaigns) {
+    const meta = campaignStrategies[c.id];
+    if (!meta) continue;
+    const cur = byKey.get(meta.key) ?? {
+      ...meta,
+      impressions: 0,
+      clicks: 0,
+      conversions: 0,
+      cost: 0,
+      campaignCount: 0,
+    };
+    cur.impressions += c.impressions;
+    cur.clicks += c.clicks;
+    cur.conversions += c.conversions;
+    cur.cost += c.cost;
+    cur.campaignCount += 1;
+    byKey.set(meta.key, cur);
+  }
+  const rows = Array.from(byKey.values()).sort((a, b) => b.cost - a.cost);
+  if (rows.length === 0) return null;
   return (
     <>
-      {strategies.map((s) => {
+      {rows.map((s) => {
         const cpa = s.conversions > 0 ? (s.cost / s.conversions).toFixed(2) : "—";
         const tagClass = s.isPortfolio
           ? "bg-amber-500/10 text-amber-500"
           : "bg-muted text-muted-foreground";
-        const statusBadge = s.status && s.status !== "ENABLED"
-          ? ` · ${s.status}`
-          : "";
+        const statusBadge = s.status && s.status !== "ENABLED" ? ` · ${s.status}` : "";
         const subtype = s.isPortfolio ? "portfolio" : "inline";
         return (
           <div key={s.key} className="px-3 py-2 flex items-center gap-1.5 flex-wrap min-w-0">
-            <span className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider ${tagClass}`} title={`${s.type}${statusBadge} · ${subtype} · ${s.campaignCount} campaign(s)`}>
+            <span
+              className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider ${tagClass}`}
+              title={`${s.type}${statusBadge} · ${subtype} · ${s.campaignCount} campaign(s)`}
+            >
               {s.name}
             </span>
             <MetricPill icon={<Eye className="w-3 h-3" />} value={s.impressions} label="impressions" width="wide" />
