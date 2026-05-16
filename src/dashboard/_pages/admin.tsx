@@ -20,6 +20,7 @@ interface Company {
   categoriesCount: number;
   itemsCount: number;
   messagesCount: number;
+  messagesLastDayCount: number;
   monthlyViews: number;
   todayScans: number;
   scans45d: number;
@@ -266,6 +267,9 @@ export function AdminPage() {
                       {company.itemsCount}
                     </span>
                     {scanDetails ? (
+                      // Eye toggle ON — surface every scan bucket and hide
+                      // messages/emails/lastVisit so the row reads as a
+                      // pure traffic snapshot.
                       <>
                         <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Scans today (1d)">
                           <EyeIcon size={10} />
@@ -289,35 +293,32 @@ export function AdminPage() {
                         </span>
                       </>
                     ) : (
+                      // Eye toggle OFF — primary moderation signals:
+                      // total messages (red), last-24h messages (green),
+                      // email templates sent.
                       <>
-                        {company.monthlyViews > 0 ? (
-                          <span className="inline-flex items-center gap-0.5 text-blue-500" title="Scans, last 30 days">
-                            <EyeIcon size={10} />
-                            {company.monthlyViews}
+                        {company.messagesCount > 0 ? (
+                          <span className="inline-flex items-center gap-0.5 text-red-500 font-medium" title="Support messages — total">
+                            <MessageIcon size={10} />
+                            {company.messagesCount}
                           </span>
                         ) : null}
-                        {company.todayScans > 0 ? (
-                          <span className="inline-flex items-center gap-0.5 text-emerald-600" title="Scans today">
-                            <EyeIcon size={10} />
-                            {company.todayScans}
+                        {company.messagesLastDayCount > 0 ? (
+                          <span className="inline-flex items-center gap-0.5 text-emerald-600 font-medium" title="Support messages — last 24h">
+                            <MessageIcon size={10} />
+                            {company.messagesLastDayCount}
+                          </span>
+                        ) : null}
+                        {company.emailsSentCount > 0 ? (
+                          <span className="inline-flex items-center gap-0.5 text-amber-500" title="Email templates sent">
+                            <Mail size={10} />
+                            {company.emailsSentCount}
                           </span>
                         ) : null}
                       </>
                     )}
-                    {company.messagesCount > 0 ? (
-                      <span className="inline-flex items-center gap-0.5 text-red-500 font-medium">
-                        <MessageIcon size={10} />
-                        {company.messagesCount}
-                      </span>
-                    ) : null}
-                    {company.emailsSentCount > 0 ? (
-                      <span className="inline-flex items-center gap-0.5 text-amber-500" title="Email templates sent">
-                        <Mail size={10} />
-                        {company.emailsSentCount}
-                      </span>
-                    ) : null}
                   </span>
-                  {company.lastVisit ? (
+                  {!scanDetails && company.lastVisit ? (
                     <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
                       {formatDateShort(company.lastVisit)}
                     </span>
