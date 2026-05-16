@@ -156,6 +156,15 @@ interface StrategyMeta {
   type: string;
   status: string | null;
   isPortfolio: boolean;
+  targetCpaMicros?: number | null;
+  cpcBidCeilingMicros?: number | null;
+}
+
+interface StrategyBidEditRequest {
+  strategyId: string;
+  name: string;
+  targetCpaMicros: number | null;
+  cpcBidCeilingMicros: number | null;
 }
 
 interface AllData {
@@ -268,6 +277,7 @@ export function GoogleAdsPage() {
   const [plannerOpen, setPlannerOpen] = useState(false);
   const plannerState = usePlannerState();
   const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
+  const [strategyBidReq, setStrategyBidReq] = useState<StrategyBidEditRequest | null>(null);
   const [qsReq, setQsReq] = useState<{ adGroupId: string; critId: string; keyword: string; matchType?: string } | null>(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [addKwAdGroupId, setAddKwAdGroupId] = useState<string | null>(null);
@@ -406,6 +416,7 @@ export function GoogleAdsPage() {
                 <StrategiesSummary
                   campaigns={filtered.campaigns}
                   campaignStrategies={data.campaignStrategies}
+                  onEditBids={(req) => setStrategyBidReq(req)}
                 />
               </div>
             ) : null}
@@ -467,6 +478,7 @@ export function GoogleAdsPage() {
             onView={(req) => setDetailReq(req)}
             adGroupId={view.adGroupId}
             campaignId={view.campaignId}
+            campaignIsPortfolio={Boolean(data?.campaignStrategies?.[view.campaignId]?.isPortfolio)}
             onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
             onBidEdit={(k) => setBidEditReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, currentBid: k.bid ?? null })}
             onQsOpen={(k) => setQsReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, matchType: k.matchType })}
@@ -526,6 +538,7 @@ export function GoogleAdsPage() {
         />
       ) : null}
       {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
+      {strategyBidReq ? <StrategyBidEditModal req={strategyBidReq} onClose={() => setStrategyBidReq(null)} onSaved={() => { setStrategyBidReq(null); void load("refresh"); }} /> : null}
       {qsReq ? <KeywordQsModal req={qsReq} onClose={() => setQsReq(null)} /> : null}
       {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
       {adGroupFormReq ? (
@@ -639,6 +652,7 @@ function AdGroupDetail({
   adGroupId,
   onKeywordOpen,
   onBidEdit,
+  campaignIsPortfolio,
   onQsOpen,
   onDeleteKeyword,
   searchTerms,
@@ -651,6 +665,11 @@ function AdGroupDetail({
   onView: (req: DetailRequest) => void;
   adGroupId: string;
   campaignId: string;
+  /** When the parent campaign uses a portfolio bid strategy, the
+   *  keyword-level CPC bid has no effect — the portfolio overrides it.
+   *  We hide the inline bid edit pill so visitors don't twiddle a knob
+   *  that does nothing. */
+  campaignIsPortfolio: boolean;
   onKeywordOpen: (k: KeywordRow) => void;
   onBidEdit: (k: KeywordRow) => void;
   onQsOpen: (k: KeywordRow) => void;
@@ -715,15 +734,17 @@ function AdGroupDetail({
                     <Gauge className="w-3 h-3" />
                     {k.qualityScore ?? "—"}
                   </button>
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); onBidEdit(k); }}
-                    title="Edit bid"
-                    className="shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-colors cursor-pointer tabular-nums min-w-[64px]"
-                  >
-                    <Coins className="w-3 h-3" />
-                    {k.bid != null ? k.bid.toFixed(2) : "—"}
-                  </button>
+                  {campaignIsPortfolio ? null : (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); onBidEdit(k); }}
+                      title="Edit bid"
+                      className="shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-colors cursor-pointer tabular-nums min-w-[64px]"
+                    >
+                      <Coins className="w-3 h-3" />
+                      {k.bid != null ? k.bid.toFixed(2) : "—"}
+                    </button>
+                  )}
                 </div>
               </div>
               );
@@ -889,9 +910,11 @@ function TotalAndTimeline({ campaigns, timeline }: { campaigns: CampaignRow[]; t
 function StrategiesSummary({
   campaigns,
   campaignStrategies,
+  onEditBids,
 }: {
   campaigns: CampaignRow[];
   campaignStrategies: Record<string, StrategyMeta>;
+  onEditBids: (req: StrategyBidEditRequest) => void;
 }) {
   type Row = StrategyMeta & {
     impressions: number;
@@ -930,6 +953,22 @@ function StrategiesSummary({
           : "bg-muted text-muted-foreground";
         const statusBadge = s.status && s.status !== "ENABLED" ? ` · ${s.status}` : "";
         const subtype = s.isPortfolio ? "portfolio" : "inline";
+        // Only portfolio TARGET_CPA strategies expose editable tCPA +
+        // Max-CPC pills; inline / other strategy types don't have these
+        // fields server-side.
+        const editable = s.isPortfolio && s.type === "TARGET_CPA";
+        const strategyId = s.isPortfolio ? s.key.split("/").pop() ?? "" : "";
+        const tcpaEur = s.targetCpaMicros != null ? (s.targetCpaMicros / 1_000_000).toFixed(2) : "—";
+        const capEur = s.cpcBidCeilingMicros != null ? (s.cpcBidCeilingMicros / 1_000_000).toFixed(2) : "—";
+        const openEditor = () => {
+          if (!editable || !strategyId) return;
+          onEditBids({
+            strategyId,
+            name: s.name,
+            targetCpaMicros: s.targetCpaMicros ?? null,
+            cpcBidCeilingMicros: s.cpcBidCeilingMicros ?? null,
+          });
+        };
         return (
           <div key={s.key} className="px-3 py-2 flex items-center gap-1.5 flex-wrap min-w-0">
             <span
@@ -943,10 +982,138 @@ function StrategiesSummary({
             <MetricPill icon={<UserPlus className="w-3 h-3" />} value={s.conversions} label="conversions" highlight={s.conversions > 0} width="narrow" />
             <MetricPill icon={<Euro className="w-3 h-3" />} value={s.cost.toFixed(2)} label="cost €" />
             <MetricPill icon={<Coins className="w-3 h-3" />} value={cpa} label="CPA €" />
+            {editable ? (
+              <>
+                <button
+                  type="button"
+                  onClick={openEditor}
+                  title="Edit target CPA"
+                  className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-colors cursor-pointer tabular-nums min-w-[72px]"
+                >
+                  <Coins className="w-3 h-3" />
+                  tCPA {tcpaEur}
+                </button>
+                <button
+                  type="button"
+                  onClick={openEditor}
+                  title="Edit Max CPC bid ceiling"
+                  className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-colors cursor-pointer tabular-nums min-w-[72px]"
+                >
+                  <Coins className="w-3 h-3" />
+                  Max {capEur}
+                </button>
+              </>
+            ) : null}
           </div>
         );
       })}
     </>
+  );
+}
+
+function StrategyBidEditModal({
+  req,
+  onClose,
+  onSaved,
+}: {
+  req: StrategyBidEditRequest;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  useScrollLock(true);
+  const [tcpaInput, setTcpaInput] = useState(req.targetCpaMicros != null ? (req.targetCpaMicros / 1_000_000).toFixed(2) : "");
+  const [capInput, setCapInput] = useState(req.cpcBidCeilingMicros != null ? (req.cpcBidCeilingMicros / 1_000_000).toFixed(2) : "");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const tcpa = parseBid(tcpaInput);
+  const cap = parseBid(capInput);
+  // Allow either field on its own — leave blank to keep current value.
+  // The button enables only when at least one value is positive AND
+  // both touched fields are positive (no zero/negative numbers).
+  const tcpaTouched = tcpaInput.trim() !== "";
+  const capTouched = capInput.trim() !== "";
+  const tcpaValid = !tcpaTouched || (tcpa != null && tcpa > 0);
+  const capValid = !capTouched || (cap != null && cap > 0);
+  const canSave = (tcpaTouched || capTouched) && tcpaValid && capValid && !saving;
+
+  async function save() {
+    if (!canSave) return;
+    setSaving(true);
+    setError(null);
+    try {
+      const body: { targetCpaMicros?: number; cpcBidCeilingMicros?: number } = {};
+      if (tcpaTouched && tcpa != null) body.targetCpaMicros = Math.round(tcpa * 1_000_000);
+      if (capTouched && cap != null) body.cpcBidCeilingMicros = Math.round(cap * 1_000_000);
+      const res = await fetch(
+        apiUrl(`/api/admin/google-ads/strategy/${req.strategyId}/bid`),
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        },
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
+        return;
+      }
+      onSaved();
+    } catch (e: any) {
+      setError(String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl flex flex-col">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
+          <h3 className="text-sm font-semibold text-foreground truncate" title={req.name}>
+            Edit strategy — {req.name}
+          </h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+            <XIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <form
+          onSubmit={(e) => { e.preventDefault(); void save(); }}
+          className="p-4 space-y-3"
+        >
+          <FormLabel label="Target CPA (€)">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={tcpaInput}
+              onChange={(e) => setTcpaInput(e.target.value.replace(/[^0-9.,]/g, ""))}
+              placeholder="25.00"
+              autoFocus
+              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+            />
+          </FormLabel>
+          <FormLabel label="Max CPC bid ceiling (€)">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={capInput}
+              onChange={(e) => setCapInput(e.target.value.replace(/[^0-9.,]/g, ""))}
+              placeholder="2.20"
+              className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary tabular-nums"
+            />
+          </FormLabel>
+          {error ? <div className="text-xs text-red-500">{error}</div> : null}
+          <button
+            type="submit"
+            disabled={!canSave}
+            className="w-full h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+          >
+            {saving ? "Saving…" : "Save"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
 
