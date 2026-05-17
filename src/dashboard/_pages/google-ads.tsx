@@ -757,16 +757,11 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
     setMap(initial);
     if (toFetch.length === 0) return;
 
-    // Sequential, not Promise.all — Google Ads API rate-limits concurrent
-    // generateKeywordIdeas calls on the same customer and silently returns
-    // empty metrics on the throttled requests (looks like "no data" in
-    // the chip when the modal — running one query at a time — gets data
-    // for the exact same keyword). One request at a time, small gap
-    // between them, update the map as each completes so the user sees
-    // chips fill in progressively.
-    void (async () => {
-      for (const text of toFetch) {
-        if (cancelled) return;
+    // Fire all keyword requests at once. Update the chip map as each
+    // response lands so chips fill in independently — a slow keyword
+    // doesn't hold up the rest.
+    for (const text of toFetch) {
+      void (async () => {
         let range: CpcRange | null = null;
         try {
           const qs = new URLSearchParams({ phrase: text, geo: geos.join(",") });
@@ -781,7 +776,7 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
             if (low != null && high != null) range = { lowMicros: low, highMicros: high };
           }
         } catch {
-          // network/parse error — leave as missing, no retry.
+          // network/parse error — leave as missing.
         }
         if (cancelled) return;
         setMap((prev) => {
@@ -789,9 +784,8 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
           updated.set(text, range ?? "missing");
           return updated;
         });
-        await new Promise((r) => setTimeout(r, 250));
-      }
-    })();
+      })();
+    }
 
     return () => { cancelled = true; };
   }, [sig, geosKey]); // eslint-disable-line react-hooks/exhaustive-deps
