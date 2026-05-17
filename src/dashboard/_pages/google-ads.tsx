@@ -264,6 +264,85 @@ const TAG_COLOR = {
 };
 
 
+// Merge a scoped /all response into the previously-loaded payload so
+// the dashboard can drill into a campaign or ad group without losing
+// data already on screen. Lists are replaced per-scope (e.g. ad groups
+// of the same campaignId get swapped); maps merge by key.
+function mergeScoped(prev: AllData | null, incoming: AllData, view: View): AllData {
+  if (!prev) return incoming;
+  if (view.kind === "campaigns") {
+    // Replace top-level lists and merge maps. Keep deeper drill-down
+    // data in case the user navigates back into it without a fresh
+    // fetch.
+    return {
+      ...prev,
+      campaigns: incoming.campaigns ?? prev.campaigns,
+      timeline: incoming.timeline ?? prev.timeline,
+      campaignStrategies: { ...prev.campaignStrategies, ...incoming.campaignStrategies },
+      campaignTargeting: { ...prev.campaignTargeting, ...incoming.campaignTargeting },
+    };
+  }
+  if (view.kind === "campaign") {
+    const cid = view.campaignId;
+    return {
+      ...prev,
+      campaigns: incoming.campaigns ?? prev.campaigns,
+      timeline: incoming.timeline ?? prev.timeline,
+      campaignStrategies: { ...prev.campaignStrategies, ...incoming.campaignStrategies },
+      campaignTargeting: { ...prev.campaignTargeting, ...incoming.campaignTargeting },
+      campaignAssets: { ...prev.campaignAssets, ...incoming.campaignAssets },
+      adGroups: [
+        ...prev.adGroups.filter((a) => a.campaignId !== cid),
+        ...incoming.adGroups,
+      ],
+      ads: [
+        ...prev.ads.filter((a) => a.campaignId !== cid),
+        ...incoming.ads,
+      ],
+      negatives: [
+        ...prev.negatives.filter((n) => n.campaignId !== cid),
+        ...incoming.negatives,
+      ],
+    };
+  }
+  if (view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") {
+    const agId = view.adGroupId;
+    return {
+      ...prev,
+      campaigns: incoming.campaigns ?? prev.campaigns,
+      timeline: incoming.timeline ?? prev.timeline,
+      campaignStrategies: { ...prev.campaignStrategies, ...incoming.campaignStrategies },
+      campaignTargeting: { ...prev.campaignTargeting, ...incoming.campaignTargeting },
+      campaignAssets: { ...prev.campaignAssets, ...incoming.campaignAssets },
+      adGroups: [
+        ...prev.adGroups.filter((a) => a.id !== agId),
+        ...incoming.adGroups,
+      ],
+      keywords: [
+        ...prev.keywords.filter((k) => k.adGroupId !== agId),
+        ...incoming.keywords,
+      ],
+      ads: [
+        ...prev.ads.filter((a) => a.adGroupId !== agId),
+        ...incoming.ads,
+      ],
+      // Replace ad-group-scoped negatives for this adgroup. Campaign
+      // negatives may also land here when the scoped query returns both
+      // — those merge by id-segment ("ag-" vs "c-").
+      negatives: [
+        ...prev.negatives.filter((n) => !(n.scope === "ad_group" && n.adGroupId === agId)),
+        ...incoming.negatives.filter((n) => n.scope === "ad_group"),
+      ],
+      searchTermsByAdGroup: { ...prev.searchTermsByAdGroup, ...incoming.searchTermsByAdGroup },
+      adGroupSitelinks: { ...(prev.adGroupSitelinks ?? {}), ...(incoming.adGroupSitelinks ?? {}) },
+      adGroupCallouts: { ...(prev.adGroupCallouts ?? {}), ...(incoming.adGroupCallouts ?? {}) },
+      adGroupSnippets: { ...(prev.adGroupSnippets ?? {}), ...(incoming.adGroupSnippets ?? {}) },
+      adGroupImages: { ...(prev.adGroupImages ?? {}), ...(incoming.adGroupImages ?? {}) },
+    };
+  }
+  return incoming;
+}
+
 export function GoogleAdsPage() {
   const router = useDashboardRouter();
   const [filterStatus, setFilterStatus] = useState<Status>("ENABLED");
@@ -285,15 +364,29 @@ export function GoogleAdsPage() {
   const [deleteKwReq, setDeleteKwReq] = useState<{ adGroupId: string; critId: string; keyword: string } | null>(null);
   const [adGroupFormReq, setAdGroupFormReq] = useState<AdGroupFormReq | null>(null);
 
-  const load = async (mode: "initial" | "refresh") => {
+  // Scope-aware loader. Each view fetches only the slice it needs;
+  // results are merged into `data` so back-navigation reuses what was
+  // already pulled. The first ad-group hit is what saved us from the
+  // 30-query initial /all payload; campaigns/campaign views now skip
+  // keywords/ads/search-terms entirely.
+  const scopeFor = (v: View): string => {
+    if (v.kind === "campaigns") return "campaigns";
+    if (v.kind === "campaign") return `campaign:${v.campaignId}`;
+    if (v.kind === "ad_group_detail" || v.kind === "keyword_search_terms") return `adgroup:${v.adGroupId}`;
+    return "all";
+  };
+
+  const load = async (mode: "initial" | "refresh", overrideView?: View) => {
     if (mode === "initial") setInitialLoading(true);
     else setRefreshing(true);
+    const targetView = overrideView ?? view;
+    const scope = scopeFor(targetView);
     try {
-      const qs = new URLSearchParams({ dateRange: filterDateRange });
+      const qs = new URLSearchParams({ dateRange: filterDateRange, scope });
       const res = await fetch(apiUrl(`/api/admin/google-ads/all?${qs}`), { credentials: "include" });
       if (!res.ok) return;
       const j = (await res.json()) as AllData;
-      setData(j);
+      setData((prev) => mergeScoped(prev, j, targetView));
     } finally {
       setInitialLoading(false);
       setRefreshing(false);
@@ -305,6 +398,15 @@ export function GoogleAdsPage() {
     void load(data ? "refresh" : "initial");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterDateRange]);
+
+  // Drill-in: when the user navigates into a campaign or ad group we
+  // load that scope. Stay quiet (refresh-style spinner) if we already
+  // have data on screen so the breadcrumb keeps rendering during fetch.
+  useEffect(() => {
+    if (!data) return;
+    void load("refresh");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view.kind, (view as { campaignId?: string }).campaignId, (view as { adGroupId?: string }).adGroupId]);
 
   // Client-side filter by status
   const filtered = useMemo(() => {
