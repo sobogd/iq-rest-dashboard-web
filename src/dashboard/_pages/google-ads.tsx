@@ -757,38 +757,41 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
     setMap(initial);
     if (toFetch.length === 0) return;
 
-    void Promise.all(
-      toFetch.map(async (text) => {
+    // Sequential, not Promise.all — Google Ads API rate-limits concurrent
+    // generateKeywordIdeas calls on the same customer and silently returns
+    // empty metrics on the throttled requests (looks like "no data" in
+    // the chip when the modal — running one query at a time — gets data
+    // for the exact same keyword). One request at a time, small gap
+    // between them, update the map as each completes so the user sees
+    // chips fill in progressively.
+    void (async () => {
+      for (const text of toFetch) {
+        if (cancelled) return;
+        let range: CpcRange | null = null;
         try {
-          // Language intentionally omitted — Google Ads Planner returns
-          // effectively the same volume/CPC data for Latin keywords across
-          // any language filter (and adding the local-country language
-          // tends to suppress data for English-only keywords like
-          // 'qr menu' targeted at expats/tourists). Geo-only query gives
-          // the densest, most consistent results.
           const qs = new URLSearchParams({ phrase: text, geo: geos.join(",") });
           const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const j = (await res.json()) as {
-            lowTopOfPageBidMicros: number | null;
-            highTopOfPageBidMicros: number | null;
-          };
-          const low = j.lowTopOfPageBidMicros;
-          const high = j.highTopOfPageBidMicros;
-          const range: CpcRange | null = low != null && high != null ? { lowMicros: low, highMicros: high } : null;
-          return { text, range };
+          if (res.ok) {
+            const j = (await res.json()) as {
+              lowTopOfPageBidMicros: number | null;
+              highTopOfPageBidMicros: number | null;
+            };
+            const low = j.lowTopOfPageBidMicros;
+            const high = j.highTopOfPageBidMicros;
+            if (low != null && high != null) range = { lowMicros: low, highMicros: high };
+          }
         } catch {
-          return { text, range: null };
+          // network/parse error — leave as missing, no retry.
         }
-      }),
-    ).then((results) => {
-      if (cancelled) return;
-      setMap((prev) => {
-        const updated = new Map(prev);
-        for (const r of results) updated.set(r.text, r.range ?? "missing");
-        return updated;
-      });
-    });
+        if (cancelled) return;
+        setMap((prev) => {
+          const updated = new Map(prev);
+          updated.set(text, range ?? "missing");
+          return updated;
+        });
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    })();
 
     return () => { cancelled = true; };
   }, [sig, geosKey]); // eslint-disable-line react-hooks/exhaustive-deps
