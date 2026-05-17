@@ -703,15 +703,12 @@ function NegativeRowEl({ n, onView }: { n: NegativeRow; onView: () => void }) {
 
 interface CpcRange { lowMicros: number; highMicros: number }
 
-// CPC chip resolution intentionally mirrors what the keyword-planner modal
-// auto-picks when opened on a campaign: the FIRST country, plus the
-// language Google associates with that country (COUNTRY_TO_LANG) — not
-// the campaign's full geo list and not its language criteria. Reason:
-// Google's planner returns far more null/empty rows for multi-country
-// combos than for single-country + language combos, and the modal's
-// single-country preview is what the operator visually compares against
-// the chip. Keeping them aligned avoids "modal says X, chip says no data"
-// inconsistencies.
+// CPC chip resolution: use the campaign's first targeted country and skip
+// language entirely. Google's planner returns near-identical CPC/volume
+// data across language filters for Latin keywords, and filtering by the
+// local country language (Greek for GR, Italian for IT, …) consistently
+// suppresses results for English-led campaigns. Single-country, no
+// language = densest, most consistent data.
 function geoResourcesFor(t: CampaignTargeting | null): string[] {
   if (!t) return [];
   for (const g of t.geos) {
@@ -720,31 +717,6 @@ function geoResourcesFor(t: CampaignTargeting | null): string[] {
     if (match) return [match.resource];
   }
   return [];
-}
-
-function languageResourceFor(t: CampaignTargeting | null): string | null {
-  if (!t) return null;
-  // Multi-country campaign (EN regional split — Mediterranean, Nordics,
-  // Western, …): assume English regardless of campaign criteria. Those
-  // campaigns target the English-speaking traveller/expat segment and
-  // their keywords are English-only; passing the local country language
-  // (Greek for GR, Maltese for MT, …) makes Google return mostly null.
-  if (t.geos.length > 1) {
-    return LANG_OPTIONS.find((o) => o.code === "EN")?.resource ?? null;
-  }
-  // Single-country: explicit language criterion wins, then COUNTRY_TO_LANG
-  // mapping of the targeted country (same fallback as the planner modal).
-  for (const l of t.languages) {
-    const code = (l.code ?? "").toUpperCase();
-    const match = LANG_OPTIONS.find((o) => o.code === code);
-    if (match) return match.resource;
-  }
-  const firstGeoCode = t.geos[0]?.code?.toUpperCase();
-  if (!firstGeoCode) return null;
-  const langCode = COUNTRY_TO_LANG[firstGeoCode];
-  if (!langCode) return null;
-  const match = LANG_OPTIONS.find((o) => o.code === langCode);
-  return match ? match.resource : null;
 }
 
 function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | null): Map<string, CpcRange | "loading" | "missing"> {
@@ -764,7 +736,6 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
   }, [keywords]);
 
   const geos = useMemo(() => geoResourcesFor(targeting), [targeting]);
-  const language = useMemo(() => languageResourceFor(targeting), [targeting]);
   const geosKey = geos.join(",");
 
   useEffect(() => {
@@ -789,11 +760,13 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
     void Promise.all(
       toFetch.map(async (text) => {
         try {
-          const qs = new URLSearchParams({
-            phrase: text,
-            geo: geos.join(","),
-            ...(language ? { language } : {}),
-          });
+          // Language intentionally omitted — Google Ads Planner returns
+          // effectively the same volume/CPC data for Latin keywords across
+          // any language filter (and adding the local-country language
+          // tends to suppress data for English-only keywords like
+          // 'qr menu' targeted at expats/tourists). Geo-only query gives
+          // the densest, most consistent results.
+          const qs = new URLSearchParams({ phrase: text, geo: geos.join(",") });
           const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const j = (await res.json()) as {
@@ -818,7 +791,7 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
     });
 
     return () => { cancelled = true; };
-  }, [sig, geosKey, language]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sig, geosKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return map;
 }
@@ -1575,39 +1548,11 @@ const GEO_GROUPS: { id: string; label: string; codes: string[] }[] = [
   { id: "british_isles", label: "British Isles", codes: ["GB", "IE"] },
 ];
 
-const LANG_OPTIONS = [
-  { label: "English", code: "EN", resource: "languageConstants/1000" },
-  { label: "Spanish", code: "ES", resource: "languageConstants/1003" },
-  { label: "Italian", code: "IT", resource: "languageConstants/1004" },
-  { label: "German", code: "DE", resource: "languageConstants/1001" },
-  { label: "French", code: "FR", resource: "languageConstants/1002" },
-  { label: "Portuguese", code: "PT", resource: "languageConstants/1014" },
-  { label: "Dutch", code: "NL", resource: "languageConstants/1010" },
-  { label: "Polish", code: "PL", resource: "languageConstants/1030" },
-  { label: "Swedish", code: "SV", resource: "languageConstants/1015" },
-  { label: "Danish", code: "DA", resource: "languageConstants/1009" },
-  { label: "Norwegian", code: "NO", resource: "languageConstants/1013" },
-  { label: "Finnish", code: "FI", resource: "languageConstants/1011" },
-  { label: "Czech", code: "CS", resource: "languageConstants/1021" },
-  { label: "Greek", code: "EL", resource: "languageConstants/1022" },
-  { label: "Romanian", code: "RO", resource: "languageConstants/1032" },
-  { label: "Hungarian", code: "HU", resource: "languageConstants/1024" },
-  { label: "Bulgarian", code: "BG", resource: "languageConstants/1020" },
-  { label: "Croatian", code: "HR", resource: "languageConstants/1039" },
-  { label: "Slovak", code: "SK", resource: "languageConstants/1033" },
-  { label: "Slovenian", code: "SL", resource: "languageConstants/1034" },
-  { label: "Estonian", code: "ET", resource: "languageConstants/1043" },
-  { label: "Latvian", code: "LV", resource: "languageConstants/1028" },
-  { label: "Lithuanian", code: "LT", resource: "languageConstants/1029" },
-];
-
 interface PlannerState {
   phrase: string;
   setPhrase: (v: string) => void;
   geos: string[];
   setGeos: (v: string[]) => void;
-  language: string;
-  setLanguage: (v: string) => void;
   result: KeywordPlanData | null;
   setResult: (v: KeywordPlanData | null) => void;
   resultError: string | null;
@@ -1620,52 +1565,24 @@ function usePlannerState(): PlannerState {
   const [phrase, setPhrase] = useState("");
   // Default: empty selection — opening the modal from a campaign auto-fills
   // the campaign's targeting; opening standalone, the user picks a group.
-  const defaultLang =
-    LANG_OPTIONS.find((l) => l.code === "EN")?.resource ?? LANG_OPTIONS[0].resource;
   const [geos, setGeos] = useState<string[]>([]);
-  const [language, setLanguage] = useState<string>(defaultLang);
   const [result, setResult] = useState<KeywordPlanData | null>(null);
   const [resultError, setResultError] = useState<string | null>(null);
   const [appliedCampaignId, setAppliedCampaignId] = useState<string | null>(null);
-  return { phrase, setPhrase, geos, setGeos, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
+  return { phrase, setPhrase, geos, setGeos, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
 }
-
-// Country → default language for the planner's auto-pick on campaign select.
-// Covers the EU+UK+EFTA set + US. Falls through gracefully when missing.
-const COUNTRY_TO_LANG: Record<string, string> = {
-  US: "EN", GB: "EN", IE: "EN", MT: "EN",
-  ES: "ES",
-  IT: "IT",
-  DE: "DE", AT: "DE", CH: "DE", LI: "DE", LU: "DE",
-  FR: "FR", BE: "FR",
-  PT: "PT",
-  NL: "NL",
-  PL: "PL",
-  SE: "SV",
-  DA: "DA", DK: "DA",
-  NO: "NO",
-  FI: "FI",
-  CS: "CS", CZ: "CS",
-  EL: "EL", GR: "EL", CY: "EL",
-  RO: "RO",
-  HU: "HU",
-  BG: "BG",
-  HR: "HR",
-  SK: "SK",
-  SL: "SL", SI: "SL",
-  ET: "ET", EE: "ET",
-  LV: "LV",
-  LT: "LT",
-  IS: "EN",
-};
 
 function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; adGroupId: string | null; onAddKeyword: (text: string, adGroupId: string) => void; onClose: () => void }) {
   useScrollLock(true);
 
-  const { phrase, setPhrase, geos, setGeos, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
+  const { phrase, setPhrase, geos, setGeos, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
   const [submitting, setSubmitting] = useState(false);
 
-  // Auto-pick country + language from current campaign targeting (once per campaign).
+  // Auto-pick country from current campaign targeting (once per campaign).
+  // Language is not part of the planner query anymore — Google's planner
+  // returns near-identical CPC/volume data across languages for Latin
+  // keywords, and dropping it removes a class of false "no data" rows
+  // where the wrong language filter starved the response.
   useEffect(() => {
     if (!campaignId || campaignId === appliedCampaignId) return;
     if (!targeting) return;
@@ -1673,14 +1590,9 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
     if (firstGeoCode) {
       const geoMatch = GEO_OPTIONS.find((g) => g.code === firstGeoCode);
       if (geoMatch) setGeos([geoMatch.resource]);
-      const langCode = COUNTRY_TO_LANG[firstGeoCode];
-      if (langCode) {
-        const langMatch = LANG_OPTIONS.find((l) => l.code === langCode);
-        if (langMatch) setLanguage(langMatch.resource);
-      }
     }
     setAppliedCampaignId(campaignId);
-  }, [campaignId, targeting, appliedCampaignId, setGeos, setLanguage, setAppliedCampaignId]);
+  }, [campaignId, targeting, appliedCampaignId, setGeos, setAppliedCampaignId]);
 
   const canSubmit = phrase.trim().length > 0 && geos.length > 0 && geos.length <= 10 && !submitting;
 
@@ -1693,7 +1605,6 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
       const qs = new URLSearchParams({
         phrase: phrase.trim(),
         geo: geos.join(","),
-        language,
       });
       const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
       if (!res.ok) {
@@ -1804,21 +1715,10 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
               </div>
             </FormLabel>
             <div className="flex items-end gap-2">
-              <FormLabel label="Language" className="flex-1">
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="w-full h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                >
-                  {LANG_OPTIONS.map((l) => (
-                    <option key={l.resource} value={l.resource}>{l.label} ({l.code})</option>
-                  ))}
-                </select>
-              </FormLabel>
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
+                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
               >
                 {submitting ? "Analyzing…" : "Analyze"}
               </button>
