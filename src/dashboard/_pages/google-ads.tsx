@@ -1336,6 +1336,21 @@ const GEO_OPTIONS = [
   { label: "Sweden", code: "SE", resource: "geoTargetConstants/2752" },
   { label: "Switzerland", code: "CH", resource: "geoTargetConstants/2756" },
 ];
+// Preset groups for the keyword planner. Each group must stay ≤10 countries
+// to fit GenerateKeywordIdeasRequest.geoTargetConstants's API limit so the
+// "select group" button always produces a single-shot, no-batching request.
+// IT/ES/PT are intentionally excluded — those run on dedicated paid
+// campaigns + keyword-research scripts and don't belong in exploratory
+// planner work.
+const GEO_GROUPS: { id: string; label: string; codes: string[] }[] = [
+  { id: "western", label: "Western (rich)", codes: ["DE", "FR", "AT", "CH", "BE", "NL", "LU", "LI"] },
+  { id: "nordics", label: "Nordics", codes: ["SE", "NO", "DK", "FI", "IS"] },
+  { id: "mediterranean", label: "Mediterranean (small)", codes: ["GR", "MT", "CY"] },
+  { id: "eastern_visegrad", label: "Eastern (Visegrad+)", codes: ["PL", "CZ", "SK", "HU", "SI"] },
+  { id: "eastern_poor", label: "Eastern (lower-income)", codes: ["RO", "BG", "HR", "LT", "LV", "EE"] },
+  { id: "british_isles", label: "British Isles", codes: ["GB", "IE"] },
+];
+
 const LANG_OPTIONS = [
   { label: "English", code: "EN", resource: "languageConstants/1000" },
   { label: "Spanish", code: "ES", resource: "languageConstants/1003" },
@@ -1365,8 +1380,8 @@ const LANG_OPTIONS = [
 interface PlannerState {
   phrase: string;
   setPhrase: (v: string) => void;
-  geo: string;
-  setGeo: (v: string) => void;
+  geos: string[];
+  setGeos: (v: string[]) => void;
   language: string;
   setLanguage: (v: string) => void;
   result: KeywordPlanData | null;
@@ -1379,19 +1394,16 @@ interface PlannerState {
 
 function usePlannerState(): PlannerState {
   const [phrase, setPhrase] = useState("");
-  // Default to Italy/Italian — matches the legacy state when only 5 geos/langs
-  // existed. Resolve by code so the index doesn't break as the option lists
-  // grow.
-  const defaultGeo =
-    GEO_OPTIONS.find((g) => g.code === "IT")?.resource ?? GEO_OPTIONS[0].resource;
+  // Default: empty selection — opening the modal from a campaign auto-fills
+  // the campaign's targeting; opening standalone, the user picks a group.
   const defaultLang =
-    LANG_OPTIONS.find((l) => l.code === "IT")?.resource ?? LANG_OPTIONS[0].resource;
-  const [geo, setGeo] = useState<string>(defaultGeo);
+    LANG_OPTIONS.find((l) => l.code === "EN")?.resource ?? LANG_OPTIONS[0].resource;
+  const [geos, setGeos] = useState<string[]>([]);
   const [language, setLanguage] = useState<string>(defaultLang);
   const [result, setResult] = useState<KeywordPlanData | null>(null);
   const [resultError, setResultError] = useState<string | null>(null);
   const [appliedCampaignId, setAppliedCampaignId] = useState<string | null>(null);
-  return { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
+  return { phrase, setPhrase, geos, setGeos, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
 }
 
 // Country → default language for the planner's auto-pick on campaign select.
@@ -1426,7 +1438,7 @@ const COUNTRY_TO_LANG: Record<string, string> = {
 function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; adGroupId: string | null; onAddKeyword: (text: string, adGroupId: string) => void; onClose: () => void }) {
   useScrollLock(true);
 
-  const { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
+  const { phrase, setPhrase, geos, setGeos, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId } = state;
   const [submitting, setSubmitting] = useState(false);
 
   // Auto-pick country + language from current campaign targeting (once per campaign).
@@ -1436,7 +1448,7 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
     const firstGeoCode = targeting.geos[0]?.code?.toUpperCase();
     if (firstGeoCode) {
       const geoMatch = GEO_OPTIONS.find((g) => g.code === firstGeoCode);
-      if (geoMatch) setGeo(geoMatch.resource);
+      if (geoMatch) setGeos([geoMatch.resource]);
       const langCode = COUNTRY_TO_LANG[firstGeoCode];
       if (langCode) {
         const langMatch = LANG_OPTIONS.find((l) => l.code === langCode);
@@ -1444,9 +1456,9 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
       }
     }
     setAppliedCampaignId(campaignId);
-  }, [campaignId, targeting, appliedCampaignId, setGeo, setLanguage, setAppliedCampaignId]);
+  }, [campaignId, targeting, appliedCampaignId, setGeos, setLanguage, setAppliedCampaignId]);
 
-  const canSubmit = phrase.trim().length > 0 && !submitting;
+  const canSubmit = phrase.trim().length > 0 && geos.length > 0 && geos.length <= 10 && !submitting;
 
   async function submit() {
     if (!canSubmit) return;
@@ -1456,7 +1468,7 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
     try {
       const qs = new URLSearchParams({
         phrase: phrase.trim(),
-        geo,
+        geo: geos.join(","),
         language,
       });
       const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
@@ -1501,18 +1513,73 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
                 className="w-full h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </FormLabel>
+            <FormLabel label={`Countries (${geos.length}/10)`}>
+              <div className="space-y-2">
+                {/* Group preset chips: click toggles the whole group on/off. */}
+                <div className="flex flex-wrap gap-1.5">
+                  {GEO_GROUPS.map((grp) => {
+                    const resources = grp.codes
+                      .map((c) => GEO_OPTIONS.find((g) => g.code === c)?.resource)
+                      .filter((r): r is string => !!r);
+                    const allOn = resources.every((r) => geos.includes(r));
+                    return (
+                      <button
+                        key={grp.id}
+                        type="button"
+                        onClick={() => {
+                          if (allOn) setGeos(geos.filter((r) => !resources.includes(r)));
+                          else setGeos(Array.from(new Set([...geos, ...resources])));
+                        }}
+                        className={`text-[11px] px-2.5 h-7 rounded-full border transition-colors ${
+                          allOn
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-secondary text-foreground border-border hover:bg-secondary/70"
+                        }`}
+                      >
+                        {grp.label} ({grp.codes.length})
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() => setGeos([])}
+                    disabled={geos.length === 0}
+                    className="text-[11px] px-2.5 h-7 rounded-full border border-border bg-transparent hover:bg-secondary/70 disabled:opacity-40"
+                  >
+                    Clear
+                  </button>
+                </div>
+                {/* Individual country chips for fine-grained edits. */}
+                <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1 rounded-md border border-border bg-secondary/40">
+                  {GEO_OPTIONS.map((g) => {
+                    const on = geos.includes(g.resource);
+                    return (
+                      <button
+                        key={g.resource}
+                        type="button"
+                        onClick={() => {
+                          if (on) setGeos(geos.filter((r) => r !== g.resource));
+                          else setGeos([...geos, g.resource]);
+                        }}
+                        className={`text-[10px] px-2 h-6 rounded border transition-colors ${
+                          on
+                            ? "bg-primary text-primary-foreground border-primary"
+                            : "bg-background text-muted-foreground border-border hover:text-foreground"
+                        }`}
+                      >
+                        {g.code}
+                      </button>
+                    );
+                  })}
+                </div>
+                {geos.length > 10 ? (
+                  <div className="text-[11px] text-red-500">
+                    API limit is 10 countries — deselect {geos.length - 10}.
+                  </div>
+                ) : null}
+              </div>
+            </FormLabel>
             <div className="flex items-end gap-2">
-              <FormLabel label="Country" className="flex-1">
-                <select
-                  value={geo}
-                  onChange={(e) => setGeo(e.target.value)}
-                  className="w-full h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                >
-                  {GEO_OPTIONS.map((g) => (
-                    <option key={g.resource} value={g.resource}>{g.label} ({g.code})</option>
-                  ))}
-                </select>
-              </FormLabel>
               <FormLabel label="Language" className="flex-1">
                 <select
                   value={language}
