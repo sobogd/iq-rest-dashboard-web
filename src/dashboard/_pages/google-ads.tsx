@@ -763,10 +763,12 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
   // refresh but the underlying text+matchType set is the cache key).
   const sig = useMemo(() => {
     const parts = keywords
-      .filter((k) => k.status !== "PAUSED" && (k.text ?? k.title))
+      .filter((k) => k.text ?? k.title)
       .map((k) => (k.text ?? k.title).toLowerCase())
       .sort();
-    return parts.join("|");
+    // Dedup so two match-type variants of the same phrase don't re-trigger
+    // the effect when only one of them is added/removed.
+    return Array.from(new Set(parts)).join("|");
   }, [keywords]);
 
   const geos = useMemo(() => geoResourcesFor(targeting), [targeting]);
@@ -777,11 +779,12 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
     if (!sig || geos.length === 0) return;
     let cancelled = false;
     const next = new Map<string, CpcRange | "loading" | "missing">();
+    const seen = new Set<string>();
     const toFetch: string[] = [];
     for (const k of keywords) {
-      if (k.status === "PAUSED") continue;
       const text = (k.text ?? k.title).toLowerCase();
-      if (!text) continue;
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
       const cached = readCpcCache(cpcCacheKey(text, geos, language));
       if (cached) {
         next.set(text, cached.range ?? "missing");
