@@ -724,14 +724,21 @@ function geoResourcesFor(t: CampaignTargeting | null): string[] {
 
 function languageResourceFor(t: CampaignTargeting | null): string | null {
   if (!t) return null;
-  // First try an explicit language criterion on the campaign.
+  // Multi-country campaign (EN regional split — Mediterranean, Nordics,
+  // Western, …): assume English regardless of campaign criteria. Those
+  // campaigns target the English-speaking traveller/expat segment and
+  // their keywords are English-only; passing the local country language
+  // (Greek for GR, Maltese for MT, …) makes Google return mostly null.
+  if (t.geos.length > 1) {
+    return LANG_OPTIONS.find((o) => o.code === "EN")?.resource ?? null;
+  }
+  // Single-country: explicit language criterion wins, then COUNTRY_TO_LANG
+  // mapping of the targeted country (same fallback as the planner modal).
   for (const l of t.languages) {
     const code = (l.code ?? "").toUpperCase();
     const match = LANG_OPTIONS.find((o) => o.code === code);
     if (match) return match.resource;
   }
-  // Fall back to the language derived from the first targeted country —
-  // same logic the planner modal uses on open.
   const firstGeoCode = t.geos[0]?.code?.toUpperCase();
   if (!firstGeoCode) return null;
   const langCode = COUNTRY_TO_LANG[firstGeoCode];
