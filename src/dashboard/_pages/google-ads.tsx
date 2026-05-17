@@ -393,7 +393,7 @@ export function GoogleAdsPage() {
 
       <div className="max-w-2xl mx-auto pt-5 md:pt-4 space-y-3">
         {view.kind !== "campaigns" && currentCampaign ? (
-          <div className="text-[11px] text-muted-foreground">
+          <div className="text-[11px] text-muted-foreground flex flex-wrap items-center gap-1">
             <button
               type="button"
               onClick={() => setView({ kind: "campaigns" })}
@@ -401,8 +401,40 @@ export function GoogleAdsPage() {
             >
               Campaigns
             </button>
-            <span className="mx-1.5">/</span>
-            <span className="text-foreground font-medium">{currentCampaign.name}</span>
+            <span>/</span>
+            {view.kind === "campaign" ? (
+              <span className="text-foreground font-medium">{currentCampaign.name}</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setView({ kind: "campaign", campaignId: currentCampaign.id })}
+                className="hover:text-foreground transition-colors"
+              >
+                {currentCampaign.name}
+              </button>
+            )}
+            {(view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") && currentAdGroup ? (
+              <>
+                <span>/</span>
+                {view.kind === "ad_group_detail" ? (
+                  <span className="text-foreground font-medium">{currentAdGroup.name}</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setView({ kind: "ad_group_detail", campaignId: view.campaignId, adGroupId: view.adGroupId })}
+                    className="hover:text-foreground transition-colors"
+                  >
+                    {currentAdGroup.name}
+                  </button>
+                )}
+              </>
+            ) : null}
+            {view.kind === "keyword_search_terms" ? (
+              <>
+                <span>/</span>
+                <span className="text-foreground font-medium">{view.keywordTitle}</span>
+              </>
+            ) : null}
           </div>
         ) : null}
         {initialLoading ? (
