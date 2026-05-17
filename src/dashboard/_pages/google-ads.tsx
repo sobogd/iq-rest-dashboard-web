@@ -392,6 +392,19 @@ export function GoogleAdsPage() {
       </SubpageStickyBar>
 
       <div className="max-w-2xl mx-auto pt-5 md:pt-4 space-y-3">
+        {view.kind !== "campaigns" && currentCampaign ? (
+          <div className="text-[11px] text-muted-foreground">
+            <button
+              type="button"
+              onClick={() => setView({ kind: "campaigns" })}
+              className="hover:text-foreground transition-colors"
+            >
+              Campaigns
+            </button>
+            <span className="mx-1.5">/</span>
+            <span className="text-foreground font-medium">{currentCampaign.name}</span>
+          </div>
+        ) : null}
         {initialLoading ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
         ) : !filtered ? null : view.kind === "campaigns" ? (
