@@ -703,25 +703,41 @@ function NegativeRowEl({ n, onView }: { n: NegativeRow; onView: () => void }) {
 
 interface CpcRange { lowMicros: number; highMicros: number }
 
+// CPC chip resolution intentionally mirrors what the keyword-planner modal
+// auto-picks when opened on a campaign: the FIRST country, plus the
+// language Google associates with that country (COUNTRY_TO_LANG) — not
+// the campaign's full geo list and not its language criteria. Reason:
+// Google's planner returns far more null/empty rows for multi-country
+// combos than for single-country + language combos, and the modal's
+// single-country preview is what the operator visually compares against
+// the chip. Keeping them aligned avoids "modal says X, chip says no data"
+// inconsistencies.
 function geoResourcesFor(t: CampaignTargeting | null): string[] {
   if (!t) return [];
-  const out: string[] = [];
   for (const g of t.geos) {
     const code = (g.code ?? "").toUpperCase();
     const match = GEO_OPTIONS.find((o) => o.code === code);
-    if (match) out.push(match.resource);
+    if (match) return [match.resource];
   }
-  return out;
+  return [];
 }
 
 function languageResourceFor(t: CampaignTargeting | null): string | null {
   if (!t) return null;
+  // First try an explicit language criterion on the campaign.
   for (const l of t.languages) {
     const code = (l.code ?? "").toUpperCase();
     const match = LANG_OPTIONS.find((o) => o.code === code);
     if (match) return match.resource;
   }
-  return null;
+  // Fall back to the language derived from the first targeted country —
+  // same logic the planner modal uses on open.
+  const firstGeoCode = t.geos[0]?.code?.toUpperCase();
+  if (!firstGeoCode) return null;
+  const langCode = COUNTRY_TO_LANG[firstGeoCode];
+  if (!langCode) return null;
+  const match = LANG_OPTIONS.find((o) => o.code === langCode);
+  return match ? match.resource : null;
 }
 
 function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | null): Map<string, CpcRange | "loading" | "missing"> {
