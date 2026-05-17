@@ -21,6 +21,7 @@ import {
   Calendar,
   UserPlus,
   ShoppingCart,
+  TrendingUp,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -523,6 +524,7 @@ export function GoogleAdsPage() {
             onView={(req) => setDetailReq(req)}
             adGroupId={view.adGroupId}
             campaignId={view.campaignId}
+            campaignTargeting={data?.campaignTargeting[view.campaignId] ?? null}
             campaignIsPortfolio={Boolean(data?.campaignStrategies?.[view.campaignId]?.isPortfolio)}
             onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
             onBidEdit={(k) => setBidEditReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, currentBid: k.bid ?? null })}
@@ -690,11 +692,184 @@ function NegativeRowEl({ n, onView }: { n: NegativeRow; onView: () => void }) {
   );
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// Keyword CPC chips — fetches top-of-page bid range from Google Ads
+// Keyword Planner for every keyword in the currently-open ad group.
+// Scoped to the campaign's geo targeting + first language; results cached
+// in localStorage with a 24h TTL so revisits are instant. Failed fetches
+// are remembered as null to avoid retry storms when an account has no
+// planner access.
+// ──────────────────────────────────────────────────────────────────────────
+
+interface CpcRange { lowMicros: number; highMicros: number }
+interface CpcCacheEntry { range: CpcRange | null; ts: number }
+
+const CPC_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const CPC_CACHE_PREFIX = "gads_cpc_v1:";
+
+function cpcCacheKey(keyword: string, geos: string[], language: string | null): string {
+  return `${CPC_CACHE_PREFIX}${keyword.toLowerCase()}|${[...geos].sort().join(",")}|${language ?? ""}`;
+}
+
+function readCpcCache(key: string): CpcCacheEntry | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CpcCacheEntry;
+    if (Date.now() - parsed.ts > CPC_CACHE_TTL_MS) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeCpcCache(key: string, range: CpcRange | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify({ range, ts: Date.now() } as CpcCacheEntry));
+  } catch {
+    // Storage quota / private mode — ignore, the in-memory map still
+    // shields us against a refetch on the same page session.
+  }
+}
+
+function geoResourcesFor(t: CampaignTargeting | null): string[] {
+  if (!t) return [];
+  const out: string[] = [];
+  for (const g of t.geos) {
+    const code = (g.code ?? "").toUpperCase();
+    const match = GEO_OPTIONS.find((o) => o.code === code);
+    if (match) out.push(match.resource);
+  }
+  return out;
+}
+
+function languageResourceFor(t: CampaignTargeting | null): string | null {
+  if (!t) return null;
+  for (const l of t.languages) {
+    const code = (l.code ?? "").toUpperCase();
+    const match = LANG_OPTIONS.find((o) => o.code === code);
+    if (match) return match.resource;
+  }
+  return null;
+}
+
+function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | null): Map<string, CpcRange | "loading" | "missing"> {
+  const [map, setMap] = useState<Map<string, CpcRange | "loading" | "missing">>(() => new Map());
+
+  // Stable signature for the keyword list so we only re-fetch when the
+  // ad group actually changes (KeywordRow identity may change every
+  // refresh but the underlying text+matchType set is the cache key).
+  const sig = useMemo(() => {
+    const parts = keywords
+      .filter((k) => k.status !== "PAUSED" && (k.text ?? k.title))
+      .map((k) => (k.text ?? k.title).toLowerCase())
+      .sort();
+    return parts.join("|");
+  }, [keywords]);
+
+  const geos = useMemo(() => geoResourcesFor(targeting), [targeting]);
+  const language = useMemo(() => languageResourceFor(targeting), [targeting]);
+  const geosKey = geos.join(",");
+
+  useEffect(() => {
+    if (!sig || geos.length === 0) return;
+    let cancelled = false;
+    const next = new Map<string, CpcRange | "loading" | "missing">();
+    const toFetch: string[] = [];
+    for (const k of keywords) {
+      if (k.status === "PAUSED") continue;
+      const text = (k.text ?? k.title).toLowerCase();
+      if (!text) continue;
+      const cached = readCpcCache(cpcCacheKey(text, geos, language));
+      if (cached) {
+        next.set(text, cached.range ?? "missing");
+      } else {
+        next.set(text, "loading");
+        toFetch.push(text);
+      }
+    }
+    setMap(next);
+    if (toFetch.length === 0) return;
+
+    // Fire single-keyword planner requests in parallel. The API counts each
+    // generateKeywordIdeas call once regardless of seed count; we keep the
+    // existing single-keyword endpoint so the success path stays simple.
+    void Promise.all(
+      toFetch.map(async (text) => {
+        try {
+          const qs = new URLSearchParams({
+            phrase: text,
+            geo: geos.join(","),
+            ...(language ? { language } : {}),
+          });
+          const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const j = (await res.json()) as {
+            lowTopOfPageBidMicros: number | null;
+            highTopOfPageBidMicros: number | null;
+          };
+          const low = j.lowTopOfPageBidMicros;
+          const high = j.highTopOfPageBidMicros;
+          const range: CpcRange | null = low != null && high != null ? { lowMicros: low, highMicros: high } : null;
+          writeCpcCache(cpcCacheKey(text, geos, language), range);
+          return { text, range };
+        } catch {
+          // Cache miss as null too — avoids hammering the API when the
+          // account or token doesn't have planner access at all.
+          writeCpcCache(cpcCacheKey(text, geos, language), null);
+          return { text, range: null };
+        }
+      }),
+    ).then((results) => {
+      if (cancelled) return;
+      setMap((prev) => {
+        const updated = new Map(prev);
+        for (const r of results) updated.set(r.text, r.range ?? "missing");
+        return updated;
+      });
+    });
+
+    return () => { cancelled = true; };
+  }, [sig, geosKey, language]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return map;
+}
+
+function CpcRangeChip({ state }: { state: CpcRange | "loading" | "missing" | undefined }) {
+  if (!state || state === "missing") return null;
+  if (state === "loading") {
+    return (
+      <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-muted-foreground tabular-nums">
+        <span className="inline-block w-3 h-3 border border-muted-foreground/40 border-t-foreground rounded-full animate-spin" />
+        cpc
+      </span>
+    );
+  }
+  const low = state.lowMicros / 1e6;
+  const high = state.highMicros / 1e6;
+  const avg = (low + high) / 2;
+  const fmt = (n: number) => (n >= 10 ? n.toFixed(1) : n.toFixed(2));
+  return (
+    <span
+      title={`Top-of-page bid range from Keyword Planner (last 24h cache).\nMin: €${fmt(low)}\nAvg: €${fmt(avg)}\nMax: €${fmt(high)}`}
+      className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-muted-foreground tabular-nums"
+    >
+      <TrendingUp className="w-3 h-3" />
+      <span>€{fmt(low)}</span>
+      <span className="text-foreground/80">·{fmt(avg)}·</span>
+      <span>€{fmt(high)}</span>
+    </span>
+  );
+}
+
 function AdGroupDetail({
   keywords,
   ads,
   onView,
   adGroupId,
+  campaignTargeting,
   onKeywordOpen,
   onBidEdit,
   campaignIsPortfolio,
@@ -710,6 +885,7 @@ function AdGroupDetail({
   onView: (req: DetailRequest) => void;
   adGroupId: string;
   campaignId: string;
+  campaignTargeting: CampaignTargeting | null;
   /** When the parent campaign uses a portfolio bid strategy, the
    *  keyword-level CPC bid has no effect — the portfolio overrides it.
    *  We hide the inline bid edit pill so visitors don't twiddle a knob
@@ -723,6 +899,7 @@ function AdGroupDetail({
   negatives: NegativeRow[];
   onNegativeView: (n: NegativeRow) => void;
 }) {
+  const cpcMap = useKeywordCpc(keywords, campaignTargeting);
   const sortedKeywords = useMemo(() => {
     const MT_ORDER: Record<string, number> = { BROAD: 0, PHRASE: 1, EXACT: 2 };
     const arr = [...keywords];
@@ -790,6 +967,7 @@ function AdGroupDetail({
                       {k.bid != null ? k.bid.toFixed(2) : "—"}
                     </button>
                   )}
+                  <CpcRangeChip state={cpcMap.get((k.text ?? k.title).toLowerCase())} />
                 </div>
               </div>
               );
