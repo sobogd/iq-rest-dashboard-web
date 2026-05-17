@@ -1,13 +1,20 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { apiUrl } from "@/lib/api";
 import { useLocale, useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { track } from "@/lib/dashboard-events";
 import { landingUrl } from "@/lib/landing-url";
 import { LogoIcon } from "@/shared/logo-icon";
-import { LegalModal, type LegalView } from "@/components/legal-modal";
+import type { LegalView } from "@/components/legal-modal";
+
+// LegalModal carries ~340 lines of Terms / Privacy / Cookies copy that
+// few visitors ever open. Lazy-load it so the login bundle doesn't pay
+// for that text on every first paint.
+const LegalModal = lazy(() =>
+  import("@/components/legal-modal").then((m) => ({ default: m.LegalModal })),
+);
 
 declare global {
   interface Window {
@@ -685,7 +692,11 @@ export function AuthPage({
   if (embedded) return (
     <>
       {inner}
-      <LegalModal view={legalView} onClose={() => setLegalView(null)} />
+      {legalView ? (
+        <Suspense fallback={null}>
+          <LegalModal view={legalView} onClose={() => setLegalView(null)} />
+        </Suspense>
+      ) : null}
     </>
   );
 
@@ -694,7 +705,11 @@ export function AuthPage({
       <div className="w-[360px] max-w-full bg-card border border-border rounded-2xl p-6 pb-7">
         {inner}
       </div>
-      <LegalModal view={legalView} onClose={() => setLegalView(null)} />
+      {legalView ? (
+        <Suspense fallback={null}>
+          <LegalModal view={legalView} onClose={() => setLegalView(null)} />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

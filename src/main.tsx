@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./components/theme-provider";
-import "./i18n";
+import { FullPageLoader } from "./components/full-page-loader";
+import { bootstrapI18n } from "./i18n";
 import "./styles.css";
 
 const queryClient = new QueryClient({
@@ -21,6 +22,11 @@ const router = createRouter({
   routeTree,
   context: { queryClient },
   defaultPreload: "intent",
+  // Show the spinner immediately for any async beforeLoad (auth check,
+  // redirects, etc.) instead of waiting the default 1s before revealing
+  // pending UI.
+  defaultPendingComponent: FullPageLoader,
+  defaultPendingMs: 0,
 });
 
 declare module "@tanstack/react-router" {
@@ -32,12 +38,18 @@ declare module "@tanstack/react-router" {
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("#root not found");
 
-createRoot(rootEl).render(
-  <StrictMode>
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ThemeProvider>
-  </StrictMode>,
-);
+// Wait for the URL-locale's translation bundle before mounting so the
+// first paint shows real copy (not raw keys). EN fallback is preloaded
+// alongside; other locales are fetched on demand by the languageChanged
+// handler in src/i18n.ts.
+void bootstrapI18n().then(() => {
+  createRoot(rootEl).render(
+    <StrictMode>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </StrictMode>,
+  );
+});
