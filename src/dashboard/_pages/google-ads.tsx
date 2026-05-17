@@ -1300,18 +1300,66 @@ interface KeywordPlanData {
 }
 
 const GEO_OPTIONS = [
+  // Non-EU first
   { label: "USA", code: "US", resource: "geoTargetConstants/2840" },
-  { label: "Spain", code: "ES", resource: "geoTargetConstants/2724" },
-  { label: "Portugal", code: "PT", resource: "geoTargetConstants/2620" },
+  { label: "United Kingdom", code: "GB", resource: "geoTargetConstants/2826" },
+  // EU-27 + EFTA (matches the EU EN campaign targeting set)
+  { label: "Austria", code: "AT", resource: "geoTargetConstants/2040" },
+  { label: "Belgium", code: "BE", resource: "geoTargetConstants/2056" },
+  { label: "Bulgaria", code: "BG", resource: "geoTargetConstants/2100" },
+  { label: "Croatia", code: "HR", resource: "geoTargetConstants/2191" },
+  { label: "Cyprus", code: "CY", resource: "geoTargetConstants/2196" },
+  { label: "Czechia", code: "CZ", resource: "geoTargetConstants/2203" },
+  { label: "Denmark", code: "DK", resource: "geoTargetConstants/2208" },
+  { label: "Estonia", code: "EE", resource: "geoTargetConstants/2233" },
+  { label: "Finland", code: "FI", resource: "geoTargetConstants/2246" },
+  { label: "France", code: "FR", resource: "geoTargetConstants/2250" },
   { label: "Germany", code: "DE", resource: "geoTargetConstants/2276" },
+  { label: "Greece", code: "GR", resource: "geoTargetConstants/2300" },
+  { label: "Hungary", code: "HU", resource: "geoTargetConstants/2348" },
+  { label: "Iceland", code: "IS", resource: "geoTargetConstants/2352" },
+  { label: "Ireland", code: "IE", resource: "geoTargetConstants/2372" },
   { label: "Italy", code: "IT", resource: "geoTargetConstants/2380" },
+  { label: "Latvia", code: "LV", resource: "geoTargetConstants/2428" },
+  { label: "Liechtenstein", code: "LI", resource: "geoTargetConstants/2438" },
+  { label: "Lithuania", code: "LT", resource: "geoTargetConstants/2440" },
+  { label: "Luxembourg", code: "LU", resource: "geoTargetConstants/2442" },
+  { label: "Malta", code: "MT", resource: "geoTargetConstants/2470" },
+  { label: "Netherlands", code: "NL", resource: "geoTargetConstants/2528" },
+  { label: "Norway", code: "NO", resource: "geoTargetConstants/2578" },
+  { label: "Poland", code: "PL", resource: "geoTargetConstants/2616" },
+  { label: "Portugal", code: "PT", resource: "geoTargetConstants/2620" },
+  { label: "Romania", code: "RO", resource: "geoTargetConstants/2642" },
+  { label: "Slovakia", code: "SK", resource: "geoTargetConstants/2703" },
+  { label: "Slovenia", code: "SI", resource: "geoTargetConstants/2705" },
+  { label: "Spain", code: "ES", resource: "geoTargetConstants/2724" },
+  { label: "Sweden", code: "SE", resource: "geoTargetConstants/2752" },
+  { label: "Switzerland", code: "CH", resource: "geoTargetConstants/2756" },
 ];
 const LANG_OPTIONS = [
   { label: "English", code: "EN", resource: "languageConstants/1000" },
   { label: "Spanish", code: "ES", resource: "languageConstants/1003" },
-  { label: "Portuguese", code: "PT", resource: "languageConstants/1014" },
-  { label: "German", code: "DE", resource: "languageConstants/1001" },
   { label: "Italian", code: "IT", resource: "languageConstants/1004" },
+  { label: "German", code: "DE", resource: "languageConstants/1001" },
+  { label: "French", code: "FR", resource: "languageConstants/1002" },
+  { label: "Portuguese", code: "PT", resource: "languageConstants/1014" },
+  { label: "Dutch", code: "NL", resource: "languageConstants/1010" },
+  { label: "Polish", code: "PL", resource: "languageConstants/1030" },
+  { label: "Swedish", code: "SV", resource: "languageConstants/1015" },
+  { label: "Danish", code: "DA", resource: "languageConstants/1009" },
+  { label: "Norwegian", code: "NO", resource: "languageConstants/1013" },
+  { label: "Finnish", code: "FI", resource: "languageConstants/1011" },
+  { label: "Czech", code: "CS", resource: "languageConstants/1021" },
+  { label: "Greek", code: "EL", resource: "languageConstants/1022" },
+  { label: "Romanian", code: "RO", resource: "languageConstants/1032" },
+  { label: "Hungarian", code: "HU", resource: "languageConstants/1024" },
+  { label: "Bulgarian", code: "BG", resource: "languageConstants/1020" },
+  { label: "Croatian", code: "HR", resource: "languageConstants/1039" },
+  { label: "Slovak", code: "SK", resource: "languageConstants/1033" },
+  { label: "Slovenian", code: "SL", resource: "languageConstants/1034" },
+  { label: "Estonian", code: "ET", resource: "languageConstants/1043" },
+  { label: "Latvian", code: "LV", resource: "languageConstants/1028" },
+  { label: "Lithuanian", code: "LT", resource: "languageConstants/1029" },
 ];
 
 interface PlannerState {
@@ -1331,15 +1379,49 @@ interface PlannerState {
 
 function usePlannerState(): PlannerState {
   const [phrase, setPhrase] = useState("");
-  const [geo, setGeo] = useState<string>(GEO_OPTIONS[4].resource);
-  const [language, setLanguage] = useState<string>(LANG_OPTIONS[4].resource);
+  // Default to Italy/Italian — matches the legacy state when only 5 geos/langs
+  // existed. Resolve by code so the index doesn't break as the option lists
+  // grow.
+  const defaultGeo =
+    GEO_OPTIONS.find((g) => g.code === "IT")?.resource ?? GEO_OPTIONS[0].resource;
+  const defaultLang =
+    LANG_OPTIONS.find((l) => l.code === "IT")?.resource ?? LANG_OPTIONS[0].resource;
+  const [geo, setGeo] = useState<string>(defaultGeo);
+  const [language, setLanguage] = useState<string>(defaultLang);
   const [result, setResult] = useState<KeywordPlanData | null>(null);
   const [resultError, setResultError] = useState<string | null>(null);
   const [appliedCampaignId, setAppliedCampaignId] = useState<string | null>(null);
   return { phrase, setPhrase, geo, setGeo, language, setLanguage, result, setResult, resultError, setResultError, appliedCampaignId, setAppliedCampaignId };
 }
 
-const COUNTRY_TO_LANG: Record<string, string> = { US: "EN", ES: "ES", PT: "PT", DE: "DE", IT: "IT" };
+// Country → default language for the planner's auto-pick on campaign select.
+// Covers the EU+UK+EFTA set + US. Falls through gracefully when missing.
+const COUNTRY_TO_LANG: Record<string, string> = {
+  US: "EN", GB: "EN", IE: "EN", MT: "EN",
+  ES: "ES",
+  IT: "IT",
+  DE: "DE", AT: "DE", CH: "DE", LI: "DE", LU: "DE",
+  FR: "FR", BE: "FR",
+  PT: "PT",
+  NL: "NL",
+  PL: "PL",
+  SE: "SV",
+  DA: "DA", DK: "DA",
+  NO: "NO",
+  FI: "FI",
+  CS: "CS", CZ: "CS",
+  EL: "EL", GR: "EL", CY: "EL",
+  RO: "RO",
+  HU: "HU",
+  BG: "BG",
+  HR: "HR",
+  SK: "SK",
+  SL: "SL", SI: "SL",
+  ET: "ET", EE: "ET",
+  LV: "LV",
+  LT: "LT",
+  IS: "EN",
+};
 
 function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, onClose }: { state: PlannerState; campaignId: string | null; targeting: CampaignTargeting | null; adGroupId: string | null; onAddKeyword: (text: string, adGroupId: string) => void; onClose: () => void }) {
   useScrollLock(true);
