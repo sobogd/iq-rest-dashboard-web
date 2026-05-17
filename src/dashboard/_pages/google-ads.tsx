@@ -695,44 +695,13 @@ function NegativeRowEl({ n, onView }: { n: NegativeRow; onView: () => void }) {
 // ──────────────────────────────────────────────────────────────────────────
 // Keyword CPC chips — fetches top-of-page bid range from Google Ads
 // Keyword Planner for every keyword in the currently-open ad group.
-// Scoped to the campaign's geo targeting + first language; results cached
-// in localStorage with a 24h TTL so revisits are instant. Failed fetches
-// are remembered as null to avoid retry storms when an account has no
-// planner access.
+// Scoped to the campaign's geo targeting + first language. No cache: a
+// fresh request fires on every ad group open. Quota cost is well under
+// 1% of the Basic-access daily limit at current usage so the simpler
+// always-fresh model wins.
 // ──────────────────────────────────────────────────────────────────────────
 
 interface CpcRange { lowMicros: number; highMicros: number }
-interface CpcCacheEntry { range: CpcRange | null; ts: number }
-
-const CPC_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-const CPC_CACHE_PREFIX = "gads_cpc_v1:";
-
-function cpcCacheKey(keyword: string, geos: string[], language: string | null): string {
-  return `${CPC_CACHE_PREFIX}${keyword.toLowerCase()}|${[...geos].sort().join(",")}|${language ?? ""}`;
-}
-
-function readCpcCache(key: string): CpcCacheEntry | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(key);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as CpcCacheEntry;
-    if (Date.now() - parsed.ts > CPC_CACHE_TTL_MS) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function writeCpcCache(key: string, range: CpcRange | null): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(key, JSON.stringify({ range, ts: Date.now() } as CpcCacheEntry));
-  } catch {
-    // Storage quota / private mode — ignore, the in-memory map still
-    // shields us against a refetch on the same page session.
-  }
-}
 
 function geoResourcesFor(t: CampaignTargeting | null): string[] {
   if (!t) return [];
@@ -778,27 +747,22 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
   useEffect(() => {
     if (!sig || geos.length === 0) return;
     let cancelled = false;
-    const next = new Map<string, CpcRange | "loading" | "missing">();
+
+    // Always fetch fresh — set every keyword to loading first so the UI
+    // doesn't briefly show no chip on a re-open.
+    const initial = new Map<string, CpcRange | "loading" | "missing">();
     const seen = new Set<string>();
     const toFetch: string[] = [];
     for (const k of keywords) {
       const text = (k.text ?? k.title).toLowerCase();
       if (!text || seen.has(text)) continue;
       seen.add(text);
-      const cached = readCpcCache(cpcCacheKey(text, geos, language));
-      if (cached) {
-        next.set(text, cached.range ?? "missing");
-      } else {
-        next.set(text, "loading");
-        toFetch.push(text);
-      }
+      initial.set(text, "loading");
+      toFetch.push(text);
     }
-    setMap(next);
+    setMap(initial);
     if (toFetch.length === 0) return;
 
-    // Fire single-keyword planner requests in parallel. The API counts each
-    // generateKeywordIdeas call once regardless of seed count; we keep the
-    // existing single-keyword endpoint so the success path stays simple.
     void Promise.all(
       toFetch.map(async (text) => {
         try {
@@ -816,12 +780,8 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
           const low = j.lowTopOfPageBidMicros;
           const high = j.highTopOfPageBidMicros;
           const range: CpcRange | null = low != null && high != null ? { lowMicros: low, highMicros: high } : null;
-          writeCpcCache(cpcCacheKey(text, geos, language), range);
           return { text, range };
         } catch {
-          // Cache miss as null too — avoids hammering the API when the
-          // account or token doesn't have planner access at all.
-          writeCpcCache(cpcCacheKey(text, geos, language), null);
           return { text, range: null };
         }
       }),
@@ -841,12 +801,27 @@ function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | nu
 }
 
 function CpcRangeChip({ state }: { state: CpcRange | "loading" | "missing" | undefined }) {
-  if (!state || state === "missing") return null;
+  if (!state) return null;
   if (state === "loading") {
     return (
       <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-muted-foreground tabular-nums">
         <span className="inline-block w-3 h-3 border border-muted-foreground/40 border-t-foreground rounded-full animate-spin" />
         cpc
+      </span>
+    );
+  }
+  if (state === "missing") {
+    // Planner returned no top-of-page bid for this phrase (low volume,
+    // very narrow long-tail, or no data in this geo). Render a faded
+    // placeholder so the user sees we tried and didn't just lose the
+    // keyword in flight.
+    return (
+      <span
+        title="No planner CPC data for this keyword + geo combination"
+        className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary/60 text-muted-foreground/60 tabular-nums"
+      >
+        <TrendingUp className="w-3 h-3" />
+        no data
       </span>
     );
   }
