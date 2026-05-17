@@ -33,7 +33,9 @@ interface Stats {
   byDayPrev: { day: string; views: number; scans: number }[];
   byLanguage: { language: string; scans: number; views: number }[];
   byPage: { page: string; views: number; sessions: number }[];
-  orders: OrderStats;
+  // Null when the requester is not an IQ Rest admin or when no restaurant
+  // in the company has ordersEnabled. Frontend skips the order sections.
+  orders: OrderStats | null;
 }
 
 type PageCategory = "home" | "menu" | "reserve" | "order" | "contacts" | "language" | "other";
@@ -148,7 +150,7 @@ export function AnalyticsClient() {
   );
 
   const isEmpty =
-    !stats || (stats.totalViews === 0 && stats.orders.ordersCount === 0);
+    !stats || (stats.totalViews === 0 && (stats.orders?.ordersCount ?? 0) === 0);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -178,25 +180,28 @@ export function AnalyticsClient() {
       ) : (
         stats && (
           <div className="space-y-4">
-            <OrdersKpis orders={stats.orders} />
-            <RevenueByDayChart byDay={stats.orders.byDay} currency={stats.orders.currency} />
-            <RevenueByHourChart byHour={stats.orders.byHour} currency={stats.orders.currency} />
-            <TopItemsList
-              title="Top items by revenue"
-              items={stats.orders.topByRevenue}
-              valueKey="revenue"
-              currency={stats.orders.currency}
-            />
-            <TopItemsList
-              title="Top items by quantity"
-              items={stats.orders.topByQuantity}
-              valueKey="quantity"
-              currency={stats.orders.currency}
-            />
-            <OrderSizes sizeBuckets={stats.orders.sizeBuckets} />
-            <StatusFunnel funnel={stats.orders.statusFunnel} />
-            {/* Existing scan/view sections kept below — same monthly filter
-                drives them so the page is internally consistent. */}
+            {stats.orders ? (
+              <>
+                <OrdersKpis orders={stats.orders} />
+                <RevenueByDayChart byDay={stats.orders.byDay} currency={stats.orders.currency} />
+                <RevenueByHourChart byHour={stats.orders.byHour} currency={stats.orders.currency} />
+                <TopItemsList
+                  title="Top items by revenue"
+                  items={stats.orders.topByRevenue}
+                  valueKey="revenue"
+                  currency={stats.orders.currency}
+                />
+                <TopItemsList
+                  title="Top items by quantity"
+                  items={stats.orders.topByQuantity}
+                  valueKey="quantity"
+                  currency={stats.orders.currency}
+                />
+                <OrderSizes sizeBuckets={stats.orders.sizeBuckets} />
+                <StatusFunnel funnel={stats.orders.statusFunnel} />
+              </>
+            ) : null}
+            {/* Scan / page-view sections — same monthly filter drives them. */}
             {stats.totalScans > 0 || stats.totalViews > 0 ? (
               <>
                 <ScanKpis stats={stats} />
