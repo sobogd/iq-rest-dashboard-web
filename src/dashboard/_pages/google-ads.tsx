@@ -21,7 +21,6 @@ import {
   Calendar,
   UserPlus,
   ShoppingCart,
-  TrendingUp,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -277,7 +276,7 @@ export function GoogleAdsPage() {
   const [detailReq, setDetailReq] = useState<DetailRequest | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const plannerState = usePlannerState();
-  const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null } | null>(null);
+  const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null; geoResource: string | null } | null>(null);
   const [strategyBidReq, setStrategyBidReq] = useState<StrategyBidEditRequest | null>(null);
   const [qsReq, setQsReq] = useState<{ adGroupId: string; critId: string; keyword: string; matchType?: string } | null>(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
@@ -524,10 +523,15 @@ export function GoogleAdsPage() {
             onView={(req) => setDetailReq(req)}
             adGroupId={view.adGroupId}
             campaignId={view.campaignId}
-            campaignTargeting={data?.campaignTargeting[view.campaignId] ?? null}
             campaignIsPortfolio={Boolean(data?.campaignStrategies?.[view.campaignId]?.isPortfolio)}
             onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
-            onBidEdit={(k) => setBidEditReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, currentBid: k.bid ?? null })}
+            onBidEdit={(k) => setBidEditReq({
+              adGroupId: k.adGroupId,
+              critId: k.id,
+              keyword: k.text ?? k.title,
+              currentBid: k.bid ?? null,
+              geoResource: geoResourcesFor(data?.campaignTargeting[view.campaignId] ?? null)[0] ?? null,
+            })}
             onQsOpen={(k) => setQsReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, matchType: k.matchType })}
             onDeleteKeyword={(k) => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title })}
             searchTerms={data?.searchTermsByAdGroup[view.adGroupId]}
@@ -719,128 +723,11 @@ function geoResourcesFor(t: CampaignTargeting | null): string[] {
   return [];
 }
 
-function useKeywordCpc(keywords: KeywordRow[], targeting: CampaignTargeting | null): Map<string, CpcRange | "loading" | "missing"> {
-  const [map, setMap] = useState<Map<string, CpcRange | "loading" | "missing">>(() => new Map());
-
-  // Stable signature for the keyword list so we only re-fetch when the
-  // ad group actually changes (KeywordRow identity may change every
-  // refresh but the underlying text+matchType set is the cache key).
-  const sig = useMemo(() => {
-    const parts = keywords
-      .filter((k) => k.text ?? k.title)
-      .map((k) => (k.text ?? k.title).toLowerCase())
-      .sort();
-    // Dedup so two match-type variants of the same phrase don't re-trigger
-    // the effect when only one of them is added/removed.
-    return Array.from(new Set(parts)).join("|");
-  }, [keywords]);
-
-  const geos = useMemo(() => geoResourcesFor(targeting), [targeting]);
-  const geosKey = geos.join(",");
-
-  useEffect(() => {
-    if (!sig || geos.length === 0) return;
-    let cancelled = false;
-
-    // Always fetch fresh — set every keyword to loading first so the UI
-    // doesn't briefly show no chip on a re-open.
-    const initial = new Map<string, CpcRange | "loading" | "missing">();
-    const seen = new Set<string>();
-    const toFetch: string[] = [];
-    for (const k of keywords) {
-      const text = (k.text ?? k.title).toLowerCase();
-      if (!text || seen.has(text)) continue;
-      seen.add(text);
-      initial.set(text, "loading");
-      toFetch.push(text);
-    }
-    setMap(initial);
-    if (toFetch.length === 0) return;
-
-    // Fire all keyword requests at once. Update the chip map as each
-    // response lands so chips fill in independently — a slow keyword
-    // doesn't hold up the rest.
-    for (const text of toFetch) {
-      void (async () => {
-        let range: CpcRange | null = null;
-        try {
-          const qs = new URLSearchParams({ phrase: text, geo: geos.join(",") });
-          const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
-          if (res.ok) {
-            const j = (await res.json()) as {
-              lowTopOfPageBidMicros: number | null;
-              highTopOfPageBidMicros: number | null;
-            };
-            const low = j.lowTopOfPageBidMicros;
-            const high = j.highTopOfPageBidMicros;
-            if (low != null && high != null) range = { lowMicros: low, highMicros: high };
-          }
-        } catch {
-          // network/parse error — leave as missing.
-        }
-        if (cancelled) return;
-        setMap((prev) => {
-          const updated = new Map(prev);
-          updated.set(text, range ?? "missing");
-          return updated;
-        });
-      })();
-    }
-
-    return () => { cancelled = true; };
-  }, [sig, geosKey]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return map;
-}
-
-function CpcRangeChip({ state }: { state: CpcRange | "loading" | "missing" | undefined }) {
-  if (!state) return null;
-  if (state === "loading") {
-    return (
-      <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-muted-foreground tabular-nums">
-        <span className="inline-block w-3 h-3 border border-muted-foreground/40 border-t-foreground rounded-full animate-spin" />
-        cpc
-      </span>
-    );
-  }
-  if (state === "missing") {
-    // Planner returned no top-of-page bid for this phrase (low volume,
-    // very narrow long-tail, or no data in this geo). Render a faded
-    // placeholder so the user sees we tried and didn't just lose the
-    // keyword in flight.
-    return (
-      <span
-        title="No planner CPC data for this keyword + geo combination"
-        className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary/60 text-muted-foreground/60 tabular-nums"
-      >
-        <TrendingUp className="w-3 h-3" />
-        no data
-      </span>
-    );
-  }
-  const low = state.lowMicros / 1e6;
-  const high = state.highMicros / 1e6;
-  const avg = (low + high) / 2;
-  const fmt = (n: number) => (n >= 10 ? n.toFixed(1) : n.toFixed(2));
-  return (
-    <span
-      title={`Top-of-page bid range from Keyword Planner (last 24h cache).\nMin: €${fmt(low)}\nAvg: €${fmt(avg)}\nMax: €${fmt(high)}`}
-      className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-secondary text-muted-foreground tabular-nums"
-    >
-      <TrendingUp className="w-3 h-3" />
-      <span>€{fmt(low)}</span>
-      <span className="text-foreground/80">·{fmt(avg)}·</span>
-      <span>€{fmt(high)}</span>
-    </span>
-  );
-}
-
 function AdGroupDetail({
   keywords,
   ads,
   onView,
   adGroupId,
-  campaignTargeting,
   onKeywordOpen,
   onBidEdit,
   campaignIsPortfolio,
@@ -856,7 +743,6 @@ function AdGroupDetail({
   onView: (req: DetailRequest) => void;
   adGroupId: string;
   campaignId: string;
-  campaignTargeting: CampaignTargeting | null;
   /** When the parent campaign uses a portfolio bid strategy, the
    *  keyword-level CPC bid has no effect — the portfolio overrides it.
    *  We hide the inline bid edit pill so visitors don't twiddle a knob
@@ -870,7 +756,6 @@ function AdGroupDetail({
   negatives: NegativeRow[];
   onNegativeView: (n: NegativeRow) => void;
 }) {
-  const cpcMap = useKeywordCpc(keywords, campaignTargeting);
   const sortedKeywords = useMemo(() => {
     const MT_ORDER: Record<string, number> = { BROAD: 0, PHRASE: 1, EXACT: 2 };
     const arr = [...keywords];
@@ -938,7 +823,6 @@ function AdGroupDetail({
                       {k.bid != null ? k.bid.toFixed(2) : "—"}
                     </button>
                   )}
-                  <CpcRangeChip state={cpcMap.get((k.text ?? k.title).toLowerCase())} />
                 </div>
               </div>
               );
@@ -1830,12 +1714,51 @@ function fmtNum(n: number | null): string {
   return n.toLocaleString();
 }
 
+function CpcRangeBlock({ state, onPick }: { state: CpcRange | "loading" | "missing"; onPick: (eur: number) => void }) {
+  if (state === "loading") {
+    return (
+      <div className="text-[11px] text-muted-foreground inline-flex items-center gap-2">
+        <span className="inline-block w-3 h-3 border border-muted-foreground/40 border-t-foreground rounded-full animate-spin" />
+        Loading planner CPC range…
+      </div>
+    );
+  }
+  if (state === "missing") {
+    return (
+      <div className="text-[11px] text-muted-foreground">No planner CPC data for this keyword.</div>
+    );
+  }
+  const low = state.lowMicros / 1e6;
+  const high = state.highMicros / 1e6;
+  const avg = (low + high) / 2;
+  const fmt = (n: number) => (n >= 10 ? n.toFixed(1) : n.toFixed(2));
+  const pill = "text-[11px] px-2.5 h-7 rounded-md bg-secondary text-foreground hover:bg-muted transition-colors tabular-nums inline-flex items-center gap-1";
+  return (
+    <div className="space-y-1.5">
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+        Planner top-of-page CPC
+      </div>
+      <div className="flex items-center gap-1.5">
+        <button type="button" onClick={() => onPick(low)} className={pill} title="Min">
+          <span className="text-muted-foreground">min</span> €{fmt(low)}
+        </button>
+        <button type="button" onClick={() => onPick(avg)} className={pill} title="Average">
+          <span className="text-muted-foreground">avg</span> €{fmt(avg)}
+        </button>
+        <button type="button" onClick={() => onPick(high)} className={pill} title="Max">
+          <span className="text-muted-foreground">max</span> €{fmt(high)}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function BidEditModal({
   req,
   onClose,
   onSaved,
 }: {
-  req: { adGroupId: string; critId: string; keyword: string; currentBid: number | null };
+  req: { adGroupId: string; critId: string; keyword: string; currentBid: number | null; geoResource: string | null };
   onClose: () => void;
   onSaved: () => void;
 }) {
@@ -1843,6 +1766,38 @@ function BidEditModal({
   const [input, setInput] = useState(req.currentBid != null ? req.currentBid.toFixed(2) : "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // CPC range from Keyword Planner for this keyword + the campaign's first
+  // targeted country. Single, focused request — no rate-limit issues
+  // since the user can only have one bid edit modal open at a time.
+  const [cpcState, setCpcState] = useState<CpcRange | "loading" | "missing">("loading");
+  useEffect(() => {
+    if (!req.geoResource) {
+      setCpcState("missing");
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const qs = new URLSearchParams({ phrase: req.keyword, geo: req.geoResource! });
+        const res = await fetch(apiUrl(`/api/admin/google-ads/planner?${qs}`), { credentials: "include" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const j = (await res.json()) as {
+          lowTopOfPageBidMicros: number | null;
+          highTopOfPageBidMicros: number | null;
+        };
+        if (cancelled) return;
+        if (j.lowTopOfPageBidMicros != null && j.highTopOfPageBidMicros != null) {
+          setCpcState({ lowMicros: j.lowTopOfPageBidMicros, highMicros: j.highTopOfPageBidMicros });
+        } else {
+          setCpcState("missing");
+        }
+      } catch {
+        if (!cancelled) setCpcState("missing");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [req.keyword, req.geoResource]);
 
   const parsed = parseBid(input);
   const canSave = parsed != null && parsed > 0 && !saving;
@@ -1913,6 +1868,7 @@ function BidEditModal({
               </button>
             </div>
           </FormLabel>
+          <CpcRangeBlock state={cpcState} onPick={(eur) => setInput(eur.toFixed(2))} />
           {parsed != null ? (
             <div className="text-[11px] text-muted-foreground">
               Will be saved as <span className="font-mono text-foreground">€{parsed.toFixed(2)}</span>
