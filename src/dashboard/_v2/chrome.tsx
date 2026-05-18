@@ -102,7 +102,7 @@ export function DashboardChrome({
  <TopBar restaurant={restaurant} activeTab={activeTab} />
  <main
  className="px-4 md:px-6 py-5 md:py-4 md:pb-10"
- style={{ paddingBottom: "calc(3.75rem + env(safe-area-inset-bottom))" }}
+ style={{ paddingBottom: "calc(4.25rem + env(safe-area-inset-bottom))" }}
  >{children}</main>
  <BottomNav activeTab={activeTab} />
  </div>
@@ -238,9 +238,9 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  track(BOTTOM_NAV_EVENT[tab.id]);
  router.resetTo(tab.view);
  }}
- className={"flex-1 flex items-center justify-center py-3 transition-colors " + cls}
+ className={"flex-1 flex items-center justify-center py-4 transition-colors " + cls}
  >
- <TabIcon size={22} />
+ <TabIcon size={26} />
  </button>
  );
  })}
