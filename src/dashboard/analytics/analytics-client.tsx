@@ -21,7 +21,6 @@ interface OrderStats {
   topByRevenue: OrderItem[];
   topByQuantity: OrderItem[];
   sizeBuckets: { "1": number; "2-3": number; "4-5": number; "6+": number };
-  statusFunnel: { new: number; in_progress: number; completed: number; cancelled: number };
 }
 
 interface Stats {
@@ -198,7 +197,6 @@ export function AnalyticsClient() {
                   currency={stats.orders.currency}
                 />
                 <OrderSizes sizeBuckets={stats.orders.sizeBuckets} />
-                <StatusFunnel funnel={stats.orders.statusFunnel} />
               </>
             ) : null}
             {/* Scan / page-view sections — same monthly filter drives them. */}
@@ -464,41 +462,6 @@ function OrderSizes({ sizeBuckets }: { sizeBuckets: OrderStats["sizeBuckets"] })
               <div className="text-xs text-foreground w-20 truncate shrink-0">{label}</div>
               <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
                 <div className="h-full bg-primary/80 rounded-full" style={{ width: `${pct}%` }} />
-              </div>
-              <div className="text-xs text-muted-foreground tabular-nums w-16 text-right shrink-0">
-                {n} ({pct}%)
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function StatusFunnel({ funnel }: { funnel: OrderStats["statusFunnel"] }) {
-  const total = funnel.new + funnel.in_progress + funnel.completed + funnel.cancelled;
-  if (total === 0) return null;
-  const rows: [string, number][] = [
-    ["New", funnel.new],
-    ["In progress", funnel.in_progress],
-    ["Completed", funnel.completed],
-    ["Cancelled", funnel.cancelled],
-  ];
-  return (
-    <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
-      <div className="text-sm font-medium text-foreground mb-3">Order status</div>
-      <div className="space-y-2">
-        {rows.map(([label, n]) => {
-          const pct = total > 0 ? Math.round((n / total) * 100) : 0;
-          return (
-            <div key={label} className="flex items-center gap-3">
-              <div className="text-xs text-foreground w-24 truncate shrink-0">{label}</div>
-              <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${label === "Cancelled" ? "bg-red-500/60" : "bg-primary/80"}`}
-                  style={{ width: `${pct}%` }}
-                />
               </div>
               <div className="text-xs text-muted-foreground tabular-nums w-16 text-right shrink-0">
                 {n} ({pct}%)
