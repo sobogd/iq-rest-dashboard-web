@@ -214,6 +214,10 @@ export function AdminPage() {
                 company.subscriptionStatus !== "ACTIVE" &&
                 trialEndMs !== null &&
                 trialEndMs < Date.now();
+              const trialDaysLeft =
+                trialActive && trialEndMs !== null
+                  ? Math.max(1, Math.ceil((trialEndMs - Date.now()) / 86_400_000))
+                  : null;
               const nameColor =
                 company.subscriptionStatus === "ACTIVE"
                   ? "text-emerald-600"
@@ -256,6 +260,7 @@ export function AdminPage() {
                     }
                   >
                     {company.name || t("noName")}
+                    {trialDaysLeft !== null ? ` (${trialDaysLeft})` : ""}
                   </span>
                   <span className="inline-flex items-center gap-2 text-[10px] text-muted-foreground tabular-nums shrink-0">
                     <span className="inline-flex items-center gap-0.5">
