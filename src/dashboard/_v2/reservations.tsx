@@ -442,9 +442,9 @@ function MonthView({
          <span className="block w-1.5 h-1.5 rounded-full bg-primary" />
         </div>
        ) : null}
-       {/* Desktop: list up to 3 booking pills + overflow counter. */}
+       {/* Desktop: list up to 2 booking pills + overflow counter. */}
        <div className="hidden sm:flex flex-col gap-0.5 min-h-0 overflow-hidden">
-        {cellItems.slice(0, 3).map((b) => (
+        {cellItems.slice(0, 2).map((b) => (
          <span
           key={b.id}
           className={
@@ -457,9 +457,9 @@ function MonthView({
           <span>{b.guestName}</span>
          </span>
         ))}
-        {cellItems.length > 3 ? (
+        {cellItems.length > 2 ? (
          <div className="text-[10px] text-muted-foreground/80">
-          {t("plusMore", { count: cellItems.length - 3 })}
+          {t("plusMore", { count: cellItems.length - 2 })}
          </div>
         ) : null}
        </div>
