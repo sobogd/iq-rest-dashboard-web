@@ -49,8 +49,6 @@ import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish, DishOption, Ml, OptionVariant } from "./types";
 import { track } from "@/lib/dashboard-events";
 
-const OPTIONS_ENABLED = import.meta.env.VITE_OPTIONS_ENABLED === "TRUE";
-
 // ── Category form ──
 
 export function CategoryForm({
@@ -586,7 +584,6 @@ export function DishForm({
  </div>
  </div>
 
- {OPTIONS_ENABLED && (
  <div id="options-section" className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{t("optionsLabel")}</div>
  <p className="text-xs text-muted-foreground mb-2.5 mt-0.5">
@@ -617,7 +614,6 @@ export function DishForm({
  </button>
  )}
  </div>
- )}
 
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
