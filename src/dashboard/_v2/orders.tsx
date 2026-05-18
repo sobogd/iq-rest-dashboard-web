@@ -2150,7 +2150,7 @@ function KitchenTableCard({
 }) {
  const t = useTranslations("dashboard.orders");
  const allReady = entries.length > 0 && entries.every((e) => e.item.status === "ready");
- const cardCls = allReady ? "bg-emerald-50 border-emerald-300" : "bg-card border-border";
+ const cardCls = allReady ? "bg-emerald-50 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-700/60" : "bg-card border-border";
  const tableNumber = table ? table.number : tableNumberFallback ?? "?";
 
  return (
