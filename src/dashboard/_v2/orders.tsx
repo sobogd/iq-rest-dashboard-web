@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { showApiError } from "@/lib/show-api-error";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useRestaurant } from "./restaurant-context";
 import { useDashboardRouter } from "../_spa/router";
@@ -11,7 +11,6 @@ import {
  ChevronLeftIcon,
  ChevronRightIcon,
  CopyIcon,
- MessageIcon,
  MoreVerticalIcon,
  PlusIcon,
  ReceiptIcon,
@@ -25,7 +24,7 @@ import { FloorMap } from "./tables";
 import {
  formatPrice,
  formatTimeShort,
- minutesSince,
+ formatElapsedHMS,
  currencySymbolOf,
  parseDecimal,
  newId,
@@ -53,21 +52,18 @@ const ITEM_STATUS_KEYS: Record<OrderItemStatus, "statusPending" | "statusCooking
  served: "statusServed",
 };
 
-// In-progress states (cooking) use the app's primary brand colour so they
-// match the Save button and other CTA chrome; ready / served stay emerald;
-// pending stays neutral grey.
-const ITEM_STATUS_CLS: Record<OrderItemStatus, string> = {
- pending: "bg-secondary text-muted-foreground border-border",
- cooking: "bg-primary/10 text-primary border-primary/30",
- ready: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900",
- served: "bg-secondary text-muted-foreground border-border",
-};
-
 const STATUS_DOT_CLS: Record<OrderItemStatus, string> = {
  pending: "bg-slate-700 dark:bg-slate-400",
  cooking: "bg-amber-500 dark:bg-amber-400",
  ready: "bg-blue-600 dark:bg-blue-500",
  served: "bg-emerald-600 dark:bg-emerald-500",
+};
+
+const STATUS_TEXT_CLS: Record<OrderItemStatus, string> = {
+ pending: "text-slate-700 dark:text-slate-400",
+ cooking: "text-amber-600 dark:text-amber-400",
+ ready: "text-blue-600 dark:text-blue-500",
+ served: "text-emerald-600 dark:text-emerald-500",
 };
 
 const STATUS_ORDER: OrderItemStatus[] = ["pending", "cooking", "ready", "served"];
@@ -121,7 +117,6 @@ export function OrdersPage({
 }) {
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
- const router = useRouter();
  const restaurant = useRestaurant();
  const dashRouter = useDashboardRouter();
  const currencySymbol = currencySymbolOf(currency);
@@ -140,7 +135,13 @@ export function OrdersPage({
  const [wizardFooter, setWizardFooter] = useState<React.ReactNode | null>(null);
  const [openedFrom, setOpenedFrom] = useState<"table" | "list">("table");
 
- const activeOrders = orders.filter((o) => o.status === "active");
+ // Sort by daily number so the orders list (global and per-table) reads
+ // top→bottom by creation order. Date order ≈ creation order but ties on
+ // same-second rows would otherwise be undefined.
+ const activeOrders = orders
+ .filter((o) => o.status === "active")
+ .slice()
+ .sort((a, b) => (a.dailyNumber ?? 0) - (b.dailyNumber ?? 0));
  const occupiedIds = useMemo(
  () => new Set(activeOrders.map((o) => o.tableId).filter((x): x is string => !!x)),
  [activeOrders],
@@ -197,12 +198,10 @@ export function OrdersPage({
  }
 
  async function persistOrder(orderId: string, patch: Partial<Order>, base?: Order) {
- // First-item adds give us `base` explicitly because the closure-captured
- // `orders` does not yet see the order that ensureOrderForFirstItem just
- // pushed via setOrders — the state update is async. Without that, we
- // bail before calling patchOrder and the first item silently fails to
- // persist server-side; on the next poll the optimistic UI snaps back to
- // the empty server-side order and the user sees their first dish vanish.
+ // First-item adds pass `base` explicitly because the closure-captured
+ // `orders` does not yet see the order ensureOrderForFirstItem just pushed
+ // (React batches setOrders). Without `base` the first dish silently fails
+ // to persist server-side and the SSE/poll feed wipes the optimistic copy.
  const target = base ?? orders.find((o) => o.id === orderId);
  if (!target) return;
  const next: Order = { ...target, ...patch };
@@ -218,7 +217,11 @@ export function OrdersPage({
  items: next.items,
  total: calcOrderTotal(next),
  });
- } catch {
+ // No invalidate / no rollback — SSE will push the server-confirmed
+ // copy back through the cache. On failure we just toast; the next
+ // SSE/poll event corrects the optimistic state.
+ } catch (err) {
+ showApiError(err, "patchOrder");
  }
  }
 
@@ -276,8 +279,8 @@ export function OrdersPage({
  else closeModal();
  try {
  await deleteOrder(orderId);
- router.refresh();
- } catch {
+ } catch (err) {
+ showApiError(err, "deleteOrder");
  }
  }
 
@@ -305,9 +308,9 @@ export function OrdersPage({
  total: 0,
  };
  setOrders((all) => [...all, newOrder]);
- router.refresh();
  return newOrder;
- } catch {
+ } catch (err) {
+ showApiError(err, "createOrder");
  return null;
  } finally {
  setCreating(false);
@@ -324,8 +327,8 @@ export function OrdersPage({
  closeModal();
  try {
  await patchOrder(orderId, { tableNumber: table.number });
- router.refresh();
- } catch {
+ } catch (err) {
+ showApiError(err, "changeTable");
  }
  }
 
@@ -356,9 +359,9 @@ export function OrdersPage({
  ...all.map((o) => (o.id === orderId ? { ...o, items: kept, total: sourceTotal } : o)),
  newOrder,
  ]);
- router.refresh();
  setView({ kind: "list" });
- } catch {
+ } catch (err) {
+ showApiError(err, "splitOrder");
  }
  }
 
@@ -1910,27 +1913,69 @@ export function KitchenPage({
  const [, setTick] = useState(0);
  const [statusFilter, setStatusFilter] = useState<OrderItemStatus[]>([]);
  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+ const [openFilter, setOpenFilter] = useState<null | "status" | "category">(null);
 
  useEffect(() => {
- const id = setInterval(() => setTick((t) => t + 1), 15000);
+ const id = setInterval(() => setTick((t) => t + 1), 1000);
  return () => clearInterval(id);
  }, []);
 
- function setItemStatus(orderId: string, itemId: string, status: OrderItemStatus) {
- const order = orders.find((o) => o.id === orderId);
+ // Synchronously-tracked mirror of `orders` so rapid taps can read the very
+ // latest optimistic state without waiting for React to flush the previous
+ // render. The plain `orders` closure on the click handler captures the
+ // value at the time the handler was created — fast taps would otherwise
+ // all see the same stale status and refuse to advance.
+ const ordersRef = useRef<Order[]>(orders);
+ useEffect(() => {
+ ordersRef.current = orders;
+ }, [orders]);
+
+ // Per-order PATCH debounce: rapid taps on the same dish would otherwise
+ // fire a storm of PATCHes that interleave with SSE updates, briefly
+ // showing intermediate statuses on screen. One PATCH per order, 300ms
+ // after the last tap.
+ const pendingPatch = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+ const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
+ pending: "cooking",
+ cooking: "ready",
+ ready: "served",
+ served: "pending",
+ };
+
+ function advanceItemStatus(orderId: string, itemId: string) {
+ const order = ordersRef.current.find((o) => o.id === orderId);
  if (!order) return;
- const items = order.items.map((it) => (it.id === itemId ? { ...it, status } : it));
- setOrders((all) => all.map((o) => (o.id === orderId ? { ...o, items } : o)));
- patchOrder(orderId, { items, total: calcOrderTotal({ ...order, items }) }).catch(() => {
- });
+ const items = order.items.map((it) =>
+ it.id === itemId ? { ...it, status: KITCHEN_NEXT[it.status] } : it,
+ );
+ const updated: Order = { ...order, items };
+ // Update ref synchronously so the next rapid tap reads the new status.
+ ordersRef.current = ordersRef.current.map((o) => (o.id === orderId ? updated : o));
+ setOrders((all) => all.map((o) => (o.id === orderId ? updated : o)));
+ schedulePatch(orderId);
  }
 
- function toggleStatus(id: OrderItemStatus) {
- setStatusFilter((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+ function schedulePatch(orderId: string) {
+ const prev = pendingPatch.current.get(orderId);
+ if (prev) clearTimeout(prev);
+ const handle = setTimeout(() => {
+ pendingPatch.current.delete(orderId);
+ const snapshot = ordersRef.current.find((o) => o.id === orderId);
+ if (!snapshot) return;
+ patchOrder(orderId, { items: snapshot.items, total: calcOrderTotal(snapshot) }).catch((err) => {
+ showApiError(err, "kitchenItemStatus");
+ });
+ }, 300);
+ pendingPatch.current.set(orderId, handle);
  }
- function toggleCategory(id: string) {
- setCategoryFilter((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
- }
+
+ useEffect(() => {
+ return () => {
+ for (const h of pendingPatch.current.values()) clearTimeout(h);
+ pendingPatch.current.clear();
+ };
+ }, []);
 
  const dishToCategory = (() => {
  const map: Record<string, string> = {};
@@ -1944,76 +1989,124 @@ export function KitchenPage({
 
  function filterItems(items: OrderItem[]): OrderItem[] {
  return items.filter((it) => {
- if (it.status === "served") return false;
  if (statusFilter.length > 0 && !statusFilter.includes(it.status)) return false;
  if (categoryFilter.length > 0 && !categoryFilter.includes(dishToCategory[it.dishId])) return false;
  return true;
  });
  }
 
- const visibleOrders = orders
- .filter((o) => o.status === "active")
- .map((o) => ({ ...o, _filteredItems: filterItems(o.items) }))
- .filter((o) => o._filteredItems.length > 0)
- .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+ // Group by table: one card per physical table that has any active order
+ // with items matching current filters. Orders share a `tableId` (preferred)
+ // or fall back to `tableNumber` for legacy / no-floor-map flows. Items from
+ // every order at the table are merged; the oldest order's createdAt drives
+ // the elapsed timer and sort order.
+ type TableGroup = {
+ key: string;
+ tableId: string | null;
+ tableNumber: number | string | null;
+ items: { item: OrderItem; orderId: string }[];
+ oldestCreatedAt: string;
+ };
+ const groupsMap = new Map<string, TableGroup>();
+ for (const o of orders) {
+ if (o.status !== "active") continue;
+ const its = filterItems(o.items);
+ if (its.length === 0) continue;
+ const key = o.tableId ?? (o.tableNumber != null ? `n:${o.tableNumber}` : `o:${o.id}`);
+ const g = groupsMap.get(key) ?? {
+ key,
+ tableId: o.tableId ?? null,
+ tableNumber: o.tableNumber ?? null,
+ items: [],
+ oldestCreatedAt: o.createdAt,
+ };
+ for (const it of its) g.items.push({ item: it, orderId: o.id });
+ if (new Date(o.createdAt).getTime() < new Date(g.oldestCreatedAt).getTime()) {
+ g.oldestCreatedAt = o.createdAt;
+ }
+ groupsMap.set(key, g);
+ }
+ const visibleGroups = [...groupsMap.values()].sort(
+ (a, b) => new Date(a.oldestCreatedAt).getTime() - new Date(b.oldestCreatedAt).getTime(),
+ );
 
- const STATUS_FILTERS: { id: OrderItemStatus; labelKey: "statusPending" | "statusCooking" | "statusReady" }[] = [
+ const STATUS_FILTERS: { id: OrderItemStatus; labelKey: "statusPending" | "statusCooking" | "statusReady" | "statusServed" }[] = [
  { id: "pending", labelKey: "statusPending" },
  { id: "cooking", labelKey: "statusCooking" },
  { id: "ready", labelKey: "statusReady" },
+ { id: "served", labelKey: "statusServed" },
  ];
 
- const pillBase = "shrink-0 inline-flex items-center h-7 px-3 rounded-full text-xs font-medium transition-colors";
- const pillOn = "bg-foreground text-background";
- const pillOff = "bg-card text-foreground border border-border";
+ const filterBtnBase = "shrink-0 inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-colors";
+ const filterBtnOn = "bg-foreground text-background";
+ const filterBtnOff = "bg-card text-foreground border border-border";
 
  return (
  <div>
- <style>{`
- .no-scrollbar::-webkit-scrollbar { display: none; }
- .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
- `}</style>
-
  <div
  className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-card/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="flex items-center gap-1.5 overflow-x-auto px-4 md:px-6 py-2 no-scrollbar">
- {STATUS_FILTERS.map((s) => {
- const on = statusFilter.includes(s.id);
- return (
+ <div className="flex items-center gap-2 px-4 md:px-6 py-2">
+ <span className="shrink-0 text-xs font-medium text-muted-foreground">{t("filtersLabel")}</span>
  <button
- key={s.id}
  type="button"
- onClick={() => toggleStatus(s.id)}
- className={pillBase + " " + (on ? pillOn : pillOff)}
+ onClick={() => setOpenFilter("status")}
+ className={filterBtnBase + " " + (statusFilter.length > 0 ? filterBtnOn : filterBtnOff)}
  >
- {t(s.labelKey)}
+ {t("filterStatus")}
+ {statusFilter.length > 0 ? ` (${statusFilter.length})` : ""}
  </button>
- );
- })}
-
  {categories.length > 0 ? (
- <div className="shrink-0 self-stretch w-px bg-secondary mx-1" />
- ) : null}
-
- {categories.map((cat) => {
- const on = categoryFilter.includes(cat.id);
- return (
  <button
- key={cat.id}
  type="button"
- onClick={() => toggleCategory(cat.id)}
- className={pillBase + " " + (on ? pillOn : pillOff)}
+ onClick={() => setOpenFilter("category")}
+ className={filterBtnBase + " " + (categoryFilter.length > 0 ? filterBtnOn : filterBtnOff)}
  >
- {getMlWithFallback(cat.name, defaultLang, defaultLang)}
+ {t("filterCategory")}
+ {categoryFilter.length > 0 ? ` (${categoryFilter.length})` : ""}
  </button>
- );
- })}
+ ) : null}
  </div>
  </div>
 
- {visibleOrders.length === 0 ? (
+ <FilterModal
+ open={openFilter === "status"}
+ title={t("filterStatus")}
+ onClose={() => setOpenFilter(null)}
+ applyLabel={t("apply")}
+ resetLabel={t("reset")}
+ options={STATUS_FILTERS.map((s) => ({ id: s.id, label: t(s.labelKey) }))}
+ selected={statusFilter}
+ onApply={(ids) => {
+ setStatusFilter(ids as OrderItemStatus[]);
+ setOpenFilter(null);
+ }}
+ onReset={() => {
+ setStatusFilter([]);
+ setOpenFilter(null);
+ }}
+ />
+ <FilterModal
+ open={openFilter === "category"}
+ title={t("filterCategory")}
+ onClose={() => setOpenFilter(null)}
+ applyLabel={t("apply")}
+ resetLabel={t("reset")}
+ options={categories.map((c) => ({ id: c.id, label: getMlWithFallback(c.name, defaultLang, defaultLang) }))}
+ selected={categoryFilter}
+ onApply={(ids) => {
+ setCategoryFilter(ids);
+ setOpenFilter(null);
+ }}
+ onReset={() => {
+ setCategoryFilter([]);
+ setOpenFilter(null);
+ }}
+ />
+
+
+ {visibleGroups.length === 0 ? (
  <div className="max-w-2xl mx-auto pt-7 md:pt-6">
  <EmptyState
  title={t("kitchenClear")}
@@ -2021,17 +2114,17 @@ export function KitchenPage({
  />
  </div>
  ) : (
- <div className="-mx-4 md:-mx-6 mt-5 md:mt-8">
- <div className="overflow-x-auto pb-4 px-4 md:px-6">
- <div className="flex items-stretch gap-3" style={{ width: "max-content" }}>
- {visibleOrders.map((order) => (
- <KitchenOrderCard
- key={order.id}
- order={order}
- filteredItems={order._filteredItems}
- table={tables.find((t) => t.id === order.tableId) || null}
+ <div className="-mx-4 md:-mx-6 mt-2 md:mt-3">
+ <div className="overflow-x-auto pb-1 px-4 md:px-6">
+ <div className="flex items-start gap-3" style={{ width: "max-content" }}>
+ {visibleGroups.map((g) => (
+ <KitchenTableCard
+ key={g.key}
+ entries={g.items}
+ table={g.tableId ? tables.find((t) => t.id === g.tableId) || null : null}
+ tableNumberFallback={g.tableNumber}
  defaultLang={defaultLang}
- onItemStatusChange={(itemId, status) => setItemStatus(order.id, itemId, status)}
+ onItemAdvance={advanceItemStatus}
  />
  ))}
  </div>
@@ -2042,46 +2135,47 @@ export function KitchenPage({
  );
 }
 
-function KitchenOrderCard({
- order,
- filteredItems,
+function KitchenTableCard({
+ entries,
  table,
+ tableNumberFallback,
  defaultLang,
- onItemStatusChange,
+ onItemAdvance,
 }: {
- order: Order;
- filteredItems: OrderItem[];
+ entries: { item: OrderItem; orderId: string }[];
  table: TableEntity | null;
+ tableNumberFallback: number | string | null;
  defaultLang: string;
- onItemStatusChange: (itemId: string, status: OrderItemStatus) => void;
+ onItemAdvance: (orderId: string, itemId: string) => void;
 }) {
  const t = useTranslations("dashboard.orders");
- const items = filteredItems || order.items.filter((it) => it.status !== "served");
- const allReady = items.length > 0 && items.every((it) => it.status === "ready");
- const elapsed = minutesSince(order.createdAt);
+ const allReady = entries.length > 0 && entries.every((e) => e.item.status === "ready");
  const cardCls = allReady ? "bg-emerald-50 border-emerald-300" : "bg-card border-border";
+ const tableNumber = table ? table.number : tableNumberFallback ?? "?";
 
  return (
  <div className={"w-72 shrink-0 rounded-xl border " + cardCls + " flex flex-col"}>
  <div className="px-3.5 py-3 border-b border-border/60">
- <div className="flex items-center justify-between gap-2">
  <div className="text-base font-medium text-foreground">
- {t("tableLabel", { number: table ? table.number : order.tableNumber ?? "?" })}
- </div>
- <div className="text-xs text-muted-foreground tabular-nums">
- {t("elapsed", { time: formatTimeShort(order.createdAt), minutes: elapsed })}
- </div>
+ {t("tableLabel", { number: tableNumber })}
  </div>
  {table?.name ? <div className="text-xs text-muted-foreground mt-0.5">{table.name}</div> : null}
  </div>
 
  <div className="flex-1 p-2 space-y-1.5">
- {items.map((item) => (
+ {[...entries]
+ .sort((a, b) => {
+ const sa = a.item.status === "served" ? 1 : 0;
+ const sb = b.item.status === "served" ? 1 : 0;
+ if (sa !== sb) return sa - sb;
+ return new Date(a.item.createdAt).getTime() - new Date(b.item.createdAt).getTime();
+ })
+ .map(({ item, orderId }) => (
  <KitchenItem
- key={item.id}
+ key={`${orderId}:${item.id}`}
  item={item}
  defaultLang={defaultLang}
- onStatusChange={(status) => onItemStatusChange(item.id, status)}
+ onAdvance={() => onItemAdvance(orderId, item.id)}
  />
  ))}
  </div>
@@ -2092,60 +2186,141 @@ function KitchenOrderCard({
 function KitchenItem({
  item,
  defaultLang,
- onStatusChange,
+ onAdvance,
 }: {
  item: OrderItem;
  defaultLang: string;
- onStatusChange: (status: OrderItemStatus) => void;
+ onAdvance: () => void;
 }) {
  const t = useTranslations("dashboard.orders");
- const nextStatus: Record<OrderItemStatus, OrderItemStatus> = {
- pending: "cooking",
- cooking: "ready",
- ready: "pending",
- served: "pending",
- };
  const statusKey = ITEM_STATUS_KEYS[item.status] || ITEM_STATUS_KEYS.pending;
- const statusCls = ITEM_STATUS_CLS[item.status] || ITEM_STATUS_CLS.pending;
 
+ const isServed = item.status === "served";
  return (
  <button
  type="button"
- onClick={() => onStatusChange(nextStatus[item.status])}
- className="w-full text-left p-2.5 rounded-lg bg-card border border-border transition-colors"
- >
- <div className="flex items-start justify-between gap-2 mb-1.5">
- <div className="text-sm font-medium text-foreground leading-tight">
- {getMlWithFallback(item.dishNameSnapshot, defaultLang, defaultLang)}
- </div>
- <span
+ onClick={onAdvance}
  className={
- "shrink-0 inline-flex items-center h-5 px-1.5 text-[10px] font-medium border rounded-full " +
- statusCls
+ "w-full text-left p-2.5 rounded-lg bg-card border border-border transition-colors " +
+ (isServed ? "opacity-50" : "")
  }
  >
+ <div className="flex items-center justify-between gap-2">
+ <div className="flex items-center gap-1.5">
+ <span
+ className={"shrink-0 w-2 h-2 rounded-full " + STATUS_DOT_CLS[item.status]}
+ aria-hidden="true"
+ />
+ <span className={"text-[11px] font-medium uppercase tracking-wide " + STATUS_TEXT_CLS[item.status]}>
  {t(statusKey)}
  </span>
  </div>
+ {!isServed ? (
+ <span className="text-[11px] font-medium text-muted-foreground tabular-nums">
+ {formatElapsedHMS(item.createdAt)}
+ </span>
+ ) : null}
+ </div>
+ <div className="text-sm font-medium text-foreground leading-6 mt-2 truncate">
+ {getMlWithFallback(item.dishNameSnapshot, defaultLang, defaultLang)}
+ </div>
 
  {item.options.length > 0 ? (
- <div className="text-xs text-muted-foreground">
- {item.options.map((o, i) => (
- <span key={i}>
- {i > 0 ? " · " : ""}
- {getMlWithFallback(o.variantName, defaultLang, defaultLang)}
- {(o.quantity ?? 1) > 1 ? ` × ${o.quantity}` : ""}
- </span>
- ))}
+ <div className="text-xs text-muted-foreground mt-0.5 space-y-0.5">
+ {item.options.map((o, i) => {
+ const name = getMlWithFallback(o.variantName, defaultLang, defaultLang);
+ const qty = o.quantity ?? 1;
+ return <div key={i}>×{qty} · {name}</div>;
+ })}
  </div>
  ) : null}
 
  {item.notes ? (
- <div className="inline-flex items-start gap-1 text-xs text-amber-700 mt-1.5 px-1.5 py-0.5 bg-amber-50 rounded">
- <MessageIcon size={11} className="mt-0.5 shrink-0" />
- <span>{item.notes}</span>
+ <div className="text-xs text-foreground mt-0.5">
+ {t("notesLabel")}: {item.notes}
  </div>
  ) : null}
  </button>
+ );
+}
+
+function FilterModal({
+ open,
+ title,
+ onClose,
+ options,
+ selected,
+ onApply,
+ onReset,
+ applyLabel,
+ resetLabel,
+}: {
+ open: boolean;
+ title: string;
+ onClose: () => void;
+ options: { id: string; label: string }[];
+ selected: string[];
+ onApply: (ids: string[]) => void;
+ onReset: () => void;
+ applyLabel: string;
+ resetLabel: string;
+}) {
+ const [draft, setDraft] = useState<string[]>(selected);
+ useEffect(() => { if (open) setDraft(selected); }, [open, selected]);
+ function toggle(id: string) {
+ setDraft((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
+ }
+ return (
+ <Modal
+ open={open}
+ onClose={onClose}
+ title={title}
+ size="sm"
+ footer={
+ <div className="flex items-center justify-end gap-2">
+ <button
+ type="button"
+ onClick={onReset}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ {resetLabel}
+ </button>
+ <button
+ type="button"
+ onClick={() => onApply(draft)}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ >
+ {applyLabel}
+ </button>
+ </div>
+ }
+ >
+ <div className="-m-5 divide-y divide-border">
+ {options.map((o) => {
+ const on = draft.includes(o.id);
+ return (
+ <button
+ key={o.id}
+ type="button"
+ onClick={() => toggle(o.id)}
+ className={
+ "w-full flex items-center gap-3 px-5 py-3 text-left transition-colors " +
+ (on ? "bg-primary/5" : "")
+ }
+ >
+ <span
+ className={
+ "w-4 h-4 rounded border inline-flex items-center justify-center shrink-0 " +
+ (on ? "bg-primary border-primary text-primary-foreground" : "border-input")
+ }
+ >
+ {on ? <CheckIcon size={10} /> : null}
+ </span>
+ <span className="min-w-0 flex-1 text-sm text-foreground truncate">{o.label}</span>
+ </button>
+ );
+ })}
+ </div>
+ </Modal>
  );
 }

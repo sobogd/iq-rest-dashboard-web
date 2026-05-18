@@ -42,7 +42,9 @@
       "willUse": "Naudos",
       "unsavedTitle": "Turite neišsaugotų pakeitimų",
       "unsavedMessage": "Jie bus prarasti, jei dabar išeisite.",
-      "discard": "Atmesti"
+      "discard": "Atmesti",
+      "genericErrorTitle": "Įvyko klaida",
+      "genericErrorMessage": "Mes jau dirbame ties šia problema."
     },
     "subscriptionChip": {
       "plan": "Planas",
@@ -293,6 +295,11 @@
       "statusCooking": "Gaminama",
       "statusReady": "Paruošta",
       "statusServed": "Patiekta",
+      "filtersLabel": "Filtrai:",
+      "filterStatus": "Būsena",
+      "filterCategory": "Kategorija",
+      "apply": "Taikyti",
+      "reset": "Atstatyti",
       "kitchenClear": "Virtuvė tuščia",
       "kitchenClearSub": "Prekės pasirodys čia, kai svečiai užsakys.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Padalinti užsakymą",
       "splitOrderHint": "Pasirinkite prekes naujam užsakymui",
       "completeOrderUnservedMessage": "Kai kurios prekės dar nepatiektos. Vis tiek uždaryti užsakymą?",
+      "completeOrderMessage": "Uždaryti šį užsakymą?",
       "duplicateItem": "Dubliuoti",
       "selectCategory": "Pasirinkite kategoriją",
       "selectDish": "Pasirinkite prekę",

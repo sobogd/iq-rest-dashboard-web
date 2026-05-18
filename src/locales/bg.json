@@ -42,7 +42,9 @@
       "willUse": "Ще използва",
       "unsavedTitle": "Имате незапазени промени",
       "unsavedMessage": "Промените ще бъдат загубени, ако излезете сега.",
-      "discard": "Отхвърли"
+      "discard": "Отхвърли",
+      "genericErrorTitle": "Възникна грешка",
+      "genericErrorMessage": "Вече работим по проблема."
     },
     "subscriptionChip": {
       "plan": "План",
@@ -293,6 +295,11 @@
       "statusCooking": "Приготвя се",
       "statusReady": "Готово",
       "statusServed": "Сервирано",
+      "filtersLabel": "Филтри:",
+      "filterStatus": "Статус",
+      "filterCategory": "Категория",
+      "apply": "Приложи",
+      "reset": "Нулирай",
       "kitchenClear": "Кухнята е чиста",
       "kitchenClearSub": "Артикулите ще се появят тук, когато гостите поръчат.",
       "elapsed": "{time} · {minutes} мин",
@@ -306,6 +313,7 @@
       "splitOrder": "Разделяне на поръчка",
       "splitOrderHint": "Изберете позиции за нова поръчка",
       "completeOrderUnservedMessage": "Някои позиции все още не са сервирани. Все пак да затворя поръчката?",
+      "completeOrderMessage": "Затваряне на тази поръчка?",
       "duplicateItem": "Дублирай",
       "selectCategory": "Изберете категория",
       "selectDish": "Изберете артикул",

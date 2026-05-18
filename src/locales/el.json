@@ -42,7 +42,9 @@
       "willUse": "Θα χρησιμοποιήσει",
       "unsavedTitle": "Έχεις μη αποθηκευμένες αλλαγές",
       "unsavedMessage": "Θα χαθούν αν φύγεις τώρα.",
-      "discard": "Απόρριψη"
+      "discard": "Απόρριψη",
+      "genericErrorTitle": "Κάτι πήγε στραβά",
+      "genericErrorMessage": "Εργαζόμαστε ήδη πάνω στο πρόβλημα."
     },
     "subscriptionChip": {
       "plan": "Πλάνο",
@@ -293,6 +295,11 @@
       "statusCooking": "Μαγειρεύεται",
       "statusReady": "Έτοιμο",
       "statusServed": "Σερβιρίστηκε",
+      "filtersLabel": "Φίλτρα:",
+      "filterStatus": "Κατάσταση",
+      "filterCategory": "Κατηγορία",
+      "apply": "Εφαρμογή",
+      "reset": "Επαναφορά",
       "kitchenClear": "Η κουζίνα είναι ελεύθερη",
       "kitchenClearSub": "Τα είδη θα εμφανίζονται εδώ όταν οι πελάτες παραγγέλνουν.",
       "elapsed": "{time} · {minutes} λεπτά",
@@ -306,6 +313,7 @@
       "splitOrder": "Διαχωρισμός παραγγελίας",
       "splitOrderHint": "Επιλέξτε στοιχεία για νέα παραγγελία",
       "completeOrderUnservedMessage": "Κάποια στοιχεία δεν έχουν σερβιριστεί. Να κλείσει η παραγγελία;",
+      "completeOrderMessage": "Κλείσιμο αυτής της παραγγελίας;",
       "duplicateItem": "Αντιγραφή",
       "selectCategory": "Επιλέξτε κατηγορία",
       "selectDish": "Επιλέξτε στοιχείο",

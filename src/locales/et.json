@@ -42,7 +42,9 @@
       "willUse": "Kasutab",
       "unsavedTitle": "Sul on salvestamata muudatused",
       "unsavedMessage": "Need lähevad kaotsi, kui sa praegu lahkud.",
-      "discard": "Loobu"
+      "discard": "Loobu",
+      "genericErrorTitle": "Midagi läks valesti",
+      "genericErrorMessage": "Tegeleme juba probleemiga."
     },
     "subscriptionChip": {
       "plan": "Plaan",
@@ -293,6 +295,11 @@
       "statusCooking": "Valmib",
       "statusReady": "Valmis",
       "statusServed": "Serveeritud",
+      "filtersLabel": "Filtrid:",
+      "filterStatus": "Olek",
+      "filterCategory": "Kategooria",
+      "apply": "Rakenda",
+      "reset": "Lähtesta",
       "kitchenClear": "Köök on tühi",
       "kitchenClearSub": "Esemed ilmuvad siia, kui külalised tellivad.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Jaga tellimus",
       "splitOrderHint": "Valige tooted uue tellimuse jaoks",
       "completeOrderUnservedMessage": "Mõned tooted ei ole serveeritud. Kas sulgeda tellimus ikkagi?",
+      "completeOrderMessage": "Sulge see tellimus?",
       "duplicateItem": "Dubleeri",
       "selectCategory": "Vali kategooria",
       "selectDish": "Vali toode",

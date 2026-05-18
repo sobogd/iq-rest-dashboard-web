@@ -42,7 +42,9 @@
       "willUse": "Uporabi",
       "unsavedTitle": "Imate neshranjene spremembe",
       "unsavedMessage": "Izgubile se bodo, če zdaj odidete.",
-      "discard": "Zavrzi"
+      "discard": "Zavrzi",
+      "genericErrorTitle": "Nekaj je šlo narobe",
+      "genericErrorMessage": "Že delamo na težavi."
     },
     "subscriptionChip": {
       "plan": "Paket",
@@ -293,6 +295,11 @@
       "statusCooking": "Kuha se",
       "statusReady": "Pripravljeno",
       "statusServed": "Postreženo",
+      "filtersLabel": "Filtri:",
+      "filterStatus": "Stanje",
+      "filterCategory": "Kategorija",
+      "apply": "Uporabi",
+      "reset": "Ponastavi",
       "kitchenClear": "Kuhinja je prazna",
       "kitchenClearSub": "Izdelki se bodo prikazali, ko gostje naročijo.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Razdeli naročilo",
       "splitOrderHint": "Izberite postavke za novo naročilo",
       "completeOrderUnservedMessage": "Nekatere postavke še niso postrežene. Vseeno zapri naročilo?",
+      "completeOrderMessage": "Zapri to naročilo?",
       "duplicateItem": "Podvoji",
       "selectCategory": "Izberite kategorijo",
       "selectDish": "Izberite postavko",

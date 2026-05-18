@@ -42,7 +42,9 @@
       "willUse": "将使用",
       "unsavedTitle": "您有未保存的更改",
       "unsavedMessage": "如果现在离开将会丢失。",
-      "discard": "放弃"
+      "discard": "放弃",
+      "genericErrorTitle": "出现错误",
+      "genericErrorMessage": "我们已经在处理此问题。"
     },
     "subscriptionChip": {
       "plan": "套餐",
@@ -293,6 +295,11 @@
       "statusCooking": "烹饪中",
       "statusReady": "已就绪",
       "statusServed": "已上菜",
+      "filtersLabel": "筛选:",
+      "filterStatus": "状态",
+      "filterCategory": "类别",
+      "apply": "应用",
+      "reset": "重置",
       "kitchenClear": "厨房清空",
       "kitchenClearSub": "顾客下单时项目会出现在这里。",
       "elapsed": "{time} · {minutes} 分钟",
@@ -306,6 +313,7 @@
       "splitOrder": "拆分订单",
       "splitOrderHint": "选择要移入新订单的项目",
       "completeOrderUnservedMessage": "部分项目尚未上桌。仍要关闭订单吗？",
+      "completeOrderMessage": "关闭此订单吗？",
       "duplicateItem": "复制",
       "selectCategory": "选择类别",
       "selectDish": "选择商品",

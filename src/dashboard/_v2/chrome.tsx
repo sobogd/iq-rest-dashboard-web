@@ -11,6 +11,8 @@ import {
  SettingsIcon,
 } from "./icons";
 import { RestaurantProvider } from "./restaurant-context";
+import { useOrdersStreamStateStore } from "./orders-sync-state";
+import { useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { SubProvider, type Sub } from "./sub-context";
 import type { Restaurant, TabId } from "./types";
 import { track } from "@/lib/dashboard-events";
@@ -42,15 +44,11 @@ interface NavTab {
  icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const KITCHEN_ENABLED = process.env.NEXT_PUBLIC_KITCHEN === "TRUE";
-
 const NAV_TABS: NavTab[] = [
  { id: "menu", labelKey: "menu", view: { name: "menu" }, icon: GridIcon },
  { id: "reservations", labelKey: "reservations", view: { name: "reservations" }, icon: CalendarIcon },
  { id: "orders", labelKey: "orders", view: { name: "orders" }, icon: ReceiptIcon },
- ...(KITCHEN_ENABLED
- ? [{ id: "kitchen" as TabId, labelKey: "kitchen" as const, view: { name: "kitchen" } as View, icon: FlameIcon }]
- : []),
+ { id: "kitchen", labelKey: "kitchen", view: { name: "kitchen" }, icon: FlameIcon },
  { id: "analytics", labelKey: "analytics", view: { name: "analytics" }, icon: ChartIcon },
  { id: "settings", labelKey: "settings", view: { name: "settings" }, icon: SettingsIcon },
 ];
@@ -104,7 +102,7 @@ export function DashboardChrome({
  <TopBar restaurant={restaurant} activeTab={activeTab} />
  <main
  className="px-4 md:px-6 py-5 md:py-4 md:pb-10"
- style={{ paddingBottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+ style={{ paddingBottom: "calc(3.75rem + env(safe-area-inset-bottom))" }}
  >{children}</main>
  <BottomNav activeTab={activeTab} />
  </div>
@@ -145,13 +143,49 @@ function TopBar({ restaurant, activeTab }: { restaurant: Restaurant; activeTab: 
  >
  <div className="max-w-5xl mx-auto px-4 md:px-6">
  <div className="flex items-center justify-between gap-3 py-4">
+ <div className="min-w-0 flex items-center gap-2">
  <h1 className="min-w-0 text-lg font-medium text-foreground truncate">
  {restaurant.name || t("untitledRestaurant")}
  </h1>
+ <SyncIndicator />
+ </div>
  <TopNav activeTab={activeTab} t={t} />
  </div>
  </div>
  </header>
+ );
+}
+
+// Single source of truth for the live-sync chip. Green when SSE is open and
+// nothing is in-flight, amber spinner while a query is fetching, red when
+// the stream is closed / reconnecting. Tiny on purpose — it should not draw
+// attention when everything is healthy.
+function SyncIndicator() {
+ const streamState = useOrdersStreamStateStore((s) => s.state);
+ const fetching = useIsFetching({ queryKey: ["orders"] }) > 0;
+ const qc = useQueryClient();
+ if (streamState === "open" && !fetching) {
+ return <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-label="live" title="Live" />;
+ }
+ if (streamState === "connecting" || fetching) {
+ return (
+ <button
+ type="button"
+ onClick={() => void qc.invalidateQueries({ queryKey: ["orders"] })}
+ className="w-3 h-3 rounded-full border-2 border-amber-400 border-t-transparent animate-spin"
+ aria-label="reconnecting"
+ title="Reconnecting"
+ />
+ );
+ }
+ return (
+ <button
+ type="button"
+ onClick={() => void qc.invalidateQueries({ queryKey: ["orders"] })}
+ className="w-1.5 h-1.5 rounded-full bg-red-500"
+ aria-label="offline"
+ title="Click to refresh"
+ />
  );
 }
 
@@ -199,14 +233,14 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  <button
  key={tab.id}
  type="button"
+ aria-label={t(tab.labelKey)}
  onClick={() => {
  track(BOTTOM_NAV_EVENT[tab.id]);
  router.resetTo(tab.view);
  }}
- className={"flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 transition-colors " + cls}
+ className={"flex-1 flex items-center justify-center py-3 transition-colors " + cls}
  >
- <TabIcon size={20} />
- <span className="text-[10px] font-medium">{t(tab.labelKey)}</span>
+ <TabIcon size={22} />
  </button>
  );
  })}

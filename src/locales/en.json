@@ -42,7 +42,9 @@
       "willUse": "Will use",
       "unsavedTitle": "You have unsaved changes",
       "unsavedMessage": "They will be lost if you leave now.",
-      "discard": "Discard"
+      "discard": "Discard",
+      "genericErrorTitle": "Something went wrong",
+      "genericErrorMessage": "We are already working on the issue."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Cooking",
       "statusReady": "Ready",
       "statusServed": "Served",
+      "filtersLabel": "Filters:",
+      "filterStatus": "Status",
+      "filterCategory": "Category",
+      "apply": "Apply",
+      "reset": "Reset",
       "kitchenClear": "Kitchen is clear",
       "kitchenClearSub": "Items will appear here as guests place orders.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Split order",
       "splitOrderHint": "Pick items to move into a new order",
       "completeOrderUnservedMessage": "Some items are not served yet. Complete order anyway?",
+      "completeOrderMessage": "Close this order?",
       "duplicateItem": "Duplicate",
       "selectCategory": "Select category",
       "selectDish": "Select item",

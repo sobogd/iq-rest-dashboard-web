@@ -42,7 +42,9 @@
       "willUse": "سيستخدم",
       "unsavedTitle": "لديك تغييرات غير محفوظة",
       "unsavedMessage": "سيتم فقدان التغييرات إذا غادرت الآن.",
-      "discard": "تجاهل"
+      "discard": "تجاهل",
+      "genericErrorTitle": "حدث خطأ",
+      "genericErrorMessage": "نحن نعمل بالفعل على حل المشكلة."
     },
     "subscriptionChip": {
       "plan": "الخطة",
@@ -293,6 +295,11 @@
       "statusCooking": "قيد الطهي",
       "statusReady": "جاهز",
       "statusServed": "تم التقديم",
+      "filtersLabel": "المرشحات:",
+      "filterStatus": "الحالة",
+      "filterCategory": "الفئة",
+      "apply": "تطبيق",
+      "reset": "إعادة تعيين",
       "kitchenClear": "المطبخ فارغ",
       "kitchenClearSub": "ستظهر العناصر هنا عندما يطلب الضيوف.",
       "elapsed": "{time} · {minutes} دقيقة",
@@ -306,6 +313,7 @@
       "splitOrder": "تقسيم الطلب",
       "splitOrderHint": "اختر العناصر لطلب جديد",
       "completeOrderUnservedMessage": "بعض العناصر لم تُقدَّم بعد. هل تريد إغلاق الطلب على أي حال؟",
+      "completeOrderMessage": "هل تغلق هذا الطلب؟",
       "duplicateItem": "تكرار",
       "selectCategory": "اختر الفئة",
       "selectDish": "اختر العنصر",

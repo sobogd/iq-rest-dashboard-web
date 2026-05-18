@@ -42,7 +42,9 @@
       "willUse": "使用します",
       "unsavedTitle": "未保存の変更があります",
       "unsavedMessage": "今ページを離れると失われます。",
-      "discard": "破棄"
+      "discard": "破棄",
+      "genericErrorTitle": "エラーが発生しました",
+      "genericErrorMessage": "現在問題を調査中です。"
     },
     "subscriptionChip": {
       "plan": "プラン",
@@ -293,6 +295,11 @@
       "statusCooking": "調理中",
       "statusReady": "準備完了",
       "statusServed": "提供済み",
+      "filtersLabel": "フィルター:",
+      "filterStatus": "ステータス",
+      "filterCategory": "カテゴリ",
+      "apply": "適用",
+      "reset": "リセット",
       "kitchenClear": "キッチンは空いています",
       "kitchenClearSub": "ゲストが注文するとここにアイテムが表示されます。",
       "elapsed": "{time} · {minutes} 分",
@@ -306,6 +313,7 @@
       "splitOrder": "注文を分割",
       "splitOrderHint": "新しい注文に移す商品を選択してください",
       "completeOrderUnservedMessage": "未提供の商品があります。注文を閉じますか？",
+      "completeOrderMessage": "この注文を閉じますか？",
       "duplicateItem": "複製",
       "selectCategory": "カテゴリーを選択",
       "selectDish": "商品を選択",

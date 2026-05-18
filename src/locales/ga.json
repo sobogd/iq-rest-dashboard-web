@@ -42,7 +42,9 @@
       "willUse": "Úsáidfidh",
       "unsavedTitle": "Tá athruithe gan sábháil agat",
       "unsavedMessage": "Caillfear iad má fhágann tú anois.",
-      "discard": "Caith uait"
+      "discard": "Caith uait",
+      "genericErrorTitle": "Tharla earráid",
+      "genericErrorMessage": "Táimid ag obair ar an bhfadhb cheana féin."
     },
     "subscriptionChip": {
       "plan": "Plean",
@@ -293,6 +295,11 @@
       "statusCooking": "Á chócaráil",
       "statusReady": "Réidh",
       "statusServed": "Seirbheáilte",
+      "filtersLabel": "Scagairí:",
+      "filterStatus": "Stádas",
+      "filterCategory": "Catagóir",
+      "apply": "Cuir i bhfeidhm",
+      "reset": "Athshocraigh",
       "kitchenClear": "Tá an chistin glan",
       "kitchenClearSub": "Beidh míreanna le feiceáil anseo nuair a chuireann cuairteoirí orduithe.",
       "elapsed": "{time} · {minutes} nóim",
@@ -306,6 +313,7 @@
       "splitOrder": "Roinn ordú",
       "splitOrderHint": "Roghnaigh míreanna d'ordú nua",
       "completeOrderUnservedMessage": "Ní freastalaíodh ar chuid de na míreanna fós. An ndúnfar an t-ordú mar sin féin?",
+      "completeOrderMessage": "An ordú seo a dhúnadh?",
       "duplicateItem": "Dúblíocht",
       "selectCategory": "Roghnaigh catagóir",
       "selectDish": "Roghnaigh earra",

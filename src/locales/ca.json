@@ -42,7 +42,9 @@
       "willUse": "Usarà",
       "unsavedTitle": "Tens canvis sense desar",
       "unsavedMessage": "Es perdran si surts ara.",
-      "discard": "Descarta"
+      "discard": "Descarta",
+      "genericErrorTitle": "S'ha produït un error",
+      "genericErrorMessage": "Ja estem treballant en el problema."
     },
     "subscriptionChip": {
       "plan": "Pla",
@@ -293,6 +295,11 @@
       "statusCooking": "Cuinant-se",
       "statusReady": "Llest",
       "statusServed": "Servit",
+      "filtersLabel": "Filtres:",
+      "filterStatus": "Estat",
+      "filterCategory": "Categoria",
+      "apply": "Aplicar",
+      "reset": "Restablir",
       "kitchenClear": "La cuina és buida",
       "kitchenClearSub": "Els articles apareixeran aquí quan els clients comandin.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Dividir comanda",
       "splitOrderHint": "Selecciona articles per a una nova comanda",
       "completeOrderUnservedMessage": "Alguns articles encara no s'han servit. Tancar la comanda igualment?",
+      "completeOrderMessage": "Tancar aquesta comanda?",
       "duplicateItem": "Duplica",
       "selectCategory": "Selecciona categoria",
       "selectDish": "Selecciona article",

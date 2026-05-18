@@ -42,7 +42,9 @@
       "willUse": "Izmantos",
       "unsavedTitle": "Jums ir nesaglabātas izmaiņas",
       "unsavedMessage": "Tās tiks zaudētas, ja tagad iziesiet.",
-      "discard": "Atmest"
+      "discard": "Atmest",
+      "genericErrorTitle": "Notikusi kļūda",
+      "genericErrorMessage": "Mēs jau strādājam pie problēmas."
     },
     "subscriptionChip": {
       "plan": "Plāns",
@@ -293,6 +295,11 @@
       "statusCooking": "Tiek gatavots",
       "statusReady": "Gatavs",
       "statusServed": "Pasniegts",
+      "filtersLabel": "Filtri:",
+      "filterStatus": "Statuss",
+      "filterCategory": "Kategorija",
+      "apply": "Piemērot",
+      "reset": "Atiestatīt",
       "kitchenClear": "Virtuve ir tukša",
       "kitchenClearSub": "Preces parādīsies šeit, kad viesi pasūtīs.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Sadalīt pasūtījumu",
       "splitOrderHint": "Atlasiet preces jaunam pasūtījumam",
       "completeOrderUnservedMessage": "Dažas preces vēl nav pasniegtas. Vai tomēr aizvērt pasūtījumu?",
+      "completeOrderMessage": "Aizvērt šo pasūtījumu?",
       "duplicateItem": "Dublēt",
       "selectCategory": "Atlasiet kategoriju",
       "selectDish": "Atlasiet preci",

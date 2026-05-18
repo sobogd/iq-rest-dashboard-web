@@ -42,7 +42,9 @@
       "willUse": "Userà",
       "unsavedTitle": "Hai modifiche non salvate",
       "unsavedMessage": "Andranno perse se esci ora.",
-      "discard": "Annulla"
+      "discard": "Annulla",
+      "genericErrorTitle": "Qualcosa è andato storto",
+      "genericErrorMessage": "Stiamo già lavorando al problema."
     },
     "subscriptionChip": {
       "plan": "Piano",
@@ -293,6 +295,11 @@
       "statusCooking": "In cottura",
       "statusReady": "Pronto",
       "statusServed": "Servito",
+      "filtersLabel": "Filtri:",
+      "filterStatus": "Stato",
+      "filterCategory": "Categoria",
+      "apply": "Applica",
+      "reset": "Reimposta",
       "kitchenClear": "Cucina libera",
       "kitchenClearSub": "Gli articoli appariranno qui quando gli ospiti ordineranno.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Dividi ordine",
       "splitOrderHint": "Seleziona piatti per un nuovo ordine",
       "completeOrderUnservedMessage": "Alcuni piatti non sono ancora stati serviti. Chiudere comunque l'ordine?",
+      "completeOrderMessage": "Chiudere questo ordine?",
       "duplicateItem": "Duplica",
       "selectCategory": "Seleziona categoria",
       "selectDish": "Seleziona articolo",

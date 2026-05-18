@@ -42,7 +42,9 @@
       "willUse": "Kullanılacak",
       "unsavedTitle": "Kaydedilmemiş değişiklikleriniz var",
       "unsavedMessage": "Şimdi çıkarsan kaybolur.",
-      "discard": "Yoksay"
+      "discard": "Yoksay",
+      "genericErrorTitle": "Bir şeyler ters gitti",
+      "genericErrorMessage": "Sorun üzerinde zaten çalışıyoruz."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Pişiyor",
       "statusReady": "Hazır",
       "statusServed": "Servis edildi",
+      "filtersLabel": "Filtreler:",
+      "filterStatus": "Durum",
+      "filterCategory": "Kategori",
+      "apply": "Uygula",
+      "reset": "Sıfırla",
       "kitchenClear": "Mutfak boş",
       "kitchenClearSub": "Misafirler sipariş verdikçe ürünler burada görünecek.",
       "elapsed": "{time} · {minutes} dk",
@@ -306,6 +313,7 @@
       "splitOrder": "Siparişi böl",
       "splitOrderHint": "Yeni sipariş için ürünleri seçin",
       "completeOrderUnservedMessage": "Bazı ürünler henüz servis edilmedi. Yine de siparişi kapatmak istiyor musunuz?",
+      "completeOrderMessage": "Bu siparişi kapatmak istiyor musunuz?",
       "duplicateItem": "Çoğalt",
       "selectCategory": "Kategori seç",
       "selectDish": "Ürün seçin",

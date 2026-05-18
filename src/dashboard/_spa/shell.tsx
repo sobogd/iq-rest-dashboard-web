@@ -11,6 +11,7 @@ import { ReservationsPage } from "../_v2/reservations";
 import { TablesPage, TableFormPage } from "../_v2/tables";
 import { CategoryForm, DishForm, OptionForm } from "../_v2/forms";
 import { useRestaurant, useRestaurantOrNull } from "../_v2/restaurant-context";
+import { useOrdersStream } from "../_v2/use-orders-stream";
 import { fetchCategories, fetchItems } from "../_v2/api";
 import { buildCategories } from "../_v2/mappers";
 import { getMlWithFallback } from "../_v2/i18n";
@@ -59,12 +60,16 @@ function ShellBody(props: ShellInitialData) {
   const isAuthView = view.name.startsWith("auth.");
   const queryClient = useQueryClient();
 
-  // Force a fresh fetch the moment the user lands on orders or reservations.
-  // Without this they'd see the snapshot from the last 30-second poll, which
-  // can be stale enough to miss a brand-new order or booking just placed by
-  // staff on another device.
+  // Live SSE stream of order events. Bypasses polling — when this is open,
+  // updates from any device / QR diner / other tab arrive in ~100ms.
+  // Polling stays alive in dashboard-host as a 30s fallback for the rare
+  // case when the stream is disconnected (server restart, CDN flake).
+  useOrdersStream(restaurant?.id ?? null);
+
+  // Cheap extra safety: invalidate when the user lands on an orders/kitchen/
+  // reservations view, in case the stream is mid-reconnect.
   useEffect(() => {
-    if (view.name === "orders" || view.name === "orders.detail") {
+    if (view.name === "orders" || view.name === "orders.detail" || view.name === "kitchen") {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     } else if (view.name === "reservations") {
       queryClient.invalidateQueries({ queryKey: ["reservations"] });

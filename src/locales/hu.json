@@ -42,7 +42,9 @@
       "willUse": "Használja",
       "unsavedTitle": "Mentetlen módosítások",
       "unsavedMessage": "Elvesznek, ha most kilépsz.",
-      "discard": "Elvet"
+      "discard": "Elvet",
+      "genericErrorTitle": "Hiba történt",
+      "genericErrorMessage": "Már dolgozunk a problémán."
     },
     "subscriptionChip": {
       "plan": "Csomag",
@@ -293,6 +295,11 @@
       "statusCooking": "Készül",
       "statusReady": "Kész",
       "statusServed": "Tálalva",
+      "filtersLabel": "Szűrők:",
+      "filterStatus": "Állapot",
+      "filterCategory": "Kategória",
+      "apply": "Alkalmaz",
+      "reset": "Visszaállít",
       "kitchenClear": "A konyha üres",
       "kitchenClearSub": "A tételek itt jelennek meg, ahogy a vendégek rendelnek.",
       "elapsed": "{time} · {minutes} perc",
@@ -306,6 +313,7 @@
       "splitOrder": "Rendelés szétosztása",
       "splitOrderHint": "Válasszon tételeket egy új rendeléshez",
       "completeOrderUnservedMessage": "Néhány tétel még nincs felszolgálva. Mindenképpen lezárja a rendelést?",
+      "completeOrderMessage": "Lezárja ezt a rendelést?",
       "duplicateItem": "Duplikálás",
       "selectCategory": "Válasszon kategóriát",
       "selectDish": "Válasszon tételt",

@@ -42,7 +42,9 @@
       "willUse": "Nutzt",
       "unsavedTitle": "Ungespeicherte Änderungen",
       "unsavedMessage": "Sie gehen verloren, wenn du die Seite jetzt verlässt.",
-      "discard": "Verwerfen"
+      "discard": "Verwerfen",
+      "genericErrorTitle": "Etwas ist schiefgelaufen",
+      "genericErrorMessage": "Wir arbeiten bereits an dem Problem."
     },
     "subscriptionChip": {
       "plan": "Tarif",
@@ -293,6 +295,11 @@
       "statusCooking": "In Zubereitung",
       "statusReady": "Fertig",
       "statusServed": "Serviert",
+      "filtersLabel": "Filter:",
+      "filterStatus": "Status",
+      "filterCategory": "Kategorie",
+      "apply": "Anwenden",
+      "reset": "Zurücksetzen",
       "kitchenClear": "Küche ist frei",
       "kitchenClearSub": "Positionen erscheinen hier, sobald Gäste bestellen.",
       "elapsed": "{time} · {minutes} Min.",
@@ -306,6 +313,7 @@
       "splitOrder": "Bestellung teilen",
       "splitOrderHint": "Wählen Sie Positionen für eine neue Bestellung",
       "completeOrderUnservedMessage": "Einige Positionen sind noch nicht serviert. Bestellung trotzdem abschließen?",
+      "completeOrderMessage": "Diese Bestellung schließen?",
       "duplicateItem": "Duplizieren",
       "selectCategory": "Kategorie wählen",
       "selectDish": "Artikel wählen",

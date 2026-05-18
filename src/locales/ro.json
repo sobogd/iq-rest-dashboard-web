@@ -42,7 +42,9 @@
       "willUse": "Va folosi",
       "unsavedTitle": "Ai modificări nesalvate",
       "unsavedMessage": "Vor fi pierdute dacă ieși acum.",
-      "discard": "Renunță"
+      "discard": "Renunță",
+      "genericErrorTitle": "Ceva nu a funcționat",
+      "genericErrorMessage": "Lucrăm deja la problemă."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Se gătește",
       "statusReady": "Gata",
       "statusServed": "Servit",
+      "filtersLabel": "Filtre:",
+      "filterStatus": "Stare",
+      "filterCategory": "Categorie",
+      "apply": "Aplică",
+      "reset": "Resetează",
       "kitchenClear": "Bucătăria e liberă",
       "kitchenClearSub": "Articolele vor apărea aici când clienții comandă.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Împarte comanda",
       "splitOrderHint": "Selectați articole pentru o comandă nouă",
       "completeOrderUnservedMessage": "Unele articole nu au fost încă servite. Închideți totuși comanda?",
+      "completeOrderMessage": "Închideți această comandă?",
       "duplicateItem": "Duplică",
       "selectCategory": "Selectați categoria",
       "selectDish": "Selectați articolul",

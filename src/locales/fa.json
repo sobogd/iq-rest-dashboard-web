@@ -42,7 +42,9 @@
       "willUse": "استفاده می‌کند",
       "unsavedTitle": "تغییرات ذخیره‌نشده دارید",
       "unsavedMessage": "در صورت خروج اکنون از بین می‌روند.",
-      "discard": "نادیده بگیر"
+      "discard": "نادیده بگیر",
+      "genericErrorTitle": "خطایی رخ داد",
+      "genericErrorMessage": "ما در حال کار روی این مشکل هستیم."
     },
     "subscriptionChip": {
       "plan": "طرح",
@@ -293,6 +295,11 @@
       "statusCooking": "در حال پخت",
       "statusReady": "آماده",
       "statusServed": "سرو شد",
+      "filtersLabel": "فیلترها:",
+      "filterStatus": "وضعیت",
+      "filterCategory": "دسته‌بندی",
+      "apply": "اعمال",
+      "reset": "بازنشانی",
       "kitchenClear": "آشپزخانه خالی است",
       "kitchenClearSub": "آیتم‌ها وقتی مهمانان سفارش دهند اینجا ظاهر می‌شوند.",
       "elapsed": "{time} · {minutes} دقیقه",
@@ -306,6 +313,7 @@
       "splitOrder": "تقسیم سفارش",
       "splitOrderHint": "آیتم‌ها را برای سفارش جدید انتخاب کنید",
       "completeOrderUnservedMessage": "برخی آیتم‌ها هنوز سرو نشده‌اند. به‌هرحال سفارش بسته شود؟",
+      "completeOrderMessage": "این سفارش بسته شود؟",
       "duplicateItem": "تکثیر",
       "selectCategory": "دسته‌بندی را انتخاب کنید",
       "selectDish": "آیتم را انتخاب کنید",

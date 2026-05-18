@@ -42,7 +42,9 @@
       "willUse": "Bruker",
       "unsavedTitle": "Du har ulagrede endringer",
       "unsavedMessage": "De går tapt hvis du forlater nå.",
-      "discard": "Forkast"
+      "discard": "Forkast",
+      "genericErrorTitle": "Noe gikk galt",
+      "genericErrorMessage": "Vi jobber allerede med problemet."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Tilberedes",
       "statusReady": "Klar",
       "statusServed": "Servert",
+      "filtersLabel": "Filtre:",
+      "filterStatus": "Status",
+      "filterCategory": "Kategori",
+      "apply": "Bruk",
+      "reset": "Tilbakestill",
       "kitchenClear": "Kjøkkenet er tomt",
       "kitchenClearSub": "Varer dukker opp her når gjester bestiller.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Del bestilling",
       "splitOrderHint": "Velg varer for en ny bestilling",
       "completeOrderUnservedMessage": "Noen varer er ikke servert. Lukk bestillingen likevel?",
+      "completeOrderMessage": "Lukke denne bestillingen?",
       "duplicateItem": "Dupliser",
       "selectCategory": "Velg kategori",
       "selectDish": "Velg vare",

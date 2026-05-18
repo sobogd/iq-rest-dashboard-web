@@ -73,7 +73,11 @@ export function DashboardHost() {
       { queryKey: ["categories"], queryFn: () => api<ApiCategory[]>("/categories"), enabled },
       { queryKey: ["items"], queryFn: () => api<ApiItem[]>("/items"), enabled },
       { queryKey: ["tables"], queryFn: () => api<ApiTable[]>("/tables"), enabled },
-      { queryKey: ["orders"], queryFn: () => api<ApiOrder[]>("/orders"), enabled, refetchInterval: 30_000 },
+      // SSE stream (use-orders-stream) is the primary source of order
+      // updates; polling stays as a safety net for the rare case the stream
+      // is disconnected. refetchIntervalInBackground keeps a KDS on a side
+      // monitor up-to-date when the staff has the window in the background.
+      { queryKey: ["orders"], queryFn: () => api<ApiOrder[]>("/orders"), enabled, refetchInterval: 30_000, refetchIntervalInBackground: true },
       { queryKey: ["reservations"], queryFn: () => api<ApiReservation[]>("/reservations"), enabled, refetchInterval: 30_000 },
       { queryKey: ["sub"], queryFn: () => api<SubData | null>("/restaurant/subscription").catch(() => null), enabled },
     ],

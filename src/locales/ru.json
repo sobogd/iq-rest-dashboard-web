@@ -42,7 +42,9 @@
       "willUse": "Будет использовано",
       "unsavedTitle": "Есть несохранённые изменения",
       "unsavedMessage": "Они будут потеряны, если выйти сейчас.",
-      "discard": "Сбросить"
+      "discard": "Сбросить",
+      "genericErrorTitle": "Что-то пошло не так",
+      "genericErrorMessage": "Мы уже работаем над проблемой."
     },
     "subscriptionChip": {
       "plan": "Тариф",
@@ -293,6 +295,11 @@
       "statusCooking": "Готовится",
       "statusReady": "Готово",
       "statusServed": "Подано",
+      "filtersLabel": "Фильтры:",
+      "filterStatus": "Статус",
+      "filterCategory": "Категория",
+      "apply": "Применить",
+      "reset": "Сбросить",
       "kitchenClear": "Кухня свободна",
       "kitchenClearSub": "Позиции появятся здесь, когда гости сделают заказы.",
       "elapsed": "{time} · {minutes} мин",
@@ -306,6 +313,7 @@
       "splitOrder": "Разделить заказ",
       "splitOrderHint": "Выберите позиции для нового заказа",
       "completeOrderUnservedMessage": "Не все позиции поданы. Всё равно закрыть заказ?",
+      "completeOrderMessage": "Закрыть этот заказ?",
       "duplicateItem": "Дублировать",
       "selectCategory": "Выберите категорию",
       "selectDish": "Выберите позицию",

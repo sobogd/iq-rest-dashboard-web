@@ -42,7 +42,9 @@
       "willUse": "Mun nota",
       "unsavedTitle": "Óvistaðar breytingar",
       "unsavedMessage": "Þær glatast ef þú ferð núna.",
-      "discard": "Hætta við"
+      "discard": "Hætta við",
+      "genericErrorTitle": "Eitthvað fór úrskeiðis",
+      "genericErrorMessage": "Við erum þegar að vinna í málinu."
     },
     "subscriptionChip": {
       "plan": "Áskrift",
@@ -293,6 +295,11 @@
       "statusCooking": "Eldað",
       "statusReady": "Tilbúið",
       "statusServed": "Borið fram",
+      "filtersLabel": "Síur:",
+      "filterStatus": "Staða",
+      "filterCategory": "Flokkur",
+      "apply": "Beita",
+      "reset": "Núllstilla",
       "kitchenClear": "Eldhús er tómt",
       "kitchenClearSub": "Hlutir munu birtast hér þegar gestir panta.",
       "elapsed": "{time} · {minutes} mín",
@@ -306,6 +313,7 @@
       "splitOrder": "Skipta pöntun",
       "splitOrderHint": "Veldu hluti fyrir nýja pöntun",
       "completeOrderUnservedMessage": "Sumum hlutum hefur ekki verið borið fram. Loka pöntuninni samt?",
+      "completeOrderMessage": "Loka þessari pöntun?",
       "duplicateItem": "Afrita",
       "selectCategory": "Veldu flokk",
       "selectDish": "Veldu vöru",

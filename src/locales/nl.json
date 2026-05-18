@@ -42,7 +42,9 @@
       "willUse": "Gebruikt",
       "unsavedTitle": "Je hebt niet-opgeslagen wijzigingen",
       "unsavedMessage": "Ze gaan verloren als je nu vertrekt.",
-      "discard": "Negeren"
+      "discard": "Negeren",
+      "genericErrorTitle": "Er ging iets mis",
+      "genericErrorMessage": "We werken al aan het probleem."
     },
     "subscriptionChip": {
       "plan": "Abonnement",
@@ -293,6 +295,11 @@
       "statusCooking": "Wordt bereid",
       "statusReady": "Klaar",
       "statusServed": "Geserveerd",
+      "filtersLabel": "Filters:",
+      "filterStatus": "Status",
+      "filterCategory": "Categorie",
+      "apply": "Toepassen",
+      "reset": "Resetten",
       "kitchenClear": "Keuken is leeg",
       "kitchenClearSub": "Items verschijnen hier zodra gasten bestellen.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Bestelling splitsen",
       "splitOrderHint": "Kies items voor een nieuwe bestelling",
       "completeOrderUnservedMessage": "Sommige items zijn nog niet geserveerd. Bestelling toch afsluiten?",
+      "completeOrderMessage": "Deze bestelling sluiten?",
       "duplicateItem": "Dupliceren",
       "selectCategory": "Selecteer categorie",
       "selectDish": "Selecteer item",

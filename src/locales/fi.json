@@ -42,7 +42,9 @@
       "willUse": "Käyttää",
       "unsavedTitle": "Sinulla on tallentamattomia muutoksia",
       "unsavedMessage": "Ne menetetään, jos lähdet nyt.",
-      "discard": "Hylkää"
+      "discard": "Hylkää",
+      "genericErrorTitle": "Jokin meni pieleen",
+      "genericErrorMessage": "Korjaamme ongelmaa parhaillaan."
     },
     "subscriptionChip": {
       "plan": "Tilaus",
@@ -293,6 +295,11 @@
       "statusCooking": "Valmistuu",
       "statusReady": "Valmis",
       "statusServed": "Tarjoiltu",
+      "filtersLabel": "Suodattimet:",
+      "filterStatus": "Tila",
+      "filterCategory": "Kategoria",
+      "apply": "Käytä",
+      "reset": "Nollaa",
       "kitchenClear": "Keittiö on tyhjä",
       "kitchenClearSub": "Tuotteet ilmestyvät tähän, kun vieraat tekevät tilauksia.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Jaa tilaus",
       "splitOrderHint": "Valitse tuotteet uuteen tilaukseen",
       "completeOrderUnservedMessage": "Joitakin tuotteita ei ole tarjoiltu. Sulje tilaus silti?",
+      "completeOrderMessage": "Suljetaanko tämä tilaus?",
       "duplicateItem": "Monista",
       "selectCategory": "Valitse luokka",
       "selectDish": "Valitse tuote",

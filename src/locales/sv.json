@@ -42,7 +42,9 @@
       "willUse": "Använder",
       "unsavedTitle": "Du har osparade ändringar",
       "unsavedMessage": "De försvinner om du lämnar nu.",
-      "discard": "Kassera"
+      "discard": "Kassera",
+      "genericErrorTitle": "Något gick fel",
+      "genericErrorMessage": "Vi arbetar redan med problemet."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Lagas",
       "statusReady": "Klar",
       "statusServed": "Serverad",
+      "filtersLabel": "Filter:",
+      "filterStatus": "Status",
+      "filterCategory": "Kategori",
+      "apply": "Använd",
+      "reset": "Återställ",
       "kitchenClear": "Köket är tomt",
       "kitchenClearSub": "Artiklar dyker upp här när gäster beställer.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Dela order",
       "splitOrderHint": "Välj artiklar för en ny order",
       "completeOrderUnservedMessage": "Vissa artiklar har inte serverats. Stänga ordern ändå?",
+      "completeOrderMessage": "Stänga denna beställning?",
       "duplicateItem": "Duplicera",
       "selectCategory": "Välj kategori",
       "selectDish": "Välj artikel",

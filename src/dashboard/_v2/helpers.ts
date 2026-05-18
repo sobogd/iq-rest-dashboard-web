@@ -44,6 +44,17 @@ export function minutesSince(iso: string): number {
  return Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
 }
 
+// MM:SS for under one hour, HH:MM:SS otherwise. Negative diffs (clock skew /
+// future timestamps) clamp to 00:00.
+export function formatElapsedHMS(iso: string): string {
+ const total = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000));
+ const s = total % 60;
+ const m = Math.floor(total / 60) % 60;
+ const h = Math.floor(total / 3600);
+ const pad = (n: number) => String(n).padStart(2, "0");
+ return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+}
+
 export function formatDayLabel(date: Date): string {
  const today = new Date();
  const tomorrow = new Date();

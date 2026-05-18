@@ -42,7 +42,9 @@
       "willUse": "Použije",
       "unsavedTitle": "Máte neuložené zmeny",
       "unsavedMessage": "Stratia sa, ak teraz odídete.",
-      "discard": "Zahodiť"
+      "discard": "Zahodiť",
+      "genericErrorTitle": "Niečo sa pokazilo",
+      "genericErrorMessage": "Už pracujeme na probléme."
     },
     "subscriptionChip": {
       "plan": "Plán",
@@ -293,6 +295,11 @@
       "statusCooking": "Pripravuje sa",
       "statusReady": "Hotové",
       "statusServed": "Podávané",
+      "filtersLabel": "Filtre:",
+      "filterStatus": "Stav",
+      "filterCategory": "Kategória",
+      "apply": "Použiť",
+      "reset": "Obnoviť",
       "kitchenClear": "Kuchyňa je voľná",
       "kitchenClearSub": "Položky sa tu zobrazia, keď hostia objednajú.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Rozdeliť objednávku",
       "splitOrderHint": "Vyberte položky pre novú objednávku",
       "completeOrderUnservedMessage": "Niektoré položky ešte neboli podané. Napriek tomu uzavrieť objednávku?",
+      "completeOrderMessage": "Uzavrieť túto objednávku?",
       "duplicateItem": "Duplikovať",
       "selectCategory": "Vyberte kategóriu",
       "selectDish": "Vyberte položku",

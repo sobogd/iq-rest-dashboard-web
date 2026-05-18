@@ -42,7 +42,9 @@
       "willUse": "Bruger",
       "unsavedTitle": "Du har ugemte ændringer",
       "unsavedMessage": "De går tabt, hvis du forlader siden nu.",
-      "discard": "Kassér"
+      "discard": "Kassér",
+      "genericErrorTitle": "Noget gik galt",
+      "genericErrorMessage": "Vi arbejder allerede på problemet."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -293,6 +295,11 @@
       "statusCooking": "Tilberedes",
       "statusReady": "Klar",
       "statusServed": "Serveret",
+      "filtersLabel": "Filtre:",
+      "filterStatus": "Status",
+      "filterCategory": "Kategori",
+      "apply": "Anvend",
+      "reset": "Nulstil",
       "kitchenClear": "Køkkenet er tomt",
       "kitchenClearSub": "Varer dukker op her, når gæster bestiller.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Del ordre",
       "splitOrderHint": "Vælg varer til en ny ordre",
       "completeOrderUnservedMessage": "Nogle varer er ikke serveret. Luk ordren alligevel?",
+      "completeOrderMessage": "Luk denne ordre?",
       "duplicateItem": "Dupliker",
       "selectCategory": "Vælg kategori",
       "selectDish": "Vælg vare",

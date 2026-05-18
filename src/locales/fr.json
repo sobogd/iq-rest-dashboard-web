@@ -42,7 +42,9 @@
       "willUse": "Utilisera",
       "unsavedTitle": "Vous avez des modifications non enregistrées",
       "unsavedMessage": "Elles seront perdues si vous quittez maintenant.",
-      "discard": "Annuler"
+      "discard": "Annuler",
+      "genericErrorTitle": "Une erreur s'est produite",
+      "genericErrorMessage": "Nous travaillons déjà sur le problème."
     },
     "subscriptionChip": {
       "plan": "Forfait",
@@ -293,6 +295,11 @@
       "statusCooking": "En cuisson",
       "statusReady": "Prêt",
       "statusServed": "Servi",
+      "filtersLabel": "Filtres :",
+      "filterStatus": "Statut",
+      "filterCategory": "Catégorie",
+      "apply": "Appliquer",
+      "reset": "Réinitialiser",
       "kitchenClear": "Cuisine vide",
       "kitchenClearSub": "Les articles apparaîtront ici quand les clients commanderont.",
       "elapsed": "{time} · {minutes} min",
@@ -306,6 +313,7 @@
       "splitOrder": "Diviser la commande",
       "splitOrderHint": "Sélectionnez les articles pour une nouvelle commande",
       "completeOrderUnservedMessage": "Certains articles ne sont pas encore servis. Clôturer la commande quand même ?",
+      "completeOrderMessage": "Fermer cette commande ?",
       "duplicateItem": "Dupliquer",
       "selectCategory": "Choisir une catégorie",
       "selectDish": "Choisir un article",
