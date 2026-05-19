@@ -83,7 +83,7 @@ export function WizardActions({
       <button
         type="submit"
         disabled={loading || continueDisabled}
-        className="flex-1 h-10 text-sm font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 active:scale-[0.99] transition-all tracking-tight disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
+        className="flex-1 h-10 text-sm font-semibold text-white bg-gradient-to-br from-[hsl(9,100%,58%)] to-[hsl(35,95%,55%)] rounded-lg hover:opacity-90 active:scale-[0.99] transition-all tracking-tight disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2"
       >
         {loading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
         {continueLabel}
