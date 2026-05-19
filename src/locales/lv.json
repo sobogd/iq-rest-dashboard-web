@@ -668,34 +668,6 @@
       "loading": "Ielādē…",
       "settingsBreadcrumb": "Iestatījumi"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Kāda veida vieta?",
-        "subtitle": "Iepriekš ielādēsim piemēra ēdienkarti, lai sāktu ar rediģēšanu, nevis tukšu lapu."
-      },
-      "step2": {
-        "title": "Nosauc savu restorānu",
-        "subtitle": "Šo viesi redzēs ēdienkartes augšpusē. Vēlāk var mainīt.",
-        "nameLabel": "Restorāna nosaukums",
-        "namePlaceholder": "Mario picerija"
-      },
-      "step3": {
-        "title": "Gandrīz gatavs",
-        "subtitle": "Apstiprini e-pastu, lai saglabātu ēdienkarti un atvērtu paneli."
-      },
-      "back": "Atpakaļ",
-      "continue": "Turpināt",
-      "cuisines": {
-        "pizza": "Picerija",
-        "sushi": "Suši / Japāņu",
-        "asian": "Aziātu",
-        "burger": "Burgeri / Ātrā ēdināšana",
-        "coffee": "Kafejnīca",
-        "bar": "Bārs / Pubs",
-        "bakery": "Maizes ceptuve / Konditoreja",
-        "restaurant": "Restorāns"
-      }
-    },
     "exampleBadge": "piem."
   }
 }

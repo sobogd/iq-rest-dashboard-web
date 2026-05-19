@@ -668,34 +668,6 @@
       "loading": "Á luchtú…",
       "settingsBreadcrumb": "Socruithe"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Cén cineál áite?",
-        "subtitle": "Lódálfaimid biachlár samplach roimh ré ionas go dtosóidh tú ag eagrú, ní le leathanach folamh."
-      },
-      "step2": {
-        "title": "Tabhair ainm ar do bhialann",
-        "subtitle": "Sin a fheicfidh aíonna ag barr do bhiachlár. Is féidir é a athrú níos déanaí.",
-        "nameLabel": "Ainm na bialainne",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Beagnach ann",
-        "subtitle": "Deimhnigh do ríomhphost chun do bhiachlár a shábháil agus an deais a oscailt."
-      },
-      "back": "Ar ais",
-      "continue": "Ar aghaidh",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Seapánach",
-        "asian": "Áiseach",
-        "burger": "Burger / Mearbhia",
-        "coffee": "Caifé",
-        "bar": "Beár / Teach Tábhairne",
-        "bakery": "Báicéireacht / Píóga",
-        "restaurant": "Bialann"
-      }
-    },
     "exampleBadge": "samp."
   }
 }

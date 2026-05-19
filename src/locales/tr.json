@@ -668,34 +668,6 @@
       "loading": "Yükleniyor…",
       "settingsBreadcrumb": "Ayarlar"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Ne tür bir mekan?",
-        "subtitle": "Boş bir sayfayla değil, düzenlemeyle başlaman için örnek bir menü yükleyeceğiz."
-      },
-      "step2": {
-        "title": "Restoranına bir isim ver",
-        "subtitle": "Bu, müşterilerin menünün üstünde göreceği isim. Sonra değiştirebilirsin.",
-        "nameLabel": "Restoran adı",
-        "namePlaceholder": "Mario'nun Pizzası"
-      },
-      "step3": {
-        "title": "Az kaldı",
-        "subtitle": "Menünü kaydedip paneli açmak için e-postanı onayla."
-      },
-      "back": "Geri",
-      "continue": "Devam et",
-      "cuisines": {
-        "pizza": "Pizzacı",
-        "sushi": "Suşi / Japon",
-        "asian": "Asya",
-        "burger": "Burger / Fast food",
-        "coffee": "Kafe",
-        "bar": "Bar / Pub",
-        "bakery": "Fırın / Pastane",
-        "restaurant": "Restoran"
-      }
-    },
     "exampleBadge": "örn."
   }
 }

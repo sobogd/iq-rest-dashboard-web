@@ -668,34 +668,6 @@
       "loading": "Wird geladen…",
       "settingsBreadcrumb": "Einstellungen"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Was für ein Lokal?",
-        "subtitle": "Wir laden eine Beispielspeisekarte vor, damit du etwas zum Bearbeiten hast statt einer leeren Seite."
-      },
-      "step2": {
-        "title": "Benenne dein Restaurant",
-        "subtitle": "Das sehen deine Gäste oben in deiner Speisekarte. Du kannst es später ändern.",
-        "nameLabel": "Restaurantname",
-        "namePlaceholder": "Mario's Pizza"
-      },
-      "step3": {
-        "title": "Fast geschafft",
-        "subtitle": "Bestätige deine E-Mail, um deine Speisekarte zu speichern und das Dashboard freizuschalten."
-      },
-      "back": "Zurück",
-      "continue": "Weiter",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japanisch",
-        "asian": "Asiatisch",
-        "burger": "Burger / Fast Food",
-        "coffee": "Kaffee / Café",
-        "bar": "Bar / Pub",
-        "bakery": "Bäckerei / Konditorei",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "Demo"
   }
 }

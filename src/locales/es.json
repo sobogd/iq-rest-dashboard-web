@@ -653,34 +653,6 @@
         "link": "Inicia sesión"
       }
     },
-    "createFlow": {
-      "step1": {
-        "title": "¿Qué tipo de local?",
-        "subtitle": "Vamos a precargar un menú de ejemplo para que empieces editando, no desde cero."
-      },
-      "step2": {
-        "title": "Pon nombre a tu restaurante",
-        "subtitle": "Esto aparecerá en la parte superior de tu menú. Puedes cambiarlo después.",
-        "nameLabel": "Nombre del restaurante",
-        "namePlaceholder": "Pizzería Mario"
-      },
-      "step3": {
-        "title": "Ya casi",
-        "subtitle": "Confirma tu email para guardar tu menú y abrir el panel."
-      },
-      "back": "Atrás",
-      "continue": "Continuar",
-      "cuisines": {
-        "pizza": "Pizzería",
-        "sushi": "Sushi / Japonés",
-        "asian": "Asiático",
-        "burger": "Hamburguesas / Comida rápida",
-        "coffee": "Café / Cafetería",
-        "bar": "Bar / Pub",
-        "bakery": "Panadería / Bollería",
-        "restaurant": "Restaurante"
-      }
-    },
     "exampleBadge": "ej.",
     "admin": {
       "all": "Todos",

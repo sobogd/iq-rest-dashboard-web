@@ -668,34 +668,6 @@
       "loading": "加载中…",
       "settingsBreadcrumb": "设置"
     },
-    "createFlow": {
-      "step1": {
-        "title": "什么类型的店？",
-        "subtitle": "我们会预加载一个示例菜单，让你从编辑开始，而不是空白页面。"
-      },
-      "step2": {
-        "title": "为你的餐厅命名",
-        "subtitle": "这将显示在菜单顶部，供顾客查看。稍后可以更改。",
-        "nameLabel": "餐厅名称",
-        "namePlaceholder": "马里奥披萨"
-      },
-      "step3": {
-        "title": "就快好了",
-        "subtitle": "确认你的邮箱以保存菜单并打开仪表板。"
-      },
-      "back": "返回",
-      "continue": "继续",
-      "cuisines": {
-        "pizza": "披萨店",
-        "sushi": "寿司 / 日料",
-        "asian": "亚洲菜",
-        "burger": "汉堡 / 快餐",
-        "coffee": "咖啡 / 咖啡馆",
-        "bar": "酒吧 / 酒馆",
-        "bakery": "烘焙 / 糕点",
-        "restaurant": "餐厅"
-      }
-    },
     "exampleBadge": "样"
   }
 }

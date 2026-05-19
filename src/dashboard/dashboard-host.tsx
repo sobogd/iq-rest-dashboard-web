@@ -1,8 +1,9 @@
 import { useQueries } from "@tanstack/react-query";
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { api } from "@/lib/api";
+import { landingUrl } from "@/lib/landing-url";
 import { Shell } from "./_spa/shell";
 import { DashboardSpaWrapper } from "./_spa/spa-wrapper";
 import { DashboardChrome } from "./_v2/chrome";
@@ -42,7 +43,6 @@ interface SubData {
 }
 
 export function DashboardHost() {
-  const navigate = useNavigate();
   const { locale } = useParams({ strict: false }) as { locale?: string };
 
   const auth = useQueries({
@@ -56,14 +56,14 @@ export function DashboardHost() {
   useEffect(() => {
     if (auth.isLoading || !authData) return;
     if (!authData.authenticated) {
-      navigate({ to: "/$locale/login", params: { locale: locale || "en" }, replace: true });
+      window.location.assign(landingUrl(locale || "en"));
       return;
     }
     // The legacyDashboard flag is honoured only on /login (post-sign-in)
     // and NOT here, otherwise users who clicked "Try new dashboard" from
     // the old monolith would bounce straight back. Once they've reached
     // the new SPA we let them stay.
-  }, [auth.isLoading, authData, navigate, locale]);
+  }, [auth.isLoading, authData, locale]);
 
   const enabled = !!authData?.authenticated;
 

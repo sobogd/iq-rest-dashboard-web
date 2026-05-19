@@ -668,34 +668,6 @@
       "loading": "A carregar…",
       "settingsBreadcrumb": "Configurações"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Que tipo de estabelecimento?",
-        "subtitle": "Vamos pré-carregar um menu de exemplo para começares a editar, não com uma página em branco."
-      },
-      "step2": {
-        "title": "Dá um nome ao teu restaurante",
-        "subtitle": "É o que os clientes verão no topo do teu menu. Podes alterar depois.",
-        "nameLabel": "Nome do restaurante",
-        "namePlaceholder": "Pizzaria Mario"
-      },
-      "step3": {
-        "title": "Quase lá",
-        "subtitle": "Confirma o teu email para guardar o menu e abrir o painel."
-      },
-      "back": "Voltar",
-      "continue": "Continuar",
-      "cuisines": {
-        "pizza": "Pizzaria",
-        "sushi": "Sushi / Japonês",
-        "asian": "Asiático",
-        "burger": "Hambúrguer / Fast food",
-        "coffee": "Café / Cafetaria",
-        "bar": "Bar / Pub",
-        "bakery": "Padaria / Pastelaria",
-        "restaurant": "Restaurante"
-      }
-    },
     "exampleBadge": "ex."
   }
 }

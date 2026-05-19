@@ -668,34 +668,6 @@
       "loading": "Betöltés…",
       "settingsBreadcrumb": "Beállítások"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Milyen hely?",
-        "subtitle": "Betöltünk egy mintamenüt, hogy szerkesztéssel indulhass, ne üres oldallal."
-      },
-      "step2": {
-        "title": "Nevezd el az éttermed",
-        "subtitle": "Ezt látják a vendégek a menü tetején. Később módosíthatod.",
-        "nameLabel": "Étterem neve",
-        "namePlaceholder": "Mario Pizzéria"
-      },
-      "step3": {
-        "title": "Majdnem kész",
-        "subtitle": "Erősítsd meg az e-mailedet a menü mentéséhez és a vezérlőpult megnyitásához."
-      },
-      "back": "Vissza",
-      "continue": "Tovább",
-      "cuisines": {
-        "pizza": "Pizzéria",
-        "sushi": "Szusi / Japán",
-        "asian": "Ázsiai",
-        "burger": "Burger / Gyorsétel",
-        "coffee": "Kávézó",
-        "bar": "Bár / Pub",
-        "bakery": "Pékség / Cukrászda",
-        "restaurant": "Étterem"
-      }
-    },
     "exampleBadge": "pl."
   }
 }

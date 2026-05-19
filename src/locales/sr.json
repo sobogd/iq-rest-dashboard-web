@@ -668,34 +668,6 @@
       "loading": "Učitavanje…",
       "settingsBreadcrumb": "Podešavanja"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Kakvo mesto?",
-        "subtitle": "Učitaćemo primer menija da krenete sa uređivanjem, a ne sa praznom stranicom."
-      },
-      "step2": {
-        "title": "Daj svom restoranu ime",
-        "subtitle": "Ovo će gosti videti na vrhu menija. Kasnije možeš promeniti.",
-        "nameLabel": "Naziv restorana",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Skoro gotovo",
-        "subtitle": "Potvrdi email da sačuvaš meni i otvoriš panel."
-      },
-      "back": "Nazad",
-      "continue": "Nastavi",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japanski",
-        "asian": "Azijski",
-        "burger": "Burger / Brza hrana",
-        "coffee": "Kafić",
-        "bar": "Bar / Pub",
-        "bakery": "Pekara / Poslastičarnica",
-        "restaurant": "Restoran"
-      }
-    },
     "exampleBadge": "prim."
   }
 }

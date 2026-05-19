@@ -2,6 +2,7 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { landingUrl } from "@/lib/landing-url";
 
 function LogoutRoute() {
   const { locale } = useParams({ from: "/$locale/logout" });
@@ -15,7 +16,7 @@ function LogoutRoute() {
       })
       .finally(() => {
         if (cancelled) return;
-        window.location.assign(`/${locale}/login`);
+        window.location.assign(landingUrl(locale || "en"));
       });
     return () => {
       cancelled = true;

@@ -668,34 +668,6 @@
       "loading": "Chargement…",
       "settingsBreadcrumb": "Paramètres"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Quel type d'établissement ?",
-        "subtitle": "Nous préchargons un menu d'exemple pour que tu commences à éditer, pas avec une page blanche."
-      },
-      "step2": {
-        "title": "Nomme ton restaurant",
-        "subtitle": "C'est ce que les clients verront en haut de ton menu. Tu pourras le changer plus tard.",
-        "nameLabel": "Nom du restaurant",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Presque terminé",
-        "subtitle": "Confirme ton email pour enregistrer ton menu et débloquer le tableau de bord."
-      },
-      "back": "Retour",
-      "continue": "Continuer",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japonais",
-        "asian": "Asiatique",
-        "burger": "Burger / Restauration rapide",
-        "coffee": "Café",
-        "bar": "Bar / Pub",
-        "bakery": "Boulangerie / Pâtisserie",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "ex."
   }
 }

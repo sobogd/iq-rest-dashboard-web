@@ -668,34 +668,6 @@
       "loading": "Načítava sa…",
       "settingsBreadcrumb": "Nastavenia"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Aký typ podniku?",
-        "subtitle": "Predtým nahráme ukážkové menu, aby si začal úpravami, nie prázdnou stránkou."
-      },
-      "step2": {
-        "title": "Pomenuj svoju reštauráciu",
-        "subtitle": "Toto uvidia hostia hore v menu. Neskôr môžeš zmeniť.",
-        "nameLabel": "Názov reštaurácie",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Skoro hotovo",
-        "subtitle": "Potvrď email, aby sa menu uložilo a otvoril sa panel."
-      },
-      "back": "Späť",
-      "continue": "Pokračovať",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japonská",
-        "asian": "Ázijská",
-        "burger": "Burger / Fast food",
-        "coffee": "Kaviareň",
-        "bar": "Bar / Pub",
-        "bakery": "Pekáreň / Cukráreň",
-        "restaurant": "Reštaurácia"
-      }
-    },
     "exampleBadge": "ukáž."
   }
 }

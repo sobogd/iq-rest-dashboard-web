@@ -668,34 +668,6 @@
       "loading": "Laadimine…",
       "settingsBreadcrumb": "Seaded"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Mis tüüpi koht?",
-        "subtitle": "Laadime sulle näidismenüü, et alustaksid muutmisest, mitte tühjast lehest."
-      },
-      "step2": {
-        "title": "Anna oma restoranile nimi",
-        "subtitle": "Seda näevad külalised menüü tipus. Saad hiljem muuta.",
-        "nameLabel": "Restorani nimi",
-        "namePlaceholder": "Mario Pitsabaar"
-      },
-      "step3": {
-        "title": "Peaaegu valmis",
-        "subtitle": "Kinnita e-mail, et menüü salvestada ja töölaud avada."
-      },
-      "back": "Tagasi",
-      "continue": "Edasi",
-      "cuisines": {
-        "pizza": "Pitsabaar",
-        "sushi": "Sushi / Jaapani",
-        "asian": "Aasia",
-        "burger": "Burger / Kiirtoit",
-        "coffee": "Kohvik",
-        "bar": "Baar / Pub",
-        "bakery": "Pagariäri / Kondiitriäri",
-        "restaurant": "Restoran"
-      }
-    },
     "exampleBadge": "näid."
   }
 }

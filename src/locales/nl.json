@@ -668,34 +668,6 @@
       "loading": "Laden…",
       "settingsBreadcrumb": "Instellingen"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Wat voor zaak?",
-        "subtitle": "We laden een voorbeeldmenu zodat je begint met iets om te bewerken, niet met een lege pagina."
-      },
-      "step2": {
-        "title": "Geef je restaurant een naam",
-        "subtitle": "Dit zien gasten bovenaan je menu. Je kunt het later wijzigen.",
-        "nameLabel": "Restaurantnaam",
-        "namePlaceholder": "Mario's Pizza"
-      },
-      "step3": {
-        "title": "Bijna klaar",
-        "subtitle": "Bevestig je e-mail om je menu op te slaan en het dashboard te openen."
-      },
-      "back": "Terug",
-      "continue": "Doorgaan",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japans",
-        "asian": "Aziatisch",
-        "burger": "Burger / Fastfood",
-        "coffee": "Koffie / Café",
-        "bar": "Bar / Pub",
-        "bakery": "Bakkerij / Banketbakkerij",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "demo"
   }
 }

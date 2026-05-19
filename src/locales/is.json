@@ -668,34 +668,6 @@
       "loading": "Hleður…",
       "settingsBreadcrumb": "Stillingar"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Hvers konar staður?",
-        "subtitle": "Við hlaðum sýnishornsmatseðli svo þú byrjir á því að breyta, ekki með tóma síðu."
-      },
-      "step2": {
-        "title": "Gefðu veitingastaðnum þínum nafn",
-        "subtitle": "Þetta sjá gestir efst á matseðlinum. Þú getur breytt síðar.",
-        "nameLabel": "Heiti veitingastaðar",
-        "namePlaceholder": "Mario Pizzeria"
-      },
-      "step3": {
-        "title": "Næstum búið",
-        "subtitle": "Staðfestu netfangið þitt til að vista matseðilinn og opna mælaborðið."
-      },
-      "back": "Til baka",
-      "continue": "Áfram",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japanskt",
-        "asian": "Asískt",
-        "burger": "Hamborgari / Skyndibiti",
-        "coffee": "Kaffihús",
-        "bar": "Bar / Krá",
-        "bakery": "Bakarí / Sætindi",
-        "restaurant": "Veitingastaður"
-      }
-    },
     "exampleBadge": "sýn."
   }
 }

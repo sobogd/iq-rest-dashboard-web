@@ -653,34 +653,6 @@
         "link": "Sign in"
       }
     },
-    "createFlow": {
-      "step1": {
-        "title": "What kind of place?",
-        "subtitle": "We'll preload a sample menu so you can start with something to edit, not a blank page."
-      },
-      "step2": {
-        "title": "Name your restaurant",
-        "subtitle": "This is what guests will see at the top of your menu. You can change it later.",
-        "nameLabel": "Restaurant name",
-        "namePlaceholder": "Mario's Pizza"
-      },
-      "step3": {
-        "title": "Almost there",
-        "subtitle": "Confirm your email to save your menu and unlock the dashboard."
-      },
-      "back": "Back",
-      "continue": "Continue",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japanese",
-        "asian": "Asian",
-        "burger": "Burger / Fast food",
-        "coffee": "Coffee / Cafe",
-        "bar": "Bar / Pub",
-        "bakery": "Bakery / Pastry",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "demo",
     "admin": {
       "all": "All",

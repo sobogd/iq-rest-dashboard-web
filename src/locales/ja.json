@@ -668,34 +668,6 @@
       "loading": "読み込み中…",
       "settingsBreadcrumb": "設定"
     },
-    "createFlow": {
-      "step1": {
-        "title": "どんなお店ですか？",
-        "subtitle": "サンプルメニューを事前に読み込むので、空白のページからではなく編集から始められます。"
-      },
-      "step2": {
-        "title": "レストラン名を入力",
-        "subtitle": "これがメニューの上部に表示されます。後で変更できます。",
-        "nameLabel": "レストラン名",
-        "namePlaceholder": "マリオのピザ"
-      },
-      "step3": {
-        "title": "あと少し",
-        "subtitle": "メールを確認してメニューを保存し、ダッシュボードを開きます。"
-      },
-      "back": "戻る",
-      "continue": "次へ",
-      "cuisines": {
-        "pizza": "ピッツェリア",
-        "sushi": "寿司 / 和食",
-        "asian": "アジア料理",
-        "burger": "バーガー / ファストフード",
-        "coffee": "コーヒー / カフェ",
-        "bar": "バー / パブ",
-        "bakery": "ベーカリー / 製菓",
-        "restaurant": "レストラン"
-      }
-    },
     "exampleBadge": "見本"
   }
 }

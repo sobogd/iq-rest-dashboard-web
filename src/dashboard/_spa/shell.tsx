@@ -33,7 +33,7 @@ import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { UsagePage } from "../_pages/usage";
 import { GoogleAdsPage } from "../_pages/google-ads";
-import { AuthPage } from "../../auth/auth-page";
+import { LandingRedirect } from "../../auth/landing-redirect";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
 
@@ -121,7 +121,7 @@ function ShellBody(props: ShellInitialData) {
   // Local setInterval was duplicating that polling — removed.
 
   if (isAuthView) {
-    return <AuthPage />;
+    return <LandingRedirect />;
   }
   if (!restaurant) return null;
 
@@ -179,7 +179,7 @@ function ViewSwitch(p: SwitchProps) {
     case "auth.login":
     case "auth.otp":
     case "auth.logout":
-      return <AuthPage />;
+      return <LandingRedirect />;
     case "menu":
       return (
         <MenuList

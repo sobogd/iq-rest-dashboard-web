@@ -668,34 +668,6 @@
       "loading": "Carregant…",
       "settingsBreadcrumb": "Configuració"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Quin tipus de local?",
-        "subtitle": "Precarregarem un menú d'exemple perquè comencis editant, no amb una pàgina en blanc."
-      },
-      "step2": {
-        "title": "Posa nom al teu restaurant",
-        "subtitle": "Això veuran els clients a dalt del menú. Pots canviar-ho després.",
-        "nameLabel": "Nom del restaurant",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Quasi a punt",
-        "subtitle": "Confirma el teu correu per desar el menú i obrir el tauler."
-      },
-      "back": "Enrere",
-      "continue": "Continuar",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japonès",
-        "asian": "Asiàtic",
-        "burger": "Hamburguesa / Menjar ràpid",
-        "coffee": "Cafeteria",
-        "bar": "Bar / Pub",
-        "bakery": "Forn / Pastisseria",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "ex."
   }
 }

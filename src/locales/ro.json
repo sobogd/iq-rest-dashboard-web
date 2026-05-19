@@ -668,34 +668,6 @@
       "loading": "Se încarcă…",
       "settingsBreadcrumb": "Setări"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Ce fel de local?",
-        "subtitle": "Vom preîncărca un meniu exemplu ca să începi cu editarea, nu cu o pagină goală."
-      },
-      "step2": {
-        "title": "Numește-ți restaurantul",
-        "subtitle": "Asta vor vedea clienții în partea de sus a meniului. Poți schimba mai târziu.",
-        "nameLabel": "Numele restaurantului",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Aproape gata",
-        "subtitle": "Confirmă email-ul ca să salvezi meniul și să deschizi panoul."
-      },
-      "back": "Înapoi",
-      "continue": "Continuă",
-      "cuisines": {
-        "pizza": "Pizzerie",
-        "sushi": "Sushi / Japonez",
-        "asian": "Asiatic",
-        "burger": "Burger / Fast food",
-        "coffee": "Cafenea",
-        "bar": "Bar / Pub",
-        "bakery": "Brutărie / Cofetărie",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "ex."
   }
 }

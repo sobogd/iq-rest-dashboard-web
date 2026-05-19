@@ -668,34 +668,6 @@
       "loading": "Ładowanie…",
       "settingsBreadcrumb": "Ustawienia"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Jaki to lokal?",
-        "subtitle": "Załadujemy przykładowe menu, żebyś zaczął od edycji, a nie pustej strony."
-      },
-      "step2": {
-        "title": "Nazwij swoją restaurację",
-        "subtitle": "To zobaczą goście u góry menu. Możesz to zmienić później.",
-        "nameLabel": "Nazwa restauracji",
-        "namePlaceholder": "Pizzeria Mario"
-      },
-      "step3": {
-        "title": "Już prawie",
-        "subtitle": "Potwierdź email, aby zapisać menu i odblokować panel."
-      },
-      "back": "Wstecz",
-      "continue": "Dalej",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japońska",
-        "asian": "Azjatycka",
-        "burger": "Burger / Fast food",
-        "coffee": "Kawiarnia",
-        "bar": "Bar / Pub",
-        "bakery": "Piekarnia / Cukiernia",
-        "restaurant": "Restauracja"
-      }
-    },
     "exampleBadge": "demo"
   }
 }

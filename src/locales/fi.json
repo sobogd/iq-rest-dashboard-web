@@ -668,34 +668,6 @@
       "loading": "Ladataan…",
       "settingsBreadcrumb": "Asetukset"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Millainen paikka?",
-        "subtitle": "Lataamme esimerkkimenun, jotta aloitat muokkaamalla etkä tyhjältä sivulta."
-      },
-      "step2": {
-        "title": "Anna ravintolallesi nimi",
-        "subtitle": "Tämän asiakkaat näkevät menun yläosassa. Voit muuttaa myöhemmin.",
-        "nameLabel": "Ravintolan nimi",
-        "namePlaceholder": "Marion Pizzeria"
-      },
-      "step3": {
-        "title": "Melkein valmis",
-        "subtitle": "Vahvista sähköpostisi tallentaaksesi menun ja avataksesi hallintapaneelin."
-      },
-      "back": "Takaisin",
-      "continue": "Jatka",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japanilainen",
-        "asian": "Aasialainen",
-        "burger": "Burgeri / Pikaruoka",
-        "coffee": "Kahvila",
-        "bar": "Baari / Pub",
-        "bakery": "Leipomo / Konditoria",
-        "restaurant": "Ravintola"
-      }
-    },
     "exampleBadge": "esim."
   }
 }

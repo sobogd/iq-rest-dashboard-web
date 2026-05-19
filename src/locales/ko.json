@@ -668,34 +668,6 @@
       "loading": "불러오는 중…",
       "settingsBreadcrumb": "설정"
     },
-    "createFlow": {
-      "step1": {
-        "title": "어떤 종류의 매장인가요?",
-        "subtitle": "샘플 메뉴를 미리 불러와 빈 페이지가 아닌 편집부터 시작할 수 있습니다."
-      },
-      "step2": {
-        "title": "식당 이름을 입력하세요",
-        "subtitle": "이것은 손님이 메뉴 상단에서 보는 이름입니다. 나중에 변경할 수 있습니다.",
-        "nameLabel": "식당 이름",
-        "namePlaceholder": "마리오 피자"
-      },
-      "step3": {
-        "title": "거의 다 됐어요",
-        "subtitle": "메뉴를 저장하고 대시보드를 열려면 이메일을 확인하세요."
-      },
-      "back": "뒤로",
-      "continue": "계속",
-      "cuisines": {
-        "pizza": "피자집",
-        "sushi": "스시 / 일식",
-        "asian": "아시아",
-        "burger": "버거 / 패스트푸드",
-        "coffee": "카페",
-        "bar": "바 / 펍",
-        "bakery": "베이커리 / 디저트",
-        "restaurant": "레스토랑"
-      }
-    },
     "exampleBadge": "샘플"
   }
 }

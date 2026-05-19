@@ -668,34 +668,6 @@
       "loading": "Įkeliama…",
       "settingsBreadcrumb": "Nustatymai"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Kokio tipo vieta?",
-        "subtitle": "Iš anksto įkelsime pavyzdinį meniu, kad pradėtum nuo redagavimo, o ne tuščio puslapio."
-      },
-      "step2": {
-        "title": "Pavadink savo restoraną",
-        "subtitle": "Tai matys svečiai meniu viršuje. Vėliau galėsi pakeisti.",
-        "nameLabel": "Restorano pavadinimas",
-        "namePlaceholder": "Mario picerija"
-      },
-      "step3": {
-        "title": "Beveik baigta",
-        "subtitle": "Patvirtink el. paštą, kad išsaugotum meniu ir atvertum skydelį."
-      },
-      "back": "Atgal",
-      "continue": "Tęsti",
-      "cuisines": {
-        "pizza": "Picerija",
-        "sushi": "Suši / Japoniškas",
-        "asian": "Azijietiškas",
-        "burger": "Burgeriai / Greitas maistas",
-        "coffee": "Kavinė",
-        "bar": "Baras / Pub",
-        "bakery": "Kepykla / Konditerija",
-        "restaurant": "Restoranas"
-      }
-    },
     "exampleBadge": "pvz."
   }
 }

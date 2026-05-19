@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ChevronRightIcon } from "../_v2/icons";
 import { logout } from "../_v2/api";
 import { track } from "@/lib/dashboard-events";
+import { landingUrl } from "@/lib/landing-url";
 
 export function LogoutLink() {
  const t = useTranslations("dashboard.settingsHub");
@@ -17,7 +18,7 @@ export function LogoutLink() {
  setBusy(true);
  try {
  await logout();
- window.location.href = `/${locale}/login`;
+ window.location.href = landingUrl(locale);
  } catch {
  setBusy(false);
  }

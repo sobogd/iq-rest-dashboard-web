@@ -668,34 +668,6 @@
       "loading": "Laddar…",
       "settingsBreadcrumb": "Inställningar"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Vad för slags ställe?",
-        "subtitle": "Vi förladdar en exempelmeny så du börjar med något att redigera, inte en tom sida."
-      },
-      "step2": {
-        "title": "Ge din restaurang ett namn",
-        "subtitle": "Det här ser gästerna högst upp i menyn. Du kan ändra senare.",
-        "nameLabel": "Restaurangnamn",
-        "namePlaceholder": "Mario's Pizza"
-      },
-      "step3": {
-        "title": "Nästan klart",
-        "subtitle": "Bekräfta din e-post för att spara menyn och låsa upp dashboarden."
-      },
-      "back": "Tillbaka",
-      "continue": "Fortsätt",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japansk",
-        "asian": "Asiatisk",
-        "burger": "Burger / Snabbmat",
-        "coffee": "Kaffe / Café",
-        "bar": "Bar / Pub",
-        "bakery": "Bageri / Konditori",
-        "restaurant": "Restaurang"
-      }
-    },
     "exampleBadge": "demo"
   }
 }

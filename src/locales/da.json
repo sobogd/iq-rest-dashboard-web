@@ -668,34 +668,6 @@
       "loading": "Indlæser…",
       "settingsBreadcrumb": "Indstillinger"
     },
-    "createFlow": {
-      "step1": {
-        "title": "Hvilken slags sted?",
-        "subtitle": "Vi indlæser en eksempelmenu, så du starter med noget at redigere, ikke en tom side."
-      },
-      "step2": {
-        "title": "Navngiv din restaurant",
-        "subtitle": "Det er hvad gæsterne ser øverst i menuen. Du kan ændre det senere.",
-        "nameLabel": "Restaurantnavn",
-        "namePlaceholder": "Mario's Pizza"
-      },
-      "step3": {
-        "title": "Næsten færdig",
-        "subtitle": "Bekræft din e-mail for at gemme menuen og låse dashboardet op."
-      },
-      "back": "Tilbage",
-      "continue": "Fortsæt",
-      "cuisines": {
-        "pizza": "Pizzeria",
-        "sushi": "Sushi / Japansk",
-        "asian": "Asiatisk",
-        "burger": "Burger / Fast food",
-        "coffee": "Kaffe / Café",
-        "bar": "Bar / Pub",
-        "bakery": "Bageri / Konditori",
-        "restaurant": "Restaurant"
-      }
-    },
     "exampleBadge": "demo"
   }
 }
