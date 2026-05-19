@@ -231,7 +231,7 @@ export function MenuOnboarding({ onActive }: { onActive?: () => void } = {}) {
  setRect(null);
  }
 
- const dimCls = "fixed bg-black/90 pointer-events-auto";
+ const dimCls = "fixed bg-white/90 dark:bg-black/90 pointer-events-auto";
 
  return createPortal(
  <div className="fixed inset-0 z-[9999]">
