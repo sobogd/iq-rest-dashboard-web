@@ -1,6 +1,7 @@
 /** Thin fetch wrapper. Sends cookies, prefixes with VITE_API_URL. */
 
 import { landingUrl } from "./landing-url";
+import { observeResponseVersion } from "./version-check";
 
 const BASE = import.meta.env.VITE_API_URL || "/api";
 
@@ -62,6 +63,7 @@ export async function api<T>(
     },
     ...init,
   });
+  observeResponseVersion(res);
   const text = await res.text();
   const data = text ? safeJson(text) : undefined;
   if (!res.ok) {

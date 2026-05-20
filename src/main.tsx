@@ -7,7 +7,36 @@ import { routeTree } from "./routeTree.gen";
 import { ThemeProvider } from "./components/theme-provider";
 import { FullPageLoader } from "./components/full-page-loader";
 import { bootstrapI18n } from "./i18n";
+import { observeResponseVersion, reloadIfStale } from "./lib/version-check";
 import "./styles.css";
+
+// Wrap global fetch once so every response — wherever in the codebase it
+// came from — gets its X-App-Version header observed. Cleaner than
+// threading observeResponseVersion through ~30 fetch call sites in
+// dashboard/_v2/api.ts and elsewhere.
+if (typeof window !== "undefined") {
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async (...args: Parameters<typeof fetch>) => {
+    const res = await originalFetch(...args);
+    try {
+      observeResponseVersion(res);
+    } catch {
+      // Never let header-reading throw poison a real request.
+    }
+    return res;
+  };
+}
+
+// Subscribe to router navigation. After every settled navigation,
+// reloadIfStale() short-circuits to a full browser reload when the API
+// has signalled a new version since the tab booted. Doing it on
+// navigation (not on every API response) means an in-progress form is
+// never auto-discarded: the user has to leave the page themselves.
+function attachStaleNavigationReload(r: typeof router) {
+  r.subscribe("onResolved", () => {
+    reloadIfStale();
+  });
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +64,8 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+attachStaleNavigationReload(router);
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("#root not found");
