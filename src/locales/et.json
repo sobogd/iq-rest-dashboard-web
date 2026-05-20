@@ -337,7 +337,9 @@
       "noActiveBody": "Uued tellimused ilmuvad siia.",
       "disabledTitle": "Tellimused on välja lülitatud",
       "disabledBody": "Lülitage tellimused seadetes sisse, et hakata neid vastu võtma.",
-      "disabledCta": "Mine seadetesse"
+      "disabledCta": "Mine seadetesse",
+      "paymentMethodLabel": "Maksemeetod",
+      "selectPaymentMethod": "Vali maksemeetod."
     },
     "reservations": {
       "title": "Broneeringud",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Lubatud väljad on kliendile tellimisel kohustuslikud.",
         "fieldName": "Nimi",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Aadress"
+        "fieldAddress": "Aadress",
+        "paymentMethodsLabel": "Maksemeetodid",
+        "paymentMethodsTip": "Meetodid, mida personal saab tellimuse sulgemisel valida. Lülita kõik välja, et valijast mööda minna.",
+        "paymentIntegrationTip": "Maksesüsteemi integreerimiseks oma restorani võtke ühendust toega."
       },
       "bookings": {
         "title": "Broneeringud",
@@ -634,7 +639,34 @@
       "currentPeriod": "Praegune periood",
       "pageReserve": "Broneeringud",
       "pageOrder": "Tellimused",
-      "pageOther": "Muud"
+      "pageOther": "Muud",
+      "colDate": "Kuupäev",
+      "colTime": "Aeg",
+      "colTable": "Laud",
+      "colTotal": "Kokku",
+      "colPayment": "Makse",
+      "colCustomer": "Klient",
+      "colComment": "Kommentaar",
+      "colItems": "Tooted",
+      "colStatus": "Olek",
+      "returnToKitchen": "Tagasi kööki",
+      "ordersListTitle": "Tellimused",
+      "noOrdersInPeriod": "Selles perioodis pole tellimusi.",
+      "revenueLabel": "Tulu",
+      "ordersLabel": "Tellimused",
+      "avgOrderLabel": "Keskm. tellimus",
+      "revenueByDay": "Tulu päevas",
+      "revenueByHour": "Tulu tunnis",
+      "topByRevenue": "Top tulu järgi",
+      "topByQuantity": "Top koguse järgi",
+      "orderSize": "Tellimuse suurus",
+      "size1": "1 toode",
+      "size23": "2-3 toodet",
+      "size45": "4-5 toodet",
+      "size6": "6+ toodet",
+      "pieces": "tk",
+      "exportCsv": "Ekspordi CSV",
+      "periodThisWeek": "Sel nädalal"
     },
     "auth": {
       "title": "Loo oma menüü",
@@ -703,6 +735,22 @@
       "kosher": "Košer",
       "spicy": "Vürtsikas",
       "organic": "Mahe"
+    },
+    "paymentMethods": {
+      "cash": "Sularaha",
+      "card": "Kaart",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Uus",
+      "in_progress": "Pooleli",
+      "completed": "Lõpetatud",
+      "cancelled": "Tühistatud"
     }
   }
 }

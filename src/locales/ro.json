@@ -337,7 +337,9 @@
       "noActiveBody": "Comenzile noi vor apărea aici.",
       "disabledTitle": "Comenzile sunt dezactivate",
       "disabledBody": "Activează comenzile în setări pentru a începe să le primești.",
-      "disabledCta": "Mergi la setări"
+      "disabledCta": "Mergi la setări",
+      "paymentMethodLabel": "Metodă de plată",
+      "selectPaymentMethod": "Alege o metodă de plată."
     },
     "reservations": {
       "title": "Rezervări",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Câmpurile activate vor fi obligatorii pentru client la plasarea comenzii.",
         "fieldName": "Nume",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adresă"
+        "fieldAddress": "Adresă",
+        "paymentMethodsLabel": "Metode de plată",
+        "paymentMethodsTip": "Metode pe care personalul le poate alege la închiderea unei comenzi. Dezactivează tot pentru a sări peste selector.",
+        "paymentIntegrationTip": "Pentru a integra un sistem de plată în restaurantul tău, contactează asistența."
       },
       "bookings": {
         "title": "Rezervări",
@@ -634,7 +639,34 @@
       "currentPeriod": "Perioada curentă",
       "pageReserve": "Rezervări",
       "pageOrder": "Comenzi",
-      "pageOther": "Altele"
+      "pageOther": "Altele",
+      "colDate": "Data",
+      "colTime": "Ora",
+      "colTable": "Masă",
+      "colTotal": "Total",
+      "colPayment": "Plată",
+      "colCustomer": "Client",
+      "colComment": "Comentariu",
+      "colItems": "Articole",
+      "colStatus": "Stare",
+      "returnToKitchen": "Înapoi la bucătărie",
+      "ordersListTitle": "Comenzi",
+      "noOrdersInPeriod": "Nu există comenzi în această perioadă.",
+      "revenueLabel": "Venituri",
+      "ordersLabel": "Comenzi",
+      "avgOrderLabel": "Comandă medie",
+      "revenueByDay": "Venituri pe zi",
+      "revenueByHour": "Venituri pe oră",
+      "topByRevenue": "Top după venituri",
+      "topByQuantity": "Top după cantitate",
+      "orderSize": "Mărimea comenzii",
+      "size1": "1 articol",
+      "size23": "2-3 articole",
+      "size45": "4-5 articole",
+      "size6": "6+ articole",
+      "pieces": "buc",
+      "exportCsv": "Exportă CSV",
+      "periodThisWeek": "Săptămâna aceasta"
     },
     "auth": {
       "title": "Creează-ți meniul",
@@ -703,6 +735,22 @@
       "kosher": "Cușer",
       "spicy": "Picant",
       "organic": "Organic"
+    },
+    "paymentMethods": {
+      "cash": "Numerar",
+      "card": "Card",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nou",
+      "in_progress": "În curs",
+      "completed": "Finalizat",
+      "cancelled": "Anulat"
     }
   }
 }

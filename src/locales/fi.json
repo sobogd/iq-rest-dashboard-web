@@ -337,7 +337,9 @@
       "noActiveBody": "Uudet tilaukset näkyvät täällä.",
       "disabledTitle": "Tilaukset on poistettu käytöstä",
       "disabledBody": "Ota tilaukset käyttöön asetuksissa aloittaaksesi niiden vastaanottamisen.",
-      "disabledCta": "Siirry asetuksiin"
+      "disabledCta": "Siirry asetuksiin",
+      "paymentMethodLabel": "Maksutapa",
+      "selectPaymentMethod": "Valitse maksutapa."
     },
     "reservations": {
       "title": "Varaukset",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Käytössä olevat kentät on täytettävä asiakkaan tilauksen yhteydessä.",
         "fieldName": "Nimi",
         "fieldPhone": "Puhelin",
-        "fieldAddress": "Osoite"
+        "fieldAddress": "Osoite",
+        "paymentMethodsLabel": "Maksutavat",
+        "paymentMethodsTip": "Tavat, joista henkilökunta voi valita tilausta sulkiessaan. Poista kaikki käytöstä ohittaaksesi valitsimen.",
+        "paymentIntegrationTip": "Ota yhteyttä tukeen integroidaksesi maksujärjestelmän ravintolaasi."
       },
       "bookings": {
         "title": "Varaukset",
@@ -634,7 +639,34 @@
       "currentPeriod": "Nykyinen jakso",
       "pageReserve": "Varaukset",
       "pageOrder": "Tilaukset",
-      "pageOther": "Muut"
+      "pageOther": "Muut",
+      "colDate": "Päivä",
+      "colTime": "Aika",
+      "colTable": "Pöytä",
+      "colTotal": "Yhteensä",
+      "colPayment": "Maksu",
+      "colCustomer": "Asiakas",
+      "colComment": "Kommentti",
+      "colItems": "Tuotteet",
+      "colStatus": "Tila",
+      "returnToKitchen": "Takaisin keittiöön",
+      "ordersListTitle": "Tilaukset",
+      "noOrdersInPeriod": "Ei tilauksia tällä jaksolla.",
+      "revenueLabel": "Tulot",
+      "ordersLabel": "Tilaukset",
+      "avgOrderLabel": "Keskim. tilaus",
+      "revenueByDay": "Tulot päivittäin",
+      "revenueByHour": "Tulot tunneittain",
+      "topByRevenue": "Top tulojen mukaan",
+      "topByQuantity": "Top määrän mukaan",
+      "orderSize": "Tilauksen koko",
+      "size1": "1 tuote",
+      "size23": "2-3 tuotetta",
+      "size45": "4-5 tuotetta",
+      "size6": "6+ tuotetta",
+      "pieces": "kpl",
+      "exportCsv": "Vie CSV",
+      "periodThisWeek": "Tällä viikolla"
     },
     "auth": {
       "title": "Luo menusi",
@@ -703,6 +735,22 @@
       "kosher": "Kosher",
       "spicy": "Tulinen",
       "organic": "Luomu"
+    },
+    "paymentMethods": {
+      "cash": "Käteinen",
+      "card": "Kortti",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Uusi",
+      "in_progress": "Käynnissä",
+      "completed": "Valmis",
+      "cancelled": "Peruttu"
     }
   }
 }

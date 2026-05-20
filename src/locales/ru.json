@@ -337,7 +337,9 @@
       "noActiveBody": "Новые заказы появятся здесь.",
       "disabledTitle": "Заказы отключены",
       "disabledBody": "Включите заказы в настройках, чтобы начать их принимать.",
-      "disabledCta": "Перейти в настройки"
+      "disabledCta": "Перейти в настройки",
+      "paymentMethodLabel": "Способ оплаты",
+      "selectPaymentMethod": "Выберите способ оплаты."
     },
     "reservations": {
       "title": "Бронирования",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Включённые поля будут обязательными для заполнения при оформлении заказа.",
         "fieldName": "Имя",
         "fieldPhone": "Телефон",
-        "fieldAddress": "Адрес"
+        "fieldAddress": "Адрес",
+        "paymentMethodsLabel": "Способы оплаты",
+        "paymentMethodsTip": "Методы, которые официант может выбрать при закрытии заказа. Отключи все, чтобы пропустить выбор.",
+        "paymentIntegrationTip": "Для интеграции платёжной системы вашего ресторана свяжитесь с поддержкой."
       },
       "bookings": {
         "title": "Бронирования",
@@ -634,7 +639,34 @@
       "currentPeriod": "Текущий период",
       "pageReserve": "Резервации",
       "pageOrder": "Заказы",
-      "pageOther": "Другое"
+      "pageOther": "Другое",
+      "colDate": "Дата",
+      "colTime": "Время",
+      "colTable": "Стол",
+      "colTotal": "Сумма",
+      "colPayment": "Оплата",
+      "colCustomer": "Клиент",
+      "colComment": "Комментарий",
+      "colItems": "Позиции",
+      "colStatus": "Статус",
+      "returnToKitchen": "Вернуть на кухню",
+      "ordersListTitle": "Заказы",
+      "noOrdersInPeriod": "Заказов за период нет.",
+      "revenueLabel": "Выручка",
+      "ordersLabel": "Заказы",
+      "avgOrderLabel": "Средний чек",
+      "revenueByDay": "Выручка по дням",
+      "revenueByHour": "Выручка по часам",
+      "topByRevenue": "Топ по выручке",
+      "topByQuantity": "Топ по количеству",
+      "orderSize": "Размер заказа",
+      "size1": "1 позиция",
+      "size23": "2-3 позиции",
+      "size45": "4-5 позиций",
+      "size6": "6+ позиций",
+      "pieces": "шт",
+      "exportCsv": "Экспорт CSV",
+      "periodThisWeek": "Эта неделя"
     },
     "auth": {
       "title": "Создайте своё меню",
@@ -703,6 +735,22 @@
       "kosher": "Кошер",
       "spicy": "Острое",
       "organic": "Органическое"
+    },
+    "paymentMethods": {
+      "cash": "Наличные",
+      "card": "Карта",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Новый",
+      "in_progress": "В работе",
+      "completed": "Завершён",
+      "cancelled": "Отменён"
     }
   }
 }

@@ -337,7 +337,9 @@
       "noActiveBody": "新しい注文はここに表示されます。",
       "disabledTitle": "注文は無効です",
       "disabledBody": "注文を受け付けるには、設定で有効にしてください。",
-      "disabledCta": "設定を開く"
+      "disabledCta": "設定を開く",
+      "paymentMethodLabel": "支払い方法",
+      "selectPaymentMethod": "支払い方法を選択。"
     },
     "reservations": {
       "title": "予約",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "有効化されたフィールドは注文時に顧客にとって必須となります。",
         "fieldName": "名前",
         "fieldPhone": "電話",
-        "fieldAddress": "住所"
+        "fieldAddress": "住所",
+        "paymentMethodsLabel": "支払い方法",
+        "paymentMethodsTip": "注文を閉じる際にスタッフが選べる方法。すべてオフにするとセレクターをスキップします。",
+        "paymentIntegrationTip": "レストランに決済システムを統合するには、サポートまでお問い合わせください。"
       },
       "bookings": {
         "title": "予約",
@@ -634,7 +639,34 @@
       "currentPeriod": "現在の期間",
       "pageReserve": "予約",
       "pageOrder": "注文",
-      "pageOther": "その他"
+      "pageOther": "その他",
+      "colDate": "日付",
+      "colTime": "時間",
+      "colTable": "テーブル",
+      "colTotal": "合計",
+      "colPayment": "支払い",
+      "colCustomer": "お客様",
+      "colComment": "コメント",
+      "colItems": "項目",
+      "colStatus": "ステータス",
+      "returnToKitchen": "厨房に戻す",
+      "ordersListTitle": "注文",
+      "noOrdersInPeriod": "この期間に注文はありません。",
+      "revenueLabel": "売上",
+      "ordersLabel": "注文",
+      "avgOrderLabel": "平均注文",
+      "revenueByDay": "日別売上",
+      "revenueByHour": "時間別売上",
+      "topByRevenue": "売上トップ",
+      "topByQuantity": "数量トップ",
+      "orderSize": "注文サイズ",
+      "size1": "1点",
+      "size23": "2-3点",
+      "size45": "4-5点",
+      "size6": "6+点",
+      "pieces": "個",
+      "exportCsv": "CSVをエクスポート",
+      "periodThisWeek": "今週"
     },
     "auth": {
       "title": "メニューを作成",
@@ -703,6 +735,22 @@
       "kosher": "コーシャ",
       "spicy": "辛い",
       "organic": "オーガニック"
+    },
+    "paymentMethods": {
+      "cash": "現金",
+      "card": "カード",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "新規",
+      "in_progress": "進行中",
+      "completed": "完了",
+      "cancelled": "キャンセル"
     }
   }
 }

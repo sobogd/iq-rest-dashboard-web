@@ -337,7 +337,9 @@
       "noActiveBody": "ستظهر الطلبات الجديدة هنا.",
       "disabledTitle": "الطلبات معطلة",
       "disabledBody": "قم بتفعيل الطلبات في الإعدادات لتبدأ في استلامها.",
-      "disabledCta": "اذهب إلى الإعدادات"
+      "disabledCta": "اذهب إلى الإعدادات",
+      "paymentMethodLabel": "طريقة الدفع",
+      "selectPaymentMethod": "اختر طريقة دفع."
     },
     "reservations": {
       "title": "الحجوزات",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "ستكون الحقول الممكّنة مطلوبة من العميل عند تقديم طلب.",
         "fieldName": "الاسم",
         "fieldPhone": "الهاتف",
-        "fieldAddress": "العنوان"
+        "fieldAddress": "العنوان",
+        "paymentMethodsLabel": "طرق الدفع",
+        "paymentMethodsTip": "الطرق التي يمكن للموظفين اختيارها عند إغلاق الطلب. أوقف الكل لتجاوز المحدد.",
+        "paymentIntegrationTip": "لدمج نظام دفع في مطعمك، تواصل مع الدعم."
       },
       "bookings": {
         "title": "الحجوزات",
@@ -634,7 +639,34 @@
       "currentPeriod": "الفترة الحالية",
       "pageReserve": "الحجوزات",
       "pageOrder": "الطلبات",
-      "pageOther": "أخرى"
+      "pageOther": "أخرى",
+      "colDate": "التاريخ",
+      "colTime": "الوقت",
+      "colTable": "الطاولة",
+      "colTotal": "الإجمالي",
+      "colPayment": "الدفع",
+      "colCustomer": "العميل",
+      "colComment": "التعليق",
+      "colItems": "العناصر",
+      "colStatus": "الحالة",
+      "returnToKitchen": "إعادة إلى المطبخ",
+      "ordersListTitle": "الطلبات",
+      "noOrdersInPeriod": "لا توجد طلبات في هذه الفترة.",
+      "revenueLabel": "الإيرادات",
+      "ordersLabel": "الطلبات",
+      "avgOrderLabel": "متوسط الطلب",
+      "revenueByDay": "الإيرادات يوميًا",
+      "revenueByHour": "الإيرادات بالساعة",
+      "topByRevenue": "الأعلى حسب الإيرادات",
+      "topByQuantity": "الأعلى حسب الكمية",
+      "orderSize": "حجم الطلب",
+      "size1": "١ صنف",
+      "size23": "٢-٣ أصناف",
+      "size45": "٤-٥ أصناف",
+      "size6": "٦+ أصناف",
+      "pieces": "قطعة",
+      "exportCsv": "تصدير CSV",
+      "periodThisWeek": "هذا الأسبوع"
     },
     "auth": {
       "title": "أنشئ قائمتك",
@@ -703,6 +735,22 @@
       "kosher": "كوشر",
       "spicy": "حار",
       "organic": "عضوي"
+    },
+    "paymentMethods": {
+      "cash": "نقدًا",
+      "card": "بطاقة",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "جديد",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغى"
     }
   }
 }

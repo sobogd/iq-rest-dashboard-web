@@ -337,7 +337,9 @@
       "noActiveBody": "Az új rendelések itt jelennek meg.",
       "disabledTitle": "A rendelések le vannak tiltva",
       "disabledBody": "Engedélyezd a rendeléseket a beállításokban, hogy fogadhasd őket.",
-      "disabledCta": "Ugrás a beállításokra"
+      "disabledCta": "Ugrás a beállításokra",
+      "paymentMethodLabel": "Fizetési mód",
+      "selectPaymentMethod": "Válassz fizetési módot."
     },
     "reservations": {
       "title": "Foglalások",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Az engedélyezett mezőket a vendégnek ki kell töltenie rendelés leadásakor.",
         "fieldName": "Név",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Cím"
+        "fieldAddress": "Cím",
+        "paymentMethodsLabel": "Fizetési módok",
+        "paymentMethodsTip": "Módok, amelyeket a személyzet a rendelés lezárásakor választhat. Kapcsold ki mindet a kiválasztó kihagyásához.",
+        "paymentIntegrationTip": "Az éttermed fizetési rendszerének integrálásához vedd fel a kapcsolatot az ügyfélszolgálattal."
       },
       "bookings": {
         "title": "Foglalások",
@@ -634,7 +639,34 @@
       "currentPeriod": "Jelenlegi időszak",
       "pageReserve": "Foglalások",
       "pageOrder": "Rendelések",
-      "pageOther": "Egyéb"
+      "pageOther": "Egyéb",
+      "colDate": "Dátum",
+      "colTime": "Idő",
+      "colTable": "Asztal",
+      "colTotal": "Összesen",
+      "colPayment": "Fizetés",
+      "colCustomer": "Vendég",
+      "colComment": "Megjegyzés",
+      "colItems": "Tételek",
+      "colStatus": "Állapot",
+      "returnToKitchen": "Vissza a konyhába",
+      "ordersListTitle": "Rendelések",
+      "noOrdersInPeriod": "Nincsenek rendelések ebben az időszakban.",
+      "revenueLabel": "Bevétel",
+      "ordersLabel": "Rendelések",
+      "avgOrderLabel": "Átl. rendelés",
+      "revenueByDay": "Bevétel naponta",
+      "revenueByHour": "Bevétel óránként",
+      "topByRevenue": "Top bevétel szerint",
+      "topByQuantity": "Top mennyiség szerint",
+      "orderSize": "Rendelés mérete",
+      "size1": "1 tétel",
+      "size23": "2-3 tétel",
+      "size45": "4-5 tétel",
+      "size6": "6+ tétel",
+      "pieces": "db",
+      "exportCsv": "CSV exportálása",
+      "periodThisWeek": "Ezen a héten"
     },
     "auth": {
       "title": "Hozd létre az étlapod",
@@ -703,6 +735,22 @@
       "kosher": "Kóser",
       "spicy": "Csípős",
       "organic": "Bio"
+    },
+    "paymentMethods": {
+      "cash": "Készpénz",
+      "card": "Kártya",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Új",
+      "in_progress": "Folyamatban",
+      "completed": "Befejezett",
+      "cancelled": "Törölt"
     }
   }
 }

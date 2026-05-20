@@ -337,7 +337,9 @@
       "noActiveBody": "Nieuwe bestellingen verschijnen hier.",
       "disabledTitle": "Bestellingen zijn uitgeschakeld",
       "disabledBody": "Schakel bestellingen in via instellingen om ze te ontvangen.",
-      "disabledCta": "Naar instellingen"
+      "disabledCta": "Naar instellingen",
+      "paymentMethodLabel": "Betaalmethode",
+      "selectPaymentMethod": "Selecteer een betaalmethode."
     },
     "reservations": {
       "title": "Reserveringen",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Ingeschakelde velden moeten door de klant worden ingevuld bij het bestellen.",
         "fieldName": "Naam",
         "fieldPhone": "Telefoon",
-        "fieldAddress": "Adres"
+        "fieldAddress": "Adres",
+        "paymentMethodsLabel": "Betaalmethoden",
+        "paymentMethodsTip": "Methoden die personeel kan kiezen bij het afsluiten van een bestelling. Schakel alles uit om de selector over te slaan.",
+        "paymentIntegrationTip": "Neem contact op met support om een betaalsysteem in je restaurant te integreren."
       },
       "bookings": {
         "title": "Reserveringen",
@@ -634,7 +639,34 @@
       "currentPeriod": "Huidige periode",
       "pageReserve": "Reserveringen",
       "pageOrder": "Bestellingen",
-      "pageOther": "Overig"
+      "pageOther": "Overig",
+      "colDate": "Datum",
+      "colTime": "Tijd",
+      "colTable": "Tafel",
+      "colTotal": "Totaal",
+      "colPayment": "Betaling",
+      "colCustomer": "Klant",
+      "colComment": "Opmerking",
+      "colItems": "Items",
+      "colStatus": "Status",
+      "returnToKitchen": "Terug naar keuken",
+      "ordersListTitle": "Bestellingen",
+      "noOrdersInPeriod": "Geen bestellingen in deze periode.",
+      "revenueLabel": "Omzet",
+      "ordersLabel": "Bestellingen",
+      "avgOrderLabel": "Gem. bestelling",
+      "revenueByDay": "Omzet per dag",
+      "revenueByHour": "Omzet per uur",
+      "topByRevenue": "Top op omzet",
+      "topByQuantity": "Top op aantal",
+      "orderSize": "Bestelgrootte",
+      "size1": "1 item",
+      "size23": "2-3 items",
+      "size45": "4-5 items",
+      "size6": "6+ items",
+      "pieces": "st",
+      "exportCsv": "CSV exporteren",
+      "periodThisWeek": "Deze week"
     },
     "auth": {
       "title": "Maak uw menu",
@@ -703,6 +735,22 @@
       "kosher": "Koosjer",
       "spicy": "Pikant",
       "organic": "Biologisch"
+    },
+    "paymentMethods": {
+      "cash": "Contant",
+      "card": "Kaart",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nieuw",
+      "in_progress": "Bezig",
+      "completed": "Voltooid",
+      "cancelled": "Geannuleerd"
     }
   }
 }

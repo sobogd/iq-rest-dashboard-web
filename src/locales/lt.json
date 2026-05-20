@@ -337,7 +337,9 @@
       "noActiveBody": "Nauji užsakymai pasirodys čia.",
       "disabledTitle": "Užsakymai išjungti",
       "disabledBody": "Įjunkite užsakymus nustatymuose, kad pradėtumėte juos gauti.",
-      "disabledCta": "Eiti į nustatymus"
+      "disabledCta": "Eiti į nustatymus",
+      "paymentMethodLabel": "Mokėjimo būdas",
+      "selectPaymentMethod": "Pasirinkite mokėjimo būdą."
     },
     "reservations": {
       "title": "Rezervacijos",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Įjungti laukai bus privalomi klientui užsakant.",
         "fieldName": "Vardas",
         "fieldPhone": "Telefonas",
-        "fieldAddress": "Adresas"
+        "fieldAddress": "Adresas",
+        "paymentMethodsLabel": "Mokėjimo būdai",
+        "paymentMethodsTip": "Būdai, kuriuos personalas gali pasirinkti uždarydamas užsakymą. Išjunk visus, kad praleistum pasirinkimą.",
+        "paymentIntegrationTip": "Norėdami integruoti mokėjimo sistemą savo restorane, susisiekite su palaikymu."
       },
       "bookings": {
         "title": "Rezervacijos",
@@ -634,7 +639,34 @@
       "currentPeriod": "Dabartinis laikotarpis",
       "pageReserve": "Rezervacijos",
       "pageOrder": "Užsakymai",
-      "pageOther": "Kita"
+      "pageOther": "Kita",
+      "colDate": "Data",
+      "colTime": "Laikas",
+      "colTable": "Stalas",
+      "colTotal": "Iš viso",
+      "colPayment": "Mokėjimas",
+      "colCustomer": "Klientas",
+      "colComment": "Komentaras",
+      "colItems": "Prekės",
+      "colStatus": "Būsena",
+      "returnToKitchen": "Grąžinti į virtuvę",
+      "ordersListTitle": "Užsakymai",
+      "noOrdersInPeriod": "Per šį laikotarpį užsakymų nėra.",
+      "revenueLabel": "Pajamos",
+      "ordersLabel": "Užsakymai",
+      "avgOrderLabel": "Vid. užsakymas",
+      "revenueByDay": "Pajamos per dieną",
+      "revenueByHour": "Pajamos per valandą",
+      "topByRevenue": "Top pagal pajamas",
+      "topByQuantity": "Top pagal kiekį",
+      "orderSize": "Užsakymo dydis",
+      "size1": "1 prekė",
+      "size23": "2-3 prekės",
+      "size45": "4-5 prekės",
+      "size6": "6+ prekių",
+      "pieces": "vnt",
+      "exportCsv": "Eksportuoti CSV",
+      "periodThisWeek": "Šią savaitę"
     },
     "auth": {
       "title": "Sukurkite savo meniu",
@@ -703,6 +735,22 @@
       "kosher": "Košer",
       "spicy": "Aštru",
       "organic": "Ekologiška"
+    },
+    "paymentMethods": {
+      "cash": "Grynieji",
+      "card": "Kortelė",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Naujas",
+      "in_progress": "Vykdoma",
+      "completed": "Užbaigtas",
+      "cancelled": "Atšauktas"
     }
   }
 }

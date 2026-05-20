@@ -337,7 +337,9 @@
       "noActiveBody": "Нове поруџбине ће се приказати овде.",
       "disabledTitle": "Поруџбине су онемогућене",
       "disabledBody": "Омогућите поруџбине у подешавањима да бисте почели да их примате.",
-      "disabledCta": "Иди у подешавања"
+      "disabledCta": "Иди у подешавања",
+      "paymentMethodLabel": "Начин плаћања",
+      "selectPaymentMethod": "Изабери начин плаћања."
     },
     "reservations": {
       "title": "Rezervacije",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Omogućena polja biće obavezna za klijenta prilikom naručivanja.",
         "fieldName": "Ime",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adresa"
+        "fieldAddress": "Adresa",
+        "paymentMethodsLabel": "Начини плаћања",
+        "paymentMethodsTip": "Начини које особље може изабрати при затварању поруџбине. Искључи све да прескочиш избор.",
+        "paymentIntegrationTip": "За интеграцију платног система у твој ресторан контактирај подршку."
       },
       "bookings": {
         "title": "Rezervacije",
@@ -611,7 +616,7 @@
       "byDay": "Po danu",
       "byLanguage": "Po jeziku",
       "byPage": "Po stranici",
-      "periodToday": "Danas",
+      "periodToday": "Данас",
       "period7d": "7 dana",
       "period30d": "30 dana",
       "period90d": "90 dana",
@@ -634,7 +639,34 @@
       "currentPeriod": "Тренутни период",
       "pageReserve": "Резервације",
       "pageOrder": "Поруџбине",
-      "pageOther": "Остало"
+      "pageOther": "Остало",
+      "colDate": "Датум",
+      "colTime": "Време",
+      "colTable": "Сто",
+      "colTotal": "Укупно",
+      "colPayment": "Плаћање",
+      "colCustomer": "Клијент",
+      "colComment": "Коментар",
+      "colItems": "Ставке",
+      "colStatus": "Статус",
+      "returnToKitchen": "Врати у кухињу",
+      "ordersListTitle": "Поруџбине",
+      "noOrdersInPeriod": "Нема поруџбина у овом периоду.",
+      "revenueLabel": "Приход",
+      "ordersLabel": "Поруџбине",
+      "avgOrderLabel": "Прос. поруџбина",
+      "revenueByDay": "Приход дневно",
+      "revenueByHour": "Приход по сату",
+      "topByRevenue": "Топ по приходу",
+      "topByQuantity": "Топ по количини",
+      "orderSize": "Величина поруџбине",
+      "size1": "1 ставка",
+      "size23": "2-3 ставке",
+      "size45": "4-5 ставки",
+      "size6": "6+ ставки",
+      "pieces": "ком",
+      "exportCsv": "Извези CSV",
+      "periodThisWeek": "Ова недеља"
     },
     "auth": {
       "title": "Napravite svoj meni",
@@ -703,6 +735,22 @@
       "kosher": "Кошер",
       "spicy": "Љуто",
       "organic": "Органско"
+    },
+    "paymentMethods": {
+      "cash": "Готовина",
+      "card": "Картица",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Ново",
+      "in_progress": "У току",
+      "completed": "Завршено",
+      "cancelled": "Отказано"
     }
   }
 }

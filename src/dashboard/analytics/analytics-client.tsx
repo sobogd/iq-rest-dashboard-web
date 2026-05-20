@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { EmptyState, PageHeader } from "../_v2/ui";
 import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
 import { track } from "@/lib/dashboard-events";
+import { OrdersListModal } from "./orders-modal";
 
 interface OrderItem { name: string; quantity: number; revenue: number }
 
@@ -17,6 +18,7 @@ interface OrderStats {
   itemsPerOrder: number;
   currency: string;
   byDay: { day: string; revenue: number; orders: number }[];
+  byDayPrev: { day: string; revenue: number; orders: number }[];
   byHour: { hour: number; revenue: number; orders: number }[];
   topByRevenue: OrderItem[];
   topByQuantity: OrderItem[];
@@ -120,6 +122,7 @@ export function AnalyticsClient() {
   const [period, setPeriod] = useState<string>(() => currentPeriod());
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [ordersModalOpen, setOrdersModalOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -143,10 +146,17 @@ export function AnalyticsClient() {
     };
   }, [period]);
 
-  const months = useMemo(
-    () => (stats?.companyCreatedAt ? buildMonths(stats.companyCreatedAt) : []),
-    [stats?.companyCreatedAt],
-  );
+  const months = useMemo(() => {
+    if (!stats?.companyCreatedAt) return [];
+    // Prepend quick-pick buckets (today, current calendar week) before the
+    // month list so the most common analytics windows are one tap away.
+    const list = buildMonths(stats.companyCreatedAt);
+    return [
+      { id: "today", label: t("periodToday", { defaultValue: "Today" }) },
+      { id: "week", label: t("periodThisWeek", { defaultValue: "This week" }) },
+      ...list,
+    ];
+  }, [stats?.companyCreatedAt, t]);
 
   const isEmpty =
     !stats || (stats.totalViews === 0 && (stats.orders?.ordersCount ?? 0) === 0);
@@ -181,22 +191,14 @@ export function AnalyticsClient() {
           <div className="space-y-4">
             {stats.orders ? (
               <>
-                <OrdersKpis orders={stats.orders} />
-                <RevenueByDayChart byDay={stats.orders.byDay} currency={stats.orders.currency} />
-                <RevenueByHourChart byHour={stats.orders.byHour} currency={stats.orders.currency} />
-                <TopItemsList
-                  title="Top items by revenue"
-                  items={stats.orders.topByRevenue}
-                  valueKey="revenue"
-                  currency={stats.orders.currency}
-                />
-                <TopItemsList
-                  title="Top items by quantity"
-                  items={stats.orders.topByQuantity}
-                  valueKey="quantity"
-                  currency={stats.orders.currency}
-                />
-                <OrderSizes sizeBuckets={stats.orders.sizeBuckets} />
+                <OrdersKpis orders={stats.orders} onOpenOrders={() => { track("dash_analytics_click_orders_card"); setOrdersModalOpen(true); }} />
+                {period !== "today" ? (
+                  <RevenueByDayChart
+                    byDay={stats.orders.byDay}
+                    byDayPrev={stats.orders.byDayPrev}
+                    currency={stats.orders.currency}
+                  />
+                ) : null}
               </>
             ) : null}
             {/* Scan / page-view sections — same monthly filter drives them. */}
@@ -211,6 +213,14 @@ export function AnalyticsClient() {
           </div>
         )
       )}
+
+      {ordersModalOpen && stats?.orders ? (
+        <OrdersListModal
+          period={period}
+          currency={stats.orders.currency}
+          onClose={() => setOrdersModalOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -297,7 +307,8 @@ function PeriodDropdown({
   );
 }
 
-function OrdersKpis({ orders }: { orders: OrderStats }) {
+function OrdersKpis({ orders, onOpenOrders }: { orders: OrderStats; onOpenOrders: () => void }) {
+  const t = useTranslations("dashboard.analyticsDashboard");
   const delta = formatDelta(orders.revenue, orders.revenuePrev, orders.currency);
   const deltaColor =
     delta.sign === "up" ? "text-emerald-500/80" :
@@ -306,7 +317,7 @@ function OrdersKpis({ orders }: { orders: OrderStats }) {
   return (
     <div className="grid grid-cols-2 gap-2.5">
       <div className="col-span-2 bg-card border border-border rounded-2xl p-4">
-        <div className="text-xs text-muted-foreground">Revenue</div>
+        <div className="text-xs text-muted-foreground">{t("revenueLabel", { defaultValue: "Revenue" })}</div>
         <div className="flex items-baseline gap-2 mt-1">
           <div className="text-2xl font-medium text-foreground tabular-nums">
             {formatCurrency(orders.revenue, orders.currency)}
@@ -318,65 +329,152 @@ function OrdersKpis({ orders }: { orders: OrderStats }) {
           ) : null}
         </div>
       </div>
-      <div className="bg-card border border-border rounded-2xl p-4">
-        <div className="text-xs text-muted-foreground">Orders</div>
+      <button
+        type="button"
+        onClick={onOpenOrders}
+        className="bg-card border border-border rounded-2xl p-4 text-left hover:border-muted-foreground/40 transition-colors relative"
+      >
+        <div className="text-xs text-muted-foreground">{t("ordersLabel", { defaultValue: "Orders" })}</div>
         <div className="text-2xl font-medium text-foreground tabular-nums mt-1">
           {orders.ordersCount}
         </div>
-      </div>
+        <svg className="absolute top-1/2 -translate-y-1/2 right-3 w-4 h-4 text-muted-foreground/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+      </button>
       <div className="bg-card border border-border rounded-2xl p-4">
-        <div className="text-xs text-muted-foreground">Avg order</div>
+        <div className="text-xs text-muted-foreground">{t("avgOrderLabel", { defaultValue: "Avg order" })}</div>
         <div className="text-2xl font-medium text-foreground tabular-nums mt-1">
           {formatCurrency(orders.aov, orders.currency)}
-        </div>
-      </div>
-      <div className="bg-card border border-border rounded-2xl p-4 col-span-2">
-        <div className="text-xs text-muted-foreground">Items per order</div>
-        <div className="text-2xl font-medium text-foreground tabular-nums mt-1">
-          {orders.itemsPerOrder.toFixed(1)}
         </div>
       </div>
     </div>
   );
 }
 
-function RevenueByDayChart({ byDay, currency }: { byDay: OrderStats["byDay"]; currency: string }) {
-  if (byDay.every((d) => d.revenue === 0)) return null;
-  const max = Math.max(...byDay.map((d) => d.revenue), 1);
+function RevenueByDayChart({
+  byDay,
+  byDayPrev,
+  currency,
+}: {
+  byDay: OrderStats["byDay"];
+  byDayPrev: OrderStats["byDayPrev"];
+  currency: string;
+}) {
+  const t = useTranslations("dashboard.analyticsDashboard");
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [labelStep, setLabelStep] = useState(1);
+  const len = Math.max(byDay.length, byDayPrev.length);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || len === 0) return;
+    const NICE_STEPS = [1, 2, 3, 5, 7, 10, 14];
+    const compute = () => {
+      const width = el.scrollWidth;
+      const colWidth = width / len;
+      const minColForLabel = 30;
+      const raw = Math.max(1, Math.ceil(minColForLabel / Math.max(colWidth, 1)));
+      const next = NICE_STEPS.find((n) => n >= raw) ?? raw;
+      setLabelStep(next);
+    };
+    compute();
+    const ro = new ResizeObserver(compute);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [len]);
+
+  if (byDay.every((d) => d.revenue === 0) && byDayPrev.every((d) => d.revenue === 0)) return null;
+  const max = Math.max(
+    ...byDay.map((d) => d.revenue),
+    ...byDayPrev.map((d) => d.revenue),
+    1,
+  );
+  const lastIdx = len - 1;
+  // Compact currency label — "€1.2k", "$120", ...
+  const compactLabel = (n: number) => {
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency,
+        notation: "compact",
+        maximumFractionDigits: n >= 1000 ? 1 : 0,
+      }).format(n);
+    } catch {
+      return `${n.toFixed(0)} ${currency}`;
+    }
+  };
   return (
     <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
-      <div className="text-sm font-medium text-foreground mb-3">Revenue by day</div>
+      <div className="text-sm font-medium text-foreground mb-3">{t("revenueByDay", { defaultValue: "Revenue by day" })}</div>
       <div className="overflow-x-auto -mx-4 md:-mx-5 px-4 md:px-5">
-        <div className="flex items-stretch gap-1">
-          {byDay.map((d) => {
-            const h = Math.round((d.revenue / max) * 100);
+        <div ref={containerRef} className="flex items-stretch gap-2">
+          {byDay.map((d, i) => {
+            const prev = byDayPrev[i];
+            const hCur = Math.round((d.revenue / max) * 100);
+            const hPrev = prev ? Math.round((prev.revenue / max) * 100) : 0;
+            const showLabel = (lastIdx - i) % labelStep === 0;
             return (
-              <div key={d.day} className="flex-1 flex flex-col gap-1.5 min-w-[12px]">
-                <div className="h-32 flex items-end justify-center">
-                  <div
-                    className="bg-primary rounded-sm w-full"
-                    style={{ height: `${Math.max(h, d.revenue > 0 ? 4 : 1)}%` }}
-                    title={`${d.day}: ${formatCurrency(d.revenue, currency)} (${d.orders} orders)`}
-                  />
+              <div key={d.day} className="flex-1 flex flex-col gap-1.5 min-w-[28px]">
+                <div className="h-32 flex items-end justify-center gap-1">
+                  <div className="flex flex-col justify-end items-center h-full">
+                    {prev && prev.revenue > 0 ? (
+                      <div
+                        className="text-[9px] text-muted-foreground tabular-nums leading-3 whitespace-nowrap mb-1.5"
+                        style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                      >
+                        {compactLabel(prev.revenue)}
+                      </div>
+                    ) : null}
+                    <div
+                      className="bg-muted-foreground/50 rounded-sm w-[10px]"
+                      style={{ height: `${Math.max(hPrev, 2)}%` }}
+                      title={prev ? `Prev ${prev.day}: ${formatCurrency(prev.revenue, currency)}` : "—"}
+                    />
+                  </div>
+                  <div className="flex flex-col justify-end items-center h-full">
+                    {d.revenue > 0 ? (
+                      <div
+                        className="text-[9px] text-foreground tabular-nums leading-3 whitespace-nowrap mb-1.5"
+                        style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                      >
+                        {compactLabel(d.revenue)}
+                      </div>
+                    ) : null}
+                    <div
+                      className="bg-primary rounded-sm w-[10px]"
+                      style={{ height: `${Math.max(hCur, 2)}%` }}
+                      title={`${d.day}: ${formatCurrency(d.revenue, currency)} (${d.orders} orders)`}
+                    />
+                  </div>
                 </div>
-                <div className="h-3 text-[9px] text-muted-foreground tabular-nums text-center">
-                  {d.day.slice(8, 10)}
+                <div className="h-3 text-[9px] text-muted-foreground tabular-nums text-center truncate">
+                  {showLabel ? formatDayShort(d.day) : null}
                 </div>
               </div>
             );
           })}
         </div>
       </div>
+      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block w-2.5 h-2.5 rounded-sm bg-muted-foreground/50" />
+          {t("prevPeriod")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block w-2.5 h-2.5 rounded-sm bg-primary" />
+          {t("currentPeriod")}
+        </span>
+      </div>
     </div>
   );
 }
 
 function RevenueByHourChart({ byHour, currency }: { byHour: OrderStats["byHour"]; currency: string }) {
+  const t = useTranslations("dashboard.analyticsDashboard");
   if (byHour.every((h) => h.revenue === 0)) return null;
   const max = Math.max(...byHour.map((h) => h.revenue), 1);
   return (
     <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
-      <div className="text-sm font-medium text-foreground mb-3">Revenue by hour</div>
+      <div className="text-sm font-medium text-foreground mb-3">{t("revenueByHour", { defaultValue: "Revenue by hour" })}</div>
       <div className="flex items-stretch gap-1">
         {byHour.map((h) => {
           const height = Math.round((h.revenue / max) * 100);
@@ -405,11 +503,13 @@ function TopItemsList({
   items,
   valueKey,
   currency,
+  pcsLabel,
 }: {
   title: string;
   items: OrderItem[];
   valueKey: "revenue" | "quantity";
   currency: string;
+  pcsLabel: string;
 }) {
   if (items.length === 0) return null;
   const max = Math.max(...items.map((i) => i[valueKey]), 1);
@@ -432,7 +532,7 @@ function TopItemsList({
                 />
               </div>
               <div className="text-xs text-muted-foreground tabular-nums w-20 text-right shrink-0">
-                {valueKey === "revenue" ? formatCurrency(v, currency) : `${v} pcs`}
+                {valueKey === "revenue" ? formatCurrency(v, currency) : `${v} ${pcsLabel}`}
               </div>
             </div>
           );
@@ -443,17 +543,18 @@ function TopItemsList({
 }
 
 function OrderSizes({ sizeBuckets }: { sizeBuckets: OrderStats["sizeBuckets"] }) {
+  const t = useTranslations("dashboard.analyticsDashboard");
   const total = sizeBuckets["1"] + sizeBuckets["2-3"] + sizeBuckets["4-5"] + sizeBuckets["6+"];
   if (total === 0) return null;
   const rows: [string, number][] = [
-    ["1 item", sizeBuckets["1"]],
-    ["2-3 items", sizeBuckets["2-3"]],
-    ["4-5 items", sizeBuckets["4-5"]],
-    ["6+ items", sizeBuckets["6+"]],
+    [t("size1", { defaultValue: "1 item" }), sizeBuckets["1"]],
+    [t("size23", { defaultValue: "2-3 items" }), sizeBuckets["2-3"]],
+    [t("size45", { defaultValue: "4-5 items" }), sizeBuckets["4-5"]],
+    [t("size6", { defaultValue: "6+ items" }), sizeBuckets["6+"]],
   ];
   return (
     <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
-      <div className="text-sm font-medium text-foreground mb-3">Order size</div>
+      <div className="text-sm font-medium text-foreground mb-3">{t("orderSize", { defaultValue: "Order size" })}</div>
       <div className="space-y-2">
         {rows.map(([label, n]) => {
           const pct = total > 0 ? Math.round((n / total) * 100) : 0;
@@ -532,16 +633,36 @@ function DayChart({ byDay, byDayPrev }: { byDay: Stats["byDay"]; byDayPrev: Stat
             return (
               <div key={d.day} className="flex-1 flex flex-col gap-1.5 min-w-[28px]">
                 <div className="h-32 flex items-end justify-center gap-1">
-                  <div
-                    className="bg-muted-foreground/50 rounded-sm w-[10px]"
-                    style={{ height: `${Math.max(hPrev, 2)}%` }}
-                    title={`Prev ${d.prevDay ?? "—"}: ${d.prevScans}`}
-                  />
-                  <div
-                    className="bg-primary rounded-sm w-[10px]"
-                    style={{ height: `${Math.max(hCur, 2)}%` }}
-                    title={t("dayTooltip", { day: d.day, scans: d.scans, views: d.views })}
-                  />
+                  <div className="flex flex-col justify-end items-center h-full">
+                    {d.prevScans > 0 ? (
+                      <div
+                        className="text-[9px] text-muted-foreground tabular-nums leading-3 whitespace-nowrap mb-1.5"
+                        style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                      >
+                        {d.prevScans}
+                      </div>
+                    ) : null}
+                    <div
+                      className="bg-muted-foreground/50 rounded-sm w-[10px]"
+                      style={{ height: `${Math.max(hPrev, 2)}%` }}
+                      title={`Prev ${d.prevDay ?? "—"}: ${d.prevScans}`}
+                    />
+                  </div>
+                  <div className="flex flex-col justify-end items-center h-full">
+                    {d.scans > 0 ? (
+                      <div
+                        className="text-[9px] text-foreground tabular-nums leading-3 whitespace-nowrap mb-1.5"
+                        style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+                      >
+                        {d.scans}
+                      </div>
+                    ) : null}
+                    <div
+                      className="bg-primary rounded-sm w-[10px]"
+                      style={{ height: `${Math.max(hCur, 2)}%` }}
+                      title={t("dayTooltip", { day: d.day, scans: d.scans, views: d.views })}
+                    />
+                  </div>
                 </div>
                 <div className="h-3 text-[9px] text-muted-foreground tabular-nums text-center truncate">
                   {showLabel ? formatDayShort(d.day) : null}

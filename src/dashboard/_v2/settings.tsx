@@ -752,7 +752,9 @@ export function OrderSettingsPage({
 }) {
  const t = useTranslations("dashboard.settings");
  const to = useTranslations("dashboard.settings.orders");
+ const tpm = useTranslations("dashboard.paymentMethods");
  const [draft, setDraft] = useState(restaurant.orderSettings);
+ const [paymentDraft, setPaymentDraft] = useState<string[]>(restaurant.paymentMethods || []);
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
@@ -777,12 +779,17 @@ export function OrderSettingsPage({
  orderNameEnabled: draft.requiredFields.name,
  orderPhoneEnabled: draft.requiredFields.phone,
  orderAddressEnabled: draft.requiredFields.address,
+ paymentMethods: paymentDraft,
  });
  } catch {
  return;
  }
- setRestaurant((r) => ({ ...r, orderSettings: draft }));
+ setRestaurant((r) => ({ ...r, orderSettings: draft, paymentMethods: paymentDraft }));
  onBack();
+ }
+
+ function togglePayment(code: string) {
+ setPaymentDraft((prev) => (prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]));
  }
 
  const disabled = !draft.acceptOrders;
@@ -866,6 +873,33 @@ export function OrderSettingsPage({
  </div>
  ))}
  </div>
+ </div>
+
+ <div className={"bg-card border border-border rounded-2xl p-5 md:p-6 md:col-span-2 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
+ <div className="text-sm font-medium text-foreground">{to("paymentMethodsLabel", { defaultValue: "Payment methods" })}</div>
+ <p className="text-xs text-muted-foreground mb-4 mt-0.5">
+ {to("paymentMethodsTip", { defaultValue: "Methods waitstaff can pick when closing an order. Turn everything off to skip the selector." })}
+ </p>
+ {(["cash", "card", "iban", "yemeksipeti", "trendyolyemek", "stripe", "uber_eats", "glovo"] as const).map((code, idx) => (
+ <div key={code}>
+ {idx > 0 ? <div className="border-t border-border my-2.5" /> : null}
+ <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
+ <div className="text-sm text-foreground">
+ {tpm(code as never, { defaultValue: code })}
+ </div>
+ <ToggleSwitch
+ checked={paymentDraft.includes(code)}
+ onChange={() => {
+ track(`dash_settings_orders_toggle_pm_${code}`);
+ togglePayment(code);
+ }}
+ />
+ </label>
+ </div>
+ ))}
+ <p className="text-xs text-muted-foreground mt-4 leading-snug">
+ {to("paymentIntegrationTip", { defaultValue: "To integrate a payment system for your restaurant, contact support." })}
+ </p>
  </div>
  </div>
 </div>

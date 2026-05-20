@@ -337,7 +337,9 @@
       "noActiveBody": "Jaunie pasūtījumi parādīsies šeit.",
       "disabledTitle": "Pasūtījumi ir izslēgti",
       "disabledBody": "Iespējojiet pasūtījumus iestatījumos, lai sāktu tos saņemt.",
-      "disabledCta": "Doties uz iestatījumiem"
+      "disabledCta": "Doties uz iestatījumiem",
+      "paymentMethodLabel": "Maksājuma veids",
+      "selectPaymentMethod": "Izvēlieties maksājuma veidu."
     },
     "reservations": {
       "title": "Rezervācijas",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Iespējotie lauki būs obligāti klientam pasūtīšanas laikā.",
         "fieldName": "Vārds",
         "fieldPhone": "Tālrunis",
-        "fieldAddress": "Adrese"
+        "fieldAddress": "Adrese",
+        "paymentMethodsLabel": "Maksājuma veidi",
+        "paymentMethodsTip": "Veidi, ko personāls var izvēlēties, slēdzot pasūtījumu. Izslēdz visu, lai izlaistu izvēli.",
+        "paymentIntegrationTip": "Lai integrētu maksājumu sistēmu jūsu restorānā, sazinieties ar atbalstu."
       },
       "bookings": {
         "title": "Rezervācijas",
@@ -634,7 +639,34 @@
       "currentPeriod": "Pašreizējais periods",
       "pageReserve": "Rezervācijas",
       "pageOrder": "Pasūtījumi",
-      "pageOther": "Citi"
+      "pageOther": "Citi",
+      "colDate": "Datums",
+      "colTime": "Laiks",
+      "colTable": "Galds",
+      "colTotal": "Kopā",
+      "colPayment": "Maksājums",
+      "colCustomer": "Klients",
+      "colComment": "Komentārs",
+      "colItems": "Preces",
+      "colStatus": "Statuss",
+      "returnToKitchen": "Atgriezt virtuvē",
+      "ordersListTitle": "Pasūtījumi",
+      "noOrdersInPeriod": "Šajā periodā pasūtījumu nav.",
+      "revenueLabel": "Ieņēmumi",
+      "ordersLabel": "Pasūtījumi",
+      "avgOrderLabel": "Vid. pasūtījums",
+      "revenueByDay": "Ieņēmumi dienā",
+      "revenueByHour": "Ieņēmumi stundā",
+      "topByRevenue": "Top pēc ieņēmumiem",
+      "topByQuantity": "Top pēc daudzuma",
+      "orderSize": "Pasūtījuma izmērs",
+      "size1": "1 prece",
+      "size23": "2-3 preces",
+      "size45": "4-5 preces",
+      "size6": "6+ preces",
+      "pieces": "gab",
+      "exportCsv": "Eksportēt CSV",
+      "periodThisWeek": "Šonedēļ"
     },
     "auth": {
       "title": "Izveidojiet savu ēdienkarti",
@@ -703,6 +735,22 @@
       "kosher": "Košers",
       "spicy": "Pikants",
       "organic": "Bio"
+    },
+    "paymentMethods": {
+      "cash": "Skaidra nauda",
+      "card": "Karte",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Jauns",
+      "in_progress": "Procesā",
+      "completed": "Pabeigts",
+      "cancelled": "Atcelts"
     }
   }
 }

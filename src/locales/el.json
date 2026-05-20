@@ -337,7 +337,9 @@
       "noActiveBody": "Οι νέες παραγγελίες θα εμφανιστούν εδώ.",
       "disabledTitle": "Οι παραγγελίες είναι απενεργοποιημένες",
       "disabledBody": "Ενεργοποιήστε τις παραγγελίες στις ρυθμίσεις για να αρχίσετε να τις λαμβάνετε.",
-      "disabledCta": "Πήγαινε στις ρυθμίσεις"
+      "disabledCta": "Πήγαινε στις ρυθμίσεις",
+      "paymentMethodLabel": "Μέθοδος πληρωμής",
+      "selectPaymentMethod": "Επιλέξτε μέθοδο πληρωμής."
     },
     "reservations": {
       "title": "Κρατήσεις",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Τα ενεργά πεδία θα είναι υποχρεωτικά για τον πελάτη κατά την παραγγελία.",
         "fieldName": "Όνομα",
         "fieldPhone": "Τηλέφωνο",
-        "fieldAddress": "Διεύθυνση"
+        "fieldAddress": "Διεύθυνση",
+        "paymentMethodsLabel": "Μέθοδοι πληρωμής",
+        "paymentMethodsTip": "Μέθοδοι που μπορεί να επιλέξει το προσωπικό στο κλείσιμο παραγγελίας. Απενεργοποίησε τα όλα για παράκαμψη του επιλογέα.",
+        "paymentIntegrationTip": "Για ενσωμάτωση συστήματος πληρωμών στο εστιατόριό σας, επικοινωνήστε με την υποστήριξη."
       },
       "bookings": {
         "title": "Κρατήσεις",
@@ -634,7 +639,34 @@
       "currentPeriod": "Τρέχουσα περίοδος",
       "pageReserve": "Κρατήσεις",
       "pageOrder": "Παραγγελίες",
-      "pageOther": "Άλλα"
+      "pageOther": "Άλλα",
+      "colDate": "Ημερομηνία",
+      "colTime": "Ώρα",
+      "colTable": "Τραπέζι",
+      "colTotal": "Σύνολο",
+      "colPayment": "Πληρωμή",
+      "colCustomer": "Πελάτης",
+      "colComment": "Σχόλιο",
+      "colItems": "Είδη",
+      "colStatus": "Κατάσταση",
+      "returnToKitchen": "Επιστροφή στην κουζίνα",
+      "ordersListTitle": "Παραγγελίες",
+      "noOrdersInPeriod": "Δεν υπάρχουν παραγγελίες σε αυτή την περίοδο.",
+      "revenueLabel": "Έσοδα",
+      "ordersLabel": "Παραγγελίες",
+      "avgOrderLabel": "Μ.Ο. παραγγελίας",
+      "revenueByDay": "Έσοδα ανά ημέρα",
+      "revenueByHour": "Έσοδα ανά ώρα",
+      "topByRevenue": "Top κατά έσοδα",
+      "topByQuantity": "Top κατά ποσότητα",
+      "orderSize": "Μέγεθος παραγγελίας",
+      "size1": "1 είδος",
+      "size23": "2-3 είδη",
+      "size45": "4-5 είδη",
+      "size6": "6+ είδη",
+      "pieces": "τμχ",
+      "exportCsv": "Εξαγωγή CSV",
+      "periodThisWeek": "Αυτή την εβδομάδα"
     },
     "auth": {
       "title": "Δημιουργήστε το μενού σας",
@@ -703,6 +735,22 @@
       "kosher": "Κοσέρ",
       "spicy": "Πικάντικο",
       "organic": "Βιολογικό"
+    },
+    "paymentMethods": {
+      "cash": "Μετρητά",
+      "card": "Κάρτα",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Νέο",
+      "in_progress": "Σε εξέλιξη",
+      "completed": "Ολοκληρώθηκε",
+      "cancelled": "Ακυρώθηκε"
     }
   }
 }

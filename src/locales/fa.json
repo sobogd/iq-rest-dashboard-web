@@ -337,7 +337,9 @@
       "noActiveBody": "سفارش‌های جدید اینجا نمایش داده می‌شوند.",
       "disabledTitle": "سفارش‌ها غیرفعال هستند",
       "disabledBody": "برای دریافت سفارش‌ها، آن‌ها را در تنظیمات فعال کنید.",
-      "disabledCta": "رفتن به تنظیمات"
+      "disabledCta": "رفتن به تنظیمات",
+      "paymentMethodLabel": "روش پرداخت",
+      "selectPaymentMethod": "یک روش پرداخت انتخاب کنید."
     },
     "reservations": {
       "title": "رزروها",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "فیلدهای فعال هنگام سفارش برای مشتری الزامی خواهند بود.",
         "fieldName": "نام",
         "fieldPhone": "تلفن",
-        "fieldAddress": "آدرس"
+        "fieldAddress": "آدرس",
+        "paymentMethodsLabel": "روش‌های پرداخت",
+        "paymentMethodsTip": "روش‌هایی که کارکنان می‌توانند هنگام بستن سفارش انتخاب کنند. همه را خاموش کنید تا انتخاب رد شود.",
+        "paymentIntegrationTip": "برای ادغام سیستم پرداخت در رستوران خود با پشتیبانی تماس بگیرید."
       },
       "bookings": {
         "title": "رزروها",
@@ -634,7 +639,34 @@
       "currentPeriod": "دوره فعلی",
       "pageReserve": "رزروها",
       "pageOrder": "سفارش‌ها",
-      "pageOther": "سایر"
+      "pageOther": "سایر",
+      "colDate": "تاریخ",
+      "colTime": "زمان",
+      "colTable": "میز",
+      "colTotal": "مجموع",
+      "colPayment": "پرداخت",
+      "colCustomer": "مشتری",
+      "colComment": "نظر",
+      "colItems": "اقلام",
+      "colStatus": "وضعیت",
+      "returnToKitchen": "بازگشت به آشپزخانه",
+      "ordersListTitle": "سفارش‌ها",
+      "noOrdersInPeriod": "در این بازه سفارشی نیست.",
+      "revenueLabel": "درآمد",
+      "ordersLabel": "سفارش‌ها",
+      "avgOrderLabel": "میانگین سفارش",
+      "revenueByDay": "درآمد روزانه",
+      "revenueByHour": "درآمد ساعتی",
+      "topByRevenue": "برترین بر اساس درآمد",
+      "topByQuantity": "برترین بر اساس تعداد",
+      "orderSize": "اندازه سفارش",
+      "size1": "۱ آیتم",
+      "size23": "۲-۳ آیتم",
+      "size45": "۴-۵ آیتم",
+      "size6": "۶+ آیتم",
+      "pieces": "عدد",
+      "exportCsv": "خروجی CSV",
+      "periodThisWeek": "این هفته"
     },
     "auth": {
       "title": "منوی خود را بسازید",
@@ -703,6 +735,22 @@
       "kosher": "کوشر",
       "spicy": "تند",
       "organic": "ارگانیک"
+    },
+    "paymentMethods": {
+      "cash": "نقد",
+      "card": "کارت",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "جدید",
+      "in_progress": "در حال انجام",
+      "completed": "تکمیل شده",
+      "cancelled": "لغو شده"
     }
   }
 }

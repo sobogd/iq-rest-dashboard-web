@@ -337,7 +337,9 @@
       "noActiveBody": "Yeni siparişler burada görünecek.",
       "disabledTitle": "Siparişler kapalı",
       "disabledBody": "Sipariş almak için ayarlardan siparişleri etkinleştirin.",
-      "disabledCta": "Ayarlara git"
+      "disabledCta": "Ayarlara git",
+      "paymentMethodLabel": "Ödeme yöntemi",
+      "selectPaymentMethod": "Bir ödeme yöntemi seçin."
     },
     "reservations": {
       "title": "Rezervasyonlar",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Etkin alanlar müşteri tarafından sipariş sırasında zorunlu olur.",
         "fieldName": "Ad",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adres"
+        "fieldAddress": "Adres",
+        "paymentMethodsLabel": "Ödeme yöntemleri",
+        "paymentMethodsTip": "Personelin sipariş kapatırken seçebileceği yöntemler. Seçimi atlamak için tümünü kapatın.",
+        "paymentIntegrationTip": "Restoranınız için bir ödeme sistemi entegrasyonu için destekle iletişime geçin."
       },
       "bookings": {
         "title": "Rezervasyonlar",
@@ -634,7 +639,34 @@
       "currentPeriod": "Mevcut dönem",
       "pageReserve": "Rezervasyonlar",
       "pageOrder": "Siparişler",
-      "pageOther": "Diğer"
+      "pageOther": "Diğer",
+      "colDate": "Tarih",
+      "colTime": "Saat",
+      "colTable": "Masa",
+      "colTotal": "Toplam",
+      "colPayment": "Ödeme",
+      "colCustomer": "Müşteri",
+      "colComment": "Yorum",
+      "colItems": "Ürünler",
+      "colStatus": "Durum",
+      "returnToKitchen": "Mutfağa geri gönder",
+      "ordersListTitle": "Siparişler",
+      "noOrdersInPeriod": "Bu dönemde sipariş yok.",
+      "revenueLabel": "Gelir",
+      "ordersLabel": "Siparişler",
+      "avgOrderLabel": "Ort. sipariş",
+      "revenueByDay": "Günlük gelir",
+      "revenueByHour": "Saatlik gelir",
+      "topByRevenue": "Gelire göre top",
+      "topByQuantity": "Adete göre top",
+      "orderSize": "Sipariş boyutu",
+      "size1": "1 ürün",
+      "size23": "2-3 ürün",
+      "size45": "4-5 ürün",
+      "size6": "6+ ürün",
+      "pieces": "adet",
+      "exportCsv": "CSV dışa aktar",
+      "periodThisWeek": "Bu hafta"
     },
     "auth": {
       "title": "Menünüzü oluşturun",
@@ -703,6 +735,22 @@
       "kosher": "Koşer",
       "spicy": "Acılı",
       "organic": "Organik"
+    },
+    "paymentMethods": {
+      "cash": "Nakit",
+      "card": "Kart",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Yeni",
+      "in_progress": "Devam ediyor",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
     }
   }
 }

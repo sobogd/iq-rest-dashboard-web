@@ -85,6 +85,8 @@ export interface Order {
  status: "active" | "completed" | "cancelled";
  items: OrderItem[];
  total: number;
+ paymentMethodId?: string | null;
+ statusBeforeClose?: string | null;
 }
 
 export interface Booking {
@@ -154,6 +156,7 @@ export interface Restaurant {
  subtitle: string;
  showTitleOnHomepage: boolean;
  menuLayout: "flat" | "drill";
+ paymentMethods: string[];
  slug: string;
  currency: string;
  backgroundUrl: string | null;

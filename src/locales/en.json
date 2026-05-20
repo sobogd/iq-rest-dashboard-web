@@ -337,7 +337,9 @@
       "noActiveBody": "New orders will show up here.",
       "disabledTitle": "Orders are disabled",
       "disabledBody": "Enable orders in settings to start receiving them.",
-      "disabledCta": "Go to settings"
+      "disabledCta": "Go to settings",
+      "paymentMethodLabel": "Payment method",
+      "selectPaymentMethod": "Select a payment method."
     },
     "reservations": {
       "title": "Bookings",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Enabled fields will be required for the customer to fill in when placing an order.",
         "fieldName": "Name",
         "fieldPhone": "Phone",
-        "fieldAddress": "Address"
+        "fieldAddress": "Address",
+        "paymentMethodsLabel": "Payment methods",
+        "paymentMethodsTip": "Methods waitstaff can pick when closing an order. Turn everything off to skip the selector.",
+        "paymentIntegrationTip": "To integrate a payment system for your restaurant, contact support."
       },
       "bookings": {
         "title": "Bookings",
@@ -634,7 +639,34 @@
       "currentPeriod": "Current period",
       "pageReserve": "Reservations",
       "pageOrder": "Orders",
-      "pageOther": "Other"
+      "pageOther": "Other",
+      "colDate": "Date",
+      "colTime": "Time",
+      "colTable": "Table",
+      "colTotal": "Total",
+      "colPayment": "Payment",
+      "colCustomer": "Customer",
+      "colComment": "Comment",
+      "colItems": "Items",
+      "colStatus": "Status",
+      "returnToKitchen": "Return to kitchen",
+      "ordersListTitle": "Orders",
+      "noOrdersInPeriod": "No orders in this period.",
+      "revenueLabel": "Revenue",
+      "ordersLabel": "Orders",
+      "avgOrderLabel": "Avg order",
+      "revenueByDay": "Revenue by day",
+      "revenueByHour": "Revenue by hour",
+      "topByRevenue": "Top items by revenue",
+      "topByQuantity": "Top items by quantity",
+      "orderSize": "Order size",
+      "size1": "1 item",
+      "size23": "2-3 items",
+      "size45": "4-5 items",
+      "size6": "6+ items",
+      "pieces": "pcs",
+      "exportCsv": "Export CSV",
+      "periodThisWeek": "This week"
     },
     "auth": {
       "title": "Create your menu",
@@ -703,6 +735,22 @@
       "kosher": "Kosher",
       "spicy": "Spicy",
       "organic": "Organic"
+    },
+    "paymentMethods": {
+      "cash": "Cash",
+      "card": "Card",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "New",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     }
   }
 }

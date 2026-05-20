@@ -337,7 +337,9 @@
       "noActiveBody": "Neue Bestellungen werden hier angezeigt.",
       "disabledTitle": "Bestellungen sind deaktiviert",
       "disabledBody": "Aktiviere Bestellungen in den Einstellungen, um sie zu empfangen.",
-      "disabledCta": "Zu den Einstellungen"
+      "disabledCta": "Zu den Einstellungen",
+      "paymentMethodLabel": "Zahlungsmethode",
+      "selectPaymentMethod": "Wählen Sie eine Zahlungsmethode."
     },
     "reservations": {
       "title": "Reservierungen",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Aktivierte Felder müssen vom Kunden bei der Bestellung ausgefüllt werden.",
         "fieldName": "Name",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adresse"
+        "fieldAddress": "Adresse",
+        "paymentMethodsLabel": "Zahlungsmethoden",
+        "paymentMethodsTip": "Methoden, die das Personal beim Abschluss einer Bestellung wählen kann. Alle deaktivieren, um die Auswahl zu überspringen.",
+        "paymentIntegrationTip": "Wenden Sie sich an den Support, um ein Zahlungssystem in Ihr Restaurant zu integrieren."
       },
       "bookings": {
         "title": "Reservierungen",
@@ -634,7 +639,34 @@
       "currentPeriod": "Aktueller Zeitraum",
       "pageReserve": "Reservierungen",
       "pageOrder": "Bestellungen",
-      "pageOther": "Sonstiges"
+      "pageOther": "Sonstiges",
+      "colDate": "Datum",
+      "colTime": "Uhrzeit",
+      "colTable": "Tisch",
+      "colTotal": "Summe",
+      "colPayment": "Zahlung",
+      "colCustomer": "Kunde",
+      "colComment": "Kommentar",
+      "colItems": "Artikel",
+      "colStatus": "Status",
+      "returnToKitchen": "Zurück in die Küche",
+      "ordersListTitle": "Bestellungen",
+      "noOrdersInPeriod": "Keine Bestellungen in diesem Zeitraum.",
+      "revenueLabel": "Umsatz",
+      "ordersLabel": "Bestellungen",
+      "avgOrderLabel": "Ø Bestellung",
+      "revenueByDay": "Umsatz pro Tag",
+      "revenueByHour": "Umsatz pro Stunde",
+      "topByRevenue": "Top nach Umsatz",
+      "topByQuantity": "Top nach Menge",
+      "orderSize": "Bestellgröße",
+      "size1": "1 Artikel",
+      "size23": "2-3 Artikel",
+      "size45": "4-5 Artikel",
+      "size6": "6+ Artikel",
+      "pieces": "Stk",
+      "exportCsv": "CSV exportieren",
+      "periodThisWeek": "Diese Woche"
     },
     "auth": {
       "title": "Erstellen Sie Ihre Karte",
@@ -703,6 +735,22 @@
       "kosher": "Koscher",
       "spicy": "Scharf",
       "organic": "Bio"
+    },
+    "paymentMethods": {
+      "cash": "Bargeld",
+      "card": "Karte",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Neu",
+      "in_progress": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert"
     }
   }
 }

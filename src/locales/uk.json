@@ -337,7 +337,9 @@
       "noActiveBody": "Нові замовлення з'являться тут.",
       "disabledTitle": "Замовлення вимкнено",
       "disabledBody": "Увімкніть замовлення в налаштуваннях, щоб почати їх отримувати.",
-      "disabledCta": "Перейти до налаштувань"
+      "disabledCta": "Перейти до налаштувань",
+      "paymentMethodLabel": "Спосіб оплати",
+      "selectPaymentMethod": "Оберіть спосіб оплати."
     },
     "reservations": {
       "title": "Бронювання",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Увімкнені поля будуть обов'язковими для заповнення під час замовлення.",
         "fieldName": "Ім'я",
         "fieldPhone": "Телефон",
-        "fieldAddress": "Адреса"
+        "fieldAddress": "Адреса",
+        "paymentMethodsLabel": "Способи оплати",
+        "paymentMethodsTip": "Методи, які офіціант може обрати при закритті замовлення. Вимкни все, щоб пропустити вибір.",
+        "paymentIntegrationTip": "Для інтеграції платіжної системи у вашому ресторані зверніться до підтримки."
       },
       "bookings": {
         "title": "Бронювання",
@@ -634,7 +639,34 @@
       "currentPeriod": "Поточний період",
       "pageReserve": "Резервації",
       "pageOrder": "Замовлення",
-      "pageOther": "Інше"
+      "pageOther": "Інше",
+      "colDate": "Дата",
+      "colTime": "Час",
+      "colTable": "Стіл",
+      "colTotal": "Сума",
+      "colPayment": "Оплата",
+      "colCustomer": "Клієнт",
+      "colComment": "Коментар",
+      "colItems": "Позиції",
+      "colStatus": "Статус",
+      "returnToKitchen": "Повернути на кухню",
+      "ordersListTitle": "Замовлення",
+      "noOrdersInPeriod": "Замовлень за період немає.",
+      "revenueLabel": "Виручка",
+      "ordersLabel": "Замовлення",
+      "avgOrderLabel": "Середній чек",
+      "revenueByDay": "Виручка по днях",
+      "revenueByHour": "Виручка по годинах",
+      "topByRevenue": "Топ за виручкою",
+      "topByQuantity": "Топ за кількістю",
+      "orderSize": "Розмір замовлення",
+      "size1": "1 позиція",
+      "size23": "2-3 позиції",
+      "size45": "4-5 позицій",
+      "size6": "6+ позицій",
+      "pieces": "шт",
+      "exportCsv": "Експорт CSV",
+      "periodThisWeek": "Цей тиждень"
     },
     "auth": {
       "title": "Створіть своє меню",
@@ -703,6 +735,22 @@
       "kosher": "Кошер",
       "spicy": "Гостре",
       "organic": "Органічне"
+    },
+    "paymentMethods": {
+      "cash": "Готівка",
+      "card": "Картка",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Новий",
+      "in_progress": "В роботі",
+      "completed": "Завершений",
+      "cancelled": "Скасований"
     }
   }
 }

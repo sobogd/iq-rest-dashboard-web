@@ -337,7 +337,9 @@
       "noActiveBody": "Nýjar pantanir munu birtast hér.",
       "disabledTitle": "Pantanir eru óvirkar",
       "disabledBody": "Virkjaðu pantanir í stillingum til að byrja að taka við þeim.",
-      "disabledCta": "Fara í stillingar"
+      "disabledCta": "Fara í stillingar",
+      "paymentMethodLabel": "Greiðslumáti",
+      "selectPaymentMethod": "Veldu greiðslumáta."
     },
     "reservations": {
       "title": "Bókanir",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Virku reitirnir verða krafðir fyrir viðskiptavininn við pöntun.",
         "fieldName": "Nafn",
         "fieldPhone": "Sími",
-        "fieldAddress": "Heimilisfang"
+        "fieldAddress": "Heimilisfang",
+        "paymentMethodsLabel": "Greiðslumáttar",
+        "paymentMethodsTip": "Aðferðir sem starfsfólk getur valið við lokun pöntunar. Slökktu á öllu til að sleppa veljaranum.",
+        "paymentIntegrationTip": "Hafðu samband við þjónustuver til að samþætta greiðslukerfi á veitingastað þinn."
       },
       "bookings": {
         "title": "Bókanir",
@@ -634,7 +639,34 @@
       "currentPeriod": "Núverandi tímabil",
       "pageReserve": "Pantanir",
       "pageOrder": "Pantanir",
-      "pageOther": "Annað"
+      "pageOther": "Annað",
+      "colDate": "Dagsetning",
+      "colTime": "Tími",
+      "colTable": "Borð",
+      "colTotal": "Samtals",
+      "colPayment": "Greiðsla",
+      "colCustomer": "Viðskiptavinur",
+      "colComment": "Athugasemd",
+      "colItems": "Vörur",
+      "colStatus": "Staða",
+      "returnToKitchen": "Aftur í eldhús",
+      "ordersListTitle": "Pantanir",
+      "noOrdersInPeriod": "Engar pantanir á þessu tímabili.",
+      "revenueLabel": "Tekjur",
+      "ordersLabel": "Pantanir",
+      "avgOrderLabel": "Meðalpöntun",
+      "revenueByDay": "Tekjur á dag",
+      "revenueByHour": "Tekjur á klst",
+      "topByRevenue": "Topp eftir tekjum",
+      "topByQuantity": "Topp eftir magni",
+      "orderSize": "Stærð pöntunar",
+      "size1": "1 hlutur",
+      "size23": "2-3 hlutir",
+      "size45": "4-5 hlutir",
+      "size6": "6+ hlutir",
+      "pieces": "stk",
+      "exportCsv": "Flytja út CSV",
+      "periodThisWeek": "Þessa viku"
     },
     "auth": {
       "title": "Búðu til matseðilinn þinn",
@@ -703,6 +735,22 @@
       "kosher": "Kosher",
       "spicy": "Bragðmikið",
       "organic": "Lífrænt"
+    },
+    "paymentMethods": {
+      "cash": "Reiðufé",
+      "card": "Kort",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nýtt",
+      "in_progress": "Í vinnslu",
+      "completed": "Lokið",
+      "cancelled": "Hætt við"
     }
   }
 }

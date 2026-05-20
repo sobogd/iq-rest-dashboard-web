@@ -35,6 +35,7 @@ export interface ApiRestaurant {
  defaultLanguage: string;
  hideTitle: boolean;
  menuLayout: string;
+ paymentMethods?: string[];
  reservationsEnabled: boolean;
  reservationMode: string;
  reservationSlotMinutes: number;
@@ -509,7 +510,7 @@ export async function createOrder(payload: {
 
 export async function patchOrder(
  id: string,
- payload: { status?: string; items?: ApiOrderItem[]; total?: number; tableNumber?: number | null },
+ payload: { status?: string; items?: ApiOrderItem[]; total?: number; tableNumber?: number | null; paymentMethodId?: string | null },
 ): Promise<ApiOrder> {
  const res = await fetch(apiUrl(`/api/orders/${id}`), {
         credentials: "include",

@@ -337,7 +337,9 @@
       "noActiveBody": "Nya beställningar visas här.",
       "disabledTitle": "Beställningar är inaktiverade",
       "disabledBody": "Aktivera beställningar i inställningar för att börja ta emot dem.",
-      "disabledCta": "Gå till inställningar"
+      "disabledCta": "Gå till inställningar",
+      "paymentMethodLabel": "Betalningsmetod",
+      "selectPaymentMethod": "Välj en betalningsmetod."
     },
     "reservations": {
       "title": "Bokningar",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Aktiverade fält måste fyllas i av kunden vid beställning.",
         "fieldName": "Namn",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adress"
+        "fieldAddress": "Adress",
+        "paymentMethodsLabel": "Betalningsmetoder",
+        "paymentMethodsTip": "Metoder personalen kan välja vid stängning av en order. Stäng av alla för att hoppa över väljaren.",
+        "paymentIntegrationTip": "Kontakta support för att integrera ett betalningssystem i din restaurang."
       },
       "bookings": {
         "title": "Bokningar",
@@ -634,7 +639,34 @@
       "currentPeriod": "Nuvarande period",
       "pageReserve": "Bokningar",
       "pageOrder": "Beställningar",
-      "pageOther": "Annat"
+      "pageOther": "Annat",
+      "colDate": "Datum",
+      "colTime": "Tid",
+      "colTable": "Bord",
+      "colTotal": "Totalt",
+      "colPayment": "Betalning",
+      "colCustomer": "Kund",
+      "colComment": "Kommentar",
+      "colItems": "Artiklar",
+      "colStatus": "Status",
+      "returnToKitchen": "Tillbaka till köket",
+      "ordersListTitle": "Beställningar",
+      "noOrdersInPeriod": "Inga beställningar under denna period.",
+      "revenueLabel": "Intäkter",
+      "ordersLabel": "Beställningar",
+      "avgOrderLabel": "Genomsnittlig beställning",
+      "revenueByDay": "Intäkter per dag",
+      "revenueByHour": "Intäkter per timme",
+      "topByRevenue": "Topp efter intäkt",
+      "topByQuantity": "Topp efter antal",
+      "orderSize": "Beställningsstorlek",
+      "size1": "1 vara",
+      "size23": "2-3 varor",
+      "size45": "4-5 varor",
+      "size6": "6+ varor",
+      "pieces": "st",
+      "exportCsv": "Exportera CSV",
+      "periodThisWeek": "Denna vecka"
     },
     "auth": {
       "title": "Skapa din meny",
@@ -703,6 +735,22 @@
       "kosher": "Kosher",
       "spicy": "Stark",
       "organic": "Ekologisk"
+    },
+    "paymentMethods": {
+      "cash": "Kontant",
+      "card": "Kort",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Ny",
+      "in_progress": "Pågående",
+      "completed": "Avslutad",
+      "cancelled": "Avbruten"
     }
   }
 }

@@ -337,7 +337,9 @@
       "noActiveBody": "Новите поръчки ще се появят тук.",
       "disabledTitle": "Поръчките са изключени",
       "disabledBody": "Включете поръчките в настройките, за да започнете да ги получавате.",
-      "disabledCta": "Към настройките"
+      "disabledCta": "Към настройките",
+      "paymentMethodLabel": "Метод на плащане",
+      "selectPaymentMethod": "Изберете метод на плащане."
     },
     "reservations": {
       "title": "Резервации",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Активираните полета ще бъдат задължителни за клиента при поръчка.",
         "fieldName": "Име",
         "fieldPhone": "Телефон",
-        "fieldAddress": "Адрес"
+        "fieldAddress": "Адрес",
+        "paymentMethodsLabel": "Методи на плащане",
+        "paymentMethodsTip": "Методи, които персоналът може да избере при затваряне на поръчка. Изключи всички, за да пропуснеш избора.",
+        "paymentIntegrationTip": "За интегриране на платежна система във вашия ресторант се свържете с поддръжката."
       },
       "bookings": {
         "title": "Резервации",
@@ -634,7 +639,34 @@
       "currentPeriod": "Текущ период",
       "pageReserve": "Резервации",
       "pageOrder": "Поръчки",
-      "pageOther": "Други"
+      "pageOther": "Други",
+      "colDate": "Дата",
+      "colTime": "Час",
+      "colTable": "Маса",
+      "colTotal": "Общо",
+      "colPayment": "Плащане",
+      "colCustomer": "Клиент",
+      "colComment": "Коментар",
+      "colItems": "Артикули",
+      "colStatus": "Статус",
+      "returnToKitchen": "Върни в кухнята",
+      "ordersListTitle": "Поръчки",
+      "noOrdersInPeriod": "Няма поръчки през този период.",
+      "revenueLabel": "Приходи",
+      "ordersLabel": "Поръчки",
+      "avgOrderLabel": "Средна поръчка",
+      "revenueByDay": "Приходи дневно",
+      "revenueByHour": "Приходи по часове",
+      "topByRevenue": "Топ по приходи",
+      "topByQuantity": "Топ по количество",
+      "orderSize": "Размер на поръчката",
+      "size1": "1 артикул",
+      "size23": "2-3 артикула",
+      "size45": "4-5 артикула",
+      "size6": "6+ артикула",
+      "pieces": "бр",
+      "exportCsv": "Експорт CSV",
+      "periodThisWeek": "Тази седмица"
     },
     "auth": {
       "title": "Създайте вашето меню",
@@ -703,6 +735,22 @@
       "kosher": "Кошер",
       "spicy": "Пикантно",
       "organic": "Био"
+    },
+    "paymentMethods": {
+      "cash": "В брой",
+      "card": "Карта",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Нов",
+      "in_progress": "В процес",
+      "completed": "Завършен",
+      "cancelled": "Отказан"
     }
   }
 }

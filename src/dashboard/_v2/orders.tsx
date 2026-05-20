@@ -216,6 +216,7 @@ export function OrdersPage({
  status: next.status === "active" ? "in_progress" : next.status,
  items: next.items,
  total: calcOrderTotal(next),
+ ...(patch.paymentMethodId !== undefined ? { paymentMethodId: patch.paymentMethodId } : {}),
  });
  // No invalidate / no rollback — SSE will push the server-confirmed
  // copy back through the cache. On failure we just toast; the next
@@ -256,9 +257,9 @@ export function OrdersPage({
  persistOrder(orderId, { items: [...order.items, copy] });
  }
 
- function completeOrder(orderId: string) {
+ function completeOrder(orderId: string, paymentMethodId: string | null) {
  track("dash_orders_order_complete_order");
- persistOrder(orderId, { status: "completed" });
+ persistOrder(orderId, { status: "completed", paymentMethodId });
  const stillHasOrders = activeTableId
  ? activeOrders.some((o) => o.id !== orderId && o.tableId === activeTableId)
  : false;
@@ -577,7 +578,15 @@ export function OrdersPage({
  </button>
  <button
  type="button"
- onClick={() => setConfirmCompleteOrder(currentOrder.id)}
+ onClick={() => {
+ // When the restaurant didn't enable any payment methods, skip the
+ // selector and complete directly.
+ if (!restaurant.paymentMethods || restaurant.paymentMethods.length === 0) {
+ completeOrder(currentOrder.id, null);
+ } else {
+ setConfirmCompleteOrder(currentOrder.id);
+ }
+ }}
  disabled={currentOrder.items.length === 0}
  className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
  >
@@ -750,26 +759,16 @@ export function OrdersPage({
  }}
  />
 
- <ConfirmDialog
+ <CompleteOrderModal
  open={!!confirmCompleteOrder}
- title={t("completeOrder")}
- message={
- confirmCompleteOrder &&
- orders
- .find((o) => o.id === confirmCompleteOrder)
- ?.items.some((it) => it.status !== "served")
- ? t("completeOrderUnservedMessage", {
- defaultValue: "Some items are not served yet. Complete order anyway?",
- })
- : t("completeOrderMessage", {
- defaultValue: "Close this order?",
- })
+ hasUnserved={
+ !!confirmCompleteOrder &&
+ (orders.find((o) => o.id === confirmCompleteOrder)?.items.some((it) => it.status !== "served") ?? false)
  }
- confirmLabel={t("completeOrder")}
- confirmStyle="primary"
+ paymentMethods={restaurant.paymentMethods}
  onCancel={() => setConfirmCompleteOrder(null)}
- onConfirm={() => {
- if (confirmCompleteOrder) completeOrder(confirmCompleteOrder);
+ onConfirm={(paymentMethodId) => {
+ if (confirmCompleteOrder) completeOrder(confirmCompleteOrder, paymentMethodId);
  setConfirmCompleteOrder(null);
  }}
  />
@@ -1149,13 +1148,16 @@ function AddItemView({
  }
 
  // step === "category"
+ // Order item creation works against leaf categories only — groups are
+ // organizational and never carry dishes themselves.
+ const pickable = categories.filter((c) => !c.isGroup);
  return (
  <div>
- {categories.length === 0 ? (
+ {pickable.length === 0 ? (
  <p className="text-sm text-muted-foreground text-center py-6">{t("noDishesInCategory")}</p>
  ) : (
  <div className="-m-5 divide-y divide-border">
- {categories.map((c) => (
+ {pickable.map((c) => (
  <button
  key={c.id}
  type="button"
@@ -2317,6 +2319,92 @@ function FilterModal({
  {on ? <CheckIcon size={10} /> : null}
  </span>
  <span className="min-w-0 flex-1 text-sm text-foreground truncate">{o.label}</span>
+ </button>
+ );
+ })}
+ </div>
+ </Modal>
+ );
+}
+
+function CompleteOrderModal({
+ open,
+ hasUnserved,
+ paymentMethods,
+ onCancel,
+ onConfirm,
+}: {
+ open: boolean;
+ hasUnserved: boolean;
+ paymentMethods: string[];
+ onCancel: () => void;
+ onConfirm: (paymentMethodId: string | null) => void;
+}) {
+ const t = useTranslations("dashboard.orders");
+ const tc = useTranslations("dashboard.common");
+ const tpm = useTranslations("dashboard.paymentMethods");
+ const [selected, setSelected] = useState<string | null>(paymentMethods[0] ?? null);
+ useEffect(() => {
+ if (open) setSelected(paymentMethods[0] ?? null);
+ }, [open, paymentMethods]);
+ return (
+ <Modal
+ open={open}
+ onClose={onCancel}
+ title={t("completeOrder")}
+ size="sm"
+ footer={
+ <div className="flex gap-2 justify-end">
+ <button
+ type="button"
+ onClick={onCancel}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
+ >
+ {tc("cancel")}
+ </button>
+ <button
+ type="button"
+ onClick={() => onConfirm(selected)}
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ >
+ {t("completeOrder")}
+ </button>
+ </div>
+ }
+ >
+ <p className="text-sm text-muted-foreground leading-snug">
+ {(hasUnserved
+ ? t("completeOrderUnservedMessage", { defaultValue: "Some items are not served yet. Complete order anyway?" })
+ : t("completeOrderMessage", { defaultValue: "Close this order?" })) +
+ " " +
+ t("selectPaymentMethod", { defaultValue: "Select a payment method." })}
+ </p>
+ <div className="mt-4 space-y-1.5">
+ {paymentMethods.map((code) => {
+ const isOn = selected === code;
+ return (
+ <button
+ key={code}
+ type="button"
+ onClick={() => setSelected(code)}
+ className={
+ "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left " +
+ (isOn ? "border-primary bg-primary/5" : "border-input")
+ }
+ >
+ <span
+ className={
+ "w-5 h-5 rounded-full inline-flex items-center justify-center shrink-0 transition-colors " +
+ (isOn ? "bg-primary text-primary-foreground" : "border border-input")
+ }
+ >
+ {isOn ? (
+ <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+ ) : null}
+ </span>
+ <span className="text-sm text-foreground flex-1">
+ {tpm(code as never, { defaultValue: code })}
+ </span>
  </button>
  );
  })}

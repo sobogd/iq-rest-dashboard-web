@@ -337,7 +337,9 @@
       "noActiveBody": "Nové objednávky se zobrazí zde.",
       "disabledTitle": "Objednávky jsou vypnuté",
       "disabledBody": "Zapněte objednávky v nastavení, abyste je začali přijímat.",
-      "disabledCta": "Přejít do nastavení"
+      "disabledCta": "Přejít do nastavení",
+      "paymentMethodLabel": "Způsob platby",
+      "selectPaymentMethod": "Vyberte způsob platby."
     },
     "reservations": {
       "title": "Rezervace",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Povolená pole budou pro zákazníka povinná při zadávání objednávky.",
         "fieldName": "Jméno",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adresa"
+        "fieldAddress": "Adresa",
+        "paymentMethodsLabel": "Způsoby platby",
+        "paymentMethodsTip": "Způsoby, které personál může vybrat při uzavření objednávky. Vypnutím všech přeskočíte výběr.",
+        "paymentIntegrationTip": "Pro integraci platebního systému ve vaší restauraci kontaktujte podporu."
       },
       "bookings": {
         "title": "Rezervace",
@@ -634,7 +639,34 @@
       "currentPeriod": "Aktuální období",
       "pageReserve": "Rezervace",
       "pageOrder": "Objednávky",
-      "pageOther": "Ostatní"
+      "pageOther": "Ostatní",
+      "colDate": "Datum",
+      "colTime": "Čas",
+      "colTable": "Stůl",
+      "colTotal": "Celkem",
+      "colPayment": "Platba",
+      "colCustomer": "Zákazník",
+      "colComment": "Komentář",
+      "colItems": "Položky",
+      "colStatus": "Stav",
+      "returnToKitchen": "Vrátit do kuchyně",
+      "ordersListTitle": "Objednávky",
+      "noOrdersInPeriod": "V tomto období žádné objednávky.",
+      "revenueLabel": "Tržby",
+      "ordersLabel": "Objednávky",
+      "avgOrderLabel": "Prům. objednávka",
+      "revenueByDay": "Tržby denně",
+      "revenueByHour": "Tržby hodinově",
+      "topByRevenue": "Top dle tržeb",
+      "topByQuantity": "Top dle množství",
+      "orderSize": "Velikost objednávky",
+      "size1": "1 položka",
+      "size23": "2-3 položky",
+      "size45": "4-5 položek",
+      "size6": "6+ položek",
+      "pieces": "ks",
+      "exportCsv": "Exportovat CSV",
+      "periodThisWeek": "Tento týden"
     },
     "auth": {
       "title": "Vytvořte své menu",
@@ -703,6 +735,22 @@
       "kosher": "Košer",
       "spicy": "Pikantní",
       "organic": "Bio"
+    },
+    "paymentMethods": {
+      "cash": "Hotovost",
+      "card": "Karta",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nový",
+      "in_progress": "Probíhá",
+      "completed": "Dokončený",
+      "cancelled": "Zrušený"
     }
   }
 }

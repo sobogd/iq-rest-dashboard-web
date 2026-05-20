@@ -337,7 +337,9 @@
       "noActiveBody": "Les noves comandes apareixeran aquí.",
       "disabledTitle": "Les comandes estan desactivades",
       "disabledBody": "Activa les comandes a la configuració per començar a rebre-les.",
-      "disabledCta": "Vés a la configuració"
+      "disabledCta": "Vés a la configuració",
+      "paymentMethodLabel": "Mètode de pagament",
+      "selectPaymentMethod": "Selecciona un mètode de pagament."
     },
     "reservations": {
       "title": "Reserves",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Els camps habilitats seran obligatoris per al client en fer la comanda.",
         "fieldName": "Nom",
         "fieldPhone": "Telèfon",
-        "fieldAddress": "Adreça"
+        "fieldAddress": "Adreça",
+        "paymentMethodsLabel": "Mètodes de pagament",
+        "paymentMethodsTip": "Mètodes que el personal pot triar en tancar una comanda. Desactiva-ho tot per ometre el selector.",
+        "paymentIntegrationTip": "Per integrar un sistema de pagament al teu restaurant, contacta amb el suport."
       },
       "bookings": {
         "title": "Reserves",
@@ -634,7 +639,34 @@
       "currentPeriod": "Període actual",
       "pageReserve": "Reserves",
       "pageOrder": "Comandes",
-      "pageOther": "Altres"
+      "pageOther": "Altres",
+      "colDate": "Data",
+      "colTime": "Hora",
+      "colTable": "Taula",
+      "colTotal": "Total",
+      "colPayment": "Pagament",
+      "colCustomer": "Client",
+      "colComment": "Comentari",
+      "colItems": "Articles",
+      "colStatus": "Estat",
+      "returnToKitchen": "Tornar a la cuina",
+      "ordersListTitle": "Comandes",
+      "noOrdersInPeriod": "No hi ha comandes en aquest període.",
+      "revenueLabel": "Ingressos",
+      "ordersLabel": "Comandes",
+      "avgOrderLabel": "Comanda mitjana",
+      "revenueByDay": "Ingressos per dia",
+      "revenueByHour": "Ingressos per hora",
+      "topByRevenue": "Top per ingressos",
+      "topByQuantity": "Top per quantitat",
+      "orderSize": "Mida de la comanda",
+      "size1": "1 article",
+      "size23": "2-3 articles",
+      "size45": "4-5 articles",
+      "size6": "6+ articles",
+      "pieces": "u",
+      "exportCsv": "Exporta CSV",
+      "periodThisWeek": "Aquesta setmana"
     },
     "auth": {
       "title": "Crea el teu menú",
@@ -703,6 +735,22 @@
       "kosher": "Kosher",
       "spicy": "Picant",
       "organic": "Ecològic"
+    },
+    "paymentMethods": {
+      "cash": "Efectiu",
+      "card": "Targeta",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nou",
+      "in_progress": "En curs",
+      "completed": "Completat",
+      "cancelled": "Cancel·lat"
     }
   }
 }

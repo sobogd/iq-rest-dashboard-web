@@ -337,7 +337,9 @@
       "noActiveBody": "Les nouvelles commandes apparaîtront ici.",
       "disabledTitle": "Les commandes sont désactivées",
       "disabledBody": "Activez les commandes dans les paramètres pour commencer à les recevoir.",
-      "disabledCta": "Aller aux paramètres"
+      "disabledCta": "Aller aux paramètres",
+      "paymentMethodLabel": "Mode de paiement",
+      "selectPaymentMethod": "Sélectionnez un mode de paiement."
     },
     "reservations": {
       "title": "Réservations",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Les champs activés devront être remplis par le client lors de la commande.",
         "fieldName": "Nom",
         "fieldPhone": "Téléphone",
-        "fieldAddress": "Adresse"
+        "fieldAddress": "Adresse",
+        "paymentMethodsLabel": "Modes de paiement",
+        "paymentMethodsTip": "Modes que le personnel peut choisir à la clôture d'une commande. Désactivez tout pour ignorer le sélecteur.",
+        "paymentIntegrationTip": "Pour intégrer un système de paiement à votre restaurant, contactez le support."
       },
       "bookings": {
         "title": "Réservations",
@@ -634,7 +639,34 @@
       "currentPeriod": "Période actuelle",
       "pageReserve": "Réservations",
       "pageOrder": "Commandes",
-      "pageOther": "Autres"
+      "pageOther": "Autres",
+      "colDate": "Date",
+      "colTime": "Heure",
+      "colTable": "Table",
+      "colTotal": "Total",
+      "colPayment": "Paiement",
+      "colCustomer": "Client",
+      "colComment": "Commentaire",
+      "colItems": "Articles",
+      "colStatus": "Statut",
+      "returnToKitchen": "Renvoyer en cuisine",
+      "ordersListTitle": "Commandes",
+      "noOrdersInPeriod": "Aucune commande sur cette période.",
+      "revenueLabel": "Revenu",
+      "ordersLabel": "Commandes",
+      "avgOrderLabel": "Commande moyenne",
+      "revenueByDay": "Revenu par jour",
+      "revenueByHour": "Revenu par heure",
+      "topByRevenue": "Top par revenu",
+      "topByQuantity": "Top par quantité",
+      "orderSize": "Taille commande",
+      "size1": "1 article",
+      "size23": "2-3 articles",
+      "size45": "4-5 articles",
+      "size6": "6+ articles",
+      "pieces": "pcs",
+      "exportCsv": "Exporter CSV",
+      "periodThisWeek": "Cette semaine"
     },
     "auth": {
       "title": "Créez votre menu",
@@ -703,6 +735,22 @@
       "kosher": "Casher",
       "spicy": "Épicé",
       "organic": "Bio"
+    },
+    "paymentMethods": {
+      "cash": "Espèces",
+      "card": "Carte",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nouveau",
+      "in_progress": "En cours",
+      "completed": "Terminé",
+      "cancelled": "Annulé"
     }
   }
 }

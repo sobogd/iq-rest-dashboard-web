@@ -337,7 +337,9 @@
       "noActiveBody": "Nova naročila se bodo prikazala tukaj.",
       "disabledTitle": "Naročila so onemogočena",
       "disabledBody": "Omogočite naročila v nastavitvah, da jih začnete prejemati.",
-      "disabledCta": "Pojdi v nastavitve"
+      "disabledCta": "Pojdi v nastavitve",
+      "paymentMethodLabel": "Način plačila",
+      "selectPaymentMethod": "Izberite način plačila."
     },
     "reservations": {
       "title": "Rezervacije",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Omogočena polja bodo obvezna za stranko pri oddaji naročila.",
         "fieldName": "Ime",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Naslov"
+        "fieldAddress": "Naslov",
+        "paymentMethodsLabel": "Načini plačila",
+        "paymentMethodsTip": "Načini, ki jih osebje lahko izbere ob zaprtju naročila. Izklopi vse za preskok izbire.",
+        "paymentIntegrationTip": "Za integracijo plačilnega sistema v tvoji restavraciji kontaktiraj podporo."
       },
       "bookings": {
         "title": "Rezervacije",
@@ -634,7 +639,34 @@
       "currentPeriod": "Trenutno obdobje",
       "pageReserve": "Rezervacije",
       "pageOrder": "Naročila",
-      "pageOther": "Drugo"
+      "pageOther": "Drugo",
+      "colDate": "Datum",
+      "colTime": "Čas",
+      "colTable": "Miza",
+      "colTotal": "Skupaj",
+      "colPayment": "Plačilo",
+      "colCustomer": "Stranka",
+      "colComment": "Opomba",
+      "colItems": "Postavke",
+      "colStatus": "Stanje",
+      "returnToKitchen": "Vrni v kuhinjo",
+      "ordersListTitle": "Naročila",
+      "noOrdersInPeriod": "V tem obdobju ni naročil.",
+      "revenueLabel": "Prihodek",
+      "ordersLabel": "Naročila",
+      "avgOrderLabel": "Povprečno naročilo",
+      "revenueByDay": "Prihodek na dan",
+      "revenueByHour": "Prihodek na uro",
+      "topByRevenue": "Top po prihodku",
+      "topByQuantity": "Top po količini",
+      "orderSize": "Velikost naročila",
+      "size1": "1 izdelek",
+      "size23": "2-3 izdelki",
+      "size45": "4-5 izdelkov",
+      "size6": "6+ izdelkov",
+      "pieces": "kos",
+      "exportCsv": "Izvozi CSV",
+      "periodThisWeek": "Ta teden"
     },
     "auth": {
       "title": "Ustvarite svoj meni",
@@ -703,6 +735,22 @@
       "kosher": "Košer",
       "spicy": "Pikantno",
       "organic": "Ekološko"
+    },
+    "paymentMethods": {
+      "cash": "Gotovina",
+      "card": "Kartica",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Nov",
+      "in_progress": "V teku",
+      "completed": "Zaključen",
+      "cancelled": "Preklican"
     }
   }
 }

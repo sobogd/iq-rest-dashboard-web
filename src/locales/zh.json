@@ -337,7 +337,9 @@
       "noActiveBody": "新订单将显示在这里。",
       "disabledTitle": "订单已禁用",
       "disabledBody": "在设置中启用订单以开始接收订单。",
-      "disabledCta": "前往设置"
+      "disabledCta": "前往设置",
+      "paymentMethodLabel": "支付方式",
+      "selectPaymentMethod": "选择支付方式。"
     },
     "reservations": {
       "title": "预订",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "已启用的字段在顾客下单时为必填。",
         "fieldName": "姓名",
         "fieldPhone": "电话",
-        "fieldAddress": "地址"
+        "fieldAddress": "地址",
+        "paymentMethodsLabel": "支付方式",
+        "paymentMethodsTip": "员工在结账时可选择的方式。全部关闭则跳过选择器。",
+        "paymentIntegrationTip": "要为您的餐厅集成支付系统,请联系客服。"
       },
       "bookings": {
         "title": "预订",
@@ -634,7 +639,34 @@
       "currentPeriod": "当前周期",
       "pageReserve": "预订",
       "pageOrder": "订单",
-      "pageOther": "其他"
+      "pageOther": "其他",
+      "colDate": "日期",
+      "colTime": "时间",
+      "colTable": "桌号",
+      "colTotal": "合计",
+      "colPayment": "支付",
+      "colCustomer": "客户",
+      "colComment": "备注",
+      "colItems": "项目",
+      "colStatus": "状态",
+      "returnToKitchen": "返回厨房",
+      "ordersListTitle": "订单",
+      "noOrdersInPeriod": "此期间无订单。",
+      "revenueLabel": "营收",
+      "ordersLabel": "订单",
+      "avgOrderLabel": "平均订单",
+      "revenueByDay": "日营收",
+      "revenueByHour": "时段营收",
+      "topByRevenue": "按营收排名",
+      "topByQuantity": "按数量排名",
+      "orderSize": "订单规模",
+      "size1": "1 件",
+      "size23": "2-3 件",
+      "size45": "4-5 件",
+      "size6": "6+ 件",
+      "pieces": "件",
+      "exportCsv": "导出 CSV",
+      "periodThisWeek": "本周"
     },
     "auth": {
       "title": "创建您的菜单",
@@ -703,6 +735,22 @@
       "kosher": "犹太洁食",
       "spicy": "辣",
       "organic": "有机"
+    },
+    "paymentMethods": {
+      "cash": "现金",
+      "card": "刷卡",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "新建",
+      "in_progress": "进行中",
+      "completed": "已完成",
+      "cancelled": "已取消"
     }
   }
 }

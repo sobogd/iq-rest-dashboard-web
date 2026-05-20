@@ -337,7 +337,9 @@
       "noActiveBody": "Nove narudžbe će se prikazati ovdje.",
       "disabledTitle": "Narudžbe su onemogućene",
       "disabledBody": "Omogući narudžbe u postavkama da ih počneš primati.",
-      "disabledCta": "Idi u postavke"
+      "disabledCta": "Idi u postavke",
+      "paymentMethodLabel": "Način plaćanja",
+      "selectPaymentMethod": "Odaberi način plaćanja."
     },
     "reservations": {
       "title": "Rezervacije",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "Omogućena polja bit će obavezna za klijenta prilikom narudžbe.",
         "fieldName": "Ime",
         "fieldPhone": "Telefon",
-        "fieldAddress": "Adresa"
+        "fieldAddress": "Adresa",
+        "paymentMethodsLabel": "Načini plaćanja",
+        "paymentMethodsTip": "Načini koje osoblje može odabrati pri zatvaranju narudžbe. Isključi sve da preskočiš odabir.",
+        "paymentIntegrationTip": "Za integraciju platnog sustava u svoj restoran kontaktiraj podršku."
       },
       "bookings": {
         "title": "Rezervacije",
@@ -634,7 +639,34 @@
       "currentPeriod": "Trenutno razdoblje",
       "pageReserve": "Rezervacije",
       "pageOrder": "Narudžbe",
-      "pageOther": "Ostalo"
+      "pageOther": "Ostalo",
+      "colDate": "Datum",
+      "colTime": "Vrijeme",
+      "colTable": "Stol",
+      "colTotal": "Ukupno",
+      "colPayment": "Plaćanje",
+      "colCustomer": "Klijent",
+      "colComment": "Komentar",
+      "colItems": "Stavke",
+      "colStatus": "Status",
+      "returnToKitchen": "Vrati u kuhinju",
+      "ordersListTitle": "Narudžbe",
+      "noOrdersInPeriod": "Nema narudžbi u ovom razdoblju.",
+      "revenueLabel": "Prihod",
+      "ordersLabel": "Narudžbe",
+      "avgOrderLabel": "Pros. narudžba",
+      "revenueByDay": "Prihod po danu",
+      "revenueByHour": "Prihod po satu",
+      "topByRevenue": "Top po prihodu",
+      "topByQuantity": "Top po količini",
+      "orderSize": "Veličina narudžbe",
+      "size1": "1 stavka",
+      "size23": "2-3 stavke",
+      "size45": "4-5 stavki",
+      "size6": "6+ stavki",
+      "pieces": "kom",
+      "exportCsv": "Izvezi CSV",
+      "periodThisWeek": "Ovaj tjedan"
     },
     "auth": {
       "title": "Stvorite svoj jelovnik",
@@ -703,6 +735,22 @@
       "kosher": "Košer",
       "spicy": "Pikantno",
       "organic": "Organsko"
+    },
+    "paymentMethods": {
+      "cash": "Gotovina",
+      "card": "Kartica",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "Novo",
+      "in_progress": "U tijeku",
+      "completed": "Završeno",
+      "cancelled": "Otkazano"
     }
   }
 }

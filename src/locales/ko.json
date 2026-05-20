@@ -337,7 +337,9 @@
       "noActiveBody": "새 주문이 여기에 표시됩니다.",
       "disabledTitle": "주문이 비활성화되어 있습니다",
       "disabledBody": "주문을 받으려면 설정에서 활성화하세요.",
-      "disabledCta": "설정으로 이동"
+      "disabledCta": "설정으로 이동",
+      "paymentMethodLabel": "결제 방법",
+      "selectPaymentMethod": "결제 방법을 선택하세요."
     },
     "reservations": {
       "title": "예약",
@@ -482,7 +484,10 @@
         "requiredFieldsTip": "활성화된 필드는 주문 시 고객이 작성해야 합니다.",
         "fieldName": "이름",
         "fieldPhone": "전화",
-        "fieldAddress": "주소"
+        "fieldAddress": "주소",
+        "paymentMethodsLabel": "결제 방법",
+        "paymentMethodsTip": "주문을 마감할 때 직원이 선택할 수 있는 방법. 모두 끄면 선택기를 건너뜁니다.",
+        "paymentIntegrationTip": "레스토랑에 결제 시스템을 통합하려면 지원팀에 문의하세요."
       },
       "bookings": {
         "title": "예약",
@@ -634,7 +639,34 @@
       "currentPeriod": "현재 기간",
       "pageReserve": "예약",
       "pageOrder": "주문",
-      "pageOther": "기타"
+      "pageOther": "기타",
+      "colDate": "날짜",
+      "colTime": "시간",
+      "colTable": "테이블",
+      "colTotal": "합계",
+      "colPayment": "결제",
+      "colCustomer": "고객",
+      "colComment": "코멘트",
+      "colItems": "항목",
+      "colStatus": "상태",
+      "returnToKitchen": "주방으로 돌려보내기",
+      "ordersListTitle": "주문",
+      "noOrdersInPeriod": "이 기간에 주문이 없습니다.",
+      "revenueLabel": "매출",
+      "ordersLabel": "주문",
+      "avgOrderLabel": "평균 주문",
+      "revenueByDay": "일별 매출",
+      "revenueByHour": "시간별 매출",
+      "topByRevenue": "매출 상위",
+      "topByQuantity": "수량 상위",
+      "orderSize": "주문 크기",
+      "size1": "1개",
+      "size23": "2-3개",
+      "size45": "4-5개",
+      "size6": "6+개",
+      "pieces": "개",
+      "exportCsv": "CSV 내보내기",
+      "periodThisWeek": "이번 주"
     },
     "auth": {
       "title": "메뉴 만들기",
@@ -703,6 +735,22 @@
       "kosher": "코셔",
       "spicy": "매운맛",
       "organic": "유기농"
+    },
+    "paymentMethods": {
+      "cash": "현금",
+      "card": "카드",
+      "iban": "IBAN",
+      "yemeksipeti": "Yemeksipeti",
+      "trendyolyemek": "Trendyol Yemek",
+      "stripe": "Stripe",
+      "uber_eats": "Uber Eats",
+      "glovo": "Glovo"
+    },
+    "orderStatus": {
+      "new": "신규",
+      "in_progress": "진행 중",
+      "completed": "완료",
+      "cancelled": "취소됨"
     }
   }
 }
