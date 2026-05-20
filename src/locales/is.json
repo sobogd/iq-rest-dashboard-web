@@ -112,7 +112,8 @@
           "continue": "Áfram",
           "done": "Lokið",
           "back": "Til baka",
-          "close": "Loka kynningu"
+          "close": "Loka kynningu",
+          "skip": "Sleppa"
         }
       },
       "scan": {

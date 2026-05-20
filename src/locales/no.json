@@ -112,7 +112,8 @@
           "continue": "Fortsett",
           "done": "Ferdig",
           "back": "Tilbake",
-          "close": "Lukk introduksjonen"
+          "close": "Lukk introduksjonen",
+          "skip": "Hopp over"
         }
       },
       "scan": {

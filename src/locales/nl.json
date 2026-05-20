@@ -112,7 +112,8 @@
           "continue": "Doorgaan",
           "done": "Klaar",
           "back": "Terug",
-          "close": "Onboarding sluiten"
+          "close": "Onboarding sluiten",
+          "skip": "Overslaan"
         }
       },
       "scan": {

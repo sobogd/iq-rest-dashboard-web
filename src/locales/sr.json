@@ -112,7 +112,8 @@
           "continue": "Nastavi",
           "done": "Gotovo",
           "back": "Nazad",
-          "close": "Zatvori uvod"
+          "close": "Zatvori uvod",
+          "skip": "Прескочи"
         }
       },
       "scan": {

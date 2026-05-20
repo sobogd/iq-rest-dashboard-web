@@ -112,7 +112,8 @@
           "continue": "Tęsti",
           "done": "Atlikta",
           "back": "Atgal",
-          "close": "Uždaryti įvadą"
+          "close": "Uždaryti įvadą",
+          "skip": "Praleisti"
         }
       },
       "scan": {

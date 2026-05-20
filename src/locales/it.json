@@ -112,7 +112,8 @@
           "continue": "Continua",
           "done": "Fatto",
           "back": "Indietro",
-          "close": "Chiudi onboarding"
+          "close": "Chiudi onboarding",
+          "skip": "Salta"
         }
       },
       "scan": {

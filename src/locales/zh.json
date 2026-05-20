@@ -112,7 +112,8 @@
           "continue": "继续",
           "done": "完成",
           "back": "返回",
-          "close": "关闭引导"
+          "close": "关闭引导",
+          "skip": "跳过"
         }
       },
       "scan": {

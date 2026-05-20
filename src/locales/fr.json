@@ -112,7 +112,8 @@
           "continue": "Continuer",
           "done": "Terminé",
           "back": "Retour",
-          "close": "Fermer l'introduction"
+          "close": "Fermer l'introduction",
+          "skip": "Passer"
         }
       },
       "scan": {

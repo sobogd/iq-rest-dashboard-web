@@ -112,7 +112,8 @@
           "continue": "Fortsæt",
           "done": "Færdig",
           "back": "Tilbage",
-          "close": "Luk introduktionen"
+          "close": "Luk introduktionen",
+          "skip": "Spring over"
         }
       },
       "scan": {

@@ -112,7 +112,8 @@
           "continue": "Continuar",
           "done": "Fet",
           "back": "Enrere",
-          "close": "Tancar la introducció"
+          "close": "Tancar la introducció",
+          "skip": "Omet"
         }
       },
       "scan": {

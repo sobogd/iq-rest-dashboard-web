@@ -112,7 +112,8 @@
           "continue": "Ar aghaidh",
           "done": "Críochnaithe",
           "back": "Ar ais",
-          "close": "Dún an tabhairt isteach"
+          "close": "Dún an tabhairt isteach",
+          "skip": "Scipeáil"
         }
       },
       "scan": {

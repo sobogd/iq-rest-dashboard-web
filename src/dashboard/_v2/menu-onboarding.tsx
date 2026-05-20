@@ -224,6 +224,11 @@ export function MenuOnboarding({ onActive }: { onActive?: () => void } = {}) {
  setRect(null);
  }
 
+ function skip() {
+ track("dash_onboarding_skip", { step: step.name });
+ persistDone();
+ }
+
  function back() {
  if (stepIdx === 0) return;
  track("dash_onboarding_back", { step: step.name });
@@ -288,6 +293,15 @@ export function MenuOnboarding({ onActive }: { onActive?: () => void } = {}) {
  className="fixed pointer-events-auto flex items-center gap-3"
  style={{ bottom: "10dvh", right: "10dvw" }}
  >
+ {stepIdx === 0 ? (
+ <button
+ type="button"
+ onClick={skip}
+ className={secondaryBtn + " inline-flex items-center justify-center px-6 shadow-2xl"}
+ >
+ {t("button.skip")}
+ </button>
+ ) : null}
  {stepIdx > 0 ? (
  <button
  type="button"

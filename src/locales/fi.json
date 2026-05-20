@@ -112,7 +112,8 @@
           "continue": "Jatka",
           "done": "Valmis",
           "back": "Takaisin",
-          "close": "Sulje opastus"
+          "close": "Sulje opastus",
+          "skip": "Ohita"
         }
       },
       "scan": {

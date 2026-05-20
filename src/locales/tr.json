@@ -112,7 +112,8 @@
           "continue": "Devam",
           "done": "Bitti",
           "back": "Geri",
-          "close": "Tanıtımı kapat"
+          "close": "Tanıtımı kapat",
+          "skip": "Atla"
         }
       },
       "scan": {

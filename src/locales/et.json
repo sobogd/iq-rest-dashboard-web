@@ -112,7 +112,8 @@
           "continue": "Edasi",
           "done": "Valmis",
           "back": "Tagasi",
-          "close": "Sulge tutvustus"
+          "close": "Sulge tutvustus",
+          "skip": "Jäta vahele"
         }
       },
       "scan": {

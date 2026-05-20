@@ -112,7 +112,8 @@
           "continue": "Weiter",
           "done": "Fertig",
           "back": "Zurück",
-          "close": "Onboarding schließen"
+          "close": "Onboarding schließen",
+          "skip": "Überspringen"
         }
       },
       "scan": {

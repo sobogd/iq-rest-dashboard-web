@@ -112,7 +112,8 @@
           "continue": "Fortsätt",
           "done": "Klart",
           "back": "Tillbaka",
-          "close": "Stäng introduktionen"
+          "close": "Stäng introduktionen",
+          "skip": "Hoppa över"
         }
       },
       "scan": {

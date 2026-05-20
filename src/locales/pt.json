@@ -112,7 +112,8 @@
           "continue": "Continuar",
           "done": "Concluído",
           "back": "Voltar",
-          "close": "Fechar a introdução"
+          "close": "Fechar a introdução",
+          "skip": "Pular"
         }
       },
       "scan": {

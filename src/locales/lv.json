@@ -112,7 +112,8 @@
           "continue": "Turpināt",
           "done": "Gatavs",
           "back": "Atpakaļ",
-          "close": "Aizvērt ievadu"
+          "close": "Aizvērt ievadu",
+          "skip": "Izlaist"
         }
       },
       "scan": {

@@ -112,7 +112,8 @@
           "continue": "Pokračovať",
           "done": "Hotovo",
           "back": "Späť",
-          "close": "Zavrieť onboarding"
+          "close": "Zavrieť onboarding",
+          "skip": "Preskočiť"
         }
       },
       "scan": {

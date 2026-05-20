@@ -112,7 +112,8 @@
           "continue": "Continuă",
           "done": "Gata",
           "back": "Înapoi",
-          "close": "Închide ghidul"
+          "close": "Închide ghidul",
+          "skip": "Sari peste"
         }
       },
       "scan": {

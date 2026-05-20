@@ -112,7 +112,8 @@
           "continue": "Folytatás",
           "done": "Kész",
           "back": "Vissza",
-          "close": "Bevezető bezárása"
+          "close": "Bevezető bezárása",
+          "skip": "Kihagyás"
         }
       },
       "scan": {

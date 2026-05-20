@@ -112,7 +112,8 @@
           "continue": "Continue",
           "done": "Done",
           "back": "Back",
-          "close": "Close onboarding"
+          "close": "Close onboarding",
+          "skip": "Skip"
         }
       },
       "scan": {
