@@ -50,6 +50,7 @@ import {
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish, DishOption, Ml, OptionVariant } from "./types";
 import { track } from "@/lib/dashboard-events";
+import { showApiError } from "@/lib/show-api-error";
 
 // ── Category form ──
 
@@ -87,12 +88,12 @@ export function CategoryForm({
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
- const langMetas = (() => {
+ const langMetas = useMemo(() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
  const def = enabled.find((l) => l.code === defaultLang);
  if (!def) return enabled;
  return [def, ...enabled.filter((l) => l.code !== defaultLang)];
- })();
+ }, [languages, defaultLang]);
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
@@ -133,7 +134,8 @@ export function CategoryForm({
  });
  }
  onSavedRedirect();
- } catch {
+ } catch (err) {
+ showApiError(err, isNew ? "dash_category_create" : "dash_category_update");
  setSaving(false);
  }
  }
@@ -145,7 +147,8 @@ export function CategoryForm({
  try {
  await deleteCategory(category.id);
  onDeletedRedirect();
- } catch {
+ } catch (err) {
+ showApiError(err, "dash_category_delete");
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -254,6 +257,45 @@ interface DishFormState {
  diets: string[];
 }
 
+function mlEqual(a: Ml, b: Ml): boolean {
+ const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+ for (const k of keys) {
+ if ((a[k] || "") !== (b[k] || "")) return false;
+ }
+ return true;
+}
+
+function arrEqual(a: string[], b: string[]): boolean {
+ if (a.length !== b.length) return false;
+ for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+ return true;
+}
+
+function isDishFormDirty(a: DishFormState, b: DishFormState): boolean {
+ if (a.price !== b.price) return true;
+ if (a.photoUrl !== b.photoUrl) return true;
+ if (a.visible !== b.visible) return true;
+ if (!arrEqual(a.allergens, b.allergens)) return true;
+ if (!arrEqual(a.diets, b.diets)) return true;
+ if (!mlEqual(a.name, b.name)) return true;
+ if (!mlEqual(a.description, b.description)) return true;
+ return false;
+}
+
+// Pick whichever language has content for the AI prompt. Default-lang first,
+// then any other non-empty value. Without the fallback a user who typed the
+// dish name only in their non-default language would send an empty prompt
+// to the image generator.
+function pickAnyMlValue(ml: Ml, preferred: string): string {
+ const first = (ml[preferred] || "").trim();
+ if (first) return first;
+ for (const v of Object.values(ml)) {
+ const trimmed = (v || "").trim();
+ if (trimmed) return trimmed;
+ }
+ return "";
+}
+
 export function DishForm({
  dish,
  categoryId,
@@ -298,6 +340,14 @@ export function DishForm({
  diets: dish?.diets ?? [],
  }), [dish, languages]);
  const [form, setForm] = useState<DishFormState>(initialForm);
+ // Resync the form when the parent swaps to a different dish (e.g. after a
+ // concurrent save+stay or an auto-translate-driven reload). useState only
+ // reads its initial value once, so without this the form would keep
+ // showing the previous dish's data.
+ const dishKey = dish?.id ?? null;
+ useEffect(() => {
+ setForm(initialForm);
+ }, [dishKey, initialForm]);
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
  const [duplicating, setDuplicating] = useState(false);
@@ -307,13 +357,15 @@ export function DishForm({
  const [optionModal, setOptionModal] = useState<
  { kind: "new" } | { kind: "edit"; id: string } | null
  >(null);
- const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm);
- const langMetas = (() => {
+ // Cheap-and-correct dirty check: only the fields that the form actually
+ // owns. Previously this serialised the whole state twice on every render.
+ const isDirty = useMemo(() => isDishFormDirty(form, initialForm), [form, initialForm]);
+ const langMetas = useMemo(() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
  const def = enabled.find((l) => l.code === defaultLang);
  if (!def) return enabled;
  return [def, ...enabled.filter((l) => l.code !== defaultLang)];
- })();
+ }, [languages, defaultLang]);
 
  useEffect(() => {
  if (typeof window !== "undefined" && window.location.hash === "#options") {
@@ -420,7 +472,8 @@ export function DishForm({
  setSaving(false);
  }
  return savedId;
- } catch {
+ } catch (err) {
+ showApiError(err, isNew ? "dash_item_create" : "dash_item_update");
  setSaving(false);
  return null;
  }
@@ -470,7 +523,8 @@ export function DishForm({
  try {
  await deleteItem(dish.id);
  onDeletedRedirect();
- } catch {
+ } catch (err) {
+ showApiError(err, "dash_item_delete");
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -508,7 +562,8 @@ export function DishForm({
  options: copiedOptions,
  });
  onSavedRedirect(created.id);
- } catch {
+ } catch (err) {
+ showApiError(err, "dash_item_duplicate");
  setDuplicating(false);
  }
  }
@@ -771,7 +826,7 @@ export function DishForm({
  onUse={(url) => setForm((f) => ({ ...f, photoUrl: url }))}
  endpoint="/api/items/generate-image"
  title={t("aiTitle")}
- defaultPrompt={getMl(form.name, defaultLang)}
+ defaultPrompt={pickAnyMlValue(form.name, defaultLang)}
  aspect="square"
  eventPrefix="dash_item"
  />
@@ -862,7 +917,8 @@ function DishOptionsInline({
  diets: dish.diets,
  options: next,
  });
- } catch {
+ } catch (err) {
+ showApiError(err, "dash_option_reorder");
  setOptions(dish.options);
  } finally {
  setBusy(false);
@@ -998,7 +1054,10 @@ export function OptionForm({
 
  const [internalLang, setInternalLang] = useState<string>(defaultLang);
  const lang = langProp ?? internalLang;
- const setLang = setInternalLang;
+ // When `langProp` is supplied the parent owns the language; writing to the
+ // internal state would dead-end. Skip the update so the dropdown reads its
+ // value from props on every render.
+ const setLang = langProp !== undefined ? () => {} : setInternalLang;
  const [form, setForm] = useState<OptionFormState>(() => ({
  name: option ? option.name : emptyMl(languages),
  type: option ? option.type : "single",
@@ -1012,12 +1071,12 @@ export function OptionForm({
  const [deleting, setDeleting] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
  const [translatingAll, setTranslatingAll] = useState(false);
- const langMetas = (() => {
+ const langMetas = useMemo(() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
  const def = enabled.find((l) => l.code === defaultLang);
  if (!def) return enabled;
  return [def, ...enabled.filter((l) => l.code !== defaultLang)];
- })();
+ }, [languages, defaultLang]);
 
  useEffect(() => {
  if (embedded) return;
@@ -1091,8 +1150,8 @@ export function OptionForm({
  });
  return { ...f, variants: next };
  });
- } catch {
- // silent
+ } catch (err) {
+ showApiError(err, "dash_option_translate_variants");
  } finally {
  setTranslatingAll(false);
  }
@@ -1127,7 +1186,8 @@ export function OptionForm({
  try {
  await persistDishOptions(dish, nextOptions, defaultLang);
  onSavedRedirect();
- } catch {
+ } catch (err) {
+ showApiError(err, isNew ? "dash_option_create" : "dash_option_update");
  setSaving(false);
  }
  }
@@ -1139,7 +1199,8 @@ export function OptionForm({
  try {
  await persistDishOptions(dish, nextOptions, defaultLang);
  onDeletedRedirect();
- } catch {
+ } catch (err) {
+ showApiError(err, "dash_option_delete");
  setDeleting(false);
  setConfirmOpen(false);
  }
@@ -1418,7 +1479,9 @@ async function persistDishOptions(dish: Dish, nextOptions: DishOption[], default
  await updateItem(dish.id, {
  name: namePrimary,
  description: descPrimary,
- price: parseFloat(dish.price),
+ // parseDecimal handles comma-decimal locales and rejects NaN — parseFloat
+ // silently mangles "9,90" to 9 and drops everything after the comma.
+ price: parseDecimal(dish.price),
  imageUrl: dish.photoUrl,
  categoryId: dish.categoryId,
  isActive: dish.visible,
