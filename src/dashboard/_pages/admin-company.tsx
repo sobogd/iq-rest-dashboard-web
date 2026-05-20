@@ -84,6 +84,11 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
     label: "Menu almost ready reminder",
     description: "Nudge for owners who started setup but haven't finished. Sent in owner's preferred language.",
   },
+  {
+    id: "trial_ending",
+    label: "Trial ends tomorrow",
+    description: "Heads-up that the free trial expires in 1 day. Points to billing page; offers reply for questions.",
+  },
 ];
 
 interface Message {
