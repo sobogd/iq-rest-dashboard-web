@@ -529,12 +529,12 @@ export function MenuList({
  }}
  className="flex-1 min-w-0 self-stretch flex items-center gap-1 px-2 py-3 text-left rounded-md transition-colors"
  >
- <span className="font-semibold text-foreground truncate">
+ <span className="flex-1 min-w-0 font-semibold text-foreground truncate">
  {getMlWithFallback(g.name, defaultLang, defaultLang)}
  </span>
  <ArrowRightIcon size={14} className="text-foreground shrink-0" />
  </button>
- <span className="inline-flex items-center gap-0 shrink-0">
+ <div className="self-center inline-flex items-center gap-0 shrink-0">
  <button
  type="button"
  onClick={(e) => { e.stopPropagation(); moveGroup(idx, -1); }}
@@ -553,7 +553,6 @@ export function MenuList({
  >
  <ArrowDownIcon size={14} />
  </button>
- </span>
  <button
  type="button"
  onClick={(e) => {
@@ -566,6 +565,7 @@ export function MenuList({
  >
  <EditIcon size={14} />
  </button>
+ </div>
  </div>
  ))}
  </div>
