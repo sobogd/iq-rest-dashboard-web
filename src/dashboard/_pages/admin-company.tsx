@@ -65,6 +65,14 @@ interface EmailTemplate {
   description: string;
 }
 
+// Locale codes admin can pick when sending an email or support reply.
+// Matches the i18n template catalogue on the API (admin-only — English only).
+const ADMIN_LOCALES = [
+  "ar", "bg", "ca", "cs", "da", "de", "el", "en", "es", "et", "fa", "fi",
+  "fr", "ga", "hr", "hu", "is", "it", "ja", "ko", "lt", "lv", "nl", "no",
+  "pl", "pt", "ro", "ru", "sk", "sl", "sr", "sv", "tr", "uk", "zh",
+];
+
 const EMAIL_TEMPLATES: EmailTemplate[] = [
   {
     id: "welcome_personal",
@@ -130,6 +138,9 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   const [sending, setSending] = useState(false);
   const [sendingTemplate, setSendingTemplate] = useState<string | null>(null);
   const [confirmTemplate, setConfirmTemplate] = useState<EmailTemplate | null>(null);
+  // Admin-picked locale for outgoing emails + support replies. Empty = auto
+  // (server falls back to user.preferredLocale → restaurant.defaultLanguage → en).
+  const [adminLocale, setAdminLocale] = useState<string>("");
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -236,7 +247,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ template: tpl.id }),
+        body: JSON.stringify({ template: tpl.id, ...(adminLocale ? { locale: adminLocale } : {}) }),
       });
       if (res.ok) {
         const j = await res.json();
@@ -271,7 +282,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
+        body: JSON.stringify({ message: text, ...(adminLocale ? { locale: adminLocale } : {}) }),
       });
       if (res.ok) {
         const sent = await res.json();
@@ -490,6 +501,19 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
               )}
             </div>
 
+            <div className="shrink-0 px-3 pt-3 flex items-center gap-2 border-t border-border">
+              <label className="text-xs text-muted-foreground">Lang</label>
+              <select
+                value={adminLocale}
+                onChange={(e) => setAdminLocale(e.target.value)}
+                className="h-8 px-2 text-xs bg-card border border-input rounded-md text-foreground"
+              >
+                <option value="">Auto</option>
+                {ADMIN_LOCALES.map((l) => (
+                  <option key={l} value={l}>{l}</option>
+                ))}
+              </select>
+            </div>
             <div className="shrink-0 flex items-start gap-2 p-3 border-t border-border">
               <textarea
                 ref={taRef}
@@ -594,9 +618,24 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             <div className="px-4 py-3 border-b border-border">
               <h3 className="text-sm font-semibold text-foreground">{`Send "${confirmTemplate.label}"?`}</h3>
             </div>
-            <p className="px-4 py-3 text-sm text-muted-foreground leading-snug">
-              Sends the email to {company.users[0]?.email ?? "owner"} in their preferred language.
-            </p>
+            <div className="px-4 py-3 space-y-3">
+              <p className="text-sm text-muted-foreground leading-snug">
+                Sends the email to {company.users[0]?.email ?? "owner"}.
+              </p>
+              <label className="block text-xs font-medium text-foreground">
+                Language
+                <select
+                  value={adminLocale}
+                  onChange={(e) => setAdminLocale(e.target.value)}
+                  className="mt-1 w-full h-9 px-2 text-sm bg-card border border-input rounded-md text-foreground"
+                >
+                  <option value="">Auto (user preference)</option>
+                  {ADMIN_LOCALES.map((l) => (
+                    <option key={l} value={l}>{l}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <div className="px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
               <button
                 type="button"
