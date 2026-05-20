@@ -588,7 +588,9 @@ export async function createCheckoutSession(
  cycle: "MONTHLY" | "YEARLY",
  currency?: string,
 ): Promise<string | null> {
- const priceLookupKey = cycle === "YEARLY" ? "basic_yearly" : "basic_monthly";
+ // priceLookupKey mirrors PRICE_LOOKUP_KEYS on the API
+ // (basic_monthly, basic_yearly, pro_monthly, pro_yearly).
+ const priceLookupKey = `${plan.toLowerCase()}_${cycle.toLowerCase()}`;
  const locale = typeof window !== "undefined" ? (window.location.pathname.match(/^\/([a-z]{2})\b/)?.[1] || "en") : "en";
  const res = await fetch(apiUrl("/api/stripe/checkout"), {
         credentials: "include",
