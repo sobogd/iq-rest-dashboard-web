@@ -255,6 +255,7 @@ interface DishFormState {
  visible: boolean;
  allergens: string[];
  diets: string[];
+ options: DishOption[];
 }
 
 function mlEqual(a: Ml, b: Ml): boolean {
@@ -279,7 +280,29 @@ function isDishFormDirty(a: DishFormState, b: DishFormState): boolean {
  if (!arrEqual(a.diets, b.diets)) return true;
  if (!mlEqual(a.name, b.name)) return true;
  if (!mlEqual(a.description, b.description)) return true;
+ if (!optionsEqual(a.options, b.options)) return true;
  return false;
+}
+
+function optionsEqual(a: DishOption[], b: DishOption[]): boolean {
+ if (a.length !== b.length) return false;
+ for (let i = 0; i < a.length; i++) {
+ const x = a[i];
+ const y = b[i];
+ if (x.id !== y.id) return false;
+ if (x.type !== y.type) return false;
+ if (!!x.required !== !!y.required) return false;
+ if (!mlEqual(x.name || {}, y.name || {})) return false;
+ const xv = x.variants || [];
+ const yv = y.variants || [];
+ if (xv.length !== yv.length) return false;
+ for (let j = 0; j < xv.length; j++) {
+ if (xv[j].id !== yv[j].id) return false;
+ if (String(xv[j].priceDelta) !== String(yv[j].priceDelta)) return false;
+ if (!mlEqual(xv[j].name || {}, yv[j].name || {})) return false;
+ }
+ }
+ return true;
 }
 
 // Pick whichever language has content for the AI prompt. Default-lang first,
@@ -338,6 +361,7 @@ export function DishForm({
  visible: dish ? dish.visible : true,
  allergens: dish?.allergens ?? [],
  diets: dish?.diets ?? [],
+ options: dish?.options ?? [],
  }), [dish, languages]);
  const [form, setForm] = useState<DishFormState>(initialForm);
  // Resync the form when the parent swaps to a different dish (e.g. after a
@@ -445,7 +469,7 @@ export function DishForm({
  translations,
  allergens: form.allergens,
  diets: form.diets,
- options: null,
+ options: form.options.length > 0 ? form.options : null,
  });
  savedId = created.id;
  } else if (dish) {
@@ -459,7 +483,7 @@ export function DishForm({
  translations,
  allergens: form.allergens,
  diets: form.diets,
- options: dish.options,
+ options: form.options,
  });
  savedId = dish.id;
  } else {
@@ -484,37 +508,29 @@ export function DishForm({
  await persist("list");
  }
 
- async function handleAddOption() {
- const id = await persist("stay");
- if (!id) return;
- if (onPersisted) await onPersisted(id);
- if (onOptionsRefresh) await onOptionsRefresh();
- if (onPersisted || onOptionsRefresh) {
+ // Options live entirely in form state until the user hits the dish's
+ // Save button. Tapping "add option" or an existing row just opens the
+ // modal — no server round-trip per option. Used to fire `updateItem`
+ // before opening, which meant every option click cost a full dish
+ // auto-translate cycle.
+ function handleAddOption() {
+ track("dash_item_click_add_option");
  setOptionModal({ kind: "new" });
- return;
- }
- if (onOpenOption) {
- onOpenOption(id, null);
- } else if (optionRoutePrefix) {
- router.push(`${optionRoutePrefix(id)}/new`);
- }
  }
 
- async function handleEditOption(optId: string) {
- const id = await persist("stay");
- if (!id) return;
- if (onPersisted) await onPersisted(id);
- if (onOptionsRefresh) await onOptionsRefresh();
- if (onPersisted || onOptionsRefresh) {
+ function handleEditOption(optId: string) {
+ track("dash_item_click_edit_option");
  setOptionModal({ kind: "edit", id: optId });
- return;
  }
- if (onOpenOption) {
- onOpenOption(id, optId);
- } else if (optionRoutePrefix) {
- router.push(`${optionRoutePrefix(id)}/${optId}`);
- }
- }
+
+ // Keep legacy hooks alive so the prop signature stays compatible with
+ // callers that still pass them (DishForm consumers in the legacy SPA
+ // shell). They're no-ops in the new in-form-state flow.
+ void optionRoutePrefix;
+ void onOpenOption;
+ void onPersisted;
+ void onOptionsRefresh;
+ void router;
 
  async function confirmDelete() {
  track("dash_item_click_delete");
@@ -738,29 +754,14 @@ export function DishForm({
  {t("optionsTip")}
  </p>
 
- {!(optionRoutePrefix || onOpenOption || onPersisted || onOptionsRefresh) ? null : dish ? (
  <DishOptionsInline
- dish={dish}
+ options={form.options}
  defaultLang={defaultLang}
  disabled={saving}
+ onReorder={(next) => setForm((f) => ({ ...f, options: next }))}
  onAddOption={handleAddOption}
  onEditOption={handleEditOption}
  />
- ) : (
- <button
- type="button"
- onClick={handleAddOption}
- disabled={saving}
- className="w-full h-10 text-sm font-medium text-muted-foreground bg-card border border-dashed border-input rounded-lg flex items-center justify-center gap-1.5 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
- >
- {saving ? (
- <div className="w-3.5 h-3.5 border-2 border-muted-foreground/30 border-t-muted-foreground rounded-full animate-spin" />
- ) : (
- <PlusIcon size={14} />
- )}
- {t("addOption")}
- </button>
- )}
  </div>
 
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
@@ -839,7 +840,7 @@ export function DishForm({
  onClose={() => setUnsavedOpen(false)}
  />
 
- {optionModal && dish ? (
+ {optionModal ? (
  <Modal
  open
  onClose={() => setOptionModal(null)}
@@ -851,19 +852,20 @@ export function DishForm({
  <OptionForm
  embedded
  lang={lang}
- dish={dish}
+ currentOptions={form.options}
+ currentDishName={form.name}
  option={
  optionModal.kind === "edit"
- ? dish.options.find((o) => o.id === optionModal.id) || null
+ ? form.options.find((o) => o.id === optionModal.id) || null
  : null
  }
  onBack={() => setOptionModal(null)}
- onSavedRedirect={async () => {
- if (onOptionsRefresh) await onOptionsRefresh();
+ onLocalSave={(nextOptions) => {
+ setForm((f) => ({ ...f, options: nextOptions }));
  setOptionModal(null);
  }}
- onDeletedRedirect={async () => {
- if (onOptionsRefresh) await onOptionsRefresh();
+ onLocalDelete={(nextOptions) => {
+ setForm((f) => ({ ...f, options: nextOptions }));
  setOptionModal(null);
  }}
  />
@@ -876,63 +878,25 @@ export function DishForm({
 // ── Options list (rendered inline inside DishForm) ──
 
 function DishOptionsInline({
- dish,
+ options,
  defaultLang,
  disabled,
+ onReorder,
  onAddOption,
  onEditOption,
 }: {
- dish: Dish;
+ options: DishOption[];
  defaultLang: string;
  disabled: boolean;
- onAddOption: () => Promise<void>;
- onEditOption: (optionId: string) => Promise<void>;
+ onReorder: (next: DishOption[]) => void;
+ onAddOption: () => void;
+ onEditOption: (optionId: string) => void;
 }) {
  const t = useTranslations("dashboard.dishForm");
- const [busy, setBusy] = useState(false);
- const [options, setOptions] = useState<DishOption[]>(dish.options);
 
- useEffect(() => {
- setOptions(dish.options);
- }, [dish.options]);
-
- async function moveOption(idx: number, dir: number) {
- if (busy || disabled) return;
- const next = moveItem(options, idx, dir);
- setOptions(next);
- setBusy(true);
- try {
- const namePrimary = (dish.name[defaultLang] || "").trim();
- const descPrimary = (dish.description[defaultLang] || "").trim() || null;
- const translations = buildItemTranslations(dish.name, dish.description, defaultLang);
- await updateItem(dish.id, {
- name: namePrimary,
- description: descPrimary,
- price: parseDecimal(dish.price),
- imageUrl: dish.photoUrl,
- categoryId: dish.categoryId,
- isActive: dish.visible,
- translations,
- allergens: dish.allergens,
- diets: dish.diets,
- options: next,
- });
- } catch (err) {
- showApiError(err, "dash_option_reorder");
- setOptions(dish.options);
- } finally {
- setBusy(false);
- }
- }
-
- async function handleAdd() {
- if (busy || disabled) return;
- await onAddOption();
- }
-
- async function handleEdit(optId: string) {
- if (busy || disabled) return;
- await onEditOption(optId);
+ function moveOption(idx: number, dir: number) {
+ if (disabled) return;
+ onReorder(moveItem(options, idx, dir));
  }
 
  return (
@@ -946,7 +910,7 @@ function DishOptionsInline({
  defaultLang={defaultLang}
  isFirst={idx === 0}
  isLast={idx === options.length - 1}
- onEdit={() => handleEdit(opt.id)}
+ onEdit={() => !disabled && onEditOption(opt.id)}
  onMoveUp={() => moveOption(idx, -1)}
  onMoveDown={() => moveOption(idx, 1)}
  />
@@ -956,14 +920,14 @@ function DishOptionsInline({
 
  <button
  type="button"
- onClick={handleAdd}
- disabled={busy || disabled}
+ onClick={() => !disabled && onAddOption()}
+ disabled={disabled}
  className={
  "w-full h-10 text-sm font-medium text-muted-foreground bg-card border border-dashed border-input rounded-lg flex items-center justify-center gap-1.5 transition-colors disabled:opacity-60 disabled:cursor-not-allowed " +
  (options.length > 0 ? "mt-2" : "")
  }
  >
- {busy || disabled ? (
+ {disabled ? (
  <div className="w-3.5 h-3.5 border-2 border-muted-foreground/30 border-t-muted-foreground rounded-full animate-spin" />
  ) : (
  <PlusIcon size={14} />
@@ -1036,14 +1000,26 @@ export function OptionForm({
  onDeletedRedirect,
  embedded,
  lang: langProp,
+ currentOptions,
+ currentDishName,
+ onLocalSave,
+ onLocalDelete,
 }: {
- dish: Dish;
+ // Standalone path (legacy SPA shell) still uses `dish` for the server
+ // round-trip; the embedded path inside DishForm uses `currentOptions`
+ // and the on-local-* callbacks so options are buffered in form state
+ // until the user hits the dish's main Save button.
+ dish?: Dish;
  option: DishOption | null;
- onSavedRedirect: () => void;
+ onSavedRedirect?: () => void;
  onBack: () => void;
- onDeletedRedirect: () => void;
+ onDeletedRedirect?: () => void;
  embedded?: boolean;
  lang?: string;
+ currentOptions?: DishOption[];
+ currentDishName?: Ml;
+ onLocalSave?: (nextOptions: DishOption[]) => void;
+ onLocalDelete?: (nextOptions: DishOption[]) => void;
 }) {
  const t = useTranslations("dashboard.optionForm");
  const tc = useTranslations("dashboard.common");
@@ -1157,6 +1133,11 @@ export function OptionForm({
  }
  }
 
+ // Source-of-truth for the dish's existing options. Embedded mode reads
+ // it from props (buffered DishForm state); legacy mode reads from the
+ // server-side `dish` row.
+ const baseOptions: DishOption[] = currentOptions ?? dish?.options ?? [];
+
  async function save() {
  if (saving) return;
  const validation = validateForm();
@@ -1177,15 +1158,28 @@ export function OptionForm({
  };
  let nextOptions: DishOption[];
  if (isNew) {
- nextOptions = [...dish.options, { id: newId(), ...data }];
+ nextOptions = [...baseOptions, { id: newId(), ...data }];
  } else if (option) {
- nextOptions = dish.options.map((o) => (o.id === option.id ? { ...o, ...data } : o));
+ nextOptions = baseOptions.map((o) => (o.id === option.id ? { ...o, ...data } : o));
  } else {
- nextOptions = dish.options;
+ nextOptions = baseOptions;
+ }
+ // Embedded inside DishForm — hand the new options array back to the
+ // parent and exit immediately. The eventual server round-trip happens
+ // when the user saves the dish as a whole.
+ if (onLocalSave) {
+ onLocalSave(nextOptions);
+ setSaving(false);
+ return;
+ }
+ // Legacy standalone path — persist directly via dish update.
+ if (!dish) {
+ setSaving(false);
+ return;
  }
  try {
  await persistDishOptions(dish, nextOptions, defaultLang);
- onSavedRedirect();
+ onSavedRedirect?.();
  } catch (err) {
  showApiError(err, isNew ? "dash_option_create" : "dash_option_update");
  setSaving(false);
@@ -1195,10 +1189,21 @@ export function OptionForm({
  async function confirmDelete() {
  if (!option) return;
  setDeleting(true);
- const nextOptions = dish.options.filter((o) => o.id !== option.id);
+ const nextOptions = baseOptions.filter((o) => o.id !== option.id);
+ if (onLocalDelete) {
+ onLocalDelete(nextOptions);
+ setDeleting(false);
+ setConfirmOpen(false);
+ return;
+ }
+ if (!dish) {
+ setDeleting(false);
+ setConfirmOpen(false);
+ return;
+ }
  try {
  await persistDishOptions(dish, nextOptions, defaultLang);
- onDeletedRedirect();
+ onDeletedRedirect?.();
  } catch (err) {
  showApiError(err, "dash_option_delete");
  setDeleting(false);
@@ -1219,7 +1224,11 @@ export function OptionForm({
  ? t("newTitle")
  : (getMlWithFallback(form.name, lang, defaultLang) || t("untitledOption"));
  const divider = <div className="border-t border-border my-5" />;
- const dishName = getMlWithFallback(dish.name, defaultLang, defaultLang);
+ const dishName = dish
+ ? getMlWithFallback(dish.name, defaultLang, defaultLang)
+ : currentDishName
+ ? getMlWithFallback(currentDishName, defaultLang, defaultLang)
+ : "";
 
  return (
  <div>
