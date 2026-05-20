@@ -657,7 +657,10 @@ export function MenuList({
  onPersisted?.();
  }}
  />
- {scopedLeaves.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
+ {/* Temporarily disabled — keeping the component wired so we can flip it
+     back on with a one-line commit once we decide whether the guided
+     tour actually helps activation. */}
+ {false && scopedLeaves.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
  </>
  );
 }
