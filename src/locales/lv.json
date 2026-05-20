@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Pievienoti {items} ēdieni {cats} kategorijās"
         }
-      }
+      },
+      "addGroup": "Pievienot grupu",
+      "backToMenu": "Atpakaļ uz izvēlni",
+      "groupsHeading": "Grupas"
     },
     "categoryForm": {
       "newTitle": "Jauna kategorija",
@@ -172,7 +175,12 @@
       "deleteTitle": "Dzēst kategoriju?",
       "deleteMessage": "Tas izdzēsīs arī visus ēdienus tajā. Nevar atsaukt.",
       "nameRequiredTitle": "Nosaukums ir obligāts",
-      "nameRequiredMessage": "Pirms saglabāšanas ievadiet kategorijas nosaukumu noklusējuma valodā."
+      "nameRequiredMessage": "Pirms saglabāšanas ievadiet kategorijas nosaukumu noklusējuma valodā.",
+      "newGroupTitle": "Jauna grupa",
+      "deleteGroupTitle": "Dzēst grupu?",
+      "deleteGroupMessage": "Grupa tiks noņemta. Iekšējās kategorijas paliks negrupētas.",
+      "parentGroupLabel": "Grupa",
+      "noGroup": "— Bez grupas —"
     },
     "dishForm": {
       "newTitle": "Jauns ēdiens",
@@ -202,7 +210,9 @@
       "missingMessage": "Pirms saglabāšanas ievadiet nosaukumu un derīgu cenu.",
       "newOptionTitle": "Jauna opcija",
       "editOptionTitle": "Rediģēt opciju",
-      "duplicateButton": "Dublēt"
+      "duplicateButton": "Dublēt",
+      "dietsLabel": "Diētas",
+      "dietsTip": "Pieskarieties, lai atlasītu diētas."
     },
     "optionForm": {
       "newTitle": "Jauna opcija",
@@ -441,7 +451,13 @@
         "uploadHint": "Augšupielādēt attēlu vai video",
         "backgroundTip": "Tiek parādīts kā jūsu publiskās tīmekļa vietnes sākumlapas fons.",
         "aiTitle": "Ģenerēt fonu",
-        "aiPlaceholder": "piem. Mājīgs galds sveču gaismā ar lauku stila šķīvjiem un siltu koku"
+        "aiPlaceholder": "piem. Mājīgs galds sveču gaismā ar lauku stila šķīvjiem un siltu koku",
+        "layoutLabel": "Izvēlnes izkārtojums",
+        "layoutTip": "Kā ēdieni parādās publiskajā izvēlnes lapā.",
+        "layout_flat_name": "Plakana",
+        "layout_flat_desc": "Horizontāli kategoriju cilnes ar ēdieniem rindā.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Pieskarieties kategorijai, lai atvērtu tās ekrānu ar ēdieniem."
       },
       "general": {
         "title": "Vispārīgi",
@@ -534,7 +550,11 @@
         "currentPlan": "Pašreizējais plāns",
         "switch": "Mainīt",
         "subscribe": "Abonēt",
-        "cancelTip": "Atceliet jebkurā laikā caur klientu portālu. Gada plāni atjaunojas reizi gadā."
+        "cancelTip": "Atceliet jebkurā laikā caur klientu portālu. Gada plāni atjaunojas reizi gadā.",
+        "planBasic": "Pamata",
+        "planPro": "Pro",
+        "comparePlans": "Salīdzināt plānus iq-rest.com →",
+        "otherCurrencyTip": "Maksājums tikai EUR. Lai maksātu citā valūtā, sazinieties ar atbalstu."
       },
       "support": {
         "title": "Atbalsts",
@@ -668,6 +688,21 @@
       "loading": "Ielādē…",
       "settingsBreadcrumb": "Iestatījumi"
     },
-    "exampleBadge": "piem."
+    "exampleBadge": "piem.",
+    "diets": {
+      "vegan": "Vegānisks",
+      "vegetarian": "Veģetārs",
+      "pescatarian": "Pescetārs",
+      "gluten_free": "Bez glutēna",
+      "lactose_free": "Bez laktozes",
+      "nut_free": "Bez riekstiem",
+      "sugar_free": "Bez cukura",
+      "low_carb": "Maz ogļhidrātu",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košers",
+      "spicy": "Pikants",
+      "organic": "Bio"
+    }
   }
 }

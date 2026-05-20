@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} gerechten toegevoegd in {cats} categorieën"
         }
-      }
+      },
+      "addGroup": "Groep toevoegen",
+      "backToMenu": "Terug naar menu",
+      "groupsHeading": "Groepen"
     },
     "categoryForm": {
       "newTitle": "Nieuwe categorie",
@@ -172,7 +175,12 @@
       "deleteTitle": "Categorie verwijderen?",
       "deleteMessage": "Hierdoor worden ook alle gerechten erin verwijderd. Niet ongedaan te maken.",
       "nameRequiredTitle": "Naam is verplicht",
-      "nameRequiredMessage": "Voer een categorienaam in de standaardtaal in voor het opslaan."
+      "nameRequiredMessage": "Voer een categorienaam in de standaardtaal in voor het opslaan.",
+      "newGroupTitle": "Nieuwe groep",
+      "deleteGroupTitle": "Groep verwijderen?",
+      "deleteGroupMessage": "De groep wordt verwijderd. Categorieën erin worden niet meer gegroepeerd.",
+      "parentGroupLabel": "Groep",
+      "noGroup": "— Geen groep —"
     },
     "dishForm": {
       "newTitle": "Nieuw gerecht",
@@ -202,7 +210,9 @@
       "missingMessage": "Voer een naam en geldige prijs in voor het opslaan.",
       "newOptionTitle": "Nieuwe optie",
       "editOptionTitle": "Optie bewerken",
-      "duplicateButton": "Dupliceren"
+      "duplicateButton": "Dupliceren",
+      "dietsLabel": "Diëten",
+      "dietsTip": "Tik om diëten in te schakelen."
     },
     "optionForm": {
       "newTitle": "Nieuwe optie",
@@ -441,7 +451,13 @@
         "uploadHint": "Afbeelding of video uploaden",
         "backgroundTip": "Wordt getoond als achtergrond van de startpagina van uw publieke site.",
         "aiTitle": "Achtergrond genereren",
-        "aiPlaceholder": "bv. Sfeervolle tafel bij kaarslicht met rustieke borden en warm hout"
+        "aiPlaceholder": "bv. Sfeervolle tafel bij kaarslicht met rustieke borden en warm hout",
+        "layoutLabel": "Menu-indeling",
+        "layoutTip": "Hoe gerechten verschijnen op de openbare menupagina.",
+        "layout_flat_name": "Plat",
+        "layout_flat_desc": "Horizontale categorie-tabs met gerechten in lijn.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Tik op een categorie om het scherm met gerechten te openen."
       },
       "general": {
         "title": "Algemeen",
@@ -534,7 +550,11 @@
         "currentPlan": "Huidig abonnement",
         "switch": "Wisselen",
         "subscribe": "Abonneren",
-        "cancelTip": "Op elk moment opzeggen via klantportaal. Jaarabonnementen worden eens per jaar verlengd."
+        "cancelTip": "Op elk moment opzeggen via klantportaal. Jaarabonnementen worden eens per jaar verlengd.",
+        "planBasic": "Basis",
+        "planPro": "Pro",
+        "comparePlans": "Vergelijk abonnementen op iq-rest.com →",
+        "otherCurrencyTip": "Betaling alleen in EUR. Voor betaling in een andere valuta, neem contact op met support."
       },
       "support": {
         "title": "Ondersteuning",
@@ -668,6 +688,21 @@
       "loading": "Laden…",
       "settingsBreadcrumb": "Instellingen"
     },
-    "exampleBadge": "demo"
+    "exampleBadge": "demo",
+    "diets": {
+      "vegan": "Veganistisch",
+      "vegetarian": "Vegetarisch",
+      "pescatarian": "Pescetarisch",
+      "gluten_free": "Glutenvrij",
+      "lactose_free": "Lactosevrij",
+      "nut_free": "Notenvrij",
+      "sugar_free": "Suikervrij",
+      "low_carb": "Koolhydraatarm",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Koosjer",
+      "spicy": "Pikant",
+      "organic": "Biologisch"
+    }
   }
 }

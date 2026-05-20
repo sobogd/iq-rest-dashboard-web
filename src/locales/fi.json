@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Lisätty {items} annosta {cats} luokkaan"
         }
-      }
+      },
+      "addGroup": "Lisää ryhmä",
+      "backToMenu": "Takaisin valikkoon",
+      "groupsHeading": "Ryhmät"
     },
     "categoryForm": {
       "newTitle": "Uusi kategoria",
@@ -172,7 +175,12 @@
       "deleteTitle": "Poistetaanko kategoria?",
       "deleteMessage": "Tämä poistaa myös kaikki annokset sen sisältä. Ei voi peruuttaa.",
       "nameRequiredTitle": "Nimi vaaditaan",
-      "nameRequiredMessage": "Anna kategorian nimi oletuskielellä ennen tallennusta."
+      "nameRequiredMessage": "Anna kategorian nimi oletuskielellä ennen tallennusta.",
+      "newGroupTitle": "Uusi ryhmä",
+      "deleteGroupTitle": "Poistetaanko ryhmä?",
+      "deleteGroupMessage": "Ryhmä poistetaan. Sisällä olevat luokat jäävät ryhmittelemättömiksi.",
+      "parentGroupLabel": "Ryhmä",
+      "noGroup": "— Ei ryhmää —"
     },
     "dishForm": {
       "newTitle": "Uusi annos",
@@ -202,7 +210,9 @@
       "missingMessage": "Anna nimi ja kelvollinen hinta ennen tallennusta.",
       "newOptionTitle": "Uusi vaihtoehto",
       "editOptionTitle": "Muokkaa vaihtoehtoa",
-      "duplicateButton": "Monista"
+      "duplicateButton": "Monista",
+      "dietsLabel": "Ruokavaliot",
+      "dietsTip": "Napauta valitaksesi ruokavaliot."
     },
     "optionForm": {
       "newTitle": "Uusi vaihtoehto",
@@ -441,7 +451,13 @@
         "uploadHint": "Lähetä kuva tai video",
         "backgroundTip": "Näytetään julkisen sivustosi etusivun taustana.",
         "aiTitle": "Luo tausta",
-        "aiPlaceholder": "esim. Viihtyisä pöytä kynttilänvalossa rustiikkisilla lautasilla ja lämpimällä puulla"
+        "aiPlaceholder": "esim. Viihtyisä pöytä kynttilänvalossa rustiikkisilla lautasilla ja lämpimällä puulla",
+        "layoutLabel": "Valikon asettelu",
+        "layoutTip": "Miten annokset näkyvät julkisella valikkosivulla.",
+        "layout_flat_name": "Litteä",
+        "layout_flat_desc": "Vaakasuorat luokkavälilehdet annoksilla rivissä.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Napauta luokkaa avataksesi sen näytön annoksilla."
       },
       "general": {
         "title": "Yleiset",
@@ -534,7 +550,11 @@
         "currentPlan": "Nykyinen tilaus",
         "switch": "Vaihda",
         "subscribe": "Tilaa",
-        "cancelTip": "Peruuta milloin tahansa asiakasportaalissa. Vuositilaukset uusiutuvat kerran vuodessa."
+        "cancelTip": "Peruuta milloin tahansa asiakasportaalissa. Vuositilaukset uusiutuvat kerran vuodessa.",
+        "planBasic": "Perus",
+        "planPro": "Pro",
+        "comparePlans": "Vertaa tilauksia osoitteessa iq-rest.com →",
+        "otherCurrencyTip": "Maksu vain EUR. Maksaaksesi muulla valuutalla, ota yhteyttä tukeen."
       },
       "support": {
         "title": "Tuki",
@@ -668,6 +688,21 @@
       "loading": "Ladataan…",
       "settingsBreadcrumb": "Asetukset"
     },
-    "exampleBadge": "esim."
+    "exampleBadge": "esim.",
+    "diets": {
+      "vegan": "Vegaaninen",
+      "vegetarian": "Kasvis",
+      "pescatarian": "Pescetaariaaninen",
+      "gluten_free": "Gluteeniton",
+      "lactose_free": "Laktoositon",
+      "nut_free": "Pähkinätön",
+      "sugar_free": "Sokeriton",
+      "low_carb": "Vähähiilihydraattinen",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Tulinen",
+      "organic": "Luomu"
+    }
   }
 }

@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} plats ajoutés dans {cats} catégories"
         }
-      }
+      },
+      "addGroup": "Ajouter un groupe",
+      "backToMenu": "Retour au menu",
+      "groupsHeading": "Groupes"
     },
     "categoryForm": {
       "newTitle": "Nouvelle catégorie",
@@ -172,7 +175,12 @@
       "deleteTitle": "Supprimer la catégorie ?",
       "deleteMessage": "Tous les plats à l'intérieur seront aussi supprimés. Action irréversible.",
       "nameRequiredTitle": "Le nom est requis",
-      "nameRequiredMessage": "Saisissez un nom de catégorie dans la langue par défaut avant d'enregistrer."
+      "nameRequiredMessage": "Saisissez un nom de catégorie dans la langue par défaut avant d'enregistrer.",
+      "newGroupTitle": "Nouveau groupe",
+      "deleteGroupTitle": "Supprimer le groupe ?",
+      "deleteGroupMessage": "Le groupe sera supprimé. Les catégories à l'intérieur deviendront non groupées.",
+      "parentGroupLabel": "Groupe",
+      "noGroup": "— Sans groupe —"
     },
     "dishForm": {
       "newTitle": "Nouveau plat",
@@ -202,7 +210,9 @@
       "missingMessage": "Saisissez un nom et un prix valide avant d'enregistrer.",
       "newOptionTitle": "Nouvelle option",
       "editOptionTitle": "Modifier l'option",
-      "duplicateButton": "Dupliquer"
+      "duplicateButton": "Dupliquer",
+      "dietsLabel": "Régimes",
+      "dietsTip": "Touchez pour indiquer les régimes compatibles."
     },
     "optionForm": {
       "newTitle": "Nouvelle option",
@@ -441,7 +451,13 @@
         "uploadHint": "Téléverser une image ou vidéo",
         "backgroundTip": "Affiché en fond de la page d'accueil de votre site public.",
         "aiTitle": "Générer le fond",
-        "aiPlaceholder": "ex. Table chaleureuse aux chandelles avec assiettes rustiques et bois clair"
+        "aiPlaceholder": "ex. Table chaleureuse aux chandelles avec assiettes rustiques et bois clair",
+        "layoutLabel": "Disposition du menu",
+        "layoutTip": "Comment les plats apparaissent dans le menu public.",
+        "layout_flat_name": "Plat",
+        "layout_flat_desc": "Onglets de catégories horizontaux avec plats en ligne.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Touchez une catégorie pour ouvrir son écran avec les plats."
       },
       "general": {
         "title": "Général",
@@ -534,7 +550,11 @@
         "currentPlan": "Forfait actuel",
         "switch": "Changer",
         "subscribe": "S'abonner",
-        "cancelTip": "Annulez à tout moment via le portail client. Les forfaits annuels se renouvellent une fois par an."
+        "cancelTip": "Annulez à tout moment via le portail client. Les forfaits annuels se renouvellent une fois par an.",
+        "planBasic": "Basique",
+        "planPro": "Pro",
+        "comparePlans": "Comparer les forfaits sur iq-rest.com →",
+        "otherCurrencyTip": "Le paiement est uniquement en EUR. Pour payer dans une autre devise, contactez le support."
       },
       "support": {
         "title": "Support",
@@ -668,6 +688,21 @@
       "loading": "Chargement…",
       "settingsBreadcrumb": "Paramètres"
     },
-    "exampleBadge": "ex."
+    "exampleBadge": "ex.",
+    "diets": {
+      "vegan": "Végétalien",
+      "vegetarian": "Végétarien",
+      "pescatarian": "Pescétarien",
+      "gluten_free": "Sans gluten",
+      "lactose_free": "Sans lactose",
+      "nut_free": "Sans noix",
+      "sugar_free": "Sans sucre",
+      "low_carb": "Faible en glucides",
+      "keto": "Cétogène",
+      "halal": "Halal",
+      "kosher": "Casher",
+      "spicy": "Épicé",
+      "organic": "Bio"
+    }
   }
 }

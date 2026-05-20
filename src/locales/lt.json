@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Pridėta {items} patiekalų į {cats} kategorijas"
         }
-      }
+      },
+      "addGroup": "Pridėti grupę",
+      "backToMenu": "Atgal į meniu",
+      "groupsHeading": "Grupės"
     },
     "categoryForm": {
       "newTitle": "Nauja kategorija",
@@ -172,7 +175,12 @@
       "deleteTitle": "Ištrinti kategoriją?",
       "deleteMessage": "Tai ištrins ir visus joje esančius patiekalus. Negalima atšaukti.",
       "nameRequiredTitle": "Pavadinimas privalomas",
-      "nameRequiredMessage": "Prieš išsaugant įveskite kategorijos pavadinimą numatytąja kalba."
+      "nameRequiredMessage": "Prieš išsaugant įveskite kategorijos pavadinimą numatytąja kalba.",
+      "newGroupTitle": "Nauja grupė",
+      "deleteGroupTitle": "Ištrinti grupę?",
+      "deleteGroupMessage": "Grupė bus pašalinta. Vidinės kategorijos liks negrupuotos.",
+      "parentGroupLabel": "Grupė",
+      "noGroup": "— Be grupės —"
     },
     "dishForm": {
       "newTitle": "Naujas patiekalas",
@@ -202,7 +210,9 @@
       "missingMessage": "Prieš išsaugant įveskite pavadinimą ir galiojančią kainą.",
       "newOptionTitle": "Nauja parinktis",
       "editOptionTitle": "Redaguoti parinktį",
-      "duplicateButton": "Dubliuoti"
+      "duplicateButton": "Dubliuoti",
+      "dietsLabel": "Dietos",
+      "dietsTip": "Bakstelėkite, kad pasirinktumėte dietas."
     },
     "optionForm": {
       "newTitle": "Nauja parinktis",
@@ -441,7 +451,13 @@
         "uploadHint": "Įkelti vaizdą arba vaizdo įrašą",
         "backgroundTip": "Rodoma kaip jūsų viešo svetainės pagrindinio puslapio fonas.",
         "aiTitle": "Generuoti foną",
-        "aiPlaceholder": "pvz. Jaukus stalas su žvakių šviesa, kaimiškomis lėkštėmis ir šiltu medžiu"
+        "aiPlaceholder": "pvz. Jaukus stalas su žvakių šviesa, kaimiškomis lėkštėmis ir šiltu medžiu",
+        "layoutLabel": "Meniu išdėstymas",
+        "layoutTip": "Kaip patiekalai rodomi viešojo meniu puslapyje.",
+        "layout_flat_name": "Plokščias",
+        "layout_flat_desc": "Horizontalūs kategorijų skirtukai su patiekalais eilėje.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Bakstelėkite kategoriją, kad atidarytumėte jos ekraną su patiekalais."
       },
       "general": {
         "title": "Bendrieji",
@@ -534,7 +550,11 @@
         "currentPlan": "Dabartinis planas",
         "switch": "Keisti",
         "subscribe": "Užsiprenumeruoti",
-        "cancelTip": "Atšaukite bet kada per klientų portalą. Metiniai planai atsinaujina kartą per metus."
+        "cancelTip": "Atšaukite bet kada per klientų portalą. Metiniai planai atsinaujina kartą per metus.",
+        "planBasic": "Pagrindinis",
+        "planPro": "Pro",
+        "comparePlans": "Palyginti planus iq-rest.com →",
+        "otherCurrencyTip": "Mokėjimas tik EUR. Norėdami mokėti kita valiuta, susisiekite su pagalba."
       },
       "support": {
         "title": "Pagalba",
@@ -668,6 +688,21 @@
       "loading": "Įkeliama…",
       "settingsBreadcrumb": "Nustatymai"
     },
-    "exampleBadge": "pvz."
+    "exampleBadge": "pvz.",
+    "diets": {
+      "vegan": "Veganiška",
+      "vegetarian": "Vegetariška",
+      "pescatarian": "Pescetariška",
+      "gluten_free": "Be gliuteno",
+      "lactose_free": "Be laktozės",
+      "nut_free": "Be riešutų",
+      "sugar_free": "Be cukraus",
+      "low_carb": "Mažai angliavandenių",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košer",
+      "spicy": "Aštru",
+      "organic": "Ekologiška"
+    }
   }
 }

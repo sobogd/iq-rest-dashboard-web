@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Adăugate {items} produse în {cats} categorii"
         }
-      }
+      },
+      "addGroup": "Adaugă grup",
+      "backToMenu": "Înapoi la meniu",
+      "groupsHeading": "Grupuri"
     },
     "categoryForm": {
       "newTitle": "Categorie nouă",
@@ -172,7 +175,12 @@
       "deleteTitle": "Ștergi categoria?",
       "deleteMessage": "Se vor șterge și toate preparatele din ea. Nu se poate anula.",
       "nameRequiredTitle": "Numele este obligatoriu",
-      "nameRequiredMessage": "Introdu numele categoriei în limba implicită înainte de salvare."
+      "nameRequiredMessage": "Introdu numele categoriei în limba implicită înainte de salvare.",
+      "newGroupTitle": "Grup nou",
+      "deleteGroupTitle": "Ștergeți grupul?",
+      "deleteGroupMessage": "Grupul va fi eliminat. Categoriile dinăuntru devin negrupate.",
+      "parentGroupLabel": "Grup",
+      "noGroup": "— Fără grup —"
     },
     "dishForm": {
       "newTitle": "Preparat nou",
@@ -202,7 +210,9 @@
       "missingMessage": "Introdu un nume și un preț valid înainte de salvare.",
       "newOptionTitle": "Opțiune nouă",
       "editOptionTitle": "Editează opțiunea",
-      "duplicateButton": "Duplică"
+      "duplicateButton": "Duplică",
+      "dietsLabel": "Diete",
+      "dietsTip": "Atinge pentru a activa dietele."
     },
     "optionForm": {
       "newTitle": "Opțiune nouă",
@@ -441,7 +451,13 @@
         "uploadHint": "Încarcă imagine sau video",
         "backgroundTip": "Afișat ca fundal al paginii principale a site-ului public.",
         "aiTitle": "Generează fundal",
-        "aiPlaceholder": "ex. Masă confortabilă la lumânări cu farfurii rustice și lemn cald"
+        "aiPlaceholder": "ex. Masă confortabilă la lumânări cu farfurii rustice și lemn cald",
+        "layoutLabel": "Aspect meniu",
+        "layoutTip": "Cum apar preparatele pe pagina meniu public.",
+        "layout_flat_name": "Plat",
+        "layout_flat_desc": "File orizontale de categorii cu preparate în linie.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Atinge o categorie pentru a deschide ecranul ei cu preparate."
       },
       "general": {
         "title": "General",
@@ -534,7 +550,11 @@
         "currentPlan": "Plan curent",
         "switch": "Schimbă",
         "subscribe": "Abonează-te",
-        "cancelTip": "Anulează oricând prin portalul clienților. Planurile anuale se reînnoiesc o dată pe an."
+        "cancelTip": "Anulează oricând prin portalul clienților. Planurile anuale se reînnoiesc o dată pe an.",
+        "planBasic": "De bază",
+        "planPro": "Pro",
+        "comparePlans": "Compară planurile pe iq-rest.com →",
+        "otherCurrencyTip": "Plata se face doar în EUR. Pentru plata în altă monedă, contactați asistența."
       },
       "support": {
         "title": "Suport",
@@ -668,6 +688,21 @@
       "loading": "Se încarcă…",
       "settingsBreadcrumb": "Setări"
     },
-    "exampleBadge": "ex."
+    "exampleBadge": "ex.",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "pescatarian": "Pescetarian",
+      "gluten_free": "Fără gluten",
+      "lactose_free": "Fără lactoză",
+      "nut_free": "Fără nuci",
+      "sugar_free": "Fără zahăr",
+      "low_carb": "Sărac în carbohidrați",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Cușer",
+      "spicy": "Picant",
+      "organic": "Organic"
+    }
   }
 }

@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Lisatud {items} rooga {cats} kategoorias"
         }
-      }
+      },
+      "addGroup": "Lisa rühm",
+      "backToMenu": "Tagasi menüüsse",
+      "groupsHeading": "Rühmad"
     },
     "categoryForm": {
       "newTitle": "Uus kategooria",
@@ -172,7 +175,12 @@
       "deleteTitle": "Kustutada kategooria?",
       "deleteMessage": "See kustutab ka kõik selles olevad road. Tagasi võtta ei saa.",
       "nameRequiredTitle": "Nimi on kohustuslik",
-      "nameRequiredMessage": "Sisesta enne salvestamist kategooria nimi vaikekeeles."
+      "nameRequiredMessage": "Sisesta enne salvestamist kategooria nimi vaikekeeles.",
+      "newGroupTitle": "Uus rühm",
+      "deleteGroupTitle": "Kustutada rühm?",
+      "deleteGroupMessage": "Rühm eemaldatakse. Sees olevad kategooriad jäävad rühmitamata.",
+      "parentGroupLabel": "Rühm",
+      "noGroup": "— Rühma pole —"
     },
     "dishForm": {
       "newTitle": "Uus roog",
@@ -202,7 +210,9 @@
       "missingMessage": "Sisesta enne salvestamist nimi ja kehtiv hind.",
       "newOptionTitle": "Uus valik",
       "editOptionTitle": "Muuda valikut",
-      "duplicateButton": "Dubleeri"
+      "duplicateButton": "Dubleeri",
+      "dietsLabel": "Dieedid",
+      "dietsTip": "Puuduta dieedi valimiseks."
     },
     "optionForm": {
       "newTitle": "Uus valik",
@@ -441,7 +451,13 @@
         "uploadHint": "Lae üles pilt või video",
         "backgroundTip": "Kuvatakse sinu avaliku veebisaidi avalehe taustana.",
         "aiTitle": "Genereeri taust",
-        "aiPlaceholder": "nt Hubane laud küünlavalgel rustikaalsete taldrikutega ja sooja puiduga"
+        "aiPlaceholder": "nt Hubane laud küünlavalgel rustikaalsete taldrikutega ja sooja puiduga",
+        "layoutLabel": "Menüü paigutus",
+        "layoutTip": "Kuidas road kuvatakse avalikul menüülehel.",
+        "layout_flat_name": "Lame",
+        "layout_flat_desc": "Horisontaalsed kategooriasakid roogadega real.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Puuduta kategooriat, et avada selle ekraan roogadega."
       },
       "general": {
         "title": "Üldine",
@@ -534,7 +550,11 @@
         "currentPlan": "Praegune plaan",
         "switch": "Vaheta",
         "subscribe": "Telli",
-        "cancelTip": "Tühista igal ajal kliendiportaalis. Aastased plaanid uuenevad kord aastas."
+        "cancelTip": "Tühista igal ajal kliendiportaalis. Aastased plaanid uuenevad kord aastas.",
+        "planBasic": "Põhi",
+        "planPro": "Pro",
+        "comparePlans": "Võrdle pakette aadressil iq-rest.com →",
+        "otherCurrencyTip": "Maksmine ainult EUR-is. Teises valuutas maksmiseks võtke ühendust toega."
       },
       "support": {
         "title": "Tugi",
@@ -668,6 +688,21 @@
       "loading": "Laadimine…",
       "settingsBreadcrumb": "Seaded"
     },
-    "exampleBadge": "näid."
+    "exampleBadge": "näid.",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Taimetoit",
+      "pescatarian": "Pescetaarlane",
+      "gluten_free": "Gluteenivaba",
+      "lactose_free": "Laktoosivaba",
+      "nut_free": "Pähklivaba",
+      "sugar_free": "Suhkruvaba",
+      "low_carb": "Madala süsivesikute sisaldusega",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košer",
+      "spicy": "Vürtsikas",
+      "organic": "Mahe"
+    }
   }
 }

@@ -187,6 +187,7 @@ function ViewSwitch(p: SwitchProps) {
           initialSub={sub}
           onPersisted={refreshMenu}
           scanBannerDismissed={scanBannerDismissed}
+          currentGroupId={view.group ?? null}
         />
       );
     case "orders":
@@ -287,6 +288,8 @@ function ViewSwitch(p: SwitchProps) {
       return (
         <CategoryForm
           category={null}
+          parentGroupId={view.group ?? null}
+          availableGroups={categories.filter((c) => c.isGroup)}
           onBack={backToMenu}
           onSavedRedirect={onSavedMenu}
           onDeletedRedirect={onSavedMenu}
@@ -298,6 +301,30 @@ function ViewSwitch(p: SwitchProps) {
       return (
         <CategoryForm
           category={cat}
+          availableGroups={categories.filter((c) => c.isGroup)}
+          onBack={backToMenu}
+          onSavedRedirect={onSavedMenu}
+          onDeletedRedirect={onSavedMenu}
+        />
+      );
+    }
+    case "group.new":
+      return (
+        <CategoryForm
+          category={null}
+          isGroup
+          onBack={backToMenu}
+          onSavedRedirect={onSavedMenu}
+          onDeletedRedirect={onSavedMenu}
+        />
+      );
+    case "group.edit": {
+      const cat = categories.find((c) => c.id === view.id && c.isGroup);
+      if (!cat) return <NotMigrated label="Group not found" />;
+      return (
+        <CategoryForm
+          category={cat}
+          isGroup
           onBack={backToMenu}
           onSavedRedirect={onSavedMenu}
           onDeletedRedirect={onSavedMenu}

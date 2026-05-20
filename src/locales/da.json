@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} retter tilføjet i {cats} kategorier"
         }
-      }
+      },
+      "addGroup": "Tilføj gruppe",
+      "backToMenu": "Tilbage til menu",
+      "groupsHeading": "Grupper"
     },
     "categoryForm": {
       "newTitle": "Ny kategori",
@@ -172,7 +175,12 @@
       "deleteTitle": "Slet kategori?",
       "deleteMessage": "Dette sletter også alle retter indeni. Kan ikke fortrydes.",
       "nameRequiredTitle": "Navn er påkrævet",
-      "nameRequiredMessage": "Indtast et kategorinavn på standardsproget før du gemmer."
+      "nameRequiredMessage": "Indtast et kategorinavn på standardsproget før du gemmer.",
+      "newGroupTitle": "Ny gruppe",
+      "deleteGroupTitle": "Slet gruppe?",
+      "deleteGroupMessage": "Gruppen fjernes. Kategorier indeni bliver ugrupperede.",
+      "parentGroupLabel": "Gruppe",
+      "noGroup": "— Ingen gruppe —"
     },
     "dishForm": {
       "newTitle": "Ny ret",
@@ -202,7 +210,9 @@
       "missingMessage": "Indtast navn og gyldig pris før du gemmer.",
       "newOptionTitle": "Ny mulighed",
       "editOptionTitle": "Rediger mulighed",
-      "duplicateButton": "Dupliker"
+      "duplicateButton": "Dupliker",
+      "dietsLabel": "Diæter",
+      "dietsTip": "Tryk for at vælge diæter."
     },
     "optionForm": {
       "newTitle": "Ny valgmulighed",
@@ -441,7 +451,13 @@
         "uploadHint": "Upload billede eller video",
         "backgroundTip": "Vises som forsidens baggrund på din offentlige hjemmeside.",
         "aiTitle": "Generer baggrund",
-        "aiPlaceholder": "f.eks. Hyggeligt bord ved levende lys med rustikke tallerkener og varmt træ"
+        "aiPlaceholder": "f.eks. Hyggeligt bord ved levende lys med rustikke tallerkener og varmt træ",
+        "layoutLabel": "Menulayout",
+        "layoutTip": "Hvordan retter vises på den offentlige menuside.",
+        "layout_flat_name": "Flad",
+        "layout_flat_desc": "Vandrette kategorifaner med retter på række.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Tryk på en kategori for at åbne dens skærm med retter."
       },
       "general": {
         "title": "Generelt",
@@ -534,7 +550,11 @@
         "currentPlan": "Nuværende plan",
         "switch": "Skift",
         "subscribe": "Abonner",
-        "cancelTip": "Opsig når som helst via kundeportalen. Årsplaner fornys én gang om året."
+        "cancelTip": "Opsig når som helst via kundeportalen. Årsplaner fornys én gang om året.",
+        "planBasic": "Basis",
+        "planPro": "Pro",
+        "comparePlans": "Sammenlign planer på iq-rest.com →",
+        "otherCurrencyTip": "Betaling foregår kun i EUR. For betaling i anden valuta, kontakt support."
       },
       "support": {
         "title": "Support",
@@ -668,6 +688,21 @@
       "loading": "Indlæser…",
       "settingsBreadcrumb": "Indstillinger"
     },
-    "exampleBadge": "demo"
+    "exampleBadge": "demo",
+    "diets": {
+      "vegan": "Vegansk",
+      "vegetarian": "Vegetar",
+      "pescatarian": "Pescetar",
+      "gluten_free": "Glutenfri",
+      "lactose_free": "Laktosefri",
+      "nut_free": "Nøddefri",
+      "sugar_free": "Sukkerfri",
+      "low_carb": "Lavkulhydrat",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Stærk",
+      "organic": "Økologisk"
+    }
   }
 }

@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} rätter tillagda i {cats} kategorier"
         }
-      }
+      },
+      "addGroup": "Lägg till grupp",
+      "backToMenu": "Tillbaka till meny",
+      "groupsHeading": "Grupper"
     },
     "categoryForm": {
       "newTitle": "Ny kategori",
@@ -172,7 +175,12 @@
       "deleteTitle": "Radera kategori?",
       "deleteMessage": "Detta raderar även alla rätter inuti. Kan inte ångras.",
       "nameRequiredTitle": "Namn krävs",
-      "nameRequiredMessage": "Ange ett kategorinamn på standardspråket innan du sparar."
+      "nameRequiredMessage": "Ange ett kategorinamn på standardspråket innan du sparar.",
+      "newGroupTitle": "Ny grupp",
+      "deleteGroupTitle": "Ta bort grupp?",
+      "deleteGroupMessage": "Gruppen tas bort. Kategorier inuti blir ogrupperade.",
+      "parentGroupLabel": "Grupp",
+      "noGroup": "— Ingen grupp —"
     },
     "dishForm": {
       "newTitle": "Ny rätt",
@@ -202,7 +210,9 @@
       "missingMessage": "Ange namn och giltigt pris innan du sparar.",
       "newOptionTitle": "Nytt alternativ",
       "editOptionTitle": "Redigera alternativ",
-      "duplicateButton": "Duplicera"
+      "duplicateButton": "Duplicera",
+      "dietsLabel": "Dieter",
+      "dietsTip": "Tryck för att välja dieter."
     },
     "optionForm": {
       "newTitle": "Nytt alternativ",
@@ -441,7 +451,13 @@
         "uploadHint": "Ladda upp bild eller video",
         "backgroundTip": "Visas som startsidans bakgrund på din offentliga webbplats.",
         "aiTitle": "Generera bakgrund",
-        "aiPlaceholder": "t.ex. Mysigt bord vid levande ljus med rustika tallrikar och varmt trä"
+        "aiPlaceholder": "t.ex. Mysigt bord vid levande ljus med rustika tallrikar och varmt trä",
+        "layoutLabel": "Menylayout",
+        "layoutTip": "Hur rätter visas på den offentliga menysidan.",
+        "layout_flat_name": "Platt",
+        "layout_flat_desc": "Horisontella kategoriflikar med rätter på rad.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Tryck på en kategori för att öppna dess skärm med rätter."
       },
       "general": {
         "title": "Allmänt",
@@ -534,7 +550,11 @@
         "currentPlan": "Nuvarande plan",
         "switch": "Byt",
         "subscribe": "Prenumerera",
-        "cancelTip": "Avbryt när som helst via kundportalen. Årsplaner förnyas en gång per år."
+        "cancelTip": "Avbryt när som helst via kundportalen. Årsplaner förnyas en gång per år.",
+        "planBasic": "Bas",
+        "planPro": "Pro",
+        "comparePlans": "Jämför planer på iq-rest.com →",
+        "otherCurrencyTip": "Betalning sker endast i EUR. För betalning i annan valuta, kontakta supporten."
       },
       "support": {
         "title": "Support",
@@ -668,6 +688,21 @@
       "loading": "Laddar…",
       "settingsBreadcrumb": "Inställningar"
     },
-    "exampleBadge": "demo"
+    "exampleBadge": "demo",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarisk",
+      "pescatarian": "Pescetarian",
+      "gluten_free": "Glutenfri",
+      "lactose_free": "Laktosfri",
+      "nut_free": "Nötfri",
+      "sugar_free": "Sockerfri",
+      "low_carb": "Lågkolhydrat",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Stark",
+      "organic": "Ekologisk"
+    }
   }
 }

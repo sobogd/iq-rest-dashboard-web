@@ -289,6 +289,38 @@ export function ContactsSettingsPage({
  );
 }
 
+function FlatLayoutPreview() {
+ return (
+   <svg viewBox="0 0 100 80" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+     <rect x="0" y="0" width="100" height="80" fill="currentColor" fillOpacity="0" />
+     {/* Horizontal tab strip */}
+     <rect x="6" y="8" width="16" height="6" rx="1.5" fill="currentColor" fillOpacity="0.7" />
+     <rect x="24" y="8" width="16" height="6" rx="1.5" fill="currentColor" fillOpacity="0.25" />
+     <rect x="42" y="8" width="16" height="6" rx="1.5" fill="currentColor" fillOpacity="0.25" />
+     <rect x="60" y="8" width="16" height="6" rx="1.5" fill="currentColor" fillOpacity="0.25" />
+     {/* Dish rows */}
+     <rect x="6" y="22" width="88" height="14" rx="2" fill="currentColor" fillOpacity="0.15" />
+     <rect x="6" y="40" width="88" height="14" rx="2" fill="currentColor" fillOpacity="0.15" />
+     <rect x="6" y="58" width="88" height="14" rx="2" fill="currentColor" fillOpacity="0.15" />
+   </svg>
+ );
+}
+
+function DrillLayoutPreview() {
+ return (
+   <svg viewBox="0 0 100 80" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+     {/* Stacked category cards, each with a chevron */}
+     {[8, 24, 40, 56].map((y) => (
+       <g key={y}>
+         <rect x="6" y={y} width="88" height="12" rx="2" fill="currentColor" fillOpacity="0.15" />
+         <rect x="10" y={y + 3.5} width="40" height="5" rx="1" fill="currentColor" fillOpacity="0.5" />
+         <path d={`M86 ${y + 4} l3 2 -3 2`} stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+       </g>
+     ))}
+   </svg>
+ );
+}
+
 // ── Branding ──
 
 export function BrandingSettingsPage({
@@ -307,6 +339,7 @@ export function BrandingSettingsPage({
  backgroundType: restaurant.backgroundType,
  accentColor: restaurant.accentColor,
  showTitleOnHomepage: restaurant.showTitleOnHomepage,
+ menuLayout: restaurant.menuLayout ?? "flat",
  });
  const fileInputRef = useRef<HTMLInputElement | null>(null);
  const colorPickerRef = useRef<HTMLInputElement | null>(null);
@@ -325,6 +358,7 @@ export function BrandingSettingsPage({
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
     hideTitle: !draft.showTitleOnHomepage,
+    menuLayout: draft.menuLayout,
  });
  } catch {
  return;
@@ -335,6 +369,7 @@ export function BrandingSettingsPage({
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
     showTitleOnHomepage: draft.showTitleOnHomepage,
+    menuLayout: draft.menuLayout,
  }));
  onBack();
  }
@@ -520,6 +555,50 @@ export function BrandingSettingsPage({
  <p className="text-xs text-muted-foreground mt-2 leading-snug">
  {tb("backgroundTip")}
  </p>
+ </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6 md:col-span-2">
+ <div className="text-sm font-medium text-foreground mb-1">
+ {tb("layoutLabel", { defaultValue: "Menu layout" })}
+ </div>
+ <p className="text-xs text-muted-foreground mb-3 leading-snug">
+ {tb("layoutTip", { defaultValue: "How dishes appear on the public menu page." })}
+ </p>
+ <div className="grid grid-cols-2 gap-3">
+ {(["flat", "drill"] as const).map((opt) => {
+ const selected = draft.menuLayout === opt;
+ return (
+ <button
+ key={opt}
+ type="button"
+ onClick={() => {
+ track(`dash_settings_branding_layout_${opt}`);
+ setDraft((d) => ({ ...d, menuLayout: opt }));
+ }}
+ className={
+ "flex flex-col items-stretch gap-2 p-3 rounded-xl border-2 transition-colors text-left " +
+ (selected
+ ? "border-foreground bg-foreground/5"
+ : "border-input hover:border-muted-foreground/50")
+ }
+ >
+ <div className="aspect-[4/3] bg-secondary rounded-lg overflow-hidden flex items-center justify-center">
+ {opt === "flat" ? <FlatLayoutPreview /> : <DrillLayoutPreview />}
+ </div>
+ <div className="text-sm font-medium text-foreground">
+ {tb(`layout_${opt}_name`, { defaultValue: opt === "flat" ? "Flat" : "Drill-down" })}
+ </div>
+ <div className="text-[11px] text-muted-foreground leading-snug">
+ {tb(`layout_${opt}_desc`, {
+ defaultValue:
+ opt === "flat"
+ ? "Horizontal category tabs with dishes scrolled inline."
+ : "Tap a category to open its own screen with dishes.",
+ })}
+ </div>
+ </button>
+ );
+ })}
+ </div>
  </div>
  </div>
  </div>
@@ -1273,6 +1352,48 @@ export function LanguagesSettingsPage({
 
 // ── Billing ──
 
+// Locale-aware pricing slugs on the landing. Mirrors
+// soqrmenuweb/lib/locale-slug-overrides.ts "/pricing" map. Update both when
+// a locale's slug changes.
+const PRICING_SLUG_BY_LOCALE: Record<string, string> = {
+  en: "/pricing",
+  ru: "/tseny",
+  es: "/precios",
+  it: "/prezzi",
+  fr: "/tarifs",
+  de: "/preise",
+  pt: "/precos",
+  nl: "/prijzen",
+  pl: "/cennik",
+  tr: "/fiyatlar",
+  uk: "/tsiny",
+  ja: "/kakaku",
+  ko: "/gagyeok",
+  zh: "/jia-ge",
+  ar: "/asaar",
+  fa: "/ghimat",
+  cs: "/ceny",
+  sk: "/ceny",
+  hu: "/arak",
+  ro: "/preturi",
+  el: "/times",
+  bg: "/tseni",
+  hr: "/cijene",
+  sr: "/cene",
+  sl: "/cene",
+  ca: "/preus",
+  da: "/priser",
+  no: "/priser",
+  sv: "/priser",
+  fi: "/hinnat",
+  et: "/hinnad",
+  lt: "/kainos",
+  lv: "/cenas",
+  ga: "/praghsanna",
+  is: "/verd",
+};
+
+
 interface SubStatus {
  plan: string | null;
  subscriptionStatus: string | null;
@@ -1376,11 +1497,24 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  .billing-plans { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
  @media (min-width: 600px) { .billing-plans { grid-template-columns: 1fr 1fr; } }
  `}</style>
+ {(["BASIC", "PRO"] as const).map((tier) => (
+ <div key={tier} className="mt-2 first:mt-0">
+ <div className="flex items-baseline justify-between mb-2 mt-5">
+ <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+ {tb(tier === "BASIC" ? "planBasic" : "planPro")}
+ </h3>
+ </div>
  <div className="billing-plans">
- {[
- { plan: "BASIC" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: "6.90", periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
- { plan: "BASIC" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: "9.90", periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
- ].map((p) => {
+ {(tier === "BASIC"
+   ? [
+       { plan: "BASIC" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: "9.90", periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
+       { plan: "BASIC" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: "6.90", periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
+     ]
+   : [
+       { plan: "PRO" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: "31.90", periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
+       { plan: "PRO" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: "24.90", periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
+     ]
+ ).map((p) => {
  const isCurrent = sub?.plan === p.plan && sub?.billingCycle === p.cycle && isActive;
  return (
  <div
@@ -1427,8 +1561,23 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  );
  })}
  </div>
+ </div>
+ ))}
 
- <p className="text-xs text-muted-foreground mt-4 leading-snug">
+ <a
+ href={`https://iq-rest.com/${locale}${PRICING_SLUG_BY_LOCALE[locale] || "/pricing"}`}
+ target="_blank"
+ rel="noopener noreferrer"
+ className="block mt-5 text-sm font-medium text-primary"
+ onClick={() => track("dash_settings_billing_pricing_link")}
+ >
+ {tb("comparePlans")}
+ </a>
+
+ <p className="text-xs text-muted-foreground mt-3 leading-snug">
+ {tb("otherCurrencyTip")}
+ </p>
+ <p className="text-xs text-muted-foreground mt-2 leading-snug">
  {tb("cancelTip")}
  </p>
  </div>

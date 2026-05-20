@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Added {items} items in {cats} categories"
         }
-      }
+      },
+      "addGroup": "Add group",
+      "backToMenu": "Back to menu",
+      "groupsHeading": "Groups"
     },
     "categoryForm": {
       "newTitle": "New category",
@@ -172,7 +175,12 @@
       "deleteTitle": "Delete category?",
       "deleteMessage": "This will also delete all dishes inside it. This cannot be undone.",
       "nameRequiredTitle": "Name is required",
-      "nameRequiredMessage": "Enter a category name in the default language before saving."
+      "nameRequiredMessage": "Enter a category name in the default language before saving.",
+      "newGroupTitle": "New group",
+      "deleteGroupTitle": "Delete group?",
+      "deleteGroupMessage": "This group will be removed. Categories inside become ungrouped.",
+      "parentGroupLabel": "Group",
+      "noGroup": "— No group —"
     },
     "dishForm": {
       "newTitle": "New dish",
@@ -202,7 +210,9 @@
       "missingMessage": "Enter a name and a valid price before saving.",
       "newOptionTitle": "New option",
       "editOptionTitle": "Edit option",
-      "duplicateButton": "Duplicate"
+      "duplicateButton": "Duplicate",
+      "dietsLabel": "Diets",
+      "dietsTip": "Tap to mark which diets this dish suits."
     },
     "optionForm": {
       "newTitle": "New option",
@@ -441,7 +451,13 @@
         "uploadHint": "Upload image or video",
         "backgroundTip": "Shown as the homepage background of your public website.",
         "aiTitle": "Generate background",
-        "aiPlaceholder": "e.g. Cozy candlelit table with rustic plates and warm wood"
+        "aiPlaceholder": "e.g. Cozy candlelit table with rustic plates and warm wood",
+        "layoutLabel": "Menu layout",
+        "layoutTip": "How dishes appear on the public menu page.",
+        "layout_flat_name": "Flat",
+        "layout_flat_desc": "Horizontal category tabs with dishes scrolled inline.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Tap a category to open its own screen with dishes."
       },
       "general": {
         "title": "General",
@@ -534,7 +550,11 @@
         "currentPlan": "Current plan",
         "switch": "Switch",
         "subscribe": "Subscribe",
-        "cancelTip": "Cancel anytime via the customer portal. Yearly plans renew once per year."
+        "cancelTip": "Cancel anytime via the customer portal. Yearly plans renew once per year.",
+        "planBasic": "Basic",
+        "planPro": "Pro",
+        "comparePlans": "Compare plans on iq-rest.com →",
+        "otherCurrencyTip": "Payment is in EUR only. To pay in another currency, please contact support."
       },
       "support": {
         "title": "Support",
@@ -668,6 +688,21 @@
       "events": "{count} ev.",
       "loading": "Loading…",
       "settingsBreadcrumb": "Settings"
+    },
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarian",
+      "pescatarian": "Pescatarian",
+      "gluten_free": "Gluten-free",
+      "lactose_free": "Lactose-free",
+      "nut_free": "Nut-free",
+      "sugar_free": "Sugar-free",
+      "low_carb": "Low-carb",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Spicy",
+      "organic": "Organic"
     }
   }
 }

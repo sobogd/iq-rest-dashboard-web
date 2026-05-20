@@ -34,6 +34,8 @@ import {
  translateText,
 } from "./i18n";
 import { AllergenIcon } from "./allergen-icon";
+import { DietIcon } from "./diet-icon";
+import { DIETS } from "@/lib/diets";
 import { moveItem, newId, currencySymbolOf, parseDecimal, sanitizePriceInput } from "./helpers";
 import { buildCategoryTranslations, buildItemTranslations } from "./mappers";
 import { useScrollLock } from "./use-scroll-lock";
@@ -56,21 +58,31 @@ export function CategoryForm({
  onSavedRedirect,
  onBack,
  onDeletedRedirect,
+ isGroup,
+ parentGroupId,
+ availableGroups = [],
 }: {
  category: Category | null;
  onSavedRedirect: () => void;
  onBack: () => void;
  onDeletedRedirect: () => void;
+ isGroup?: boolean;
+ parentGroupId?: string | null;
+ availableGroups?: Category[];
 }) {
  const t = useTranslations("dashboard.categoryForm");
  const tc = useTranslations("dashboard.common");
  const restaurant = useRestaurant();
  const { defaultLang, languages } = restaurant;
  const isNew = category === null;
+ // For an existing category — derive group-ness from the row. For new — from props.
+ const editingGroup = category?.isGroup ?? !!isGroup;
+ const initialParentId = category?.parentId ?? parentGroupId ?? null;
 
  const [lang, setLang] = useState<string>(defaultLang);
- const [form, setForm] = useState<{ name: Ml }>({
+ const [form, setForm] = useState<{ name: Ml; parentId: string | null }>({
  name: category ? category.name : emptyMl(languages),
+ parentId: initialParentId,
  });
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
@@ -107,9 +119,18 @@ export function CategoryForm({
  setSaving(true);
  try {
  if (isNew) {
- await createCategory({ name: trimmed[defaultLang], translations });
+ await createCategory({
+ name: trimmed[defaultLang],
+ translations,
+ isGroup: editingGroup,
+ parentId: editingGroup ? null : form.parentId,
+ });
  } else if (category) {
- await updateCategory(category.id, { name: trimmed[defaultLang], translations });
+ await updateCategory(category.id, {
+ name: trimmed[defaultLang],
+ translations,
+ ...(editingGroup ? {} : { parentId: form.parentId }),
+ });
  }
  onSavedRedirect();
  } catch {
@@ -131,7 +152,7 @@ export function CategoryForm({
  }
 
  const titleText = isNew
- ? t("newTitle")
+ ? (editingGroup ? t("newGroupTitle", { defaultValue: t("newTitle") }) : t("newTitle"))
  : (getMlWithFallback(form.name, lang, defaultLang) || tc("untitled"));
 
  return (
@@ -162,6 +183,27 @@ export function CategoryForm({
  placeholder={t("namePlaceholder")}
  onFocus={() => track("dash_category_focus_name_input")}
  />
+
+ {!editingGroup && availableGroups.length > 0 ? (
+ <div className="mt-4">
+ <label htmlFor="cat-parent" className="block text-sm font-medium text-foreground mb-2.5">
+ {t("parentGroupLabel", { defaultValue: "Group" })}
+ </label>
+ <select
+ id="cat-parent"
+ value={form.parentId ?? ""}
+ onChange={(e) => setForm((f) => ({ ...f, parentId: e.target.value || null }))}
+ className={inputClass}
+ >
+ <option value="">{t("noGroup", { defaultValue: "— No group —" })}</option>
+ {availableGroups.map((g) => (
+ <option key={g.id} value={g.id}>
+ {getMlWithFallback(g.name, defaultLang, defaultLang) || tc("untitled")}
+ </option>
+ ))}
+ </select>
+ </div>
+ ) : null}
  </div>
 
  {!isNew ? (
@@ -209,6 +251,7 @@ interface DishFormState {
  photoUrl: string | null;
  visible: boolean;
  allergens: string[];
+ diets: string[];
 }
 
 export function DishForm({
@@ -237,6 +280,7 @@ export function DishForm({
  const t = useTranslations("dashboard.dishForm");
  const tc = useTranslations("dashboard.common");
  const tAllergens = useTranslations("dashboard.allergens");
+ const tDiets = useTranslations("dashboard.diets");
  const router = useRouter();
  const restaurant = useRestaurant();
  const { defaultLang, languages, currency } = restaurant;
@@ -251,6 +295,7 @@ export function DishForm({
  photoUrl: dish?.photoUrl ?? null,
  visible: dish ? dish.visible : true,
  allergens: dish?.allergens ?? [],
+ diets: dish?.diets ?? [],
  }), [dish, languages]);
  const [form, setForm] = useState<DishFormState>(initialForm);
  const [saving, setSaving] = useState(false);
@@ -315,6 +360,15 @@ export function DishForm({
  }));
  }
 
+ function toggleDiet(code: string) {
+ setForm((f) => ({
+ ...f,
+ diets: f.diets.includes(code)
+ ? f.diets.filter((d) => d !== code)
+ : [...f.diets, code],
+ }));
+ }
+
  async function persist(redirectAfter: "list" | "stay" = "list"): Promise<string | null> {
  if (saving) return null;
  const validation = validateForm();
@@ -338,6 +392,7 @@ export function DishForm({
  isActive: form.visible,
  translations,
  allergens: form.allergens,
+ diets: form.diets,
  options: null,
  });
  savedId = created.id;
@@ -351,6 +406,7 @@ export function DishForm({
  isActive: form.visible,
  translations,
  allergens: form.allergens,
+ diets: form.diets,
  options: dish.options,
  });
  savedId = dish.id;
@@ -448,6 +504,7 @@ export function DishForm({
  isActive: dish.visible,
  translations,
  allergens: dish.allergens,
+ diets: dish.diets,
  options: copiedOptions,
  });
  onSavedRedirect(created.id);
@@ -545,6 +602,42 @@ export function DishForm({
  onFocus={() => track("dash_item_focus_description_input")}
  />
  </div>
+ </div>
+ </div>
+
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
+ <div className="flex items-baseline justify-between gap-3 mb-0.5">
+ <div className="text-sm font-medium text-foreground">{t("dietsLabel")}</div>
+ {form.diets.length > 0 ? (
+ <span className="text-[11px] font-medium text-muted-foreground tabular-nums">
+ {form.diets.length} {tc("selected")}
+ </span>
+ ) : null}
+ </div>
+ <p className="text-xs text-muted-foreground mb-2.5">{t("dietsTip")}</p>
+ <div className="flex flex-wrap gap-1.5">
+ {DIETS.map((d) => {
+ const checked = form.diets.includes(d.code);
+ return (
+ <button
+ key={d.code}
+ type="button"
+ onClick={() => {
+ track(form.diets.includes(d.code) ? "dash_item_click_diet_off" : "dash_item_click_diet_on");
+ toggleDiet(d.code);
+ }}
+ className={
+ "inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
+ (checked
+ ? "bg-foreground text-background"
+ : "bg-secondary text-muted-foreground")
+ }
+ >
+ <DietIcon code={d.code} className="w-3.5 h-3.5" />
+ {tDiets(d.code as never)}
+ </button>
+ );
+ })}
  </div>
  </div>
 
@@ -766,6 +859,7 @@ function DishOptionsInline({
  isActive: dish.visible,
  translations,
  allergens: dish.allergens,
+ diets: dish.diets,
  options: next,
  });
  } catch {
@@ -1330,6 +1424,7 @@ async function persistDishOptions(dish: Dish, nextOptions: DishOption[], default
  isActive: dish.visible,
  translations,
  allergens: dish.allergens,
+ diets: dish.diets,
  options: nextOptions,
  });
 }

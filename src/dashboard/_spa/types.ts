@@ -6,7 +6,7 @@ export type View =
   | { name: "auth.login" }
   | { name: "auth.otp" }
   | { name: "auth.logout" }
-  | { name: "menu" }
+  | { name: "menu"; group?: string }
   | { name: "orders" }
   | { name: "orders.detail"; orderId: string }
   | { name: "reservations" }
@@ -29,8 +29,10 @@ export type View =
   | { name: "settings.admin.company"; id: string }
   | { name: "settings.admin.usage" }
   | { name: "settings.admin.googleAds" }
-  | { name: "category.new" }
+  | { name: "category.new"; group?: string }
   | { name: "category.edit"; id: string }
+  | { name: "group.new" }
+  | { name: "group.edit"; id: string }
   | { name: "item.new"; categoryId?: string }
   | { name: "item.edit"; id: string }
   | { name: "option.new"; itemId: string }

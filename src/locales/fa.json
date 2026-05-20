@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} آیتم در {cats} دسته اضافه شد"
         }
-      }
+      },
+      "addGroup": "افزودن گروه",
+      "backToMenu": "بازگشت به منو",
+      "groupsHeading": "گروه‌ها"
     },
     "categoryForm": {
       "newTitle": "دسته جدید",
@@ -172,7 +175,12 @@
       "deleteTitle": "دسته حذف شود؟",
       "deleteMessage": "این کار همه غذاهای داخل آن را نیز حذف می‌کند. قابل بازگشت نیست.",
       "nameRequiredTitle": "نام الزامی است",
-      "nameRequiredMessage": "قبل از ذخیره، نام دسته را به زبان پیش‌فرض وارد کنید."
+      "nameRequiredMessage": "قبل از ذخیره، نام دسته را به زبان پیش‌فرض وارد کنید.",
+      "newGroupTitle": "گروه جدید",
+      "deleteGroupTitle": "حذف گروه؟",
+      "deleteGroupMessage": "گروه حذف خواهد شد. دسته‌بندی‌های داخل بدون گروه می‌مانند.",
+      "parentGroupLabel": "گروه",
+      "noGroup": "— بدون گروه —"
     },
     "dishForm": {
       "newTitle": "غذای جدید",
@@ -202,7 +210,9 @@
       "missingMessage": "قبل از ذخیره، نام و قیمت معتبر وارد کنید.",
       "newOptionTitle": "گزینهٔ جدید",
       "editOptionTitle": "ویرایش گزینه",
-      "duplicateButton": "تکثیر"
+      "duplicateButton": "تکثیر",
+      "dietsLabel": "رژیم‌ها",
+      "dietsTip": "برای انتخاب رژیم‌ها بزنید."
     },
     "optionForm": {
       "newTitle": "گزینه جدید",
@@ -441,7 +451,13 @@
         "uploadHint": "بارگذاری تصویر یا ویدیو",
         "backgroundTip": "به‌عنوان پس‌زمینه صفحه اصلی وب‌سایت عمومی شما نمایش داده می‌شود.",
         "aiTitle": "تولید پس‌زمینه",
-        "aiPlaceholder": "مثلاً میز دلنشین در نور شمع با بشقاب‌های روستیک و چوب گرم"
+        "aiPlaceholder": "مثلاً میز دلنشین در نور شمع با بشقاب‌های روستیک و چوب گرم",
+        "layoutLabel": "چیدمان منو",
+        "layoutTip": "نحوه نمایش غذاها در صفحه منو عمومی.",
+        "layout_flat_name": "تخت",
+        "layout_flat_desc": "تب‌های افقی دسته‌بندی با غذاها در یک ردیف.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "برای باز کردن صفحه غذاهای دسته، روی آن بزنید."
       },
       "general": {
         "title": "عمومی",
@@ -534,7 +550,11 @@
         "currentPlan": "طرح فعلی",
         "switch": "تغییر",
         "subscribe": "اشتراک",
-        "cancelTip": "هر زمان از طریق پورتال مشتری لغو کنید. طرح‌های سالانه یک‌بار در سال تمدید می‌شوند."
+        "cancelTip": "هر زمان از طریق پورتال مشتری لغو کنید. طرح‌های سالانه یک‌بار در سال تمدید می‌شوند.",
+        "planBasic": "پایه",
+        "planPro": "پرو",
+        "comparePlans": "مقایسه طرح‌ها در iq-rest.com →",
+        "otherCurrencyTip": "پرداخت فقط با یورو. برای پرداخت با ارز دیگر با پشتیبانی تماس بگیرید."
       },
       "support": {
         "title": "پشتیبانی",
@@ -668,6 +688,21 @@
       "loading": "در حال بارگذاری…",
       "settingsBreadcrumb": "تنظیمات"
     },
-    "exampleBadge": "نمو."
+    "exampleBadge": "نمو.",
+    "diets": {
+      "vegan": "گیاهی (وگن)",
+      "vegetarian": "گیاه‌خواری",
+      "pescatarian": "پسکتارین",
+      "gluten_free": "بدون گلوتن",
+      "lactose_free": "بدون لاکتوز",
+      "nut_free": "بدون آجیل",
+      "sugar_free": "بدون شکر",
+      "low_carb": "کم‌کربوهیدرات",
+      "keto": "کتو",
+      "halal": "حلال",
+      "kosher": "کوشر",
+      "spicy": "تند",
+      "organic": "ارگانیک"
+    }
   }
 }

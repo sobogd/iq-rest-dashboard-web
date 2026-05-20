@@ -34,6 +34,7 @@ export interface ApiRestaurant {
  languages: string[];
  defaultLanguage: string;
  hideTitle: boolean;
+ menuLayout: string;
  reservationsEnabled: boolean;
  reservationMode: string;
  reservationSlotMinutes: number;
@@ -149,6 +150,8 @@ export interface ApiCategory {
  translations: CategoryTranslations;
  sortOrder: number;
  isActive: boolean;
+ isGroup: boolean;
+ parentId: string | null;
 }
 
 export async function fetchCategories(): Promise<ApiCategory[]> {
@@ -162,6 +165,8 @@ export async function createCategory(payload: {
  name: string;
  translations?: CategoryTranslations;
  isActive?: boolean;
+ isGroup?: boolean;
+ parentId?: string | null;
 }): Promise<ApiCategory> {
  const res = await fetch(apiUrl("/api/categories"), {
         credentials: "include",
@@ -175,7 +180,7 @@ export async function createCategory(payload: {
 
 export async function updateCategory(
  id: string,
- payload: { name: string; translations?: CategoryTranslations; isActive?: boolean; sortOrder?: number },
+ payload: { name: string; translations?: CategoryTranslations; isActive?: boolean; sortOrder?: number; isGroup?: boolean; parentId?: string | null },
 ): Promise<ApiCategory> {
  const res = await fetch(apiUrl(`/api/categories/${id}`), {
         credentials: "include",
@@ -221,6 +226,7 @@ export interface ApiItem {
  price: number;
  imageUrl: string | null;
  allergens: string[];
+ diets: string[];
  options: DishOption[] | null;
  sortOrder: number;
  isActive: boolean;
@@ -244,6 +250,7 @@ export async function createItem(payload: {
  isActive?: boolean;
  translations?: ItemTranslations;
  allergens?: string[];
+ diets?: string[];
  options?: DishOption[] | null;
 }): Promise<ApiItem> {
  const res = await fetch(apiUrl("/api/items"), {
@@ -267,6 +274,7 @@ export async function updateItem(
  isActive?: boolean;
  translations?: ItemTranslations;
  allergens?: string[];
+ diets?: string[];
  options?: DishOption[] | null;
  sortOrder?: number;
  },

@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Cuireadh {items} mír i {cats} chatagóir"
         }
-      }
+      },
+      "addGroup": "Cuir grúpa leis",
+      "backToMenu": "Ar ais chuig an roghchlár",
+      "groupsHeading": "Grúpaí"
     },
     "categoryForm": {
       "newTitle": "Catagóir nua",
@@ -172,7 +175,12 @@
       "deleteTitle": "Scrios an chatagóir?",
       "deleteMessage": "Scriosfar gach mias istigh leis seo freisin. Ní féidir é a chealú.",
       "nameRequiredTitle": "Tá ainm riachtanach",
-      "nameRequiredMessage": "Cuir isteach ainm catagóire sa teanga réamhshocraithe sula sábhálann tú."
+      "nameRequiredMessage": "Cuir isteach ainm catagóire sa teanga réamhshocraithe sula sábhálann tú.",
+      "newGroupTitle": "Grúpa nua",
+      "deleteGroupTitle": "Scrios an grúpa?",
+      "deleteGroupMessage": "Bainfear an grúpa. Beidh na catagóirí istigh gan grúpa.",
+      "parentGroupLabel": "Grúpa",
+      "noGroup": "— Gan grúpa —"
     },
     "dishForm": {
       "newTitle": "Mias nua",
@@ -202,7 +210,9 @@
       "missingMessage": "Cuir isteach ainm agus praghas bailí sula sábhálann tú.",
       "newOptionTitle": "Rogha nua",
       "editOptionTitle": "Cuir rogha in eagar",
-      "duplicateButton": "Dúblíocht"
+      "duplicateButton": "Dúblíocht",
+      "dietsLabel": "Aistí Bia",
+      "dietsTip": "Tapáil chun aistí bia a roghnú."
     },
     "optionForm": {
       "newTitle": "Rogha nua",
@@ -441,7 +451,13 @@
         "uploadHint": "Uaslódáil íomhá nó físeán",
         "backgroundTip": "Léirítear mar chúlra leathanach baile do shuímh phoiblí.",
         "aiTitle": "Gin cúlra",
-        "aiPlaceholder": "m.sh. Bord taitneamhach le coinnle agus plátaí tuaithe agus adhmad te"
+        "aiPlaceholder": "m.sh. Bord taitneamhach le coinnle agus plátaí tuaithe agus adhmad te",
+        "layoutLabel": "Leagan amach an roghchláir",
+        "layoutTip": "Conas a thaispeántar miasa ar leathanach an roghchláir poiblí.",
+        "layout_flat_name": "Cothrom",
+        "layout_flat_desc": "Cluaisíní catagóire cothrománacha le miasa i ndiaidh a chéile.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Tapáil ar chatagóir chun a scáileán le miasa a oscailt."
       },
       "general": {
         "title": "Ginearálta",
@@ -534,7 +550,11 @@
         "currentPlan": "Plean reatha",
         "switch": "Athraigh",
         "subscribe": "Liostáil",
-        "cancelTip": "Cealaigh am ar bith trí phortail an chustaiméara. Athnuaitear pleananna bliantúla uair amháin in aghaidh na bliana."
+        "cancelTip": "Cealaigh am ar bith trí phortail an chustaiméara. Athnuaitear pleananna bliantúla uair amháin in aghaidh na bliana.",
+        "planBasic": "Bunúsach",
+        "planPro": "Pro",
+        "comparePlans": "Cuir pleananna i gcomparáid ar iq-rest.com →",
+        "otherCurrencyTip": "Íocaíocht in EUR amháin. Chun íoc i n-airgeadra eile, déan teagmháil leis an tacaíocht."
       },
       "support": {
         "title": "Tacaíocht",
@@ -668,6 +688,21 @@
       "loading": "Á luchtú…",
       "settingsBreadcrumb": "Socruithe"
     },
-    "exampleBadge": "samp."
+    "exampleBadge": "samp.",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Veigeatóireach",
+      "pescatarian": "Peisceatóireach",
+      "gluten_free": "Saor ó glútan",
+      "lactose_free": "Saor ó lachtós",
+      "nut_free": "Saor ó chnónna",
+      "sugar_free": "Saor ó shiúcra",
+      "low_carb": "Carbaihiodráit íseal",
+      "keto": "Céato",
+      "halal": "Halal",
+      "kosher": "Cosher",
+      "spicy": "Spíosrach",
+      "organic": "Orgánach"
+    }
   }
 }

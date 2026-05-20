@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Dodano {items} jedi v {cats} kategorijah"
         }
-      }
+      },
+      "addGroup": "Dodaj skupino",
+      "backToMenu": "Nazaj na meni",
+      "groupsHeading": "Skupine"
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",
@@ -172,7 +175,12 @@
       "deleteTitle": "Izbrišem kategorijo?",
       "deleteMessage": "S tem se izbrišejo tudi vse jedi v njej. Ni mogoče razveljaviti.",
       "nameRequiredTitle": "Ime je obvezno",
-      "nameRequiredMessage": "Vnesite ime kategorije v privzetem jeziku pred shranjevanjem."
+      "nameRequiredMessage": "Vnesite ime kategorije v privzetem jeziku pred shranjevanjem.",
+      "newGroupTitle": "Nova skupina",
+      "deleteGroupTitle": "Izbrišem skupino?",
+      "deleteGroupMessage": "Skupina bo odstranjena. Notranje kategorije bodo brez skupine.",
+      "parentGroupLabel": "Skupina",
+      "noGroup": "— Brez skupine —"
     },
     "dishForm": {
       "newTitle": "Nova jed",
@@ -202,7 +210,9 @@
       "missingMessage": "Vnesite ime in veljavno ceno pred shranjevanjem.",
       "newOptionTitle": "Nova možnost",
       "editOptionTitle": "Uredi možnost",
-      "duplicateButton": "Podvoji"
+      "duplicateButton": "Podvoji",
+      "dietsLabel": "Diete",
+      "dietsTip": "Dotaknite se za izbiro diet."
     },
     "optionForm": {
       "newTitle": "Nova možnost",
@@ -441,7 +451,13 @@
         "uploadHint": "Naloži sliko ali video",
         "backgroundTip": "Prikazano kot ozadje domače strani vašega javnega spletišča.",
         "aiTitle": "Ustvari ozadje",
-        "aiPlaceholder": "npr. Prijetna miza pri svečah z rustikalnimi krožniki in toplim lesom"
+        "aiPlaceholder": "npr. Prijetna miza pri svečah z rustikalnimi krožniki in toplim lesom",
+        "layoutLabel": "Postavitev menija",
+        "layoutTip": "Kako se jedi prikazujejo na javni strani menija.",
+        "layout_flat_name": "Plosko",
+        "layout_flat_desc": "Vodoravni zavihki kategorij z jedmi v vrstici.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Dotaknite se kategorije, da odprete njen zaslon z jedmi."
       },
       "general": {
         "title": "Splošno",
@@ -534,7 +550,11 @@
         "currentPlan": "Trenutni paket",
         "switch": "Preklopi",
         "subscribe": "Naroči se",
-        "cancelTip": "Prekličite kadarkoli prek portala za stranke. Letni paketi se obnovijo enkrat letno."
+        "cancelTip": "Prekličite kadarkoli prek portala za stranke. Letni paketi se obnovijo enkrat letno.",
+        "planBasic": "Osnovni",
+        "planPro": "Pro",
+        "comparePlans": "Primerjaj načrte na iq-rest.com →",
+        "otherCurrencyTip": "Plačilo samo v EUR. Za plačilo v drugi valuti se obrnite na podporo."
       },
       "support": {
         "title": "Podpora",
@@ -668,6 +688,21 @@
       "loading": "Nalaganje…",
       "settingsBreadcrumb": "Nastavitve"
     },
-    "exampleBadge": "prim."
+    "exampleBadge": "prim.",
+    "diets": {
+      "vegan": "Vegansko",
+      "vegetarian": "Vegetarijansko",
+      "pescatarian": "Pescetarijansko",
+      "gluten_free": "Brez glutena",
+      "lactose_free": "Brez laktoze",
+      "nut_free": "Brez oreščkov",
+      "sugar_free": "Brez sladkorja",
+      "low_carb": "Z malo ogljikovih hidratov",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košer",
+      "spicy": "Pikantno",
+      "organic": "Ekološko"
+    }
   }
 }

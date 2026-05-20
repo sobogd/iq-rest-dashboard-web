@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{items} Gerichte in {cats} Kategorien hinzugefügt"
         }
-      }
+      },
+      "addGroup": "Gruppe hinzufügen",
+      "backToMenu": "Zurück zum Menü",
+      "groupsHeading": "Gruppen"
     },
     "categoryForm": {
       "newTitle": "Neue Kategorie",
@@ -172,7 +175,12 @@
       "deleteTitle": "Kategorie löschen?",
       "deleteMessage": "Damit werden auch alle Gerichte darin gelöscht. Nicht rückgängig zu machen.",
       "nameRequiredTitle": "Name ist erforderlich",
-      "nameRequiredMessage": "Geben Sie vor dem Speichern einen Kategorienamen in der Standardsprache ein."
+      "nameRequiredMessage": "Geben Sie vor dem Speichern einen Kategorienamen in der Standardsprache ein.",
+      "newGroupTitle": "Neue Gruppe",
+      "deleteGroupTitle": "Gruppe löschen?",
+      "deleteGroupMessage": "Die Gruppe wird entfernt. Enthaltene Kategorien werden nicht gruppiert.",
+      "parentGroupLabel": "Gruppe",
+      "noGroup": "— Keine Gruppe —"
     },
     "dishForm": {
       "newTitle": "Neues Gericht",
@@ -202,7 +210,9 @@
       "missingMessage": "Geben Sie vor dem Speichern Name und gültigen Preis ein.",
       "newOptionTitle": "Neue Option",
       "editOptionTitle": "Option bearbeiten",
-      "duplicateButton": "Duplizieren"
+      "duplicateButton": "Duplizieren",
+      "dietsLabel": "Ernährungsformen",
+      "dietsTip": "Tippen, um passende Ernährungsformen zu wählen."
     },
     "optionForm": {
       "newTitle": "Neue Option",
@@ -441,7 +451,13 @@
         "uploadHint": "Bild oder Video hochladen",
         "backgroundTip": "Wird als Startseiten-Hintergrund Ihrer öffentlichen Website angezeigt.",
         "aiTitle": "Hintergrund generieren",
-        "aiPlaceholder": "z. B. Gemütlicher Tisch im Kerzenschein mit rustikalen Tellern und warmem Holz"
+        "aiPlaceholder": "z. B. Gemütlicher Tisch im Kerzenschein mit rustikalen Tellern und warmem Holz",
+        "layoutLabel": "Menü-Layout",
+        "layoutTip": "Wie Gerichte auf der öffentlichen Menüseite erscheinen.",
+        "layout_flat_name": "Flach",
+        "layout_flat_desc": "Horizontale Kategorie-Tabs mit Gerichten inline.",
+        "layout_drill_name": "Drill-Down",
+        "layout_drill_desc": "Tippen Sie auf eine Kategorie, um ihren Bildschirm mit Gerichten zu öffnen."
       },
       "general": {
         "title": "Allgemein",
@@ -534,7 +550,11 @@
         "currentPlan": "Aktueller Tarif",
         "switch": "Wechseln",
         "subscribe": "Abonnieren",
-        "cancelTip": "Jederzeit über das Kundenportal kündbar. Jahrestarife verlängern sich einmal pro Jahr."
+        "cancelTip": "Jederzeit über das Kundenportal kündbar. Jahrestarife verlängern sich einmal pro Jahr.",
+        "planBasic": "Basic",
+        "planPro": "Pro",
+        "comparePlans": "Tarife auf iq-rest.com vergleichen →",
+        "otherCurrencyTip": "Zahlung nur in EUR. Für Zahlung in anderer Währung kontaktieren Sie den Support."
       },
       "support": {
         "title": "Support",
@@ -668,6 +688,21 @@
       "loading": "Wird geladen…",
       "settingsBreadcrumb": "Einstellungen"
     },
-    "exampleBadge": "Demo"
+    "exampleBadge": "Demo",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Vegetarisch",
+      "pescatarian": "Pescetarisch",
+      "gluten_free": "Glutenfrei",
+      "lactose_free": "Laktosefrei",
+      "nut_free": "Nussfrei",
+      "sugar_free": "Zuckerfrei",
+      "low_carb": "Low-Carb",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Koscher",
+      "spicy": "Scharf",
+      "organic": "Bio"
+    }
   }
 }

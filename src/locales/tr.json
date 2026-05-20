@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{cats} kategoriye {items} ürün eklendi"
         }
-      }
+      },
+      "addGroup": "Grup ekle",
+      "backToMenu": "Menüye dön",
+      "groupsHeading": "Gruplar"
     },
     "categoryForm": {
       "newTitle": "Yeni kategori",
@@ -172,7 +175,12 @@
       "deleteTitle": "Kategori silinsin mi?",
       "deleteMessage": "İçindeki tüm yemekler de silinir. Geri alınamaz.",
       "nameRequiredTitle": "Ad gerekli",
-      "nameRequiredMessage": "Kaydetmeden önce varsayılan dilde kategori adı girin."
+      "nameRequiredMessage": "Kaydetmeden önce varsayılan dilde kategori adı girin.",
+      "newGroupTitle": "Yeni grup",
+      "deleteGroupTitle": "Grup silinsin mi?",
+      "deleteGroupMessage": "Grup kaldırılacak. İçindeki kategoriler gruba dahil olmayacak.",
+      "parentGroupLabel": "Grup",
+      "noGroup": "— Grup yok —"
     },
     "dishForm": {
       "newTitle": "Yeni yemek",
@@ -202,7 +210,9 @@
       "missingMessage": "Kaydetmeden önce ad ve geçerli fiyat girin.",
       "newOptionTitle": "Yeni seçenek",
       "editOptionTitle": "Seçeneği düzenle",
-      "duplicateButton": "Çoğalt"
+      "duplicateButton": "Çoğalt",
+      "dietsLabel": "Diyetler",
+      "dietsTip": "Diyetleri seçmek için dokunun."
     },
     "optionForm": {
       "newTitle": "Yeni seçenek",
@@ -441,7 +451,13 @@
         "uploadHint": "Görsel veya video yükle",
         "backgroundTip": "Genel sitenizin ana sayfasının arka planı olarak görüntülenir.",
         "aiTitle": "Arka plan oluştur",
-        "aiPlaceholder": "ör. Mum ışığında rustik tabaklar ve sıcak ahşapla samimi masa"
+        "aiPlaceholder": "ör. Mum ışığında rustik tabaklar ve sıcak ahşapla samimi masa",
+        "layoutLabel": "Menü düzeni",
+        "layoutTip": "Yemeklerin genel menü sayfasında nasıl göründüğü.",
+        "layout_flat_name": "Düz",
+        "layout_flat_desc": "Yatay kategori sekmeleri ile yemekler sırayla.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Yemekleri içeren ekranı açmak için bir kategoriye dokunun."
       },
       "general": {
         "title": "Genel",
@@ -534,7 +550,11 @@
         "currentPlan": "Mevcut plan",
         "switch": "Değiştir",
         "subscribe": "Abone ol",
-        "cancelTip": "Müşteri portalından istediğiniz zaman iptal edin. Yıllık planlar yılda bir yenilenir."
+        "cancelTip": "Müşteri portalından istediğiniz zaman iptal edin. Yıllık planlar yılda bir yenilenir.",
+        "planBasic": "Temel",
+        "planPro": "Pro",
+        "comparePlans": "iq-rest.com'da planları karşılaştır →",
+        "otherCurrencyTip": "Ödeme yalnızca EUR ile yapılır. Başka bir para biriminde ödeme için destekle iletişime geçin."
       },
       "support": {
         "title": "Destek",
@@ -668,6 +688,21 @@
       "loading": "Yükleniyor…",
       "settingsBreadcrumb": "Ayarlar"
     },
-    "exampleBadge": "örn."
+    "exampleBadge": "örn.",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Vejetaryen",
+      "pescatarian": "Peskeryen",
+      "gluten_free": "Glütensiz",
+      "lactose_free": "Laktozsuz",
+      "nut_free": "Fındıksız",
+      "sugar_free": "Şekersiz",
+      "low_carb": "Düşük karbonhidratlı",
+      "keto": "Keto",
+      "halal": "Helal",
+      "kosher": "Koşer",
+      "spicy": "Acılı",
+      "organic": "Organik"
+    }
   }
 }

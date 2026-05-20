@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Dodano {items} jela u {cats} kategorija"
         }
-      }
+      },
+      "addGroup": "Dodaj grupu",
+      "backToMenu": "Natrag na izbornik",
+      "groupsHeading": "Grupe"
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",
@@ -172,7 +175,12 @@
       "deleteTitle": "Obrisati kategoriju?",
       "deleteMessage": "Ovo će obrisati i sva jela u njoj. Ne može se poništiti.",
       "nameRequiredTitle": "Naziv je obavezan",
-      "nameRequiredMessage": "Unesite naziv kategorije na zadanom jeziku prije spremanja."
+      "nameRequiredMessage": "Unesite naziv kategorije na zadanom jeziku prije spremanja.",
+      "newGroupTitle": "Nova grupa",
+      "deleteGroupTitle": "Obrisati grupu?",
+      "deleteGroupMessage": "Grupa će biti uklonjena. Kategorije unutar postaju negrupirane.",
+      "parentGroupLabel": "Grupa",
+      "noGroup": "— Bez grupe —"
     },
     "dishForm": {
       "newTitle": "Novo jelo",
@@ -202,7 +210,9 @@
       "missingMessage": "Unesite naziv i valjanu cijenu prije spremanja.",
       "newOptionTitle": "Nova opcija",
       "editOptionTitle": "Uredi opciju",
-      "duplicateButton": "Dupliciraj"
+      "duplicateButton": "Dupliciraj",
+      "dietsLabel": "Dijete",
+      "dietsTip": "Dodirnite za odabir dijeta."
     },
     "optionForm": {
       "newTitle": "Nova opcija",
@@ -441,7 +451,13 @@
         "uploadHint": "Učitaj sliku ili video",
         "backgroundTip": "Prikazuje se kao pozadina početne stranice vašeg javnog web mjesta.",
         "aiTitle": "Generiraj pozadinu",
-        "aiPlaceholder": "npr. Ugodan stol pri svjetlu svijeća s rustikalnim tanjurima i toplim drvom"
+        "aiPlaceholder": "npr. Ugodan stol pri svjetlu svijeća s rustikalnim tanjurima i toplim drvom",
+        "layoutLabel": "Raspored izbornika",
+        "layoutTip": "Kako se jela prikazuju na javnoj stranici izbornika.",
+        "layout_flat_name": "Ravno",
+        "layout_flat_desc": "Horizontalne kartice kategorija s jelima u liniji.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Dodirnite kategoriju da otvorite njen zaslon s jelima."
       },
       "general": {
         "title": "Općenito",
@@ -534,7 +550,11 @@
         "currentPlan": "Trenutni plan",
         "switch": "Promijeni",
         "subscribe": "Pretplati se",
-        "cancelTip": "Otkažite bilo kad putem korisničkog portala. Godišnji planovi obnavljaju se jednom godišnje."
+        "cancelTip": "Otkažite bilo kad putem korisničkog portala. Godišnji planovi obnavljaju se jednom godišnje.",
+        "planBasic": "Osnovni",
+        "planPro": "Pro",
+        "comparePlans": "Usporedi planove na iq-rest.com →",
+        "otherCurrencyTip": "Plaćanje samo u EUR. Za plaćanje u drugoj valuti obratite se podršci."
       },
       "support": {
         "title": "Podrška",
@@ -668,6 +688,21 @@
       "loading": "Učitavanje…",
       "settingsBreadcrumb": "Postavke"
     },
-    "exampleBadge": "prim."
+    "exampleBadge": "prim.",
+    "diets": {
+      "vegan": "Vegansko",
+      "vegetarian": "Vegetarijansko",
+      "pescatarian": "Pescetarijansko",
+      "gluten_free": "Bez glutena",
+      "lactose_free": "Bez laktoze",
+      "nut_free": "Bez orašastih plodova",
+      "sugar_free": "Bez šećera",
+      "low_carb": "Niskougljikohidratno",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košer",
+      "spicy": "Pikantno",
+      "organic": "Organsko"
+    }
   }
 }

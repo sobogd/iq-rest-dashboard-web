@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Dodano {items} pozycji w {cats} kategoriach"
         }
-      }
+      },
+      "addGroup": "Dodaj grupę",
+      "backToMenu": "Powrót do menu",
+      "groupsHeading": "Grupy"
     },
     "categoryForm": {
       "newTitle": "Nowa kategoria",
@@ -172,7 +175,12 @@
       "deleteTitle": "Usunąć kategorię?",
       "deleteMessage": "To usunie też wszystkie dania w środku. Nie można cofnąć.",
       "nameRequiredTitle": "Nazwa jest wymagana",
-      "nameRequiredMessage": "Wprowadź nazwę kategorii w domyślnym języku przed zapisaniem."
+      "nameRequiredMessage": "Wprowadź nazwę kategorii w domyślnym języku przed zapisaniem.",
+      "newGroupTitle": "Nowa grupa",
+      "deleteGroupTitle": "Usunąć grupę?",
+      "deleteGroupMessage": "Grupa zostanie usunięta. Kategorie w środku staną się niezgrupowane.",
+      "parentGroupLabel": "Grupa",
+      "noGroup": "— Bez grupy —"
     },
     "dishForm": {
       "newTitle": "Nowe danie",
@@ -202,7 +210,9 @@
       "missingMessage": "Wprowadź nazwę i poprawną cenę przed zapisaniem.",
       "newOptionTitle": "Nowa opcja",
       "editOptionTitle": "Edytuj opcję",
-      "duplicateButton": "Duplikuj"
+      "duplicateButton": "Duplikuj",
+      "dietsLabel": "Diety",
+      "dietsTip": "Dotknij, aby zaznaczyć diety."
     },
     "optionForm": {
       "newTitle": "Nowa opcja",
@@ -441,7 +451,13 @@
         "uploadHint": "Prześlij obraz lub wideo",
         "backgroundTip": "Wyświetlane jako tło strony głównej publicznej witryny.",
         "aiTitle": "Generuj tło",
-        "aiPlaceholder": "np. Przytulny stół przy świecach z rustykalnymi talerzami i ciepłym drewnem"
+        "aiPlaceholder": "np. Przytulny stół przy świecach z rustykalnymi talerzami i ciepłym drewnem",
+        "layoutLabel": "Układ menu",
+        "layoutTip": "Jak dania pojawiają się na stronie menu publicznego.",
+        "layout_flat_name": "Płaski",
+        "layout_flat_desc": "Poziome zakładki kategorii z daniami w linii.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Dotknij kategorię, aby otworzyć jej ekran z daniami."
       },
       "general": {
         "title": "Ogólne",
@@ -534,7 +550,11 @@
         "currentPlan": "Bieżący plan",
         "switch": "Zmień",
         "subscribe": "Subskrybuj",
-        "cancelTip": "Anuluj w dowolnej chwili przez portal klienta. Plany roczne odnawiają się raz w roku."
+        "cancelTip": "Anuluj w dowolnej chwili przez portal klienta. Plany roczne odnawiają się raz w roku.",
+        "planBasic": "Podstawowy",
+        "planPro": "Pro",
+        "comparePlans": "Porównaj plany na iq-rest.com →",
+        "otherCurrencyTip": "Płatność tylko w EUR. Aby zapłacić w innej walucie, skontaktuj się z pomocą techniczną."
       },
       "support": {
         "title": "Wsparcie",
@@ -668,6 +688,21 @@
       "loading": "Ładowanie…",
       "settingsBreadcrumb": "Ustawienia"
     },
-    "exampleBadge": "demo"
+    "exampleBadge": "demo",
+    "diets": {
+      "vegan": "Wegańskie",
+      "vegetarian": "Wegetariańskie",
+      "pescatarian": "Pescetariańskie",
+      "gluten_free": "Bezglutenowe",
+      "lactose_free": "Bez laktozy",
+      "nut_free": "Bez orzechów",
+      "sugar_free": "Bez cukru",
+      "low_carb": "Niskowęglowodanowe",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Koszer",
+      "spicy": "Pikantne",
+      "organic": "Organiczne"
+    }
   }
 }

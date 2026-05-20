@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Hozzáadva {items} tétel {cats} kategóriában"
         }
-      }
+      },
+      "addGroup": "Csoport hozzáadása",
+      "backToMenu": "Vissza a menübe",
+      "groupsHeading": "Csoportok"
     },
     "categoryForm": {
       "newTitle": "Új kategória",
@@ -172,7 +175,12 @@
       "deleteTitle": "Törlöd a kategóriát?",
       "deleteMessage": "Ez törli a benne lévő ételeket is. Nem visszavonható.",
       "nameRequiredTitle": "A név kötelező",
-      "nameRequiredMessage": "Adj meg kategórianevet az alapértelmezett nyelven a mentés előtt."
+      "nameRequiredMessage": "Adj meg kategórianevet az alapértelmezett nyelven a mentés előtt.",
+      "newGroupTitle": "Új csoport",
+      "deleteGroupTitle": "Törli a csoportot?",
+      "deleteGroupMessage": "A csoport eltávolításra kerül. A bent lévő kategóriák csoportosítatlanok lesznek.",
+      "parentGroupLabel": "Csoport",
+      "noGroup": "— Csoport nélkül —"
     },
     "dishForm": {
       "newTitle": "Új étel",
@@ -202,7 +210,9 @@
       "missingMessage": "Adj meg nevet és érvényes árat a mentés előtt.",
       "newOptionTitle": "Új opció",
       "editOptionTitle": "Opció szerkesztése",
-      "duplicateButton": "Duplikálás"
+      "duplicateButton": "Duplikálás",
+      "dietsLabel": "Étrendek",
+      "dietsTip": "Koppintson az étrendek kiválasztásához."
     },
     "optionForm": {
       "newTitle": "Új opció",
@@ -441,7 +451,13 @@
         "uploadHint": "Kép vagy videó feltöltése",
         "backgroundTip": "A nyilvános weboldal kezdőlapjának háttereként jelenik meg.",
         "aiTitle": "Háttér generálása",
-        "aiPlaceholder": "pl. Hangulatos asztal gyertyafényben rusztikus tányérokkal és meleg fával"
+        "aiPlaceholder": "pl. Hangulatos asztal gyertyafényben rusztikus tányérokkal és meleg fával",
+        "layoutLabel": "Menü elrendezés",
+        "layoutTip": "Hogyan jelennek meg az ételek a nyilvános menüoldalon.",
+        "layout_flat_name": "Lapos",
+        "layout_flat_desc": "Vízszintes kategória fülek ételek sorban.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Koppintson egy kategóriára a saját képernyő megnyitásához."
       },
       "general": {
         "title": "Általános",
@@ -534,7 +550,11 @@
         "currentPlan": "Jelenlegi csomag",
         "switch": "Váltás",
         "subscribe": "Feliratkozás",
-        "cancelTip": "Bármikor lemondható az ügyfélportálon. Az éves csomagok évente egyszer újulnak meg."
+        "cancelTip": "Bármikor lemondható az ügyfélportálon. Az éves csomagok évente egyszer újulnak meg.",
+        "planBasic": "Alap",
+        "planPro": "Pro",
+        "comparePlans": "Csomagok összehasonlítása az iq-rest.com oldalon →",
+        "otherCurrencyTip": "A fizetés csak EUR-ban történik. Más pénznemben történő fizetéshez vegye fel a kapcsolatot az ügyfélszolgálattal."
       },
       "support": {
         "title": "Támogatás",
@@ -668,6 +688,21 @@
       "loading": "Betöltés…",
       "settingsBreadcrumb": "Beállítások"
     },
-    "exampleBadge": "pl."
+    "exampleBadge": "pl.",
+    "diets": {
+      "vegan": "Vegán",
+      "vegetarian": "Vegetáriánus",
+      "pescatarian": "Peszketariánus",
+      "gluten_free": "Gluténmentes",
+      "lactose_free": "Laktózmentes",
+      "nut_free": "Diómentes",
+      "sugar_free": "Cukormentes",
+      "low_carb": "Alacsony szénhidráttartalmú",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kóser",
+      "spicy": "Csípős",
+      "organic": "Bio"
+    }
   }
 }

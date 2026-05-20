@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{cats} カテゴリーに {items} 項目を追加しました"
         }
-      }
+      },
+      "addGroup": "グループを追加",
+      "backToMenu": "メニューに戻る",
+      "groupsHeading": "グループ"
     },
     "categoryForm": {
       "newTitle": "新しいカテゴリ",
@@ -172,7 +175,12 @@
       "deleteTitle": "カテゴリを削除しますか？",
       "deleteMessage": "中のすべての料理も削除されます。元に戻せません。",
       "nameRequiredTitle": "名前は必須です",
-      "nameRequiredMessage": "保存前にデフォルト言語でカテゴリ名を入力してください。"
+      "nameRequiredMessage": "保存前にデフォルト言語でカテゴリ名を入力してください。",
+      "newGroupTitle": "新しいグループ",
+      "deleteGroupTitle": "グループを削除?",
+      "deleteGroupMessage": "グループは削除されます。中のカテゴリーはグループ解除されます。",
+      "parentGroupLabel": "グループ",
+      "noGroup": "— グループなし —"
     },
     "dishForm": {
       "newTitle": "新しい料理",
@@ -202,7 +210,9 @@
       "missingMessage": "保存前に名前と有効な価格を入力してください。",
       "newOptionTitle": "新しいオプション",
       "editOptionTitle": "オプションを編集",
-      "duplicateButton": "複製"
+      "duplicateButton": "複製",
+      "dietsLabel": "食事タイプ",
+      "dietsTip": "タップして食事タイプを選択。"
     },
     "optionForm": {
       "newTitle": "新しいオプション",
@@ -441,7 +451,13 @@
         "uploadHint": "画像または動画をアップロード",
         "backgroundTip": "公開ウェブサイトのホームページの背景として表示されます。",
         "aiTitle": "背景を生成",
-        "aiPlaceholder": "例：素朴な皿と暖かい木のキャンドルライトのテーブル"
+        "aiPlaceholder": "例：素朴な皿と暖かい木のキャンドルライトのテーブル",
+        "layoutLabel": "メニューレイアウト",
+        "layoutTip": "公開メニューページでの料理表示方法。",
+        "layout_flat_name": "フラット",
+        "layout_flat_desc": "水平カテゴリータブと並んだ料理。",
+        "layout_drill_name": "ドリルダウン",
+        "layout_drill_desc": "カテゴリーをタップして料理画面を開く。"
       },
       "general": {
         "title": "一般",
@@ -534,7 +550,11 @@
         "currentPlan": "現在のプラン",
         "switch": "切り替え",
         "subscribe": "登録",
-        "cancelTip": "顧客ポータルからいつでもキャンセルできます。年プランは年に1回更新されます。"
+        "cancelTip": "顧客ポータルからいつでもキャンセルできます。年プランは年に1回更新されます。",
+        "planBasic": "ベーシック",
+        "planPro": "プロ",
+        "comparePlans": "iq-rest.com でプランを比較 →",
+        "otherCurrencyTip": "お支払いはEURのみ。他通貨でのお支払いはサポートまでお問い合わせください。"
       },
       "support": {
         "title": "サポート",
@@ -668,6 +688,21 @@
       "loading": "読み込み中…",
       "settingsBreadcrumb": "設定"
     },
-    "exampleBadge": "見本"
+    "exampleBadge": "見本",
+    "diets": {
+      "vegan": "ヴィーガン",
+      "vegetarian": "ベジタリアン",
+      "pescatarian": "ペスカタリアン",
+      "gluten_free": "グルテンフリー",
+      "lactose_free": "乳糖フリー",
+      "nut_free": "ナッツ不使用",
+      "sugar_free": "砂糖不使用",
+      "low_carb": "低糖質",
+      "keto": "ケト",
+      "halal": "ハラール",
+      "kosher": "コーシャ",
+      "spicy": "辛い",
+      "organic": "オーガニック"
+    }
   }
 }

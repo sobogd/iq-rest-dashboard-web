@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Pridaných {items} položiek v {cats} kategóriách"
         }
-      }
+      },
+      "addGroup": "Pridať skupinu",
+      "backToMenu": "Späť do menu",
+      "groupsHeading": "Skupiny"
     },
     "categoryForm": {
       "newTitle": "Nová kategória",
@@ -172,7 +175,12 @@
       "deleteTitle": "Zmazať kategóriu?",
       "deleteMessage": "Zmažú sa aj všetky jedlá vo vnútri. Nedá sa vrátiť.",
       "nameRequiredTitle": "Názov je povinný",
-      "nameRequiredMessage": "Pred uložením zadajte názov kategórie v predvolenom jazyku."
+      "nameRequiredMessage": "Pred uložením zadajte názov kategórie v predvolenom jazyku.",
+      "newGroupTitle": "Nová skupina",
+      "deleteGroupTitle": "Odstrániť skupinu?",
+      "deleteGroupMessage": "Skupina bude odstránená. Kategórie vnútri zostanú bez skupiny.",
+      "parentGroupLabel": "Skupina",
+      "noGroup": "— Bez skupiny —"
     },
     "dishForm": {
       "newTitle": "Nové jedlo",
@@ -202,7 +210,9 @@
       "missingMessage": "Pred uložením zadajte názov a platnú cenu.",
       "newOptionTitle": "Nová možnosť",
       "editOptionTitle": "Upraviť možnosť",
-      "duplicateButton": "Duplikovať"
+      "duplicateButton": "Duplikovať",
+      "dietsLabel": "Diéty",
+      "dietsTip": "Ťuknutím vyberte diéty."
     },
     "optionForm": {
       "newTitle": "Nová možnosť",
@@ -441,7 +451,13 @@
         "uploadHint": "Nahrať obrázok alebo video",
         "backgroundTip": "Zobrazené ako pozadie úvodnej stránky vašej verejnej stránky.",
         "aiTitle": "Generovať pozadie",
-        "aiPlaceholder": "napr. Útulný stôl pri sviečkach s rustikálnymi tanierami a teplým drevom"
+        "aiPlaceholder": "napr. Útulný stôl pri sviečkach s rustikálnymi tanierami a teplým drevom",
+        "layoutLabel": "Rozloženie menu",
+        "layoutTip": "Ako sa pokrmy zobrazujú na stránke verejného menu.",
+        "layout_flat_name": "Ploché",
+        "layout_flat_desc": "Vodorovné karty kategórií s pokrmami v rade.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Ťuknutím na kategóriu otvoríte jej obrazovku s pokrmami."
       },
       "general": {
         "title": "Všeobecné",
@@ -534,7 +550,11 @@
         "currentPlan": "Aktuálny plán",
         "switch": "Prepnúť",
         "subscribe": "Predplatiť",
-        "cancelTip": "Zrušte kedykoľvek cez zákaznícky portál. Ročné plány sa obnovujú raz ročne."
+        "cancelTip": "Zrušte kedykoľvek cez zákaznícky portál. Ročné plány sa obnovujú raz ročne.",
+        "planBasic": "Základný",
+        "planPro": "Pro",
+        "comparePlans": "Porovnať tarify na iq-rest.com →",
+        "otherCurrencyTip": "Platba iba v EUR. Pre platbu v inej mene kontaktujte podporu."
       },
       "support": {
         "title": "Podpora",
@@ -668,6 +688,21 @@
       "loading": "Načítava sa…",
       "settingsBreadcrumb": "Nastavenia"
     },
-    "exampleBadge": "ukáž."
+    "exampleBadge": "ukáž.",
+    "diets": {
+      "vegan": "Vegánske",
+      "vegetarian": "Vegetariánske",
+      "pescatarian": "Pescetariánske",
+      "gluten_free": "Bezlepkové",
+      "lactose_free": "Bez laktózy",
+      "nut_free": "Bez orechov",
+      "sugar_free": "Bez cukru",
+      "low_carb": "Nízkosacharidové",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Košer",
+      "spicy": "Pikantné",
+      "organic": "Bio"
+    }
   }
 }

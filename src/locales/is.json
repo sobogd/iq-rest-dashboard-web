@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Bætti við {items} réttum í {cats} flokkum"
         }
-      }
+      },
+      "addGroup": "Bæta við hóp",
+      "backToMenu": "Aftur í valmynd",
+      "groupsHeading": "Hópar"
     },
     "categoryForm": {
       "newTitle": "Nýr flokkur",
@@ -172,7 +175,12 @@
       "deleteTitle": "Eyða flokki?",
       "deleteMessage": "Þetta mun einnig eyða öllum réttum innan hans. Ekki hægt að afturkalla.",
       "nameRequiredTitle": "Nafn krafist",
-      "nameRequiredMessage": "Sláðu inn nafn flokks á sjálfgefna tungumálinu fyrir vistun."
+      "nameRequiredMessage": "Sláðu inn nafn flokks á sjálfgefna tungumálinu fyrir vistun.",
+      "newGroupTitle": "Nýr hópur",
+      "deleteGroupTitle": "Eyða hóp?",
+      "deleteGroupMessage": "Hópurinn verður fjarlægður. Flokkar innan verða óflokkaðir.",
+      "parentGroupLabel": "Hópur",
+      "noGroup": "— Enginn hópur —"
     },
     "dishForm": {
       "newTitle": "Nýr réttur",
@@ -202,7 +210,9 @@
       "missingMessage": "Sláðu inn nafn og gilt verð fyrir vistun.",
       "newOptionTitle": "Nýr valkostur",
       "editOptionTitle": "Breyta valkosti",
-      "duplicateButton": "Afrita"
+      "duplicateButton": "Afrita",
+      "dietsLabel": "Mataræði",
+      "dietsTip": "Pikkaðu til að velja mataræði."
     },
     "optionForm": {
       "newTitle": "Nýr valkostur",
@@ -441,7 +451,13 @@
         "uploadHint": "Hlaða upp mynd eða myndbandi",
         "backgroundTip": "Birtist sem bakgrunnur forsíðu opinberu vefsíðu þinnar.",
         "aiTitle": "Búa til bakgrunn",
-        "aiPlaceholder": "t.d. Notalegt borð við kertaljós með rúmlegum diskum og hlýjum viði"
+        "aiPlaceholder": "t.d. Notalegt borð við kertaljós með rúmlegum diskum og hlýjum viði",
+        "layoutLabel": "Útlit matseðils",
+        "layoutTip": "Hvernig réttir birtast á opnu matseðilssíðunni.",
+        "layout_flat_name": "Flat",
+        "layout_flat_desc": "Láréttir flokkaflipar með réttum í röð.",
+        "layout_drill_name": "Drill-down",
+        "layout_drill_desc": "Pikkaðu á flokk til að opna skjáinn hans með réttum."
       },
       "general": {
         "title": "Almennt",
@@ -534,7 +550,11 @@
         "currentPlan": "Núverandi áskrift",
         "switch": "Skipta",
         "subscribe": "Gerast áskrifandi",
-        "cancelTip": "Hættu hvenær sem er gegnum viðskiptavinagáttina. Árspakkar endurnýjast einu sinni á ári."
+        "cancelTip": "Hættu hvenær sem er gegnum viðskiptavinagáttina. Árspakkar endurnýjast einu sinni á ári.",
+        "planBasic": "Grunn",
+        "planPro": "Pro",
+        "comparePlans": "Bera saman áskriftir á iq-rest.com →",
+        "otherCurrencyTip": "Greiðsla aðeins í EUR. Hafðu samband við þjónustuver til að greiða í annarri mynt."
       },
       "support": {
         "title": "Stuðningur",
@@ -668,6 +688,21 @@
       "loading": "Hleður…",
       "settingsBreadcrumb": "Stillingar"
     },
-    "exampleBadge": "sýn."
+    "exampleBadge": "sýn.",
+    "diets": {
+      "vegan": "Vegan",
+      "vegetarian": "Grænmetisæti",
+      "pescatarian": "Pescetar",
+      "gluten_free": "Glútenlaust",
+      "lactose_free": "Laktósalaust",
+      "nut_free": "Hnetulaust",
+      "sugar_free": "Sykurlaust",
+      "low_carb": "Lágkolvetna",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Bragðmikið",
+      "organic": "Lífrænt"
+    }
   }
 }

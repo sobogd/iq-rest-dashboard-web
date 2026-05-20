@@ -161,7 +161,10 @@
         "toast": {
           "saved": "Afegits {items} plats en {cats} categories"
         }
-      }
+      },
+      "addGroup": "Afegir grup",
+      "backToMenu": "Tornar al menú",
+      "groupsHeading": "Grups"
     },
     "categoryForm": {
       "newTitle": "Nova categoria",
@@ -172,7 +175,12 @@
       "deleteTitle": "Elimina la categoria?",
       "deleteMessage": "Això també eliminarà tots els plats de dins. No es pot desfer.",
       "nameRequiredTitle": "El nom és obligatori",
-      "nameRequiredMessage": "Introdueix un nom de categoria en l'idioma per defecte abans de desar."
+      "nameRequiredMessage": "Introdueix un nom de categoria en l'idioma per defecte abans de desar.",
+      "newGroupTitle": "Nou grup",
+      "deleteGroupTitle": "Eliminar el grup?",
+      "deleteGroupMessage": "El grup s'eliminarà. Les categories de dins quedaran sense agrupar.",
+      "parentGroupLabel": "Grup",
+      "noGroup": "— Sense grup —"
     },
     "dishForm": {
       "newTitle": "Nou plat",
@@ -202,7 +210,9 @@
       "missingMessage": "Introdueix nom i preu vàlid abans de desar.",
       "newOptionTitle": "Nova opció",
       "editOptionTitle": "Edita l'opció",
-      "duplicateButton": "Duplica"
+      "duplicateButton": "Duplica",
+      "dietsLabel": "Dietes",
+      "dietsTip": "Toca per indicar les dietes compatibles."
     },
     "optionForm": {
       "newTitle": "Nova opció",
@@ -441,7 +451,13 @@
         "uploadHint": "Puja imatge o vídeo",
         "backgroundTip": "Es mostra com a fons de la pàgina d'inici del teu lloc públic.",
         "aiTitle": "Genera fons",
-        "aiPlaceholder": "p. ex. Taula acollidora amb llum d'espelmes amb plats rústics i fusta càlida"
+        "aiPlaceholder": "p. ex. Taula acollidora amb llum d'espelmes amb plats rústics i fusta càlida",
+        "layoutLabel": "Disseny del menú",
+        "layoutTip": "Com apareixen els plats a la pàgina de menú públic.",
+        "layout_flat_name": "Pla",
+        "layout_flat_desc": "Pestanyes horitzontals de categories amb plats en línia.",
+        "layout_drill_name": "Desglossament",
+        "layout_drill_desc": "Toca una categoria per obrir la seva pantalla amb plats."
       },
       "general": {
         "title": "General",
@@ -534,7 +550,11 @@
         "currentPlan": "Pla actual",
         "switch": "Canvia",
         "subscribe": "Subscriu-te",
-        "cancelTip": "Cancel·la en qualsevol moment des del portal de client. Els plans anuals es renoven una vegada l'any."
+        "cancelTip": "Cancel·la en qualsevol moment des del portal de client. Els plans anuals es renoven una vegada l'any.",
+        "planBasic": "Bàsic",
+        "planPro": "Pro",
+        "comparePlans": "Comparar plans a iq-rest.com →",
+        "otherCurrencyTip": "El pagament és només en EUR. Per pagar en una altra moneda, contacta amb el suport."
       },
       "support": {
         "title": "Suport",
@@ -668,6 +688,21 @@
       "loading": "Carregant…",
       "settingsBreadcrumb": "Configuració"
     },
-    "exampleBadge": "ex."
+    "exampleBadge": "ex.",
+    "diets": {
+      "vegan": "Vegà",
+      "vegetarian": "Vegetarià",
+      "pescatarian": "Pescetarià",
+      "gluten_free": "Sense gluten",
+      "lactose_free": "Sense lactosa",
+      "nut_free": "Sense fruita seca",
+      "sugar_free": "Sense sucre",
+      "low_carb": "Baix en carbohidrats",
+      "keto": "Keto",
+      "halal": "Halal",
+      "kosher": "Kosher",
+      "spicy": "Picant",
+      "organic": "Ecològic"
+    }
   }
 }

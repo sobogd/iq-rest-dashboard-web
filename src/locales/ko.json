@@ -161,7 +161,10 @@
         "toast": {
           "saved": "{cats}개 카테고리에 {items}개 항목 추가됨"
         }
-      }
+      },
+      "addGroup": "그룹 추가",
+      "backToMenu": "메뉴로 돌아가기",
+      "groupsHeading": "그룹"
     },
     "categoryForm": {
       "newTitle": "새 카테고리",
@@ -172,7 +175,12 @@
       "deleteTitle": "카테고리를 삭제하시겠어요?",
       "deleteMessage": "안에 있는 모든 요리도 삭제됩니다. 되돌릴 수 없습니다.",
       "nameRequiredTitle": "이름이 필요합니다",
-      "nameRequiredMessage": "저장하기 전에 기본 언어로 카테고리 이름을 입력하세요."
+      "nameRequiredMessage": "저장하기 전에 기본 언어로 카테고리 이름을 입력하세요.",
+      "newGroupTitle": "새 그룹",
+      "deleteGroupTitle": "그룹 삭제?",
+      "deleteGroupMessage": "그룹이 제거됩니다. 내부 카테고리는 그룹 해제됩니다.",
+      "parentGroupLabel": "그룹",
+      "noGroup": "— 그룹 없음 —"
     },
     "dishForm": {
       "newTitle": "새 요리",
@@ -202,7 +210,9 @@
       "missingMessage": "저장하기 전에 이름과 유효한 가격을 입력하세요.",
       "newOptionTitle": "새 옵션",
       "editOptionTitle": "옵션 편집",
-      "duplicateButton": "복제"
+      "duplicateButton": "복제",
+      "dietsLabel": "식단",
+      "dietsTip": "탭하여 식단을 선택하세요."
     },
     "optionForm": {
       "newTitle": "새 옵션",
@@ -441,7 +451,13 @@
         "uploadHint": "이미지 또는 비디오 업로드",
         "backgroundTip": "공개 웹사이트 홈페이지의 배경으로 표시됩니다.",
         "aiTitle": "배경 생성",
-        "aiPlaceholder": "예: 촛불 아래 소박한 접시와 따뜻한 나무가 있는 아늑한 테이블"
+        "aiPlaceholder": "예: 촛불 아래 소박한 접시와 따뜻한 나무가 있는 아늑한 테이블",
+        "layoutLabel": "메뉴 레이아웃",
+        "layoutTip": "공개 메뉴 페이지에서 요리가 나타나는 방식.",
+        "layout_flat_name": "평면",
+        "layout_flat_desc": "요리가 일렬로 있는 가로 카테고리 탭.",
+        "layout_drill_name": "드릴다운",
+        "layout_drill_desc": "카테고리를 탭하여 요리 화면을 엽니다."
       },
       "general": {
         "title": "일반",
@@ -534,7 +550,11 @@
         "currentPlan": "현재 플랜",
         "switch": "전환",
         "subscribe": "구독",
-        "cancelTip": "고객 포털을 통해 언제든 취소할 수 있습니다. 연간 플랜은 연 1회 갱신됩니다."
+        "cancelTip": "고객 포털을 통해 언제든 취소할 수 있습니다. 연간 플랜은 연 1회 갱신됩니다.",
+        "planBasic": "기본",
+        "planPro": "프로",
+        "comparePlans": "iq-rest.com에서 요금제 비교 →",
+        "otherCurrencyTip": "결제는 EUR만 가능합니다. 다른 통화로 결제하려면 지원팀에 문의하세요."
       },
       "support": {
         "title": "지원",
@@ -668,6 +688,21 @@
       "loading": "불러오는 중…",
       "settingsBreadcrumb": "설정"
     },
-    "exampleBadge": "샘플"
+    "exampleBadge": "샘플",
+    "diets": {
+      "vegan": "비건",
+      "vegetarian": "채식",
+      "pescatarian": "페스코",
+      "gluten_free": "글루텐 프리",
+      "lactose_free": "락토오스 프리",
+      "nut_free": "견과류 무첨가",
+      "sugar_free": "무설탕",
+      "low_carb": "저탄수",
+      "keto": "키토",
+      "halal": "할랄",
+      "kosher": "코셔",
+      "spicy": "매운맛",
+      "organic": "유기농"
+    }
   }
 }

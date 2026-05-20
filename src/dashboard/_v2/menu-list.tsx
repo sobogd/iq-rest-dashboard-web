@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useFlip } from "./use-flip";
 import { Collapsible } from "./collapsible";
 import { useDashboardRouter } from "../_spa/router";
 import {
  ArrowDownIcon,
+ ArrowLeftIcon,
+ ArrowRightIcon,
  ArrowUpIcon,
  ChevronDownIcon,
  ClockIcon,
@@ -40,11 +42,13 @@ export function MenuList({
  initialSub = null,
  onPersisted,
  scanBannerDismissed = false,
+ currentGroupId = null,
 }: {
  initialCategories: Category[];
  initialSub?: SubData | null;
  onPersisted?: () => void;
  scanBannerDismissed?: boolean;
+ currentGroupId?: string | null;
 }) {
  const t = useTranslations("dashboard.menu");
  const tsub = useTranslations("dashboard.subscriptionChip");
@@ -55,7 +59,27 @@ export function MenuList({
  const currencySymbol = currencySymbolOf(currency);
 
  const [categories, setCategories] = useState<Category[]>(initialCategories);
- const categoriesFlipRef = useFlip<HTMLDivElement>([categories.map((c) => c.id).join(",")]);
+ // Scoped lists for the current view: leaves at this depth + (top-level only) groups.
+ const scopedLeaves = useMemo(
+   () =>
+     categories
+       .filter((c) => !c.isGroup && (c.parentId ?? null) === (currentGroupId ?? null))
+       .sort((a, b) => a.sortOrder - b.sortOrder),
+   [categories, currentGroupId],
+ );
+ const topLevelGroups = useMemo(
+   () =>
+     categories
+       .filter((c) => c.isGroup)
+       .sort((a, b) => a.sortOrder - b.sortOrder),
+   [categories],
+ );
+ const currentGroup = useMemo(
+   () => (currentGroupId ? categories.find((c) => c.id === currentGroupId && c.isGroup) ?? null : null),
+   [categories, currentGroupId],
+ );
+ const categoriesFlipRef = useFlip<HTMLDivElement>([scopedLeaves.map((c) => c.id).join(",")]);
+ const groupsFlipRef = useFlip<HTMLDivElement>([topLevelGroups.map((c) => c.id).join(",")]);
  // Persist menu UI state (open categories + scroll position) across
  // navigations to the item / category edit pages. sessionStorage so it
  // resets per tab.
@@ -93,14 +117,16 @@ export function MenuList({
  setTrialDismissedUntil(until);
  }
 
- const existingRealItemsCount = categories.reduce(
+ const existingRealItemsCount = scopedLeaves.reduce(
   (sum, c) => sum + c.dishes.filter((d) => !d.isExample).length,
   0,
  );
 
- // Always show when the menu is empty (no categories at all),
- // otherwise honour the per-restaurant dismissed flag.
- const noCategories = categories.length === 0;
+ // "Empty" depends on the current depth: at top-level, count leaves + groups;
+ // inside a group, just leaves of that group.
+ const noCategories = currentGroupId
+   ? scopedLeaves.length === 0
+   : scopedLeaves.length === 0 && topLevelGroups.length === 0;
  const scanBannerVisible = noCategories || !bannerLocallyDismissed;
 
  async function handleDismissBanner() {
@@ -177,7 +203,7 @@ export function MenuList({
  });
  }, [initialCategories]);
 
- const anyOpen = categories.length > 0 && categories.some((c) => openIds[c.id]);
+ const anyOpen = scopedLeaves.length > 0 && scopedLeaves.some((c) => openIds[c.id]);
 
  function toggleCategory(id: string) {
  setOpenIds((p) => {
@@ -188,11 +214,11 @@ export function MenuList({
  }
  function expandAll() {
  track("dash_menu_expand");
- const map: Record<string, boolean> = {};
- categories.forEach((c) => {
- map[c.id] = true;
+ setOpenIds((prev) => {
+ const next = { ...prev };
+ scopedLeaves.forEach((c) => { next[c.id] = true; });
+ return next;
  });
- setOpenIds(map);
  }
  function collapseAll() {
  track("dash_menu_collapse");
@@ -200,11 +226,11 @@ export function MenuList({
  // initialCategories effect below treats missing ids as "new" and
  // re-opens every category after the next data refresh
  // (e.g. after moveCategory fires onPersisted).
- const map: Record<string, boolean> = {};
- categories.forEach((c) => {
- map[c.id] = false;
+ setOpenIds((prev) => {
+ const next = { ...prev };
+ scopedLeaves.forEach((c) => { next[c.id] = false; });
+ return next;
  });
- setOpenIds(map);
  }
 
  // ── Race-safe writes via AbortController ─────────────────────────────────
@@ -228,21 +254,44 @@ export function MenuList({
 
  const isAbort = (e: unknown) => (e as { name?: string } | null)?.name === "AbortError";
 
- async function moveCategory(idx: number, dir: number) {
- track(dir < 0 ? "dash_menu_category_sort_up" : "dash_menu_category_sort_down");
- const next = moveItem(categories, idx, dir);
- setCategories(next);
+ async function moveGroup(idx: number, dir: number) {
+ track(dir < 0 ? "dash_menu_group_sort_up" : "dash_menu_group_sort_down");
+ const reordered = moveItem(topLevelGroups, idx, dir);
+ const idToOrder = new Map(reordered.map((g, i) => [g.id, i]));
+ setCategories((cats) =>
+   cats.map((c) => (idToOrder.has(c.id) ? { ...c, sortOrder: idToOrder.get(c.id)! } : c)),
+ );
  catReorderAborterRef.current?.abort();
  const ac = new AbortController();
  catReorderAborterRef.current = ac;
  try {
- await reorderCategories(next.map((c, i) => ({ id: c.id, sortOrder: i })), ac.signal);
- // No onPersisted refetch — local optimistic state is authoritative.
- // A refetch here would race with concurrent ops and overwrite newer
- // local state with a stale server snapshot.
+ await reorderCategories(
+   reordered.map((g, i) => ({ id: g.id, sortOrder: i })),
+   ac.signal,
+ );
  } catch (e) {
  if (isAbort(e)) return;
- // Server failed — local state stays optimistic.
+ }
+ }
+
+ async function moveCategory(idx: number, dir: number) {
+ // Reorder only happens within the current sibling scope (leaves at this depth).
+ track(dir < 0 ? "dash_menu_category_sort_up" : "dash_menu_category_sort_down");
+ const reorderedSiblings = moveItem(scopedLeaves, idx, dir);
+ const idToOrder = new Map(reorderedSiblings.map((c, i) => [c.id, i]));
+ setCategories((cats) =>
+   cats.map((c) => (idToOrder.has(c.id) ? { ...c, sortOrder: idToOrder.get(c.id)! } : c)),
+ );
+ catReorderAborterRef.current?.abort();
+ const ac = new AbortController();
+ catReorderAborterRef.current = ac;
+ try {
+ await reorderCategories(
+   reorderedSiblings.map((c, i) => ({ id: c.id, sortOrder: i })),
+   ac.signal,
+ );
+ } catch (e) {
+ if (isAbort(e)) return;
  }
  }
 
@@ -318,6 +367,20 @@ export function MenuList({
  >
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
+ {currentGroup ? (
+ <button
+ type="button"
+ onClick={() => router.push({ name: "menu" })}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
+ aria-label={t("backToMenu", { defaultValue: "Back to menu" })}
+ >
+ <ArrowLeftIcon size={14} />
+ <span className="truncate max-w-[200px]">
+ {getMlWithFallback(currentGroup.name, defaultLang, defaultLang)}
+ </span>
+ </button>
+ ) : (
+ <>
  {menuUrl ? (
  <PreviewButton
  url={menuUrl}
@@ -334,8 +397,10 @@ export function MenuList({
  onboardingTarget="share"
  />
  ) : null}
+ </>
+ )}
  </div>
- {categories.length > 0 ? (
+ {scopedLeaves.length > 0 ? (
  <button
  type="button"
  onClick={anyOpen ? collapseAll : expandAll}
@@ -412,7 +477,7 @@ export function MenuList({
  );
  })()}
 
- {scanBannerVisible && (
+ {scanBannerVisible && !currentGroupId && (
  <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${noCategories ? "" : "pr-10"}`}>
  {!noCategories && (
  <button
@@ -447,7 +512,66 @@ export function MenuList({
  </div>
  )}
 
- {categories.length === 0 ? (
+
+ {!currentGroupId && topLevelGroups.length > 0 ? (
+ <div ref={groupsFlipRef} className="space-y-2 mb-3">
+ {topLevelGroups.map((g, idx) => (
+ <div
+ key={g.id}
+ data-flip-id={g.id}
+ className="flex items-stretch gap-1 bg-card border border-border rounded-2xl px-2 py-1"
+ >
+ <button
+ type="button"
+ onClick={() => {
+ track("dash_menu_group_open");
+ router.push({ name: "menu", group: g.id });
+ }}
+ className="flex-1 min-w-0 self-stretch flex items-center gap-1 px-2 py-3 text-left rounded-md transition-colors"
+ >
+ <span className="font-semibold text-foreground truncate">
+ {getMlWithFallback(g.name, defaultLang, defaultLang)}
+ </span>
+ <ArrowRightIcon size={14} className="text-foreground shrink-0" />
+ </button>
+ <span className="inline-flex items-center gap-0 shrink-0">
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); moveGroup(idx, -1); }}
+ disabled={idx === 0}
+ className={iconBtn}
+ aria-label={t("moveCategoryUp")}
+ >
+ <ArrowUpIcon size={14} />
+ </button>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); moveGroup(idx, 1); }}
+ disabled={idx === topLevelGroups.length - 1}
+ className={iconBtn}
+ aria-label={t("moveCategoryDown")}
+ >
+ <ArrowDownIcon size={14} />
+ </button>
+ </span>
+ <button
+ type="button"
+ onClick={(e) => {
+ e.stopPropagation();
+ track("dash_menu_group_edit");
+ router.push({ name: "group.edit", id: g.id });
+ }}
+ className={iconBtn}
+ aria-label={t("editCategory")}
+ >
+ <EditIcon size={14} />
+ </button>
+ </div>
+ ))}
+ </div>
+ ) : null}
+
+ {noCategories ? (
  <EmptyState
  title={t("noCategories")}
  subtitle={t("noCategoriesSub")}
@@ -456,7 +580,7 @@ export function MenuList({
  type="button"
  onClick={() => {
  track("dash_menu_add_category");
- router.push({ name: "category.new" });
+ router.push(currentGroupId ? { name: "category.new", group: currentGroupId } : { name: "category.new" });
  }}
  data-onboarding-target="add-category"
  className={primaryBtn + " w-full inline-flex items-center justify-center"}
@@ -468,7 +592,7 @@ export function MenuList({
  ) : (
  <div>
  <div ref={categoriesFlipRef} className="space-y-3">
- {categories.map((cat, idx) => (
+ {scopedLeaves.map((cat, idx) => (
  <div key={cat.id} data-flip-id={cat.id}>
  <CategoryAccordion
  category={cat}
@@ -477,7 +601,7 @@ export function MenuList({
  isOpen={!!openIds[cat.id]}
  onToggle={() => toggleCategory(cat.id)}
  isFirst={idx === 0}
- isLast={idx === categories.length - 1}
+ isLast={idx === scopedLeaves.length - 1}
  isFirstCategory={idx === 0}
  onMoveUp={() => moveCategory(idx, -1)}
  onMoveDown={() => moveCategory(idx, 1)}
@@ -492,7 +616,7 @@ export function MenuList({
  type="button"
  onClick={() => {
  track("dash_menu_add_category");
- router.push({ name: "category.new" });
+ router.push(currentGroupId ? { name: "category.new", group: currentGroupId } : { name: "category.new" });
  }}
  data-onboarding-target="add-category"
  className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
@@ -502,6 +626,20 @@ export function MenuList({
  </button>
  </div>
  )}
+
+ {!currentGroupId ? (
+ <button
+ type="button"
+ onClick={() => {
+ track("dash_menu_add_group");
+ router.push({ name: "group.new" });
+ }}
+ className="w-full mt-2 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ >
+ <PlusIcon size={14} />
+ {t("addGroup", { defaultValue: "Add group" })}
+ </button>
+ ) : null}
  </div>
 
  <ShareModal
@@ -519,7 +657,7 @@ export function MenuList({
  onPersisted?.();
  }}
  />
- {categories.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
+ {scopedLeaves.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
  </>
  );
 }
@@ -582,7 +720,7 @@ function CategoryAccordion({
  <ChevronDownIcon size={14} />
  </span>
  </span>
- <span className="flex-1 min-w-0 text-sm font-semibold uppercase tracking-wide text-foreground/70 truncate block">
+ <span className="flex-1 min-w-0 text-sm font-semibold text-foreground/70 truncate block">
  {getMlWithFallback(category.name, defaultLang, defaultLang)}
  </span>
 

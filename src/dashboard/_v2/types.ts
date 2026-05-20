@@ -24,6 +24,7 @@ export interface Dish {
  price: string;
  visible: boolean;
  allergens: string[];
+ diets: string[];
  options: DishOption[];
  photoUrl: string | null;
  sortOrder: number;
@@ -36,6 +37,9 @@ export interface Category {
  name: Ml;
  sortOrder: number;
  dishes: Dish[];
+ isGroup: boolean;
+ parentId: string | null;
+ children?: Category[];
 }
 
 export interface TableEntity {
@@ -149,6 +153,7 @@ export interface Restaurant {
  name: string;
  subtitle: string;
  showTitleOnHomepage: boolean;
+ menuLayout: "flat" | "drill";
  slug: string;
  currency: string;
  backgroundUrl: string | null;

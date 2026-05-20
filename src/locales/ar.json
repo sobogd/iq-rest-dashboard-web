@@ -161,7 +161,10 @@
         "toast": {
           "saved": "تم إضافة {items} صنفًا في {cats} فئات"
         }
-      }
+      },
+      "addGroup": "إضافة مجموعة",
+      "backToMenu": "العودة إلى القائمة",
+      "groupsHeading": "المجموعات"
     },
     "categoryForm": {
       "newTitle": "فئة جديدة",
@@ -172,7 +175,12 @@
       "deleteTitle": "هل تحذف الفئة؟",
       "deleteMessage": "سيؤدي ذلك أيضاً إلى حذف جميع الأطباق داخلها. لا يمكن التراجع.",
       "nameRequiredTitle": "الاسم مطلوب",
-      "nameRequiredMessage": "أدخل اسم الفئة باللغة الافتراضية قبل الحفظ."
+      "nameRequiredMessage": "أدخل اسم الفئة باللغة الافتراضية قبل الحفظ.",
+      "newGroupTitle": "مجموعة جديدة",
+      "deleteGroupTitle": "حذف المجموعة؟",
+      "deleteGroupMessage": "ستتم إزالة المجموعة. الفئات داخلها ستصبح بدون مجموعة.",
+      "parentGroupLabel": "المجموعة",
+      "noGroup": "— بدون مجموعة —"
     },
     "dishForm": {
       "newTitle": "طبق جديد",
@@ -202,7 +210,9 @@
       "missingMessage": "أدخل اسماً وسعراً صالحاً قبل الحفظ.",
       "newOptionTitle": "خيار جديد",
       "editOptionTitle": "تعديل الخيار",
-      "duplicateButton": "تكرار"
+      "duplicateButton": "تكرار",
+      "dietsLabel": "الأنظمة الغذائية",
+      "dietsTip": "انقر لاختيار الأنظمة الغذائية."
     },
     "optionForm": {
       "newTitle": "خيار جديد",
@@ -441,7 +451,13 @@
         "uploadHint": "تحميل صورة أو فيديو",
         "backgroundTip": "يُعرض كخلفية للصفحة الرئيسية لموقعك العام.",
         "aiTitle": "إنشاء خلفية",
-        "aiPlaceholder": "مثلاً طاولة دافئة بضوء الشموع مع أطباق ريفية وخشب دافئ"
+        "aiPlaceholder": "مثلاً طاولة دافئة بضوء الشموع مع أطباق ريفية وخشب دافئ",
+        "layoutLabel": "تخطيط القائمة",
+        "layoutTip": "كيف تظهر الأطباق في صفحة القائمة العامة.",
+        "layout_flat_name": "مسطح",
+        "layout_flat_desc": "علامات تبويب أفقية للفئات مع الأطباق في سطر.",
+        "layout_drill_name": "التعمق",
+        "layout_drill_desc": "انقر على فئة لفتح شاشتها مع الأطباق."
       },
       "general": {
         "title": "عام",
@@ -534,7 +550,11 @@
         "currentPlan": "الخطة الحالية",
         "switch": "تبديل",
         "subscribe": "اشترك",
-        "cancelTip": "ألغِ في أي وقت من بوابة العميل. تتجدد الخطط السنوية مرة في السنة."
+        "cancelTip": "ألغِ في أي وقت من بوابة العميل. تتجدد الخطط السنوية مرة في السنة.",
+        "planBasic": "أساسي",
+        "planPro": "برو",
+        "comparePlans": "قارن الخطط في iq-rest.com ←",
+        "otherCurrencyTip": "الدفع باليورو فقط. للدفع بعملة أخرى يرجى التواصل مع الدعم."
       },
       "support": {
         "title": "الدعم",
@@ -668,6 +688,21 @@
       "loading": "جارٍ التحميل…",
       "settingsBreadcrumb": "الإعدادات"
     },
-    "exampleBadge": "تج."
+    "exampleBadge": "تج.",
+    "diets": {
+      "vegan": "نباتي صرف",
+      "vegetarian": "نباتي",
+      "pescatarian": "نباتي مع الأسماك",
+      "gluten_free": "خالٍ من الغلوتين",
+      "lactose_free": "خالٍ من اللاكتوز",
+      "nut_free": "خالٍ من المكسرات",
+      "sugar_free": "خالٍ من السكر",
+      "low_carb": "قليل الكربوهيدرات",
+      "keto": "كيتو",
+      "halal": "حلال",
+      "kosher": "كوشر",
+      "spicy": "حار",
+      "organic": "عضوي"
+    }
   }
 }

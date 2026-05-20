@@ -14,7 +14,7 @@ export function viewToPath(view: View): string {
     case "auth.logout":
       return "/dashboard/logout";
     case "menu":
-      return "/dashboard";
+      return view.group ? `/dashboard?group=${view.group}` : "/dashboard";
     case "orders":
       return "/dashboard/orders";
     case "orders.detail":
@@ -60,9 +60,15 @@ export function viewToPath(view: View): string {
     case "settings.admin.googleAds":
       return "/dashboard/settings/admin/google-ads";
     case "category.new":
-      return "/dashboard/categories/new";
+      return view.group
+        ? `/dashboard/categories/new?group=${view.group}`
+        : "/dashboard/categories/new";
     case "category.edit":
       return `/dashboard/categories/${view.id}/edit`;
+    case "group.new":
+      return "/dashboard/groups/new";
+    case "group.edit":
+      return `/dashboard/groups/${view.id}/edit`;
     case "item.new":
       return view.categoryId ? `/dashboard/items/new?cat=${view.categoryId}` : "/dashboard/items/new";
     case "item.edit":
@@ -88,7 +94,10 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/login" || stripped === "/login") return { name: "auth.login" };
   if (stripped === "/dashboard/otp" || stripped === "/otp") return { name: "auth.otp" };
   if (stripped === "/dashboard/logout" || stripped === "/logout") return { name: "auth.logout" };
-  if (stripped === "" || stripped === "/dashboard") return { name: "menu" };
+  if (stripped === "" || stripped === "/dashboard") {
+    const g = params.get("group");
+    return g ? { name: "menu", group: g } : { name: "menu" };
+  }
 
   // Settings family
   if (stripped === "/dashboard/settings") return { name: "settings" };
@@ -125,9 +134,15 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/analytics") return { name: "analytics" };
 
   // Categories
-  if (stripped === "/dashboard/categories/new") return { name: "category.new" };
+  if (stripped === "/dashboard/categories/new") {
+    const g = params.get("group");
+    return g ? { name: "category.new", group: g } : { name: "category.new" };
+  }
   const catEdit = stripped.match(/^\/dashboard\/categories\/([^/]+)\/edit$/);
   if (catEdit) return { name: "category.edit", id: catEdit[1] };
+  if (stripped === "/dashboard/groups/new") return { name: "group.new" };
+  const groupEdit = stripped.match(/^\/dashboard\/groups\/([^/]+)\/edit$/);
+  if (groupEdit) return { name: "group.edit", id: groupEdit[1] };
 
   // Items
   if (stripped === "/dashboard/items/new")

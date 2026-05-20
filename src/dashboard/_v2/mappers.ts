@@ -144,6 +144,7 @@ export function apiCategoryToCategory(
  price: item.price.toFixed(2),
  visible: item.isActive,
  allergens: item.allergens || [],
+ diets: item.diets || [],
  options: item.options || [],
  photoUrl: item.imageUrl || null,
  sortOrder: item.sortOrder,
@@ -155,6 +156,8 @@ export function apiCategoryToCategory(
  name: categoryToMl(category, defaultLang),
  sortOrder: category.sortOrder,
  dishes,
+ isGroup: category.isGroup === true,
+ parentId: category.parentId ?? null,
  };
 }
 
@@ -190,6 +193,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  name: r.title || "",
  subtitle: r.description || "",
  showTitleOnHomepage: !r.hideTitle,
+ menuLayout: (r.menuLayout === "drill" ? "drill" : "flat"),
  slug,
  currency: r.currency,
  backgroundUrl: r.source || null,
