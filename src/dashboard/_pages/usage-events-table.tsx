@@ -387,6 +387,20 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     <>
       <button
         type="button"
+        onClick={() => setShiftPending((v) => !v)}
+        disabled={selectedCount === 0}
+        className={
+          "h-8 w-8 inline-flex items-center justify-center rounded-md text-sm font-bold disabled:opacity-40 " +
+          (shiftPending
+            ? "bg-primary text-primary-foreground"
+            : "bg-secondary text-muted-foreground hover:text-foreground")
+        }
+        title={shiftPending ? "Click any event to select the range to it" : "Arm Shift: next click selects the range"}
+      >
+        ⇧
+      </button>
+      <button
+        type="button"
         onClick={() => selectedCount > 0 && setConfirmDelete(true)}
         disabled={selectedCount === 0 || bulkBusy}
         className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 disabled:opacity-40"
@@ -617,29 +631,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
           }}
           showSearch
         />
-      ) : null}
-      {selectMode && selectedCount > 0 ? (
-        <button
-          type="button"
-          onClick={() => setShiftPending((v) => !v)}
-          className={
-            "fixed bottom-4 right-4 z-30 h-11 px-4 rounded-full shadow-lg text-xs font-semibold tracking-wide inline-flex items-center gap-2 transition-colors " +
-            (shiftPending
-              ? "bg-primary text-primary-foreground shadow-primary/30"
-              : "bg-card border border-border text-foreground hover:border-primary/50")
-          }
-          title={shiftPending ? "Click any event to select the range to it" : "Arm Shift: next click selects the range"}
-        >
-          <span
-            className={
-              "inline-flex items-center justify-center h-5 px-1.5 rounded text-[10px] font-bold " +
-              (shiftPending ? "bg-primary-foreground/15" : "bg-secondary text-muted-foreground")
-            }
-          >
-            ⇧
-          </span>
-          Shift
-        </button>
       ) : null}
     </div>
   );

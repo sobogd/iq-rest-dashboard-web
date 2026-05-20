@@ -8,6 +8,7 @@ import {
   MessageSquare,
   X as CloseIcon,
   Target,
+  Trash2,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SendIcon } from "../_v2/icons";
@@ -146,6 +147,8 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   // Admin-picked locale for outgoing emails + support replies. Empty = auto
   // (server falls back to user.preferredLocale → restaurant.defaultLanguage → en).
   const [adminLocale, setAdminLocale] = useState<string>("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -198,6 +201,28 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       fetchMessages();
     }
   }, [nested, messages.length, fetchMessages]);
+
+  async function applyDelete() {
+    if (deleting) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`), {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (res.ok) {
+        setConfirmDelete(false);
+        onClose?.();
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setAlert({ title: "Delete failed", message: j.message || j.error || "Could not delete." });
+      }
+    } catch {
+      setAlert({ title: "Delete failed", message: "Network error" });
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   useEffect(() => {
     if (nested !== "messages") return;
@@ -467,6 +492,13 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         <FooterIconButton title="Conversions" onClick={() => setNested("conversions")}>
           <Target className="h-4 w-4" />
         </FooterIconButton>
+
+        <FooterIconButton
+          title="Delete company"
+          onClick={() => setConfirmDelete(true)}
+        >
+          <Trash2 className="h-4 w-4 text-red-600" />
+        </FooterIconButton>
       </div>
 
       {nested === "messages" ? (
@@ -694,6 +726,46 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
       {menuLink ? (
         <MenuPreviewModal menuUrl={menuLink} open={previewOpen} onOpenChange={setPreviewOpen} />
+      ) : null}
+
+      {confirmDelete ? (
+        <div
+          onClick={() => (deleting ? null : setConfirmDelete(false))}
+          className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl"
+          >
+            <div className="px-4 py-3 border-b border-border">
+              <h3 className="text-sm font-semibold text-foreground">Delete company</h3>
+            </div>
+            <p className="px-4 py-3 text-sm text-muted-foreground leading-snug">
+              Delete {company?.name || "this company"}? This removes the company and all its data. Cannot be undone.
+            </p>
+            <div className="px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleting}
+                className="h-9 px-3 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => void applyDelete()}
+                disabled={deleting}
+                className="h-9 px-3 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 inline-flex items-center gap-2 disabled:opacity-60"
+              >
+                {deleting ? (
+                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : null}
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       ) : null}
     </>
   );
