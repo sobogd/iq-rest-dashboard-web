@@ -56,6 +56,10 @@ html {
     --sidebar-accent-foreground: 0 0% 10%;
     --sidebar-border: 0 0% 88%;
     --sidebar-ring: 16 100% 58%;
+    /* Sticky nav (top/bottom) + page sub-headers — same as card on light;
+       tweak here to differentiate them from regular cards. */
+    --nav-bg: 0 0% 100%;
+    --subheader-bg: 0 0% 100%;
   }
 
   .dark {
@@ -88,6 +92,10 @@ html {
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 12%;
     --sidebar-ring: 16 100% 58%;
+    /* Lifted above the 5% page bg so TopBar/BottomNav and sub-headers
+       have visible hierarchy in dark mode. */
+    --nav-bg: 0 0% 9%;
+    --subheader-bg: 0 0% 6.5%;
   }
 
   * {
