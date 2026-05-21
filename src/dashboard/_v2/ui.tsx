@@ -12,11 +12,13 @@ import {
  DownloadIcon,
  ExternalLinkIcon,
  EyeIcon,
+ GlobeIcon,
  ShareIcon,
  SparklesIcon,
 } from "./icons";
 import { inputClass, labelClass, primaryBtn, secondaryBtn } from "./tokens";
-import { getMl, setMl, translateText } from "./i18n";
+import { AVAILABLE_LANGUAGES, getMl, setMl, translateText } from "./i18n";
+import { useIsAdmin } from "./use-is-admin";
 import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
@@ -456,6 +458,8 @@ export function TranslatedInput({
  const showFallback = lang !== defaultLang && !current && fallback;
 
  const showTranslate = translatable && lang !== defaultLang;
+ const isAdmin = useIsAdmin();
+ const [allLangsOpen, setAllLangsOpen] = useState(false);
 
  const tc = useTranslations("dashboard.common");
  const inputProps = {
@@ -465,7 +469,7 @@ export function TranslatedInput({
  onChange(setMl(value, lang, e.target.value)),
  onFocus,
  placeholder: showFallback ? tc("willUse") + ": " + fallback : (placeholder || ""),
- className: inputClass,
+ className: inputClass + (isAdmin ? " pr-10" : ""),
  };
 
  return (
@@ -490,6 +494,7 @@ export function TranslatedInput({
  ) : null}
  </div>
  ) : null}
+ <div className="relative">
  {multiline ? (
  <AutoGrowTextarea {...inputProps} />
  ) : (
@@ -499,8 +504,125 @@ export function TranslatedInput({
  inputMode={type === "decimal" ? "decimal" : undefined}
  />
  )}
- {hint ? <p className="text-[11px] text-muted-foreground mt-1">{hint}</p> : null}
+ {isAdmin ? (
+ <button
+ type="button"
+ onClick={() => setAllLangsOpen(true)}
+ className="absolute top-1 right-1 w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground transition-colors"
+ aria-label="All languages"
+ title="All languages"
+ >
+ <GlobeIcon size={16} />
+ </button>
+ ) : null}
  </div>
+ {hint ? <p className="text-[11px] text-muted-foreground mt-1">{hint}</p> : null}
+ {isAdmin ? (
+ <AllLanguagesModal
+ open={allLangsOpen}
+ onClose={() => setAllLangsOpen(false)}
+ title={label || ""}
+ value={value}
+ defaultLang={defaultLang}
+ languages={languages}
+ onChange={onChange}
+ multiline={!!multiline}
+ placeholder={placeholder}
+ />
+ ) : null}
+ </div>
+ );
+}
+
+// AllLanguagesModal — admin-only side-quest UI. Lets the user edit one
+// multilingual field across every restaurant language in a single modal,
+// instead of toggling the top-level language selector and re-opening
+// the form. Triggered by the globe icon inside TranslatedInput.
+
+function AllLanguagesModal({
+ open,
+ onClose,
+ title,
+ value,
+ defaultLang,
+ languages,
+ onChange,
+ multiline,
+ placeholder,
+}: {
+ open: boolean;
+ onClose: () => void;
+ title: string;
+ value: Ml;
+ defaultLang: string;
+ languages: string[];
+ onChange: (next: Ml) => void;
+ multiline?: boolean;
+ placeholder?: string;
+}) {
+ const tc = useTranslations("dashboard.common");
+ // Stable order: default language first, then the rest in AVAILABLE_LANGUAGES
+ // order (matches the top-level lang selector).
+ const ordered = (() => {
+ const set = new Set(languages);
+ const langs: string[] = [];
+ if (set.has(defaultLang)) langs.push(defaultLang);
+ for (const meta of AVAILABLE_LANGUAGES) {
+ if (meta.code !== defaultLang && set.has(meta.code)) langs.push(meta.code);
+ }
+ return langs;
+ })();
+
+ return (
+ <Modal open={open} onClose={onClose} title={title || tc("translate")} size="md">
+ <div className="space-y-3">
+ {ordered.map((code) => {
+ const meta = AVAILABLE_LANGUAGES.find((l) => l.code === code);
+ const v = getMl(value, code);
+ const isDefault = code === defaultLang;
+ return (
+ <div key={code} className="space-y-1">
+ <div className="flex items-center justify-between gap-2">
+ <div className="text-xs font-medium text-foreground inline-flex items-center gap-1.5">
+ <span>{meta?.flag}</span>
+ <span>{meta?.short ?? code}</span>
+ {isDefault ? (
+ <span className="text-[10px] px-1 py-0.5 rounded bg-secondary text-muted-foreground uppercase">
+ {tc("default") || "default"}
+ </span>
+ ) : null}
+ </div>
+ {!isDefault ? (
+ <AiTranslateButton
+ value={value}
+ lang={code}
+ defaultLang={defaultLang}
+ languages={languages}
+ onChange={onChange}
+ />
+ ) : null}
+ </div>
+ {multiline ? (
+ <AutoGrowTextarea
+ value={v}
+ onChange={(e) => onChange(setMl(value, code, e.target.value))}
+ placeholder={placeholder || ""}
+ className={inputClass}
+ />
+ ) : (
+ <input
+ type="text"
+ value={v}
+ onChange={(e) => onChange(setMl(value, code, e.target.value))}
+ placeholder={placeholder || ""}
+ className={inputClass}
+ />
+ )}
+ </div>
+ );
+ })}
+ </div>
+ </Modal>
  );
 }
 
