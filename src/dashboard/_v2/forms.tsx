@@ -217,17 +217,19 @@ export function CategoryForm({
  className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-red-600 rounded-lg transition-colors"
  >
  <TrashIcon size={13} />
- {t("deleteButton")}
+ {editingGroup ? t("deleteButtonGroup") : t("deleteButton")}
  </button>
  </div>
  ) : null}
 
  <ConfirmDialog
  open={confirmOpen}
- title={t("deleteTitle")}
+ title={editingGroup ? t("deleteTitleGroup") : t("deleteTitle")}
  message={
  deleting
  ? tc("deleting")
+ : editingGroup
+ ? t("deleteMessageGroup")
  : t("deleteMessage")
  }
  onConfirm={confirmDelete}
