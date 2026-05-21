@@ -644,9 +644,6 @@ export function DishForm({
  {t("priceLabel")}
  </label>
  <div className="relative">
- <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground pointer-events-none">
- {currencySymbol}
- </span>
  <input
  id="dish-price"
  type="text"
@@ -655,8 +652,11 @@ export function DishForm({
  value={form.price}
  onChange={(e) => setForm((f) => ({ ...f, price: sanitizePriceInput(e.target.value) }))}
  onFocus={() => track("dash_item_focus_price_input")}
- className={inputClass + " pl-6 pr-2 tabular-nums"}
+ className={inputClass + " pl-3 pr-8 tabular-nums"}
  />
+ <span className="absolute top-1 right-1 w-8 h-8 inline-flex items-center justify-center text-sm text-muted-foreground pointer-events-none">
+ {currencySymbol}
+ </span>
  </div>
  </div>
  </div>
