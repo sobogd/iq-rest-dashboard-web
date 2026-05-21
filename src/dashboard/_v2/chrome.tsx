@@ -2,13 +2,11 @@
 
 import { useEffect, useRef, ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { BarChart3, SlidersHorizontal, Utensils } from "lucide-react";
 import {
  CalendarIcon,
- ChartIcon,
- GridIcon,
- PotIcon,
+ ChefHatIcon,
  ReceiptIcon,
- SettingsIcon,
 } from "./icons";
 import { RestaurantProvider } from "./restaurant-context";
 import { RestaurantsProvider } from "./restaurants-context";
@@ -46,12 +44,12 @@ interface NavTab {
 }
 
 const NAV_TABS: NavTab[] = [
- { id: "menu", labelKey: "menu", view: { name: "menu" }, icon: GridIcon },
+ { id: "menu", labelKey: "menu", view: { name: "menu" }, icon: Utensils },
  { id: "reservations", labelKey: "reservations", view: { name: "reservations" }, icon: CalendarIcon },
  { id: "orders", labelKey: "orders", view: { name: "orders" }, icon: ReceiptIcon },
- { id: "kitchen", labelKey: "kitchen", view: { name: "kitchen" }, icon: PotIcon },
- { id: "analytics", labelKey: "analytics", view: { name: "analytics" }, icon: ChartIcon },
- { id: "settings", labelKey: "settings", view: { name: "settings" }, icon: SettingsIcon },
+ { id: "kitchen", labelKey: "kitchen", view: { name: "kitchen" }, icon: ChefHatIcon },
+ { id: "analytics", labelKey: "analytics", view: { name: "analytics" }, icon: BarChart3 },
+ { id: "settings", labelKey: "settings", view: { name: "settings" }, icon: SlidersHorizontal },
 ];
 
 function viewToTab(viewName: string): TabId {

@@ -161,6 +161,13 @@ export const PotIcon = (p: IconProps) => svg({ ...p, children: <>
  <line x1="19" y1="13" x2="22" y2="13" />
 </> });
 
+// ChefHatIcon — toque-style chef hat. Closer to what real KDS apps
+// (Square, Lightspeed) use for the kitchen tab than a generic pot.
+export const ChefHatIcon = (p: IconProps) => svg({ ...p, children: <>
+ <path d="M6 14 a4 4 0 1 1 1 -7.87 a4 4 0 0 1 9.5 -0.13 a4 4 0 1 1 1.5 7.87 z" />
+ <path d="M6 14 v5 a1 1 0 0 0 1 1 h10 a1 1 0 0 0 1 -1 v-5" />
+</> });
+
 export const MessageIcon = (p: IconProps) => svg({ ...p, children: <>
  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 </> });
@@ -186,6 +193,38 @@ export const ChartIcon = (p: IconProps) => svg({ ...p, children: <>
  <line x1="12" y1="20" x2="12" y2="10" />
  <line x1="18" y1="20" x2="18" y2="4" />
  <line x1="6" y1="20" x2="6" y2="16" />
+</> });
+
+// TrendingUpIcon — vertical bars at varied heights (not strictly
+// growing). Reads as analytics without implying constant growth.
+export const TrendingUpIcon = (p: IconProps) => svg({ ...p, children: <>
+ <line x1="5" y1="20" x2="5" y2="10" />
+ <line x1="10" y1="20" x2="10" y2="16" />
+ <line x1="14" y1="20" x2="14" y2="6" />
+ <line x1="19" y1="20" x2="19" y2="13" />
+</> });
+
+// SlidersIcon — three horizontal mixer sliders with knobs at different
+// positions. Used for the Settings tab so the glyph reads as "tweak /
+// many controls" rather than just a single gear.
+export const SlidersIcon = (p: IconProps) => svg({ ...p, children: <>
+ <line x1="4" y1="6" x2="20" y2="6" />
+ <circle cx="10" cy="6" r="2" fill="currentColor" stroke="none" />
+ <line x1="4" y1="12" x2="20" y2="12" />
+ <circle cx="16" cy="12" r="2" fill="currentColor" stroke="none" />
+ <line x1="4" y1="18" x2="20" y2="18" />
+ <circle cx="8" cy="18" r="2" fill="currentColor" stroke="none" />
+</> });
+
+// PlateForkKnifeIcon — round dinner plate flanked by a fork (left) and
+// a knife (right). Utensils sit close to the viewBox edges so they
+// don't crowd the plate.
+export const PlateForkKnifeIcon = (p: IconProps) => svg({ ...p, children: <>
+ <circle cx="12" cy="12" r="4" />
+ <path d="M3 3 v6 a1 1 0 0 0 1 1 h0 a1 1 0 0 0 1 -1 v-6" />
+ <line x1="4" y1="10" x2="4" y2="21" />
+ <path d="M21 3 c-2 0 -3 2 -3 5 v3 h3 z" />
+ <line x1="21" y1="11" x2="21" y2="21" />
 </> });
 
 export const ExpandIcon = (p: IconProps) => svg({ ...p, children: <>
