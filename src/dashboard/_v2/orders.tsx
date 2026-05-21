@@ -2046,7 +2046,7 @@ export function KitchenPage({
  return (
  <div>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-card/90 backdrop-blur-md border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-subheader/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="flex items-center gap-2 px-4 md:px-6 py-2">

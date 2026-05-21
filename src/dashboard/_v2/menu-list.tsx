@@ -362,7 +362,7 @@ export function MenuList({
  return (
  <>
  <div
- className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-card border-b border-border/60"
+ className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
