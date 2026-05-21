@@ -7,7 +7,6 @@ import { EmptyState, PageHeader } from "../_v2/ui";
 import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
 import { track } from "@/lib/dashboard-events";
 import { OrdersListModal } from "./orders-modal";
-import { useRestaurantsOrNull } from "../_v2/restaurants-context";
 import { activeRestaurantHeader } from "@/lib/active-restaurant";
 
 interface OrderItem { name: string; quantity: number; revenue: number }
@@ -121,24 +120,18 @@ function formatDelta(current: number, prev: number, currency: string): { text: s
 
 export function AnalyticsClient() {
   const t = useTranslations("dashboard.analyticsDashboard");
-  const restaurants = useRestaurantsOrNull();
   const [period, setPeriod] = useState<string>(() => currentPeriod());
-  const [scope, setScope] = useState<"restaurant" | "all">("restaurant");
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [ordersModalOpen, setOrdersModalOpen] = useState(false);
 
-  const showScopeToggle = (restaurants?.list.length ?? 0) > 1;
-
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const params = new URLSearchParams({ period });
-    if (scope === "all") params.set("scope", "all");
-    fetch(apiUrl(`/api/analytics/stats?${params.toString()}`), {
+    fetch(apiUrl(`/api/analytics/stats?period=${period}`), {
       credentials: "include",
       cache: "no-store",
-      headers: scope === "all" ? {} : activeRestaurantHeader(),
+      headers: activeRestaurantHeader(),
     })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -153,7 +146,7 @@ export function AnalyticsClient() {
     return () => {
       cancelled = true;
     };
-  }, [period, scope]);
+  }, [period]);
 
   const months = useMemo(() => {
     if (!stats?.companyCreatedAt) return [];
@@ -188,24 +181,6 @@ export function AnalyticsClient() {
           ) : null
         }
       />
-      {showScopeToggle ? (
-        <div className="mb-4 inline-flex rounded-md border border-border overflow-hidden text-xs">
-          <button
-            type="button"
-            onClick={() => setScope("restaurant")}
-            className={`px-3 h-8 ${scope === "restaurant" ? "bg-foreground text-background" : "bg-card text-muted-foreground"}`}
-          >
-            {t("scopeActive")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setScope("all")}
-            className={`px-3 h-8 border-l border-border ${scope === "all" ? "bg-foreground text-background" : "bg-card text-muted-foreground"}`}
-          >
-            {t("scopeAll")}
-          </button>
-        </div>
-      ) : null}
 
       {loading && !stats ? (
         <div className="bg-card border border-border rounded-xl min-h-[280px] flex items-center justify-center">
