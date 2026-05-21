@@ -515,7 +515,7 @@ export function TranslatedInput({
  aria-label="All languages"
  title="All languages"
  >
- <GlobeIcon size={20} />
+ <GlobeIcon size={18} />
  </button>
  ) : null}
  </div>
@@ -601,10 +601,10 @@ export function HelpButton({ text }: { text: string }) {
  e.stopPropagation();
  setOpen((v) => !v);
  }}
- className="w-5 h-5 inline-flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
+ className="w-4 h-4 inline-flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
  aria-label="Help"
  >
- <HelpCircleIcon size={16} />
+ <HelpCircleIcon size={14} />
  </button>
  {open && pos
  ? createPortal(
@@ -681,7 +681,7 @@ function AllLanguagesModal({
  open={open}
  onClose={onClose}
  title={
- <span className="inline-flex items-center gap-2">
+ <span className="inline-flex items-center gap-1">
  <span>{ta("title")}</span>
  <HelpButton text={helpText} />
  </span>
