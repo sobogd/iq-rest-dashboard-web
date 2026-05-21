@@ -174,7 +174,7 @@ export function CategoryForm({
  onLangSelect={() => track("dash_category_click_lang")}
  />
 
- <div className="max-w-2xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6">
+ <div className="max-w-5xl mx-auto md:px-6 bg-card border border-border rounded-2xl p-5 md:p-6">
  <TranslatedInput
  id="cat-name"
  label={t("nameLabel")}
@@ -210,7 +210,7 @@ export function CategoryForm({
  </div>
 
  {!isNew ? (
- <div className="max-w-2xl mx-auto mt-6 flex justify-center">
+ <div className="max-w-5xl mx-auto md:px-6 mt-6 flex justify-center">
  <button
  type="button"
  onClick={() => setConfirmOpen(true)}
@@ -611,7 +611,7 @@ export function DishForm({
  onLangSelect={() => track("dash_item_click_lang")}
  />
 
- <div className="max-w-2xl mx-auto space-y-3">
+ <div className="max-w-5xl mx-auto md:px-6 space-y-3">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="flex flex-col-reverse md:flex-row-reverse gap-4 md:gap-5">
  <div className="w-full md:w-[7.6rem] shrink-0">
@@ -788,7 +788,7 @@ export function DishForm({
  </div>
 
  {!isNew ? (
- <div className="max-w-2xl mx-auto mt-6 flex items-center justify-center gap-3">
+ <div className="max-w-5xl mx-auto md:px-6 mt-6 flex items-center justify-center gap-3">
  <button
  type="button"
  onClick={handleDuplicate}
@@ -1252,7 +1252,7 @@ export function OptionForm({
 
  <div className={embedded
  ? ""
- : "max-w-2xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6"}>
+ : "max-w-5xl mx-auto md:px-6 bg-card border border-border rounded-2xl p-5 md:p-6"}>
  <TranslatedInput
  id="opt-name"
  label={t("nameLabel")}
@@ -1371,14 +1371,14 @@ export function OptionForm({
  type="button"
  onClick={save}
  disabled={saving}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40"
  >
  {saving ? tc("saving") : tc("save")}
  </button>
  </div>
  </div>
  ) : !isNew ? (
- <div className="max-w-2xl mx-auto mt-6 flex justify-center">
+ <div className="max-w-5xl mx-auto md:px-6 mt-6 flex justify-center">
  <button
  type="button"
  onClick={() => setConfirmOpen(true)}
@@ -1542,7 +1542,7 @@ function UnsavedChangesDialog({
  type="button"
  onClick={() => void onSave()}
  disabled={saving}
- className="flex-1 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg inline-flex items-center justify-center gap-1.5 disabled:opacity-60"
+ className="flex-1 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg inline-flex items-center justify-center gap-1.5 disabled:opacity-60"
  >
  {saving ? (
  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />

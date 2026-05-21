@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { apiUrl } from "@/lib/api";
+import { activeRestaurantHeader } from "@/lib/active-restaurant";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import {
@@ -227,7 +228,7 @@ export function ConfirmDialog({
  const isDanger = !singleButton && (!confirmStyle || confirmStyle === "danger");
  const confirmCls = isDanger
  ? "h-8 px-3 text-xs font-medium text-white bg-red-600 rounded-lg transition-colors"
- : "h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors";
+ : "h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors";
 
  return (
  <Modal
@@ -779,7 +780,7 @@ function AllLanguagesModal({
  <button
  type="button"
  onClick={onClose}
- className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
  >
  {tc("save")}
  </button>
@@ -910,9 +911,9 @@ export function EmptyState({
 }) {
  return (
  <div className="bg-card border border-border rounded-xl p-8 md:p-12 min-h-[280px] flex flex-col items-center justify-center text-center">
- <h3 className="text-base font-medium text-foreground">{title}</h3>
+ <h3 className="text-sm font-medium text-foreground">{title}</h3>
  {subtitle ? (
- <p className="text-sm text-muted-foreground leading-snug mt-1.5 max-w-sm">{subtitle}</p>
+ <p className="text-xs text-muted-foreground leading-snug mt-1.5 max-w-sm">{subtitle}</p>
  ) : null}
  {action ? <div className="mt-5 w-full max-w-xs">{action}</div> : null}
  </div>
@@ -978,7 +979,7 @@ export function SubpageStickyBar({
  className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-5xl mx-auto md:px-6 flex items-center justify-between gap-3">
  <button
  type="button"
  onClick={onBack}
@@ -994,7 +995,7 @@ export function SubpageStickyBar({
  type="button"
  onClick={handleSave}
  disabled={!canSave || saving}
- className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors inline-flex items-center gap-1"
+ className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-md transition-colors inline-flex items-center gap-1"
  >
  {saving ? (
  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -1044,7 +1045,7 @@ export function EditPageHeader({
  className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-5xl mx-auto md:px-6 flex items-center justify-between gap-3">
  <button
  type="button"
  onClick={onBack}
@@ -1059,7 +1060,7 @@ export function EditPageHeader({
  type="button"
  onClick={onSave}
  disabled={!canSave || saving}
- className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors inline-flex items-center gap-1"
+ className="h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-md transition-colors inline-flex items-center gap-1"
  >
  {saving ? (
  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -1073,7 +1074,7 @@ export function EditPageHeader({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-5 md:pt-4 pb-5">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 pb-5">
  {breadcrumb ? <div className="text-xs text-muted-foreground truncate">{breadcrumb}</div> : null}
  <h2 className="text-xl font-medium text-foreground truncate mt-1">{title}</h2>
  </div>
@@ -1104,7 +1105,7 @@ export function PreviewButton({
  onOpen?.();
  setOpen(true);
  }}
- className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary rounded-md transition-colors"
+ className="inline-flex items-center gap-1 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
  >
  <EyeIcon size={14} />
  {t("preview")}
@@ -1568,7 +1569,7 @@ export function AiImageModal({
  const res = await fetch(apiUrl(endpoint), {
  method: "POST",
  credentials: "include",
- headers: { "Content-Type": "application/json" },
+ headers: { "Content-Type": "application/json", ...activeRestaurantHeader() },
  body: JSON.stringify({ prompt: prompt.trim(), ...(extraBody || {}) }),
  });
  if (!res.ok) {

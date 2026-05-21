@@ -449,7 +449,7 @@ function ViewSwitch(p: SwitchProps) {
 
 function NotMigrated({ label }: { label: string }) {
   return (
-    <div className="max-w-2xl mx-auto py-10 text-center text-sm text-muted-foreground">{label}</div>
+    <div className="max-w-5xl mx-auto md:px-6 py-10 text-center text-sm text-muted-foreground">{label}</div>
   );
 }
 

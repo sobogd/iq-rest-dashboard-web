@@ -124,7 +124,7 @@ export function AdminPage() {
           </button>
         </div>
       </SubpageStickyBar>
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         {loading && companies.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">{t("loading")}</div>
         ) : companies.length === 0 ? (

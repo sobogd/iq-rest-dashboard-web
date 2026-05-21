@@ -164,7 +164,7 @@ export function AnalyticsClient() {
     !stats || (stats.totalViews === 0 && (stats.orders?.ordersCount ?? 0) === 0);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-5xl mx-auto md:px-6">
       <PageHeader
         title={t("title")}
         subtitle={t("subtitle")}

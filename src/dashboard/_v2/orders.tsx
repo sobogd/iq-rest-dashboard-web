@@ -402,12 +402,12 @@ export function OrdersPage({
  <div className="max-w-5xl mx-auto md:px-6">
  <PageHeader title={t("title")} />
  <div className="bg-card border border-border rounded-2xl px-6 py-12 flex flex-col items-center text-center">
- <div className="text-sm font-semibold text-foreground mb-2">{t("disabledTitle")}</div>
- <p className="text-sm text-muted-foreground mb-6 max-w-md leading-relaxed">{t("disabledBody")}</p>
+ <div className="text-sm font-medium text-foreground mb-2">{t("disabledTitle")}</div>
+ <p className="text-xs text-muted-foreground mb-6 max-w-md leading-snug">{t("disabledBody")}</p>
  <button
  type="button"
  onClick={() => dashRouter.push({ name: "settings.orders" })}
- className="inline-flex items-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+ className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary-gradient text-primary-foreground text-xs font-medium transition-colors"
  >
  {t("disabledCta")}
  </button>
@@ -448,7 +448,7 @@ export function OrdersPage({
  onClick={() =>
  setView({ kind: "addItem", orderId: null, step: "category" })
  }
- className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
  >
  <PlusIcon size={13} />
  {activeTableOrders.length === 0 ? t("startOrder") : t("newOrder")}
@@ -588,7 +588,7 @@ export function OrdersPage({
  }
  }}
  disabled={currentOrder.items.length === 0}
- className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40"
  >
  <CheckIcon size={13} />
  {t("closeShort", { defaultValue: "Close" })}
@@ -1362,7 +1362,7 @@ function DishWizard({
  Array.isArray(reqSelections[currentOpt.id]) &&
  (reqSelections[currentOpt.id] as string[]).length > 0;
  const btnCls =
- "inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40";
+ "inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40";
  const footerNode: React.ReactNode = (() => {
  if (substep.kind === "required" && currentOpt && currentOpt.type === "multi") {
  return (
@@ -1643,7 +1643,7 @@ function ChangeTableModal({
  if (selectedTable) onConfirm(orderId, selectedTable);
  }}
  disabled={!selectedTable || isSame === true}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40"
  >
  {tc("save")}
  </button>
@@ -1733,7 +1733,7 @@ function SplitOrderModal({
  type="button"
  onClick={() => onConfirm(orderId, Array.from(picked))}
  disabled={!canSplit}
- className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors disabled:opacity-40"
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40"
  >
  <SplitIcon size={13} />
  {t("splitOrder", { defaultValue: "Split order" })}
@@ -2051,7 +2051,7 @@ export function KitchenPage({
  className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="flex items-center gap-2 px-4 md:px-6 py-2">
+ <div className="max-w-5xl mx-auto md:px-6 flex items-center gap-2 px-4 py-2">
  <button
  type="button"
  onClick={() => setOpenFilter("status")}
@@ -2110,7 +2110,7 @@ export function KitchenPage({
 
 
  {visibleGroups.length === 0 ? (
- <div className="max-w-2xl mx-auto pt-7 md:pt-6">
+ <div className="max-w-5xl mx-auto md:px-6 pt-7 md:pt-6">
  <EmptyState
  title={t("kitchenClear")}
  subtitle={t("kitchenClearSub")}
@@ -2291,7 +2291,7 @@ function FilterModal({
  <button
  type="button"
  onClick={() => onApply(draft)}
- className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
  >
  {applyLabel}
  </button>
@@ -2366,7 +2366,7 @@ function CompleteOrderModal({
  <button
  type="button"
  onClick={() => onConfirm(selected)}
- className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
  >
  {t("completeOrder")}
  </button>

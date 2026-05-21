@@ -122,7 +122,7 @@ export function AboutSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_about_back"); onBack(); }} onSave={save} canSave={canSave} />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{ta("title")}</h2>
@@ -212,7 +212,7 @@ export function ContactsSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_contacts_back"); onBack(); }} onSave={save} canSave />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tc("title")}</h2>
@@ -404,7 +404,7 @@ export function BrandingSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_branding_back"); onBack(); }} onSave={save} canSave />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tb("title")}</h2>
@@ -677,7 +677,7 @@ export function GeneralSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_general_back"); onBack(); }} onSave={save} canSave={canSave} />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tg("title")}</h2>
@@ -797,7 +797,7 @@ export function OrderSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_orders_back"); onBack(); }} onSave={save} canSave={canSave} />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{to("title")}</h2>
@@ -974,7 +974,7 @@ export function BookingSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_booking_back"); onBack(); }} onSave={save} canSave={canSave} />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tb("title")}</h2>
@@ -1285,7 +1285,7 @@ export function LanguagesSettingsPage({
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_langs_back"); onBack(); }} onSave={save} canSave={canSave} />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5 flex items-start justify-between gap-3">
  <div>
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
@@ -1480,7 +1480,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_billing_back"); onBack(); }} hideSave />
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tb("title")}</h2>
@@ -1559,7 +1559,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  }
  >
  {p.badgeKey && !isCurrent ? (
- <span className="absolute -top-2 left-5 inline-flex items-center h-5 px-2 text-[10px] font-medium text-primary-foreground bg-primary rounded-full">
+ <span className="absolute -top-2 left-5 inline-flex items-center h-5 px-2 text-[10px] font-medium text-primary-foreground bg-primary-gradient rounded-full">
  {tb(p.badgeKey)}
  </span>
  ) : null}
@@ -1585,7 +1585,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  (isCurrent
  ? "bg-secondary text-muted-foreground cursor-not-allowed"
  : p.highlight
- ? "text-primary-foreground bg-primary"
+ ? "text-primary-foreground bg-primary-gradient"
  : "text-foreground bg-card border border-input")
  }
  >
@@ -1705,7 +1705,7 @@ export function SupportPage({ onBack }: { onBack: () => void }) {
  className="flex flex-col h-[calc(100dvh-var(--topbar-h,0px)-116px)] md:h-[calc(100dvh-var(--topbar-h,0px)-56px)]"
  >
  <SubpageStickyBar onBack={() => { track("dash_settings_support_back"); onBack(); }} hideSave />
- <div className="max-w-2xl mx-auto w-full pt-5 md:pt-4 flex-1 flex flex-col min-h-0">
+ <div className="max-w-5xl mx-auto md:px-6 w-full pt-5 md:pt-4 flex-1 flex flex-col min-h-0">
  <div className="mb-3 shrink-0">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{ts("title")}</h2>
@@ -1738,7 +1738,7 @@ export function SupportPage({ onBack }: { onBack: () => void }) {
  type="button"
  onClick={send}
  disabled={!input.trim() || sending}
- className="w-full shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
+ className="w-full shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors items-center justify-center gap-2"
  >
  {sending ? (
  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />

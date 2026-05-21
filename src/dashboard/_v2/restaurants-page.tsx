@@ -105,7 +105,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <SubpageStickyBar onBack={onBack} hideSave />
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         <div className="mb-5">
           <h2 className="text-xl font-medium text-foreground">{t("title")}</h2>
           <p className="text-[13px] text-muted-foreground leading-snug mt-1">{t("subtitle")}</p>
@@ -292,7 +292,7 @@ export function RestaurantNewPage({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <SubpageStickyBar onBack={onBack} onSave={submit} canSave={canSave} />
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         <div className="mb-5">
           <h2 className="text-xl font-medium text-foreground">{t("newTitle")}</h2>
           <p className="text-[13px] text-muted-foreground leading-snug mt-1">{t("newSubtitle")}</p>

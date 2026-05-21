@@ -381,7 +381,7 @@ export function MenuList({
  className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
  style={{ top: "var(--topbar-h, 0px)" }}
  >
- <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-3">
+ <div className="w-full max-w-5xl mx-auto md:px-6 flex items-center justify-between gap-3">
  <div className="flex items-center gap-2 min-w-0">
  {currentGroup ? (
  <button
@@ -436,7 +436,7 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-2">
+ <div className="max-w-5xl mx-auto md:px-6 pt-2">
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -465,13 +465,8 @@ export function MenuList({
  ×
  </button>
  )}
- <div className="flex items-start gap-3">
- <div
- className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white"
- style={{ background: "linear-gradient(to bottom right, hsl(9,100%,58%), #f59e0b)" }}
- >
- <ClockIcon size={16} />
- </div>
+ <div className="flex items-start gap-3 md:items-center">
+ <ClockIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
  <div className="flex-1 min-w-0">
  <p className="text-sm font-semibold">
  {trialExpired ? tsub("trialExpired") : tsub("trialDays", { days: daysLeft })}
@@ -482,12 +477,18 @@ export function MenuList({
  <button
  type="button"
  onClick={goBilling}
- className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
- style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
+ className={primaryBtn + " mt-3 md:hidden inline-flex items-center gap-1.5"}
  >
  {tBilling("manage")}
  </button>
  </div>
+ <button
+ type="button"
+ onClick={goBilling}
+ className={primaryBtn + " hidden md:inline-flex items-center gap-1.5 shrink-0"}
+ >
+ {tBilling("manage")}
+ </button>
  </div>
  </div>
  );
@@ -505,25 +506,28 @@ export function MenuList({
  ×
  </button>
  )}
- <div className="flex items-start gap-3">
- <div
- className="flex items-center justify-center h-10 w-10 rounded-xl shrink-0 text-white"
- style={{ background: "linear-gradient(to bottom right, hsl(9,100%,58%), #f59e0b)" }}
- >
- <SparklesIcon size={16} />
- </div>
+ <div className="flex items-start gap-3 md:items-center">
+ <SparklesIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
  <div className="flex-1 min-w-0">
  <p className="text-sm font-semibold">{t("scan.banner.title")}</p>
  <p className="text-xs text-muted-foreground mt-0.5">{t("scan.banner.subtitle")}</p>
  <button
  type="button"
  onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
- className="mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white text-sm font-semibold shadow-md hover:opacity-90"
- style={{ background: "linear-gradient(to right, hsl(9,100%,58%), #f59e0b)" }}
+ className={primaryBtn + " mt-3 md:hidden inline-flex items-center gap-1.5"}
  >
+ <SparklesIcon size={14} />
  {t("scan.banner.cta")}
  </button>
  </div>
+ <button
+ type="button"
+ onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
+ className={primaryBtn + " hidden md:inline-flex items-center gap-1.5 shrink-0"}
+ >
+ <SparklesIcon size={14} />
+ {t("scan.banner.cta")}
+ </button>
  </div>
  </div>
  )}
@@ -541,8 +545,9 @@ export function MenuList({
  router.push({ name: "category.new" });
  }}
  data-onboarding-target="add-category"
- className={primaryBtn + " w-full inline-flex items-center justify-center"}
+ className={primaryBtn + " inline-flex items-center gap-1.5"}
  >
+ <PlusIcon size={14} />
  {t("addCategory")}
  </button>
  }

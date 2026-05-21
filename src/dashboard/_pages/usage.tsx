@@ -14,7 +14,7 @@ export function UsagePage() {
         <div ref={setToolbarHost} className="flex items-center gap-1" />
       </SubpageStickyBar>
       <div
-        className="max-w-2xl mx-auto pt-5 md:pt-4"
+        className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4"
         style={{ "--events-sticky-top": "calc(var(--topbar-h, 0px) + 56px)" } as React.CSSProperties}
       >
         <UsageEventsTable toolbarHost={toolbarHost} />

@@ -701,7 +701,7 @@ function FilterModal({
               datesTouched ? draftFrom : "",
               datesTouched ? draftTo : "",
             )}
-            className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90"
+            className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90"
           >
             Apply
           </button>
@@ -860,7 +860,7 @@ function CompanyPickerModal({
               type="button"
               onClick={() => onPick(draft)}
               disabled={!draft}
-              className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary rounded-md hover:opacity-90 disabled:opacity-50"
+              className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90 disabled:opacity-50"
             >
               Apply
             </button>

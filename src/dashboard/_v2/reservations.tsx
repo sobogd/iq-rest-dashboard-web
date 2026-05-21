@@ -274,12 +274,12 @@ function CtaWrapper({ title, children }: { title: string; children: React.ReactN
 function CtaState({ title, body, cta, onClick }: { title: string; body: string; cta: string; onClick: () => void }) {
  return (
   <div className="bg-card border border-border rounded-2xl px-6 py-12 flex flex-col items-center text-center">
-   <div className="text-sm font-semibold text-foreground mb-2">{title}</div>
-   <p className="text-sm text-muted-foreground mb-6 max-w-md leading-relaxed">{body}</p>
+   <div className="text-sm font-medium text-foreground mb-2">{title}</div>
+   <p className="text-xs text-muted-foreground mb-6 max-w-md leading-snug">{body}</p>
    <button
     type="button"
     onClick={onClick}
-    className="inline-flex items-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+    className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary-gradient text-primary-foreground text-xs font-medium transition-colors"
    >
     {cta}
    </button>

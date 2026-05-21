@@ -67,7 +67,7 @@ export function SettingsHubView({
   }, []);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-5xl mx-auto md:px-6">
       {isAdmin ? (
         <div className="mb-4 flex items-center gap-1.5 flex-wrap">
           <button

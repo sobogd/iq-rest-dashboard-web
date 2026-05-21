@@ -599,7 +599,7 @@ export function GoogleAdsPage() {
         </div>
       </SubpageStickyBar>
 
-      <div className="max-w-2xl mx-auto pt-5 md:pt-4 space-y-3">
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 space-y-3">
         {drillAg ? (
           <>
             <div className="text-[11px] text-muted-foreground flex flex-wrap items-center gap-1">

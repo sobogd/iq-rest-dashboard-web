@@ -568,7 +568,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
                 type="button"
                 onClick={sendMessage}
                 disabled={!newMessage.trim() || sending}
-                className="shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary rounded-lg transition-colors items-center justify-center gap-2"
+                className="shrink-0 flex h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors items-center justify-center gap-2"
               >
                 {sending ? (
                   <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -686,7 +686,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
                 type="button"
                 onClick={() => sendEmailTemplate(confirmTemplate)}
                 disabled={!!sendingTemplate}
-                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary rounded-md inline-flex items-center justify-center gap-2 disabled:opacity-60"
+                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md inline-flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {sendingTemplate ? (
                   <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -715,7 +715,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
               <button
                 type="button"
                 onClick={() => setAlert(null)}
-                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary rounded-md"
+                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md"
               >
                 OK
               </button>

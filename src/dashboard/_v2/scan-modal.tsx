@@ -246,32 +246,37 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   stage === "confirm" ? t("title.confirm") :
   t("title.saving");
 
+ const subtitle = stage === "upload" ? t("upload.description") : undefined;
+
  const footer =
   stage === "upload" ? (
-   <button
-    type="button"
-    className={primaryBtn + " w-full h-10 hover:bg-primary/90 active:scale-[0.99] transition-all disabled:bg-input disabled:text-muted-foreground disabled:cursor-not-allowed disabled:active:scale-100 disabled:hover:bg-input"}
-    disabled={photoPool.length === 0}
-    onClick={() => void handleStartScan()}
-   >
-    {t("upload.scan")}
-   </button>
+   <div className="flex justify-end">
+    <button
+     type="button"
+     className={primaryBtn + " disabled:cursor-not-allowed"}
+     disabled={photoPool.length === 0}
+     onClick={() => void handleStartScan()}
+    >
+     {t("upload.scan")}
+    </button>
+   </div>
   ) : stage === "review" ? (
-   <button
-    type="button"
-    className={primaryBtn + " w-full h-10"}
-    disabled={selectedCount === 0}
-    onClick={proceedFromReview}
-   >
-    {t("review.continue", { n: selectedCount })}
-   </button>
+   <div className="flex justify-end">
+    <button
+     type="button"
+     className={primaryBtn + " disabled:cursor-not-allowed"}
+     disabled={selectedCount === 0}
+     onClick={proceedFromReview}
+    >
+     {t("review.continue", { n: selectedCount })}
+    </button>
+   </div>
   ) : null;
 
  return (
-  <Modal open={open} onClose={handleClose} title={title} size="md" footer={footer}>
+  <Modal open={open} onClose={handleClose} title={title} subtitle={subtitle} size="md" footer={footer}>
    {stage === "upload" && (
     <div className="flex flex-col gap-3">
-     <p className="text-sm text-muted-foreground leading-relaxed">{t("upload.description")}</p>
      <input
       ref={fileInputRef}
       type="file"

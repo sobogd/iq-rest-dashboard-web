@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CreditCard, Armchair, ChevronRight, Download } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { activeRestaurantHeader } from "@/lib/active-restaurant";
 import { track } from "@/lib/dashboard-events";
 import { Modal } from "../_v2/ui";
 import { useRestaurant } from "../_v2/restaurant-context";
@@ -92,7 +93,7 @@ export function OrdersListModal({ period, currency, onClose }: ListProps) {
 
   useEffect(() => {
     const { from, to } = periodRange(period);
-    fetch(apiUrl(`/api/orders?from=${from}&to=${to}`), { credentials: "include", cache: "no-store" })
+    fetch(apiUrl(`/api/orders?from=${from}&to=${to}`), { credentials: "include", cache: "no-store", headers: activeRestaurantHeader() })
       .then((r) => (r.ok ? r.json() : []))
       .then((data: OrderRow[]) => setOrders(Array.isArray(data) ? data : []))
       .catch(() => setOrders([]));
@@ -296,6 +297,7 @@ function OrderDetailModal({ order, currency, onClose, onReopened }: DetailProps)
       const res = await fetch(apiUrl(`/api/orders/${order.id}/reopen`), {
         credentials: "include",
         method: "POST",
+        headers: activeRestaurantHeader(),
       });
       if (res.ok) {
         const updated = await res.json();

@@ -254,7 +254,7 @@ export function TablesPage({
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_tables_click_back"); onBack(); }} hideSave />
 
- <div className="max-w-2xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{t("title")}</h2>
@@ -374,7 +374,7 @@ export function TableFormPage({
 
  if (mode === "edit" && !tables.find((x) => x.id === tableId)) {
  return (
- <div className="max-w-2xl mx-auto py-10 text-center text-sm text-muted-foreground">
+ <div className="max-w-5xl mx-auto md:px-6 py-10 text-center text-sm text-muted-foreground">
  {t("emptyTitle")}
  </div>
  );

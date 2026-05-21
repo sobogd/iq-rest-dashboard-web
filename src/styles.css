@@ -228,3 +228,14 @@ html {
     background-color: hsl(var(--primary)); /* fallback for old browsers */
   }
 }
+
+@layer components {
+  /* Disabled primary buttons drop the gradient and show a flat muted
+     surface so the user can tell the action isn't available. */
+  button.bg-primary-gradient:disabled,
+  .bg-primary-gradient[aria-disabled="true"] {
+    background-image: none;
+    background-color: hsl(var(--input));
+    color: hsl(var(--muted-foreground));
+  }
+}
