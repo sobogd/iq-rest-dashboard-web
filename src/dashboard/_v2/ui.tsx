@@ -556,11 +556,19 @@ export function HelpButton({ text }: { text: string }) {
  if (!open) return;
  // Anchor the popover to the button's screen rect. Recompute on resize
  // and scroll so it stays glued even when the modal's body scrolls.
+ // Clamps horizontally so the popover never spills past the viewport.
  function compute() {
  const el = btnRef.current;
  if (!el) return;
  const r = el.getBoundingClientRect();
- setPos({ top: r.bottom + 8, left: r.left + r.width / 2 });
+ const popWidth = Math.min(288, window.innerWidth - 16);
+ const pad = 8;
+ const center = r.left + r.width / 2;
+ const left = Math.max(
+ pad,
+ Math.min(center - popWidth / 2, window.innerWidth - popWidth - pad),
+ );
+ setPos({ top: r.bottom + 8, left });
  }
  compute();
  window.addEventListener("resize", compute);
@@ -603,8 +611,8 @@ export function HelpButton({ text }: { text: string }) {
  <div
  ref={popRef}
  role="tooltip"
- style={{ top: pos.top, left: pos.left, transform: "translateX(-50%)" }}
- className="fixed z-[60] w-72 max-w-[calc(100vw-2rem)] p-3 rounded-lg bg-card border border-border shadow-lg text-xs text-foreground font-normal leading-snug normal-case"
+ style={{ top: pos.top, left: pos.left }}
+ className="fixed z-[60] w-72 max-w-[calc(100vw-1rem)] p-3 rounded-lg bg-card border border-border shadow-lg text-xs text-foreground font-normal leading-snug normal-case"
  >
  {text}
  </div>,
