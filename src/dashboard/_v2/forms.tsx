@@ -748,7 +748,7 @@ export function DishForm({
  </div>
  </div>
 
- {restaurant.acceptOrders ? (
+ {restaurant.orderSettings.acceptOrders ? (
  <div id="options-section" className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{t("optionsLabel")}</div>
  <p className="text-xs text-muted-foreground mb-4 mt-0.5">
