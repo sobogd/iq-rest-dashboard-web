@@ -150,6 +150,17 @@ export const FlameIcon = (p: IconProps) => svg({ ...p, children: <>
  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
 </> });
 
+// PotIcon — kitchen / cooking pot with lid + side handles. Used for the
+// Kitchen tab in the bottom nav.
+export const PotIcon = (p: IconProps) => svg({ ...p, children: <>
+ <path d="M5 10 v9 a2 2 0 0 0 2 2 h10 a2 2 0 0 0 2 -2 v-9" />
+ <line x1="3" y1="10" x2="21" y2="10" />
+ <line x1="11" y1="7" x2="13" y2="7" />
+ <line x1="12" y1="7" x2="12" y2="10" />
+ <line x1="2" y1="13" x2="5" y2="13" />
+ <line x1="19" y1="13" x2="22" y2="13" />
+</> });
+
 export const MessageIcon = (p: IconProps) => svg({ ...p, children: <>
  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
 </> });

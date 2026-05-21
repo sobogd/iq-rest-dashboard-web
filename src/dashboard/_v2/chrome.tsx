@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import {
  CalendarIcon,
  ChartIcon,
- FlameIcon,
  GridIcon,
+ PotIcon,
  ReceiptIcon,
  SettingsIcon,
 } from "./icons";
@@ -49,7 +49,7 @@ const NAV_TABS: NavTab[] = [
  { id: "menu", labelKey: "menu", view: { name: "menu" }, icon: GridIcon },
  { id: "reservations", labelKey: "reservations", view: { name: "reservations" }, icon: CalendarIcon },
  { id: "orders", labelKey: "orders", view: { name: "orders" }, icon: ReceiptIcon },
- { id: "kitchen", labelKey: "kitchen", view: { name: "kitchen" }, icon: FlameIcon },
+ { id: "kitchen", labelKey: "kitchen", view: { name: "kitchen" }, icon: PotIcon },
  { id: "analytics", labelKey: "analytics", view: { name: "analytics" }, icon: ChartIcon },
  { id: "settings", labelKey: "settings", view: { name: "settings" }, icon: SettingsIcon },
 ];

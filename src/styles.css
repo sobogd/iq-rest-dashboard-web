@@ -67,7 +67,7 @@ html {
      hierarchy. Mobile keeps the sub-header flush with cards. */
   @media (min-width: 768px) {
     :root {
-      --subheader-bg: 0 0% 99%;
+      --subheader-bg: 0 0% 99.3%;
     }
   }
 
