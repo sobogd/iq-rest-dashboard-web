@@ -1319,6 +1319,7 @@ export function OptionForm({
  variant={variant}
  lang={lang}
  defaultLang={defaultLang}
+ languages={languages}
  currencySymbol={currencySymbol}
  isFirst={idx === 0}
  isLast={idx === form.variants.length - 1}
@@ -1408,6 +1409,7 @@ function VariantRow({
  variant,
  lang,
  defaultLang,
+ languages,
  currencySymbol,
  isFirst,
  isLast,
@@ -1420,6 +1422,7 @@ function VariantRow({
  variant: OptionVariant;
  lang: string;
  defaultLang: string;
+ languages: string[];
  currencySymbol: string;
  isFirst: boolean;
  isLast: boolean;
@@ -1442,16 +1445,15 @@ function VariantRow({
  </button>
  </div>
  <div className="flex-1 min-w-0">
- <input
- type="text"
- value={getMl(variant.name, lang)}
- onChange={(e) => onChange({ name: setMl(variant.name, lang, e.target.value) })}
- placeholder={
- lang !== defaultLang && getMl(variant.name, defaultLang)
- ? tc("willUse") + ": " + getMl(variant.name, defaultLang)
- : t("variantNamePlaceholder")
- }
- className={inputClass}
+ <TranslatedInput
+ id={`variant-${variant.id}`}
+ value={variant.name}
+ lang={lang}
+ defaultLang={defaultLang}
+ languages={languages}
+ onChange={(next) => onChange({ name: next })}
+ placeholder={t("variantNamePlaceholder")}
+ translatable={false}
  />
  </div>
  <div className="w-16 md:w-20 shrink-0 relative">
