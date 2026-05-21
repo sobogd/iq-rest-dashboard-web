@@ -79,7 +79,7 @@ export function Modal({
  " bg-card border border-border rounded-2xl max-h-[90dvh] flex flex-col"
  }
  >
- <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border">
+ <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border shrink-0">
  {onBack ? (
  <button
  type="button"
@@ -105,7 +105,7 @@ export function Modal({
  <CloseIcon size={16} />
  </button>
  </div>
- <div className="flex-1 overflow-y-auto p-5">{children}</div>
+ <div className="flex-1 min-h-0 overflow-y-auto p-5">{children}</div>
  {footer ? (
  <div className="px-5 py-3 border-t border-border shrink-0">{footer}</div>
  ) : null}
