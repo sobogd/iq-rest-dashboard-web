@@ -515,7 +515,7 @@ export function TranslatedInput({
  aria-label="All languages"
  title="All languages"
  >
- <GlobeIcon size={16} />
+ <GlobeIcon size={20} />
  </button>
  ) : null}
  </div>

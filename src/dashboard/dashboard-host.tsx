@@ -1,8 +1,8 @@
 import { useQueries } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import { api } from "@/lib/api";
+import { FullPageLoader } from "@/components/full-page-loader";
 import { landingUrl } from "@/lib/landing-url";
 import { Shell } from "./_spa/shell";
 import { DashboardSpaWrapper } from "./_spa/spa-wrapper";
@@ -152,10 +152,6 @@ export function DashboardHost() {
   );
 }
 
-function FullPageLoader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-    </div>
-  );
-}
+// FullPageLoader is the shared one in @/components/full-page-loader so the
+// pre-Suspense fallback and the post-mount auth/data wait look identical
+// (avoids the "small spinner → other small spinner" flicker on first load).
