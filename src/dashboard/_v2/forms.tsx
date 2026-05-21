@@ -1342,7 +1342,7 @@ export function OptionForm({
  </div>
 
  {embedded ? (
- <div className="mt-5 flex items-center justify-between gap-2">
+ <div className="sticky bottom-0 -mx-5 -mb-5 mt-5 px-5 py-3 bg-card border-t border-border flex items-center justify-between gap-2 z-10">
  {!isNew ? (
  <button
  type="button"

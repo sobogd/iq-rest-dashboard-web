@@ -693,7 +693,7 @@ function AllLanguagesModal({
  onClick={onClose}
  className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
  >
- {tc("ok")}
+ {tc("save")}
  </button>
  </div>
  }
