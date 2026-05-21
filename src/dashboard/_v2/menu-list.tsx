@@ -8,7 +8,6 @@ import { useDashboardRouter } from "../_spa/router";
 import {
  ArrowDownIcon,
  ArrowLeftIcon,
- ArrowRightIcon,
  ArrowUpIcon,
  ChevronDownIcon,
  ClockIcon,
@@ -17,7 +16,6 @@ import {
  ExpandIcon,
  EyeIcon,
  EyeOffIcon,
- FolderIcon,
  PlusIcon,
  SparklesIcon,
 } from "./icons";
@@ -60,13 +58,24 @@ export function MenuList({
  const currencySymbol = currencySymbolOf(currency);
 
  const [categories, setCategories] = useState<Category[]>(initialCategories);
- // Scoped lists for the current view: leaves at this depth + (top-level only) groups.
+ // Flat layout: top-level (ungrouped) categories + groups with their nested
+ // categories all visible on the same page. currentGroupId from the URL is
+ // ignored — kept only so older deep links don't 404.
+ // All non-group categories regardless of parent — drives bulk operations
+ // (expand-all, item totals, scan-banner visibility).
  const scopedLeaves = useMemo(
    () =>
      categories
-       .filter((c) => !c.isGroup && (c.parentId ?? null) === (currentGroupId ?? null))
+       .filter((c) => !c.isGroup)
        .sort((a, b) => a.sortOrder - b.sortOrder),
-   [categories, currentGroupId],
+   [categories],
+ );
+ const ungroupedCategories = useMemo(
+   () =>
+     categories
+       .filter((c) => !c.isGroup && (c.parentId ?? null) === null)
+       .sort((a, b) => a.sortOrder - b.sortOrder),
+   [categories],
  );
  const topLevelGroups = useMemo(
    () =>
@@ -75,12 +84,16 @@ export function MenuList({
        .sort((a, b) => a.sortOrder - b.sortOrder),
    [categories],
  );
+ const categoriesInGroup = (groupId: string) =>
+   categories
+     .filter((c) => !c.isGroup && c.parentId === groupId)
+     .sort((a, b) => a.sortOrder - b.sortOrder);
  const currentGroup = useMemo(
    () => (currentGroupId ? categories.find((c) => c.id === currentGroupId && c.isGroup) ?? null : null),
    [categories, currentGroupId],
  );
- const categoriesFlipRef = useFlip<HTMLDivElement>([scopedLeaves.map((c) => c.id).join(",")]);
  const groupsFlipRef = useFlip<HTMLDivElement>([topLevelGroups.map((c) => c.id).join(",")]);
+ const ungroupedFlipRef = useFlip<HTMLDivElement>([ungroupedCategories.map((c) => c.id).join(",")]);
  // Persist menu UI state (open categories + scroll position) across
  // navigations to the item / category edit pages. sessionStorage so it
  // resets per tab.
@@ -125,9 +138,8 @@ export function MenuList({
 
  // "Empty" depends on the current depth: at top-level, count leaves + groups;
  // inside a group, just leaves of that group.
- const noCategories = currentGroupId
-   ? scopedLeaves.length === 0
-   : scopedLeaves.length === 0 && topLevelGroups.length === 0;
+ // Empty layout: no categories and no groups anywhere.
+ const noCategories = scopedLeaves.length === 0 && topLevelGroups.length === 0;
  const scanBannerVisible = noCategories || !bannerLocallyDismissed;
 
  async function handleDismissBanner() {
@@ -204,7 +216,12 @@ export function MenuList({
  });
  }, [initialCategories]);
 
- const anyOpen = scopedLeaves.length > 0 && scopedLeaves.some((c) => openIds[c.id]);
+ // anyOpen treats both leaf categories and group containers. Groups default
+ // to open (openIds[id] !== false) so any group not explicitly closed counts
+ // as "open" — keeps the icon flipping correctly when only groups are open.
+ const anyOpen =
+ scopedLeaves.some((c) => openIds[c.id]) ||
+ topLevelGroups.some((g) => openIds[g.id] !== false);
 
  function toggleCategory(id: string) {
  setOpenIds((p) => {
@@ -218,18 +235,16 @@ export function MenuList({
  setOpenIds((prev) => {
  const next = { ...prev };
  scopedLeaves.forEach((c) => { next[c.id] = true; });
+ topLevelGroups.forEach((g) => { next[g.id] = true; });
  return next;
  });
  }
  function collapseAll() {
  track("dash_menu_collapse");
- // Set false explicitly per id rather than {} — otherwise the
- // initialCategories effect below treats missing ids as "new" and
- // re-opens every category after the next data refresh
- // (e.g. after moveCategory fires onPersisted).
  setOpenIds((prev) => {
  const next = { ...prev };
  scopedLeaves.forEach((c) => { next[c.id] = false; });
+ topLevelGroups.forEach((g) => { next[g.id] = false; });
  return next;
  });
  }
@@ -275,10 +290,10 @@ export function MenuList({
  }
  }
 
- async function moveCategory(idx: number, dir: number) {
- // Reorder only happens within the current sibling scope (leaves at this depth).
+ async function moveCategory(siblings: Category[], idx: number, dir: number) {
+ // Reorder happens within the passed sibling list (per-group or ungrouped).
  track(dir < 0 ? "dash_menu_category_sort_up" : "dash_menu_category_sort_down");
- const reorderedSiblings = moveItem(scopedLeaves, idx, dir);
+ const reorderedSiblings = moveItem(siblings, idx, dir);
  const idToOrder = new Map(reorderedSiblings.map((c, i) => [c.id, i]));
  setCategories((cats) =>
    cats.map((c) => (idToOrder.has(c.id) ? { ...c, sortOrder: idToOrder.get(c.id)! } : c)),
@@ -421,7 +436,7 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-5">
+ <div className="max-w-2xl mx-auto pt-5 md:pt-2">
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -514,76 +529,6 @@ export function MenuList({
  )}
 
 
- {!currentGroupId && topLevelGroups.length > 0 ? (
- <div ref={groupsFlipRef} className="space-y-3 mb-3">
- {topLevelGroups.map((g, idx) => (
- <div
- key={g.id}
- data-flip-id={g.id}
- className="bg-card border border-border/60 rounded-xl overflow-hidden"
- >
- <div
- role="button"
- tabIndex={0}
- onClick={() => {
- track("dash_menu_group_open");
- router.push({ name: "menu", group: g.id });
- }}
- onKeyDown={(e) => {
- if (e.key === "Enter" || e.key === " ") {
- e.preventDefault();
- track("dash_menu_group_open");
- router.push({ name: "menu", group: g.id });
- }
- }}
- className="flex items-center gap-2 pl-4 pr-3 py-2 cursor-pointer select-none"
- >
- <FolderIcon size={14} className="text-muted-foreground shrink-0" />
- <span className="min-w-0 text-sm font-semibold text-foreground/70 truncate">
- {getMlWithFallback(g.name, defaultLang, defaultLang)}
- </span>
- <ArrowRightIcon size={12} className="text-muted-foreground shrink-0" />
- <span className="flex-1" />
- <div className="flex items-center gap-0.5 shrink-0">
- <span className="inline-flex items-center gap-0">
- <button
- type="button"
- onClick={(e) => { e.stopPropagation(); moveGroup(idx, -1); }}
- disabled={idx === 0}
- className={iconBtn}
- aria-label={t("moveCategoryUp")}
- >
- <ArrowUpIcon size={14} />
- </button>
- <button
- type="button"
- onClick={(e) => { e.stopPropagation(); moveGroup(idx, 1); }}
- disabled={idx === topLevelGroups.length - 1}
- className={iconBtn}
- aria-label={t("moveCategoryDown")}
- >
- <ArrowDownIcon size={14} />
- </button>
- </span>
- <button
- type="button"
- onClick={(e) => {
- e.stopPropagation();
- track("dash_menu_group_edit");
- router.push({ name: "group.edit", id: g.id });
- }}
- className={iconBtn}
- aria-label={t("editCategory")}
- >
- <EditIcon size={14} />
- </button>
- </div>
- </div>
- </div>
- ))}
- </div>
- ) : null}
-
  {noCategories ? (
  <EmptyState
  title={t("noCategories")}
@@ -593,7 +538,7 @@ export function MenuList({
  type="button"
  onClick={() => {
  track("dash_menu_add_category");
- router.push(currentGroupId ? { name: "category.new", group: currentGroupId } : { name: "category.new" });
+ router.push({ name: "category.new" });
  }}
  data-onboarding-target="add-category"
  className={primaryBtn + " w-full inline-flex items-center justify-center"}
@@ -603,9 +548,10 @@ export function MenuList({
  }
  />
  ) : (
- <div>
- <div ref={categoriesFlipRef} className="space-y-3">
- {scopedLeaves.map((cat, idx) => (
+ <div className="space-y-3">
+ {/* Ungrouped categories first (no group header). */}
+ <div ref={ungroupedFlipRef} className="space-y-3">
+ {ungroupedCategories.map((cat, idx) => (
  <div key={cat.id} data-flip-id={cat.id}>
  <CategoryAccordion
  category={cat}
@@ -614,10 +560,10 @@ export function MenuList({
  isOpen={!!openIds[cat.id]}
  onToggle={() => toggleCategory(cat.id)}
  isFirst={idx === 0}
- isLast={idx === scopedLeaves.length - 1}
+ isLast={idx === ungroupedCategories.length - 1}
  isFirstCategory={idx === 0}
- onMoveUp={() => moveCategory(idx, -1)}
- onMoveDown={() => moveCategory(idx, 1)}
+ onMoveUp={() => moveCategory(ungroupedCategories, idx, -1)}
+ onMoveDown={() => moveCategory(ungroupedCategories, idx, 1)}
  onMoveDish={moveDish}
  onToggleDishVisible={toggleDishVisible}
  />
@@ -625,34 +571,68 @@ export function MenuList({
  ))}
  </div>
 
+ {/* Each group: borderless header (chevron + name + buttons),
+     followed by its child categories + a scoped "Add category"
+     button. Click anywhere on the header toggles the group. */}
+ {topLevelGroups.length > 0 && (
+ <div ref={groupsFlipRef} className="space-y-3">
+ {topLevelGroups.map((g, gi) => {
+ const kids = categoriesInGroup(g.id);
+ const isGroupOpen = openIds[g.id] !== false;
+ return (
+ <GroupBlock
+ key={g.id}
+ g={g}
+ gi={gi}
+ kids={kids}
+ isGroupOpen={isGroupOpen}
+ topLevelGroupsLength={topLevelGroups.length}
+ openIds={openIds}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ t={t}
+ toggleCategory={toggleCategory}
+ moveGroup={moveGroup}
+ moveCategory={moveCategory}
+ moveDish={moveDish}
+ toggleDishVisible={toggleDishVisible}
+ onEditGroup={() => {
+ track("dash_menu_group_edit");
+ router.push({ name: "group.edit", id: g.id });
+ }}
+ />
+ );
+ })}
+ </div>
+ )}
+
+ <div className="flex items-center justify-center gap-6 pt-6 pb-16 md:pb-0">
  <button
  type="button"
  onClick={() => {
  track("dash_menu_add_category");
- router.push(currentGroupId ? { name: "category.new", group: currentGroupId } : { name: "category.new" });
+ router.push({ name: "category.new" });
  }}
  data-onboarding-target="add-category"
- className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 bg-subheader border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
  >
  <PlusIcon size={14} />
  {t("addCategory")}
  </button>
- </div>
- )}
-
- {!currentGroupId ? (
  <button
  type="button"
  onClick={() => {
  track("dash_menu_add_group");
  router.push({ name: "group.new" });
  }}
- className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 bg-subheader border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
  >
  <PlusIcon size={14} />
  {t("addGroup", { defaultValue: "Add group" })}
  </button>
- ) : null}
+ </div>
+ </div>
+ )}
  </div>
 
  <ShareModal
@@ -675,6 +655,124 @@ export function MenuList({
      tour actually helps activation. */}
  {false && scopedLeaves.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
  </>
+ );
+}
+
+function GroupBlock({
+ g,
+ gi,
+ kids,
+ isGroupOpen,
+ topLevelGroupsLength,
+ openIds,
+ defaultLang,
+ currencySymbol,
+ t,
+ toggleCategory,
+ moveGroup,
+ moveCategory,
+ moveDish,
+ toggleDishVisible,
+ onEditGroup,
+}: {
+ g: Category;
+ gi: number;
+ kids: Category[];
+ isGroupOpen: boolean;
+ topLevelGroupsLength: number;
+ openIds: Record<string, boolean>;
+ defaultLang: string;
+ currencySymbol: string;
+ t: ReturnType<typeof useTranslations>;
+ toggleCategory: (id: string) => void;
+ moveGroup: (idx: number, dir: number) => void;
+ moveCategory: (siblings: Category[], idx: number, dir: number) => void;
+ moveDish: (categoryId: string, idx: number, dir: number) => void;
+ toggleDishVisible: (categoryId: string, dishId: string) => void;
+ onEditGroup: () => void;
+}) {
+ const kidsFlipRef = useFlip<HTMLDivElement>([kids.map((c) => c.id).join(",")]);
+ return (
+ <div data-flip-id={g.id} className="space-y-3">
+ <div
+ role="button"
+ tabIndex={0}
+ onClick={() => toggleCategory(g.id)}
+ onKeyDown={(e) => {
+ if (e.key === "Enter" || e.key === " ") {
+ e.preventDefault();
+ toggleCategory(g.id);
+ }
+ }}
+ className="flex items-center gap-2 pl-0 pr-0 py-1 cursor-pointer select-none"
+ >
+ <span className="w-6 h-6 -ml-1 inline-flex items-center justify-center text-muted-foreground shrink-0">
+ <span
+ className="transition-transform duration-150 inline-flex"
+ style={{ transform: isGroupOpen ? "rotate(0deg)" : "rotate(-90deg)" }}
+ >
+ <ChevronDownIcon size={14} />
+ </span>
+ </span>
+ <span className="min-w-0 text-lg font-semibold text-foreground/70 truncate">
+ {getMlWithFallback(g.name, defaultLang, defaultLang)}
+ </span>
+ <span className="flex-1" />
+ <div className="flex items-center gap-0.5 shrink-0">
+ <span className="inline-flex items-center gap-0">
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); moveGroup(gi, -1); }}
+ disabled={gi === 0}
+ className={iconBtn}
+ aria-label={t("moveCategoryUp")}
+ >
+ <ArrowUpIcon size={14} />
+ </button>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); moveGroup(gi, 1); }}
+ disabled={gi === topLevelGroupsLength - 1}
+ className={iconBtn}
+ aria-label={t("moveCategoryDown")}
+ >
+ <ArrowDownIcon size={14} />
+ </button>
+ </span>
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); onEditGroup(); }}
+ className={iconBtn + " justify-end pr-0 -mr-1"}
+ aria-label={t("editCategory")}
+ >
+ <EditIcon size={14} />
+ </button>
+ </div>
+ </div>
+
+ <Collapsible open={isGroupOpen} style={{ marginTop: 0 }}>
+ <div ref={kidsFlipRef} className="space-y-3 pt-2">
+ {kids.map((cat, ci) => (
+ <div key={cat.id} data-flip-id={cat.id}>
+ <CategoryAccordion
+ category={cat}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ isOpen={!!openIds[cat.id]}
+ onToggle={() => toggleCategory(cat.id)}
+ isFirst={ci === 0}
+ isLast={ci === kids.length - 1}
+ isFirstCategory={false}
+ onMoveUp={() => moveCategory(kids, ci, -1)}
+ onMoveDown={() => moveCategory(kids, ci, 1)}
+ onMoveDish={moveDish}
+ onToggleDishVisible={toggleDishVisible}
+ />
+ </div>
+ ))}
+ </div>
+ </Collapsible>
+ </div>
  );
 }
 

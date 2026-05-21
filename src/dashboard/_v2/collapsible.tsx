@@ -6,7 +6,17 @@ const REDUCED_MOTION = typeof window !== "undefined"
 const DURATION = 200;
 const EASING = "cubic-bezier(0.2, 0, 0, 1)";
 
-export function Collapsible({ open, children }: { open: boolean; children: React.ReactNode }) {
+export function Collapsible({
+ open,
+ children,
+ className,
+ style,
+}: {
+ open: boolean;
+ children: React.ReactNode;
+ className?: string;
+ style?: React.CSSProperties;
+}) {
  const outerRef = useRef<HTMLDivElement>(null);
  const innerRef = useRef<HTMLDivElement>(null);
  const isFirstRun = useRef(true);
@@ -52,7 +62,7 @@ export function Collapsible({ open, children }: { open: boolean; children: React
  }, [open]);
 
  return (
-   <div ref={outerRef} style={{ overflow: "hidden" }}>
+   <div ref={outerRef} className={className} style={{ overflow: "hidden", ...style }}>
      <div ref={innerRef}>{children}</div>
    </div>
  );

@@ -20,7 +20,6 @@ import {
 } from "./icons";
 import { inputClass, labelClass, primaryBtn, secondaryBtn } from "./tokens";
 import { AVAILABLE_LANGUAGES, getMl, setMl, translateText } from "./i18n";
-import { useIsAdmin } from "./use-is-admin";
 import { useLocale } from "@/lib/i18n-compat";
 import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
@@ -461,7 +460,6 @@ export function TranslatedInput({
  const showFallback = lang !== defaultLang && !current && fallback;
 
  const showTranslate = translatable && lang !== defaultLang;
- const isAdmin = useIsAdmin();
  const [allLangsOpen, setAllLangsOpen] = useState(false);
 
  const tc = useTranslations("dashboard.common");
@@ -472,7 +470,7 @@ export function TranslatedInput({
  onChange(setMl(value, lang, e.target.value)),
  onFocus,
  placeholder: showFallback ? tc("willUse") + ": " + fallback : (placeholder || ""),
- className: inputClass + (isAdmin ? " pr-10" : ""),
+ className: inputClass + " pr-10",
  };
 
  return (
@@ -507,7 +505,6 @@ export function TranslatedInput({
  inputMode={type === "decimal" ? "decimal" : undefined}
  />
  )}
- {isAdmin ? (
  <button
  type="button"
  onClick={() => setAllLangsOpen(true)}
@@ -517,10 +514,8 @@ export function TranslatedInput({
  >
  <GlobeIcon size={14} />
  </button>
- ) : null}
  </div>
  {hint ? <p className="text-[11px] text-muted-foreground mt-1">{hint}</p> : null}
- {isAdmin ? (
  <AllLanguagesModal
  open={allLangsOpen}
  onClose={() => setAllLangsOpen(false)}
@@ -532,7 +527,6 @@ export function TranslatedInput({
  multiline={!!multiline}
  placeholder={placeholder}
  />
- ) : null}
  </div>
  );
 }
@@ -968,9 +962,6 @@ export function EditPageHeader({
  {tc("back")}
  </button>
  <div className="flex items-center gap-2">
- {onLangChange && languages && lang ? (
- <LanguageSwitcher lang={lang} onChange={onLangChange} languages={languages} onOpen={onLangsOpen} onSelect={onLangSelect} />
- ) : null}
  {onSave ? (
  <button
  type="button"
