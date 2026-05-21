@@ -2235,7 +2235,7 @@ function KitchenItem({
  const qty = o.quantity ?? 1;
  return (
  <div key={i} className="flex gap-1.5">
- <span aria-hidden>+</span>
+ <span aria-hidden>•</span>
  <span>{qty > 1 ? `${qty}× ` : ""}{varName}</span>
  </div>
  );
@@ -2244,8 +2244,9 @@ function KitchenItem({
  ) : null}
 
  {item.notes ? (
- <div className="text-xs text-foreground mt-0.5">
- {item.notes}
+ <div className="text-xs text-muted-foreground mt-0.5 pl-2 flex gap-1.5">
+ <span aria-hidden>•</span>
+ <span>{item.notes}</span>
  </div>
  ) : null}
  </button>
