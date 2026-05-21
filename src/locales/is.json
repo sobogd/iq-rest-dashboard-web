@@ -575,6 +575,8 @@
       "active": "Virkur",
       "delete": "Eyða",
       "confirmDelete": "Eyða veitingastaðnum „{name}“? Þessari aðgerð er ekki hægt að afturkalla.",
+      "deleteTitle": "Eyða veitingastað?",
+      "deleteMessage": "{name} verður eytt varanlega ásamt matseðli, borðum, pöntunum og bókunum. Þessari aðgerð er ekki hægt að afturkalla.",
       "deleted": "Eytt",
       "switched": "Skipt",
       "add": "Bæta veitingastað við",

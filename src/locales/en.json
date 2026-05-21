@@ -575,6 +575,8 @@
       "active": "Active",
       "delete": "Delete",
       "confirmDelete": "Delete restaurant \"{name}\"? This cannot be undone.",
+      "deleteTitle": "Delete restaurant?",
+      "deleteMessage": "{name} will be permanently deleted along with its menu, tables, orders and reservations. This cannot be undone.",
       "deleted": "Deleted",
       "switched": "Switched",
       "add": "Add restaurant",

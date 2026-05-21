@@ -575,6 +575,8 @@
       "active": "Actif",
       "delete": "Supprimer",
       "confirmDelete": "Supprimer le restaurant « {name} » ? Cette action est irréversible.",
+      "deleteTitle": "Supprimer le restaurant ?",
+      "deleteMessage": "{name} sera supprimé définitivement avec son menu, ses tables, ses commandes et ses réservations. Cette action est irréversible.",
       "deleted": "Supprimé",
       "switched": "Changé",
       "add": "Ajouter un restaurant",

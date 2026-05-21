@@ -575,6 +575,8 @@
       "active": "Aktīvs",
       "delete": "Dzēst",
       "confirmDelete": "Dzēst restorānu “{name}”? Šo darbību nevar atsaukt.",
+      "deleteTitle": "Dzēst restorānu?",
+      "deleteMessage": "{name} tiks neatgriezeniski dzēsts kopā ar ēdienkarti, galdiņiem, pasūtījumiem un rezervācijām. Šo darbību nevar atsaukt.",
       "deleted": "Dzēsts",
       "switched": "Pārslēgts",
       "add": "Pievienot restorānu",

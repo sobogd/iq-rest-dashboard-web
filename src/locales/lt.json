@@ -575,6 +575,8 @@
       "active": "Aktyvus",
       "delete": "Ištrinti",
       "confirmDelete": "Ištrinti restoraną „{name}“? Šio veiksmo atšaukti nepavyks.",
+      "deleteTitle": "Ištrinti restoraną?",
+      "deleteMessage": "{name} bus visam laikui ištrintas kartu su meniu, stalais, užsakymais ir rezervacijomis. Šio veiksmo atšaukti nepavyks.",
       "deleted": "Ištrinta",
       "switched": "Perjungta",
       "add": "Pridėti restoraną",

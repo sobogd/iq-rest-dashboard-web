@@ -575,6 +575,8 @@
       "active": "Attivo",
       "delete": "Elimina",
       "confirmDelete": "Eliminare il ristorante «{name}»? L'azione non può essere annullata.",
+      "deleteTitle": "Eliminare il ristorante?",
+      "deleteMessage": "{name} sarà eliminato definitivamente insieme al menu, ai tavoli, agli ordini e alle prenotazioni. L'azione non può essere annullata.",
       "deleted": "Eliminato",
       "switched": "Cambiato",
       "add": "Aggiungi ristorante",

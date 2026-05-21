@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRestaurants } from "./restaurants-context";
-import { SubpageStickyBar } from "./ui";
+import { ConfirmDialog, SubpageStickyBar } from "./ui";
 import { ChevronRightIcon, CheckIcon } from "./icons";
 import { createRestaurant, deleteRestaurant, previewRestaurantSlug } from "./api";
 import { useDashboardRouter } from "../_spa/router";
@@ -66,6 +66,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   const { list, activeId, isPaid, switching, setActive, refresh } = useRestaurants();
   const router = useDashboardRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -81,9 +82,15 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
     }
   };
 
-  const onDelete = async (id: string, name: string) => {
+  const askDelete = (id: string, name: string) => {
     if (list.length <= 1) return;
-    if (!confirm(t("confirmDelete", { name }))) return;
+    setPendingDelete({ id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    const { id } = pendingDelete;
+    setPendingDelete(null);
     setBusyId(id);
     try {
       await deleteRestaurant(id);
@@ -142,7 +149,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
                 {list.length > 1 && isPaid && !isActive && (
                   <button
                     type="button"
-                    onClick={() => onDelete(r.id, r.title)}
+                    onClick={() => askDelete(r.id, r.title)}
                     disabled={busyId === r.id}
                     className="text-xs text-red-600 hover:text-red-700 px-2 py-1 disabled:opacity-50"
                   >
@@ -172,6 +179,14 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
           )}
         </div>
       </div>
+      <ConfirmDialog
+        open={!!pendingDelete}
+        title={t("deleteTitle")}
+        message={pendingDelete ? t("deleteMessage", { name: pendingDelete.name }) : ""}
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDelete(null)}
+        confirmLabel={t("delete")}
+      />
     </div>
   );
 }

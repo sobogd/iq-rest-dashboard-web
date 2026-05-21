@@ -575,6 +575,8 @@
       "active": "Aktywna",
       "delete": "Usuń",
       "confirmDelete": "Usunąć restaurację „{name}”? Tej operacji nie można cofnąć.",
+      "deleteTitle": "Usunąć restaurację?",
+      "deleteMessage": "Restauracja {name} zostanie trwale usunięta wraz z menu, stolikami, zamówieniami i rezerwacjami. Tej operacji nie można cofnąć.",
       "deleted": "Usunięto",
       "switched": "Przełączono",
       "add": "Dodaj restaurację",

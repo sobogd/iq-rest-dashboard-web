@@ -575,6 +575,8 @@
       "active": "Aktivní",
       "delete": "Smazat",
       "confirmDelete": "Smazat restauraci „{name}“? Tuto akci nelze vrátit zpět.",
+      "deleteTitle": "Smazat restauraci?",
+      "deleteMessage": "Restaurace {name} bude trvale smazána včetně menu, stolů, objednávek a rezervací. Tuto akci nelze vrátit zpět.",
       "deleted": "Smazáno",
       "switched": "Přepnuto",
       "add": "Přidat restauraci",

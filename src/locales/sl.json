@@ -575,6 +575,8 @@
       "active": "Aktivna",
       "delete": "Izbriši",
       "confirmDelete": "Izbrišem restavracijo »{name}«? Tega dejanja ni mogoče razveljaviti.",
+      "deleteTitle": "Izbrisati restavracijo?",
+      "deleteMessage": "{name} bo trajno izbrisan skupaj z menijem, mizami, naročili in rezervacijami. Tega dejanja ni mogoče razveljaviti.",
       "deleted": "Izbrisano",
       "switched": "Preklopljeno",
       "add": "Dodaj restavracijo",

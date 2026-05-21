@@ -575,6 +575,8 @@
       "active": "Aktiivne",
       "delete": "Kustuta",
       "confirmDelete": "Kustutada restoran „{name}“? Seda toimingut ei saa tagasi võtta.",
+      "deleteTitle": "Kustutada restoran?",
+      "deleteMessage": "{name} kustutatakse jäädavalt koos menüü, laudade, tellimuste ja broneeringutega. Seda toimingut ei saa tagasi võtta.",
       "deleted": "Kustutatud",
       "switched": "Vahetatud",
       "add": "Lisa restoran",

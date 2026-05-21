@@ -575,6 +575,8 @@
       "active": "Aktif",
       "delete": "Sil",
       "confirmDelete": "\"{name}\" restoranı silinsin mi? Bu işlem geri alınamaz.",
+      "deleteTitle": "Restoran silinsin mi?",
+      "deleteMessage": "{name} menüsü, masaları, siparişleri ve rezervasyonlarıyla birlikte kalıcı olarak silinecek. Bu işlem geri alınamaz.",
       "deleted": "Silindi",
       "switched": "Geçildi",
       "add": "Restoran ekle",

@@ -575,6 +575,8 @@
       "active": "当前",
       "delete": "删除",
       "confirmDelete": "删除餐厅 \"{name}\"？此操作无法撤销。",
+      "deleteTitle": "删除餐厅？",
+      "deleteMessage": "{name} 及其菜单、桌位、订单和预订将被永久删除。此操作无法撤销。",
       "deleted": "已删除",
       "switched": "已切换",
       "add": "添加餐厅",

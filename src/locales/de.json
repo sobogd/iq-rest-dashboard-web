@@ -575,6 +575,8 @@
       "active": "Aktiv",
       "delete": "Löschen",
       "confirmDelete": "Restaurant „{name}“ löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleteTitle": "Restaurant löschen?",
+      "deleteMessage": "{name} wird mitsamt Menü, Tischen, Bestellungen und Reservierungen dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
       "deleted": "Gelöscht",
       "switched": "Gewechselt",
       "add": "Restaurant hinzufügen",

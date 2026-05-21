@@ -575,6 +575,8 @@
       "active": "Aktív",
       "delete": "Törlés",
       "confirmDelete": "Törlöd a(z) „{name}” éttermet? Ez a művelet nem visszavonható.",
+      "deleteTitle": "Étterem törlése?",
+      "deleteMessage": "A(z) {name} véglegesen törlődik az étlappal, asztalokkal, rendelésekkel és foglalásokkal együtt. Ez a művelet nem visszavonható.",
       "deleted": "Törölve",
       "switched": "Átváltva",
       "add": "Étterem hozzáadása",

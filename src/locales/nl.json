@@ -575,6 +575,8 @@
       "active": "Actief",
       "delete": "Verwijderen",
       "confirmDelete": "Restaurant \"{name}\" verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "deleteTitle": "Restaurant verwijderen?",
+      "deleteMessage": "{name} wordt permanent verwijderd samen met het menu, de tafels, bestellingen en reserveringen. Deze actie kan niet ongedaan worden gemaakt.",
       "deleted": "Verwijderd",
       "switched": "Gewisseld",
       "add": "Restaurant toevoegen",

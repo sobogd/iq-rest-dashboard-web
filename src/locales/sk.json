@@ -575,6 +575,8 @@
       "active": "Aktívna",
       "delete": "Odstrániť",
       "confirmDelete": "Odstrániť reštauráciu „{name}“? Túto akciu nemožno vrátiť späť.",
+      "deleteTitle": "Odstrániť reštauráciu?",
+      "deleteMessage": "Reštaurácia {name} bude natrvalo odstránená spolu s menu, stolmi, objednávkami a rezerváciami. Túto akciu nemožno vrátiť späť.",
       "deleted": "Odstránené",
       "switched": "Prepnuté",
       "add": "Pridať reštauráciu",

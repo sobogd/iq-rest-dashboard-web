@@ -575,6 +575,8 @@
       "active": "Activ",
       "delete": "Șterge",
       "confirmDelete": "Ștergi restaurantul „{name}”? Această acțiune nu poate fi anulată.",
+      "deleteTitle": "Ștergi restaurantul?",
+      "deleteMessage": "{name} va fi șters definitiv împreună cu meniul, mesele, comenzile și rezervările. Această acțiune nu poate fi anulată.",
       "deleted": "Șters",
       "switched": "Comutat",
       "add": "Adaugă restaurant",

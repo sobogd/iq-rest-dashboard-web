@@ -575,6 +575,8 @@
       "active": "Aktiivinen",
       "delete": "Poista",
       "confirmDelete": "Poistetaanko ravintola ”{name}”? Tätä toimintoa ei voi peruuttaa.",
+      "deleteTitle": "Poistetaanko ravintola?",
+      "deleteMessage": "{name} poistetaan pysyvästi yhdessä ruokalistan, pöytien, tilausten ja varausten kanssa. Tätä toimintoa ei voi peruuttaa.",
       "deleted": "Poistettu",
       "switched": "Vaihdettu",
       "add": "Lisää ravintola",

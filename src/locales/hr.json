@@ -575,6 +575,8 @@
       "active": "Aktivan",
       "delete": "Izbriši",
       "confirmDelete": "Izbrisati restoran „{name}“? Ovu radnju nije moguće poništiti.",
+      "deleteTitle": "Izbrisati restoran?",
+      "deleteMessage": "{name} bit će trajno izbrisan zajedno s jelovnikom, stolovima, narudžbama i rezervacijama. Ovu radnju nije moguće poništiti.",
       "deleted": "Izbrisano",
       "switched": "Prebačeno",
       "add": "Dodaj restoran",

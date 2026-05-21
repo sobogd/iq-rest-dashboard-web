@@ -575,6 +575,8 @@
       "active": "Aktiv",
       "delete": "Ta bort",
       "confirmDelete": "Ta bort restaurangen ”{name}”? Åtgärden kan inte ångras.",
+      "deleteTitle": "Ta bort restaurang?",
+      "deleteMessage": "{name} tas bort permanent tillsammans med menyn, borden, beställningarna och bokningarna. Åtgärden kan inte ångras.",
       "deleted": "Borttagen",
       "switched": "Bytt",
       "add": "Lägg till restaurang",

@@ -575,6 +575,8 @@
       "active": "Actiu",
       "delete": "Suprimeix",
       "confirmDelete": "Vols suprimir el restaurant «{name}»? Aquesta acció no es pot desfer.",
+      "deleteTitle": "Suprimir restaurant?",
+      "deleteMessage": "{name} se suprimirà definitivament junt amb el seu menú, taules, comandes i reserves. Aquesta acció no es pot desfer.",
       "deleted": "Suprimit",
       "switched": "Canviat",
       "add": "Afegeix restaurant",

@@ -575,6 +575,8 @@
       "active": "Aktiv",
       "delete": "Slett",
       "confirmDelete": "Slette restauranten «{name}»? Dette kan ikke angres.",
+      "deleteTitle": "Slette restaurant?",
+      "deleteMessage": "{name} slettes permanent sammen med menyen, bordene, bestillingene og reservasjonene. Dette kan ikke angres.",
       "deleted": "Slettet",
       "switched": "Byttet",
       "add": "Legg til restaurant",

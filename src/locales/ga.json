@@ -575,6 +575,8 @@
       "active": "Gníomhach",
       "delete": "Scrios",
       "confirmDelete": "Scrios an bhialann \"{name}\"? Ní féidir é a chealú.",
+      "deleteTitle": "Scrios bialann?",
+      "deleteMessage": "Scriosfar {name} go buan mar aon lena bhiachlár, lena bhoird, lena orduithe agus lena áirithintí. Ní féidir é a chealú.",
       "deleted": "Scriosta",
       "switched": "Athraithe",
       "add": "Cuir bialann leis",
