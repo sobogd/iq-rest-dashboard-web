@@ -569,6 +569,33 @@
         "send": "Sūtīt"
       }
     },
+    "restaurants": {
+      "title": "Restorāni",
+      "subtitle": "Pārslēdzieties starp restorāniem vai pievienojiet jaunu.",
+      "active": "Aktīvs",
+      "delete": "Dzēst",
+      "confirmDelete": "Dzēst restorānu “{name}”? Šo darbību nevar atsaukt.",
+      "deleted": "Dzēsts",
+      "switched": "Pārslēgts",
+      "add": "Pievienot restorānu",
+      "addDesc": "Izveidojiet citu restorānu — dublējiet šo ēdienkarti vai sāciet no nulles.",
+      "paidOnly": "Vairāki restorāni pieejami maksas plānā. Jaunināt sadaļā Norēķini, lai pievienotu vēl.",
+      "newTitle": "Pievienot restorānu",
+      "newSubtitle": "Izveidojiet citu restorānu. Izvēlieties, vai sākt ar pašreizējās ēdienkartes kopiju, vai no nulles.",
+      "startFrom": "Sākt no",
+      "duplicate": "Dublēt pašreizējo ēdienkarti un iestatījumus",
+      "duplicateDesc": "Kopē kategorijas, ēdienus, valodas un vizuālos iestatījumus. Galdiņus, pasūtījumus un rezervācijas nekopē.",
+      "blank": "Sākt tukšu",
+      "blankDesc": "Tukšs restorāns. Ēdienkarti veidosiet no nulles.",
+      "name": "Nosaukums",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Izveidot restorānu",
+      "created": "Restorāns izveidots",
+      "saving": "Saglabā…",
+      "cancel": "Atcelt",
+      "backToSettings": "Iestatījumi"
+    },
     "settingsHub": {
       "title": "Iestatījumi",
       "subtitle": "Pārvaldiet restorānu, komandu un kontu.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Visi uzņēmumi, plāni un sarunas.",
         "sessions": "Sesijas",
         "sessionsDesc": "Lietotāju sesijas, notikumi un konversijas."
-      }
+      },
+      "activeRestaurant": "Aktīvs restorāns: {name}",
+      "switcherDescMany": "Pārslēdzieties starp {count} restorāniem vai pievienojiet vēl vienu.",
+      "switcherDescOne": "Pievienojiet citu restorānu vai pārvaldiet šo."
     },
     "impersonation": {
       "loggedInAs": "Pieteicies kā {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ preces",
       "pieces": "gab",
       "exportCsv": "Eksportēt CSV",
-      "periodThisWeek": "Šonedēļ"
+      "periodThisWeek": "Šonedēļ",
+      "scopeActive": "Aktīvs restorāns",
+      "scopeAll": "Visi restorāni"
     },
     "auth": {
       "title": "Izveidojiet savu ēdienkarti",

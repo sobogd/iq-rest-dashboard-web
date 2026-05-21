@@ -569,6 +569,33 @@
         "send": "Send"
       }
     },
+    "restaurants": {
+      "title": "Restauranter",
+      "subtitle": "Skift mellem restauranter eller tilføj en ny.",
+      "active": "Aktiv",
+      "delete": "Slet",
+      "confirmDelete": "Slet restauranten \"{name}\"? Denne handling kan ikke fortrydes.",
+      "deleted": "Slettet",
+      "switched": "Skiftet",
+      "add": "Tilføj restaurant",
+      "addDesc": "Opret en anden restaurant — kopiér denne menu eller start fra bunden.",
+      "paidOnly": "Flere restauranter er tilgængelige på en betalt plan. Opgrader under Fakturering for at tilføje flere.",
+      "newTitle": "Tilføj restaurant",
+      "newSubtitle": "Opret en anden restaurant. Vælg, om du vil starte med en kopi af den nuværende menu eller fra bunden.",
+      "startFrom": "Start fra",
+      "duplicate": "Duplikér nuværende menu og indstillinger",
+      "duplicateDesc": "Kopierer kategorier, retter, sprog og visuelle indstillinger. Borde, ordrer og reservationer kopieres ikke.",
+      "blank": "Start tom",
+      "blankDesc": "Tom restaurant. Du opsætter menuen fra bunden.",
+      "name": "Navn",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-slug",
+      "create": "Opret restaurant",
+      "created": "Restaurant oprettet",
+      "saving": "Gemmer…",
+      "cancel": "Annuller",
+      "backToSettings": "Indstillinger"
+    },
     "settingsHub": {
       "title": "Indstillinger",
       "subtitle": "Administrer din restaurant, team og konto.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Alle virksomheder, planer og chats.",
         "sessions": "Sessioner",
         "sessionsDesc": "Brugersessioner, hændelser og konverteringer."
-      }
+      },
+      "activeRestaurant": "Aktiv restaurant: {name}",
+      "switcherDescMany": "Skift mellem {count} restauranter eller tilføj en til.",
+      "switcherDescOne": "Tilføj en anden restaurant eller administrer denne."
     },
     "impersonation": {
       "loggedInAs": "Logget ind som {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ varer",
       "pieces": "stk",
       "exportCsv": "Eksporter CSV",
-      "periodThisWeek": "Denne uge"
+      "periodThisWeek": "Denne uge",
+      "scopeActive": "Aktiv restaurant",
+      "scopeAll": "Alle restauranter"
     },
     "auth": {
       "title": "Lav din menu",

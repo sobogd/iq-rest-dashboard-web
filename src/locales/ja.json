@@ -569,6 +569,33 @@
         "send": "送信"
       }
     },
+    "restaurants": {
+      "title": "レストラン",
+      "subtitle": "レストランを切り替えるか、新しく追加します。",
+      "active": "アクティブ",
+      "delete": "削除",
+      "confirmDelete": "レストラン「{name}」を削除しますか？この操作は元に戻せません。",
+      "deleted": "削除しました",
+      "switched": "切り替えました",
+      "add": "レストランを追加",
+      "addDesc": "別のレストランを作成します — このメニューを複製するか、最初から始めます。",
+      "paidOnly": "複数のレストランは有料プランで利用できます。請求から アップグレードして追加してください。",
+      "newTitle": "レストランを追加",
+      "newSubtitle": "別のレストランを作成します。現在のメニューのコピーから始めるか、ゼロから始めるかを選んでください。",
+      "startFrom": "開始方法",
+      "duplicate": "現在のメニューと設定を複製",
+      "duplicateDesc": "カテゴリー、商品、言語、ビジュアル設定をコピーします。テーブル、注文、予約はコピーされません。",
+      "blank": "空から開始",
+      "blankDesc": "空のレストラン。メニューをゼロから設定します。",
+      "name": "名前",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL スラッグ",
+      "create": "レストランを作成",
+      "created": "レストランを作成しました",
+      "saving": "保存中…",
+      "cancel": "キャンセル",
+      "backToSettings": "設定"
+    },
     "settingsHub": {
       "title": "設定",
       "subtitle": "レストラン、チーム、アカウントを管理します。",
@@ -602,7 +629,10 @@
         "companiesDesc": "すべての企業、プラン、チャット。",
         "sessions": "セッション",
         "sessionsDesc": "ユーザーセッション、イベント、コンバージョン。"
-      }
+      },
+      "activeRestaurant": "アクティブなレストラン: {name}",
+      "switcherDescMany": "{count} 店舗のレストランを切り替えるか、別のものを追加します。",
+      "switcherDescOne": "別のレストランを追加するか、このレストランを管理します。"
     },
     "impersonation": {
       "loggedInAs": "{email} としてログイン中",
@@ -667,7 +697,9 @@
       "size6": "6+点",
       "pieces": "個",
       "exportCsv": "CSVをエクスポート",
-      "periodThisWeek": "今週"
+      "periodThisWeek": "今週",
+      "scopeActive": "アクティブなレストラン",
+      "scopeAll": "すべてのレストラン"
     },
     "auth": {
       "title": "メニューを作成",

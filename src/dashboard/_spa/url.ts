@@ -51,6 +51,10 @@ export function viewToPath(view: View): string {
       return view.from ? `/dashboard/settings/billing?from=${view.from}` : "/dashboard/settings/billing";
     case "settings.support":
       return "/dashboard/settings/support";
+    case "settings.restaurants":
+      return "/dashboard/settings/restaurants";
+    case "settings.restaurants.new":
+      return "/dashboard/settings/restaurants/new";
     case "settings.admin.companies":
       return "/dashboard/settings/admin/companies";
     case "settings.admin.company":
@@ -117,6 +121,8 @@ export function pathToView(path: string): View {
     return from === "menu" ? { name: "settings.billing", from: "menu" } : { name: "settings.billing" };
   }
   if (stripped === "/dashboard/settings/support") return { name: "settings.support" };
+  if (stripped === "/dashboard/settings/restaurants") return { name: "settings.restaurants" };
+  if (stripped === "/dashboard/settings/restaurants/new") return { name: "settings.restaurants.new" };
   if (stripped === "/dashboard/settings/admin/companies")
     return { name: "settings.admin.companies" };
   const companyMatch = stripped.match(/^\/dashboard\/settings\/admin\/companies\/([^/]+)$/);

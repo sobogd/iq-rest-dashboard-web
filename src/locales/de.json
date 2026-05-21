@@ -569,6 +569,33 @@
         "send": "Senden"
       }
     },
+    "restaurants": {
+      "title": "Restaurants",
+      "subtitle": "Zwischen Restaurants wechseln oder ein neues hinzufügen.",
+      "active": "Aktiv",
+      "delete": "Löschen",
+      "confirmDelete": "Restaurant „{name}“ löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "deleted": "Gelöscht",
+      "switched": "Gewechselt",
+      "add": "Restaurant hinzufügen",
+      "addDesc": "Erstelle ein weiteres Restaurant — dieses Menü duplizieren oder neu beginnen.",
+      "paidOnly": "Mehrere Restaurants sind im bezahlten Tarif verfügbar. Im Abrechnungsbereich upgraden, um weitere hinzuzufügen.",
+      "newTitle": "Restaurant hinzufügen",
+      "newSubtitle": "Erstelle ein weiteres Restaurant. Wähle, ob du mit einer Kopie des aktuellen Menüs oder neu beginnst.",
+      "startFrom": "Starten mit",
+      "duplicate": "Aktuelles Menü und Einstellungen duplizieren",
+      "duplicateDesc": "Kopiert Kategorien, Gerichte, Sprachen und visuelle Einstellungen. Tische, Bestellungen und Reservierungen werden nicht kopiert.",
+      "blank": "Leer starten",
+      "blankDesc": "Leeres Restaurant. Du richtest das Menü von Grund auf ein.",
+      "name": "Name",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-Slug",
+      "create": "Restaurant erstellen",
+      "created": "Restaurant erstellt",
+      "saving": "Speichern…",
+      "cancel": "Abbrechen",
+      "backToSettings": "Einstellungen"
+    },
     "settingsHub": {
       "title": "Einstellungen",
       "subtitle": "Verwalten Sie Ihr Restaurant, Team und Konto.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Alle Unternehmen, Tarife und Chats.",
         "sessions": "Sitzungen",
         "sessionsDesc": "Benutzersitzungen, Ereignisse und Konversionen."
-      }
+      },
+      "activeRestaurant": "Aktives Restaurant: {name}",
+      "switcherDescMany": "Zwischen {count} Restaurants wechseln oder ein weiteres hinzufügen.",
+      "switcherDescOne": "Weiteres Restaurant hinzufügen oder dieses verwalten."
     },
     "impersonation": {
       "loggedInAs": "Angemeldet als {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ Artikel",
       "pieces": "Stk",
       "exportCsv": "CSV exportieren",
-      "periodThisWeek": "Diese Woche"
+      "periodThisWeek": "Diese Woche",
+      "scopeActive": "Aktives Restaurant",
+      "scopeAll": "Alle Restaurants"
     },
     "auth": {
       "title": "Erstellen Sie Ihre Karte",

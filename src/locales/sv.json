@@ -569,6 +569,33 @@
         "send": "Skicka"
       }
     },
+    "restaurants": {
+      "title": "Restauranger",
+      "subtitle": "Växla mellan restauranger eller lägg till en ny.",
+      "active": "Aktiv",
+      "delete": "Ta bort",
+      "confirmDelete": "Ta bort restaurangen ”{name}”? Åtgärden kan inte ångras.",
+      "deleted": "Borttagen",
+      "switched": "Bytt",
+      "add": "Lägg till restaurang",
+      "addDesc": "Skapa en annan restaurang — duplicera den här menyn eller börja från noll.",
+      "paidOnly": "Flera restauranger är tillgängliga i ett betalt abonnemang. Uppgradera under Fakturering för att lägga till fler.",
+      "newTitle": "Lägg till restaurang",
+      "newSubtitle": "Skapa en annan restaurang. Välj om du vill börja med en kopia av nuvarande meny eller från noll.",
+      "startFrom": "Börja från",
+      "duplicate": "Duplicera nuvarande meny och inställningar",
+      "duplicateDesc": "Kopierar kategorier, rätter, språk och visuella inställningar. Bord, beställningar och bokningar kopieras inte.",
+      "blank": "Börja tom",
+      "blankDesc": "Tom restaurang. Du sätter upp menyn från noll.",
+      "name": "Namn",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-slug",
+      "create": "Skapa restaurang",
+      "created": "Restaurang skapad",
+      "saving": "Sparar…",
+      "cancel": "Avbryt",
+      "backToSettings": "Inställningar"
+    },
     "settingsHub": {
       "title": "Inställningar",
       "subtitle": "Hantera restaurang, team och konto.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Alla företag, planer och chattar.",
         "sessions": "Sessioner",
         "sessionsDesc": "Användarsessioner, händelser och konverteringar."
-      }
+      },
+      "activeRestaurant": "Aktiv restaurang: {name}",
+      "switcherDescMany": "Växla mellan {count} restauranger eller lägg till en till.",
+      "switcherDescOne": "Lägg till en annan restaurang eller hantera den här."
     },
     "impersonation": {
       "loggedInAs": "Inloggad som {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ varor",
       "pieces": "st",
       "exportCsv": "Exportera CSV",
-      "periodThisWeek": "Denna vecka"
+      "periodThisWeek": "Denna vecka",
+      "scopeActive": "Aktiv restaurang",
+      "scopeAll": "Alla restauranger"
     },
     "auth": {
       "title": "Skapa din meny",

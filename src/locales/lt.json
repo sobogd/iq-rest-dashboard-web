@@ -569,6 +569,33 @@
         "send": "Siųsti"
       }
     },
+    "restaurants": {
+      "title": "Restoranai",
+      "subtitle": "Perjunkite tarp restoranų arba pridėkite naują.",
+      "active": "Aktyvus",
+      "delete": "Ištrinti",
+      "confirmDelete": "Ištrinti restoraną „{name}“? Šio veiksmo atšaukti nepavyks.",
+      "deleted": "Ištrinta",
+      "switched": "Perjungta",
+      "add": "Pridėti restoraną",
+      "addDesc": "Sukurkite kitą restoraną — dubliuokite šį meniu arba pradėkite nuo nulio.",
+      "paidOnly": "Keli restoranai pasiekiami mokamame plane. Atnaujinkite skiltyje Apmokestinimas, kad pridėtumėte daugiau.",
+      "newTitle": "Pridėti restoraną",
+      "newSubtitle": "Sukurkite kitą restoraną. Pasirinkite, ar pradėti nuo dabartinio meniu kopijos, ar nuo nulio.",
+      "startFrom": "Pradėti nuo",
+      "duplicate": "Dubliuoti dabartinį meniu ir nustatymus",
+      "duplicateDesc": "Nukopijuoja kategorijas, patiekalus, kalbas ir vizualinius nustatymus. Stalų, užsakymų ir rezervacijų nekopijuoja.",
+      "blank": "Pradėti tuščią",
+      "blankDesc": "Tuščias restoranas. Meniu sukursite nuo nulio.",
+      "name": "Pavadinimas",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug'as",
+      "create": "Sukurti restoraną",
+      "created": "Restoranas sukurtas",
+      "saving": "Įrašoma…",
+      "cancel": "Atšaukti",
+      "backToSettings": "Nustatymai"
+    },
     "settingsHub": {
       "title": "Nustatymai",
       "subtitle": "Tvarkykite restoraną, komandą ir paskyrą.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Visos įmonės, planai ir pokalbiai.",
         "sessions": "Seansai",
         "sessionsDesc": "Vartotojų seansai, įvykiai ir konversijos."
-      }
+      },
+      "activeRestaurant": "Aktyvus restoranas: {name}",
+      "switcherDescMany": "Perjunkite tarp {count} restoranų arba pridėkite naują.",
+      "switcherDescOne": "Pridėkite kitą restoraną arba tvarkykite šį."
     },
     "impersonation": {
       "loggedInAs": "Prisijungę kaip {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ prekių",
       "pieces": "vnt",
       "exportCsv": "Eksportuoti CSV",
-      "periodThisWeek": "Šią savaitę"
+      "periodThisWeek": "Šią savaitę",
+      "scopeActive": "Aktyvus restoranas",
+      "scopeAll": "Visi restoranai"
     },
     "auth": {
       "title": "Sukurkite savo meniu",

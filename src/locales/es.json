@@ -569,6 +569,33 @@
         "send": "Enviar mensaje"
       }
     },
+    "restaurants": {
+      "title": "Restaurantes",
+      "subtitle": "Cambia entre restaurantes o añade uno nuevo.",
+      "active": "Activo",
+      "delete": "Eliminar",
+      "confirmDelete": "¿Eliminar el restaurante «{name}»? Esta acción no se puede deshacer.",
+      "deleted": "Eliminado",
+      "switched": "Cambiado",
+      "add": "Añadir restaurante",
+      "addDesc": "Crea otro restaurante: duplica este menú o empieza desde cero.",
+      "paidOnly": "Varios restaurantes están disponibles en el plan de pago. Mejora desde Facturación para añadir más.",
+      "newTitle": "Añadir restaurante",
+      "newSubtitle": "Crea otro restaurante. Elige si empezar con una copia del menú actual o desde cero.",
+      "startFrom": "Empieza desde",
+      "duplicate": "Duplicar menú y ajustes actuales",
+      "duplicateDesc": "Copia categorías, platos, idiomas y ajustes visuales. Las mesas, pedidos y reservas no se copian.",
+      "blank": "Empieza en blanco",
+      "blankDesc": "Restaurante vacío. Configurarás el menú desde cero.",
+      "name": "Nombre",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug de URL",
+      "create": "Crear restaurante",
+      "created": "Restaurante creado",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "backToSettings": "Ajustes"
+    },
     "settingsHub": {
       "title": "Ajustes",
       "subtitle": "Gestiona tu restaurante, equipo y cuenta.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Todas las empresas, planes y chats.",
         "sessions": "Sesiones",
         "sessionsDesc": "Sesiones de usuario, eventos y conversiones."
-      }
+      },
+      "activeRestaurant": "Restaurante activo: {name}",
+      "switcherDescMany": "Cambia entre {count} restaurantes o añade otro.",
+      "switcherDescOne": "Añade otro restaurante o gestiona este."
     },
     "impersonation": {
       "loggedInAs": "Conectado como {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ artículos",
       "pieces": "ud",
       "exportCsv": "Exportar CSV",
-      "periodThisWeek": "Esta semana"
+      "periodThisWeek": "Esta semana",
+      "scopeActive": "Restaurante activo",
+      "scopeAll": "Todos los restaurantes"
     },
     "auth": {
       "title": "Crea tu menú",

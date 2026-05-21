@@ -569,6 +569,33 @@
         "send": "Lähetä"
       }
     },
+    "restaurants": {
+      "title": "Ravintolat",
+      "subtitle": "Vaihda ravintolaa tai lisää uusi.",
+      "active": "Aktiivinen",
+      "delete": "Poista",
+      "confirmDelete": "Poistetaanko ravintola ”{name}”? Tätä toimintoa ei voi peruuttaa.",
+      "deleted": "Poistettu",
+      "switched": "Vaihdettu",
+      "add": "Lisää ravintola",
+      "addDesc": "Luo toinen ravintola — kopioi tämä ruokalista tai aloita tyhjästä.",
+      "paidOnly": "Useat ravintolat ovat saatavilla maksullisessa tilauksessa. Päivitä Laskutuksesta lisätäksesi niitä.",
+      "newTitle": "Lisää ravintola",
+      "newSubtitle": "Luo toinen ravintola. Valitse, aloitatko nykyisen ruokalistan kopiosta vai tyhjästä.",
+      "startFrom": "Aloita",
+      "duplicate": "Kopioi nykyinen ruokalista ja asetukset",
+      "duplicateDesc": "Kopioi kategoriat, annokset, kielet ja visuaaliset asetukset. Pöytiä, tilauksia ja varauksia ei kopioida.",
+      "blank": "Aloita tyhjästä",
+      "blankDesc": "Tyhjä ravintola. Määrität ruokalistan alusta alkaen.",
+      "name": "Nimi",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-tunnus",
+      "create": "Luo ravintola",
+      "created": "Ravintola luotu",
+      "saving": "Tallennetaan…",
+      "cancel": "Peruuta",
+      "backToSettings": "Asetukset"
+    },
     "settingsHub": {
       "title": "Asetukset",
       "subtitle": "Hallitse ravintolaasi, tiimiä ja tiliä.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Kaikki yritykset, paketit ja keskustelut.",
         "sessions": "Istunnot",
         "sessionsDesc": "Käyttäjäistunnot, tapahtumat ja konversiot."
-      }
+      },
+      "activeRestaurant": "Aktiivinen ravintola: {name}",
+      "switcherDescMany": "Vaihda {count} ravintolan välillä tai lisää uusi.",
+      "switcherDescOne": "Lisää toinen ravintola tai hallinnoi tätä."
     },
     "impersonation": {
       "loggedInAs": "Kirjautunut käyttäjänä {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ tuotetta",
       "pieces": "kpl",
       "exportCsv": "Vie CSV",
-      "periodThisWeek": "Tällä viikolla"
+      "periodThisWeek": "Tällä viikolla",
+      "scopeActive": "Aktiivinen ravintola",
+      "scopeAll": "Kaikki ravintolat"
     },
     "auth": {
       "title": "Luo menusi",

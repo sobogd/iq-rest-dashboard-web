@@ -569,6 +569,33 @@
         "send": "Verzenden"
       }
     },
+    "restaurants": {
+      "title": "Restaurants",
+      "subtitle": "Wissel tussen restaurants of voeg een nieuw restaurant toe.",
+      "active": "Actief",
+      "delete": "Verwijderen",
+      "confirmDelete": "Restaurant \"{name}\" verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+      "deleted": "Verwijderd",
+      "switched": "Gewisseld",
+      "add": "Restaurant toevoegen",
+      "addDesc": "Maak een ander restaurant — dupliceer dit menu of begin met een leeg restaurant.",
+      "paidOnly": "Meerdere restaurants zijn beschikbaar in een betaald abonnement. Upgrade in Facturering om er meer toe te voegen.",
+      "newTitle": "Restaurant toevoegen",
+      "newSubtitle": "Maak een ander restaurant. Kies of je start met een kopie van het huidige menu of helemaal opnieuw.",
+      "startFrom": "Beginnen met",
+      "duplicate": "Huidig menu en instellingen dupliceren",
+      "duplicateDesc": "Kopieert categorieën, gerechten, talen en visuele instellingen. Tafels, bestellingen en reserveringen worden niet gekopieerd.",
+      "blank": "Leeg starten",
+      "blankDesc": "Leeg restaurant. Je stelt het menu vanaf nul in.",
+      "name": "Naam",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-slug",
+      "create": "Restaurant maken",
+      "created": "Restaurant aangemaakt",
+      "saving": "Opslaan…",
+      "cancel": "Annuleren",
+      "backToSettings": "Instellingen"
+    },
     "settingsHub": {
       "title": "Instellingen",
       "subtitle": "Beheer uw restaurant, team en account.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Alle bedrijven, abonnementen en chats.",
         "sessions": "Sessies",
         "sessionsDesc": "Gebruikerssessies, gebeurtenissen en conversies."
-      }
+      },
+      "activeRestaurant": "Actief restaurant: {name}",
+      "switcherDescMany": "Wissel tussen {count} restaurants of voeg een ander toe.",
+      "switcherDescOne": "Voeg een ander restaurant toe of beheer dit restaurant."
     },
     "impersonation": {
       "loggedInAs": "Ingelogd als {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ items",
       "pieces": "st",
       "exportCsv": "CSV exporteren",
-      "periodThisWeek": "Deze week"
+      "periodThisWeek": "Deze week",
+      "scopeActive": "Actief restaurant",
+      "scopeAll": "Alle restaurants"
     },
     "auth": {
       "title": "Maak uw menu",

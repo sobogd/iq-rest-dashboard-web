@@ -569,6 +569,33 @@
         "send": "Envia"
       }
     },
+    "restaurants": {
+      "title": "Restaurants",
+      "subtitle": "Canvia entre restaurants o afegeix-ne un de nou.",
+      "active": "Actiu",
+      "delete": "Suprimeix",
+      "confirmDelete": "Vols suprimir el restaurant «{name}»? Aquesta acció no es pot desfer.",
+      "deleted": "Suprimit",
+      "switched": "Canviat",
+      "add": "Afegeix restaurant",
+      "addDesc": "Crea un altre restaurant: duplica aquest menú o comença de zero.",
+      "paidOnly": "Diversos restaurants estan disponibles al pla de pagament. Actualitza a Facturació per afegir-ne més.",
+      "newTitle": "Afegeix restaurant",
+      "newSubtitle": "Crea un altre restaurant. Tria si vols començar amb una còpia del menú actual o des de zero.",
+      "startFrom": "Comença des de",
+      "duplicate": "Duplica el menú i la configuració actuals",
+      "duplicateDesc": "Copia categories, plats, idiomes i ajustos visuals. Taules, comandes i reserves no es copien.",
+      "blank": "Comença en blanc",
+      "blankDesc": "Restaurant buit. Configuraràs el menú des de zero.",
+      "name": "Nom",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug d'URL",
+      "create": "Crea restaurant",
+      "created": "Restaurant creat",
+      "saving": "S'està desant…",
+      "cancel": "Cancel·la",
+      "backToSettings": "Configuració"
+    },
     "settingsHub": {
       "title": "Configuració",
       "subtitle": "Gestiona el restaurant, l'equip i el compte.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Totes les empreses, plans i xats.",
         "sessions": "Sessions",
         "sessionsDesc": "Sessions d'usuari, esdeveniments i conversions."
-      }
+      },
+      "activeRestaurant": "Restaurant actiu: {name}",
+      "switcherDescMany": "Canvia entre {count} restaurants o afegeix-ne un altre.",
+      "switcherDescOne": "Afegeix un altre restaurant o gestiona aquest."
     },
     "impersonation": {
       "loggedInAs": "Iniciada sessió com a {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ articles",
       "pieces": "u",
       "exportCsv": "Exporta CSV",
-      "periodThisWeek": "Aquesta setmana"
+      "periodThisWeek": "Aquesta setmana",
+      "scopeActive": "Restaurant actiu",
+      "scopeAll": "Tots els restaurants"
     },
     "auth": {
       "title": "Crea el teu menú",

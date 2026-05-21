@@ -569,6 +569,33 @@
         "send": "Küldés"
       }
     },
+    "restaurants": {
+      "title": "Éttermek",
+      "subtitle": "Válts éttermek között, vagy adj hozzá újat.",
+      "active": "Aktív",
+      "delete": "Törlés",
+      "confirmDelete": "Törlöd a(z) „{name}” éttermet? Ez a művelet nem visszavonható.",
+      "deleted": "Törölve",
+      "switched": "Átváltva",
+      "add": "Étterem hozzáadása",
+      "addDesc": "Hozz létre másik éttermet — másold át ezt az étlapot, vagy kezdj a nulláról.",
+      "paidOnly": "A több étterem fizetős csomagban érhető el. Frissíts a Számlázásnál, hogy többet adhass hozzá.",
+      "newTitle": "Étterem hozzáadása",
+      "newSubtitle": "Hozz létre másik éttermet. Válaszd, hogy a jelenlegi étlap másolatából vagy üresen indulsz.",
+      "startFrom": "Indítás",
+      "duplicate": "Jelenlegi étlap és beállítások másolása",
+      "duplicateDesc": "Másolja a kategóriákat, ételeket, nyelveket és vizuális beállításokat. Az asztalokat, rendeléseket és foglalásokat nem.",
+      "blank": "Üresen kezdés",
+      "blankDesc": "Üres étterem. Az étlapot a nulláról állítod össze.",
+      "name": "Név",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-slug",
+      "create": "Étterem létrehozása",
+      "created": "Étterem létrehozva",
+      "saving": "Mentés…",
+      "cancel": "Mégse",
+      "backToSettings": "Beállítások"
+    },
     "settingsHub": {
       "title": "Beállítások",
       "subtitle": "Étterem, csapat és fiók kezelése.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Minden cég, csomag és beszélgetés.",
         "sessions": "Munkamenetek",
         "sessionsDesc": "Felhasználói munkamenetek, események és konverziók."
-      }
+      },
+      "activeRestaurant": "Aktív étterem: {name}",
+      "switcherDescMany": "Válts {count} étterem között, vagy adj hozzá újat.",
+      "switcherDescOne": "Adj hozzá másik éttermet, vagy kezeld ezt."
     },
     "impersonation": {
       "loggedInAs": "Bejelentkezve mint {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ tétel",
       "pieces": "db",
       "exportCsv": "CSV exportálása",
-      "periodThisWeek": "Ezen a héten"
+      "periodThisWeek": "Ezen a héten",
+      "scopeActive": "Aktív étterem",
+      "scopeAll": "Összes étterem"
     },
     "auth": {
       "title": "Hozd létre az étlapod",

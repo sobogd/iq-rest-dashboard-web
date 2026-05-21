@@ -569,6 +569,33 @@
         "send": "Trimite"
       }
     },
+    "restaurants": {
+      "title": "Restaurante",
+      "subtitle": "Comută între restaurante sau adaugă unul nou.",
+      "active": "Activ",
+      "delete": "Șterge",
+      "confirmDelete": "Ștergi restaurantul „{name}”? Această acțiune nu poate fi anulată.",
+      "deleted": "Șters",
+      "switched": "Comutat",
+      "add": "Adaugă restaurant",
+      "addDesc": "Creează un alt restaurant — duplică acest meniu sau pornește de la zero.",
+      "paidOnly": "Mai multe restaurante sunt disponibile într-un plan plătit. Actualizează la Facturare pentru a adăuga mai multe.",
+      "newTitle": "Adaugă restaurant",
+      "newSubtitle": "Creează un alt restaurant. Alege dacă pornești cu o copie a meniului curent sau de la zero.",
+      "startFrom": "Pornește de la",
+      "duplicate": "Duplică meniul și setările curente",
+      "duplicateDesc": "Copiază categoriile, articolele, limbile și setările vizuale. Mesele, comenzile și rezervările nu se copiază.",
+      "blank": "Pornește gol",
+      "blankDesc": "Restaurant gol. Vei configura meniul de la zero.",
+      "name": "Nume",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug URL",
+      "create": "Creează restaurant",
+      "created": "Restaurant creat",
+      "saving": "Se salvează…",
+      "cancel": "Anulează",
+      "backToSettings": "Setări"
+    },
     "settingsHub": {
       "title": "Setări",
       "subtitle": "Gestionează restaurantul, echipa și contul.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Toate companiile, planurile și conversațiile.",
         "sessions": "Sesiuni",
         "sessionsDesc": "Sesiuni utilizator, evenimente și conversii."
-      }
+      },
+      "activeRestaurant": "Restaurant activ: {name}",
+      "switcherDescMany": "Comută între {count} restaurante sau adaugă altul.",
+      "switcherDescOne": "Adaugă alt restaurant sau gestionează-l pe acesta."
     },
     "impersonation": {
       "loggedInAs": "Conectat ca {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ articole",
       "pieces": "buc",
       "exportCsv": "Exportă CSV",
-      "periodThisWeek": "Săptămâna aceasta"
+      "periodThisWeek": "Săptămâna aceasta",
+      "scopeActive": "Restaurant activ",
+      "scopeAll": "Toate restaurantele"
     },
     "auth": {
       "title": "Creează-ți meniul",

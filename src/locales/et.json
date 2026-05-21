@@ -569,6 +569,33 @@
         "send": "Saada"
       }
     },
+    "restaurants": {
+      "title": "Restoranid",
+      "subtitle": "Vaheta restoranide vahel või lisa uus.",
+      "active": "Aktiivne",
+      "delete": "Kustuta",
+      "confirmDelete": "Kustutada restoran „{name}“? Seda toimingut ei saa tagasi võtta.",
+      "deleted": "Kustutatud",
+      "switched": "Vahetatud",
+      "add": "Lisa restoran",
+      "addDesc": "Loo veel üks restoran — dubleeri see menüü või alusta tühjalt.",
+      "paidOnly": "Mitu restorani on saadaval tasulises plaanis. Uuenda arveldamise alt, et lisada veel.",
+      "newTitle": "Lisa restoran",
+      "newSubtitle": "Loo veel üks restoran. Vali, kas alustada praeguse menüü koopiast või nullist.",
+      "startFrom": "Alusta",
+      "duplicate": "Dubleeri praegune menüü ja sätted",
+      "duplicateDesc": "Kopeerib kategooriad, road, keeled ja visuaalsed sätted. Lauad, tellimused ja broneeringud ei kopeeru.",
+      "blank": "Alusta tühjalt",
+      "blankDesc": "Tühi restoran. Menüü seadistad nullist.",
+      "name": "Nimi",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-i slug",
+      "create": "Loo restoran",
+      "created": "Restoran loodud",
+      "saving": "Salvestamine…",
+      "cancel": "Tühista",
+      "backToSettings": "Seaded"
+    },
     "settingsHub": {
       "title": "Seaded",
       "subtitle": "Halda restorani, meeskonda ja kontot.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Kõik ettevõtted, plaanid ja vestlused.",
         "sessions": "Seansid",
         "sessionsDesc": "Kasutajaseansid, sündmused ja konversioonid."
-      }
+      },
+      "activeRestaurant": "Aktiivne restoran: {name}",
+      "switcherDescMany": "Vaheta {count} restorani vahel või lisa uus.",
+      "switcherDescOne": "Lisa uus restoran või halda seda."
     },
     "impersonation": {
       "loggedInAs": "Sisse logitud kui {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ toodet",
       "pieces": "tk",
       "exportCsv": "Ekspordi CSV",
-      "periodThisWeek": "Sel nädalal"
+      "periodThisWeek": "Sel nädalal",
+      "scopeActive": "Aktiivne restoran",
+      "scopeAll": "Kõik restoranid"
     },
     "auth": {
       "title": "Loo oma menüü",

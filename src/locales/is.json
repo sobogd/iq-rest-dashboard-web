@@ -569,6 +569,33 @@
         "send": "Senda"
       }
     },
+    "restaurants": {
+      "title": "Veitingastaðir",
+      "subtitle": "Skiptu á milli veitingastaða eða bættu nýjum við.",
+      "active": "Virkur",
+      "delete": "Eyða",
+      "confirmDelete": "Eyða veitingastaðnum „{name}“? Þessari aðgerð er ekki hægt að afturkalla.",
+      "deleted": "Eytt",
+      "switched": "Skipt",
+      "add": "Bæta veitingastað við",
+      "addDesc": "Stofnaðu annan veitingastað — afritaðu þennan matseðil eða byrjaðu á núlli.",
+      "paidOnly": "Margir veitingastaðir eru í boði í greiddri áskrift. Uppfærðu undir Reikningar til að bæta við fleirum.",
+      "newTitle": "Bæta veitingastað við",
+      "newSubtitle": "Stofnaðu annan veitingastað. Veldu hvort byrja eigi með afriti af núverandi matseðli eða á núlli.",
+      "startFrom": "Byrjaðu með",
+      "duplicate": "Afrita núverandi matseðil og stillingar",
+      "duplicateDesc": "Afritar flokka, rétti, tungumál og útlit. Borðum, pöntunum og bókunum er ekki afritað.",
+      "blank": "Byrja tómt",
+      "blankDesc": "Tómur veitingastaður. Þú setur upp matseðilinn frá grunni.",
+      "name": "Nafn",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL-slóð",
+      "create": "Stofna veitingastað",
+      "created": "Veitingastaður stofnaður",
+      "saving": "Vista…",
+      "cancel": "Hætta við",
+      "backToSettings": "Stillingar"
+    },
     "settingsHub": {
       "title": "Stillingar",
       "subtitle": "Stjórnaðu veitingastaðnum, teyminu og reikningnum.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Öll fyrirtæki, áskriftir og spjall.",
         "sessions": "Setur",
         "sessionsDesc": "Notendasetur, atburðir og umbreytingar."
-      }
+      },
+      "activeRestaurant": "Virkur veitingastaður: {name}",
+      "switcherDescMany": "Skiptu á milli {count} veitingastaða eða bættu öðrum við.",
+      "switcherDescOne": "Bættu öðrum veitingastað við eða stjórnaðu þessum."
     },
     "impersonation": {
       "loggedInAs": "Skráður inn sem {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ hlutir",
       "pieces": "stk",
       "exportCsv": "Flytja út CSV",
-      "periodThisWeek": "Þessa viku"
+      "periodThisWeek": "Þessa viku",
+      "scopeActive": "Virkur veitingastaður",
+      "scopeAll": "Allir veitingastaðir"
     },
     "auth": {
       "title": "Búðu til matseðilinn þinn",

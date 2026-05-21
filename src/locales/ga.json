@@ -569,6 +569,33 @@
         "send": "Seol"
       }
     },
+    "restaurants": {
+      "title": "Bialanna",
+      "subtitle": "Athraigh idir bialanna nó cuir ceann nua leis.",
+      "active": "Gníomhach",
+      "delete": "Scrios",
+      "confirmDelete": "Scrios an bhialann \"{name}\"? Ní féidir é a chealú.",
+      "deleted": "Scriosta",
+      "switched": "Athraithe",
+      "add": "Cuir bialann leis",
+      "addDesc": "Cruthaigh bialann eile — déan dúblach den bhiachlár seo nó tosaigh ó thús.",
+      "paidOnly": "Tá iliomad bialann ar fáil i bplean íoctha. Uasghrádaigh i mBilleáil chun tuilleadh a chur leis.",
+      "newTitle": "Cuir bialann leis",
+      "newSubtitle": "Cruthaigh bialann eile. Pioc an dtosóidh tú le cóip den bhiachlár reatha nó ó thús.",
+      "startFrom": "Tosaigh ó",
+      "duplicate": "Déan dúblach den bhiachlár agus de na socruithe reatha",
+      "duplicateDesc": "Cóipeálann sé catagóirí, míreanna, teangacha agus socruithe amhairc. Ní chóipeáiltear boird, orduithe ná áirithintí.",
+      "blank": "Tosaigh folamh",
+      "blankDesc": "Bialann fholamh. Cuirfidh tú an biachlár le chéile ó thús.",
+      "name": "Ainm",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug URL",
+      "create": "Cruthaigh bialann",
+      "created": "Bialann cruthaithe",
+      "saving": "Á shábháil…",
+      "cancel": "Cealaigh",
+      "backToSettings": "Socruithe"
+    },
     "settingsHub": {
       "title": "Socruithe",
       "subtitle": "Bainistigh do bhialann, foireann agus cuntas.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Gach cuideachta, plean agus comhrá.",
         "sessions": "Seisiúin",
         "sessionsDesc": "Seisiúin úsáideoirí, eachtraí agus comhshó."
-      }
+      },
+      "activeRestaurant": "Bialann gníomhach: {name}",
+      "switcherDescMany": "Athraigh idir {count} bhialann nó cuir ceann eile leis.",
+      "switcherDescOne": "Cuir bialann eile leis nó bainistigh an ceann seo."
     },
     "impersonation": {
       "loggedInAs": "Logáilte isteach mar {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ míreanna",
       "pieces": "cnsl",
       "exportCsv": "Easpórtáil CSV",
-      "periodThisWeek": "An tseachtain seo"
+      "periodThisWeek": "An tseachtain seo",
+      "scopeActive": "Bialann gníomhach",
+      "scopeAll": "Gach bialann"
     },
     "auth": {
       "title": "Cruthaigh do bhiachlár",

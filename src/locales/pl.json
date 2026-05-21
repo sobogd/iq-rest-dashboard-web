@@ -569,6 +569,33 @@
         "send": "Wyślij"
       }
     },
+    "restaurants": {
+      "title": "Restauracje",
+      "subtitle": "Przełączaj między restauracjami lub dodaj nową.",
+      "active": "Aktywna",
+      "delete": "Usuń",
+      "confirmDelete": "Usunąć restaurację „{name}”? Tej operacji nie można cofnąć.",
+      "deleted": "Usunięto",
+      "switched": "Przełączono",
+      "add": "Dodaj restaurację",
+      "addDesc": "Utwórz kolejną restaurację — zduplikuj to menu lub zacznij od zera.",
+      "paidOnly": "Wiele restauracji jest dostępnych w płatnym planie. Zaktualizuj w Płatnościach, aby dodać więcej.",
+      "newTitle": "Dodaj restaurację",
+      "newSubtitle": "Utwórz kolejną restaurację. Wybierz, czy zacząć od kopii bieżącego menu, czy od zera.",
+      "startFrom": "Zacznij od",
+      "duplicate": "Duplikuj bieżące menu i ustawienia",
+      "duplicateDesc": "Kopiuje kategorie, dania, języki i ustawienia wizualne. Stoliki, zamówienia i rezerwacje nie są kopiowane.",
+      "blank": "Zacznij od pustego",
+      "blankDesc": "Pusta restauracja. Menu skonfigurujesz od zera.",
+      "name": "Nazwa",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug URL",
+      "create": "Utwórz restaurację",
+      "created": "Restauracja utworzona",
+      "saving": "Zapisywanie…",
+      "cancel": "Anuluj",
+      "backToSettings": "Ustawienia"
+    },
     "settingsHub": {
       "title": "Ustawienia",
       "subtitle": "Zarządzaj restauracją, zespołem i kontem.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Wszystkie firmy, plany i czaty.",
         "sessions": "Sesje",
         "sessionsDesc": "Sesje użytkowników, zdarzenia i konwersje."
-      }
+      },
+      "activeRestaurant": "Aktywna restauracja: {name}",
+      "switcherDescMany": "Przełączaj między {count} restauracjami lub dodaj kolejną.",
+      "switcherDescOne": "Dodaj kolejną restaurację lub zarządzaj tą."
     },
     "impersonation": {
       "loggedInAs": "Zalogowany jako {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ pozycji",
       "pieces": "szt",
       "exportCsv": "Eksportuj CSV",
-      "periodThisWeek": "Ten tydzień"
+      "periodThisWeek": "Ten tydzień",
+      "scopeActive": "Aktywna restauracja",
+      "scopeAll": "Wszystkie restauracje"
     },
     "auth": {
       "title": "Stwórz swoje menu",

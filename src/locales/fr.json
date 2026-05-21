@@ -569,6 +569,33 @@
         "send": "Envoyer"
       }
     },
+    "restaurants": {
+      "title": "Restaurants",
+      "subtitle": "Basculez entre les restaurants ou ajoutez-en un nouveau.",
+      "active": "Actif",
+      "delete": "Supprimer",
+      "confirmDelete": "Supprimer le restaurant « {name} » ? Cette action est irréversible.",
+      "deleted": "Supprimé",
+      "switched": "Changé",
+      "add": "Ajouter un restaurant",
+      "addDesc": "Créez un autre restaurant — dupliquez ce menu ou partez de zéro.",
+      "paidOnly": "Plusieurs restaurants sont disponibles dans une formule payante. Mettez à niveau dans Facturation pour en ajouter.",
+      "newTitle": "Ajouter un restaurant",
+      "newSubtitle": "Créez un autre restaurant. Choisissez de partir d'une copie du menu actuel ou de zéro.",
+      "startFrom": "Commencer avec",
+      "duplicate": "Dupliquer le menu et les réglages actuels",
+      "duplicateDesc": "Copie les catégories, plats, langues et réglages visuels. Tables, commandes et réservations ne sont pas copiés.",
+      "blank": "Commencer vide",
+      "blankDesc": "Restaurant vide. Vous configurerez le menu de zéro.",
+      "name": "Nom",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "Slug d'URL",
+      "create": "Créer le restaurant",
+      "created": "Restaurant créé",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler",
+      "backToSettings": "Réglages"
+    },
     "settingsHub": {
       "title": "Paramètres",
       "subtitle": "Gérez votre restaurant, équipe et compte.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Toutes les entreprises, forfaits et chats.",
         "sessions": "Sessions",
         "sessionsDesc": "Sessions utilisateur, événements et conversions."
-      }
+      },
+      "activeRestaurant": "Restaurant actif : {name}",
+      "switcherDescMany": "Basculez entre {count} restaurants ou ajoutez-en un autre.",
+      "switcherDescOne": "Ajoutez un autre restaurant ou gérez celui-ci."
     },
     "impersonation": {
       "loggedInAs": "Connecté en tant que {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ articles",
       "pieces": "pcs",
       "exportCsv": "Exporter CSV",
-      "periodThisWeek": "Cette semaine"
+      "periodThisWeek": "Cette semaine",
+      "scopeActive": "Restaurant actif",
+      "scopeAll": "Tous les restaurants"
     },
     "auth": {
       "title": "Créez votre menu",

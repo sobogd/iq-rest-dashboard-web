@@ -569,6 +569,33 @@
         "send": "Pošalji"
       }
     },
+    "restaurants": {
+      "title": "Restorani",
+      "subtitle": "Prebacuj između restorana ili dodaj novi.",
+      "active": "Aktivan",
+      "delete": "Izbriši",
+      "confirmDelete": "Izbrisati restoran „{name}“? Ovu radnju nije moguće poništiti.",
+      "deleted": "Izbrisano",
+      "switched": "Prebačeno",
+      "add": "Dodaj restoran",
+      "addDesc": "Stvori još jedan restoran — kopiraj ovaj jelovnik ili započni iznova.",
+      "paidOnly": "Više restorana dostupno je u plaćenom planu. Nadogradi pod Naplata da dodaš još.",
+      "newTitle": "Dodaj restoran",
+      "newSubtitle": "Stvori još jedan restoran. Odaberi želiš li započeti s kopijom trenutnog jelovnika ili od nule.",
+      "startFrom": "Započni od",
+      "duplicate": "Dupliciraj trenutni jelovnik i postavke",
+      "duplicateDesc": "Kopira kategorije, stavke, jezike i vizualne postavke. Stolovi, narudžbe i rezervacije se ne kopiraju.",
+      "blank": "Započni prazan",
+      "blankDesc": "Prazan restoran. Jelovnik ćeš postaviti od nule.",
+      "name": "Naziv",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Stvori restoran",
+      "created": "Restoran stvoren",
+      "saving": "Spremanje…",
+      "cancel": "Odustani",
+      "backToSettings": "Postavke"
+    },
     "settingsHub": {
       "title": "Postavke",
       "subtitle": "Upravljajte restoranom, timom i računom.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Sve tvrtke, planovi i razgovori.",
         "sessions": "Sesije",
         "sessionsDesc": "Korisničke sesije, događaji i konverzije."
-      }
+      },
+      "activeRestaurant": "Aktivan restoran: {name}",
+      "switcherDescMany": "Prebacuj između {count} restorana ili dodaj još jedan.",
+      "switcherDescOne": "Dodaj još jedan restoran ili upravljaj ovim."
     },
     "impersonation": {
       "loggedInAs": "Prijavljen kao {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ stavki",
       "pieces": "kom",
       "exportCsv": "Izvezi CSV",
-      "periodThisWeek": "Ovaj tjedan"
+      "periodThisWeek": "Ovaj tjedan",
+      "scopeActive": "Aktivan restoran",
+      "scopeAll": "Svi restorani"
     },
     "auth": {
       "title": "Stvorite svoj jelovnik",

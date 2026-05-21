@@ -569,6 +569,33 @@
         "send": "Pošalji"
       }
     },
+    "restaurants": {
+      "title": "Ресторани",
+      "subtitle": "Пребацујте се између ресторана или додајте нови.",
+      "active": "Активан",
+      "delete": "Обриши",
+      "confirmDelete": "Обрисати ресторан „{name}“? Ова радња се не може поништити.",
+      "deleted": "Обрисано",
+      "switched": "Пребачено",
+      "add": "Додај ресторан",
+      "addDesc": "Креирајте други ресторан — дуплирајте овај мени или почните из почетка.",
+      "paidOnly": "Више ресторана је доступно у плаћеном плану. Надоградите у одељку Наплата да додате још.",
+      "newTitle": "Додај ресторан",
+      "newSubtitle": "Креирајте други ресторан. Изаберите да ли да почнете с копијом тренутног менија или из нуле.",
+      "startFrom": "Почети од",
+      "duplicate": "Дуплирај тренутни мени и подешавања",
+      "duplicateDesc": "Копира категорије, ставке, језике и визуелна подешавања. Столови, поруџбине и резервације се не копирају.",
+      "blank": "Почни празан",
+      "blankDesc": "Празан ресторан. Мени ћете подесити из нуле.",
+      "name": "Назив",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Креирај ресторан",
+      "created": "Ресторан креиран",
+      "saving": "Чување…",
+      "cancel": "Откажи",
+      "backToSettings": "Подешавања"
+    },
     "settingsHub": {
       "title": "Podešavanja",
       "subtitle": "Upravljajte restoranom, timom i nalogom.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Sve kompanije, planovi i razgovori.",
         "sessions": "Sesije",
         "sessionsDesc": "Korisničke sesije, događaji i konverzije."
-      }
+      },
+      "activeRestaurant": "Активан ресторан: {name}",
+      "switcherDescMany": "Пребацујте се између {count} ресторана или додајте још један.",
+      "switcherDescOne": "Додајте други ресторан или управљајте овим."
     },
     "impersonation": {
       "loggedInAs": "Prijavljeni kao {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ ставки",
       "pieces": "ком",
       "exportCsv": "Извези CSV",
-      "periodThisWeek": "Ова недеља"
+      "periodThisWeek": "Ова недеља",
+      "scopeActive": "Активан ресторан",
+      "scopeAll": "Сви ресторани"
     },
     "auth": {
       "title": "Napravite svoj meni",

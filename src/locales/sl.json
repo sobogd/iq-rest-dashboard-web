@@ -569,6 +569,33 @@
         "send": "Pošlji"
       }
     },
+    "restaurants": {
+      "title": "Restavracije",
+      "subtitle": "Preklapljajte med restavracijami ali dodajte novo.",
+      "active": "Aktivna",
+      "delete": "Izbriši",
+      "confirmDelete": "Izbrišem restavracijo »{name}«? Tega dejanja ni mogoče razveljaviti.",
+      "deleted": "Izbrisano",
+      "switched": "Preklopljeno",
+      "add": "Dodaj restavracijo",
+      "addDesc": "Ustvarite drugo restavracijo — podvojite ta meni ali začnite na novo.",
+      "paidOnly": "Več restavracij je na voljo v plačljivem paketu. Nadgradite v razdelku Plačila, da jih dodate več.",
+      "newTitle": "Dodaj restavracijo",
+      "newSubtitle": "Ustvarite drugo restavracijo. Izberite, ali začnete s kopijo trenutnega menija ali iz nič.",
+      "startFrom": "Začnite z",
+      "duplicate": "Podvoji trenutni meni in nastavitve",
+      "duplicateDesc": "Kopira kategorije, jedi, jezike in vizualne nastavitve. Miz, naročil in rezervacij ne kopira.",
+      "blank": "Začnite prazno",
+      "blankDesc": "Prazna restavracija. Meni boste sestavili iz nič.",
+      "name": "Ime",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Ustvari restavracijo",
+      "created": "Restavracija ustvarjena",
+      "saving": "Shranjevanje…",
+      "cancel": "Prekliči",
+      "backToSettings": "Nastavitve"
+    },
     "settingsHub": {
       "title": "Nastavitve",
       "subtitle": "Upravljajte restavracijo, ekipo in račun.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Vsa podjetja, paketi in klepeti.",
         "sessions": "Seje",
         "sessionsDesc": "Uporabniške seje, dogodki in pretvorbe."
-      }
+      },
+      "activeRestaurant": "Aktivna restavracija: {name}",
+      "switcherDescMany": "Preklapljajte med {count} restavracijami ali dodajte še eno.",
+      "switcherDescOne": "Dodajte drugo restavracijo ali upravljajte to."
     },
     "impersonation": {
       "loggedInAs": "Prijavljeni kot {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ izdelkov",
       "pieces": "kos",
       "exportCsv": "Izvozi CSV",
-      "periodThisWeek": "Ta teden"
+      "periodThisWeek": "Ta teden",
+      "scopeActive": "Aktivna restavracija",
+      "scopeAll": "Vse restavracije"
     },
     "auth": {
       "title": "Ustvarite svoj meni",

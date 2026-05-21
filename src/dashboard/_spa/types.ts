@@ -25,6 +25,8 @@ export type View =
   | { name: "settings.languages" }
   | { name: "settings.billing"; from?: "menu" }
   | { name: "settings.support" }
+  | { name: "settings.restaurants" }
+  | { name: "settings.restaurants.new" }
   | { name: "settings.admin.companies" }
   | { name: "settings.admin.company"; id: string }
   | { name: "settings.admin.usage" }

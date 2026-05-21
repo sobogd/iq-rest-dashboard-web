@@ -9,6 +9,7 @@ import { LogoutLink } from "../../settings/logout-link";
 import { track } from "@/lib/dashboard-events";
 import { useDashboardRouter } from "../router";
 import type { View } from "../types";
+import { useRestaurantsOrNull } from "../../_v2/restaurants-context";
 
 interface CardDef {
   view: View;
@@ -40,6 +41,9 @@ export function SettingsHubView({
   const t = useTranslations("dashboard.settingsHub");
   const router = useDashboardRouter();
   const [exiting, setExiting] = useState(false);
+  const restaurants = useRestaurantsOrNull();
+  const showSwitcher = !!restaurants && restaurants.isPaid && restaurants.list.length > 0;
+  const activeName = restaurants?.list.find((r) => r.id === restaurants.activeId)?.title ?? "";
 
   async function handleExitImpersonation() {
     if (exiting) return;
@@ -90,6 +94,25 @@ export function SettingsHubView({
         </div>
       ) : null}
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
+      {showSwitcher ? (
+        <button
+          type="button"
+          onClick={() => router.push({ name: "settings.restaurants" })}
+          className="w-full text-left mb-2.5 p-4 bg-card border border-border rounded-xl flex items-center justify-between gap-3"
+        >
+          <div className="min-w-0">
+            <div className="text-sm font-medium text-foreground">
+              {t("activeRestaurant", { name: activeName })}
+            </div>
+            <div className="text-xs text-muted-foreground leading-snug mt-0.5">
+              {restaurants && restaurants.list.length > 1
+                ? t("switcherDescMany", { count: restaurants.list.length })
+                : t("switcherDescOne")}
+            </div>
+          </div>
+          <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
+        </button>
+      ) : null}
       <div className="space-y-2.5">
         {CARDS.map((card) => (
           <button

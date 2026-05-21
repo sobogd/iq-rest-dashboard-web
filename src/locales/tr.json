@@ -569,6 +569,33 @@
         "send": "Gönder"
       }
     },
+    "restaurants": {
+      "title": "Restoranlar",
+      "subtitle": "Restoranlar arasında geçiş yapın veya yenisini ekleyin.",
+      "active": "Aktif",
+      "delete": "Sil",
+      "confirmDelete": "\"{name}\" restoranı silinsin mi? Bu işlem geri alınamaz.",
+      "deleted": "Silindi",
+      "switched": "Geçildi",
+      "add": "Restoran ekle",
+      "addDesc": "Başka bir restoran oluşturun — bu menüyü çoğaltın veya sıfırdan başlayın.",
+      "paidOnly": "Birden fazla restoran ücretli planda kullanılabilir. Daha fazla eklemek için Faturalandırma'dan yükseltin.",
+      "newTitle": "Restoran ekle",
+      "newSubtitle": "Başka bir restoran oluşturun. Mevcut menünün kopyasıyla mı yoksa sıfırdan mı başlayacağınızı seçin.",
+      "startFrom": "Başlangıç",
+      "duplicate": "Mevcut menü ve ayarları çoğalt",
+      "duplicateDesc": "Kategorileri, ürünleri, dilleri ve görsel ayarları kopyalar. Masalar, siparişler ve rezervasyonlar kopyalanmaz.",
+      "blank": "Boş başla",
+      "blankDesc": "Boş restoran. Menüyü sıfırdan kuracaksınız.",
+      "name": "Ad",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Restoran oluştur",
+      "created": "Restoran oluşturuldu",
+      "saving": "Kaydediliyor…",
+      "cancel": "İptal",
+      "backToSettings": "Ayarlar"
+    },
     "settingsHub": {
       "title": "Ayarlar",
       "subtitle": "Restoran, ekip ve hesabınızı yönetin.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Tüm şirketler, planlar ve sohbetler.",
         "sessions": "Oturumlar",
         "sessionsDesc": "Kullanıcı oturumları, olaylar ve dönüşümler."
-      }
+      },
+      "activeRestaurant": "Aktif restoran: {name}",
+      "switcherDescMany": "{count} restoran arasında geçiş yapın veya yenisini ekleyin.",
+      "switcherDescOne": "Başka bir restoran ekleyin veya bunu yönetin."
     },
     "impersonation": {
       "loggedInAs": "{email} olarak giriş yapıldı",
@@ -667,7 +697,9 @@
       "size6": "6+ ürün",
       "pieces": "adet",
       "exportCsv": "CSV dışa aktar",
-      "periodThisWeek": "Bu hafta"
+      "periodThisWeek": "Bu hafta",
+      "scopeActive": "Aktif restoran",
+      "scopeAll": "Tüm restoranlar"
     },
     "auth": {
       "title": "Menünüzü oluşturun",

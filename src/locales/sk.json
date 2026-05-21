@@ -569,6 +569,33 @@
         "send": "Odoslať"
       }
     },
+    "restaurants": {
+      "title": "Reštaurácie",
+      "subtitle": "Prepínajte medzi reštauráciami alebo pridajte novú.",
+      "active": "Aktívna",
+      "delete": "Odstrániť",
+      "confirmDelete": "Odstrániť reštauráciu „{name}“? Túto akciu nemožno vrátiť späť.",
+      "deleted": "Odstránené",
+      "switched": "Prepnuté",
+      "add": "Pridať reštauráciu",
+      "addDesc": "Vytvorte ďalšiu reštauráciu — duplikujte toto menu alebo začnite od nuly.",
+      "paidOnly": "Viacero reštaurácií je dostupných v platenom pláne. Upgradujte vo Fakturácii, aby ste pridali ďalšie.",
+      "newTitle": "Pridať reštauráciu",
+      "newSubtitle": "Vytvorte ďalšiu reštauráciu. Vyberte, či začnete kópiou súčasného menu alebo od nuly.",
+      "startFrom": "Začať od",
+      "duplicate": "Duplikovať súčasné menu a nastavenia",
+      "duplicateDesc": "Kopíruje kategórie, položky, jazyky a vizuálne nastavenia. Stoly, objednávky a rezervácie sa nekopírujú.",
+      "blank": "Začať prázdne",
+      "blankDesc": "Prázdna reštaurácia. Menu si nastavíte od nuly.",
+      "name": "Názov",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Vytvoriť reštauráciu",
+      "created": "Reštaurácia vytvorená",
+      "saving": "Ukladám…",
+      "cancel": "Zrušiť",
+      "backToSettings": "Nastavenia"
+    },
     "settingsHub": {
       "title": "Nastavenia",
       "subtitle": "Spravujte reštauráciu, tím a účet.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Všetky spoločnosti, plány a chaty.",
         "sessions": "Relácie",
         "sessionsDesc": "Používateľské relácie, udalosti a konverzie."
-      }
+      },
+      "activeRestaurant": "Aktívna reštaurácia: {name}",
+      "switcherDescMany": "Prepínajte medzi {count} reštauráciami alebo pridajte ďalšiu.",
+      "switcherDescOne": "Pridajte ďalšiu reštauráciu alebo spravujte túto."
     },
     "impersonation": {
       "loggedInAs": "Prihlásený ako {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ položiek",
       "pieces": "ks",
       "exportCsv": "Exportovať CSV",
-      "periodThisWeek": "Tento týždeň"
+      "periodThisWeek": "Tento týždeň",
+      "scopeActive": "Aktívna reštaurácia",
+      "scopeAll": "Všetky reštaurácie"
     },
     "auth": {
       "title": "Vytvorte si menu",

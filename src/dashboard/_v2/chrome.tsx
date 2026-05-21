@@ -11,6 +11,7 @@ import {
  SettingsIcon,
 } from "./icons";
 import { RestaurantProvider } from "./restaurant-context";
+import { RestaurantsProvider } from "./restaurants-context";
 import { useOrdersStreamStateStore } from "./orders-sync-state";
 import { useIsFetching, useQueryClient } from "@tanstack/react-query";
 import { SubProvider, type Sub } from "./sub-context";
@@ -87,15 +88,18 @@ export function DashboardChrome({
  if (isAuth) {
  // Auth renders fullscreen — no top/bottom dashboard nav.
  return (
+ <RestaurantsProvider>
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>
 <div className="min-h-dvh bg-background antialiased tracking-tight">{children}</div>
  </SubProvider>
  </RestaurantProvider>
+ </RestaurantsProvider>
  );
  }
 
  return (
+ <RestaurantsProvider>
  <RestaurantProvider restaurant={restaurant}>
  <SubProvider sub={sub}>
 <div className="min-h-dvh bg-background antialiased tracking-tight">
@@ -108,6 +112,7 @@ export function DashboardChrome({
  </div>
  </SubProvider>
  </RestaurantProvider>
+ </RestaurantsProvider>
  );
 }
 

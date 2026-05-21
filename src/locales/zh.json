@@ -569,6 +569,33 @@
         "send": "发送"
       }
     },
+    "restaurants": {
+      "title": "餐厅",
+      "subtitle": "在餐厅之间切换或添加新餐厅。",
+      "active": "当前",
+      "delete": "删除",
+      "confirmDelete": "删除餐厅 \"{name}\"？此操作无法撤销。",
+      "deleted": "已删除",
+      "switched": "已切换",
+      "add": "添加餐厅",
+      "addDesc": "创建另一家餐厅 —— 复制此菜单或从零开始。",
+      "paidOnly": "多餐厅功能在付费方案中可用。请在账单中升级以添加更多。",
+      "newTitle": "添加餐厅",
+      "newSubtitle": "创建另一家餐厅。选择从当前菜单的副本开始，或从零开始。",
+      "startFrom": "起始方式",
+      "duplicate": "复制当前菜单和设置",
+      "duplicateDesc": "复制分类、菜品、语言和视觉设置。桌位、订单和预订不会被复制。",
+      "blank": "空白开始",
+      "blankDesc": "空餐厅。您将从零开始设置菜单。",
+      "name": "名称",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL 短链",
+      "create": "创建餐厅",
+      "created": "餐厅已创建",
+      "saving": "正在保存…",
+      "cancel": "取消",
+      "backToSettings": "设置"
+    },
     "settingsHub": {
       "title": "设置",
       "subtitle": "管理您的餐厅、团队和账户。",
@@ -602,7 +629,10 @@
         "companiesDesc": "所有公司、套餐和聊天。",
         "sessions": "会话",
         "sessionsDesc": "用户会话、事件和转化。"
-      }
+      },
+      "activeRestaurant": "当前餐厅：{name}",
+      "switcherDescMany": "在 {count} 家餐厅之间切换，或添加另一家。",
+      "switcherDescOne": "添加另一家餐厅或管理这一家。"
     },
     "impersonation": {
       "loggedInAs": "以 {email} 登录",
@@ -667,7 +697,9 @@
       "size6": "6+ 件",
       "pieces": "件",
       "exportCsv": "导出 CSV",
-      "periodThisWeek": "本周"
+      "periodThisWeek": "本周",
+      "scopeActive": "当前餐厅",
+      "scopeAll": "所有餐厅"
     },
     "auth": {
       "title": "创建您的菜单",

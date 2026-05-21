@@ -2,6 +2,7 @@
 
 import { landingUrl } from "./landing-url";
 import { observeResponseVersion } from "./version-check";
+import { activeRestaurantHeader } from "./active-restaurant";
 
 const BASE = import.meta.env.VITE_API_URL || "/api";
 
@@ -59,6 +60,7 @@ export async function api<T>(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...activeRestaurantHeader(),
       ...(init.headers || {}),
     },
     ...init,

@@ -29,6 +29,7 @@ import {
 } from "../_v2/settings";
 import { AnalyticsClient } from "../analytics/analytics-client";
 import { SettingsHubView } from "./views/settings-hub";
+import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
 import { UsagePage } from "../_pages/usage";
@@ -102,6 +103,18 @@ function ShellBody(props: ShellInitialData) {
       return [...props.initialBookings, ...localOnly];
     });
   }, [props.initialBookings]);
+
+  // Sync categories + tables when the active restaurant changes (TanStack
+  // Query refetched with a new X-Restaurant-Id header → host re-passes new
+  // initialCategories/initialTables). Local-only edits are rare here, so
+  // mirror the server snapshot wholesale.
+  useEffect(() => {
+    setCategories(props.initialCategories);
+  }, [props.initialCategories]);
+
+  useEffect(() => {
+    setTables(props.initialTables);
+  }, [props.initialTables]);
 
   const defaultLang = restaurant?.defaultLang || "en";
   const refreshMenu = useCallback(async () => {
@@ -274,6 +287,10 @@ function ViewSwitch(p: SwitchProps) {
       return <SettingsBillingWrapper onBack={view.from === "menu" ? backToMenu : backToSettings} />;
     case "settings.support":
       return <SettingsSupportWrapper onBack={backToSettings} />;
+    case "settings.restaurants":
+      return <RestaurantsListPage onBack={backToSettings} />;
+    case "settings.restaurants.new":
+      return <RestaurantNewPage onBack={() => router.push({ name: "settings.restaurants" })} />;
 
     case "settings.admin.companies":
       return <AdminPage />;

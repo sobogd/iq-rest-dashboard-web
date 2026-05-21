@@ -569,6 +569,33 @@
         "send": "Odeslat"
       }
     },
+    "restaurants": {
+      "title": "Restaurace",
+      "subtitle": "Přepínejte mezi restauracemi nebo přidejte novou.",
+      "active": "Aktivní",
+      "delete": "Smazat",
+      "confirmDelete": "Smazat restauraci „{name}“? Tuto akci nelze vrátit zpět.",
+      "deleted": "Smazáno",
+      "switched": "Přepnuto",
+      "add": "Přidat restauraci",
+      "addDesc": "Vytvořte další restauraci — zkopírujte toto menu nebo začněte od nuly.",
+      "paidOnly": "Více restaurací je k dispozici v placeném tarifu. Upgradujte v sekci Fakturace.",
+      "newTitle": "Přidat restauraci",
+      "newSubtitle": "Vytvořte další restauraci. Vyberte, zda začít kopií současného menu nebo od nuly.",
+      "startFrom": "Začít od",
+      "duplicate": "Duplikovat aktuální menu a nastavení",
+      "duplicateDesc": "Zkopíruje kategorie, položky, jazyky a vizuální nastavení. Stoly, objednávky a rezervace se nekopírují.",
+      "blank": "Začít prázdné",
+      "blankDesc": "Prázdná restaurace. Menu nastavíte od nuly.",
+      "name": "Název",
+      "namePlaceholder": "Bistro Centrale",
+      "slugPreview": "URL slug",
+      "create": "Vytvořit restauraci",
+      "created": "Restaurace vytvořena",
+      "saving": "Ukládám…",
+      "cancel": "Zrušit",
+      "backToSettings": "Nastavení"
+    },
     "settingsHub": {
       "title": "Nastavení",
       "subtitle": "Spravujte restauraci, tým a účet.",
@@ -602,7 +629,10 @@
         "companiesDesc": "Všechny společnosti, plány a chaty.",
         "sessions": "Relace",
         "sessionsDesc": "Uživatelské relace, události a konverze."
-      }
+      },
+      "activeRestaurant": "Aktivní restaurace: {name}",
+      "switcherDescMany": "Přepínejte mezi {count} restauracemi nebo přidejte další.",
+      "switcherDescOne": "Přidejte další restauraci nebo spravujte tuto."
     },
     "impersonation": {
       "loggedInAs": "Přihlášen jako {email}",
@@ -667,7 +697,9 @@
       "size6": "6+ položek",
       "pieces": "ks",
       "exportCsv": "Exportovat CSV",
-      "periodThisWeek": "Tento týden"
+      "periodThisWeek": "Tento týden",
+      "scopeActive": "Aktivní restaurace",
+      "scopeAll": "Všechny restaurace"
     },
     "auth": {
       "title": "Vytvořte své menu",
