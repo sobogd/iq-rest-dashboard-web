@@ -570,6 +570,11 @@
         "send": "Odoslať"
       }
     },
+    "allLangsModal": {
+      "title": "Preklady",
+      "subtitle": "Preklady poľa „{field}“ pre každý jazyk povolený v tejto reštaurácii. Predvolený jazyk sa nastavuje v hlavnom poli — toto sú ďalšie jazyky, ktoré uvidia hostia.",
+      "subtitleGeneric": "Preklady pre každý jazyk povolený v tejto reštaurácii. Predvolený jazyk sa nastavuje v hlavnom poli — toto sú ďalšie jazyky, ktoré uvidia hostia."
+    },
     "restaurants": {
       "title": "Reštaurácie",
       "subtitle": "Prepínajte medzi reštauráciami alebo pridajte novú.",

@@ -570,6 +570,11 @@
         "send": "Sūtīt"
       }
     },
+    "allLangsModal": {
+      "title": "Tulkojumi",
+      "subtitle": "Lauka “{field}” tulkojumi katrai šajā restorānā iespējotai valodai. Noklusējuma valoda tiek iestatīta galvenajā laukā — šeit ir papildu valodas, ko redzēs viesi.",
+      "subtitleGeneric": "Tulkojumi katrai šajā restorānā iespējotai valodai. Noklusējuma valoda tiek iestatīta galvenajā laukā — šeit ir papildu valodas, ko redzēs viesi."
+    },
     "restaurants": {
       "title": "Restorāni",
       "subtitle": "Pārslēdzieties starp restorāniem vai pievienojiet jaunu.",

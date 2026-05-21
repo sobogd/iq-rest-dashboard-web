@@ -570,6 +570,11 @@
         "send": "Siųsti"
       }
     },
+    "allLangsModal": {
+      "title": "Vertimai",
+      "subtitle": "Lauko „{field}“ vertimai į kiekvieną šiame restorane įjungtą kalbą. Numatytoji kalba nustatoma pagrindiniame lauke — čia papildomos kalbos, kurias matys svečiai.",
+      "subtitleGeneric": "Vertimai į kiekvieną šiame restorane įjungtą kalbą. Numatytoji kalba nustatoma pagrindiniame lauke — čia papildomos kalbos, kurias matys svečiai."
+    },
     "restaurants": {
       "title": "Restoranai",
       "subtitle": "Perjunkite tarp restoranų arba pridėkite naują.",

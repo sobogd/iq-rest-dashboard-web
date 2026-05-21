@@ -570,6 +570,11 @@
         "send": "Pošlji"
       }
     },
+    "allLangsModal": {
+      "title": "Prevodi",
+      "subtitle": "Prevodi polja »{field}« za vsak jezik, omogočen v tej restavraciji. Privzeti jezik se nastavi v glavnem polju — to so dodatni jeziki, ki jih bodo videli gostje.",
+      "subtitleGeneric": "Prevodi za vsak jezik, omogočen v tej restavraciji. Privzeti jezik se nastavi v glavnem polju — to so dodatni jeziki, ki jih bodo videli gostje."
+    },
     "restaurants": {
       "title": "Restavracije",
       "subtitle": "Preklapljajte med restavracijami ali dodajte novo.",

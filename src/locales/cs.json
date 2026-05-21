@@ -570,6 +570,11 @@
         "send": "Odeslat"
       }
     },
+    "allLangsModal": {
+      "title": "Překlady",
+      "subtitle": "Překlady pole „{field}“ pro každý jazyk aktivovaný v této restauraci. Výchozí jazyk se nastavuje v hlavním poli — toto jsou další jazyky, které uvidí hosté.",
+      "subtitleGeneric": "Překlady pro každý jazyk aktivovaný v této restauraci. Výchozí jazyk se nastavuje v hlavním poli — toto jsou další jazyky, které uvidí hosté."
+    },
     "restaurants": {
       "title": "Restaurace",
       "subtitle": "Přepínejte mezi restauracemi nebo přidejte novou.",

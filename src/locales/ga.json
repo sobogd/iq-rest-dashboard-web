@@ -570,6 +570,11 @@
         "send": "Seol"
       }
     },
+    "allLangsModal": {
+      "title": "Aistriúcháin",
+      "subtitle": "Aistriúcháin do “{field}” do gach teanga atá cumasaithe sa bhialann seo. Socraítear an teanga réamhshocraithe sa phríomhpháirc — seo iad na teangacha breise a fheicfidh na haíonna.",
+      "subtitleGeneric": "Aistriúcháin do gach teanga atá cumasaithe sa bhialann seo. Socraítear an teanga réamhshocraithe sa phríomhpháirc — seo iad na teangacha breise a fheicfidh na haíonna."
+    },
     "restaurants": {
       "title": "Bialanna",
       "subtitle": "Athraigh idir bialanna nó cuir ceann nua leis.",

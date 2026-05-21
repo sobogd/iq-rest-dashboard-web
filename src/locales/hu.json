@@ -570,6 +570,11 @@
         "send": "Küldés"
       }
     },
+    "allLangsModal": {
+      "title": "Fordítások",
+      "subtitle": "A(z) „{field}” mező fordításai minden, ebben az étteremben engedélyezett nyelven. Az alapértelmezett nyelvet a fő mezőben adod meg — itt láthatók a további nyelvek, amelyeket a vendégek látni fognak.",
+      "subtitleGeneric": "Fordítások minden, ebben az étteremben engedélyezett nyelven. Az alapértelmezett nyelvet a fő mezőben adod meg — itt láthatók a további nyelvek, amelyeket a vendégek látni fognak."
+    },
     "restaurants": {
       "title": "Éttermek",
       "subtitle": "Válts éttermek között, vagy adj hozzá újat.",

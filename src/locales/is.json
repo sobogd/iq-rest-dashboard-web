@@ -570,6 +570,11 @@
         "send": "Senda"
       }
     },
+    "allLangsModal": {
+      "title": "Þýðingar",
+      "subtitle": "Þýðingar á „{field}“ fyrir hvert tungumál sem er virkjað á þessum veitingastað. Sjálfgefið tungumál er stillt í aðalreitnum — hér eru auka tungumálin sem gestir munu sjá.",
+      "subtitleGeneric": "Þýðingar fyrir hvert tungumál sem er virkjað á þessum veitingastað. Sjálfgefið tungumál er stillt í aðalreitnum — hér eru auka tungumálin sem gestir munu sjá."
+    },
     "restaurants": {
       "title": "Veitingastaðir",
       "subtitle": "Skiptu á milli veitingastaða eða bættu nýjum við.",

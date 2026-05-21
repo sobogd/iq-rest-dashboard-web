@@ -570,6 +570,11 @@
         "send": "Wyślij"
       }
     },
+    "allLangsModal": {
+      "title": "Tłumaczenia",
+      "subtitle": "Tłumaczenia pola „{field}” dla każdego języka włączonego w tej restauracji. Język domyślny ustawiasz w głównym polu — tutaj znajdują się dodatkowe języki, które zobaczą goście.",
+      "subtitleGeneric": "Tłumaczenia dla każdego języka włączonego w tej restauracji. Język domyślny ustawiasz w głównym polu — tutaj znajdują się dodatkowe języki, które zobaczą goście."
+    },
     "restaurants": {
       "title": "Restauracje",
       "subtitle": "Przełączaj między restauracjami lub dodaj nową.",

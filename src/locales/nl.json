@@ -570,6 +570,11 @@
         "send": "Verzenden"
       }
     },
+    "allLangsModal": {
+      "title": "Vertalingen",
+      "subtitle": "Vertalingen van \"{field}\" voor elke taal die in dit restaurant is ingeschakeld. De standaardtaal stel je in via het hoofdveld — dit zijn de extra talen die je gasten te zien krijgen.",
+      "subtitleGeneric": "Vertalingen voor elke taal die in dit restaurant is ingeschakeld. De standaardtaal stel je in via het hoofdveld — dit zijn de extra talen die je gasten te zien krijgen."
+    },
     "restaurants": {
       "title": "Restaurants",
       "subtitle": "Wissel tussen restaurants of voeg een nieuw restaurant toe.",

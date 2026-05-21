@@ -579,23 +579,24 @@ function AllLanguagesModal({
  return name.charAt(0).toUpperCase() + name.slice(1);
  };
 
- // Stable order: default language first, then the rest in AVAILABLE_LANGUAGES
- // order (matches the top-level lang selector).
+ // Default language is the source — the user fills it in the main input,
+ // not in this modal. The list shows the *other* enabled languages only.
  const ordered = (() => {
  const set = new Set(languages);
  const langs: string[] = [];
- if (set.has(defaultLang)) langs.push(defaultLang);
  for (const meta of AVAILABLE_LANGUAGES) {
  if (meta.code !== defaultLang && set.has(meta.code)) langs.push(meta.code);
  }
  return langs;
  })();
 
+ const ta = useTranslations("dashboard.allLangsModal");
  return (
  <Modal
  open={open}
  onClose={onClose}
- title={title || tc("translate")}
+ title={ta("title")}
+ subtitle={title ? ta("subtitle", { field: title }) : ta("subtitleGeneric")}
  size="md"
  footer={
  <div className="flex items-center justify-end">
@@ -612,19 +613,12 @@ function AllLanguagesModal({
  <div className="space-y-3">
  {ordered.map((code) => {
  const v = getMl(value, code);
- const isDefault = code === defaultLang;
  return (
  <div key={code} className="space-y-1">
  <div className="flex items-center justify-between gap-2">
- <div className="text-sm font-medium text-foreground inline-flex items-center gap-2">
- <span>{langLabel(code)}</span>
- {isDefault ? (
- <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-muted-foreground uppercase">
- {tc("defaultLang")}
- </span>
- ) : null}
+ <div className="text-sm font-medium text-foreground">
+ {langLabel(code)}
  </div>
- {!isDefault ? (
  <AiTranslateButton
  value={value}
  lang={code}
@@ -632,7 +626,6 @@ function AllLanguagesModal({
  languages={languages}
  onChange={onChange}
  />
- ) : null}
  </div>
  {multiline ? (
  <AutoGrowTextarea

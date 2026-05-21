@@ -570,6 +570,11 @@
         "send": "Saada"
       }
     },
+    "allLangsModal": {
+      "title": "Tõlked",
+      "subtitle": "Välja „{field}“ tõlked iga selles restoranis lubatud keele jaoks. Vaikekeel määratakse põhiväljal — siin on lisakeeled, mida teie külalised näevad.",
+      "subtitleGeneric": "Tõlked iga selles restoranis lubatud keele jaoks. Vaikekeel määratakse põhiväljal — siin on lisakeeled, mida teie külalised näevad."
+    },
     "restaurants": {
       "title": "Restoranid",
       "subtitle": "Vaheta restoranide vahel või lisa uus.",

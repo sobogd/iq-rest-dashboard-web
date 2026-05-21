@@ -570,6 +570,11 @@
         "send": "Skicka"
       }
     },
+    "allLangsModal": {
+      "title": "Översättningar",
+      "subtitle": "Översättningar av ”{field}” för varje språk som är aktiverat i denna restaurang. Standardspråket sätts i huvudfältet — här är de extra språk som dina gäster kommer att se.",
+      "subtitleGeneric": "Översättningar för varje språk som är aktiverat i denna restaurang. Standardspråket sätts i huvudfältet — här är de extra språk som dina gäster kommer att se."
+    },
     "restaurants": {
       "title": "Restauranger",
       "subtitle": "Växla mellan restauranger eller lägg till en ny.",

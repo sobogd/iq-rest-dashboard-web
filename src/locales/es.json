@@ -570,6 +570,11 @@
         "send": "Enviar mensaje"
       }
     },
+    "allLangsModal": {
+      "title": "Traducciones",
+      "subtitle": "Traducciones de «{field}» para cada idioma activado en este restaurante. El idioma predeterminado se configura en el campo principal — estos son los idiomas adicionales que verán tus clientes.",
+      "subtitleGeneric": "Traducciones para cada idioma activado en este restaurante. El idioma predeterminado se configura en el campo principal — estos son los idiomas adicionales que verán tus clientes."
+    },
     "restaurants": {
       "title": "Restaurantes",
       "subtitle": "Cambia entre restaurantes o añade uno nuevo.",

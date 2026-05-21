@@ -570,6 +570,11 @@
         "send": "Pošalji"
       }
     },
+    "allLangsModal": {
+      "title": "Prijevodi",
+      "subtitle": "Prijevodi polja „{field}“ za svaki jezik omogućen u ovom restoranu. Zadani se jezik postavlja u glavnom polju — ovo su dodatni jezici koje će gosti vidjeti.",
+      "subtitleGeneric": "Prijevodi za svaki jezik omogućen u ovom restoranu. Zadani se jezik postavlja u glavnom polju — ovo su dodatni jezici koje će gosti vidjeti."
+    },
     "restaurants": {
       "title": "Restorani",
       "subtitle": "Prebacuj između restorana ili dodaj novi.",

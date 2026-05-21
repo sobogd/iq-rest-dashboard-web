@@ -570,6 +570,11 @@
         "send": "Gönder"
       }
     },
+    "allLangsModal": {
+      "title": "Çeviriler",
+      "subtitle": "Bu restoranda etkinleştirilmiş her dil için \"{field}\" çevirileri. Varsayılan dil ana alanda ayarlanır — burada misafirlerinizin göreceği ek diller listelenir.",
+      "subtitleGeneric": "Bu restoranda etkinleştirilmiş her dil için çeviriler. Varsayılan dil ana alanda ayarlanır — burada misafirlerinizin göreceği ek diller listelenir."
+    },
     "restaurants": {
       "title": "Restoranlar",
       "subtitle": "Restoranlar arasında geçiş yapın veya yenisini ekleyin.",

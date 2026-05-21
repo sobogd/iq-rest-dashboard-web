@@ -570,6 +570,11 @@
         "send": "Trimite"
       }
     },
+    "allLangsModal": {
+      "title": "Traduceri",
+      "subtitle": "Traduceri pentru „{field}” în fiecare limbă activată în acest restaurant. Limba implicită se setează în câmpul principal — acestea sunt limbile suplimentare pe care le vor vedea oaspeții.",
+      "subtitleGeneric": "Traduceri pentru fiecare limbă activată în acest restaurant. Limba implicită se setează în câmpul principal — acestea sunt limbile suplimentare pe care le vor vedea oaspeții."
+    },
     "restaurants": {
       "title": "Restaurante",
       "subtitle": "Comută între restaurante sau adaugă unul nou.",

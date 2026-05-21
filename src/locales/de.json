@@ -570,6 +570,11 @@
         "send": "Senden"
       }
     },
+    "allLangsModal": {
+      "title": "Übersetzungen",
+      "subtitle": "Übersetzungen für „{field}“ in jeder im Restaurant aktivierten Sprache. Die Standardsprache wird im Hauptfeld festgelegt — hier siehst du die zusätzlichen Sprachen, die deine Gäste sehen werden.",
+      "subtitleGeneric": "Übersetzungen in jeder im Restaurant aktivierten Sprache. Die Standardsprache wird im Hauptfeld festgelegt — hier siehst du die zusätzlichen Sprachen, die deine Gäste sehen werden."
+    },
     "restaurants": {
       "title": "Restaurants",
       "subtitle": "Zwischen Restaurants wechseln oder ein neues hinzufügen.",

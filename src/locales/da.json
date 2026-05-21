@@ -570,6 +570,11 @@
         "send": "Send"
       }
     },
+    "allLangsModal": {
+      "title": "Oversættelser",
+      "subtitle": "Oversættelser af “{field}” for hvert sprog aktiveret i denne restaurant. Standardsproget angives i hovedfeltet — dette er de yderligere sprog, som dine gæster vil se.",
+      "subtitleGeneric": "Oversættelser for hvert sprog aktiveret i denne restaurant. Standardsproget angives i hovedfeltet — dette er de yderligere sprog, som dine gæster vil se."
+    },
     "restaurants": {
       "title": "Restauranter",
       "subtitle": "Skift mellem restauranter eller tilføj en ny.",

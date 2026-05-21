@@ -570,6 +570,11 @@
         "send": "Send message"
       }
     },
+    "allLangsModal": {
+      "title": "Translations",
+      "subtitle": "Translations of \"{field}\" for every language enabled in this restaurant. The default language is set in the main input — these are the secondary languages your guests will see.",
+      "subtitleGeneric": "Translations for every language enabled in this restaurant. The default language is set in the main input — these are the secondary languages your guests will see."
+    },
     "restaurants": {
       "title": "Restaurants",
       "subtitle": "Switch between restaurants or add a new one.",

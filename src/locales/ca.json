@@ -570,6 +570,11 @@
         "send": "Envia"
       }
     },
+    "allLangsModal": {
+      "title": "Traduccions",
+      "subtitle": "Traduccions de «{field}» per a cada idioma activat en aquest restaurant. L'idioma per defecte es defineix al camp principal — aquí hi ha els idiomes addicionals que veuran els teus clients.",
+      "subtitleGeneric": "Traduccions per a cada idioma activat en aquest restaurant. L'idioma per defecte es defineix al camp principal — aquí hi ha els idiomes addicionals que veuran els teus clients."
+    },
     "restaurants": {
       "title": "Restaurants",
       "subtitle": "Canvia entre restaurants o afegeix-ne un de nou.",

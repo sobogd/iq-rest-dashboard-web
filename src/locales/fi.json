@@ -570,6 +570,11 @@
         "send": "Lähetä"
       }
     },
+    "allLangsModal": {
+      "title": "Käännökset",
+      "subtitle": "Kentän ”{field}” käännökset jokaiselle tähän ravintolaan otetulle kielelle. Oletuskieli asetetaan pääkentässä — tässä näkyvät lisäkielet, jotka asiakkaat näkevät.",
+      "subtitleGeneric": "Käännökset jokaiselle tähän ravintolaan otetulle kielelle. Oletuskieli asetetaan pääkentässä — tässä näkyvät lisäkielet, jotka asiakkaat näkevät."
+    },
     "restaurants": {
       "title": "Ravintolat",
       "subtitle": "Vaihda ravintolaa tai lisää uusi.",
