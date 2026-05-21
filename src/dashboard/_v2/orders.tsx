@@ -2157,15 +2157,15 @@ function KitchenTableCard({
  const tableNumber = table ? table.number : tableNumberFallback ?? "?";
 
  return (
- <div className={"w-72 shrink-0 rounded-xl border " + cardCls + " flex flex-col"}>
- <div className="px-3.5 py-3 border-b border-border/60">
+ <div className={"w-72 shrink-0 rounded-xl border overflow-hidden " + cardCls + " flex flex-col"}>
+ <div className="px-3.5 py-3 border-b border-border/60 bg-subheader rounded-t-xl">
  <div className="text-base font-medium text-foreground">
  {t("tableLabel", { number: tableNumber })}
  </div>
  {table?.name ? <div className="text-xs text-muted-foreground mt-0.5">{table.name}</div> : null}
  </div>
 
- <div className="flex-1 p-2 space-y-1.5">
+ <div className="flex-1 divide-y divide-border">
  {[...entries]
  .sort((a, b) => {
  const sa = a.item.status === "served" ? 1 : 0;
@@ -2204,7 +2204,7 @@ function KitchenItem({
  type="button"
  onClick={onAdvance}
  className={
- "w-full text-left p-2.5 rounded-lg bg-card border border-border transition-colors " +
+ "w-full text-left px-3.5 py-2.5 transition-colors " +
  (isServed ? "opacity-50" : "")
  }
  >
@@ -2229,18 +2229,23 @@ function KitchenItem({
  </div>
 
  {item.options.length > 0 ? (
- <div className="text-xs text-muted-foreground mt-0.5 space-y-0.5">
+ <div className="text-xs text-muted-foreground mt-0.5 space-y-0.5 pl-2">
  {item.options.map((o, i) => {
- const name = getMlWithFallback(o.variantName, defaultLang, defaultLang);
+ const varName = getMlWithFallback(o.variantName, defaultLang, defaultLang);
  const qty = o.quantity ?? 1;
- return <div key={i}>×{qty} · {name}</div>;
+ return (
+ <div key={i} className="flex gap-1.5">
+ <span aria-hidden>+</span>
+ <span>{qty > 1 ? `${qty}× ` : ""}{varName}</span>
+ </div>
+ );
  })}
  </div>
  ) : null}
 
  {item.notes ? (
  <div className="text-xs text-foreground mt-0.5">
- {t("notesLabel")}: {item.notes}
+ {item.notes}
  </div>
  ) : null}
  </button>

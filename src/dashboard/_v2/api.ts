@@ -533,7 +533,7 @@ export interface ApiOrderItem {
  dishId: string;
  dishNameSnapshot: Ml;
  basePriceSnapshot: string;
- options: { optionName: Ml; variantName: Ml; priceDelta: string }[];
+ options: { optionName: Ml; variantName: Ml; priceDelta: string; quantity?: number }[];
  notes: string;
  status: "pending" | "cooking" | "ready" | "served";
  createdAt: string;

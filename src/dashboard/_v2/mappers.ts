@@ -294,6 +294,7 @@ export function apiOrderToOrder(o: ApiOrder, tablesByNumber: Map<number, string>
  optionName: opt.optionName,
  variantName: opt.variantName,
  priceDelta: opt.priceDelta,
+ quantity: opt.quantity,
  })),
  notes: it.notes,
  status: it.status,
