@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Þú hefur notað allar {limit} ókeypis gervigreindar gerðir. Gerðust áskrifandi að einhverjum áskriftarpakka fyrir ótakmarkaðar gervigreindarmyndir."
     },
     "photo": {
+      "label": "Mynd",
+      "generate": "Búa til",
+      "addPhoto": "Bæta við mynd",
       "removePhoto": "Fjarlægja mynd"
     },
     "menu": {

@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Tüm {limit} ücretsiz AI üretimini kullandınız. Sınırsız AI görsel için herhangi bir plana abone olun."
     },
     "photo": {
+      "label": "Fotoğraf",
+      "generate": "Oluştur",
+      "addPhoto": "Fotoğraf ekle",
       "removePhoto": "Fotoğrafı kaldır"
     },
     "menu": {

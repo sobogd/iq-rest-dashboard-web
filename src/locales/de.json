@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Sie haben alle {limit} kostenlosen KI-Bilder verbraucht. Abonnieren Sie einen Tarif für unbegrenzte KI-Bilder."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Generieren",
+      "addPhoto": "Foto hinzufügen",
       "removePhoto": "Foto entfernen"
     },
     "menu": {

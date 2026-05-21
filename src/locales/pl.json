@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Wykorzystano wszystkie {limit} darmowych generacji AI. Subskrybuj dowolny plan dla nieograniczonych obrazów AI."
     },
     "photo": {
+      "label": "Zdjęcie",
+      "generate": "Generuj",
+      "addPhoto": "Dodaj zdjęcie",
       "removePhoto": "Usuń zdjęcie"
     },
     "menu": {

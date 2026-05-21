@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Porabili ste vseh {limit} brezplačnih UI generiranj. Naročite se na kateri koli paket za neomejene UI slike."
     },
     "photo": {
+      "label": "Fotografija",
+      "generate": "Ustvari",
+      "addPhoto": "Dodaj fotografijo",
       "removePhoto": "Odstrani fotografijo"
     },
     "menu": {

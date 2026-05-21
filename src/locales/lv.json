@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Jūs esat izmantojis visas {limit} bezmaksas MI ģenerēšanas. Abonējiet jebkuru plānu, lai iegūtu neierobežotu skaitu MI attēlu."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Ģenerēt",
+      "addPhoto": "Pievienot foto",
       "removePhoto": "Noņemt fotoattēlu"
     },
     "menu": {

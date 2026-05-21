@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Usou todas as {limit} gerações IA gratuitas. Subscreva qualquer plano para imagens IA ilimitadas."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Gerar",
+      "addPhoto": "Adicionar foto",
       "removePhoto": "Remover foto"
     },
     "menu": {

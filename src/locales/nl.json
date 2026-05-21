@@ -79,6 +79,9 @@
       "quotaExceededMessage": "U heeft alle {limit} gratis AI-generaties gebruikt. Neem een abonnement voor onbeperkt AI-afbeeldingen."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Genereren",
+      "addPhoto": "Foto toevoegen",
       "removePhoto": "Foto verwijderen"
     },
     "menu": {

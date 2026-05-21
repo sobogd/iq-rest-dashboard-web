@@ -79,6 +79,9 @@
       "quotaExceededMessage": "무료 AI 생성 {limit}회를 모두 사용했습니다. 무제한 AI 이미지를 위해 어떤 플랜이든 구독하세요."
     },
     "photo": {
+      "label": "사진",
+      "generate": "생성",
+      "addPhoto": "사진 추가",
       "removePhoto": "사진 제거"
     },
     "menu": {

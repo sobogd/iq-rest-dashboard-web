@@ -79,6 +79,9 @@
       "quotaExceededMessage": "您已用尽全部 {limit} 次免费AI生成。订阅任意套餐获得无限AI图片。"
     },
     "photo": {
+      "label": "照片",
+      "generate": "生成",
+      "addPhoto": "添加照片",
       "removePhoto": "删除照片"
     },
     "menu": {

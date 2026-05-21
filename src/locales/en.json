@@ -79,6 +79,9 @@
       "quotaExceededMessage": "You've used all {limit} free AI image generations. Subscribe to any plan for unlimited AI images."
     },
     "photo": {
+      "label": "Photo",
+      "generate": "Generate",
+      "addPhoto": "Add photo",
       "removePhoto": "Remove photo"
     },
     "menu": {

@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Du har brukt alle {limit} gratis AI-genereringer. Abonner på en plan for ubegrensede AI-bilder."
     },
     "photo": {
+      "label": "Bilde",
+      "generate": "Generer",
+      "addPhoto": "Legg til bilde",
       "removePhoto": "Fjern bilde"
     },
     "menu": {

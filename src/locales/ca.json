@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Has utilitzat les {limit} generacions IA gratuïtes. Subscriu-te a qualsevol pla per imatges IA il·limitades."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Generar",
+      "addPhoto": "Afegir foto",
       "removePhoto": "Elimina la foto"
     },
     "menu": {

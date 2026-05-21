@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Iskoristili ste svih {limit} besplatnih AI generiranja. Pretplatite se na bilo koji plan za neograničene AI slike."
     },
     "photo": {
+      "label": "Fotografija",
+      "generate": "Generiraj",
+      "addPhoto": "Dodaj fotografiju",
       "removePhoto": "Ukloni fotografiju"
     },
     "menu": {

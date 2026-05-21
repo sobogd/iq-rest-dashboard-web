@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Ai folosit toate cele {limit} generări AI gratuite. Abonează-te la orice plan pentru imagini AI nelimitate."
     },
     "photo": {
+      "label": "Fotografie",
+      "generate": "Generează",
+      "addPhoto": "Adaugă fotografie",
       "removePhoto": "Elimină poza"
     },
     "menu": {

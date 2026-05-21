@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Felhasználtad mind a {limit} ingyenes MI generálást. Iratkozz fel bármely csomagra a korlátlan MI képekhez."
     },
     "photo": {
+      "label": "Fotó",
+      "generate": "Generálás",
+      "addPhoto": "Fotó hozzáadása",
       "removePhoto": "Fotó eltávolítása"
     },
     "menu": {

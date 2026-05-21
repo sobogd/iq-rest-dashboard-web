@@ -1454,14 +1454,14 @@ export function PhotoPicker({
  <>
  {onAiClick ? (
  <div className="flex items-center justify-between gap-2 mb-2.5">
- <label className="block text-sm font-medium text-foreground">Photo</label>
+ <label className="block text-sm font-medium text-foreground">{tph("label")}</label>
  <button
  type="button"
  onClick={onAiClick}
  className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors"
  >
  <SparklesIcon size={11} />
- Generate
+ {tph("generate")}
  </button>
  </div>
  ) : null}
@@ -1500,7 +1500,7 @@ export function PhotoPicker({
  <circle cx="9" cy="9" r="2" />
  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
  </svg>
- <span className="text-[13px] font-medium">Add photo</span>
+ <span className="text-[13px] font-medium">{tph("addPhoto")}</span>
  </>
  )}
  <input

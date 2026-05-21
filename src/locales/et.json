@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Oled kasutanud kõik {limit} tasuta tehisintellekti genereerimist. Telli mõni plaan piiramatute tehisintellekti piltide jaoks."
     },
     "photo": {
+      "label": "Foto",
+      "generate": "Genereeri",
+      "addPhoto": "Lisa foto",
       "removePhoto": "Eemalda foto"
     },
     "menu": {

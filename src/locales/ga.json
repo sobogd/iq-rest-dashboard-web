@@ -79,6 +79,9 @@
       "quotaExceededMessage": "D'úsáid tú gach ceann de na {limit} ghineadh AI saor in aisce. Liostáil le haon phlean le haghaidh íomhánna AI gan teorainn."
     },
     "photo": {
+      "label": "Grianghraf",
+      "generate": "Gin",
+      "addPhoto": "Cuir grianghraf leis",
       "removePhoto": "Bain grianghraf"
     },
     "menu": {

@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Olet käyttänyt kaikki {limit} ilmaista tekoälyluontia. Tilaa mikä tahansa paketti rajoittamattomille tekoälykuville."
     },
     "photo": {
+      "label": "Kuva",
+      "generate": "Luo",
+      "addPhoto": "Lisää kuva",
       "removePhoto": "Poista kuva"
     },
     "menu": {

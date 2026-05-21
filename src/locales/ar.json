@@ -79,6 +79,9 @@
       "quotaExceededMessage": "لقد استخدمت كل {limit} عمليات إنشاء AI المجانية. اشترك في أي خطة للحصول على صور AI غير محدودة."
     },
     "photo": {
+      "label": "صورة",
+      "generate": "إنشاء",
+      "addPhoto": "إضافة صورة",
       "removePhoto": "إزالة الصورة"
     },
     "menu": {

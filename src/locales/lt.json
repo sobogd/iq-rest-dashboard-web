@@ -79,6 +79,9 @@
       "quotaExceededMessage": "Sunaudojote visus {limit} nemokamus DI generavimus. Užsiprenumeruokite bet kurį planą neribotam DI vaizdų skaičiui."
     },
     "photo": {
+      "label": "Nuotrauka",
+      "generate": "Sukurti",
+      "addPhoto": "Pridėti nuotrauką",
       "removePhoto": "Pašalinti nuotrauką"
     },
     "menu": {
