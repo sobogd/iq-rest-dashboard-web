@@ -317,6 +317,8 @@
       "filtersLabel": "Filtros:",
       "filterStatus": "Estado",
       "filterCategory": "Categoría",
+      "filterByStatus": "Filtrar por estado",
+      "filterByCategory": "Filtrar por categoría",
       "apply": "Aplicar",
       "reset": "Restablecer",
       "kitchenClear": "La cocina está despejada",

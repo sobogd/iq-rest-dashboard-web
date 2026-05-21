@@ -317,6 +317,8 @@
       "filtersLabel": "Filtreler:",
       "filterStatus": "Durum",
       "filterCategory": "Kategori",
+      "filterByStatus": "Duruma göre filtrele",
+      "filterByCategory": "Kategoriye göre filtrele",
       "apply": "Uygula",
       "reset": "Sıfırla",
       "kitchenClear": "Mutfak boş",

@@ -317,6 +317,8 @@
       "filtersLabel": "Filters:",
       "filterStatus": "Status",
       "filterCategory": "Categorie",
+      "filterByStatus": "Filteren op status",
+      "filterByCategory": "Filteren op categorie",
       "apply": "Toepassen",
       "reset": "Resetten",
       "kitchenClear": "Keuken is leeg",

@@ -317,6 +317,8 @@
       "filtersLabel": "Фильтры:",
       "filterStatus": "Статус",
       "filterCategory": "Категория",
+      "filterByStatus": "Фильтр по статусу",
+      "filterByCategory": "Фильтр по категории",
       "apply": "Применить",
       "reset": "Сбросить",
       "kitchenClear": "Кухня свободна",

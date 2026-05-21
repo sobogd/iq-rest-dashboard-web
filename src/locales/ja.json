@@ -317,6 +317,8 @@
       "filtersLabel": "フィルター:",
       "filterStatus": "ステータス",
       "filterCategory": "カテゴリ",
+      "filterByStatus": "ステータスで絞り込み",
+      "filterByCategory": "カテゴリで絞り込み",
       "apply": "適用",
       "reset": "リセット",
       "kitchenClear": "キッチンは空いています",

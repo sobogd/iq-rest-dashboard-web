@@ -317,6 +317,8 @@
       "filtersLabel": "Φίλτρα:",
       "filterStatus": "Κατάσταση",
       "filterCategory": "Κατηγορία",
+      "filterByStatus": "Φιλτράρισμα κατά κατάσταση",
+      "filterByCategory": "Φιλτράρισμα κατά κατηγορία",
       "apply": "Εφαρμογή",
       "reset": "Επαναφορά",
       "kitchenClear": "Η κουζίνα είναι ελεύθερη",

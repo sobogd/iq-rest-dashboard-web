@@ -317,6 +317,8 @@
       "filtersLabel": "Filtri:",
       "filterStatus": "Statuss",
       "filterCategory": "Kategorija",
+      "filterByStatus": "Filtrēt pēc statusa",
+      "filterByCategory": "Filtrēt pēc kategorijas",
       "apply": "Piemērot",
       "reset": "Atiestatīt",
       "kitchenClear": "Virtuve ir tukša",

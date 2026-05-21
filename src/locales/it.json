@@ -317,6 +317,8 @@
       "filtersLabel": "Filtri:",
       "filterStatus": "Stato",
       "filterCategory": "Categoria",
+      "filterByStatus": "Filtra per stato",
+      "filterByCategory": "Filtra per categoria",
       "apply": "Applica",
       "reset": "Reimposta",
       "kitchenClear": "Cucina libera",

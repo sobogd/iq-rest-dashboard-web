@@ -317,6 +317,8 @@
       "filtersLabel": "Filtrai:",
       "filterStatus": "Būsena",
       "filterCategory": "Kategorija",
+      "filterByStatus": "Filtruoti pagal būseną",
+      "filterByCategory": "Filtruoti pagal kategoriją",
       "apply": "Taikyti",
       "reset": "Atstatyti",
       "kitchenClear": "Virtuvė tuščia",

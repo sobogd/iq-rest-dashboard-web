@@ -317,6 +317,8 @@
       "filtersLabel": "المرشحات:",
       "filterStatus": "الحالة",
       "filterCategory": "الفئة",
+      "filterByStatus": "تصفية حسب الحالة",
+      "filterByCategory": "تصفية حسب الفئة",
       "apply": "تطبيق",
       "reset": "إعادة تعيين",
       "kitchenClear": "المطبخ فارغ",

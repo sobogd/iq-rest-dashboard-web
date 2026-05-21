@@ -317,6 +317,8 @@
       "filtersLabel": "Scagairí:",
       "filterStatus": "Stádas",
       "filterCategory": "Catagóir",
+      "filterByStatus": "Scag de réir stádais",
+      "filterByCategory": "Scag de réir catagóire",
       "apply": "Cuir i bhfeidhm",
       "reset": "Athshocraigh",
       "kitchenClear": "Tá an chistin glan",

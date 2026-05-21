@@ -317,6 +317,8 @@
       "filtersLabel": "Síur:",
       "filterStatus": "Staða",
       "filterCategory": "Flokkur",
+      "filterByStatus": "Sía eftir stöðu",
+      "filterByCategory": "Sía eftir flokki",
       "apply": "Beita",
       "reset": "Núllstilla",
       "kitchenClear": "Eldhús er tómt",

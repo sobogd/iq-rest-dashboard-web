@@ -317,6 +317,8 @@
       "filtersLabel": "Filters:",
       "filterStatus": "Status",
       "filterCategory": "Category",
+      "filterByStatus": "Filter by status",
+      "filterByCategory": "Filter by category",
       "apply": "Apply",
       "reset": "Reset",
       "kitchenClear": "Kitchen is clear",

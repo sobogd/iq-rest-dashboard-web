@@ -317,6 +317,8 @@
       "filtersLabel": "Filtre:",
       "filterStatus": "Status",
       "filterCategory": "Kategori",
+      "filterByStatus": "Filtrer etter status",
+      "filterByCategory": "Filtrer etter kategori",
       "apply": "Bruk",
       "reset": "Tilbakestill",
       "kitchenClear": "Kjøkkenet er tomt",

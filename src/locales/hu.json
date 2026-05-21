@@ -317,6 +317,8 @@
       "filtersLabel": "Szűrők:",
       "filterStatus": "Állapot",
       "filterCategory": "Kategória",
+      "filterByStatus": "Szűrés állapot szerint",
+      "filterByCategory": "Szűrés kategória szerint",
       "apply": "Alkalmaz",
       "reset": "Visszaállít",
       "kitchenClear": "A konyha üres",

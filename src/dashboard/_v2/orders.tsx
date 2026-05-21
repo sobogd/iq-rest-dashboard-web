@@ -2039,9 +2039,11 @@ export function KitchenPage({
  { id: "served", labelKey: "statusServed" },
  ];
 
- const filterBtnBase = "shrink-0 inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium transition-colors";
+ // Match the menu page sticky-header buttons: bg-secondary pill with
+ // h-8 / px-2.5 / text-xs. Active state lifts to foreground.
+ const filterBtnBase = "shrink-0 inline-flex items-center gap-1.5 h-8 px-2.5 rounded-md text-xs font-medium transition-colors";
  const filterBtnOn = "bg-foreground text-background";
- const filterBtnOff = "bg-card text-foreground border border-border";
+ const filterBtnOff = "bg-secondary text-muted-foreground hover:text-foreground";
 
  return (
  <div>
@@ -2050,13 +2052,12 @@ export function KitchenPage({
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="flex items-center gap-2 px-4 md:px-6 py-2">
- <span className="shrink-0 text-xs font-medium text-muted-foreground">{t("filtersLabel")}</span>
  <button
  type="button"
  onClick={() => setOpenFilter("status")}
  className={filterBtnBase + " " + (statusFilter.length > 0 ? filterBtnOn : filterBtnOff)}
  >
- {t("filterStatus")}
+ {t("filterByStatus")}
  {statusFilter.length > 0 ? ` (${statusFilter.length})` : ""}
  </button>
  {categories.length > 0 ? (
@@ -2065,7 +2066,7 @@ export function KitchenPage({
  onClick={() => setOpenFilter("category")}
  className={filterBtnBase + " " + (categoryFilter.length > 0 ? filterBtnOn : filterBtnOff)}
  >
- {t("filterCategory")}
+ {t("filterByCategory")}
  {categoryFilter.length > 0 ? ` (${categoryFilter.length})` : ""}
  </button>
  ) : null}
@@ -2116,7 +2117,7 @@ export function KitchenPage({
  />
  </div>
  ) : (
- <div className="-mx-4 md:-mx-6 mt-2 md:mt-3">
+ <div className="-mx-4 md:-mx-6 mt-4 md:mt-3">
  <div className="overflow-x-auto pb-1 px-4 md:px-6">
  <div className="flex items-start gap-3" style={{ width: "max-content" }}>
  {visibleGroups.map((g) => (

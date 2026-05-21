@@ -317,6 +317,8 @@
       "filtersLabel": "Filtre:",
       "filterStatus": "Status",
       "filterCategory": "Kategori",
+      "filterByStatus": "Filtrér efter status",
+      "filterByCategory": "Filtrér efter kategori",
       "apply": "Anvend",
       "reset": "Nulstil",
       "kitchenClear": "Køkkenet er tomt",

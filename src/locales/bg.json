@@ -317,6 +317,8 @@
       "filtersLabel": "Филтри:",
       "filterStatus": "Статус",
       "filterCategory": "Категория",
+      "filterByStatus": "Филтрирай по статус",
+      "filterByCategory": "Филтрирай по категория",
       "apply": "Приложи",
       "reset": "Нулирай",
       "kitchenClear": "Кухнята е чиста",

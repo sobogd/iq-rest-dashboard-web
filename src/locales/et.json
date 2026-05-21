@@ -317,6 +317,8 @@
       "filtersLabel": "Filtrid:",
       "filterStatus": "Olek",
       "filterCategory": "Kategooria",
+      "filterByStatus": "Filtreeri oleku järgi",
+      "filterByCategory": "Filtreeri kategooria järgi",
       "apply": "Rakenda",
       "reset": "Lähtesta",
       "kitchenClear": "Köök on tühi",

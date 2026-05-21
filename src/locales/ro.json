@@ -317,6 +317,8 @@
       "filtersLabel": "Filtre:",
       "filterStatus": "Stare",
       "filterCategory": "Categorie",
+      "filterByStatus": "Filtrează după stare",
+      "filterByCategory": "Filtrează după categorie",
       "apply": "Aplică",
       "reset": "Resetează",
       "kitchenClear": "Bucătăria e liberă",

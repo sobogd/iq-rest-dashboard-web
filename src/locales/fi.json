@@ -317,6 +317,8 @@
       "filtersLabel": "Suodattimet:",
       "filterStatus": "Tila",
       "filterCategory": "Kategoria",
+      "filterByStatus": "Suodata tilan mukaan",
+      "filterByCategory": "Suodata luokan mukaan",
       "apply": "Käytä",
       "reset": "Nollaa",
       "kitchenClear": "Keittiö on tyhjä",

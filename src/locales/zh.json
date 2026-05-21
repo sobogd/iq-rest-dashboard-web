@@ -317,6 +317,8 @@
       "filtersLabel": "筛选:",
       "filterStatus": "状态",
       "filterCategory": "类别",
+      "filterByStatus": "按状态筛选",
+      "filterByCategory": "按分类筛选",
       "apply": "应用",
       "reset": "重置",
       "kitchenClear": "厨房清空",

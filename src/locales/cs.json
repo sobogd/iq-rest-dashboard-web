@@ -317,6 +317,8 @@
       "filtersLabel": "Filtry:",
       "filterStatus": "Stav",
       "filterCategory": "Kategorie",
+      "filterByStatus": "Filtrovat podle stavu",
+      "filterByCategory": "Filtrovat podle kategorie",
       "apply": "Použít",
       "reset": "Obnovit",
       "kitchenClear": "Kuchyně je volná",

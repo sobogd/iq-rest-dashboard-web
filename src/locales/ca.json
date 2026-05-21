@@ -317,6 +317,8 @@
       "filtersLabel": "Filtres:",
       "filterStatus": "Estat",
       "filterCategory": "Categoria",
+      "filterByStatus": "Filtra per estat",
+      "filterByCategory": "Filtra per categoria",
       "apply": "Aplicar",
       "reset": "Restablir",
       "kitchenClear": "La cuina és buida",

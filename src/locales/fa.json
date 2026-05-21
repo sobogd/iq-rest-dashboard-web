@@ -317,6 +317,8 @@
       "filtersLabel": "فیلترها:",
       "filterStatus": "وضعیت",
       "filterCategory": "دسته‌بندی",
+      "filterByStatus": "فیلتر بر اساس وضعیت",
+      "filterByCategory": "فیلتر بر اساس دسته‌بندی",
       "apply": "اعمال",
       "reset": "بازنشانی",
       "kitchenClear": "آشپزخانه خالی است",

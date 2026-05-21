@@ -317,6 +317,8 @@
       "filtersLabel": "Filtri:",
       "filterStatus": "Status",
       "filterCategory": "Kategorija",
+      "filterByStatus": "Filtriraj po statusu",
+      "filterByCategory": "Filtriraj po kategoriji",
       "apply": "Primijeni",
       "reset": "Poništi",
       "kitchenClear": "Kuhinja je prazna",
