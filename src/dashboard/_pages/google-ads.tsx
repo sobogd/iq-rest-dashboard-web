@@ -343,18 +343,103 @@ function mergeScoped(prev: AllData | null, incoming: AllData, view: View): AllDa
   return incoming;
 }
 
+type Section = "campaigns" | "groups" | "keywords" | "search_terms";
+
+interface FlatGroupRow {
+  id: string;
+  name: string;
+  status: Status;
+  campaignId: string;
+  campaignName: string;
+  suffix?: string;
+  defaultBid?: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  cost: number;
+}
+
+interface FlatKeywordRow {
+  id: string;
+  critId: string;
+  adGroupId: string;
+  adGroupName: string;
+  campaignId: string;
+  campaignName: string;
+  text: string;
+  matchType: string;
+  status: Status;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  cost: number;
+  qualityScore?: number;
+  bid?: number;
+}
+
+interface SearchTermFlatRow {
+  searchTerm: string;
+  status: string;
+  matchedKeyword: string;
+  matchedMatchType: string;
+  adGroupId: string;
+  adGroupName: string;
+  campaignId: string;
+  campaignName: string;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  cost: number;
+}
+
+interface FlatSectionData {
+  campaigns?: CampaignRow[];
+  timeline?: TimelineBucket[];
+  groups?: FlatGroupRow[];
+  keywords?: FlatKeywordRow[];
+  searchTerms?: SearchTermFlatRow[];
+}
+
+interface AdGroupDrillData {
+  adGroup: { id: string; name: string; suffix?: string; campaignId: string; campaignName: string };
+  keywords: KeywordRow[];
+  ads: AdRow[];
+  assets?: CampAssets;
+}
+
+type DrillState =
+  | null
+  | { kind: "loading"; adGroupId: string }
+  | { kind: "ad_group"; data: AdGroupDrillData };
+
+interface KeywordStRequest {
+  adGroupId: string;
+  critId: string;
+  title: string;
+  loading: boolean;
+  items: SearchTerm[];
+}
+
+const SECTION_OPTIONS: Array<{ value: Section; label: string }> = [
+  { value: "campaigns", label: "Camp" },
+  { value: "groups", label: "Grp" },
+  { value: "keywords", label: "Kw" },
+  { value: "search_terms", label: "ST" },
+];
+
 export function GoogleAdsPage() {
   const router = useDashboardRouter();
+  const [section, setSection] = useState<Section>("keywords");
   const [filterStatus, setFilterStatus] = useState<Status>("ENABLED");
   const [filterDateRange, setFilterDateRange] = useState<DateRange>("today");
-  const [view, setView] = useState<View>({ kind: "campaigns" });
 
-  const [data, setData] = useState<AllData | null>(null);
+  const [flatData, setFlatData] = useState<FlatSectionData>({});
   const [initialLoading, setInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [drill, setDrill] = useState<DrillState>(null);
+
   const [detailReq, setDetailReq] = useState<DetailRequest | null>(null);
-  const [plannerOpen, setPlannerOpen] = useState(false);
-  const plannerState = usePlannerState();
   const [bidEditReq, setBidEditReq] = useState<{ adGroupId: string; critId: string; keyword: string; currentBid: number | null; geoResource: string | null } | null>(null);
   const [strategyBidReq, setStrategyBidReq] = useState<StrategyBidEditRequest | null>(null);
   const [qsReq, setQsReq] = useState<{ adGroupId: string; critId: string; keyword: string; matchType?: string } | null>(null);
@@ -363,75 +448,99 @@ export function GoogleAdsPage() {
   const [addKwFromPlanner, setAddKwFromPlanner] = useState<{ adGroupId: string; text: string } | null>(null);
   const [deleteKwReq, setDeleteKwReq] = useState<{ adGroupId: string; critId: string; keyword: string } | null>(null);
   const [adGroupFormReq, setAdGroupFormReq] = useState<AdGroupFormReq | null>(null);
+  const [plannerOpen, setPlannerOpen] = useState(false);
+  const plannerState = usePlannerState();
+  const [kwStReq, setKwStReq] = useState<KeywordStRequest | null>(null);
 
-  // Scope-aware loader. Each view fetches only the slice it needs;
-  // results are merged into `data` so back-navigation reuses what was
-  // already pulled. The first ad-group hit is what saved us from the
-  // 30-query initial /all payload; campaigns/campaign views now skip
-  // keywords/ads/search-terms entirely.
-  const scopeFor = (v: View): string => {
-    if (v.kind === "campaigns") return "campaigns";
-    if (v.kind === "campaign") return `campaign:${v.campaignId}`;
-    if (v.kind === "ad_group_detail" || v.kind === "keyword_search_terms") return `adgroup:${v.adGroupId}`;
-    return "all";
+  const sectionPath = (s: Section): string => {
+    if (s === "campaigns") return "page-campaigns";
+    if (s === "groups") return "page-groups";
+    if (s === "keywords") return "page-keywords";
+    return "page-search-terms";
   };
 
-  const load = async (mode: "initial" | "refresh", overrideView?: View) => {
+  const hasAnyData = Boolean(flatData.campaigns || flatData.groups || flatData.keywords || flatData.searchTerms);
+
+  const load = async (mode: "initial" | "refresh") => {
     if (mode === "initial") setInitialLoading(true);
     else setRefreshing(true);
-    const targetView = overrideView ?? view;
-    const scope = scopeFor(targetView);
     try {
-      const qs = new URLSearchParams({ dateRange: filterDateRange, scope });
-      const res = await fetch(apiUrl(`/api/admin/google-ads/all?${qs}`), { credentials: "include" });
+      const qs = new URLSearchParams({ dateRange: filterDateRange });
+      const res = await fetch(apiUrl(`/api/admin/google-ads/${sectionPath(section)}?${qs}`), { credentials: "include" });
       if (!res.ok) return;
-      const j = (await res.json()) as AllData;
-      setData((prev) => mergeScoped(prev, j, targetView));
+      const j = await res.json();
+      setFlatData({
+        campaigns: section === "campaigns" ? j.campaigns : undefined,
+        timeline: section === "campaigns" ? j.timeline : undefined,
+        groups: section === "groups" ? j.adGroups : undefined,
+        keywords: section === "keywords" ? j.keywords : undefined,
+        searchTerms: section === "search_terms" ? j.items : undefined,
+      });
     } finally {
       setInitialLoading(false);
       setRefreshing(false);
     }
   };
 
-  // Initial + date-change → loader. Refresh button → no loader.
+  // Section/date change → reload + clear any open drill.
   useEffect(() => {
-    void load(data ? "refresh" : "initial");
+    setDrill(null);
+    void load(hasAnyData ? "refresh" : "initial");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterDateRange]);
+  }, [section, filterDateRange]);
 
-  // Drill-in: when the user navigates into a campaign or ad group we
-  // load that scope. Stay quiet (refresh-style spinner) if we already
-  // have data on screen so the breadcrumb keeps rendering during fetch.
-  useEffect(() => {
-    if (!data) return;
-    void load("refresh");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view.kind, (view as { campaignId?: string }).campaignId, (view as { adGroupId?: string }).adGroupId]);
+  const loadDrillAdGroup = async (adGroupId: string) => {
+    setDrill({ kind: "loading", adGroupId });
+    const qs = new URLSearchParams({ dateRange: filterDateRange });
+    const res = await fetch(apiUrl(`/api/admin/google-ads/page-ad-group/${adGroupId}?${qs}`), { credentials: "include" });
+    if (!res.ok) { setDrill(null); return; }
+    const j = (await res.json()) as AdGroupDrillData;
+    setDrill({ kind: "ad_group", data: j });
+  };
 
-  // Client-side filter by status
-  const filtered = useMemo(() => {
-    if (!data) return null;
-    const byS = <T extends { status: Status }>(arr: T[]) => arr.filter((x) => x.status === filterStatus);
-    return {
-      campaigns: byS(data.campaigns),
-      adGroups: byS(data.adGroups),
-      ads: byS(data.ads),
-      keywords: byS(data.keywords),
-      negatives: byS(data.negatives),
-    };
-  }, [data, filterStatus]);
+  const refreshDrill = async () => {
+    if (drill?.kind === "ad_group") await loadDrillAdGroup(drill.data.adGroup.id);
+  };
 
-  const currentCampaign = view.kind !== "campaigns" ? filtered?.campaigns.find((c) => c.id === view.campaignId) ?? data?.campaigns.find((c) => c.id === view.campaignId) : null;
-  const currentAdGroupId = (view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") ? view.adGroupId : null;
-  const currentAdGroup = currentAdGroupId ? (filtered?.adGroups.find((a) => a.id === currentAdGroupId) ?? data?.adGroups.find((a) => a.id === currentAdGroupId)) : null;
+  const openKeywordSearchTerms = async (adGroupId: string, critId: string, title: string) => {
+    setKwStReq({ adGroupId, critId, title, loading: true, items: [] });
+    const qs = new URLSearchParams({ dateRange: filterDateRange });
+    const res = await fetch(apiUrl(`/api/admin/google-ads/search-terms/keyword/${adGroupId}/${critId}?${qs}`), { credentials: "include" });
+    if (!res.ok) return;
+    const j = await res.json();
+    setKwStReq((prev) => prev ? { ...prev, loading: false, items: j.items ?? [] } : null);
+  };
 
   function handleBack() {
-    if (view.kind === "campaigns") router.push({ name: "settings" });
-    else if (view.kind === "campaign") setView({ kind: "campaigns" });
-    else if (view.kind === "ad_group_detail") setView({ kind: "campaign", campaignId: view.campaignId });
-    else if (view.kind === "keyword_search_terms") setView({ kind: "ad_group_detail", campaignId: view.campaignId, adGroupId: view.adGroupId });
+    if (drill) { setDrill(null); return; }
+    router.push({ name: "settings" });
   }
 
+  const filtCampaigns = (flatData.campaigns ?? []).filter((c) => c.status === filterStatus);
+  const filtGroups = (flatData.groups ?? []).filter((g) => g.status === filterStatus);
+  const filtKeywords = (flatData.keywords ?? []).filter((k) => k.status === filterStatus);
+  const flatSearchTerms = flatData.searchTerms ?? [];
+
+  const sortedGroups = useMemo(() => {
+    const arr = [...filtGroups];
+    arr.sort((a, b) => b.impressions - a.impressions);
+    return arr;
+  }, [filtGroups]);
+
+  const sortedKeywords = useMemo(() => {
+    const MT_ORDER: Record<string, number> = { B: 0, P: 1, E: 2 };
+    const arr = [...filtKeywords];
+    arr.sort((a, b) => {
+      const ai = MT_ORDER[a.matchType] ?? 99;
+      const bi = MT_ORDER[b.matchType] ?? 99;
+      if (ai !== bi) return ai - bi;
+      return b.impressions - a.impressions;
+    });
+    return arr;
+  }, [filtKeywords]);
+
+  const drillAg = drill?.kind === "ad_group" ? drill.data : null;
+  const drillLoading = drill?.kind === "loading";
 
   return (
     <div>
@@ -446,45 +555,42 @@ export function GoogleAdsPage() {
             <Calendar className="w-3.5 h-3.5" />
             <span>{DATE_LABEL[filterDateRange]}</span>
           </button>
+          {!drill ? (
+            <TabGroup
+              options={SECTION_OPTIONS.map((s) => ({ value: s.value, label: s.label }))}
+              selected={section}
+              onSelect={(v) => setSection(v as Section)}
+            />
+          ) : null}
           <TabGroup
             options={STATUS_ORDER.map((s) => ({ value: s, label: STATUS_SHORT[s] }))}
             selected={filterStatus}
             onSelect={(v) => setFilterStatus(v as Status)}
           />
-          {view.kind === "ad_group_detail" ? (
-            <button
-              type="button"
-              onClick={() => setAddKwAdGroupId(view.adGroupId)}
-              title="Add keyword"
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-            >
-              <Plus className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-          {view.kind === "campaign" ? (
-            <button
-              type="button"
-              onClick={() => setAdGroupFormReq({ mode: "create", campaignId: view.campaignId })}
-              title="New ad group"
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-            >
-              <Plus className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-          {view.kind === "ad_group_detail" || view.kind === "keyword_search_terms" ? (
-            <button
-              type="button"
-              onClick={() => setPlannerOpen(true)}
-              title="Keyword Planner"
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-            >
-              <BarChart3 className="h-3.5 w-3.5" />
-            </button>
+          {drillAg ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setAddKwAdGroupId(drillAg.adGroup.id)}
+                title="Add keyword"
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setPlannerOpen(true)}
+                title="Keyword Planner"
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              >
+                <BarChart3 className="h-3.5 w-3.5" />
+              </button>
+            </>
           ) : null}
           <button
             type="button"
-            onClick={() => void load("refresh")}
-            disabled={refreshing || initialLoading}
+            onClick={() => drill ? void refreshDrill() : void load("refresh")}
+            disabled={refreshing || initialLoading || drillLoading}
             title="Refresh"
             className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
           >
@@ -494,162 +600,111 @@ export function GoogleAdsPage() {
       </SubpageStickyBar>
 
       <div className="max-w-2xl mx-auto pt-5 md:pt-4 space-y-3">
-        {view.kind !== "campaigns" && currentCampaign ? (
-          <div className="text-[11px] text-muted-foreground flex flex-wrap items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setView({ kind: "campaigns" })}
-              className="hover:text-foreground transition-colors"
-            >
-              Campaigns
-            </button>
-            <span>/</span>
-            {view.kind === "campaign" ? (
-              <span className="text-foreground font-medium">{currentCampaign.name}</span>
-            ) : (
+        {drillAg ? (
+          <>
+            <div className="text-[11px] text-muted-foreground flex flex-wrap items-center gap-1">
               <button
                 type="button"
-                onClick={() => setView({ kind: "campaign", campaignId: currentCampaign.id })}
+                onClick={() => setDrill(null)}
                 className="hover:text-foreground transition-colors"
               >
-                {currentCampaign.name}
+                Groups
               </button>
-            )}
-            {(view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") && currentAdGroup ? (
-              <>
-                <span>/</span>
-                {view.kind === "ad_group_detail" ? (
-                  <span className="text-foreground font-medium">{currentAdGroup.name}</span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setView({ kind: "ad_group_detail", campaignId: view.campaignId, adGroupId: view.adGroupId })}
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {currentAdGroup.name}
-                  </button>
-                )}
-              </>
-            ) : null}
-            {view.kind === "keyword_search_terms" ? (
-              <>
-                <span>/</span>
-                <span className="text-foreground font-medium">{view.keywordTitle}</span>
-              </>
-            ) : null}
-          </div>
-        ) : null}
-        {initialLoading ? (
-          <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-        ) : !filtered ? null : view.kind === "campaigns" ? (
-          <>
-            <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {filtered.campaigns.map((c) => (
-                <CampaignRow
-                  key={c.id}
-                  c={c}
-                  onOpen={() => setView({ kind: "campaign", campaignId: c.id })}
-                  onView={() => setDetailReq({ kind: "campaign", id: c.id })}
-                />
-              ))}
+              <span>/</span>
+              <span className="text-foreground font-medium">{drillAg.adGroup.campaignName}</span>
+              <span>/</span>
+              <span className="text-foreground font-medium">{drillAg.adGroup.name}</span>
             </div>
-            {filtered.campaigns.length > 0 ? (
-              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-                <TotalAndTimeline campaigns={filtered.campaigns} timeline={data?.timeline ?? []} />
-              </div>
-            ) : null}
-            {filtered.campaigns.length > 0 && data?.campaignStrategies ? (
-              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-                <StrategiesSummary
-                  campaigns={filtered.campaigns}
-                  campaignStrategies={data.campaignStrategies}
-                  onEditBids={(req) => setStrategyBidReq(req)}
-                />
-              </div>
-            ) : null}
-          </>
-        ) : view.kind === "campaign" && currentCampaign ? (
-          <>
-            <div>
-              <div className="px-3 md:px-0 text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5">Ad groups</div>
-              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-                {filtered.adGroups.filter((a) => a.campaignId === view.campaignId).map((a) => (
-                  <AdGroupRowEl
-                    key={a.id}
-                    a={a}
-                    onOpen={() => setView({ kind: "ad_group_detail", campaignId: view.campaignId, adGroupId: a.id })}
-                    onEdit={() => {
-                      const ad = data?.ads.find((x) => x.adGroupId === a.id && x.status === "ENABLED")
-                        ?? data?.ads.find((x) => x.adGroupId === a.id);
-                      const currentAd: AdFormState | undefined = ad
-                        ? {
-                            finalUrl: ad.finalUrls[0] ?? "",
-                            path1: ad.path1,
-                            path2: ad.path2,
-                            headlines: ad.headlines.map((h) => ({
-                              text: h.text,
-                              pin: (h.pinned === "HEADLINE_1" || h.pinned === "HEADLINE_2" || h.pinned === "HEADLINE_3")
-                                ? (h.pinned as HeadlinePin)
-                                : undefined,
-                            })),
-                            descriptions: ad.descriptions.map((d) => ({
-                              text: d.text,
-                              pin: (d.pinned === "DESCRIPTION_1" || d.pinned === "DESCRIPTION_2")
-                                ? (d.pinned as DescriptionPin)
-                                : undefined,
-                            })),
-                          }
-                        : undefined;
-                      setAdGroupFormReq({
-                        mode: "edit",
-                        adGroupId: a.id,
-                        campaignId: a.campaignId,
-                        current: { name: a.name, status: a.status, defaultBid: a.defaultBid, suffix: a.suffix },
-                        currentAd,
-                      });
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-            <NegativesBlock
-              negatives={filtered.negatives.filter((n) => n.campaignId === view.campaignId && n.scope === "campaign")}
-              onView={(n) => setDetailReq({ kind: "negative", scope: n.scope, id: n.rawId, campaignId: n.campaignId, adGroupId: n.adGroupId })}
+            <AdGroupDetail
+              keywords={drillAg.keywords.filter((k) => k.status === filterStatus)}
+              ads={drillAg.ads.filter((a) => a.status === filterStatus)}
+              assets={drillAg.assets}
+              onView={(req) => setDetailReq(req)}
+              adGroupId={drillAg.adGroup.id}
+              campaignId={drillAg.adGroup.campaignId}
+              campaignIsPortfolio={false}
+              onKeywordOpen={(k) => void openKeywordSearchTerms(k.adGroupId, k.id, k.title)}
+              onBidEdit={(k) => setBidEditReq({
+                adGroupId: k.adGroupId,
+                critId: k.id,
+                keyword: k.text ?? k.title,
+                currentBid: k.bid ?? null,
+                geoResource: null,
+              })}
+              onQsOpen={(k) => setQsReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, matchType: k.matchType })}
+              onDeleteKeyword={(k) => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title })}
+              searchTerms={undefined}
+              negatives={[]}
+              onNegativeView={() => { /* drill mode: negatives shown elsewhere */ }}
             />
           </>
-        ) : view.kind === "ad_group_detail" && currentAdGroup ? (
-          <AdGroupDetail
-            keywords={filtered.keywords.filter((k) => k.adGroupId === view.adGroupId)}
-            ads={filtered.ads.filter((a) => a.adGroupId === view.adGroupId)}
-            assets={data?.campaignAssets[view.campaignId]}
-            onView={(req) => setDetailReq(req)}
-            adGroupId={view.adGroupId}
-            campaignId={view.campaignId}
-            campaignIsPortfolio={Boolean(data?.campaignStrategies?.[view.campaignId]?.isPortfolio)}
-            onKeywordOpen={(k) => setView({ kind: "keyword_search_terms", campaignId: view.campaignId, adGroupId: view.adGroupId, critId: k.id, keywordTitle: k.title })}
-            onBidEdit={(k) => setBidEditReq({
-              adGroupId: k.adGroupId,
-              critId: k.id,
-              keyword: k.text ?? k.title,
-              currentBid: k.bid ?? null,
-              geoResource: geoResourcesFor(data?.campaignTargeting[view.campaignId] ?? null)[0] ?? null,
-            })}
-            onQsOpen={(k) => setQsReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title, matchType: k.matchType })}
-            onDeleteKeyword={(k) => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.id, keyword: k.text ?? k.title })}
-            searchTerms={data?.searchTermsByAdGroup[view.adGroupId]}
-            negatives={filtered.negatives.filter((n) => n.adGroupId === view.adGroupId && n.scope === "ad_group")}
-            onNegativeView={(n) => setDetailReq({ kind: "negative", scope: n.scope, id: n.rawId, campaignId: n.campaignId, adGroupId: n.adGroupId })}
-          />
-        ) : view.kind === "keyword_search_terms" ? (
-          <SearchTermsList
-            items={(data?.searchTermsByAdGroup[view.adGroupId] ?? []).filter((st) => {
-              const kw = data?.keywords.find((k) => k.id === view.critId);
-              if (!kw) return false;
-              return st.matchedKwText === kw.text && st.matchedKwMt === kw.matchType;
-            })}
-            loading={false}
-            header={view.keywordTitle}
-          />
+        ) : drillLoading || initialLoading ? (
+          <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
+        ) : section === "campaigns" ? (
+          <>
+            <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+              {filtCampaigns.length === 0 ? (
+                <div className="text-xs text-muted-foreground py-4 text-center">No campaigns</div>
+              ) : (
+                filtCampaigns.map((c) => (
+                  <CampaignRow
+                    key={c.id}
+                    c={c}
+                    onOpen={() => setDetailReq({ kind: "campaign", id: c.id })}
+                    onView={() => setDetailReq({ kind: "campaign", id: c.id })}
+                  />
+                ))
+              )}
+            </div>
+            {filtCampaigns.length > 0 && flatData.timeline && flatData.timeline.length > 0 ? (
+              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+                <TotalAndTimeline campaigns={filtCampaigns} timeline={flatData.timeline} />
+              </div>
+            ) : null}
+          </>
+        ) : section === "groups" ? (
+          <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+            {sortedGroups.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-4 text-center">No groups</div>
+            ) : (
+              sortedGroups.map((g) => (
+                <FlatGroupRowEl key={g.id} g={g} onOpen={() => void loadDrillAdGroup(g.id)} />
+              ))
+            )}
+          </div>
+        ) : section === "keywords" ? (
+          <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+            {sortedKeywords.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-4 text-center">No keywords</div>
+            ) : (
+              sortedKeywords.map((k) => (
+                <FlatKeywordRowEl
+                  key={k.id}
+                  k={k}
+                  onOpen={() => void openKeywordSearchTerms(k.adGroupId, k.critId, `[${k.matchType}] "${k.text}" · ${k.adGroupName}`)}
+                  onBidEdit={() => setBidEditReq({
+                    adGroupId: k.adGroupId,
+                    critId: k.critId,
+                    keyword: k.text,
+                    currentBid: k.bid ?? null,
+                    geoResource: null,
+                  })}
+                  onQsOpen={() => setQsReq({ adGroupId: k.adGroupId, critId: k.critId, keyword: k.text, matchType: k.matchType })}
+                  onDelete={() => setDeleteKwReq({ adGroupId: k.adGroupId, critId: k.critId, keyword: k.text })}
+                />
+              ))
+            )}
+          </div>
+        ) : section === "search_terms" ? (
+          <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+            {flatSearchTerms.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-4 text-center">No search terms</div>
+            ) : (
+              flatSearchTerms.map((st, i) => (
+                <FlatSearchTermRowEl key={`${st.searchTerm}|${st.adGroupId}|${i}`} st={st} />
+              ))
+            )}
+          </div>
         ) : null}
       </div>
 
@@ -681,48 +736,148 @@ export function GoogleAdsPage() {
           </div>
         </div>
       ) : null}
-      {plannerOpen ? <PlannerModal state={plannerState} campaignId={currentCampaign?.id ?? null} targeting={currentCampaign?.id ? data?.campaignTargeting?.[currentCampaign.id] ?? null : null} adGroupId={(view.kind === "ad_group_detail" || view.kind === "keyword_search_terms") ? view.adGroupId : null} onAddKeyword={(text, adGroupId) => setAddKwFromPlanner({ adGroupId, text })} onClose={() => setPlannerOpen(false)} /> : null}
+      {plannerOpen ? <PlannerModal state={plannerState} campaignId={drillAg?.adGroup.campaignId ?? null} targeting={null} adGroupId={drillAg?.adGroup.id ?? null} onAddKeyword={(text, adGroupId) => setAddKwFromPlanner({ adGroupId, text })} onClose={() => setPlannerOpen(false)} /> : null}
       {addKwFromPlanner ? (
         <AddKeywordModal
           adGroupId={addKwFromPlanner.adGroupId}
           initialText={addKwFromPlanner.text}
           onClose={() => setAddKwFromPlanner(null)}
-          onSaved={() => { setAddKwFromPlanner(null); setPlannerOpen(false); void load("refresh"); }}
+          onSaved={() => { setAddKwFromPlanner(null); setPlannerOpen(false); if (drill) void refreshDrill(); else void load("refresh"); }}
         />
       ) : null}
-      {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); void load("refresh"); }} /> : null}
+      {bidEditReq ? <BidEditModal req={bidEditReq} onClose={() => setBidEditReq(null)} onSaved={() => { setBidEditReq(null); if (drill) void refreshDrill(); else void load("refresh"); }} /> : null}
       {strategyBidReq ? <StrategyBidEditModal req={strategyBidReq} onClose={() => setStrategyBidReq(null)} onSaved={() => { setStrategyBidReq(null); void load("refresh"); }} /> : null}
       {qsReq ? <KeywordQsModal req={qsReq} onClose={() => setQsReq(null)} /> : null}
-      {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); void load("refresh"); }} /> : null}
+      {addKwAdGroupId ? <AddKeywordModal adGroupId={addKwAdGroupId} onClose={() => setAddKwAdGroupId(null)} onSaved={() => { setAddKwAdGroupId(null); if (drill) void refreshDrill(); else void load("refresh"); }} /> : null}
       {adGroupFormReq ? (
         <AdGroupFormModal
           req={adGroupFormReq}
-          sitelinks={
-            adGroupFormReq.mode === "edit"
-              ? (data?.adGroupSitelinks?.[adGroupFormReq.adGroupId] ?? [])
-              : []
-          }
-          callouts={
-            adGroupFormReq.mode === "edit"
-              ? (data?.adGroupCallouts?.[adGroupFormReq.adGroupId] ?? [])
-              : []
-          }
-          snippets={
-            adGroupFormReq.mode === "edit"
-              ? (data?.adGroupSnippets?.[adGroupFormReq.adGroupId] ?? [])
-              : []
-          }
-          images={
-            adGroupFormReq.mode === "edit"
-              ? (data?.adGroupImages?.[adGroupFormReq.adGroupId] ?? [])
-              : []
-          }
+          sitelinks={[]}
+          callouts={[]}
+          snippets={[]}
+          images={[]}
           onClose={() => setAdGroupFormReq(null)}
-          onSaved={() => { setAdGroupFormReq(null); void load("refresh"); }}
-          onRefresh={() => { void load("refresh"); }}
+          onSaved={() => { setAdGroupFormReq(null); if (drill) void refreshDrill(); else void load("refresh"); }}
+          onRefresh={() => { if (drill) void refreshDrill(); else void load("refresh"); }}
         />
       ) : null}
-      {deleteKwReq ? <DeleteKeywordModal req={deleteKwReq} onClose={() => setDeleteKwReq(null)} onDeleted={() => { setDeleteKwReq(null); void load("refresh"); }} /> : null}
+      {deleteKwReq ? <DeleteKeywordModal req={deleteKwReq} onClose={() => setDeleteKwReq(null)} onDeleted={() => { setDeleteKwReq(null); if (drill) void refreshDrill(); else void load("refresh"); }} /> : null}
+      {kwStReq ? (
+        <div onClick={() => setKwStReq(null)} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl max-h-[85vh] overflow-auto bg-card border border-border rounded-xl shadow-xl">
+            <div className="px-4 py-3 border-b border-border flex items-center justify-between sticky top-0 bg-card z-10">
+              <h3 className="text-sm font-semibold text-foreground truncate pr-2">Search terms · {kwStReq.title}</h3>
+              <button type="button" onClick={() => setKwStReq(null)} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0">
+                <XIcon className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="p-3">
+              <SearchTermsList items={kwStReq.items} loading={kwStReq.loading} header="" />
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function FlatGroupRowEl({ g, onOpen }: { g: FlatGroupRow; onOpen: () => void }) {
+  return (
+    <div onClick={onOpen} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onOpen(); }} className="px-3 py-2 space-y-1.5 hover:bg-muted/40 transition-colors cursor-pointer">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <TitleTag text={g.name} color={TAG_COLOR.ad_group} paused={g.status === "PAUSED"} />
+        <span className="ml-auto" />
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium " + TAG_COLOR.campaign}>{g.campaignName}</span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={g.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={g.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<Gauge className="w-3 h-3" />} value={g.conversions} label="conversions" width="narrow" highlight={g.conversions > 0} />
+        <MetricPill icon={<Euro className="w-3 h-3" />} value={g.cost.toFixed(2)} label="cost €" />
+        {g.defaultBid != null ? (
+          <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 tabular-nums">
+            <Coins className="w-3 h-3" />
+            {g.defaultBid.toFixed(2)}
+          </span>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function FlatKeywordRowEl({ k, onOpen, onBidEdit, onQsOpen, onDelete }: {
+  k: FlatKeywordRow;
+  onOpen: () => void;
+  onBidEdit: () => void;
+  onQsOpen: () => void;
+  onDelete: () => void;
+}) {
+  const mtClass = k.matchType === "E" ? "bg-red-500/15 text-red-500"
+    : k.matchType === "P" ? "bg-amber-500/15 text-amber-500"
+    : k.matchType === "B" ? "bg-blue-500/15 text-blue-500"
+    : "bg-secondary text-foreground";
+  return (
+    <div onClick={onOpen} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onOpen(); }} className="px-3 py-2 space-y-1.5 hover:bg-muted/40 transition-colors cursor-pointer">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <span className={"shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider " + mtClass}>{k.matchType}</span>
+        <TitleTag text={k.text} color={TAG_COLOR.keyword} paused={k.status === "PAUSED"} />
+        <span className="ml-auto" />
+        <CopyTag value={k.text} />
+        <DeleteTag onClick={(e) => { e.stopPropagation(); onDelete(); }} />
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium " + TAG_COLOR.campaign}>{k.campaignName}</span>
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium " + TAG_COLOR.ad_group}>{k.adGroupName}</span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={k.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={k.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<Gauge className="w-3 h-3" />} value={k.conversions} label="conversions" width="narrow" highlight={k.conversions > 0} />
+        <MetricPill icon={<Euro className="w-3 h-3" />} value={k.cost.toFixed(2)} label="cost €" />
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onQsOpen(); }}
+          title="Open QS breakdown"
+          className="shrink-0 inline-flex items-center justify-center py-0.5 px-1 w-[36px] gap-0.5 overflow-hidden rounded text-[10px] font-medium uppercase tracking-wider tabular-nums bg-muted text-muted-foreground hover:bg-muted/70 transition-colors cursor-pointer"
+        >
+          <Gauge className="w-3 h-3" />
+          {k.qualityScore ?? "—"}
+        </button>
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onBidEdit(); }}
+          title="Edit bid"
+          className="shrink-0 inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 transition-colors cursor-pointer tabular-nums min-w-[64px]"
+        >
+          <Coins className="w-3 h-3" />
+          {k.bid != null ? k.bid.toFixed(2) : "—"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function FlatSearchTermRowEl({ st }: { st: SearchTermFlatRow }) {
+  const statusCls = searchTermStatusClass(st.status);
+  return (
+    <div className="px-3 py-2 space-y-1.5">
+      <div className="flex items-center gap-1.5 min-w-0">
+        <TitleTag text={st.searchTerm} color="bg-emerald-500/10 text-emerald-500" paused={false} />
+        <span className="ml-auto" />
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider " + statusCls}>{st.status}</span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+        <span className={"shrink-0 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider " + (st.matchedMatchType === "E" ? "bg-red-500/15 text-red-500" : st.matchedMatchType === "P" ? "bg-amber-500/15 text-amber-500" : "bg-blue-500/15 text-blue-500")}>{st.matchedMatchType}</span>
+        <span className="text-[11px] text-muted-foreground truncate">"{st.matchedKeyword}"</span>
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium " + TAG_COLOR.campaign}>{st.campaignName}</span>
+        <span className={"shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium " + TAG_COLOR.ad_group}>{st.adGroupName}</span>
+      </div>
+      <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+        <MetricPill icon={<Eye className="w-3 h-3" />} value={st.impressions} label="impressions" width="wide" />
+        <MetricPill icon={<MousePointerClick className="w-3 h-3" />} value={st.clicks} label="clicks" width="narrow" />
+        <MetricPill icon={<Gauge className="w-3 h-3" />} value={st.conversions} label="conversions" width="narrow" highlight={st.conversions > 0} />
+        <MetricPill icon={<Euro className="w-3 h-3" />} value={st.cost.toFixed(2)} label="cost €" />
+      </div>
     </div>
   );
 }
