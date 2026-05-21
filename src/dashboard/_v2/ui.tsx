@@ -13,6 +13,7 @@ import {
  ExternalLinkIcon,
  EyeIcon,
  GlobeIcon,
+ HelpCircleIcon,
  ShareIcon,
  SparklesIcon,
 } from "./icons";
@@ -540,6 +541,55 @@ export function TranslatedInput({
 // instead of toggling the top-level language selector and re-opening
 // the form. Triggered by the globe icon inside TranslatedInput.
 
+// HelpButton — small "?" icon that toggles a popover with the given text.
+// Closes on outside click / Escape. Used inside modal titles to expose
+// long explainer copy without bloating the header.
+
+export function HelpButton({ text }: { text: string }) {
+ const [open, setOpen] = useState(false);
+ const ref = useRef<HTMLDivElement | null>(null);
+
+ useEffect(() => {
+ if (!open) return;
+ function onDown(e: MouseEvent) {
+ if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+ }
+ function onKey(e: KeyboardEvent) {
+ if (e.key === "Escape") setOpen(false);
+ }
+ window.addEventListener("mousedown", onDown);
+ window.addEventListener("keydown", onKey);
+ return () => {
+ window.removeEventListener("mousedown", onDown);
+ window.removeEventListener("keydown", onKey);
+ };
+ }, [open]);
+
+ return (
+ <span ref={ref} className="relative inline-flex items-center">
+ <button
+ type="button"
+ onClick={(e) => {
+ e.stopPropagation();
+ setOpen((v) => !v);
+ }}
+ className="w-5 h-5 inline-flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground transition-colors"
+ aria-label="Help"
+ >
+ <HelpCircleIcon size={16} />
+ </button>
+ {open ? (
+ <span
+ role="tooltip"
+ className="absolute z-10 top-full left-1/2 -translate-x-1/2 mt-2 w-72 max-w-[calc(100vw-2rem)] p-3 rounded-lg bg-popover border border-border shadow-lg text-xs text-foreground font-normal leading-snug normal-case"
+ >
+ {text}
+ </span>
+ ) : null}
+ </span>
+ );
+}
+
 function AllLanguagesModal({
  open,
  onClose,
@@ -591,12 +641,17 @@ function AllLanguagesModal({
  })();
 
  const ta = useTranslations("dashboard.allLangsModal");
+ const helpText = title ? ta("subtitle", { field: title }) : ta("subtitleGeneric");
  return (
  <Modal
  open={open}
  onClose={onClose}
- title={ta("title")}
- subtitle={title ? ta("subtitle", { field: title }) : ta("subtitleGeneric")}
+ title={
+ <span className="inline-flex items-center gap-2">
+ <span>{ta("title")}</span>
+ <HelpButton text={helpText} />
+ </span>
+ }
  size="md"
  footer={
  <div className="flex items-center justify-end">
