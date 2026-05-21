@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Διαγραφή ομάδας;",
       "deleteGroupMessage": "Η ομάδα θα αφαιρεθεί. Οι κατηγορίες μέσα θα γίνουν χωρίς ομάδα.",
       "parentGroupLabel": "Ομάδα",
-      "noGroup": "— Χωρίς ομάδα —"
+      "noGroup": "Χωρίς ομάδα"
     },
     "dishForm": {
       "newTitle": "Νέο πιάτο",

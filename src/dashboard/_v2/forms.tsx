@@ -20,6 +20,7 @@ import {
  EditPageHeader,
  Modal,
  PhotoPicker,
+ Select,
  ToggleSwitch,
  TranslatedInput,
 } from "./ui";
@@ -191,19 +192,19 @@ export function CategoryForm({
  <label htmlFor="cat-parent" className="block text-sm font-medium text-foreground mb-2.5">
  {t("parentGroupLabel", { defaultValue: "Group" })}
  </label>
- <select
+ <Select<string | null>
  id="cat-parent"
- value={form.parentId ?? ""}
- onChange={(e) => setForm((f) => ({ ...f, parentId: e.target.value || null }))}
- className={inputClass}
- >
- <option value="">{t("noGroup", { defaultValue: "— No group —" })}</option>
- {availableGroups.map((g) => (
- <option key={g.id} value={g.id}>
- {getMlWithFallback(g.name, defaultLang, defaultLang) || tc("untitled")}
- </option>
- ))}
- </select>
+ value={form.parentId}
+ onChange={(next) => setForm((f) => ({ ...f, parentId: next }))}
+ placeholder={t("noGroup", { defaultValue: "No group" })}
+ options={[
+ { value: null, label: t("noGroup", { defaultValue: "No group" }) },
+ ...availableGroups.map((g) => ({
+ value: g.id as string | null,
+ label: getMlWithFallback(g.name, defaultLang, defaultLang) || tc("untitled"),
+ })),
+ ]}
+ />
  </div>
  ) : null}
  </div>

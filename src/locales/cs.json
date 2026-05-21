@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Smazat skupinu?",
       "deleteGroupMessage": "Skupina bude smazána. Kategorie uvnitř budou bez skupiny.",
       "parentGroupLabel": "Skupina",
-      "noGroup": "— Bez skupiny —"
+      "noGroup": "Bez skupiny"
     },
     "dishForm": {
       "newTitle": "Nové jídlo",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Kustutada rühm?",
       "deleteGroupMessage": "Rühm eemaldatakse. Sees olevad kategooriad jäävad rühmitamata.",
       "parentGroupLabel": "Rühm",
-      "noGroup": "— Rühma pole —"
+      "noGroup": "Ilma rühmata"
     },
     "dishForm": {
       "newTitle": "Uus roog",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Törli a csoportot?",
       "deleteGroupMessage": "A csoport eltávolításra kerül. A bent lévő kategóriák csoportosítatlanok lesznek.",
       "parentGroupLabel": "Csoport",
-      "noGroup": "— Csoport nélkül —"
+      "noGroup": "Csoport nélkül"
     },
     "dishForm": {
       "newTitle": "Új étel",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Slett gruppe?",
       "deleteGroupMessage": "Gruppen fjernes. Kategorier inni blir ugrupperte.",
       "parentGroupLabel": "Gruppe",
-      "noGroup": "— Ingen gruppe —"
+      "noGroup": "Uten gruppe"
     },
     "dishForm": {
       "newTitle": "Ny rett",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "删除分组？",
       "deleteGroupMessage": "分组将被移除。其中的类别将不再归属任何分组。",
       "parentGroupLabel": "分组",
-      "noGroup": "— 无分组 —"
+      "noGroup": "无分组"
     },
     "dishForm": {
       "newTitle": "新菜品",

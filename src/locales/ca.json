@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Eliminar el grup?",
       "deleteGroupMessage": "El grup s'eliminarà. Les categories de dins quedaran sense agrupar.",
       "parentGroupLabel": "Grup",
-      "noGroup": "— Sense grup —"
+      "noGroup": "Sense grup"
     },
     "dishForm": {
       "newTitle": "Nou plat",

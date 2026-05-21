@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Ištrinti grupę?",
       "deleteGroupMessage": "Grupė bus pašalinta. Vidinės kategorijos liks negrupuotos.",
       "parentGroupLabel": "Grupė",
-      "noGroup": "— Be grupės —"
+      "noGroup": "Be grupės"
     },
     "dishForm": {
       "newTitle": "Naujas patiekalas",

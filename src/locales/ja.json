@@ -183,7 +183,7 @@
       "deleteGroupTitle": "グループを削除?",
       "deleteGroupMessage": "グループは削除されます。中のカテゴリーはグループ解除されます。",
       "parentGroupLabel": "グループ",
-      "noGroup": "— グループなし —"
+      "noGroup": "グループなし"
     },
     "dishForm": {
       "newTitle": "新しい料理",

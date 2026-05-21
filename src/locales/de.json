@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Gruppe löschen?",
       "deleteGroupMessage": "Die Gruppe wird entfernt. Enthaltene Kategorien werden nicht gruppiert.",
       "parentGroupLabel": "Gruppe",
-      "noGroup": "— Keine Gruppe —"
+      "noGroup": "Ohne Gruppe"
     },
     "dishForm": {
       "newTitle": "Neues Gericht",

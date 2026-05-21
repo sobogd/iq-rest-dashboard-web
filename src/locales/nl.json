@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Groep verwijderen?",
       "deleteGroupMessage": "De groep wordt verwijderd. Categorieën erin worden niet meer gegroepeerd.",
       "parentGroupLabel": "Groep",
-      "noGroup": "— Geen groep —"
+      "noGroup": "Zonder groep"
     },
     "dishForm": {
       "newTitle": "Nieuw gerecht",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Delete group?",
       "deleteGroupMessage": "This group will be removed. Categories inside become ungrouped.",
       "parentGroupLabel": "Group",
-      "noGroup": "— No group —"
+      "noGroup": "No group"
     },
     "dishForm": {
       "newTitle": "New dish",

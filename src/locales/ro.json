@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Ștergeți grupul?",
       "deleteGroupMessage": "Grupul va fi eliminat. Categoriile dinăuntru devin negrupate.",
       "parentGroupLabel": "Grup",
-      "noGroup": "— Fără grup —"
+      "noGroup": "Fără grup"
     },
     "dishForm": {
       "newTitle": "Preparat nou",

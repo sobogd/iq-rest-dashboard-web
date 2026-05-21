@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Grup silinsin mi?",
       "deleteGroupMessage": "Grup kaldırılacak. İçindeki kategoriler gruba dahil olmayacak.",
       "parentGroupLabel": "Grup",
-      "noGroup": "— Grup yok —"
+      "noGroup": "Grup yok"
     },
     "dishForm": {
       "newTitle": "Yeni yemek",

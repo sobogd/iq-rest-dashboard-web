@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Изтриване на групата?",
       "deleteGroupMessage": "Групата ще бъде премахната. Категориите вътре стават негрупирани.",
       "parentGroupLabel": "Група",
-      "noGroup": "— Без група —"
+      "noGroup": "Без група"
     },
     "dishForm": {
       "newTitle": "Ново ястие",

@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Eyða hóp?",
       "deleteGroupMessage": "Hópurinn verður fjarlægður. Flokkar innan verða óflokkaðir.",
       "parentGroupLabel": "Hópur",
-      "noGroup": "— Enginn hópur —"
+      "noGroup": "Án hóps"
     },
     "dishForm": {
       "newTitle": "Nýr réttur",

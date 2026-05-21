@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Обрисати групу?",
       "deleteGroupMessage": "Група ће бити уклоњена. Категорије унутра постају негруписане.",
       "parentGroupLabel": "Група",
-      "noGroup": "— Без групе —"
+      "noGroup": "Без групе"
     },
     "dishForm": {
       "newTitle": "Novo jelo",

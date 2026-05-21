@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Eliminare il gruppo?",
       "deleteGroupMessage": "Il gruppo verrà rimosso. Le categorie interne resteranno non raggruppate.",
       "parentGroupLabel": "Gruppo",
-      "noGroup": "— Senza gruppo —"
+      "noGroup": "Senza gruppo"
     },
     "dishForm": {
       "newTitle": "Nuovo piatto",

@@ -40,16 +40,18 @@ export function Modal({
  size = "md",
  footer,
  closeOnBackdrop = true,
+ hideHeader = false,
 }: {
  open: boolean;
  onClose: () => void;
  onBack?: (() => void) | null;
- title: ReactNode;
+ title?: ReactNode;
  subtitle?: ReactNode;
  children: ReactNode;
  size?: "sm" | "md" | "lg";
  footer?: ReactNode;
  closeOnBackdrop?: boolean;
+ hideHeader?: boolean;
 }) {
  useEffect(() => {
  if (!open) return;
@@ -75,9 +77,10 @@ export function Modal({
  className={
  "relative w-full " +
  widthCls +
- " bg-card border border-border rounded-2xl max-h-[90dvh] flex flex-col"
+ " bg-card border border-border rounded-2xl max-h-[90dvh] flex flex-col overflow-hidden"
  }
  >
+ {hideHeader ? null : (
  <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border shrink-0">
  {onBack ? (
  <button
@@ -104,12 +107,97 @@ export function Modal({
  <CloseIcon size={16} />
  </button>
  </div>
+ )}
  <div className="flex-1 min-h-0 overflow-y-auto p-5">{children}</div>
  {footer ? (
  <div className="px-5 py-3 border-t border-border shrink-0">{footer}</div>
  ) : null}
  </div>
  </div>
+ );
+}
+
+// Select — input-styled trigger with a chevron, opens a header/footer-less
+// modal whose body is a tap-to-select list. Closes on backdrop click or on
+// selecting an option (Escape works too via Modal's keydown handler).
+
+export interface SelectOption<T extends string | null> {
+ value: T;
+ label: string;
+}
+
+export function Select<T extends string | null>({
+ value,
+ onChange,
+ options,
+ placeholder,
+ id,
+ disabled,
+}: {
+ value: T;
+ onChange: (next: T) => void;
+ options: SelectOption<T>[];
+ placeholder?: string;
+ id?: string;
+ disabled?: boolean;
+}) {
+ const [open, setOpen] = useState(false);
+ const tc = useTranslations("dashboard.common");
+ const current = options.find((o) => o.value === value);
+ const showPlaceholder = !current && !!placeholder;
+ return (
+ <>
+ <button
+ id={id}
+ type="button"
+ disabled={disabled}
+ onClick={() => setOpen(true)}
+ className={inputClass + " inline-flex items-center justify-between gap-2 text-left disabled:opacity-50"}
+ >
+ <span
+ className={
+ "truncate " +
+ (showPlaceholder ? "text-muted-foreground" : "text-foreground")
+ }
+ >
+ {current?.label || placeholder || tc("untitled")}
+ </span>
+ <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground shrink-0">
+ <polyline points="6 9 12 15 18 9" />
+ </svg>
+ </button>
+ <Modal
+ open={open}
+ onClose={() => setOpen(false)}
+ hideHeader
+ size="sm"
+ >
+ <div className="-m-5 divide-y divide-border">
+ {options.map((o, idx) => {
+ const isActive = o.value === value;
+ return (
+ <button
+ key={(o.value ?? "__null__") + ":" + idx}
+ type="button"
+ onClick={() => {
+ onChange(o.value);
+ setOpen(false);
+ }}
+ className={
+ "w-full flex items-center gap-3 px-5 py-3 text-left text-sm transition-colors " +
+ (isActive
+ ? "bg-primary/5 text-foreground font-medium"
+ : "text-foreground hover:bg-secondary/40")
+ }
+ >
+ <span className="flex-1 min-w-0 truncate">{o.label}</span>
+ {isActive ? <CheckIcon size={14} className="text-primary shrink-0" /> : null}
+ </button>
+ );
+ })}
+ </div>
+ </Modal>
+ </>
  );
 }
 

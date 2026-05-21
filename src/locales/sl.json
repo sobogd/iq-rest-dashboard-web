@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Izbrišem skupino?",
       "deleteGroupMessage": "Skupina bo odstranjena. Notranje kategorije bodo brez skupine.",
       "parentGroupLabel": "Skupina",
-      "noGroup": "— Brez skupine —"
+      "noGroup": "Brez skupine"
     },
     "dishForm": {
       "newTitle": "Nova jed",

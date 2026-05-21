@@ -183,7 +183,7 @@
       "deleteGroupTitle": "حذف المجموعة؟",
       "deleteGroupMessage": "ستتم إزالة المجموعة. الفئات داخلها ستصبح بدون مجموعة.",
       "parentGroupLabel": "المجموعة",
-      "noGroup": "— بدون مجموعة —"
+      "noGroup": "بدون مجموعة"
     },
     "dishForm": {
       "newTitle": "طبق جديد",

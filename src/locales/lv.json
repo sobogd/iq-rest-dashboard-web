@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Dzēst grupu?",
       "deleteGroupMessage": "Grupa tiks noņemta. Iekšējās kategorijas paliks negrupētas.",
       "parentGroupLabel": "Grupa",
-      "noGroup": "— Bez grupas —"
+      "noGroup": "Bez grupas"
     },
     "dishForm": {
       "newTitle": "Jauns ēdiens",

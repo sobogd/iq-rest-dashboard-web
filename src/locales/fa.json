@@ -183,7 +183,7 @@
       "deleteGroupTitle": "حذف گروه؟",
       "deleteGroupMessage": "گروه حذف خواهد شد. دسته‌بندی‌های داخل بدون گروه می‌مانند.",
       "parentGroupLabel": "گروه",
-      "noGroup": "— بدون گروه —"
+      "noGroup": "بدون گروه"
     },
     "dishForm": {
       "newTitle": "غذای جدید",

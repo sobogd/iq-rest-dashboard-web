@@ -183,7 +183,7 @@
       "deleteGroupTitle": "Poistetaanko ryhmä?",
       "deleteGroupMessage": "Ryhmä poistetaan. Sisällä olevat luokat jäävät ryhmittelemättömiksi.",
       "parentGroupLabel": "Ryhmä",
-      "noGroup": "— Ei ryhmää —"
+      "noGroup": "Ei ryhmää"
     },
     "dishForm": {
       "newTitle": "Uusi annos",
