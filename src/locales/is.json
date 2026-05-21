@@ -42,10 +42,12 @@
       "qrCode": "QR-kóði",
       "willUse": "Mun nota",
       "unsavedTitle": "Óvistaðar breytingar",
-      "unsavedMessage": "Þær glatast ef þú ferð núna.",
+      "unsavedMessage": "Ef þú ferð núna tapast breytingarnar. Vista áður en þú ferð?",
       "discard": "Hætta við",
       "genericErrorTitle": "Eitthvað fór úrskeiðis",
-      "genericErrorMessage": "Við erum þegar að vinna í málinu."
+      "genericErrorMessage": "Við erum þegar að vinna í málinu.",
+      "saveErrorTitle": "Vistunarvilla",
+      "saveErrorMessage": "Villa kom upp við vistun. Reyndu aftur síðar."
     },
     "subscriptionChip": {
       "plan": "Áskrift",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Eyða hóp?",
       "deleteGroupMessage": "Hópurinn verður fjarlægður. Flokkar innan verða óflokkaðir.",
       "parentGroupLabel": "Hópur",
-      "noGroup": "Án hóps"
+      "noGroup": "Án hóps",
+      "savingOverlay": "Vinsamlegast bíðið, flokkur vistast…",
+      "savingAndTranslatingOverlay": "Vinsamlegast bíðið, flokkur vistast og þýðist…",
+      "savingGroupOverlay": "Vinsamlegast bíðið, hópur vistast…",
+      "savingAndTranslatingGroupOverlay": "Vinsamlegast bíðið, hópur vistast og þýðist…"
     },
     "dishForm": {
       "newTitle": "Nýr réttur",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Breyta valkosti",
       "duplicateButton": "Afrita",
       "dietsLabel": "Mataræði",
-      "dietsTip": "Pikkaðu til að velja mataræði."
+      "dietsTip": "Pikkaðu til að velja mataræði.",
+      "savingOverlay": "Vinsamlegast bíðið, réttur vistast…",
+      "savingAndTranslatingOverlay": "Vinsamlegast bíðið, réttur vistast og þýðist…"
     },
     "optionForm": {
       "newTitle": "Nýr valkostur",

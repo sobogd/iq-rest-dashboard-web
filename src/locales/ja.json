@@ -41,11 +41,13 @@
       "selected": "選択済み",
       "qrCode": "QRコード",
       "willUse": "使用します",
-      "unsavedTitle": "未保存の変更があります",
-      "unsavedMessage": "今ページを離れると失われます。",
+      "unsavedTitle": "未保存の変更",
+      "unsavedMessage": "今移動すると編集内容が失われます。保存しますか？",
       "discard": "破棄",
       "genericErrorTitle": "エラーが発生しました",
-      "genericErrorMessage": "現在問題を調査中です。"
+      "genericErrorMessage": "現在問題を調査中です。",
+      "saveErrorTitle": "保存エラー",
+      "saveErrorMessage": "保存中にエラーが発生しました。後でもう一度お試しください。"
     },
     "subscriptionChip": {
       "plan": "プラン",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "グループを削除?",
       "deleteGroupMessage": "グループは削除されます。中のカテゴリーはグループ解除されます。",
       "parentGroupLabel": "グループ",
-      "noGroup": "グループなし"
+      "noGroup": "グループなし",
+      "savingOverlay": "お待ちください、カテゴリを保存しています…",
+      "savingAndTranslatingOverlay": "お待ちください、カテゴリを保存して翻訳しています…",
+      "savingGroupOverlay": "お待ちください、グループを保存しています…",
+      "savingAndTranslatingGroupOverlay": "お待ちください、グループを保存して翻訳しています…"
     },
     "dishForm": {
       "newTitle": "新しい料理",
@@ -221,7 +227,9 @@
       "editOptionTitle": "オプションを編集",
       "duplicateButton": "複製",
       "dietsLabel": "食事タイプ",
-      "dietsTip": "タップして食事タイプを選択。"
+      "dietsTip": "タップして食事タイプを選択。",
+      "savingOverlay": "お待ちください、料理を保存しています…",
+      "savingAndTranslatingOverlay": "お待ちください、料理を保存して翻訳しています…"
     },
     "optionForm": {
       "newTitle": "新しいオプション",

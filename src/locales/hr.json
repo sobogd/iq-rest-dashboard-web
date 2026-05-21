@@ -41,11 +41,13 @@
       "selected": "odabrano",
       "qrCode": "QR kod",
       "willUse": "Koristi",
-      "unsavedTitle": "Imate nespremljene promjene",
-      "unsavedMessage": "Bit će izgubljene ako sada odete.",
+      "unsavedTitle": "Nespremljene promjene",
+      "unsavedMessage": "Ako sada izađete, promjene će se izgubiti. Spremiti prije izlaska?",
       "discard": "Odbaci",
       "genericErrorTitle": "Nešto je pošlo po zlu",
-      "genericErrorMessage": "Već radimo na problemu."
+      "genericErrorMessage": "Već radimo na problemu.",
+      "saveErrorTitle": "Pogreška spremanja",
+      "saveErrorMessage": "Došlo je do pogreške prilikom spremanja. Pokušajte ponovno kasnije."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Obrisati grupu?",
       "deleteGroupMessage": "Grupa će biti uklonjena. Kategorije unutar postaju negrupirane.",
       "parentGroupLabel": "Grupa",
-      "noGroup": "Bez grupe"
+      "noGroup": "Bez grupe",
+      "savingOverlay": "Pričekajte, kategorija se sprema…",
+      "savingAndTranslatingOverlay": "Pričekajte, kategorija se sprema i prevodi…",
+      "savingGroupOverlay": "Pričekajte, grupa se sprema…",
+      "savingAndTranslatingGroupOverlay": "Pričekajte, grupa se sprema i prevodi…"
     },
     "dishForm": {
       "newTitle": "Novo jelo",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Uredi opciju",
       "duplicateButton": "Dupliciraj",
       "dietsLabel": "Dijete",
-      "dietsTip": "Dodirnite za odabir dijeta."
+      "dietsTip": "Dodirnite za odabir dijeta.",
+      "savingOverlay": "Pričekajte, jelo se sprema…",
+      "savingAndTranslatingOverlay": "Pričekajte, jelo se sprema i prevodi…"
     },
     "optionForm": {
       "newTitle": "Nova opcija",

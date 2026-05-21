@@ -23,6 +23,7 @@ import {
  Select,
  ToggleSwitch,
  TranslatedInput,
+ UnsavedChangesDialog,
 } from "./ui";
 import { iconBtn, inputClass } from "./tokens";
 import {
@@ -81,13 +82,25 @@ export function CategoryForm({
  const initialParentId = category?.parentId ?? parentGroupId ?? null;
 
  const [lang, setLang] = useState<string>(defaultLang);
- const [form, setForm] = useState<{ name: Ml; parentId: string | null }>({
+ const initialForm = useMemo<{ name: Ml; parentId: string | null }>(
+ () => ({
  name: category ? category.name : emptyMl(languages),
  parentId: initialParentId,
- });
+ }),
+ // We only need to compute initial once — category / languages / parentId are
+ // stable for the lifetime of a CategoryForm mount.
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ [],
+ );
+ const [form, setForm] = useState<{ name: Ml; parentId: string | null }>(initialForm);
  const [saving, setSaving] = useState(false);
  const [deleting, setDeleting] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
+ const [unsavedOpen, setUnsavedOpen] = useState(false);
+ const [saveErrorOpen, setSaveErrorOpen] = useState(false);
+ const isDirty =
+ JSON.stringify(form.name) !== JSON.stringify(initialForm.name) ||
+ form.parentId !== initialForm.parentId;
  const langMetas = useMemo(() => {
  const enabled = AVAILABLE_LANGUAGES.filter((l) => languages.includes(l.code));
  const def = enabled.find((l) => l.code === defaultLang);
@@ -135,7 +148,8 @@ export function CategoryForm({
  }
  onSavedRedirect();
  } catch (err) {
- showApiError(err, isNew ? "dash_category_create" : "dash_category_update");
+ track("dash_category_save_error", { error: String(err) });
+ setSaveErrorOpen(true);
  setSaving(false);
  }
  }
@@ -161,7 +175,11 @@ export function CategoryForm({
  return (
  <div>
  <EditPageHeader
- onBack={() => { track("dash_category_click_back"); onBack(); }}
+ onBack={() => {
+ track("dash_category_click_back");
+ if (isDirty && !saving) { setUnsavedOpen(true); return; }
+ onBack();
+ }}
  title={titleText}
  breadcrumb={t("breadcrumb")}
  lang={lang}
@@ -174,7 +192,8 @@ export function CategoryForm({
  onLangSelect={() => track("dash_category_click_lang")}
  />
 
- <div className="max-w-5xl mx-auto md:px-6 bg-card border border-border rounded-2xl p-5 md:p-6">
+ <div className="max-w-5xl mx-auto md:px-6">
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <TranslatedInput
  id="cat-name"
  label={t("nameLabel")}
@@ -207,6 +226,7 @@ export function CategoryForm({
  />
  </div>
  ) : null}
+ </div>
  </div>
 
  {!isNew ? (
@@ -243,6 +263,36 @@ export function CategoryForm({
  message={alert?.message}
  onCancel={() => setAlert(null)}
  />
+
+ <UnsavedChangesDialog
+ open={unsavedOpen}
+ saving={saving}
+ onDiscard={() => { setUnsavedOpen(false); onBack(); }}
+ onSave={() => { setUnsavedOpen(false); void save(); }}
+ onClose={() => setUnsavedOpen(false)}
+ />
+
+ <ConfirmDialog
+ open={saveErrorOpen}
+ singleButton
+ title={tc("saveErrorTitle")}
+ message={tc("saveErrorMessage")}
+ confirmLabel={tc("close")}
+ onCancel={() => setSaveErrorOpen(false)}
+ />
+
+ {saving ? (
+ <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center px-6">
+ <div className="flex flex-col items-center gap-3 text-center">
+ <div className="w-10 h-10 border-[3px] border-input border-t-foreground rounded-full animate-spin" />
+ <div className="text-xs text-muted-foreground">
+ {editingGroup
+ ? (languages.length > 1 ? t("savingAndTranslatingGroupOverlay") : t("savingGroupOverlay"))
+ : (languages.length > 1 ? t("savingAndTranslatingOverlay") : t("savingOverlay"))}
+ </div>
+ </div>
+ </div>
+ ) : null}
  </div>
  );
 }
@@ -379,6 +429,7 @@ export function DishForm({
  const [duplicating, setDuplicating] = useState(false);
  const [confirmOpen, setConfirmOpen] = useState(false);
  const [unsavedOpen, setUnsavedOpen] = useState(false);
+ const [saveErrorOpen, setSaveErrorOpen] = useState(false);
  const [aiOpen, setAiOpen] = useState(false);
  const [optionModal, setOptionModal] = useState<
  { kind: "new" } | { kind: "edit"; id: string } | null
@@ -499,7 +550,8 @@ export function DishForm({
  }
  return savedId;
  } catch (err) {
- showApiError(err, isNew ? "dash_item_create" : "dash_item_update");
+ track("dash_item_save_error", { error: String(err) });
+ setSaveErrorOpen(true);
  setSaving(false);
  return null;
  }
@@ -840,8 +892,17 @@ export function DishForm({
  open={unsavedOpen}
  saving={saving}
  onDiscard={() => { setUnsavedOpen(false); onBack(); }}
- onSave={save}
+ onSave={() => { setUnsavedOpen(false); void save(); }}
  onClose={() => setUnsavedOpen(false)}
+ />
+
+ <ConfirmDialog
+ open={saveErrorOpen}
+ singleButton
+ title={tc("saveErrorTitle")}
+ message={tc("saveErrorMessage")}
+ confirmLabel={tc("close")}
+ onCancel={() => setSaveErrorOpen(false)}
  />
 
  {optionModal ? (
@@ -874,6 +935,16 @@ export function DishForm({
  }}
  />
  </Modal>
+ ) : null}
+ {saving ? (
+ <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center px-6">
+ <div className="flex flex-col items-center gap-3 text-center">
+ <div className="w-10 h-10 border-[3px] border-input border-t-foreground rounded-full animate-spin" />
+ <div className="text-xs text-muted-foreground">
+ {languages.length > 1 ? t("savingAndTranslatingOverlay") : t("savingOverlay")}
+ </div>
+ </div>
+ </div>
  ) : null}
  </div>
  );
@@ -1252,7 +1323,7 @@ export function OptionForm({
 
  <div className={embedded
  ? ""
- : "max-w-5xl mx-auto md:px-6 bg-card border border-border rounded-2xl p-5 md:p-6"}>
+ : "max-w-5xl mx-auto bg-card border border-border rounded-2xl p-5 md:p-6"}>
  <TranslatedInput
  id="opt-name"
  label={t("nameLabel")}
@@ -1507,52 +1578,3 @@ async function persistDishOptions(dish: Dish, nextOptions: DishOption[], default
  });
 }
 
-function UnsavedChangesDialog({
- open,
- saving,
- onDiscard,
- onSave,
- onClose,
-}: {
- open: boolean;
- saving: boolean;
- onDiscard: () => void;
- onSave: () => void | Promise<void>;
- onClose: () => void;
-}) {
- const t = useTranslations("dashboard.common");
- return (
- <Modal
- open={open}
- onClose={() => !saving && onClose()}
- title={t("unsavedTitle")}
- size="sm"
- closeOnBackdrop={!saving}
- footer={
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={onDiscard}
- disabled={saving}
- className="flex-1 h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg disabled:opacity-50"
- >
- {t("discard")}
- </button>
- <button
- type="button"
- onClick={() => void onSave()}
- disabled={saving}
- className="flex-1 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg inline-flex items-center justify-center gap-1.5 disabled:opacity-60"
- >
- {saving ? (
- <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
- ) : null}
- {t("save")}
- </button>
- </div>
- }
- >
- <p className="text-sm text-muted-foreground leading-snug">{t("unsavedMessage")}</p>
- </Modal>
- );
-}

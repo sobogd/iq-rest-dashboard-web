@@ -202,6 +202,63 @@ export function Select<T extends string | null>({
  );
 }
 
+// UnsavedChangesDialog — leave-prompt for forms with unsaved edits.
+// Shared between DishForm + CategoryForm. Buttons match other modal
+// footers (justify-end, content-width, h-8 px-3 text-xs).
+
+export function UnsavedChangesDialog({
+ open,
+ saving,
+ onDiscard,
+ onSave,
+ onClose,
+}: {
+ open: boolean;
+ saving: boolean;
+ onDiscard: () => void;
+ onSave: () => void | Promise<void>;
+ onClose: () => void;
+}) {
+ const t = useTranslations("dashboard.common");
+ return (
+ <Modal
+ open={open}
+ onClose={() => !saving && onClose()}
+ title={t("unsavedTitle")}
+ size="sm"
+ closeOnBackdrop={!saving}
+ footer={
+ <div className="flex items-center gap-2 justify-end">
+ <button
+ type="button"
+ onClick={onDiscard}
+ disabled={saving}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg disabled:opacity-50"
+ >
+ <CloseIcon size={14} />
+ {t("discard")}
+ </button>
+ <button
+ type="button"
+ onClick={() => void onSave()}
+ disabled={saving}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
+ >
+ {saving ? (
+ <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+ ) : (
+ <CheckIcon size={14} />
+ )}
+ {t("save")}
+ </button>
+ </div>
+ }
+ >
+ <p className="text-sm text-muted-foreground leading-snug">{t("unsavedMessage")}</p>
+ </Modal>
+ );
+}
+
 // ConfirmDialog — destructive by default. singleButton turns it into a one-button alert.
 
 export function ConfirmDialog({
@@ -1470,11 +1527,11 @@ export function PhotoPicker({
  htmlFor={inputId}
  onClick={() => { if (!url) onAddClick?.(); }}
  className={
- "relative flex items-center justify-center gap-1.5 " + width + " " + height +
+ "relative flex flex-col items-center justify-center gap-1 " + width + " " + height +
  " border border-dashed rounded-lg cursor-pointer transition-all overflow-hidden " +
  (url
  ? "border-input p-0"
- : "border-input bg-secondary text-muted-foreground px-3")
+ : "border-input bg-secondary text-muted-foreground px-3 text-center")
  }
  >
  {uploading ? (
@@ -1501,7 +1558,7 @@ export function PhotoPicker({
  <circle cx="9" cy="9" r="2" />
  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
  </svg>
- <span className="text-[13px] font-medium">{tph("addPhoto")}</span>
+ <span className="text-[11px] font-medium leading-none">{tph("addPhoto")}</span>
  </>
  )}
  <input

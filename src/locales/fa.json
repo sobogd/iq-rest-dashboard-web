@@ -41,11 +41,13 @@
       "selected": "انتخاب‌شده",
       "qrCode": "کد QR",
       "willUse": "استفاده می‌کند",
-      "unsavedTitle": "تغییرات ذخیره‌نشده دارید",
-      "unsavedMessage": "در صورت خروج اکنون از بین می‌روند.",
+      "unsavedTitle": "تغییرات ذخیره‌نشده",
+      "unsavedMessage": "اگر اکنون خارج شوید، تغییرات از بین می‌رود. قبل از خروج ذخیره شود؟",
       "discard": "نادیده بگیر",
       "genericErrorTitle": "خطایی رخ داد",
-      "genericErrorMessage": "ما در حال کار روی این مشکل هستیم."
+      "genericErrorMessage": "ما در حال کار روی این مشکل هستیم.",
+      "saveErrorTitle": "خطا در ذخیره",
+      "saveErrorMessage": "هنگام ذخیره خطایی رخ داد. لطفاً بعداً دوباره امتحان کنید."
     },
     "subscriptionChip": {
       "plan": "طرح",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "حذف گروه؟",
       "deleteGroupMessage": "گروه حذف خواهد شد. دسته‌بندی‌های داخل بدون گروه می‌مانند.",
       "parentGroupLabel": "گروه",
-      "noGroup": "بدون گروه"
+      "noGroup": "بدون گروه",
+      "savingOverlay": "لطفاً صبر کنید، در حال ذخیره دسته…",
+      "savingAndTranslatingOverlay": "لطفاً صبر کنید، در حال ذخیره و ترجمه دسته…",
+      "savingGroupOverlay": "لطفاً صبر کنید، در حال ذخیره گروه…",
+      "savingAndTranslatingGroupOverlay": "لطفاً صبر کنید، در حال ذخیره و ترجمه گروه…"
     },
     "dishForm": {
       "newTitle": "غذای جدید",
@@ -221,7 +227,9 @@
       "editOptionTitle": "ویرایش گزینه",
       "duplicateButton": "تکثیر",
       "dietsLabel": "رژیم‌ها",
-      "dietsTip": "برای انتخاب رژیم‌ها بزنید."
+      "dietsTip": "برای انتخاب رژیم‌ها بزنید.",
+      "savingOverlay": "لطفاً صبر کنید، در حال ذخیره غذا…",
+      "savingAndTranslatingOverlay": "لطفاً صبر کنید، در حال ذخیره و ترجمه غذا…"
     },
     "optionForm": {
       "newTitle": "گزینه جدید",

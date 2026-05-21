@@ -41,11 +41,13 @@
       "selected": "atlasīts",
       "qrCode": "QR kods",
       "willUse": "Izmantos",
-      "unsavedTitle": "Jums ir nesaglabātas izmaiņas",
-      "unsavedMessage": "Tās tiks zaudētas, ja tagad iziesiet.",
+      "unsavedTitle": "Nesaglabātas izmaiņas",
+      "unsavedMessage": "Ja iziesiet tagad, izmaiņas tiks zaudētas. Saglabāt pirms iziešanas?",
       "discard": "Atmest",
       "genericErrorTitle": "Notikusi kļūda",
-      "genericErrorMessage": "Mēs jau strādājam pie problēmas."
+      "genericErrorMessage": "Mēs jau strādājam pie problēmas.",
+      "saveErrorTitle": "Saglabāšanas kļūda",
+      "saveErrorMessage": "Saglabājot radās kļūda. Lūdzu, mēģiniet vēlāk."
     },
     "subscriptionChip": {
       "plan": "Plāns",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Dzēst grupu?",
       "deleteGroupMessage": "Grupa tiks noņemta. Iekšējās kategorijas paliks negrupētas.",
       "parentGroupLabel": "Grupa",
-      "noGroup": "Bez grupas"
+      "noGroup": "Bez grupas",
+      "savingOverlay": "Lūdzu, uzgaidiet, kategorija tiek saglabāta…",
+      "savingAndTranslatingOverlay": "Lūdzu, uzgaidiet, kategorija tiek saglabāta un tulkota…",
+      "savingGroupOverlay": "Lūdzu, uzgaidiet, grupa tiek saglabāta…",
+      "savingAndTranslatingGroupOverlay": "Lūdzu, uzgaidiet, grupa tiek saglabāta un tulkota…"
     },
     "dishForm": {
       "newTitle": "Jauns ēdiens",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Rediģēt opciju",
       "duplicateButton": "Dublēt",
       "dietsLabel": "Diētas",
-      "dietsTip": "Pieskarieties, lai atlasītu diētas."
+      "dietsTip": "Pieskarieties, lai atlasītu diētas.",
+      "savingOverlay": "Lūdzu, uzgaidiet, ēdiens tiek saglabāts…",
+      "savingAndTranslatingOverlay": "Lūdzu, uzgaidiet, ēdiens tiek saglabāts un tulkots…"
     },
     "optionForm": {
       "newTitle": "Jauna opcija",

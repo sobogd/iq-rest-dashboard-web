@@ -41,11 +41,13 @@
       "selected": "已选",
       "qrCode": "二维码",
       "willUse": "将使用",
-      "unsavedTitle": "您有未保存的更改",
-      "unsavedMessage": "如果现在离开将会丢失。",
+      "unsavedTitle": "未保存的更改",
+      "unsavedMessage": "现在离开将丢失更改。退出前保存吗？",
       "discard": "放弃",
       "genericErrorTitle": "出现错误",
-      "genericErrorMessage": "我们已经在处理此问题。"
+      "genericErrorMessage": "我们已经在处理此问题。",
+      "saveErrorTitle": "保存出错",
+      "saveErrorMessage": "保存时出错，请稍后再试。"
     },
     "subscriptionChip": {
       "plan": "套餐",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "删除分组？",
       "deleteGroupMessage": "分组将被移除。其中的类别将不再归属任何分组。",
       "parentGroupLabel": "分组",
-      "noGroup": "无分组"
+      "noGroup": "无分组",
+      "savingOverlay": "请稍候，正在保存分类…",
+      "savingAndTranslatingOverlay": "请稍候，正在保存并翻译分类…",
+      "savingGroupOverlay": "请稍候，正在保存分组…",
+      "savingAndTranslatingGroupOverlay": "请稍候，正在保存并翻译分组…"
     },
     "dishForm": {
       "newTitle": "新菜品",
@@ -221,7 +227,9 @@
       "editOptionTitle": "编辑选项",
       "duplicateButton": "复制",
       "dietsLabel": "饮食类型",
-      "dietsTip": "点击选择饮食类型。"
+      "dietsTip": "点击选择饮食类型。",
+      "savingOverlay": "请稍候，正在保存菜品…",
+      "savingAndTranslatingOverlay": "请稍候，正在保存并翻译菜品…"
     },
     "optionForm": {
       "newTitle": "新选项",

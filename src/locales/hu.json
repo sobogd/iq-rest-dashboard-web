@@ -41,11 +41,13 @@
       "selected": "kiválasztva",
       "qrCode": "QR-kód",
       "willUse": "Használja",
-      "unsavedTitle": "Mentetlen módosítások",
-      "unsavedMessage": "Elvesznek, ha most kilépsz.",
+      "unsavedTitle": "Nem mentett változások",
+      "unsavedMessage": "Ha most kilépsz, a változások elvesznek. Mentés kilépés előtt?",
       "discard": "Elvet",
       "genericErrorTitle": "Hiba történt",
-      "genericErrorMessage": "Már dolgozunk a problémán."
+      "genericErrorMessage": "Már dolgozunk a problémán.",
+      "saveErrorTitle": "Mentési hiba",
+      "saveErrorMessage": "Hiba történt mentés közben. Próbáld újra később."
     },
     "subscriptionChip": {
       "plan": "Csomag",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Törli a csoportot?",
       "deleteGroupMessage": "A csoport eltávolításra kerül. A bent lévő kategóriák csoportosítatlanok lesznek.",
       "parentGroupLabel": "Csoport",
-      "noGroup": "Csoport nélkül"
+      "noGroup": "Csoport nélkül",
+      "savingOverlay": "Kérjük, várjon, a kategória mentése folyamatban…",
+      "savingAndTranslatingOverlay": "Kérjük, várjon, a kategória mentése és fordítása folyamatban…",
+      "savingGroupOverlay": "Kérjük, várjon, a csoport mentése folyamatban…",
+      "savingAndTranslatingGroupOverlay": "Kérjük, várjon, a csoport mentése és fordítása folyamatban…"
     },
     "dishForm": {
       "newTitle": "Új étel",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Opció szerkesztése",
       "duplicateButton": "Duplikálás",
       "dietsLabel": "Étrendek",
-      "dietsTip": "Koppintson az étrendek kiválasztásához."
+      "dietsTip": "Koppintson az étrendek kiválasztásához.",
+      "savingOverlay": "Kérjük, várjon, az étel mentése folyamatban…",
+      "savingAndTranslatingOverlay": "Kérjük, várjon, az étel mentése és fordítása folyamatban…"
     },
     "optionForm": {
       "newTitle": "Új opció",

@@ -41,11 +41,13 @@
       "selected": "izabrano",
       "qrCode": "QR kod",
       "willUse": "Koristi",
-      "unsavedTitle": "Имате несачуване промене",
-      "unsavedMessage": "Биће изгубљене ако сада изађете.",
+      "unsavedTitle": "Несачуване промене",
+      "unsavedMessage": "Ако сада изађете, промене ће се изгубити. Сачувати пре изласка?",
       "discard": "Одбаци",
       "genericErrorTitle": "Nešto je pošlo naopako",
-      "genericErrorMessage": "Već radimo na problemu."
+      "genericErrorMessage": "Već radimo na problemu.",
+      "saveErrorTitle": "Грешка чувања",
+      "saveErrorMessage": "Дошло је до грешке приликом чувања. Покушајте поново касније."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Обрисати групу?",
       "deleteGroupMessage": "Група ће бити уклоњена. Категорије унутра постају негруписане.",
       "parentGroupLabel": "Група",
-      "noGroup": "Без групе"
+      "noGroup": "Без групе",
+      "savingOverlay": "Сачекајте, категорија се чува…",
+      "savingAndTranslatingOverlay": "Сачекајте, категорија се чува и преводи…",
+      "savingGroupOverlay": "Сачекајте, група се чува…",
+      "savingAndTranslatingGroupOverlay": "Сачекајте, група се чува и преводи…"
     },
     "dishForm": {
       "newTitle": "Novo jelo",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Izmeni opciju",
       "duplicateButton": "Dupliraj",
       "dietsLabel": "Дијете",
-      "dietsTip": "Додирните за избор дијета."
+      "dietsTip": "Додирните за избор дијета.",
+      "savingOverlay": "Сачекајте, јело се чува…",
+      "savingAndTranslatingOverlay": "Сачекајте, јело се чува и преводи…"
     },
     "optionForm": {
       "newTitle": "Nova opcija",

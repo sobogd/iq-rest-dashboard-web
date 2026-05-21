@@ -41,11 +41,13 @@
       "selected": "seleccionado",
       "qrCode": "Código QR",
       "willUse": "Usará",
-      "unsavedTitle": "Tienes cambios sin guardar",
-      "unsavedMessage": "Se perderán si sales ahora.",
+      "unsavedTitle": "Cambios sin guardar",
+      "unsavedMessage": "Si sales ahora, perderás los cambios. ¿Guardar antes de salir?",
       "discard": "Descartar",
       "genericErrorTitle": "Algo salió mal",
-      "genericErrorMessage": "Ya estamos trabajando en el problema."
+      "genericErrorMessage": "Ya estamos trabajando en el problema.",
+      "saveErrorTitle": "Error al guardar",
+      "saveErrorMessage": "Se produjo un error al guardar. Inténtalo de nuevo más tarde."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "¿Eliminar grupo?",
       "deleteGroupMessage": "El grupo se eliminará. Las categorías dentro quedarán sin agrupar.",
       "parentGroupLabel": "Grupo",
-      "noGroup": "Sin grupo"
+      "noGroup": "Sin grupo",
+      "savingOverlay": "Espera, guardando la categoría…",
+      "savingAndTranslatingOverlay": "Espera, guardando y traduciendo la categoría…",
+      "savingGroupOverlay": "Espera, guardando el grupo…",
+      "savingAndTranslatingGroupOverlay": "Espera, guardando y traduciendo el grupo…"
     },
     "dishForm": {
       "newTitle": "Nuevo plato",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Editar opción",
       "duplicateButton": "Duplicar",
       "dietsLabel": "Dietas",
-      "dietsTip": "Toca para marcar las dietas compatibles."
+      "dietsTip": "Toca para marcar las dietas compatibles.",
+      "savingOverlay": "Espera, guardando el plato…",
+      "savingAndTranslatingOverlay": "Espera, guardando y traduciendo el plato…"
     },
     "optionForm": {
       "newTitle": "Nueva opción",

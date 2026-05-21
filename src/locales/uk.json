@@ -41,11 +41,13 @@
       "selected": "вибрано",
       "qrCode": "QR-код",
       "willUse": "Використає",
-      "unsavedTitle": "Є незбережені зміни",
-      "unsavedMessage": "Вони будуть втрачені, якщо вийти зараз.",
+      "unsavedTitle": "Не зберегли",
+      "unsavedMessage": "Якщо вийти зараз, правки пропадуть. Зберегти перед виходом?",
       "discard": "Скасувати",
       "genericErrorTitle": "Щось пішло не так",
-      "genericErrorMessage": "Ми вже працюємо над проблемою."
+      "genericErrorMessage": "Ми вже працюємо над проблемою.",
+      "saveErrorTitle": "Помилка збереження",
+      "saveErrorMessage": "Сталася помилка під час збереження, спробуйте пізніше."
     },
     "subscriptionChip": {
       "plan": "Тариф",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Видалити групу?",
       "deleteGroupMessage": "Групу буде видалено. Категорії всередині стануть негрупованими.",
       "parentGroupLabel": "Група",
-      "noGroup": "Без групи"
+      "noGroup": "Без групи",
+      "savingOverlay": "Зачекайте, категорія зберігається…",
+      "savingAndTranslatingOverlay": "Зачекайте, категорія зберігається й перекладається…",
+      "savingGroupOverlay": "Зачекайте, група зберігається…",
+      "savingAndTranslatingGroupOverlay": "Зачекайте, група зберігається й перекладається…"
     },
     "dishForm": {
       "newTitle": "Нова страва",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Редагувати опцію",
       "duplicateButton": "Дублювати",
       "dietsLabel": "Дієти",
-      "dietsTip": "Торкніться, щоб обрати дієти."
+      "dietsTip": "Торкніться, щоб обрати дієти.",
+      "savingOverlay": "Зачекайте, страва зберігається…",
+      "savingAndTranslatingOverlay": "Зачекайте, страва зберігається й перекладається…"
     },
     "optionForm": {
       "newTitle": "Нова опція",

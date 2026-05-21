@@ -41,11 +41,13 @@
       "selected": "valittu",
       "qrCode": "QR-koodi",
       "willUse": "Käyttää",
-      "unsavedTitle": "Sinulla on tallentamattomia muutoksia",
-      "unsavedMessage": "Ne menetetään, jos lähdet nyt.",
+      "unsavedTitle": "Tallentamattomia muutoksia",
+      "unsavedMessage": "Jos lähdet nyt, muutokset menetetään. Tallennetaanko ennen poistumista?",
       "discard": "Hylkää",
       "genericErrorTitle": "Jokin meni pieleen",
-      "genericErrorMessage": "Korjaamme ongelmaa parhaillaan."
+      "genericErrorMessage": "Korjaamme ongelmaa parhaillaan.",
+      "saveErrorTitle": "Tallennusvirhe",
+      "saveErrorMessage": "Tallennettaessa tapahtui virhe. Yritä myöhemmin uudelleen."
     },
     "subscriptionChip": {
       "plan": "Tilaus",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Poistetaanko ryhmä?",
       "deleteGroupMessage": "Ryhmä poistetaan. Sisällä olevat luokat jäävät ryhmittelemättömiksi.",
       "parentGroupLabel": "Ryhmä",
-      "noGroup": "Ei ryhmää"
+      "noGroup": "Ei ryhmää",
+      "savingOverlay": "Odota, luokkaa tallennetaan…",
+      "savingAndTranslatingOverlay": "Odota, luokkaa tallennetaan ja käännetään…",
+      "savingGroupOverlay": "Odota, ryhmää tallennetaan…",
+      "savingAndTranslatingGroupOverlay": "Odota, ryhmää tallennetaan ja käännetään…"
     },
     "dishForm": {
       "newTitle": "Uusi annos",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Muokkaa vaihtoehtoa",
       "duplicateButton": "Monista",
       "dietsLabel": "Ruokavaliot",
-      "dietsTip": "Napauta valitaksesi ruokavaliot."
+      "dietsTip": "Napauta valitaksesi ruokavaliot.",
+      "savingOverlay": "Odota, annosta tallennetaan…",
+      "savingAndTranslatingOverlay": "Odota, annosta tallennetaan ja käännetään…"
     },
     "optionForm": {
       "newTitle": "Uusi vaihtoehto",

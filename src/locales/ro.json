@@ -41,11 +41,13 @@
       "selected": "selectat",
       "qrCode": "Cod QR",
       "willUse": "Va folosi",
-      "unsavedTitle": "Ai modificări nesalvate",
-      "unsavedMessage": "Vor fi pierdute dacă ieși acum.",
+      "unsavedTitle": "Modificări nesalvate",
+      "unsavedMessage": "Dacă pleci acum, modificările vor fi pierdute. Salvezi înainte de a pleca?",
       "discard": "Renunță",
       "genericErrorTitle": "Ceva nu a funcționat",
-      "genericErrorMessage": "Lucrăm deja la problemă."
+      "genericErrorMessage": "Lucrăm deja la problemă.",
+      "saveErrorTitle": "Eroare la salvare",
+      "saveErrorMessage": "A apărut o eroare la salvare. Încearcă din nou mai târziu."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Ștergeți grupul?",
       "deleteGroupMessage": "Grupul va fi eliminat. Categoriile dinăuntru devin negrupate.",
       "parentGroupLabel": "Grup",
-      "noGroup": "Fără grup"
+      "noGroup": "Fără grup",
+      "savingOverlay": "Vă rugăm să așteptați, categoria se salvează…",
+      "savingAndTranslatingOverlay": "Vă rugăm să așteptați, categoria se salvează și se traduce…",
+      "savingGroupOverlay": "Vă rugăm să așteptați, grupul se salvează…",
+      "savingAndTranslatingGroupOverlay": "Vă rugăm să așteptați, grupul se salvează și se traduce…"
     },
     "dishForm": {
       "newTitle": "Preparat nou",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Editează opțiunea",
       "duplicateButton": "Duplică",
       "dietsLabel": "Diete",
-      "dietsTip": "Atinge pentru a activa dietele."
+      "dietsTip": "Atinge pentru a activa dietele.",
+      "savingOverlay": "Vă rugăm să așteptați, felul se salvează…",
+      "savingAndTranslatingOverlay": "Vă rugăm să așteptați, felul se salvează și se traduce…"
     },
     "optionForm": {
       "newTitle": "Opțiune nouă",

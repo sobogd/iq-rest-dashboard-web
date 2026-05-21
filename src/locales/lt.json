@@ -41,11 +41,13 @@
       "selected": "pasirinkta",
       "qrCode": "QR kodas",
       "willUse": "Naudos",
-      "unsavedTitle": "Turite neišsaugotų pakeitimų",
-      "unsavedMessage": "Jie bus prarasti, jei dabar išeisite.",
+      "unsavedTitle": "Neišsaugoti pakeitimai",
+      "unsavedMessage": "Jei išeisite dabar, pakeitimai bus prarasti. Išsaugoti prieš išeinant?",
       "discard": "Atmesti",
       "genericErrorTitle": "Įvyko klaida",
-      "genericErrorMessage": "Mes jau dirbame ties šia problema."
+      "genericErrorMessage": "Mes jau dirbame ties šia problema.",
+      "saveErrorTitle": "Saugojimo klaida",
+      "saveErrorMessage": "Saugant įvyko klaida. Bandykite vėliau."
     },
     "subscriptionChip": {
       "plan": "Planas",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Ištrinti grupę?",
       "deleteGroupMessage": "Grupė bus pašalinta. Vidinės kategorijos liks negrupuotos.",
       "parentGroupLabel": "Grupė",
-      "noGroup": "Be grupės"
+      "noGroup": "Be grupės",
+      "savingOverlay": "Palaukite, kategorija išsaugoma…",
+      "savingAndTranslatingOverlay": "Palaukite, kategorija išsaugoma ir verčiama…",
+      "savingGroupOverlay": "Palaukite, grupė išsaugoma…",
+      "savingAndTranslatingGroupOverlay": "Palaukite, grupė išsaugoma ir verčiama…"
     },
     "dishForm": {
       "newTitle": "Naujas patiekalas",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Redaguoti parinktį",
       "duplicateButton": "Dubliuoti",
       "dietsLabel": "Dietos",
-      "dietsTip": "Bakstelėkite, kad pasirinktumėte dietas."
+      "dietsTip": "Bakstelėkite, kad pasirinktumėte dietas.",
+      "savingOverlay": "Palaukite, patiekalas išsaugomas…",
+      "savingAndTranslatingOverlay": "Palaukite, patiekalas išsaugomas ir verčiamas…"
     },
     "optionForm": {
       "newTitle": "Nauja parinktis",

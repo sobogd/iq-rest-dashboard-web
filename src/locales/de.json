@@ -41,11 +41,13 @@
       "selected": "ausgewählt",
       "qrCode": "QR-Code",
       "willUse": "Nutzt",
-      "unsavedTitle": "Ungespeicherte Änderungen",
-      "unsavedMessage": "Sie gehen verloren, wenn du die Seite jetzt verlässt.",
+      "unsavedTitle": "Nicht gespeicherte Änderungen",
+      "unsavedMessage": "Wenn du jetzt gehst, gehen die Änderungen verloren. Vorher speichern?",
       "discard": "Verwerfen",
       "genericErrorTitle": "Etwas ist schiefgelaufen",
-      "genericErrorMessage": "Wir arbeiten bereits an dem Problem."
+      "genericErrorMessage": "Wir arbeiten bereits an dem Problem.",
+      "saveErrorTitle": "Speicherfehler",
+      "saveErrorMessage": "Beim Speichern ist ein Fehler aufgetreten. Bitte versuche es später erneut."
     },
     "subscriptionChip": {
       "plan": "Tarif",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Gruppe löschen?",
       "deleteGroupMessage": "Die Gruppe wird entfernt. Enthaltene Kategorien werden nicht gruppiert.",
       "parentGroupLabel": "Gruppe",
-      "noGroup": "Ohne Gruppe"
+      "noGroup": "Ohne Gruppe",
+      "savingOverlay": "Bitte warten, Kategorie wird gespeichert…",
+      "savingAndTranslatingOverlay": "Bitte warten, Kategorie wird gespeichert und übersetzt…",
+      "savingGroupOverlay": "Bitte warten, Gruppe wird gespeichert…",
+      "savingAndTranslatingGroupOverlay": "Bitte warten, Gruppe wird gespeichert und übersetzt…"
     },
     "dishForm": {
       "newTitle": "Neues Gericht",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Option bearbeiten",
       "duplicateButton": "Duplizieren",
       "dietsLabel": "Ernährungsformen",
-      "dietsTip": "Tippen, um passende Ernährungsformen zu wählen."
+      "dietsTip": "Tippen, um passende Ernährungsformen zu wählen.",
+      "savingOverlay": "Bitte warten, Gericht wird gespeichert…",
+      "savingAndTranslatingOverlay": "Bitte warten, Gericht wird gespeichert und übersetzt…"
     },
     "optionForm": {
       "newTitle": "Neue Option",

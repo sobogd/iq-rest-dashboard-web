@@ -436,7 +436,7 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-5xl mx-auto md:px-6 pt-2">
+ <div className="max-w-5xl mx-auto md:px-6 pt-4">
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -454,17 +454,7 @@ export function MenuList({
  router.push({ name: "settings.billing", from: "menu" });
  };
  return (
- <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${trialing ? "pr-10" : ""}`}>
- {trialing && (
- <button
- type="button"
- onClick={dismissTrialBanner}
- className="absolute top-2 right-2 h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted/50"
- aria-label={t("scan.banner.dismiss")}
- >
- ×
- </button>
- )}
+ <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5">
  <div className="flex items-start gap-3 md:items-center">
  <ClockIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
  <div className="flex-1 min-w-0">
@@ -474,14 +464,34 @@ export function MenuList({
  <p className="text-xs text-muted-foreground mt-0.5">
  {trialExpired ? tBilling("menuUnavailableTip") : tBilling("trialEnds", { date: trialEndsAt!.toLocaleDateString() })}
  </p>
+ <div className="mt-3 flex gap-2 md:hidden">
  <button
  type="button"
  onClick={goBilling}
- className={primaryBtn + " mt-3 md:hidden inline-flex items-center gap-1.5"}
+ className={primaryBtn + " inline-flex items-center gap-1.5"}
  >
  {tBilling("manage")}
  </button>
+ {trialing && (
+ <button
+ type="button"
+ onClick={dismissTrialBanner}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors inline-flex items-center"
+ >
+ {t("scan.banner.dismiss")}
+ </button>
+ )}
  </div>
+ </div>
+ {trialing && (
+ <button
+ type="button"
+ onClick={dismissTrialBanner}
+ className="hidden md:inline-flex h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors items-center shrink-0"
+ >
+ {t("scan.banner.dismiss")}
+ </button>
+ )}
  <button
  type="button"
  onClick={goBilling}
@@ -495,31 +505,41 @@ export function MenuList({
  })()}
 
  {scanBannerVisible && !currentGroupId && (
- <div className={`relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5 ${noCategories ? "" : "pr-10"}`}>
- {!noCategories && (
- <button
- type="button"
- onClick={() => void handleDismissBanner()}
- className="absolute top-2 right-2 h-7 w-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted/50"
- aria-label={t("scan.banner.dismiss")}
- >
- ×
- </button>
- )}
+ <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5">
  <div className="flex items-start gap-3 md:items-center">
  <SparklesIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
  <div className="flex-1 min-w-0">
  <p className="text-sm font-semibold">{t("scan.banner.title")}</p>
  <p className="text-xs text-muted-foreground mt-0.5">{t("scan.banner.subtitle")}</p>
+ <div className="mt-3 flex gap-2 md:hidden">
  <button
  type="button"
  onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
- className={primaryBtn + " mt-3 md:hidden inline-flex items-center gap-1.5"}
+ className={primaryBtn + " inline-flex items-center gap-1.5"}
  >
  <SparklesIcon size={14} />
  {t("scan.banner.cta")}
  </button>
+ {!noCategories && (
+ <button
+ type="button"
+ onClick={() => void handleDismissBanner()}
+ className="h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors inline-flex items-center"
+ >
+ {t("scan.banner.dismiss")}
+ </button>
+ )}
  </div>
+ </div>
+ {!noCategories && (
+ <button
+ type="button"
+ onClick={() => void handleDismissBanner()}
+ className="hidden md:inline-flex h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors items-center shrink-0"
+ >
+ {t("scan.banner.dismiss")}
+ </button>
+ )}
  <button
  type="button"
  onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
@@ -555,6 +575,7 @@ export function MenuList({
  ) : (
  <div className="space-y-3">
  {/* Ungrouped categories first (no group header). */}
+ {ungroupedCategories.length > 0 && (
  <div ref={ungroupedFlipRef} className="space-y-3">
  {ungroupedCategories.map((cat, idx) => (
  <div key={cat.id} data-flip-id={cat.id}>
@@ -575,6 +596,7 @@ export function MenuList({
  </div>
  ))}
  </div>
+ )}
 
  {/* Each group: borderless header (chevron + name + buttons),
      followed by its child categories + a scoped "Add category"

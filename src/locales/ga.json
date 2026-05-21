@@ -41,11 +41,13 @@
       "selected": "roghnaithe",
       "qrCode": "Cód QR",
       "willUse": "Úsáidfidh",
-      "unsavedTitle": "Tá athruithe gan sábháil agat",
-      "unsavedMessage": "Caillfear iad má fhágann tú anois.",
+      "unsavedTitle": "Athruithe gan sábháil",
+      "unsavedMessage": "Má fhágann tú anois, caillfear na hathruithe. Sábháil sula bhfágann tú?",
       "discard": "Caith uait",
       "genericErrorTitle": "Tharla earráid",
-      "genericErrorMessage": "Táimid ag obair ar an bhfadhb cheana féin."
+      "genericErrorMessage": "Táimid ag obair ar an bhfadhb cheana féin.",
+      "saveErrorTitle": "Earráid sábhála",
+      "saveErrorMessage": "Tharla earráid agus á shábháil. Bain triail eile as ar ball."
     },
     "subscriptionChip": {
       "plan": "Plean",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Scrios an grúpa?",
       "deleteGroupMessage": "Bainfear an grúpa. Beidh na catagóirí istigh gan grúpa.",
       "parentGroupLabel": "Grúpa",
-      "noGroup": "Gan grúpa"
+      "noGroup": "Gan grúpa",
+      "savingOverlay": "Fan le do thoil, catagóir á shábháil…",
+      "savingAndTranslatingOverlay": "Fan le do thoil, catagóir á shábháil agus á aistriú…",
+      "savingGroupOverlay": "Fan le do thoil, grúpa á shábháil…",
+      "savingAndTranslatingGroupOverlay": "Fan le do thoil, grúpa á shábháil agus á aistriú…"
     },
     "dishForm": {
       "newTitle": "Mias nua",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Cuir rogha in eagar",
       "duplicateButton": "Dúblíocht",
       "dietsLabel": "Aistí Bia",
-      "dietsTip": "Tapáil chun aistí bia a roghnú."
+      "dietsTip": "Tapáil chun aistí bia a roghnú.",
+      "savingOverlay": "Fan le do thoil, miasa á shábháil…",
+      "savingAndTranslatingOverlay": "Fan le do thoil, miasa á shábháil agus á aistriú…"
     },
     "optionForm": {
       "newTitle": "Rogha nua",

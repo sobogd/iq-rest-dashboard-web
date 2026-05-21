@@ -41,11 +41,13 @@
       "selected": "sélectionné",
       "qrCode": "Code QR",
       "willUse": "Utilisera",
-      "unsavedTitle": "Vous avez des modifications non enregistrées",
-      "unsavedMessage": "Elles seront perdues si vous quittez maintenant.",
+      "unsavedTitle": "Modifications non enregistrées",
+      "unsavedMessage": "Si vous partez maintenant, vos modifications seront perdues. Enregistrer avant de partir ?",
       "discard": "Annuler",
       "genericErrorTitle": "Une erreur s'est produite",
-      "genericErrorMessage": "Nous travaillons déjà sur le problème."
+      "genericErrorMessage": "Nous travaillons déjà sur le problème.",
+      "saveErrorTitle": "Erreur d'enregistrement",
+      "saveErrorMessage": "Une erreur s'est produite lors de l'enregistrement. Réessayez plus tard."
     },
     "subscriptionChip": {
       "plan": "Forfait",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Supprimer le groupe ?",
       "deleteGroupMessage": "Le groupe sera supprimé. Les catégories à l'intérieur deviendront non groupées.",
       "parentGroupLabel": "Groupe",
-      "noGroup": "Sans groupe"
+      "noGroup": "Sans groupe",
+      "savingOverlay": "Veuillez patienter, la catégorie est en cours d'enregistrement…",
+      "savingAndTranslatingOverlay": "Veuillez patienter, la catégorie est en cours d'enregistrement et de traduction…",
+      "savingGroupOverlay": "Veuillez patienter, le groupe est en cours d'enregistrement…",
+      "savingAndTranslatingGroupOverlay": "Veuillez patienter, le groupe est en cours d'enregistrement et de traduction…"
     },
     "dishForm": {
       "newTitle": "Nouveau plat",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Modifier l'option",
       "duplicateButton": "Dupliquer",
       "dietsLabel": "Régimes",
-      "dietsTip": "Touchez pour indiquer les régimes compatibles."
+      "dietsTip": "Touchez pour indiquer les régimes compatibles.",
+      "savingOverlay": "Veuillez patienter, le plat est en cours d'enregistrement…",
+      "savingAndTranslatingOverlay": "Veuillez patienter, le plat est en cours d'enregistrement et de traduction…"
     },
     "optionForm": {
       "newTitle": "Nouvelle option",

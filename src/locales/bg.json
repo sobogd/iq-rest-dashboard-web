@@ -41,11 +41,13 @@
       "selected": "избрано",
       "qrCode": "QR код",
       "willUse": "Ще използва",
-      "unsavedTitle": "Имате незапазени промени",
-      "unsavedMessage": "Промените ще бъдат загубени, ако излезете сега.",
+      "unsavedTitle": "Незапазени промени",
+      "unsavedMessage": "Ако излезете сега, промените ще се загубят. Да запазим преди излизане?",
       "discard": "Отхвърли",
       "genericErrorTitle": "Възникна грешка",
-      "genericErrorMessage": "Вече работим по проблема."
+      "genericErrorMessage": "Вече работим по проблема.",
+      "saveErrorTitle": "Грешка при запазване",
+      "saveErrorMessage": "Възникна грешка при запазване. Опитайте по-късно."
     },
     "subscriptionChip": {
       "plan": "План",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Изтриване на групата?",
       "deleteGroupMessage": "Групата ще бъде премахната. Категориите вътре стават негрупирани.",
       "parentGroupLabel": "Група",
-      "noGroup": "Без група"
+      "noGroup": "Без група",
+      "savingOverlay": "Моля, изчакайте, категорията се запазва…",
+      "savingAndTranslatingOverlay": "Моля, изчакайте, категорията се запазва и превежда…",
+      "savingGroupOverlay": "Моля, изчакайте, групата се запазва…",
+      "savingAndTranslatingGroupOverlay": "Моля, изчакайте, групата се запазва и превежда…"
     },
     "dishForm": {
       "newTitle": "Ново ястие",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Редактиране на опция",
       "duplicateButton": "Дублирай",
       "dietsLabel": "Диети",
-      "dietsTip": "Докоснете, за да изберете диети."
+      "dietsTip": "Докоснете, за да изберете диети.",
+      "savingOverlay": "Моля, изчакайте, ястието се запазва…",
+      "savingAndTranslatingOverlay": "Моля, изчакайте, ястието се запазва и превежда…"
     },
     "optionForm": {
       "newTitle": "Нова опция",

@@ -41,11 +41,13 @@
       "selected": "выбрано",
       "qrCode": "QR-код",
       "willUse": "Будет использовано",
-      "unsavedTitle": "Есть несохранённые изменения",
-      "unsavedMessage": "Они будут потеряны, если выйти сейчас.",
+      "unsavedTitle": "Не сохранили",
+      "unsavedMessage": "Уйти сейчас — потерять правки. Сохранить перед выходом?",
       "discard": "Сбросить",
       "genericErrorTitle": "Что-то пошло не так",
-      "genericErrorMessage": "Мы уже работаем над проблемой."
+      "genericErrorMessage": "Мы уже работаем над проблемой.",
+      "saveErrorTitle": "Ошибка сохранения",
+      "saveErrorMessage": "Произошла ошибка при сохранении, попробуйте позже."
     },
     "subscriptionChip": {
       "plan": "Тариф",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Удалить группу?",
       "deleteGroupMessage": "Группа будет удалена. Категории внутри станут несгруппированными.",
       "parentGroupLabel": "Группа",
-      "noGroup": "Без группы"
+      "noGroup": "Без группы",
+      "savingOverlay": "Подождите, идёт сохранение категории…",
+      "savingAndTranslatingOverlay": "Подождите, идёт сохранение и автоперевод категории…",
+      "savingGroupOverlay": "Подождите, идёт сохранение группы…",
+      "savingAndTranslatingGroupOverlay": "Подождите, идёт сохранение и автоперевод группы…"
     },
     "dishForm": {
       "newTitle": "Новое блюдо",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Редактировать опцию",
       "duplicateButton": "Дублировать",
       "dietsLabel": "Диеты",
-      "dietsTip": "Нажмите, чтобы отметить подходящие диеты."
+      "dietsTip": "Нажмите, чтобы отметить подходящие диеты.",
+      "savingOverlay": "Подождите, идёт сохранение блюда…",
+      "savingAndTranslatingOverlay": "Подождите, идёт сохранение и автоперевод блюда…"
     },
     "optionForm": {
       "newTitle": "Новая опция",

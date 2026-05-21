@@ -41,11 +41,13 @@
       "selected": "selected",
       "qrCode": "QR code",
       "willUse": "Will use",
-      "unsavedTitle": "You have unsaved changes",
-      "unsavedMessage": "They will be lost if you leave now.",
+      "unsavedTitle": "Unsaved changes",
+      "unsavedMessage": "Leaving now will discard your edits. Save before leaving?",
       "discard": "Discard",
       "genericErrorTitle": "Something went wrong",
-      "genericErrorMessage": "We are already working on the issue."
+      "genericErrorMessage": "We are already working on the issue.",
+      "saveErrorTitle": "Save error",
+      "saveErrorMessage": "Something went wrong while saving. Please try again later."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Delete group?",
       "deleteGroupMessage": "This group will be removed. Categories inside become ungrouped.",
       "parentGroupLabel": "Group",
-      "noGroup": "No group"
+      "noGroup": "No group",
+      "savingOverlay": "Please wait, saving category…",
+      "savingAndTranslatingOverlay": "Please wait, saving and translating category…",
+      "savingGroupOverlay": "Please wait, saving group…",
+      "savingAndTranslatingGroupOverlay": "Please wait, saving and translating group…"
     },
     "dishForm": {
       "newTitle": "New dish",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Edit option",
       "duplicateButton": "Duplicate",
       "dietsLabel": "Diets",
-      "dietsTip": "Tap to mark which diets this dish suits."
+      "dietsTip": "Tap to mark which diets this dish suits.",
+      "savingOverlay": "Please wait, saving dish…",
+      "savingAndTranslatingOverlay": "Please wait, saving and translating dish…"
     },
     "optionForm": {
       "newTitle": "New option",

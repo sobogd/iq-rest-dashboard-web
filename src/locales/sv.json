@@ -41,11 +41,13 @@
       "selected": "valda",
       "qrCode": "QR-kod",
       "willUse": "Använder",
-      "unsavedTitle": "Du har osparade ändringar",
-      "unsavedMessage": "De försvinner om du lämnar nu.",
+      "unsavedTitle": "Osparade ändringar",
+      "unsavedMessage": "Om du går nu förloras ändringarna. Spara innan du går?",
       "discard": "Kassera",
       "genericErrorTitle": "Något gick fel",
-      "genericErrorMessage": "Vi arbetar redan med problemet."
+      "genericErrorMessage": "Vi arbetar redan med problemet.",
+      "saveErrorTitle": "Sparfel",
+      "saveErrorMessage": "Ett fel uppstod vid sparning. Försök igen senare."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Ta bort grupp?",
       "deleteGroupMessage": "Gruppen tas bort. Kategorier inuti blir ogrupperade.",
       "parentGroupLabel": "Grupp",
-      "noGroup": "Utan grupp"
+      "noGroup": "Utan grupp",
+      "savingOverlay": "Vänta, kategorin sparas…",
+      "savingAndTranslatingOverlay": "Vänta, kategorin sparas och översätts…",
+      "savingGroupOverlay": "Vänta, gruppen sparas…",
+      "savingAndTranslatingGroupOverlay": "Vänta, gruppen sparas och översätts…"
     },
     "dishForm": {
       "newTitle": "Ny rätt",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Redigera alternativ",
       "duplicateButton": "Duplicera",
       "dietsLabel": "Dieter",
-      "dietsTip": "Tryck för att välja dieter."
+      "dietsTip": "Tryck för att välja dieter.",
+      "savingOverlay": "Vänta, rätten sparas…",
+      "savingAndTranslatingOverlay": "Vänta, rätten sparas och översätts…"
     },
     "optionForm": {
       "newTitle": "Nytt alternativ",

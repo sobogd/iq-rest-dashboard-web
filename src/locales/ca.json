@@ -41,11 +41,13 @@
       "selected": "seleccionat",
       "qrCode": "Codi QR",
       "willUse": "Usarà",
-      "unsavedTitle": "Tens canvis sense desar",
-      "unsavedMessage": "Es perdran si surts ara.",
+      "unsavedTitle": "Canvis sense desar",
+      "unsavedMessage": "Si surts ara, perdràs els canvis. Vols desar abans de sortir?",
       "discard": "Descarta",
       "genericErrorTitle": "S'ha produït un error",
-      "genericErrorMessage": "Ja estem treballant en el problema."
+      "genericErrorMessage": "Ja estem treballant en el problema.",
+      "saveErrorTitle": "Error en desar",
+      "saveErrorMessage": "S'ha produït un error en desar. Torna-ho a provar més tard."
     },
     "subscriptionChip": {
       "plan": "Pla",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Eliminar el grup?",
       "deleteGroupMessage": "El grup s'eliminarà. Les categories de dins quedaran sense agrupar.",
       "parentGroupLabel": "Grup",
-      "noGroup": "Sense grup"
+      "noGroup": "Sense grup",
+      "savingOverlay": "Espereu, desant la categoria…",
+      "savingAndTranslatingOverlay": "Espereu, desant i traduint la categoria…",
+      "savingGroupOverlay": "Espereu, desant el grup…",
+      "savingAndTranslatingGroupOverlay": "Espereu, desant i traduint el grup…"
     },
     "dishForm": {
       "newTitle": "Nou plat",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Edita l'opció",
       "duplicateButton": "Duplica",
       "dietsLabel": "Dietes",
-      "dietsTip": "Toca per indicar les dietes compatibles."
+      "dietsTip": "Toca per indicar les dietes compatibles.",
+      "savingOverlay": "Espereu, desant el plat…",
+      "savingAndTranslatingOverlay": "Espereu, desant i traduint el plat…"
     },
     "optionForm": {
       "newTitle": "Nova opció",

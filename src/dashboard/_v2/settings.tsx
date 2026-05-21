@@ -6,6 +6,7 @@ import { ChevronRightIcon, CheckIcon, CopyIcon, SendIcon, SparklesIcon, CloseIco
 import {
  AiImageModal,
  PageHeader,
+ Select,
  SubpageStickyBar,
  ToggleSwitch,
  uploadFile,
@@ -1303,7 +1304,9 @@ export function LanguagesSettingsPage({
  {tl("availableTip")}
  </p>
  <div className="flex flex-wrap gap-1.5">
- {AVAILABLE_LANGUAGES.map((l) => {
+ {[...AVAILABLE_LANGUAGES]
+ .sort((a, b) => a.label.localeCompare(b.label))
+ .map((l) => {
  const isSelected = draft.languages.includes(l.code);
  return (
  <button
@@ -1311,14 +1314,13 @@ export function LanguagesSettingsPage({
  type="button"
  onClick={() => toggleLang(l.code)}
  className={
- "inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full text-xs font-medium transition-colors " +
+ "inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium rounded-md transition-colors " +
  (isSelected
  ? "bg-foreground text-background"
- : "bg-secondary text-foreground")
+ : "bg-secondary text-muted-foreground")
  }
  >
- <span className="text-sm leading-none">{l.flag}</span>
- <span>{l.label}</span>
+ {l.label}
  </button>
  );
  })}
@@ -1330,26 +1332,19 @@ export function LanguagesSettingsPage({
  <Divider />
 
  <label htmlFor="lang-default" className="block text-sm font-medium text-foreground mb-2.5">{tl("defaultLabel")}</label>
- <select
+ <Select<string>
  id="lang-default"
  value={draft.defaultLang}
- onChange={(e) => {
+ onChange={(next) => {
  track("dash_settings_langs_change_default");
- setDraft((d) => ({ ...d, defaultLang: e.target.value }));
+ setDraft((d) => ({ ...d, defaultLang: next }));
  }}
  disabled={draft.languages.length === 0}
- className={inputClass + " disabled:bg-secondary disabled:text-muted-foreground"}
- >
- {draft.languages.map((code) => {
- const l = AVAILABLE_LANGUAGES.find((x) => x.code === code);
- if (!l) return null;
- return (
- <option key={code} value={code}>
- {l.flag} {l.label}
- </option>
- );
- })}
- </select>
+ options={draft.languages
+ .map((code) => AVAILABLE_LANGUAGES.find((x) => x.code === code))
+ .filter((l): l is NonNullable<typeof l> => !!l)
+ .map((l) => ({ value: l.code, label: `${l.flag} ${l.label}` }))}
+ />
  <p className="text-xs text-muted-foreground mt-1.5 leading-snug">
  {tl("defaultTip")}
  </p>

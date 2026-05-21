@@ -41,11 +41,13 @@
       "selected": "seçildi",
       "qrCode": "QR kodu",
       "willUse": "Kullanılacak",
-      "unsavedTitle": "Kaydedilmemiş değişiklikleriniz var",
-      "unsavedMessage": "Şimdi çıkarsan kaybolur.",
+      "unsavedTitle": "Kaydedilmemiş değişiklikler",
+      "unsavedMessage": "Şimdi çıkarsanız değişiklikler kaybolur. Çıkmadan önce kaydedilsin mi?",
       "discard": "Yoksay",
       "genericErrorTitle": "Bir şeyler ters gitti",
-      "genericErrorMessage": "Sorun üzerinde zaten çalışıyoruz."
+      "genericErrorMessage": "Sorun üzerinde zaten çalışıyoruz.",
+      "saveErrorTitle": "Kaydetme hatası",
+      "saveErrorMessage": "Kaydetme sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Grup silinsin mi?",
       "deleteGroupMessage": "Grup kaldırılacak. İçindeki kategoriler gruba dahil olmayacak.",
       "parentGroupLabel": "Grup",
-      "noGroup": "Grup yok"
+      "noGroup": "Grup yok",
+      "savingOverlay": "Lütfen bekleyin, kategori kaydediliyor…",
+      "savingAndTranslatingOverlay": "Lütfen bekleyin, kategori kaydediliyor ve çevriliyor…",
+      "savingGroupOverlay": "Lütfen bekleyin, grup kaydediliyor…",
+      "savingAndTranslatingGroupOverlay": "Lütfen bekleyin, grup kaydediliyor ve çevriliyor…"
     },
     "dishForm": {
       "newTitle": "Yeni yemek",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Seçeneği düzenle",
       "duplicateButton": "Çoğalt",
       "dietsLabel": "Diyetler",
-      "dietsTip": "Diyetleri seçmek için dokunun."
+      "dietsTip": "Diyetleri seçmek için dokunun.",
+      "savingOverlay": "Lütfen bekleyin, yemek kaydediliyor…",
+      "savingAndTranslatingOverlay": "Lütfen bekleyin, yemek kaydediliyor ve çevriliyor…"
     },
     "optionForm": {
       "newTitle": "Yeni seçenek",

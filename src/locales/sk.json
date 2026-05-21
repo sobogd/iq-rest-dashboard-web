@@ -41,11 +41,13 @@
       "selected": "vybrané",
       "qrCode": "QR kód",
       "willUse": "Použije",
-      "unsavedTitle": "Máte neuložené zmeny",
-      "unsavedMessage": "Stratia sa, ak teraz odídete.",
+      "unsavedTitle": "Neuložené zmeny",
+      "unsavedMessage": "Ak teraz odídete, úpravy sa zahodia. Uložiť pred odchodom?",
       "discard": "Zahodiť",
       "genericErrorTitle": "Niečo sa pokazilo",
-      "genericErrorMessage": "Už pracujeme na probléme."
+      "genericErrorMessage": "Už pracujeme na probléme.",
+      "saveErrorTitle": "Chyba ukladania",
+      "saveErrorMessage": "Pri ukladaní došlo k chybe. Skúste to neskôr."
     },
     "subscriptionChip": {
       "plan": "Plán",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Odstrániť skupinu?",
       "deleteGroupMessage": "Skupina bude odstránená. Kategórie vnútri zostanú bez skupiny.",
       "parentGroupLabel": "Skupina",
-      "noGroup": "Bez skupiny"
+      "noGroup": "Bez skupiny",
+      "savingOverlay": "Počkajte prosím, kategória sa ukladá…",
+      "savingAndTranslatingOverlay": "Počkajte prosím, kategória sa ukladá a prekladá…",
+      "savingGroupOverlay": "Počkajte prosím, skupina sa ukladá…",
+      "savingAndTranslatingGroupOverlay": "Počkajte prosím, skupina sa ukladá a prekladá…"
     },
     "dishForm": {
       "newTitle": "Nové jedlo",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Upraviť možnosť",
       "duplicateButton": "Duplikovať",
       "dietsLabel": "Diéty",
-      "dietsTip": "Ťuknutím vyberte diéty."
+      "dietsTip": "Ťuknutím vyberte diéty.",
+      "savingOverlay": "Počkajte prosím, jedlo sa ukladá…",
+      "savingAndTranslatingOverlay": "Počkajte prosím, jedlo sa ukladá a prekladá…"
     },
     "optionForm": {
       "newTitle": "Nová možnosť",

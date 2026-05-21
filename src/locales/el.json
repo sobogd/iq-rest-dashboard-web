@@ -41,11 +41,13 @@
       "selected": "επιλεγμένο",
       "qrCode": "Κωδικός QR",
       "willUse": "Θα χρησιμοποιήσει",
-      "unsavedTitle": "Έχεις μη αποθηκευμένες αλλαγές",
-      "unsavedMessage": "Θα χαθούν αν φύγεις τώρα.",
+      "unsavedTitle": "Μη αποθηκευμένες αλλαγές",
+      "unsavedMessage": "Αν φύγετε τώρα, οι αλλαγές θα χαθούν. Αποθήκευση πριν την έξοδο;",
       "discard": "Απόρριψη",
       "genericErrorTitle": "Κάτι πήγε στραβά",
-      "genericErrorMessage": "Εργαζόμαστε ήδη πάνω στο πρόβλημα."
+      "genericErrorMessage": "Εργαζόμαστε ήδη πάνω στο πρόβλημα.",
+      "saveErrorTitle": "Σφάλμα αποθήκευσης",
+      "saveErrorMessage": "Παρουσιάστηκε σφάλμα κατά την αποθήκευση. Προσπαθήστε ξανά αργότερα."
     },
     "subscriptionChip": {
       "plan": "Πλάνο",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Διαγραφή ομάδας;",
       "deleteGroupMessage": "Η ομάδα θα αφαιρεθεί. Οι κατηγορίες μέσα θα γίνουν χωρίς ομάδα.",
       "parentGroupLabel": "Ομάδα",
-      "noGroup": "Χωρίς ομάδα"
+      "noGroup": "Χωρίς ομάδα",
+      "savingOverlay": "Παρακαλώ περιμένετε, η κατηγορία αποθηκεύεται…",
+      "savingAndTranslatingOverlay": "Παρακαλώ περιμένετε, η κατηγορία αποθηκεύεται και μεταφράζεται…",
+      "savingGroupOverlay": "Παρακαλώ περιμένετε, η ομάδα αποθηκεύεται…",
+      "savingAndTranslatingGroupOverlay": "Παρακαλώ περιμένετε, η ομάδα αποθηκεύεται και μεταφράζεται…"
     },
     "dishForm": {
       "newTitle": "Νέο πιάτο",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Επεξεργασία επιλογής",
       "duplicateButton": "Αντιγραφή",
       "dietsLabel": "Δίαιτες",
-      "dietsTip": "Πατήστε για επιλογή διατροφών."
+      "dietsTip": "Πατήστε για επιλογή διατροφών.",
+      "savingOverlay": "Παρακαλώ περιμένετε, το πιάτο αποθηκεύεται…",
+      "savingAndTranslatingOverlay": "Παρακαλώ περιμένετε, το πιάτο αποθηκεύεται και μεταφράζεται…"
     },
     "optionForm": {
       "newTitle": "Νέα επιλογή",

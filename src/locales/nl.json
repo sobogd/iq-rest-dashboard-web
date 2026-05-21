@@ -41,11 +41,13 @@
       "selected": "geselecteerd",
       "qrCode": "QR-code",
       "willUse": "Gebruikt",
-      "unsavedTitle": "Je hebt niet-opgeslagen wijzigingen",
-      "unsavedMessage": "Ze gaan verloren als je nu vertrekt.",
+      "unsavedTitle": "Niet-opgeslagen wijzigingen",
+      "unsavedMessage": "Als je nu vertrekt, gaan je wijzigingen verloren. Eerst opslaan?",
       "discard": "Negeren",
       "genericErrorTitle": "Er ging iets mis",
-      "genericErrorMessage": "We werken al aan het probleem."
+      "genericErrorMessage": "We werken al aan het probleem.",
+      "saveErrorTitle": "Opslagfout",
+      "saveErrorMessage": "Er is een fout opgetreden tijdens het opslaan. Probeer het later opnieuw."
     },
     "subscriptionChip": {
       "plan": "Abonnement",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Groep verwijderen?",
       "deleteGroupMessage": "De groep wordt verwijderd. Categorieën erin worden niet meer gegroepeerd.",
       "parentGroupLabel": "Groep",
-      "noGroup": "Zonder groep"
+      "noGroup": "Zonder groep",
+      "savingOverlay": "Even geduld, categorie wordt opgeslagen…",
+      "savingAndTranslatingOverlay": "Even geduld, categorie wordt opgeslagen en vertaald…",
+      "savingGroupOverlay": "Even geduld, groep wordt opgeslagen…",
+      "savingAndTranslatingGroupOverlay": "Even geduld, groep wordt opgeslagen en vertaald…"
     },
     "dishForm": {
       "newTitle": "Nieuw gerecht",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Optie bewerken",
       "duplicateButton": "Dupliceren",
       "dietsLabel": "Diëten",
-      "dietsTip": "Tik om diëten in te schakelen."
+      "dietsTip": "Tik om diëten in te schakelen.",
+      "savingOverlay": "Even geduld, gerecht wordt opgeslagen…",
+      "savingAndTranslatingOverlay": "Even geduld, gerecht wordt opgeslagen en vertaald…"
     },
     "optionForm": {
       "newTitle": "Nieuwe optie",

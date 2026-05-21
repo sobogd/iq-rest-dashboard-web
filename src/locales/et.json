@@ -41,11 +41,13 @@
       "selected": "valitud",
       "qrCode": "QR-kood",
       "willUse": "Kasutab",
-      "unsavedTitle": "Sul on salvestamata muudatused",
-      "unsavedMessage": "Need lähevad kaotsi, kui sa praegu lahkud.",
+      "unsavedTitle": "Salvestamata muudatused",
+      "unsavedMessage": "Kui lahkud praegu, muudatused kaovad. Salvestada enne lahkumist?",
       "discard": "Loobu",
       "genericErrorTitle": "Midagi läks valesti",
-      "genericErrorMessage": "Tegeleme juba probleemiga."
+      "genericErrorMessage": "Tegeleme juba probleemiga.",
+      "saveErrorTitle": "Salvestamise viga",
+      "saveErrorMessage": "Salvestamisel tekkis viga. Proovi hiljem uuesti."
     },
     "subscriptionChip": {
       "plan": "Plaan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Kustutada rühm?",
       "deleteGroupMessage": "Rühm eemaldatakse. Sees olevad kategooriad jäävad rühmitamata.",
       "parentGroupLabel": "Rühm",
-      "noGroup": "Ilma rühmata"
+      "noGroup": "Ilma rühmata",
+      "savingOverlay": "Palun oodake, kategooriat salvestatakse…",
+      "savingAndTranslatingOverlay": "Palun oodake, kategooriat salvestatakse ja tõlgitakse…",
+      "savingGroupOverlay": "Palun oodake, rühma salvestatakse…",
+      "savingAndTranslatingGroupOverlay": "Palun oodake, rühma salvestatakse ja tõlgitakse…"
     },
     "dishForm": {
       "newTitle": "Uus roog",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Muuda valikut",
       "duplicateButton": "Dubleeri",
       "dietsLabel": "Dieedid",
-      "dietsTip": "Puuduta dieedi valimiseks."
+      "dietsTip": "Puuduta dieedi valimiseks.",
+      "savingOverlay": "Palun oodake, rooga salvestatakse…",
+      "savingAndTranslatingOverlay": "Palun oodake, rooga salvestatakse ja tõlgitakse…"
     },
     "optionForm": {
       "newTitle": "Uus valik",

@@ -41,11 +41,13 @@
       "selected": "izbrano",
       "qrCode": "Koda QR",
       "willUse": "Uporabi",
-      "unsavedTitle": "Imate neshranjene spremembe",
-      "unsavedMessage": "Izgubile se bodo, če zdaj odidete.",
+      "unsavedTitle": "Neshranjene spremembe",
+      "unsavedMessage": "Če greste zdaj, bodo spremembe izgubljene. Shraniti pred odhodom?",
       "discard": "Zavrzi",
       "genericErrorTitle": "Nekaj je šlo narobe",
-      "genericErrorMessage": "Že delamo na težavi."
+      "genericErrorMessage": "Že delamo na težavi.",
+      "saveErrorTitle": "Napaka pri shranjevanju",
+      "saveErrorMessage": "Pri shranjevanju je prišlo do napake. Poskusite pozneje."
     },
     "subscriptionChip": {
       "plan": "Paket",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Izbrišem skupino?",
       "deleteGroupMessage": "Skupina bo odstranjena. Notranje kategorije bodo brez skupine.",
       "parentGroupLabel": "Skupina",
-      "noGroup": "Brez skupine"
+      "noGroup": "Brez skupine",
+      "savingOverlay": "Počakajte, kategorija se shranjuje…",
+      "savingAndTranslatingOverlay": "Počakajte, kategorija se shranjuje in prevaja…",
+      "savingGroupOverlay": "Počakajte, skupina se shranjuje…",
+      "savingAndTranslatingGroupOverlay": "Počakajte, skupina se shranjuje in prevaja…"
     },
     "dishForm": {
       "newTitle": "Nova jed",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Uredi možnost",
       "duplicateButton": "Podvoji",
       "dietsLabel": "Diete",
-      "dietsTip": "Dotaknite se za izbiro diet."
+      "dietsTip": "Dotaknite se za izbiro diet.",
+      "savingOverlay": "Počakajte, jed se shranjuje…",
+      "savingAndTranslatingOverlay": "Počakajte, jed se shranjuje in prevaja…"
     },
     "optionForm": {
       "newTitle": "Nova možnost",

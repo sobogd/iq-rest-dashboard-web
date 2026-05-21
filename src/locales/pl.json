@@ -41,11 +41,13 @@
       "selected": "wybrane",
       "qrCode": "Kod QR",
       "willUse": "Użyje",
-      "unsavedTitle": "Masz niezapisane zmiany",
-      "unsavedMessage": "Zostaną utracone, jeśli wyjdziesz teraz.",
+      "unsavedTitle": "Niezapisane zmiany",
+      "unsavedMessage": "Jeśli teraz wyjdziesz, zmiany zostaną utracone. Zapisać przed wyjściem?",
       "discard": "Odrzuć",
       "genericErrorTitle": "Coś poszło nie tak",
-      "genericErrorMessage": "Już pracujemy nad rozwiązaniem."
+      "genericErrorMessage": "Już pracujemy nad rozwiązaniem.",
+      "saveErrorTitle": "Błąd zapisu",
+      "saveErrorMessage": "Wystąpił błąd podczas zapisywania. Spróbuj ponownie później."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Usunąć grupę?",
       "deleteGroupMessage": "Grupa zostanie usunięta. Kategorie w środku staną się niezgrupowane.",
       "parentGroupLabel": "Grupa",
-      "noGroup": "Bez grupy"
+      "noGroup": "Bez grupy",
+      "savingOverlay": "Proszę czekać, kategoria jest zapisywana…",
+      "savingAndTranslatingOverlay": "Proszę czekać, kategoria jest zapisywana i tłumaczona…",
+      "savingGroupOverlay": "Proszę czekać, grupa jest zapisywana…",
+      "savingAndTranslatingGroupOverlay": "Proszę czekać, grupa jest zapisywana i tłumaczona…"
     },
     "dishForm": {
       "newTitle": "Nowe danie",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Edytuj opcję",
       "duplicateButton": "Duplikuj",
       "dietsLabel": "Diety",
-      "dietsTip": "Dotknij, aby zaznaczyć diety."
+      "dietsTip": "Dotknij, aby zaznaczyć diety.",
+      "savingOverlay": "Proszę czekać, danie jest zapisywane…",
+      "savingAndTranslatingOverlay": "Proszę czekać, danie jest zapisywane i tłumaczone…"
     },
     "optionForm": {
       "newTitle": "Nowa opcja",

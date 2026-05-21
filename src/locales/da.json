@@ -41,11 +41,13 @@
       "selected": "valgt",
       "qrCode": "QR-kode",
       "willUse": "Bruger",
-      "unsavedTitle": "Du har ugemte ændringer",
-      "unsavedMessage": "De går tabt, hvis du forlader siden nu.",
+      "unsavedTitle": "Ikke gemte ændringer",
+      "unsavedMessage": "Hvis du går nu, kasseres ændringerne. Gemme før du går?",
       "discard": "Kassér",
       "genericErrorTitle": "Noget gik galt",
-      "genericErrorMessage": "Vi arbejder allerede på problemet."
+      "genericErrorMessage": "Vi arbejder allerede på problemet.",
+      "saveErrorTitle": "Lagringsfejl",
+      "saveErrorMessage": "Der opstod en fejl under lagringen. Prøv igen senere."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Slet gruppe?",
       "deleteGroupMessage": "Gruppen fjernes. Kategorier indeni bliver ugrupperede.",
       "parentGroupLabel": "Gruppe",
-      "noGroup": "Uden gruppe"
+      "noGroup": "Uden gruppe",
+      "savingOverlay": "Vent venligst, kategorien gemmes…",
+      "savingAndTranslatingOverlay": "Vent venligst, kategorien gemmes og oversættes…",
+      "savingGroupOverlay": "Vent venligst, gruppen gemmes…",
+      "savingAndTranslatingGroupOverlay": "Vent venligst, gruppen gemmes og oversættes…"
     },
     "dishForm": {
       "newTitle": "Ny ret",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Rediger mulighed",
       "duplicateButton": "Dupliker",
       "dietsLabel": "Diæter",
-      "dietsTip": "Tryk for at vælge diæter."
+      "dietsTip": "Tryk for at vælge diæter.",
+      "savingOverlay": "Vent venligst, retten gemmes…",
+      "savingAndTranslatingOverlay": "Vent venligst, retten gemmes og oversættes…"
     },
     "optionForm": {
       "newTitle": "Ny valgmulighed",

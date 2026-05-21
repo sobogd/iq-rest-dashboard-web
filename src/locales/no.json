@@ -41,11 +41,13 @@
       "selected": "valgt",
       "qrCode": "QR-kode",
       "willUse": "Bruker",
-      "unsavedTitle": "Du har ulagrede endringer",
-      "unsavedMessage": "De går tapt hvis du forlater nå.",
+      "unsavedTitle": "Ulagrede endringer",
+      "unsavedMessage": "Hvis du går nå, går endringene tapt. Lagre før du går?",
       "discard": "Forkast",
       "genericErrorTitle": "Noe gikk galt",
-      "genericErrorMessage": "Vi jobber allerede med problemet."
+      "genericErrorMessage": "Vi jobber allerede med problemet.",
+      "saveErrorTitle": "Lagringsfeil",
+      "saveErrorMessage": "Det oppstod en feil ved lagring. Prøv igjen senere."
     },
     "subscriptionChip": {
       "plan": "Plan",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "Slett gruppe?",
       "deleteGroupMessage": "Gruppen fjernes. Kategorier inni blir ugrupperte.",
       "parentGroupLabel": "Gruppe",
-      "noGroup": "Uten gruppe"
+      "noGroup": "Uten gruppe",
+      "savingOverlay": "Vennligst vent, kategorien lagres…",
+      "savingAndTranslatingOverlay": "Vennligst vent, kategorien lagres og oversettes…",
+      "savingGroupOverlay": "Vennligst vent, gruppen lagres…",
+      "savingAndTranslatingGroupOverlay": "Vennligst vent, gruppen lagres og oversettes…"
     },
     "dishForm": {
       "newTitle": "Ny rett",
@@ -221,7 +227,9 @@
       "editOptionTitle": "Rediger alternativ",
       "duplicateButton": "Dupliser",
       "dietsLabel": "Dietter",
-      "dietsTip": "Trykk for å velge dietter."
+      "dietsTip": "Trykk for å velge dietter.",
+      "savingOverlay": "Vennligst vent, retten lagres…",
+      "savingAndTranslatingOverlay": "Vennligst vent, retten lagres og oversettes…"
     },
     "optionForm": {
       "newTitle": "Nytt alternativ",

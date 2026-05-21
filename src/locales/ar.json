@@ -41,11 +41,13 @@
       "selected": "محدد",
       "qrCode": "رمز QR",
       "willUse": "سيستخدم",
-      "unsavedTitle": "لديك تغييرات غير محفوظة",
-      "unsavedMessage": "سيتم فقدان التغييرات إذا غادرت الآن.",
+      "unsavedTitle": "تغييرات غير محفوظة",
+      "unsavedMessage": "ستفقد تعديلاتك إذا غادرت الآن. هل تريد الحفظ قبل المغادرة؟",
       "discard": "تجاهل",
       "genericErrorTitle": "حدث خطأ",
-      "genericErrorMessage": "نحن نعمل بالفعل على حل المشكلة."
+      "genericErrorMessage": "نحن نعمل بالفعل على حل المشكلة.",
+      "saveErrorTitle": "خطأ في الحفظ",
+      "saveErrorMessage": "حدث خطأ أثناء الحفظ. يرجى المحاولة لاحقًا."
     },
     "subscriptionChip": {
       "plan": "الخطة",
@@ -189,7 +191,11 @@
       "deleteGroupTitle": "حذف المجموعة؟",
       "deleteGroupMessage": "ستتم إزالة المجموعة. الفئات داخلها ستصبح بدون مجموعة.",
       "parentGroupLabel": "المجموعة",
-      "noGroup": "بدون مجموعة"
+      "noGroup": "بدون مجموعة",
+      "savingOverlay": "يرجى الانتظار، جارٍ حفظ الفئة…",
+      "savingAndTranslatingOverlay": "يرجى الانتظار، جارٍ حفظ الفئة وترجمتها…",
+      "savingGroupOverlay": "يرجى الانتظار، جارٍ حفظ المجموعة…",
+      "savingAndTranslatingGroupOverlay": "يرجى الانتظار، جارٍ حفظ المجموعة وترجمتها…"
     },
     "dishForm": {
       "newTitle": "طبق جديد",
@@ -221,7 +227,9 @@
       "editOptionTitle": "تعديل الخيار",
       "duplicateButton": "تكرار",
       "dietsLabel": "الأنظمة الغذائية",
-      "dietsTip": "انقر لاختيار الأنظمة الغذائية."
+      "dietsTip": "انقر لاختيار الأنظمة الغذائية.",
+      "savingOverlay": "يرجى الانتظار، جارٍ حفظ الطبق…",
+      "savingAndTranslatingOverlay": "يرجى الانتظار، جارٍ حفظ الطبق وترجمته…"
     },
     "optionForm": {
       "newTitle": "خيار جديد",
