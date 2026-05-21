@@ -436,7 +436,7 @@ export function MenuList({
  </div>
  </div>
 
- <div className="max-w-2xl mx-auto pt-5 md:pt-2">
+ <div className="max-w-2xl mx-auto pt-2">
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -606,7 +606,7 @@ export function MenuList({
  </div>
  )}
 
- <div className="flex items-center justify-center gap-6 pt-6 pb-16 md:pb-0">
+ <div className="flex items-center justify-center gap-6 pt-6 pb-8 md:pb-0">
  <button
  type="button"
  onClick={() => {

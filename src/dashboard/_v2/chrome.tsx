@@ -229,7 +229,7 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-nav/95 backdrop-blur-md border-t border-border"
  style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
  >
- <div className="flex items-stretch">
+ <div className="flex items-stretch px-2">
  {NAV_TABS.map((tab) => {
  const isActive = activeTab === tab.id;
  const TabIcon = tab.icon;
@@ -243,10 +243,9 @@ function BottomNav({ activeTab }: { activeTab: TabId }) {
  track(BOTTOM_NAV_EVENT[tab.id]);
  router.resetTo(tab.view);
  }}
- className={"flex-1 flex flex-col items-center justify-center gap-1.5 py-3.5 transition-colors " + cls}
+ className={"flex-1 flex items-center justify-center py-4 transition-colors " + cls}
  >
- <TabIcon size={20} />
- <span className={"text-[9px] leading-none " + (isActive ? "text-primary" : "text-muted-foreground/70")}>{t(tab.labelKey)}</span>
+ <TabIcon size={22} />
  </button>
  );
  })}
