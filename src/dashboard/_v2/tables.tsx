@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, QrIcon, TrashIcon } from "./icons";
 import {
  ConfirmDialog,
@@ -330,6 +331,7 @@ export function TableFormPage({
  onBack: () => void;
 }) {
  const t = useTranslations("dashboard.tables");
+ const qc = useQueryClient();
 
  const initial: TableEntity =
  mode === "edit" && tableId
@@ -420,6 +422,11 @@ export function TableFormPage({
  });
  setTables((prev) => prev.map((x) => (x.id === draft.id ? { ...x, ...draft } : x)));
  }
+ // Refresh the shared TanStack cache so the host's tablesQ.data + every
+ // other consumer reflects the new/updated row. Without this the
+ // shell's props-sync useEffect would wipe local-only inserts on the
+ // next host re-render.
+ await qc.invalidateQueries({ queryKey: ["tables"] });
  onBack();
  } catch {
  setSaving(false);
@@ -447,6 +454,7 @@ export function TableFormPage({
  try {
  await deleteTable(draft.id);
  setTables((prev) => prev.filter((x) => x.id !== draft.id));
+ await qc.invalidateQueries({ queryKey: ["tables"] });
  onBack();
  } catch {
  }

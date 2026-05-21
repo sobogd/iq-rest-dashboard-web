@@ -125,10 +125,16 @@ function ShellBody(props: ShellInitialData) {
       );
       const built = buildCategories(cats as unknown as ApiCategory[], items, defaultLang);
       setCategories(built);
+      // Keep the shared TanStack cache in lock-step so the host's props
+      // re-derivation (and the useEffect sync above) sees the same rows
+      // and doesn't overwrite the freshly-refreshed state on the next
+      // render of an unrelated query.
+      void queryClient.invalidateQueries({ queryKey: ["categories"] });
+      void queryClient.invalidateQueries({ queryKey: ["items"] });
     } catch {
       // ignore
     }
-  }, [defaultLang]);
+  }, [defaultLang, queryClient]);
 
   // Orders + reservations are polled by TanStack queries in dashboard-host.
   // Local setInterval was duplicating that polling — removed.
