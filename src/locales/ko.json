@@ -28,6 +28,7 @@
       "translate": "번역",
       "translating": "번역 중...",
       "translateWithAi": "AI로 번역",
+      "defaultLang": "기본",
       "translateAll": "모두 번역",
       "replace": "바꾸기",
       "copy": "사본",

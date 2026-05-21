@@ -19,6 +19,7 @@ import {
 import { inputClass, labelClass, primaryBtn, secondaryBtn } from "./tokens";
 import { AVAILABLE_LANGUAGES, getMl, setMl, translateText } from "./i18n";
 import { useIsAdmin } from "./use-is-admin";
+import { useLocale } from "@/lib/i18n-compat";
 import { useAiImageAccess } from "./sub-context";
 import type { Ml } from "./types";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
@@ -561,6 +562,23 @@ function AllLanguagesModal({
  placeholder?: string;
 }) {
  const tc = useTranslations("dashboard.common");
+ const uiLocale = useLocale();
+ // Localised language name in the current UI locale (e.g. "Italian" / "Itali-
+ // ano" / "итальянский" for code "it"). Falls back to the raw code if the
+ // platform's Intl.DisplayNames doesn't know the code.
+ const displayNames = (() => {
+ try {
+ return new Intl.DisplayNames([uiLocale], { type: "language" });
+ } catch {
+ return null;
+ }
+ })();
+ const langLabel = (code: string): string => {
+ const name = displayNames?.of(code);
+ if (!name || name === code) return code.toUpperCase();
+ return name.charAt(0).toUpperCase() + name.slice(1);
+ };
+
  // Stable order: default language first, then the rest in AVAILABLE_LANGUAGES
  // order (matches the top-level lang selector).
  const ordered = (() => {
@@ -593,18 +611,16 @@ function AllLanguagesModal({
  >
  <div className="space-y-3">
  {ordered.map((code) => {
- const meta = AVAILABLE_LANGUAGES.find((l) => l.code === code);
  const v = getMl(value, code);
  const isDefault = code === defaultLang;
  return (
  <div key={code} className="space-y-1">
  <div className="flex items-center justify-between gap-2">
- <div className="text-xs font-medium text-foreground inline-flex items-center gap-1.5">
- <span>{meta?.flag}</span>
- <span>{meta?.short ?? code}</span>
+ <div className="text-sm font-medium text-foreground inline-flex items-center gap-2">
+ <span>{langLabel(code)}</span>
  {isDefault ? (
- <span className="text-[10px] px-1 py-0.5 rounded bg-secondary text-muted-foreground uppercase">
- default
+ <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-muted-foreground uppercase">
+ {tc("defaultLang")}
  </span>
  ) : null}
  </div>
