@@ -17,6 +17,7 @@ import {
  ExpandIcon,
  EyeIcon,
  EyeOffIcon,
+ FolderIcon,
  PlusIcon,
  SparklesIcon,
 } from "./icons";
@@ -514,27 +515,37 @@ export function MenuList({
 
 
  {!currentGroupId && topLevelGroups.length > 0 ? (
- <div ref={groupsFlipRef} className="space-y-2 mb-3">
+ <div ref={groupsFlipRef} className="space-y-3 mb-3">
  {topLevelGroups.map((g, idx) => (
  <div
  key={g.id}
  data-flip-id={g.id}
- className="flex items-stretch gap-1 bg-card border border-border rounded-2xl px-2 py-1"
+ className="bg-card border border-border/60 rounded-xl overflow-hidden"
  >
- <button
- type="button"
+ <div
+ role="button"
+ tabIndex={0}
  onClick={() => {
  track("dash_menu_group_open");
  router.push({ name: "menu", group: g.id });
  }}
- className="flex-1 min-w-0 self-stretch flex items-center gap-1 px-2 py-3 text-left rounded-md transition-colors"
+ onKeyDown={(e) => {
+ if (e.key === "Enter" || e.key === " ") {
+ e.preventDefault();
+ track("dash_menu_group_open");
+ router.push({ name: "menu", group: g.id });
+ }
+ }}
+ className="flex items-center gap-2 pl-4 pr-3 py-2 cursor-pointer select-none"
  >
- <span className="flex-1 min-w-0 font-semibold text-foreground truncate">
+ <FolderIcon size={14} className="text-muted-foreground shrink-0" />
+ <span className="min-w-0 text-sm font-semibold text-foreground/70 truncate">
  {getMlWithFallback(g.name, defaultLang, defaultLang)}
  </span>
- <ArrowRightIcon size={14} className="text-foreground shrink-0" />
- </button>
- <div className="self-center inline-flex items-center gap-0 shrink-0">
+ <ArrowRightIcon size={12} className="text-muted-foreground shrink-0" />
+ <span className="flex-1" />
+ <div className="flex items-center gap-0.5 shrink-0">
+ <span className="inline-flex items-center gap-0">
  <button
  type="button"
  onClick={(e) => { e.stopPropagation(); moveGroup(idx, -1); }}
@@ -553,6 +564,7 @@ export function MenuList({
  >
  <ArrowDownIcon size={14} />
  </button>
+ </span>
  <button
  type="button"
  onClick={(e) => {
@@ -565,6 +577,7 @@ export function MenuList({
  >
  <EditIcon size={14} />
  </button>
+ </div>
  </div>
  </div>
  ))}
@@ -619,7 +632,7 @@ export function MenuList({
  router.push(currentGroupId ? { name: "category.new", group: currentGroupId } : { name: "category.new" });
  }}
  data-onboarding-target="add-category"
- className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 bg-subheader border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addCategory")}
@@ -634,7 +647,7 @@ export function MenuList({
  track("dash_menu_add_group");
  router.push({ name: "group.new" });
  }}
- className="w-full mt-2 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ className="w-full mt-3 h-12 text-sm font-medium text-muted-foreground/60 bg-subheader border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addGroup", { defaultValue: "Add group" })}

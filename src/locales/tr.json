@@ -96,6 +96,7 @@
       "moveCategoryUp": "Kategoriyi yukarı taşı",
       "moveCategoryDown": "Kategoriyi aşağı taşı",
       "editCategory": "Kategoriyi düzenle",
+      "groupPrefix": "Grup",
       "editDish": "Yemeği düzenle",
       "hideDish": "Yemeği gizle",
       "showDish": "Yemeği göster",

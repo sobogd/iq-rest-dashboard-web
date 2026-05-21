@@ -96,6 +96,7 @@
       "moveCategoryUp": "Move category up",
       "moveCategoryDown": "Move category down",
       "editCategory": "Edit category",
+      "groupPrefix": "Group",
       "editDish": "Edit dish",
       "hideDish": "Hide dish",
       "showDish": "Show dish",

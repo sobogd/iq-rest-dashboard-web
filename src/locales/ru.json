@@ -96,6 +96,7 @@
       "moveCategoryUp": "Переместить категорию вверх",
       "moveCategoryDown": "Переместить категорию вниз",
       "editCategory": "Изменить категорию",
+      "groupPrefix": "Группа",
       "editDish": "Изменить блюдо",
       "hideDish": "Скрыть блюдо",
       "showDish": "Показать блюдо",

@@ -684,7 +684,7 @@ export function DishForm({
  </span>
  ) : null}
  </div>
- <p className="text-xs text-muted-foreground mb-2.5">{t("dietsTip")}</p>
+ <p className="text-xs text-muted-foreground mb-4">{t("dietsTip")}</p>
  <div className="flex flex-wrap gap-1.5">
  {DIETS.map((d) => {
  const checked = form.diets.includes(d.code);
@@ -720,7 +720,7 @@ export function DishForm({
  </span>
  ) : null}
  </div>
- <p className="text-xs text-muted-foreground mb-2.5">{t("allergensTip")}</p>
+ <p className="text-xs text-muted-foreground mb-4">{t("allergensTip")}</p>
  <div className="flex flex-wrap gap-1.5">
  {ALLERGENS.map((a) => {
  const checked = form.allergens.includes(a.code);
@@ -749,7 +749,7 @@ export function DishForm({
 
  <div id="options-section" className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <div className="text-sm font-medium text-foreground">{t("optionsLabel")}</div>
- <p className="text-xs text-muted-foreground mb-2.5 mt-0.5">
+ <p className="text-xs text-muted-foreground mb-4 mt-0.5">
  {t("optionsTip")}
  </p>
 

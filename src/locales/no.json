@@ -96,6 +96,7 @@
       "moveCategoryUp": "Flytt kategori opp",
       "moveCategoryDown": "Flytt kategori ned",
       "editCategory": "Rediger kategori",
+      "groupPrefix": "Gruppe",
       "editDish": "Rediger rett",
       "hideDish": "Skjul rett",
       "showDish": "Vis rett",

@@ -96,6 +96,7 @@
       "moveCategoryUp": "类别上移",
       "moveCategoryDown": "类别下移",
       "editCategory": "编辑类别",
+      "groupPrefix": "分组",
       "editDish": "编辑菜品",
       "hideDish": "隐藏菜品",
       "showDish": "显示菜品",

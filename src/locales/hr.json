@@ -96,6 +96,7 @@
       "moveCategoryUp": "Pomakni kategoriju gore",
       "moveCategoryDown": "Pomakni kategoriju dolje",
       "editCategory": "Uredi kategoriju",
+      "groupPrefix": "Grupa",
       "editDish": "Uredi jelo",
       "hideDish": "Sakrij jelo",
       "showDish": "Prikaži jelo",

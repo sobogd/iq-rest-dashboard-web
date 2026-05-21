@@ -96,6 +96,7 @@
       "moveCategoryUp": "Mou categoria amunt",
       "moveCategoryDown": "Mou categoria avall",
       "editCategory": "Edita categoria",
+      "groupPrefix": "Grup",
       "editDish": "Edita plat",
       "hideDish": "Amaga plat",
       "showDish": "Mostra plat",

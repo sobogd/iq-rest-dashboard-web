@@ -96,6 +96,7 @@
       "moveCategoryUp": "카테고리 위로",
       "moveCategoryDown": "카테고리 아래로",
       "editCategory": "카테고리 편집",
+      "groupPrefix": "그룹",
       "editDish": "요리 편집",
       "hideDish": "요리 숨기기",
       "showDish": "요리 표시",

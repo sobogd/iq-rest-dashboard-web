@@ -96,6 +96,7 @@
       "moveCategoryUp": "カテゴリを上へ",
       "moveCategoryDown": "カテゴリを下へ",
       "editCategory": "カテゴリを編集",
+      "groupPrefix": "グループ",
       "editDish": "料理を編集",
       "hideDish": "料理を非表示",
       "showDish": "料理を表示",
