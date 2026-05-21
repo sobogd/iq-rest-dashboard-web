@@ -667,6 +667,7 @@ function AllLanguagesModal({
 
  const ta = useTranslations("dashboard.allLangsModal");
  const helpText = title ? ta("subtitle", { field: title }) : ta("subtitleGeneric");
+ const sourceText = getMl(value, defaultLang);
  return (
  <Modal
  open={open}
@@ -677,6 +678,7 @@ function AllLanguagesModal({
  <HelpButton text={helpText} />
  </span>
  }
+ subtitle={sourceText || undefined}
  size="md"
  footer={
  <div className="flex items-center justify-end">
