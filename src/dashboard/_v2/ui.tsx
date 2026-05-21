@@ -574,7 +574,23 @@ function AllLanguagesModal({
  })();
 
  return (
- <Modal open={open} onClose={onClose} title={title || tc("translate")} size="md">
+ <Modal
+ open={open}
+ onClose={onClose}
+ title={title || tc("translate")}
+ size="md"
+ footer={
+ <div className="flex items-center justify-end">
+ <button
+ type="button"
+ onClick={onClose}
+ className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary rounded-lg transition-colors"
+ >
+ {tc("ok")}
+ </button>
+ </div>
+ }
+ >
  <div className="space-y-3">
  {ordered.map((code) => {
  const meta = AVAILABLE_LANGUAGES.find((l) => l.code === code);
@@ -588,7 +604,7 @@ function AllLanguagesModal({
  <span>{meta?.short ?? code}</span>
  {isDefault ? (
  <span className="text-[10px] px-1 py-0.5 rounded bg-secondary text-muted-foreground uppercase">
- {tc("default") || "default"}
+ default
  </span>
  ) : null}
  </div>
