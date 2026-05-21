@@ -1334,7 +1334,7 @@ export function OptionForm({
  <button
  type="button"
  onClick={addVariant}
- className="w-full mt-3 h-10 text-sm font-medium text-muted-foreground bg-card border border-dashed border-input rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+ className="w-full mt-3 mb-6 h-10 text-sm font-medium text-muted-foreground bg-card border border-dashed border-input rounded-lg flex items-center justify-center gap-1.5 transition-colors"
  >
  <PlusIcon size={14} />
  {t("addVariant")}
@@ -1342,7 +1342,7 @@ export function OptionForm({
  </div>
 
  {embedded ? (
- <div className="sticky bottom-0 -mx-5 -mb-5 mt-5 px-5 py-3 bg-card border-t border-border flex items-center justify-between gap-2 z-10">
+ <div className="sticky -bottom-5 -mx-5 -mb-5 px-5 py-3 bg-card border-t border-border flex items-center justify-between gap-2 z-10">
  {!isNew ? (
  <button
  type="button"
