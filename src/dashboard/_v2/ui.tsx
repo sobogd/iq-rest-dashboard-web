@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { apiUrl } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -547,12 +548,28 @@ export function TranslatedInput({
 
 export function HelpButton({ text }: { text: string }) {
  const [open, setOpen] = useState(false);
- const ref = useRef<HTMLDivElement | null>(null);
+ const btnRef = useRef<HTMLButtonElement | null>(null);
+ const popRef = useRef<HTMLDivElement | null>(null);
+ const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
  useEffect(() => {
  if (!open) return;
+ // Anchor the popover to the button's screen rect. Recompute on resize
+ // and scroll so it stays glued even when the modal's body scrolls.
+ function compute() {
+ const el = btnRef.current;
+ if (!el) return;
+ const r = el.getBoundingClientRect();
+ setPos({ top: r.bottom + 8, left: r.left + r.width / 2 });
+ }
+ compute();
+ window.addEventListener("resize", compute);
+ window.addEventListener("scroll", compute, true);
  function onDown(e: MouseEvent) {
- if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+ const t = e.target as Node;
+ if (btnRef.current?.contains(t)) return;
+ if (popRef.current?.contains(t)) return;
+ setOpen(false);
  }
  function onKey(e: KeyboardEvent) {
  if (e.key === "Escape") setOpen(false);
@@ -560,14 +577,17 @@ export function HelpButton({ text }: { text: string }) {
  window.addEventListener("mousedown", onDown);
  window.addEventListener("keydown", onKey);
  return () => {
+ window.removeEventListener("resize", compute);
+ window.removeEventListener("scroll", compute, true);
  window.removeEventListener("mousedown", onDown);
  window.removeEventListener("keydown", onKey);
  };
  }, [open]);
 
  return (
- <span ref={ref} className="relative inline-flex items-center">
+ <>
  <button
+ ref={btnRef}
  type="button"
  onClick={(e) => {
  e.stopPropagation();
@@ -578,15 +598,20 @@ export function HelpButton({ text }: { text: string }) {
  >
  <HelpCircleIcon size={16} />
  </button>
- {open ? (
- <span
+ {open && pos
+ ? createPortal(
+ <div
+ ref={popRef}
  role="tooltip"
- className="absolute z-10 top-full left-1/2 -translate-x-1/2 mt-2 w-72 max-w-[calc(100vw-2rem)] p-3 rounded-lg bg-popover border border-border shadow-lg text-xs text-foreground font-normal leading-snug normal-case"
+ style={{ top: pos.top, left: pos.left, transform: "translateX(-50%)" }}
+ className="fixed z-[60] w-72 max-w-[calc(100vw-2rem)] p-3 rounded-lg bg-card border border-border shadow-lg text-xs text-foreground font-normal leading-snug normal-case"
  >
  {text}
- </span>
- ) : null}
- </span>
+ </div>,
+ document.body,
+ )
+ : null}
+ </>
  );
 }
 
