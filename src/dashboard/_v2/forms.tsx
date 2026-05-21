@@ -1457,9 +1457,6 @@ function VariantRow({
  />
  </div>
  <div className="w-16 md:w-20 shrink-0 relative">
- <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
- {currencySymbol}
- </span>
  <input
  type="text"
  inputMode="decimal"
@@ -1467,8 +1464,11 @@ function VariantRow({
  onChange={(e) => onChange({ priceDelta: sanitizePriceInput(e.target.value) })}
  placeholder="0"
  title={t("priceModifier")}
- className={inputClass + " pl-5 pr-1 tabular-nums"}
+ className={inputClass + " pl-2 pr-7 tabular-nums"}
  />
+ <span className="absolute top-1 right-1 w-7 h-8 inline-flex items-center justify-center text-xs text-muted-foreground pointer-events-none">
+ {currencySymbol}
+ </span>
  </div>
  <button
  type="button"
