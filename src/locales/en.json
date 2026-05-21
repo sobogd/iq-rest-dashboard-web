@@ -579,6 +579,7 @@
       "deleteMessage": "{name} will be permanently deleted along with its menu, tables, orders and reservations. This cannot be undone.",
       "deleted": "Deleted",
       "switched": "Switched",
+      "switching": "Switching restaurant…",
       "add": "Add restaurant",
       "addDesc": "Create another restaurant — duplicate this menu or start blank.",
       "paidOnly": "Multiple restaurants are available on a paid plan. Upgrade in Billing to add more.",

@@ -579,6 +579,7 @@
       "deleteMessage": "{name} será eliminado permanentemente juntamente com o menu, mesas, pedidos e reservas. Esta ação não pode ser revertida.",
       "deleted": "Eliminado",
       "switched": "Alterado",
+      "switching": "A alternar restaurante…",
       "add": "Adicionar restaurante",
       "addDesc": "Crie outro restaurante — duplique este menu ou comece do zero.",
       "paidOnly": "Vários restaurantes estão disponíveis no plano pago. Faça upgrade em Faturação para adicionar mais.",

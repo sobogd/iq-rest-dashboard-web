@@ -579,6 +579,7 @@
       "deleteMessage": "{name} tas bort permanent tillsammans med menyn, borden, beställningarna och bokningarna. Åtgärden kan inte ångras.",
       "deleted": "Borttagen",
       "switched": "Bytt",
+      "switching": "Byter restaurang…",
       "add": "Lägg till restaurang",
       "addDesc": "Skapa en annan restaurang — duplicera den här menyn eller börja från noll.",
       "paidOnly": "Flera restauranger är tillgängliga i ett betalt abonnemang. Uppgradera under Fakturering för att lägga till fler.",

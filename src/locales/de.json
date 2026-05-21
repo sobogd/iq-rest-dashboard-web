@@ -579,6 +579,7 @@
       "deleteMessage": "{name} wird mitsamt Menü, Tischen, Bestellungen und Reservierungen dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
       "deleted": "Gelöscht",
       "switched": "Gewechselt",
+      "switching": "Restaurant wird gewechselt…",
       "add": "Restaurant hinzufügen",
       "addDesc": "Erstelle ein weiteres Restaurant — dieses Menü duplizieren oder neu beginnen.",
       "paidOnly": "Mehrere Restaurants sind im bezahlten Tarif verfügbar. Im Abrechnungsbereich upgraden, um weitere hinzuzufügen.",

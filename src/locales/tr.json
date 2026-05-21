@@ -579,6 +579,7 @@
       "deleteMessage": "{name} menüsü, masaları, siparişleri ve rezervasyonlarıyla birlikte kalıcı olarak silinecek. Bu işlem geri alınamaz.",
       "deleted": "Silindi",
       "switched": "Geçildi",
+      "switching": "Restoran değiştiriliyor…",
       "add": "Restoran ekle",
       "addDesc": "Başka bir restoran oluşturun — bu menüyü çoğaltın veya sıfırdan başlayın.",
       "paidOnly": "Birden fazla restoran ücretli planda kullanılabilir. Daha fazla eklemek için Faturalandırma'dan yükseltin.",

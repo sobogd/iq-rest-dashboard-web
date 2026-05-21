@@ -579,6 +579,7 @@
       "deleteMessage": "{name} poistetaan pysyvästi yhdessä ruokalistan, pöytien, tilausten ja varausten kanssa. Tätä toimintoa ei voi peruuttaa.",
       "deleted": "Poistettu",
       "switched": "Vaihdettu",
+      "switching": "Vaihdetaan ravintolaa…",
       "add": "Lisää ravintola",
       "addDesc": "Luo toinen ravintola — kopioi tämä ruokalista tai aloita tyhjästä.",
       "paidOnly": "Useat ravintolat ovat saatavilla maksullisessa tilauksessa. Päivitä Laskutuksesta lisätäksesi niitä.",

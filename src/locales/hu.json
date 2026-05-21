@@ -579,6 +579,7 @@
       "deleteMessage": "A(z) {name} véglegesen törlődik az étlappal, asztalokkal, rendelésekkel és foglalásokkal együtt. Ez a művelet nem visszavonható.",
       "deleted": "Törölve",
       "switched": "Átváltva",
+      "switching": "Étterem váltása…",
       "add": "Étterem hozzáadása",
       "addDesc": "Hozz létre másik éttermet — másold át ezt az étlapot, vagy kezdj a nulláról.",
       "paidOnly": "A több étterem fizetős csomagban érhető el. Frissíts a Számlázásnál, hogy többet adhass hozzá.",

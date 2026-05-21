@@ -579,6 +579,7 @@
       "deleteMessage": "{name} sera supprimé définitivement avec son menu, ses tables, ses commandes et ses réservations. Cette action est irréversible.",
       "deleted": "Supprimé",
       "switched": "Changé",
+      "switching": "Changement de restaurant…",
       "add": "Ajouter un restaurant",
       "addDesc": "Créez un autre restaurant — dupliquez ce menu ou partez de zéro.",
       "paidOnly": "Plusieurs restaurants sont disponibles dans une formule payante. Mettez à niveau dans Facturation pour en ajouter.",

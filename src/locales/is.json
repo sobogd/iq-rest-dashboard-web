@@ -579,6 +579,7 @@
       "deleteMessage": "{name} verður eytt varanlega ásamt matseðli, borðum, pöntunum og bókunum. Þessari aðgerð er ekki hægt að afturkalla.",
       "deleted": "Eytt",
       "switched": "Skipt",
+      "switching": "Skipti um veitingastað…",
       "add": "Bæta veitingastað við",
       "addDesc": "Stofnaðu annan veitingastað — afritaðu þennan matseðil eða byrjaðu á núlli.",
       "paidOnly": "Margir veitingastaðir eru í boði í greiddri áskrift. Uppfærðu undir Reikningar til að bæta við fleirum.",

@@ -579,6 +579,7 @@
       "deleteMessage": "{name} bit će trajno izbrisan zajedno s jelovnikom, stolovima, narudžbama i rezervacijama. Ovu radnju nije moguće poništiti.",
       "deleted": "Izbrisano",
       "switched": "Prebačeno",
+      "switching": "Prebacivanje restorana…",
       "add": "Dodaj restoran",
       "addDesc": "Stvori još jedan restoran — kopiraj ovaj jelovnik ili započni iznova.",
       "paidOnly": "Više restorana dostupno je u plaćenom planu. Nadogradi pod Naplata da dodaš još.",

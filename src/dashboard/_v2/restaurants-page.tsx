@@ -73,10 +73,10 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   }, []);
 
   const onSwitch = async (id: string) => {
-    if (id === activeId) return;
+    if (id === activeId || switching) return;
     try {
       await setActive(id);
-      toast.success(t("switched"));
+      router.resetTo({ name: "menu" });
     } catch (err) {
       toast.error((err as Error).message || t("switched"));
     }
@@ -187,6 +187,14 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
         onCancel={() => setPendingDelete(null)}
         confirmLabel={t("delete")}
       />
+      {switching ? (
+        <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-10 h-10 border-[3px] border-input border-t-foreground rounded-full animate-spin" />
+            <div className="text-xs text-muted-foreground">{t("switching")}</div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

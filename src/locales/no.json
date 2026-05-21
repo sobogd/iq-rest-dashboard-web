@@ -579,6 +579,7 @@
       "deleteMessage": "{name} slettes permanent sammen med menyen, bordene, bestillingene og reservasjonene. Dette kan ikke angres.",
       "deleted": "Slettet",
       "switched": "Byttet",
+      "switching": "Bytter restaurant…",
       "add": "Legg til restaurant",
       "addDesc": "Opprett en annen restaurant — dupliser denne menyen eller start på nytt.",
       "paidOnly": "Flere restauranter er tilgjengelig i betalt plan. Oppgrader under Fakturering for å legge til flere.",

@@ -579,6 +579,7 @@
       "deleteMessage": "{name} va fi șters definitiv împreună cu meniul, mesele, comenzile și rezervările. Această acțiune nu poate fi anulată.",
       "deleted": "Șters",
       "switched": "Comutat",
+      "switching": "Se schimbă restaurantul…",
       "add": "Adaugă restaurant",
       "addDesc": "Creează un alt restaurant — duplică acest meniu sau pornește de la zero.",
       "paidOnly": "Mai multe restaurante sunt disponibile într-un plan plătit. Actualizează la Facturare pentru a adăuga mai multe.",

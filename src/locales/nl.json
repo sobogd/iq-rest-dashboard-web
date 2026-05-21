@@ -579,6 +579,7 @@
       "deleteMessage": "{name} wordt permanent verwijderd samen met het menu, de tafels, bestellingen en reserveringen. Deze actie kan niet ongedaan worden gemaakt.",
       "deleted": "Verwijderd",
       "switched": "Gewisseld",
+      "switching": "Restaurant wisselen…",
       "add": "Restaurant toevoegen",
       "addDesc": "Maak een ander restaurant — dupliceer dit menu of begin met een leeg restaurant.",
       "paidOnly": "Meerdere restaurants zijn beschikbaar in een betaald abonnement. Upgrade in Facturering om er meer toe te voegen.",

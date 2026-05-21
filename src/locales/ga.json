@@ -579,6 +579,7 @@
       "deleteMessage": "Scriosfar {name} go buan mar aon lena bhiachlár, lena bhoird, lena orduithe agus lena áirithintí. Ní féidir é a chealú.",
       "deleted": "Scriosta",
       "switched": "Athraithe",
+      "switching": "Bialann á hathrú…",
       "add": "Cuir bialann leis",
       "addDesc": "Cruthaigh bialann eile — déan dúblach den bhiachlár seo nó tosaigh ó thús.",
       "paidOnly": "Tá iliomad bialann ar fáil i bplean íoctha. Uasghrádaigh i mBilleáil chun tuilleadh a chur leis.",

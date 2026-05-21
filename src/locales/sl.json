@@ -579,6 +579,7 @@
       "deleteMessage": "{name} bo trajno izbrisan skupaj z menijem, mizami, naročili in rezervacijami. Tega dejanja ni mogoče razveljaviti.",
       "deleted": "Izbrisano",
       "switched": "Preklopljeno",
+      "switching": "Preklapljanje restavracije…",
       "add": "Dodaj restavracijo",
       "addDesc": "Ustvarite drugo restavracijo — podvojite ta meni ali začnite na novo.",
       "paidOnly": "Več restavracij je na voljo v plačljivem paketu. Nadgradite v razdelku Plačila, da jih dodate več.",

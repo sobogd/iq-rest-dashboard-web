@@ -579,6 +579,7 @@
       "deleteMessage": "{name} tiks neatgriezeniski dzēsts kopā ar ēdienkarti, galdiņiem, pasūtījumiem un rezervācijām. Šo darbību nevar atsaukt.",
       "deleted": "Dzēsts",
       "switched": "Pārslēgts",
+      "switching": "Pārslēdzu restorānu…",
       "add": "Pievienot restorānu",
       "addDesc": "Izveidojiet citu restorānu — dublējiet šo ēdienkarti vai sāciet no nulles.",
       "paidOnly": "Vairāki restorāni pieejami maksas plānā. Jaunināt sadaļā Norēķini, lai pievienotu vēl.",

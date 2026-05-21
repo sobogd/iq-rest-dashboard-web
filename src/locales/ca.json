@@ -579,6 +579,7 @@
       "deleteMessage": "{name} se suprimirà definitivament junt amb el seu menú, taules, comandes i reserves. Aquesta acció no es pot desfer.",
       "deleted": "Suprimit",
       "switched": "Canviat",
+      "switching": "Canviant de restaurant…",
       "add": "Afegeix restaurant",
       "addDesc": "Crea un altre restaurant: duplica aquest menú o comença de zero.",
       "paidOnly": "Diversos restaurants estan disponibles al pla de pagament. Actualitza a Facturació per afegir-ne més.",
