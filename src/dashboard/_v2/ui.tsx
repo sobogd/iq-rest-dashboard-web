@@ -410,7 +410,11 @@ function AutoGrowTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElemen
  const el = ref.current;
  if (!el) return;
  el.style.height = "auto";
- el.style.height = el.scrollHeight + "px";
+ // scrollHeight reports content + padding only; with border-box sizing
+ // we still owe the element its border width (otherwise the bottom row
+ // is clipped by 2 px and the bottom padding visually shrinks).
+ const borderY = el.offsetHeight - el.clientHeight;
+ el.style.height = el.scrollHeight + borderY + "px";
  }, [props.value]);
 
  const baseCls = inputClass + " h-10 py-2 resize-none overflow-hidden";
