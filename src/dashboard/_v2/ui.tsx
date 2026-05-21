@@ -74,7 +74,7 @@ export function Modal({
  className={
  "relative w-full " +
  widthCls +
- " bg-card border border-border rounded-2xl max-h-[92vh] flex flex-col"
+ " bg-card border border-border rounded-2xl max-h-[90dvh] flex flex-col"
  }
  >
  <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border">
