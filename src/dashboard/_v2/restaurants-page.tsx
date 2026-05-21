@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRestaurants } from "./restaurants-context";
-import { ConfirmDialog, SubpageStickyBar } from "./ui";
+import { Modal, SubpageStickyBar } from "./ui";
 import { ChevronRightIcon, CheckIcon } from "./icons";
 import { createRestaurant, deleteRestaurant, previewRestaurantSlug } from "./api";
 import { useDashboardRouter } from "../_spa/router";
@@ -63,10 +62,11 @@ function ModeCard({
 
 export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   const t = useTranslations("dashboard.restaurants");
+  const tc = useTranslations("dashboard.common");
   const { list, activeId, isPaid, switching, setActive, refresh } = useRestaurants();
   const router = useDashboardRouter();
-  const [busyId, setBusyId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -74,12 +74,8 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
 
   const onSwitch = async (id: string) => {
     if (id === activeId || switching) return;
-    try {
-      await setActive(id);
-      router.resetTo({ name: "menu" });
-    } catch (err) {
-      toast.error((err as Error).message || t("switched"));
-    }
+    await setActive(id).catch(() => undefined);
+    router.resetTo({ name: "menu" });
   };
 
   const askDelete = (id: string, name: string) => {
@@ -88,10 +84,9 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   };
 
   const confirmDelete = async () => {
-    if (!pendingDelete) return;
+    if (!pendingDelete || deleting) return;
     const { id } = pendingDelete;
-    setPendingDelete(null);
-    setBusyId(id);
+    setDeleting(true);
     try {
       await deleteRestaurant(id);
       if (id === activeId) {
@@ -99,11 +94,11 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
         if (next) await setActive(next.id);
       }
       await refresh();
-      toast.success(t("deleted"));
-    } catch (err) {
-      toast.error((err as Error).message || t("deleted"));
+      setPendingDelete(null);
+    } catch {
+      // surface failure via the modal staying open + button re-enabling
     } finally {
-      setBusyId(null);
+      setDeleting(false);
     }
   };
 
@@ -150,8 +145,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
                   <button
                     type="button"
                     onClick={() => askDelete(r.id, r.title)}
-                    disabled={busyId === r.id}
-                    className="text-xs text-red-600 hover:text-red-700 px-2 py-1 disabled:opacity-50"
+                    className="text-xs text-red-600 hover:text-red-700 px-2 py-1"
                   >
                     {t("delete")}
                   </button>
@@ -179,14 +173,40 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
           )}
         </div>
       </div>
-      <ConfirmDialog
+      <Modal
         open={!!pendingDelete}
+        onClose={() => { if (!deleting) setPendingDelete(null); }}
         title={t("deleteTitle")}
-        message={pendingDelete ? t("deleteMessage", { name: pendingDelete.name }) : ""}
-        onConfirm={confirmDelete}
-        onCancel={() => setPendingDelete(null)}
-        confirmLabel={t("delete")}
-      />
+        size="sm"
+        closeOnBackdrop={!deleting}
+        footer={
+          <div className="flex gap-2 justify-end">
+            <button
+              type="button"
+              onClick={() => setPendingDelete(null)}
+              disabled={deleting}
+              className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors disabled:opacity-50"
+            >
+              {tc("cancel")}
+            </button>
+            <button
+              type="button"
+              onClick={confirmDelete}
+              disabled={deleting}
+              className="h-8 px-3 text-xs font-medium text-white bg-red-600 rounded-lg transition-colors inline-flex items-center gap-1.5 disabled:opacity-70"
+            >
+              {deleting ? (
+                <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              ) : null}
+              {t("delete")}
+            </button>
+          </div>
+        }
+      >
+        <p className="text-sm text-muted-foreground leading-snug">
+          {pendingDelete ? t("deleteMessage", { name: pendingDelete.name }) : ""}
+        </p>
+      </Modal>
       {switching ? (
         <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
@@ -263,10 +283,8 @@ export function RestaurantNewPage({ onBack }: { onBack: () => void }) {
         predicate: (q) => !(Array.isArray(q.queryKey) && q.queryKey[0] === "restaurants"),
       });
       await refresh();
-      toast.success(t("created"));
       router.push({ name: "settings.restaurants" });
-    } catch (err) {
-      toast.error((err as Error).message || t("created"));
+    } catch {
       setSubmitting(false);
     }
   };
