@@ -681,7 +681,7 @@ function AllLanguagesModal({
  open={open}
  onClose={onClose}
  title={
- <span className="inline-flex items-center gap-1">
+ <span className="inline-flex items-center gap-2">
  <span>{ta("title")}</span>
  <HelpButton text={helpText} />
  </span>
