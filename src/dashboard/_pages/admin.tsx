@@ -90,7 +90,7 @@ export function AdminPage() {
             className={
               "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
               (sortByLastVisit
-                ? "bg-primary text-primary-foreground"
+                ? "bg-primary-gradient text-primary-foreground"
                 : "bg-secondary text-muted-foreground hover:text-foreground")
             }
           >
@@ -103,7 +103,7 @@ export function AdminPage() {
             className={
               "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
               (scanDetails
-                ? "bg-primary text-primary-foreground"
+                ? "bg-primary-gradient text-primary-foreground"
                 : "bg-secondary text-muted-foreground hover:text-foreground")
             }
           >

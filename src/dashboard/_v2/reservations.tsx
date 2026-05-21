@@ -239,7 +239,7 @@ function ViewBtn({ active, onClick, children }: { active: boolean; onClick: () =
    onClick={onClick}
    className={
     "h-8 px-3 text-xs font-medium transition-colors " +
-    (active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+    (active ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")
    }
   >
    {children}
@@ -279,7 +279,7 @@ function CtaState({ title, body, cta, onClick }: { title: string; body: string; 
    <button
     type="button"
     onClick={onClick}
-    className="inline-flex items-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+    className="inline-flex items-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
    >
     {cta}
    </button>

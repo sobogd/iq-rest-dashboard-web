@@ -407,7 +407,7 @@ export function OrdersPage({
  <button
  type="button"
  onClick={() => dashRouter.push({ name: "settings.orders" })}
- className="inline-flex items-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
+ className="inline-flex items-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition"
  >
  {t("disabledCta")}
  </button>
@@ -679,7 +679,7 @@ export function OrdersPage({
  type="button"
  onClick={startTablelessOrder}
  disabled={creating}
- className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition disabled:opacity-50"
+ className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition disabled:opacity-50"
  >
  <PlusIcon size={16} className="mr-1.5" />
  {t("newOrder")}
@@ -2396,7 +2396,7 @@ function CompleteOrderModal({
  <span
  className={
  "w-5 h-5 rounded-full inline-flex items-center justify-center shrink-0 transition-colors " +
- (isOn ? "bg-primary text-primary-foreground" : "border border-input")
+ (isOn ? "bg-primary-gradient text-primary-foreground" : "border border-input")
  }
  >
  {isOn ? (

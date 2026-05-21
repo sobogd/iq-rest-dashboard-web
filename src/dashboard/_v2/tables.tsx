@@ -170,7 +170,7 @@ export function FloorMap({
  : isReady
  ? "bg-emerald-500 text-white"
  : isOccupied
- ? "bg-primary text-primary-foreground"
+ ? "bg-primary-gradient text-primary-foreground"
  : "bg-card text-foreground";
  const badge = badgeFor ? badgeFor(t.id) : null;
  return (
@@ -206,7 +206,7 @@ export function FloorMap({
  <span
  className={
  "absolute -top-1 -right-1 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full border-2 border-card " +
- (isReady ? "bg-emerald-500 text-white" : "bg-primary text-primary-foreground")
+ (isReady ? "bg-emerald-500 text-white" : "bg-primary-gradient text-primary-foreground")
  }
  >
  {badge}

@@ -1442,7 +1442,7 @@ function StrategyBidEditModal({
           <button
             type="submit"
             disabled={!canSave}
-            className="w-full h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+            className="w-full h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
           >
             {saving ? "Saving…" : "Save"}
           </button>
@@ -1536,7 +1536,7 @@ function TabGroup({ options, selected, onSelect }: { options: Array<{ value: str
           key={o.value}
           type="button"
           onClick={() => onSelect(o.value)}
-          className={"h-7 min-w-7 px-2 rounded text-[11px] font-medium uppercase tracking-wider tabular-nums transition-colors inline-flex items-center justify-center " + (selected === o.value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+          className={"h-7 min-w-7 px-2 rounded text-[11px] font-medium uppercase tracking-wider tabular-nums transition-colors inline-flex items-center justify-center " + (selected === o.value ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
         >
           {o.label}
         </button>
@@ -1805,7 +1805,7 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
                         }}
                         className={`text-[11px] px-2.5 h-7 rounded-full border transition-colors ${
                           allOn
-                            ? "bg-primary text-primary-foreground border-primary"
+                            ? "bg-primary-gradient text-primary-foreground border-primary"
                             : "bg-secondary text-foreground border-border hover:bg-secondary/70"
                         }`}
                       >
@@ -1836,7 +1836,7 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
                         }}
                         className={`text-[10px] px-2 h-6 rounded border transition-colors ${
                           on
-                            ? "bg-primary text-primary-foreground border-primary"
+                            ? "bg-primary-gradient text-primary-foreground border-primary"
                             : "bg-background text-muted-foreground border-border hover:text-foreground"
                         }`}
                       >
@@ -1856,7 +1856,7 @@ function PlannerModal({ state, campaignId, targeting, adGroupId, onAddKeyword, o
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+                className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
               >
                 {submitting ? "Analyzing…" : "Analyze"}
               </button>
@@ -2119,7 +2119,7 @@ function BidEditModal({
               <button
                 type="submit"
                 disabled={!canSave}
-                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
+                className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
               >
                 {saving ? "Saving…" : "Save"}
               </button>
@@ -2473,7 +2473,7 @@ function AddKeywordModal({
                   key={mt}
                   type="button"
                   onClick={() => setMatchType(mt)}
-                  className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (matchType === mt ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+                  className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (matchType === mt ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
                 >
                   {mt}
                 </button>
@@ -2504,7 +2504,7 @@ function AddKeywordModal({
                 const active = negative === p.value;
                 const activeColor = p.value
                   ? "bg-red-500 text-white"
-                  : "bg-primary text-primary-foreground";
+                  : "bg-primary-gradient text-primary-foreground";
                 return (
                   <button
                     key={p.label}
@@ -2523,7 +2523,7 @@ function AddKeywordModal({
             <button
               type="submit"
               disabled={!canSave}
-              className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+              className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
             >
               {saving ? "Saving…" : "Save"}
             </button>
@@ -2813,7 +2813,7 @@ function AdGroupFormModal({
       onClick={() => setTab(k)}
       className={
         "h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 " +
-        (tab === k ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+        (tab === k ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")
       }
     >
       <span>{label}</span>
@@ -2873,7 +2873,7 @@ function AdGroupFormModal({
                         key={s}
                         type="button"
                         onClick={() => setStatus(s)}
-                        className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (status === s ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
+                        className={"h-8 px-3 rounded text-[11px] font-semibold uppercase tracking-wider transition-colors inline-flex items-center justify-center " + (status === s ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")}
                       >
                         {s}
                       </button>
@@ -3115,7 +3115,7 @@ function AdGroupFormModal({
             type="button"
             onClick={() => void save()}
             disabled={!canSave}
-            className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+            className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
           >
             {saving ? "Saving…" : isEdit ? "Save" : "Create"}
           </button>
@@ -3289,7 +3289,7 @@ function SitelinksTab({
             type="button"
             onClick={() => void add()}
             disabled={!canAdd}
-            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+            className="h-8 px-3 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
           >
             {saving ? "Adding…" : "Add"}
           </button>
@@ -3414,7 +3414,7 @@ function CalloutsTab({
             type="button"
             onClick={() => void add()}
             disabled={!canAdd}
-            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
+            className="h-8 px-3 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity shrink-0"
           >
             {saving ? "Adding…" : "Add"}
           </button>
@@ -3583,7 +3583,7 @@ function SnippetTab({
             type="button"
             onClick={() => void add()}
             disabled={!canAdd}
-            className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+            className="h-8 px-3 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
           >
             {saving ? "Adding…" : "Add"}
           </button>

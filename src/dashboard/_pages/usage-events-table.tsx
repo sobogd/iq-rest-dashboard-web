@@ -392,7 +392,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         className={
           "h-8 w-8 inline-flex items-center justify-center rounded-md text-sm font-bold disabled:opacity-40 " +
           (shiftPending
-            ? "bg-primary text-primary-foreground"
+            ? "bg-primary-gradient text-primary-foreground"
             : "bg-secondary text-muted-foreground hover:text-foreground")
         }
         title={shiftPending ? "Click any event to select the range to it" : "Arm Shift: next click selects the range"}

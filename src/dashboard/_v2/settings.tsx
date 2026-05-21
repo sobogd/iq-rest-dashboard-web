@@ -1365,7 +1365,7 @@ export function LanguagesSettingsPage({
  <button
  type="button"
  onClick={() => { setTranslateError(null); }}
- className="w-full h-10 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90"
+ className="w-full h-10 rounded-md bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90"
  >
  {tc("close")}
  </button>
@@ -1761,7 +1761,7 @@ function SupportBubble({ message }: { message: ApiSupportMessage }) {
  hour12: false,
  });
  const cls = isUser
- ? "bg-primary text-primary-foreground rounded-tr-sm"
+ ? "bg-primary-gradient text-primary-foreground rounded-tr-sm"
  : "bg-secondary text-foreground rounded-tl-sm";
 
  return (

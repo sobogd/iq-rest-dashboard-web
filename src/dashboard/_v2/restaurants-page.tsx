@@ -46,7 +46,7 @@ function ModeCard({
       <div
         className={`absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center transition-all ${
           active
-            ? "bg-primary text-primary-foreground scale-100"
+            ? "bg-primary-gradient text-primary-foreground scale-100"
             : "bg-transparent border-2 border-border scale-90"
         }`}
       >

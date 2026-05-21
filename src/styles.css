@@ -213,3 +213,18 @@ html {
   );
   animation: shimmer 1.5s infinite;
 }
+
+@layer components {
+  /* Primary action button gradient — matches the landing page CTA.
+     Apply alongside text-primary-foreground; rounded/padding stay
+     from whatever button class wears it. Hover dims via Tailwind's
+     hover:opacity-90 if you want it. */
+  .bg-primary-gradient {
+    background-image: linear-gradient(
+      to bottom right,
+      hsl(9 100% 58%),
+      hsl(35 95% 55%)
+    );
+    background-color: hsl(var(--primary)); /* fallback for old browsers */
+  }
+}

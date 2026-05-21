@@ -796,7 +796,7 @@ function FooterIconButton({
     <button type="button" onClick={onClick} disabled={disabled} title={title} className={cls}>
       {children}
       {badge && badge > 0 ? (
-        <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-semibold tabular-nums">
+        <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 inline-flex items-center justify-center rounded-full bg-primary-gradient text-primary-foreground text-[10px] font-semibold tabular-nums">
           {badge}
         </span>
       ) : null}
@@ -812,7 +812,7 @@ function MessageBubble({ message }: { message: Message }) {
     hour12: false,
   });
   const cls = isAdmin
-    ? "bg-primary text-primary-foreground rounded-tr-sm"
+    ? "bg-primary-gradient text-primary-foreground rounded-tr-sm"
     : "bg-secondary text-foreground rounded-tl-sm";
 
   return (
@@ -954,7 +954,7 @@ function ConversionsModal({
                 type="button"
                 onClick={() => void saveGclid()}
                 disabled={!gclidInput.trim() || saving}
-                className="h-9 px-4 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+                className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
               >
                 {saving ? "Saving…" : "Apply"}
               </button>
@@ -992,7 +992,7 @@ function ConversionsModal({
                 type="button"
                 onClick={() => void sendConversion()}
                 disabled={!selected || sending}
-                className="w-full h-9 rounded-md bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
+                className="w-full h-9 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
               >
                 {sending ? "Sending…" : "Send"}
               </button>

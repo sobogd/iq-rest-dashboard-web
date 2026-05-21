@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDashboardRouter } from "./router";
 import type { View } from "./types";
@@ -85,6 +85,18 @@ function ShellBody(props: ShellInitialData) {
   const [orders, setOrders] = useState<Order[]>(props.initialOrders);
   const [bookings, setBookings] = useState<Booking[]>(props.initialBookings);
   const [tables, setTables] = useState<TableEntity[]>(props.initialTables);
+
+  // When the active restaurant changes, hard-replace orders / bookings
+  // with the new restaurant's server snapshot. The merge effects below
+  // would otherwise preserve previous-restaurant rows as "local-only".
+  const prevRestaurantIdRef = useRef<string | null>(restaurant?.id ?? null);
+  useEffect(() => {
+    if (prevRestaurantIdRef.current !== (restaurant?.id ?? null)) {
+      prevRestaurantIdRef.current = restaurant?.id ?? null;
+      setOrders(props.initialOrders);
+      setBookings(props.initialBookings);
+    }
+  }, [restaurant?.id, props.initialOrders, props.initialBookings]);
 
   // Sync polled data from TanStack Query (dashboard-host refetchInterval: 30s).
   // Merge keeps locally-created records not yet returned by the server.
