@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useFlip } from "./use-flip";
 import { Collapsible } from "./collapsible";
@@ -54,6 +55,7 @@ export function MenuList({
  const tBilling = useTranslations("dashboard.settings.billing");
  const restaurant = useRestaurant();
  const router = useDashboardRouter();
+ const qc = useQueryClient();
  const { defaultLang, currency, menuUrl } = restaurant;
  const currencySymbol = currencySymbolOf(currency);
 
@@ -147,6 +149,10 @@ export function MenuList({
   setBannerLocallyDismissed(true);
   try {
    await dismissScanBanner();
+   // Refresh the restaurant cache so the dismissed flag survives a
+   // route round-trip (menu → form → back) without the banner popping
+   // back via the old initialSub / scanBannerDismissed prop.
+   await qc.invalidateQueries({ queryKey: ["restaurant"] });
   } catch {
    // ignore — UI already hidden
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronRightIcon, CheckIcon, CopyIcon, SendIcon, SparklesIcon, CloseIcon } from "./icons";
 import {
@@ -1239,6 +1240,7 @@ export function LanguagesSettingsPage({
  const t = useTranslations("dashboard.settings");
  const tl = useTranslations("dashboard.settings.languages");
  const tc = useTranslations("dashboard.common");
+ const qc = useQueryClient();
  const [draft, setDraft] = useState({
  languages: restaurant.languages,
  defaultLang: restaurant.defaultLang,
@@ -1263,6 +1265,14 @@ export function LanguagesSettingsPage({
  try {
  await updateRestaurantLanguages(draft.languages, draft.defaultLang);
  setRestaurant((r) => ({ ...r, languages: draft.languages, defaultLang: draft.defaultLang }));
+ // Categories + items snapshots now carry new/removed translations.
+ // Invalidate the cached menu so the next render picks up the
+ // backfilled (or pruned) ml fields.
+ await Promise.all([
+ qc.invalidateQueries({ queryKey: ["categories"] }),
+ qc.invalidateQueries({ queryKey: ["items"] }),
+ qc.invalidateQueries({ queryKey: ["restaurant"] }),
+ ]);
  setTranslating(false);
  onBack();
  } catch (err) {
