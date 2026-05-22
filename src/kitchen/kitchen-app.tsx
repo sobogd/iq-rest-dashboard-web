@@ -95,6 +95,18 @@ function KitchenAppBody() {
   const snapshotRef = useRef<KitchenSnapshot | null>(null);
   snapshotRef.current = snapshot;
 
+  // Orders with un-flushed / in-flight optimistic mutations. KitchenPage
+  // populates this via onOrderPendingChange; we use it in onSseOrder to
+  // skip the server's broadcast of our own write — otherwise the SSE
+  // echo arrives while the staff is mid-tap-burst and rolls back the
+  // still-pending second tap. Stored as a ref because it's read inside
+  // the SSE handler and shouldn't trigger re-renders.
+  const pendingOrderIdsRef = useRef<Set<string>>(new Set());
+  const handleOrderPendingChange = useCallback((orderId: string, pending: boolean) => {
+    if (pending) pendingOrderIdsRef.current.add(orderId);
+    else pendingOrderIdsRef.current.delete(orderId);
+  }, []);
+
   const handleLogout = useCallback(() => {
     clearDeviceToken();
     setToken(null);
@@ -273,8 +285,16 @@ function KitchenAppBody() {
         return;
       }
 
-      const mapped = incoming.map((raw) => apiOrderToOrder(raw, snap.tablesByNumber));
+      const mapped = incoming
+        .map((raw) => apiOrderToOrder(raw, snap.tablesByNumber))
+        // Skip echoes of orders we still have local pending writes for.
+        // The SSE broadcast from our own PATCH would otherwise replace
+        // the optimistic state mid-tap-burst — staff sees an item snap
+        // back to its server status, lose the most recent tap.
+        .filter((m) => !pendingOrderIdsRef.current.has(m.id));
       const prevOrdersById = new Map(snap.orders.map((o) => [o.id, o]));
+
+      if (mapped.length === 0) return;
 
       setSnapshot((cur) => {
         if (!cur) return cur;
@@ -385,6 +405,7 @@ function KitchenAppBody() {
             void _prev;
             void next;
           }}
+          onOrderPendingChange={handleOrderPendingChange}
         />
       </KitchenShell>
       <OfflineOverlay

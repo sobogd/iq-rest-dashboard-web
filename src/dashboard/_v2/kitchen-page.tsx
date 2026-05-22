@@ -44,6 +44,12 @@ interface KitchenPageProps {
   // kitchen.* kiosk to chime on waiter-targeted transitions (→ ready).
   // Admin host doesn't need it.
   onItemAdvanced?: (prev: OrderItemStatus, next: OrderItemStatus) => void;
+  // Lifts pending-mutation tracking up to the outer kiosk shell so it can
+  // suppress SSE echoes of our own writes (otherwise the server's own
+  // /api/orders/stream broadcast races our next optimistic tap and rolls
+  // it back). When `pending=true` the outer layer should ignore any SSE
+  // updates for `orderId`; when `pending=false` it can resume applying.
+  onOrderPendingChange?: (orderId: string, pending: boolean) => void;
 }
 
 const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
@@ -60,6 +66,7 @@ export function KitchenPage({
   categories,
   defaultLang,
   onItemAdvanced,
+  onOrderPendingChange,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -126,18 +133,39 @@ export function KitchenPage({
 
   function schedulePatch(orderId: string, snapshotItems: OrderItem[]) {
     const prev = pendingPatch.current.get(orderId);
-    if (prev) clearTimeout(prev.timer);
+    if (prev) {
+      clearTimeout(prev.timer);
+    } else {
+      // First scheduled patch in this debounce window — start treating
+      // this order as "locally owned" so the outer shell stops applying
+      // SSE echoes of our own writes back over the optimistic state.
+      onOrderPendingChange?.(orderId, true);
+    }
+    const release = () => {
+      // Only release if no new tap has queued another debounce window
+      // during the PATCH inflight. Otherwise the second window's own
+      // resolve will release later.
+      if (!pendingPatch.current.has(orderId)) {
+        onOrderPendingChange?.(orderId, false);
+      }
+    };
     const timer = setTimeout(() => {
       pendingPatch.current.delete(orderId);
       const snapshot = ordersRef.current.find((o) => o.id === orderId);
-      if (!snapshot) return;
+      if (!snapshot) {
+        release();
+        return;
+      }
       patchOrder(orderId, {
         items: snapshot.items,
         total: calcOrderTotal(snapshot),
-      }).catch((err) => {
-        rollbackOrder(orderId, snapshotItems);
-        showApiError(err, "kitchenItemStatus");
-      });
+      })
+        .then(release)
+        .catch((err) => {
+          rollbackOrder(orderId, snapshotItems);
+          showApiError(err, "kitchenItemStatus");
+          release();
+        });
     }, 300);
     pendingPatch.current.set(orderId, { timer, snapshotItems });
   }
