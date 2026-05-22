@@ -17,6 +17,7 @@ import {
   unlockSound,
 } from "./sound";
 import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
+import { ZoomControls } from "./zoom-controls";
 import { KitchenPage } from "@/dashboard/_v2/kitchen-page";
 import {
   apiOrderToOrder,
@@ -406,6 +407,7 @@ function KitchenAppBody() {
             void next;
           }}
           onOrderPendingChange={handleOrderPendingChange}
+          filterBarExtras={<ZoomControls />}
         />
       </KitchenShell>
       <OfflineOverlay

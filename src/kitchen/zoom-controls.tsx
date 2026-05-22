@@ -1,0 +1,74 @@
+import { useEffect, useState } from "react";
+
+// In-page zoom for the kitchen kiosk. Implemented via the non-standard
+// `zoom` CSS property because it works on every WebKit/Blink browser
+// our planshets run (Safari/iPadOS, Android Chrome) and rescales layout
+// proportionally — unlike font-size changes, which would distort cards.
+//
+// Persisted to localStorage so the staff's chosen scale survives reloads
+// and reinstalls of the PWA. Range chosen by trial: 80–150 in 10%
+// steps. Out-of-range values are clamped on read.
+
+const STORAGE_KEY = "k-zoom";
+const MIN = 80;
+const MAX = 150;
+const STEP = 10;
+const DEFAULT_ZOOM = 100;
+
+function readStoredZoom(): number {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return DEFAULT_ZOOM;
+    const n = Number.parseInt(raw, 10);
+    if (Number.isNaN(n)) return DEFAULT_ZOOM;
+    return Math.min(MAX, Math.max(MIN, n));
+  } catch {
+    return DEFAULT_ZOOM;
+  }
+}
+
+function applyZoom(percent: number): void {
+  // Non-standard `zoom` is the only cross-browser proportional scale on
+  // iPad Safari today (transform: scale moves the layout origin and
+  // breaks sticky positioning). TypeScript doesn't model `zoom` on
+  // CSSStyleDeclaration, hence the cast.
+  (document.documentElement.style as CSSStyleDeclaration & { zoom: string }).zoom = String(percent / 100);
+}
+
+export function ZoomControls() {
+  const [zoom, setZoom] = useState<number>(() => readStoredZoom());
+
+  useEffect(() => {
+    applyZoom(zoom);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, String(zoom));
+    } catch {
+      // ignore — zoom will revert next reload on private-mode tabs
+    }
+    return () => {
+      // Reset on unmount so the admin host (which never mounts this
+      // component) isn't left zoomed when the kitchen view is closed.
+      applyZoom(DEFAULT_ZOOM);
+    };
+  }, [zoom]);
+
+  const dec = () => setZoom((z) => Math.max(MIN, z - STEP));
+  const inc = () => setZoom((z) => Math.min(MAX, z + STEP));
+
+  const btnCls =
+    "h-8 w-8 inline-flex items-center justify-center rounded-md text-xs font-semibold bg-secondary text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40";
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <button type="button" onClick={dec} disabled={zoom <= MIN} className={btnCls} aria-label="Zoom out">
+        −
+      </button>
+      <span className="text-[11px] font-medium text-muted-foreground tabular-nums min-w-[2.5rem] text-center">
+        {zoom}%
+      </span>
+      <button type="button" onClick={inc} disabled={zoom >= MAX} className={btnCls} aria-label="Zoom in">
+        +
+      </button>
+    </div>
+  );
+}

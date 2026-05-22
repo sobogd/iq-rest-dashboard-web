@@ -50,6 +50,10 @@ interface KitchenPageProps {
   // it back). When `pending=true` the outer layer should ignore any SSE
   // updates for `orderId`; when `pending=false` it can resume applying.
   onOrderPendingChange?: (orderId: string, pending: boolean) => void;
+  // Extra controls rendered to the right of the filter buttons in the
+  // sticky sub-header. The kitchen kiosk uses this for zoom +/- buttons;
+  // admin host passes nothing.
+  filterBarExtras?: React.ReactNode;
 }
 
 const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
@@ -67,6 +71,7 @@ export function KitchenPage({
   defaultLang,
   onItemAdvanced,
   onOrderPendingChange,
+  filterBarExtras,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -265,6 +270,7 @@ export function KitchenPage({
               {categoryFilter.length > 0 ? ` (${categoryFilter.length})` : ""}
             </button>
           ) : null}
+          {filterBarExtras ? <div className="ml-auto flex items-center gap-1.5">{filterBarExtras}</div> : null}
         </div>
       </div>
 
