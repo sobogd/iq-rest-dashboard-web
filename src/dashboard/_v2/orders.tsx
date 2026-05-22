@@ -5,7 +5,6 @@ import { showApiError } from "@/lib/show-api-error";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useRestaurant } from "./restaurant-context";
-import { useDashboardRouter } from "../_spa/router";
 import {
  CheckIcon,
  ChevronLeftIcon,
@@ -104,7 +103,6 @@ export function OrdersPage({
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
  const restaurant = useRestaurant();
- const dashRouter = useDashboardRouter();
  const currencySymbol = currencySymbolOf(currency);
 
  const NO_TABLE = "__no_table__";
@@ -388,26 +386,6 @@ export function OrdersPage({
  persistOrder(orderId, { items }, base);
  setView({ kind: "order", orderId });
  }
-
- if (!restaurant.orderSettings.acceptOrders) {
- return (
- <div className="max-w-5xl mx-auto md:px-6">
- <PageHeader title={t("title")} />
- <div className="bg-card border border-border rounded-2xl px-6 py-12 flex flex-col items-center text-center">
- <div className="text-sm font-medium text-foreground mb-2">{t("disabledTitle")}</div>
- <p className="text-xs text-muted-foreground mb-6 max-w-md leading-snug">{t("disabledBody")}</p>
- <button
- type="button"
- onClick={() => dashRouter.push({ name: "settings.orders" })}
- className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary-gradient text-primary-foreground text-xs font-medium transition-colors"
- >
- {t("disabledCta")}
- </button>
- </div>
- </div>
- );
- }
-
 
  // Заголовок, подзаголовок, контент и футер модалки зависят от уровня.
  let modalTitle: React.ReactNode = "";

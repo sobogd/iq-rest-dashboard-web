@@ -76,19 +76,7 @@ export function ReservationsPage({
   [bookings, focusDate],
  );
 
- // Empty / disabled states — render late so all hooks above run unconditionally.
- if (!restaurant.bookingSettings.enabled) {
-  return (
-   <CtaWrapper title={t("title")}>
-    <CtaState
-     title={t("disabledTitle")}
-     body={t("disabledBody")}
-     cta={t("disabledCta")}
-     onClick={() => router.push({ name: "settings.bookings" })}
-    />
-   </CtaWrapper>
-  );
- }
+ // Empty state — render late so all hooks above run unconditionally.
  if (tables.length === 0) {
   return (
    <CtaWrapper title={t("title")}>
