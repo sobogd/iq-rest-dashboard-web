@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRestaurants } from "./restaurants-context";
 import { Modal, SubpageStickyBar } from "./ui";
-import { ChevronRightIcon, CheckIcon } from "./icons";
+import { CheckIcon, PlusIcon } from "./icons";
 import { createRestaurant, deleteRestaurant, previewRestaurantSlug } from "./api";
 import { useDashboardRouter } from "../_spa/router";
 
@@ -158,13 +158,10 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
             <button
               type="button"
               onClick={() => router.push({ name: "settings.restaurants.new" })}
-              className="w-full text-left p-4 bg-card border border-dashed border-border rounded-xl flex items-center justify-between gap-3 hover:border-primary transition-colors"
+              className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
-              <div className="min-w-0">
-                <div className="text-sm font-medium text-foreground">+ {t("add")}</div>
-                <div className="text-xs text-muted-foreground leading-snug mt-0.5">{t("addDesc")}</div>
-              </div>
-              <ChevronRightIcon size={16} className="text-muted-foreground shrink-0" />
+              <PlusIcon size={14} />
+              {t("add")}
             </button>
           ) : (
             <div className="p-4 bg-secondary/50 border border-border rounded-xl text-xs text-muted-foreground">
