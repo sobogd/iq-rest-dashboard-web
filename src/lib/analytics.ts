@@ -1,4 +1,5 @@
 import { apiUrl } from "@/lib/api";
+import { isKioskHost } from "@/lib/device-mode";
 
 const SEARCH_HOST_REGEX =
   /(?:^|\.)(google|bing|yandex|duckduckgo|yahoo|baidu|ecosia|qwant|startpage|mojeek|brave)\.[a-z.]+$/i;
@@ -20,6 +21,7 @@ function searchReferrerHost(): string | null {
 
 export function trackEvent(event: string): void {
   if (typeof window === "undefined") return;
+  if (isKioskHost()) return;
   let qs = "";
   if (!referrerConsumed) {
     referrerConsumed = true;
