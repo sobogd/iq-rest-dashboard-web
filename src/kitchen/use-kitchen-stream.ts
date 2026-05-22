@@ -125,9 +125,15 @@ export function useKitchenStream({
       setState("connecting");
       lastActivityAt = Date.now();
 
-      const base = import.meta.env.VITE_API_URL || "/api";
-      const url = `${base}/devices/stream?token=${encodeURIComponent(token)}`;
-      const next = new EventSource(url, { withCredentials: true });
+      // Same-origin: kitchen.* nginx proxies /api/devices/stream to the
+      // dashboard-api backend so we avoid CORS + withCredentials on the
+      // EventSource. (Admin SPA uses the absolute VITE_API_URL; kitchen
+      // doesn't, by design.)
+      const url = `/api/devices/stream?token=${encodeURIComponent(token)}`;
+      // No withCredentials — we're same-origin in kitchen mode and the
+      // token is in the URL (the only way to auth an EventSource without
+      // Authorization headers).
+      const next = new EventSource(url);
       es = next;
 
       next.addEventListener("ready", () => {

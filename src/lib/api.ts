@@ -3,8 +3,13 @@
 import { landingUrl } from "./landing-url";
 import { observeResponseVersion } from "./version-check";
 import { activeRestaurantHeader } from "./active-restaurant";
+import { isKitchenHost } from "./device-mode";
 
-const BASE = import.meta.env.VITE_API_URL || "/api";
+// Admin SPA talks to dashboard-api.iq-rest.com cross-origin (VITE_API_URL
+// is absolute in prod). Kitchen kiosk talks same-origin through its own
+// nginx /api → localhost:8130 proxy so EventSource doesn't need CORS +
+// withCredentials acrobatics.
+const BASE = isKitchenHost() ? "/api" : (import.meta.env.VITE_API_URL || "/api");
 
 // Endpoints that are EXPECTED to return 401 when the visitor is unauthenticated
 // (initial auth probe etc.). For those we surface the error to the caller
