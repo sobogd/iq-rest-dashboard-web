@@ -358,7 +358,21 @@
       "disabledBody": "Увімкніть замовлення в налаштуваннях, щоб почати їх отримувати.",
       "disabledCta": "Перейти до налаштувань",
       "paymentMethodLabel": "Спосіб оплати",
-      "selectPaymentMethod": "Оберіть спосіб оплати."
+      "selectPaymentMethod": "Оберіть спосіб оплати.",
+      "discountAdd": "Додати знижку",
+      "discountEdit": "Редагувати знижку",
+      "discountRemove": "Прибрати",
+      "discountSave": "Зберегти",
+      "discountTitle": "Знижка",
+      "discountSubtitle": "Застосуйте знижку до ціни.",
+      "discountOrderTitle": "Знижка на замовлення",
+      "discountItemTitle": "Знижка на позицію",
+      "discountTypeLabel": "Тип",
+      "discountTypePercent": "Відсоток",
+      "discountTypeFixed": "Фіксована",
+      "discountValueLabel": "Значення",
+      "discountReasonLabel": "Причина (необов'язково)",
+      "discountReasonPlaceholder": "напр. Постійний клієнт"
     },
     "reservations": {
       "title": "Бронювання",

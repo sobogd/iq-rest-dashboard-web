@@ -358,7 +358,21 @@
       "disabledBody": "Включите заказы в настройках, чтобы начать их принимать.",
       "disabledCta": "Перейти в настройки",
       "paymentMethodLabel": "Способ оплаты",
-      "selectPaymentMethod": "Выберите способ оплаты."
+      "selectPaymentMethod": "Выберите способ оплаты.",
+      "discountAdd": "Добавить скидку",
+      "discountEdit": "Изменить скидку",
+      "discountRemove": "Убрать",
+      "discountSave": "Сохранить",
+      "discountTitle": "Скидка",
+      "discountSubtitle": "Примените скидку к цене.",
+      "discountOrderTitle": "Скидка на заказ",
+      "discountItemTitle": "Скидка на позицию",
+      "discountTypeLabel": "Тип",
+      "discountTypePercent": "Процент",
+      "discountTypeFixed": "Фиксированная",
+      "discountValueLabel": "Значение",
+      "discountReasonLabel": "Причина (необязательно)",
+      "discountReasonPlaceholder": "напр. Постоянный клиент"
     },
     "reservations": {
       "title": "Бронирования",

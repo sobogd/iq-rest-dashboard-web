@@ -358,7 +358,21 @@
       "disabledBody": "Ενεργοποιήστε τις παραγγελίες στις ρυθμίσεις για να αρχίσετε να τις λαμβάνετε.",
       "disabledCta": "Πήγαινε στις ρυθμίσεις",
       "paymentMethodLabel": "Μέθοδος πληρωμής",
-      "selectPaymentMethod": "Επιλέξτε μέθοδο πληρωμής."
+      "selectPaymentMethod": "Επιλέξτε μέθοδο πληρωμής.",
+      "discountAdd": "Προσθήκη έκπτωσης",
+      "discountEdit": "Επεξεργασία έκπτωσης",
+      "discountRemove": "Αφαίρεση",
+      "discountSave": "Αποθήκευση",
+      "discountTitle": "Έκπτωση",
+      "discountSubtitle": "Εφαρμόστε μια έκπτωση στην τιμή.",
+      "discountOrderTitle": "Έκπτωση παραγγελίας",
+      "discountItemTitle": "Έκπτωση είδους",
+      "discountTypeLabel": "Τύπος",
+      "discountTypePercent": "Ποσοστό",
+      "discountTypeFixed": "Σταθερό",
+      "discountValueLabel": "Τιμή",
+      "discountReasonLabel": "Λόγος (προαιρετικά)",
+      "discountReasonPlaceholder": "π.χ. Τακτικός πελάτης"
     },
     "reservations": {
       "title": "Κρατήσεις",

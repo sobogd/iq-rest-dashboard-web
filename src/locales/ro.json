@@ -358,7 +358,21 @@
       "disabledBody": "Activează comenzile în setări pentru a începe să le primești.",
       "disabledCta": "Mergi la setări",
       "paymentMethodLabel": "Metodă de plată",
-      "selectPaymentMethod": "Alege o metodă de plată."
+      "selectPaymentMethod": "Alege o metodă de plată.",
+      "discountAdd": "Adaugă reducere",
+      "discountEdit": "Editează reducerea",
+      "discountRemove": "Elimină",
+      "discountSave": "Salvează",
+      "discountTitle": "Reducere",
+      "discountSubtitle": "Aplică o reducere la preț.",
+      "discountOrderTitle": "Reducere la comandă",
+      "discountItemTitle": "Reducere la articol",
+      "discountTypeLabel": "Tip",
+      "discountTypePercent": "Procent",
+      "discountTypeFixed": "Fixă",
+      "discountValueLabel": "Valoare",
+      "discountReasonLabel": "Motiv (opțional)",
+      "discountReasonPlaceholder": "ex. Client fidel"
     },
     "reservations": {
       "title": "Rezervări",

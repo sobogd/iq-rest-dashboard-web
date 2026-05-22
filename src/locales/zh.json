@@ -358,7 +358,21 @@
       "disabledBody": "在设置中启用订单以开始接收订单。",
       "disabledCta": "前往设置",
       "paymentMethodLabel": "支付方式",
-      "selectPaymentMethod": "选择支付方式。"
+      "selectPaymentMethod": "选择支付方式。",
+      "discountAdd": "添加折扣",
+      "discountEdit": "编辑折扣",
+      "discountRemove": "移除",
+      "discountSave": "保存",
+      "discountTitle": "折扣",
+      "discountSubtitle": "对价格应用折扣。",
+      "discountOrderTitle": "订单折扣",
+      "discountItemTitle": "商品折扣",
+      "discountTypeLabel": "类型",
+      "discountTypePercent": "百分比",
+      "discountTypeFixed": "固定",
+      "discountValueLabel": "数值",
+      "discountReasonLabel": "原因(可选)",
+      "discountReasonPlaceholder": "例如:老客户"
     },
     "reservations": {
       "title": "预订",

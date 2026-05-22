@@ -358,7 +358,21 @@
       "disabledBody": "Włącz zamówienia w ustawieniach, aby zacząć je przyjmować.",
       "disabledCta": "Przejdź do ustawień",
       "paymentMethodLabel": "Metoda płatności",
-      "selectPaymentMethod": "Wybierz metodę płatności."
+      "selectPaymentMethod": "Wybierz metodę płatności.",
+      "discountAdd": "Dodaj rabat",
+      "discountEdit": "Edytuj rabat",
+      "discountRemove": "Usuń",
+      "discountSave": "Zapisz",
+      "discountTitle": "Rabat",
+      "discountSubtitle": "Zastosuj rabat do ceny.",
+      "discountOrderTitle": "Rabat na zamówienie",
+      "discountItemTitle": "Rabat na pozycję",
+      "discountTypeLabel": "Typ",
+      "discountTypePercent": "Procent",
+      "discountTypeFixed": "Stała kwota",
+      "discountValueLabel": "Wartość",
+      "discountReasonLabel": "Powód (opcjonalnie)",
+      "discountReasonPlaceholder": "np. Stały klient"
     },
     "reservations": {
       "title": "Rezerwacje",

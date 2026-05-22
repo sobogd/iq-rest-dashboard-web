@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Modal } from "./ui";
 import { inputClass } from "./tokens";
+import { sanitizePriceInput } from "./helpers";
 import type { Discount } from "./types";
 
 // Discount picker shared by the order-level "Add discount" menu and the
@@ -114,50 +115,37 @@ export function DiscountModal({
           <label className="block text-sm font-medium text-foreground mb-2.5">
             {t("discountTypeLabel", { defaultValue: "Type" })}
           </label>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setType("percent")}
-              className={
-                "h-10 rounded-lg text-sm font-medium transition-colors " +
-                (type === "percent"
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground hover:text-foreground")
-              }
-            >
+          {/* Segmented control — mirrors the day/month switch on the
+              bookings page so the kiosk + admin share one visual idiom
+              for binary mode pickers. */}
+          <div className="inline-flex items-center rounded-lg border border-border bg-card overflow-hidden">
+            <TypeBtn active={type === "percent"} onClick={() => setType("percent")}>
               {t("discountTypePercent", { defaultValue: "Percent" })} (%)
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("fixed")}
-              className={
-                "h-10 rounded-lg text-sm font-medium transition-colors " +
-                (type === "fixed"
-                  ? "bg-foreground text-background"
-                  : "bg-secondary text-muted-foreground hover:text-foreground")
-              }
-            >
+            </TypeBtn>
+            <TypeBtn active={type === "fixed"} onClick={() => setType("fixed")}>
               {t("discountTypeFixed", { defaultValue: "Fixed" })} ({currencySymbol})
-            </button>
+            </TypeBtn>
           </div>
         </div>
         <div>
           <label htmlFor="discount-value" className="block text-sm font-medium text-foreground mb-2.5">
             {t("discountValueLabel", { defaultValue: "Value" })}
           </label>
-          <input
-            id="discount-value"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
-            min="0"
-            max={type === "percent" ? 100 : undefined}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            className={inputClass}
-            autoFocus
-            placeholder={type === "percent" ? "10" : "5.00"}
-          />
+          <div className="relative">
+            <input
+              id="discount-value"
+              type="text"
+              inputMode="decimal"
+              value={value}
+              onChange={(e) => setValue(sanitizePriceInput(e.target.value))}
+              placeholder={type === "percent" ? "10" : "5.00"}
+              className={inputClass + " pl-3 pr-8 tabular-nums"}
+              autoFocus
+            />
+            <span className="absolute top-1 right-1 w-8 h-8 inline-flex items-center justify-center text-sm text-muted-foreground pointer-events-none">
+              {type === "percent" ? "%" : currencySymbol}
+            </span>
+          </div>
         </div>
         <div>
           <label htmlFor="discount-reason" className="block text-sm font-medium text-foreground mb-2.5">
@@ -174,5 +162,28 @@ export function DiscountModal({
         </div>
       </div>
     </Modal>
+  );
+}
+
+function TypeBtn({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        "h-8 px-3 text-xs font-medium transition-colors " +
+        (active ? "bg-primary-gradient text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+      }
+    >
+      {children}
+    </button>
   );
 }

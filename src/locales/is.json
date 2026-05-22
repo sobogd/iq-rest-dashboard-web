@@ -358,7 +358,21 @@
       "disabledBody": "Virkjaðu pantanir í stillingum til að byrja að taka við þeim.",
       "disabledCta": "Fara í stillingar",
       "paymentMethodLabel": "Greiðslumáti",
-      "selectPaymentMethod": "Veldu greiðslumáta."
+      "selectPaymentMethod": "Veldu greiðslumáta.",
+      "discountAdd": "Bæta við afslátt",
+      "discountEdit": "Breyta afslætti",
+      "discountRemove": "Fjarlægja",
+      "discountSave": "Vista",
+      "discountTitle": "Afsláttur",
+      "discountSubtitle": "Beittu afslætti á verðið.",
+      "discountOrderTitle": "Afsláttur af pöntun",
+      "discountItemTitle": "Afsláttur af vöru",
+      "discountTypeLabel": "Tegund",
+      "discountTypePercent": "Prósenta",
+      "discountTypeFixed": "Fast",
+      "discountValueLabel": "Gildi",
+      "discountReasonLabel": "Ástæða (valfrjálst)",
+      "discountReasonPlaceholder": "t.d. Tryggur viðskiptavinur"
     },
     "reservations": {
       "title": "Bókanir",

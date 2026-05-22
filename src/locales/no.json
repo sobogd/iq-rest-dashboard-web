@@ -358,7 +358,21 @@
       "disabledBody": "Aktiver bestillinger i innstillinger for å begynne å motta dem.",
       "disabledCta": "Gå til innstillinger",
       "paymentMethodLabel": "Betalingsmetode",
-      "selectPaymentMethod": "Velg en betalingsmetode."
+      "selectPaymentMethod": "Velg en betalingsmetode.",
+      "discountAdd": "Legg til rabatt",
+      "discountEdit": "Rediger rabatt",
+      "discountRemove": "Fjern",
+      "discountSave": "Lagre",
+      "discountTitle": "Rabatt",
+      "discountSubtitle": "Bruk en rabatt på prisen.",
+      "discountOrderTitle": "Rabatt på bestilling",
+      "discountItemTitle": "Rabatt på vare",
+      "discountTypeLabel": "Type",
+      "discountTypePercent": "Prosent",
+      "discountTypeFixed": "Fast",
+      "discountValueLabel": "Verdi",
+      "discountReasonLabel": "Årsak (valgfritt)",
+      "discountReasonPlaceholder": "f.eks. Lojal kunde"
     },
     "reservations": {
       "title": "Bookinger",

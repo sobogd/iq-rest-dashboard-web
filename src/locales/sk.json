@@ -358,7 +358,21 @@
       "disabledBody": "Zapnite objednávky v nastaveniach, aby ste ich začali prijímať.",
       "disabledCta": "Prejsť do nastavení",
       "paymentMethodLabel": "Spôsob platby",
-      "selectPaymentMethod": "Vyberte spôsob platby."
+      "selectPaymentMethod": "Vyberte spôsob platby.",
+      "discountAdd": "Pridať zľavu",
+      "discountEdit": "Upraviť zľavu",
+      "discountRemove": "Odstrániť",
+      "discountSave": "Uložiť",
+      "discountTitle": "Zľava",
+      "discountSubtitle": "Aplikujte zľavu na cenu.",
+      "discountOrderTitle": "Zľava na objednávku",
+      "discountItemTitle": "Zľava na položku",
+      "discountTypeLabel": "Typ",
+      "discountTypePercent": "Percentá",
+      "discountTypeFixed": "Pevná",
+      "discountValueLabel": "Hodnota",
+      "discountReasonLabel": "Dôvod (voliteľné)",
+      "discountReasonPlaceholder": "napr. Stály zákazník"
     },
     "reservations": {
       "title": "Rezervácie",

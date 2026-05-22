@@ -358,7 +358,21 @@
       "disabledBody": "Lülitage tellimused seadetes sisse, et hakata neid vastu võtma.",
       "disabledCta": "Mine seadetesse",
       "paymentMethodLabel": "Maksemeetod",
-      "selectPaymentMethod": "Vali maksemeetod."
+      "selectPaymentMethod": "Vali maksemeetod.",
+      "discountAdd": "Lisa allahindlus",
+      "discountEdit": "Muuda allahindlust",
+      "discountRemove": "Eemalda",
+      "discountSave": "Salvesta",
+      "discountTitle": "Allahindlus",
+      "discountSubtitle": "Rakenda hinnale allahindlus.",
+      "discountOrderTitle": "Tellimuse allahindlus",
+      "discountItemTitle": "Toote allahindlus",
+      "discountTypeLabel": "Tüüp",
+      "discountTypePercent": "Protsent",
+      "discountTypeFixed": "Fikseeritud",
+      "discountValueLabel": "Väärtus",
+      "discountReasonLabel": "Põhjus (valikuline)",
+      "discountReasonPlaceholder": "nt püsiklient"
     },
     "reservations": {
       "title": "Broneeringud",

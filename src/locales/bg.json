@@ -358,7 +358,21 @@
       "disabledBody": "Включете поръчките в настройките, за да започнете да ги получавате.",
       "disabledCta": "Към настройките",
       "paymentMethodLabel": "Метод на плащане",
-      "selectPaymentMethod": "Изберете метод на плащане."
+      "selectPaymentMethod": "Изберете метод на плащане.",
+      "discountAdd": "Добави отстъпка",
+      "discountEdit": "Промени отстъпка",
+      "discountRemove": "Премахни",
+      "discountSave": "Запази",
+      "discountTitle": "Отстъпка",
+      "discountSubtitle": "Приложи отстъпка към цената.",
+      "discountOrderTitle": "Отстъпка за поръчка",
+      "discountItemTitle": "Отстъпка за позиция",
+      "discountTypeLabel": "Тип",
+      "discountTypePercent": "Процент",
+      "discountTypeFixed": "Фиксиран",
+      "discountValueLabel": "Стойност",
+      "discountReasonLabel": "Причина (по избор)",
+      "discountReasonPlaceholder": "напр. Постоянен клиент"
     },
     "reservations": {
       "title": "Резервации",

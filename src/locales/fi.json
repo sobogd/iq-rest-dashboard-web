@@ -358,7 +358,21 @@
       "disabledBody": "Ota tilaukset käyttöön asetuksissa aloittaaksesi niiden vastaanottamisen.",
       "disabledCta": "Siirry asetuksiin",
       "paymentMethodLabel": "Maksutapa",
-      "selectPaymentMethod": "Valitse maksutapa."
+      "selectPaymentMethod": "Valitse maksutapa.",
+      "discountAdd": "Lisää alennus",
+      "discountEdit": "Muokkaa alennusta",
+      "discountRemove": "Poista",
+      "discountSave": "Tallenna",
+      "discountTitle": "Alennus",
+      "discountSubtitle": "Lisää hintaan alennus.",
+      "discountOrderTitle": "Tilauksen alennus",
+      "discountItemTitle": "Tuotteen alennus",
+      "discountTypeLabel": "Tyyppi",
+      "discountTypePercent": "Prosenttia",
+      "discountTypeFixed": "Kiinteä",
+      "discountValueLabel": "Arvo",
+      "discountReasonLabel": "Syy (valinnainen)",
+      "discountReasonPlaceholder": "esim. Kanta-asiakas"
     },
     "reservations": {
       "title": "Varaukset",

@@ -358,7 +358,21 @@
       "disabledBody": "Įjunkite užsakymus nustatymuose, kad pradėtumėte juos gauti.",
       "disabledCta": "Eiti į nustatymus",
       "paymentMethodLabel": "Mokėjimo būdas",
-      "selectPaymentMethod": "Pasirinkite mokėjimo būdą."
+      "selectPaymentMethod": "Pasirinkite mokėjimo būdą.",
+      "discountAdd": "Pridėti nuolaidą",
+      "discountEdit": "Redaguoti nuolaidą",
+      "discountRemove": "Pašalinti",
+      "discountSave": "Įrašyti",
+      "discountTitle": "Nuolaida",
+      "discountSubtitle": "Pritaikykite nuolaidą kainai.",
+      "discountOrderTitle": "Užsakymo nuolaida",
+      "discountItemTitle": "Prekės nuolaida",
+      "discountTypeLabel": "Tipas",
+      "discountTypePercent": "Procentai",
+      "discountTypeFixed": "Fiksuota",
+      "discountValueLabel": "Reikšmė",
+      "discountReasonLabel": "Priežastis (neprivaloma)",
+      "discountReasonPlaceholder": "pvz. Lojalus klientas"
     },
     "reservations": {
       "title": "Rezervacijos",

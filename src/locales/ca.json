@@ -358,7 +358,21 @@
       "disabledBody": "Activa les comandes a la configuració per començar a rebre-les.",
       "disabledCta": "Vés a la configuració",
       "paymentMethodLabel": "Mètode de pagament",
-      "selectPaymentMethod": "Selecciona un mètode de pagament."
+      "selectPaymentMethod": "Selecciona un mètode de pagament.",
+      "discountAdd": "Afegir descompte",
+      "discountEdit": "Editar descompte",
+      "discountRemove": "Eliminar",
+      "discountSave": "Desar",
+      "discountTitle": "Descompte",
+      "discountSubtitle": "Aplica un descompte al preu.",
+      "discountOrderTitle": "Descompte de la comanda",
+      "discountItemTitle": "Descompte de l'article",
+      "discountTypeLabel": "Tipus",
+      "discountTypePercent": "Percentatge",
+      "discountTypeFixed": "Fix",
+      "discountValueLabel": "Valor",
+      "discountReasonLabel": "Motiu (opcional)",
+      "discountReasonPlaceholder": "p. ex. Client fidel"
     },
     "reservations": {
       "title": "Reserves",

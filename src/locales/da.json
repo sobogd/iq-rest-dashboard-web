@@ -358,7 +358,21 @@
       "disabledBody": "Aktivér ordrer i indstillinger for at begynde at modtage dem.",
       "disabledCta": "Gå til indstillinger",
       "paymentMethodLabel": "Betalingsmetode",
-      "selectPaymentMethod": "Vælg en betalingsmetode."
+      "selectPaymentMethod": "Vælg en betalingsmetode.",
+      "discountAdd": "Tilføj rabat",
+      "discountEdit": "Rediger rabat",
+      "discountRemove": "Fjern",
+      "discountSave": "Gem",
+      "discountTitle": "Rabat",
+      "discountSubtitle": "Anvend en rabat på prisen.",
+      "discountOrderTitle": "Rabat på ordre",
+      "discountItemTitle": "Rabat på vare",
+      "discountTypeLabel": "Type",
+      "discountTypePercent": "Procent",
+      "discountTypeFixed": "Fast",
+      "discountValueLabel": "Værdi",
+      "discountReasonLabel": "Årsag (valgfri)",
+      "discountReasonPlaceholder": "f.eks. Loyal kunde"
     },
     "reservations": {
       "title": "Reservationer",

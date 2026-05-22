@@ -358,7 +358,21 @@
       "disabledBody": "قم بتفعيل الطلبات في الإعدادات لتبدأ في استلامها.",
       "disabledCta": "اذهب إلى الإعدادات",
       "paymentMethodLabel": "طريقة الدفع",
-      "selectPaymentMethod": "اختر طريقة دفع."
+      "selectPaymentMethod": "اختر طريقة دفع.",
+      "discountAdd": "إضافة خصم",
+      "discountEdit": "تعديل الخصم",
+      "discountRemove": "إزالة",
+      "discountSave": "حفظ",
+      "discountTitle": "الخصم",
+      "discountSubtitle": "طبّق خصمًا على السعر.",
+      "discountOrderTitle": "خصم الطلب",
+      "discountItemTitle": "خصم العنصر",
+      "discountTypeLabel": "النوع",
+      "discountTypePercent": "نسبة مئوية",
+      "discountTypeFixed": "ثابت",
+      "discountValueLabel": "القيمة",
+      "discountReasonLabel": "السبب (اختياري)",
+      "discountReasonPlaceholder": "مثال: عميل دائم"
     },
     "reservations": {
       "title": "الحجوزات",

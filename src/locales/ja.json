@@ -358,7 +358,21 @@
       "disabledBody": "注文を受け付けるには、設定で有効にしてください。",
       "disabledCta": "設定を開く",
       "paymentMethodLabel": "支払い方法",
-      "selectPaymentMethod": "支払い方法を選択。"
+      "selectPaymentMethod": "支払い方法を選択。",
+      "discountAdd": "割引を追加",
+      "discountEdit": "割引を編集",
+      "discountRemove": "削除",
+      "discountSave": "保存",
+      "discountTitle": "割引",
+      "discountSubtitle": "価格に割引を適用します。",
+      "discountOrderTitle": "注文の割引",
+      "discountItemTitle": "商品の割引",
+      "discountTypeLabel": "タイプ",
+      "discountTypePercent": "パーセント",
+      "discountTypeFixed": "定額",
+      "discountValueLabel": "値",
+      "discountReasonLabel": "理由 (任意)",
+      "discountReasonPlaceholder": "例: 常連客"
     },
     "reservations": {
       "title": "予約",

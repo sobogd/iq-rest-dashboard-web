@@ -358,7 +358,21 @@
       "disabledBody": "Омогућите поруџбине у подешавањима да бисте почели да их примате.",
       "disabledCta": "Иди у подешавања",
       "paymentMethodLabel": "Начин плаћања",
-      "selectPaymentMethod": "Изабери начин плаћања."
+      "selectPaymentMethod": "Изабери начин плаћања.",
+      "discountAdd": "Додај попуст",
+      "discountEdit": "Уреди попуст",
+      "discountRemove": "Уклони",
+      "discountSave": "Сачувај",
+      "discountTitle": "Попуст",
+      "discountSubtitle": "Примените попуст на цену.",
+      "discountOrderTitle": "Попуст на поруџбину",
+      "discountItemTitle": "Попуст на ставку",
+      "discountTypeLabel": "Тип",
+      "discountTypePercent": "Проценат",
+      "discountTypeFixed": "Фиксно",
+      "discountValueLabel": "Вредност",
+      "discountReasonLabel": "Разлог (необавезно)",
+      "discountReasonPlaceholder": "нпр. Стални купац"
     },
     "reservations": {
       "title": "Rezervacije",

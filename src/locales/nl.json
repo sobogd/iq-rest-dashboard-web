@@ -358,7 +358,21 @@
       "disabledBody": "Schakel bestellingen in via instellingen om ze te ontvangen.",
       "disabledCta": "Naar instellingen",
       "paymentMethodLabel": "Betaalmethode",
-      "selectPaymentMethod": "Selecteer een betaalmethode."
+      "selectPaymentMethod": "Selecteer een betaalmethode.",
+      "discountAdd": "Korting toevoegen",
+      "discountEdit": "Korting bewerken",
+      "discountRemove": "Verwijderen",
+      "discountSave": "Opslaan",
+      "discountTitle": "Korting",
+      "discountSubtitle": "Pas een korting toe op de prijs.",
+      "discountOrderTitle": "Korting op bestelling",
+      "discountItemTitle": "Korting op artikel",
+      "discountTypeLabel": "Type",
+      "discountTypePercent": "Procent",
+      "discountTypeFixed": "Vast",
+      "discountValueLabel": "Waarde",
+      "discountReasonLabel": "Reden (optioneel)",
+      "discountReasonPlaceholder": "bijv. Vaste klant"
     },
     "reservations": {
       "title": "Reserveringen",

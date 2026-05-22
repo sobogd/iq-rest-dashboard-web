@@ -358,7 +358,21 @@
       "disabledBody": "주문을 받으려면 설정에서 활성화하세요.",
       "disabledCta": "설정으로 이동",
       "paymentMethodLabel": "결제 방법",
-      "selectPaymentMethod": "결제 방법을 선택하세요."
+      "selectPaymentMethod": "결제 방법을 선택하세요.",
+      "discountAdd": "할인 추가",
+      "discountEdit": "할인 편집",
+      "discountRemove": "제거",
+      "discountSave": "저장",
+      "discountTitle": "할인",
+      "discountSubtitle": "가격에 할인을 적용합니다.",
+      "discountOrderTitle": "주문 할인",
+      "discountItemTitle": "상품 할인",
+      "discountTypeLabel": "유형",
+      "discountTypePercent": "퍼센트",
+      "discountTypeFixed": "고정",
+      "discountValueLabel": "값",
+      "discountReasonLabel": "사유 (선택)",
+      "discountReasonPlaceholder": "예: 단골 고객"
     },
     "reservations": {
       "title": "예약",

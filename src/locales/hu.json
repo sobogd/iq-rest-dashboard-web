@@ -358,7 +358,21 @@
       "disabledBody": "Engedélyezd a rendeléseket a beállításokban, hogy fogadhasd őket.",
       "disabledCta": "Ugrás a beállításokra",
       "paymentMethodLabel": "Fizetési mód",
-      "selectPaymentMethod": "Válassz fizetési módot."
+      "selectPaymentMethod": "Válassz fizetési módot.",
+      "discountAdd": "Kedvezmény hozzáadása",
+      "discountEdit": "Kedvezmény szerkesztése",
+      "discountRemove": "Eltávolítás",
+      "discountSave": "Mentés",
+      "discountTitle": "Kedvezmény",
+      "discountSubtitle": "Alkalmazzon kedvezményt az árra.",
+      "discountOrderTitle": "Rendelés kedvezmény",
+      "discountItemTitle": "Tétel kedvezmény",
+      "discountTypeLabel": "Típus",
+      "discountTypePercent": "Százalék",
+      "discountTypeFixed": "Fix",
+      "discountValueLabel": "Érték",
+      "discountReasonLabel": "Indok (opcionális)",
+      "discountReasonPlaceholder": "pl. Törzsvásárló"
     },
     "reservations": {
       "title": "Foglalások",

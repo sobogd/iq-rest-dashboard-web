@@ -358,7 +358,21 @@
       "disabledBody": "Omogočite naročila v nastavitvah, da jih začnete prejemati.",
       "disabledCta": "Pojdi v nastavitve",
       "paymentMethodLabel": "Način plačila",
-      "selectPaymentMethod": "Izberite način plačila."
+      "selectPaymentMethod": "Izberite način plačila.",
+      "discountAdd": "Dodaj popust",
+      "discountEdit": "Uredi popust",
+      "discountRemove": "Odstrani",
+      "discountSave": "Shrani",
+      "discountTitle": "Popust",
+      "discountSubtitle": "Uporabi popust na ceno.",
+      "discountOrderTitle": "Popust na naročilo",
+      "discountItemTitle": "Popust na artikel",
+      "discountTypeLabel": "Vrsta",
+      "discountTypePercent": "Odstotek",
+      "discountTypeFixed": "Fiksno",
+      "discountValueLabel": "Vrednost",
+      "discountReasonLabel": "Razlog (neobvezno)",
+      "discountReasonPlaceholder": "npr. Stalna stranka"
     },
     "reservations": {
       "title": "Rezervacije",

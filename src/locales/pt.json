@@ -358,7 +358,21 @@
       "disabledBody": "Ative os pedidos nas configurações para começar a recebê-los.",
       "disabledCta": "Ir para as configurações",
       "paymentMethodLabel": "Método de pagamento",
-      "selectPaymentMethod": "Selecione um método de pagamento."
+      "selectPaymentMethod": "Selecione um método de pagamento.",
+      "discountAdd": "Adicionar desconto",
+      "discountEdit": "Editar desconto",
+      "discountRemove": "Remover",
+      "discountSave": "Guardar",
+      "discountTitle": "Desconto",
+      "discountSubtitle": "Aplica um desconto ao preço.",
+      "discountOrderTitle": "Desconto da encomenda",
+      "discountItemTitle": "Desconto do artigo",
+      "discountTypeLabel": "Tipo",
+      "discountTypePercent": "Percentagem",
+      "discountTypeFixed": "Fixo",
+      "discountValueLabel": "Valor",
+      "discountReasonLabel": "Motivo (opcional)",
+      "discountReasonPlaceholder": "ex. Cliente fiel"
     },
     "reservations": {
       "title": "Reservas",

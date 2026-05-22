@@ -358,7 +358,21 @@
       "disabledBody": "برای دریافت سفارش‌ها، آن‌ها را در تنظیمات فعال کنید.",
       "disabledCta": "رفتن به تنظیمات",
       "paymentMethodLabel": "روش پرداخت",
-      "selectPaymentMethod": "یک روش پرداخت انتخاب کنید."
+      "selectPaymentMethod": "یک روش پرداخت انتخاب کنید.",
+      "discountAdd": "افزودن تخفیف",
+      "discountEdit": "ویرایش تخفیف",
+      "discountRemove": "حذف",
+      "discountSave": "ذخیره",
+      "discountTitle": "تخفیف",
+      "discountSubtitle": "تخفیفی روی قیمت اعمال کنید.",
+      "discountOrderTitle": "تخفیف سفارش",
+      "discountItemTitle": "تخفیف کالا",
+      "discountTypeLabel": "نوع",
+      "discountTypePercent": "درصد",
+      "discountTypeFixed": "ثابت",
+      "discountValueLabel": "مقدار",
+      "discountReasonLabel": "دلیل (اختیاری)",
+      "discountReasonPlaceholder": "مثال: مشتری وفادار"
     },
     "reservations": {
       "title": "رزروها",

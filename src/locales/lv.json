@@ -358,7 +358,21 @@
       "disabledBody": "Iespējojiet pasūtījumus iestatījumos, lai sāktu tos saņemt.",
       "disabledCta": "Doties uz iestatījumiem",
       "paymentMethodLabel": "Maksājuma veids",
-      "selectPaymentMethod": "Izvēlieties maksājuma veidu."
+      "selectPaymentMethod": "Izvēlieties maksājuma veidu.",
+      "discountAdd": "Pievienot atlaidi",
+      "discountEdit": "Rediģēt atlaidi",
+      "discountRemove": "Noņemt",
+      "discountSave": "Saglabāt",
+      "discountTitle": "Atlaide",
+      "discountSubtitle": "Piemēro atlaidi cenai.",
+      "discountOrderTitle": "Pasūtījuma atlaide",
+      "discountItemTitle": "Preces atlaide",
+      "discountTypeLabel": "Veids",
+      "discountTypePercent": "Procenti",
+      "discountTypeFixed": "Fiksēts",
+      "discountValueLabel": "Vērtība",
+      "discountReasonLabel": "Iemesls (neobligāti)",
+      "discountReasonPlaceholder": "piem., Pastāvīgais klients"
     },
     "reservations": {
       "title": "Rezervācijas",

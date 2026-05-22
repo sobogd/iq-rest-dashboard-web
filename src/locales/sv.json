@@ -358,7 +358,21 @@
       "disabledBody": "Aktivera beställningar i inställningar för att börja ta emot dem.",
       "disabledCta": "Gå till inställningar",
       "paymentMethodLabel": "Betalningsmetod",
-      "selectPaymentMethod": "Välj en betalningsmetod."
+      "selectPaymentMethod": "Välj en betalningsmetod.",
+      "discountAdd": "Lägg till rabatt",
+      "discountEdit": "Redigera rabatt",
+      "discountRemove": "Ta bort",
+      "discountSave": "Spara",
+      "discountTitle": "Rabatt",
+      "discountSubtitle": "Tillämpa en rabatt på priset.",
+      "discountOrderTitle": "Rabatt på beställning",
+      "discountItemTitle": "Rabatt på artikel",
+      "discountTypeLabel": "Typ",
+      "discountTypePercent": "Procent",
+      "discountTypeFixed": "Fast",
+      "discountValueLabel": "Värde",
+      "discountReasonLabel": "Skäl (valfritt)",
+      "discountReasonPlaceholder": "t.ex. Stamkund"
     },
     "reservations": {
       "title": "Bokningar",

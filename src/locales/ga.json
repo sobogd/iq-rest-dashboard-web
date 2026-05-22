@@ -358,7 +358,21 @@
       "disabledBody": "Cumasaigh orduithe sna socruithe chun tús a chur leo a fháil.",
       "disabledCta": "Téigh chuig na socruithe",
       "paymentMethodLabel": "Modh íocaíochta",
-      "selectPaymentMethod": "Roghnaigh modh íocaíochta."
+      "selectPaymentMethod": "Roghnaigh modh íocaíochta.",
+      "discountAdd": "Cuir lascaine leis",
+      "discountEdit": "Cuir lascaine in eagar",
+      "discountRemove": "Bain",
+      "discountSave": "Sábháil",
+      "discountTitle": "Lascaine",
+      "discountSubtitle": "Cuir lascaine i bhfeidhm ar an bpraghas.",
+      "discountOrderTitle": "Lascaine ordaithe",
+      "discountItemTitle": "Lascaine ar earra",
+      "discountTypeLabel": "Cineál",
+      "discountTypePercent": "Céatadán",
+      "discountTypeFixed": "Socraithe",
+      "discountValueLabel": "Luach",
+      "discountReasonLabel": "Cúis (roghnach)",
+      "discountReasonPlaceholder": "m.sh. Custaiméir dílis"
     },
     "reservations": {
       "title": "Áirithintí",

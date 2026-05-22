@@ -358,7 +358,21 @@
       "disabledBody": "Attiva gli ordini nelle impostazioni per iniziare a riceverli.",
       "disabledCta": "Vai alle impostazioni",
       "paymentMethodLabel": "Metodo di pagamento",
-      "selectPaymentMethod": "Seleziona un metodo di pagamento."
+      "selectPaymentMethod": "Seleziona un metodo di pagamento.",
+      "discountAdd": "Aggiungi sconto",
+      "discountEdit": "Modifica sconto",
+      "discountRemove": "Rimuovi",
+      "discountSave": "Salva",
+      "discountTitle": "Sconto",
+      "discountSubtitle": "Applica uno sconto al prezzo.",
+      "discountOrderTitle": "Sconto sull'ordine",
+      "discountItemTitle": "Sconto sull'articolo",
+      "discountTypeLabel": "Tipo",
+      "discountTypePercent": "Percentuale",
+      "discountTypeFixed": "Fisso",
+      "discountValueLabel": "Valore",
+      "discountReasonLabel": "Motivo (facoltativo)",
+      "discountReasonPlaceholder": "es. Cliente abituale"
     },
     "reservations": {
       "title": "Prenotazioni",

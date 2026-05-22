@@ -358,7 +358,21 @@
       "disabledBody": "Aktiviere Bestellungen in den Einstellungen, um sie zu empfangen.",
       "disabledCta": "Zu den Einstellungen",
       "paymentMethodLabel": "Zahlungsmethode",
-      "selectPaymentMethod": "Wählen Sie eine Zahlungsmethode."
+      "selectPaymentMethod": "Wählen Sie eine Zahlungsmethode.",
+      "discountAdd": "Rabatt hinzufügen",
+      "discountEdit": "Rabatt bearbeiten",
+      "discountRemove": "Entfernen",
+      "discountSave": "Speichern",
+      "discountTitle": "Rabatt",
+      "discountSubtitle": "Wende einen Rabatt auf den Preis an.",
+      "discountOrderTitle": "Bestellrabatt",
+      "discountItemTitle": "Artikelrabatt",
+      "discountTypeLabel": "Typ",
+      "discountTypePercent": "Prozent",
+      "discountTypeFixed": "Festbetrag",
+      "discountValueLabel": "Wert",
+      "discountReasonLabel": "Grund (optional)",
+      "discountReasonPlaceholder": "z. B. Stammkunde"
     },
     "reservations": {
       "title": "Reservierungen",

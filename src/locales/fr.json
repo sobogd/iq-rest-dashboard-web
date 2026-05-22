@@ -358,7 +358,21 @@
       "disabledBody": "Activez les commandes dans les paramètres pour commencer à les recevoir.",
       "disabledCta": "Aller aux paramètres",
       "paymentMethodLabel": "Mode de paiement",
-      "selectPaymentMethod": "Sélectionnez un mode de paiement."
+      "selectPaymentMethod": "Sélectionnez un mode de paiement.",
+      "discountAdd": "Ajouter une remise",
+      "discountEdit": "Modifier la remise",
+      "discountRemove": "Retirer",
+      "discountSave": "Enregistrer",
+      "discountTitle": "Remise",
+      "discountSubtitle": "Appliquez une remise au prix.",
+      "discountOrderTitle": "Remise sur la commande",
+      "discountItemTitle": "Remise sur l'article",
+      "discountTypeLabel": "Type",
+      "discountTypePercent": "Pourcentage",
+      "discountTypeFixed": "Fixe",
+      "discountValueLabel": "Valeur",
+      "discountReasonLabel": "Motif (facultatif)",
+      "discountReasonPlaceholder": "p. ex. Client fidèle"
     },
     "reservations": {
       "title": "Réservations",
