@@ -174,6 +174,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
         open={!!pendingDelete}
         onClose={() => { if (!deleting) setPendingDelete(null); }}
         title={t("deleteTitle")}
+        subtitle={pendingDelete ? t("deleteMessage", { name: pendingDelete.name }) : ""}
         size="sm"
         closeOnBackdrop={!deleting}
         footer={
@@ -199,11 +200,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
             </button>
           </div>
         }
-      >
-        <p className="text-sm text-muted-foreground leading-snug">
-          {pendingDelete ? t("deleteMessage", { name: pendingDelete.name }) : ""}
-        </p>
-      </Modal>
+      />
       {switching ? (
         <div className="fixed inset-0 z-50 bg-background/70 backdrop-blur-sm flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
