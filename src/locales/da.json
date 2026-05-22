@@ -458,7 +458,7 @@
         "locationTip": "Adresse og kort vises på din offentlige kontaktside. Søg eller tryk på kortet for at placere nålen."
       },
       "branding": {
-        "title": "Branding",
+        "title": "Site",
         "accentLabel": "Accentfarve",
         "accentTip": "Hovedfarve til knapper og fremhævelser.",
         "showTitleLabel": "Vis navn på forsiden",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restaurantens navn og undertitel.",
         "contacts": "Kontakter & adresse",
         "contactsDesc": "Telefon, Instagram, WhatsApp, nål på kortet.",
-        "branding": "Branding",
-        "brandingDesc": "Accentfarve, navnesynlighed, baggrundsbillede eller -video.",
+        "branding": "Site",
+        "brandingDesc": "Offentlig menu-URL, navn, accentfarve, baggrundsbillede eller -video.",
         "general": "Generelt",
         "generalDesc": "Offentligt menulink, standardvaluta.",
         "tables": "Borde",

@@ -458,7 +458,7 @@
         "locationTip": "Adreça i mapa que es mostren a la pàgina de contactes pública. Cerca o toca el mapa per posar el pin."
       },
       "branding": {
-        "title": "Marca",
+        "title": "Lloc",
         "accentLabel": "Color d'accent",
         "accentTip": "Color principal per a botons i ressaltats.",
         "showTitleLabel": "Mostra el nom a la pàgina d'inici",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nom del restaurant i subtítol.",
         "contacts": "Contactes i ubicació",
         "contactsDesc": "Telèfon, Instagram, WhatsApp, pin al mapa.",
-        "branding": "Marca",
-        "brandingDesc": "Color d'accent, visibilitat del nom, imatge o vídeo de fons.",
+        "branding": "Lloc",
+        "brandingDesc": "URL del menú públic, nom, color d'accent, imatge o vídeo de fons.",
         "general": "General",
         "generalDesc": "Enllaç del menú públic, moneda per defecte.",
         "tables": "Taules",

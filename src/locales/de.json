@@ -458,7 +458,7 @@
         "locationTip": "Adresse und Karte auf Ihrer öffentlichen Kontaktseite. Suchen oder auf die Karte tippen, um den Pin zu setzen."
       },
       "branding": {
-        "title": "Branding",
+        "title": "Webseite",
         "accentLabel": "Akzentfarbe",
         "accentTip": "Hauptfarbe für Buttons und Hervorhebungen.",
         "showTitleLabel": "Name auf der Startseite anzeigen",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restaurantname und Untertitel.",
         "contacts": "Kontakt & Standort",
         "contactsDesc": "Telefon, Instagram, WhatsApp, Adresse auf der Karte.",
-        "branding": "Branding",
-        "brandingDesc": "Akzentfarbe, Sichtbarkeit des Namens, Hintergrundbild oder -video.",
+        "branding": "Webseite",
+        "brandingDesc": "Öffentliche Menü-URL, Name, Akzentfarbe, Hintergrundbild oder -video.",
         "general": "Allgemein",
         "generalDesc": "Öffentlicher Karten-Link, Standardwährung.",
         "tables": "Tische",

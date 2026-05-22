@@ -458,7 +458,7 @@
         "locationTip": "Adrese un karte tiek parādītas jūsu publiskajā kontaktu lapā. Meklējiet vai pieskarieties kartei, lai novietotu adatu."
       },
       "branding": {
-        "title": "Zīmols",
+        "title": "Vietne",
         "accentLabel": "Akcenta krāsa",
         "accentTip": "Galvenā krāsa pogām un izcēlumiem.",
         "showTitleLabel": "Rādīt nosaukumu sākumlapā",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restorāna nosaukums un apakšvirsraksts.",
         "contacts": "Kontakti un atrašanās vieta",
         "contactsDesc": "Tālrunis, Instagram, WhatsApp, adata kartē.",
-        "branding": "Zīmols",
-        "brandingDesc": "Akcenta krāsa, nosaukuma redzamība, fona attēls vai video.",
+        "branding": "Vietne",
+        "brandingDesc": "Publiskā ēdienkartes URL, nosaukums, akcenta krāsa, fona attēls vai video.",
         "general": "Vispārīgi",
         "generalDesc": "Publiskās ēdienkartes saite, noklusējuma valūta.",
         "tables": "Galdi",

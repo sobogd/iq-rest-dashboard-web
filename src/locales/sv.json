@@ -458,7 +458,7 @@
         "locationTip": "Adress och karta visas på din offentliga kontaktsida. Sök eller tryck på kartan för att placera nålen."
       },
       "branding": {
-        "title": "Varumärke",
+        "title": "Webbplats",
         "accentLabel": "Accentfärg",
         "accentTip": "Huvudfärg för knappar och markeringar.",
         "showTitleLabel": "Visa namn på startsidan",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restaurangens namn och underrubrik.",
         "contacts": "Kontakter & plats",
         "contactsDesc": "Telefon, Instagram, WhatsApp, nål på kartan.",
-        "branding": "Varumärke",
-        "brandingDesc": "Accentfärg, namnsynlighet, bakgrundsbild eller -video.",
+        "branding": "Webbplats",
+        "brandingDesc": "URL till offentlig meny, namn, accentfärg, bakgrundsbild eller -video.",
         "general": "Allmänt",
         "generalDesc": "Offentlig menylänk, standardvaluta.",
         "tables": "Bord",

@@ -458,7 +458,7 @@
         "locationTip": "Dirección y mapa que se muestran en tu página de contactos pública. Busca o toca el mapa para fijar el punto."
       },
       "branding": {
-        "title": "Marca",
+        "title": "Sitio",
         "accentLabel": "Color de acento",
         "accentTip": "Color principal para botones y resaltados.",
         "showTitleLabel": "Mostrar nombre en la página de inicio",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nombre y subtítulo del restaurante.",
         "contacts": "Contactos y ubicación",
         "contactsDesc": "Teléfono, Instagram, WhatsApp, dirección en el mapa.",
-        "branding": "Marca",
-        "brandingDesc": "Color de acento, visibilidad del nombre, imagen o vídeo de fondo.",
+        "branding": "Sitio",
+        "brandingDesc": "URL del menú público, nombre, color de acento, imagen o vídeo de fondo.",
         "general": "General",
         "generalDesc": "Enlace del menú público, moneda predeterminada.",
         "tables": "Mesas",

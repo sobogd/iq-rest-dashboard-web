@@ -458,7 +458,7 @@
         "locationTip": "Adresa și harta afișate pe pagina de contacte publică. Caută sau atinge harta pentru a fixa pinul."
       },
       "branding": {
-        "title": "Brand",
+        "title": "Site",
         "accentLabel": "Culoare de accent",
         "accentTip": "Culoarea principală pentru butoane și evidențieri.",
         "showTitleLabel": "Afișează numele pe pagina principală",
@@ -635,8 +635,8 @@
         "aboutDesc": "Numele restaurantului și subtitlu.",
         "contacts": "Contacte și locație",
         "contactsDesc": "Telefon, Instagram, WhatsApp, pin pe hartă.",
-        "branding": "Brand",
-        "brandingDesc": "Culoare de accent, vizibilitate nume, imagine sau video de fundal.",
+        "branding": "Site",
+        "brandingDesc": "URL meniu public, nume, culoare de accent, imagine sau video de fundal.",
         "general": "General",
         "generalDesc": "Link meniu public, monedă implicită.",
         "tables": "Mese",

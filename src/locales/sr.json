@@ -458,7 +458,7 @@
         "locationTip": "Adresa i mapa prikazani na vašoj javnoj stranici kontakta. Pretražite ili dodirnite mapu da postavite čiodu."
       },
       "branding": {
-        "title": "Brendiranje",
+        "title": "Сајт",
         "accentLabel": "Boja akcenta",
         "accentTip": "Glavna boja za dugmad i isticanja.",
         "showTitleLabel": "Prikaži ime na početnoj",
@@ -635,8 +635,8 @@
         "aboutDesc": "Ime restorana i podnaslov.",
         "contacts": "Kontakti i lokacija",
         "contactsDesc": "Telefon, Instagram, WhatsApp, čioda na mapi.",
-        "branding": "Brendiranje",
-        "brandingDesc": "Boja akcenta, vidljivost imena, pozadinska slika ili video.",
+        "branding": "Сајт",
+        "brandingDesc": "URL јавног менија, назив, акцентна боја, слика или видео позадине.",
         "general": "Opšte",
         "generalDesc": "Link javnog menija, podrazumevana valuta.",
         "tables": "Stolovi",

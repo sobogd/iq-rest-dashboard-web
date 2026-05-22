@@ -458,7 +458,7 @@
         "locationTip": "Aadress ja kaart kuvatakse sinu avalikul kontaktilehel. Otsi või vajuta kaardil, et nõela paigutada."
       },
       "branding": {
-        "title": "Bränding",
+        "title": "Sait",
         "accentLabel": "Aktsendivärv",
         "accentTip": "Põhivärv nuppudele ja esiletõstmistele.",
         "showTitleLabel": "Näita nime avalehel",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restorani nimi ja alapealkiri.",
         "contacts": "Kontaktid ja asukoht",
         "contactsDesc": "Telefon, Instagram, WhatsApp, nõel kaardil.",
-        "branding": "Bränding",
-        "brandingDesc": "Aktsendivärv, nime nähtavus, taustpilt või video.",
+        "branding": "Sait",
+        "brandingDesc": "Avalik menüü-URL, nimi, rõhutusvärv, tausta pilt või video.",
         "general": "Üldine",
         "generalDesc": "Avaliku menüü link, vaikevaluuta.",
         "tables": "Lauad",

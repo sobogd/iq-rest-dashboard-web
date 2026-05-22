@@ -458,7 +458,7 @@
         "locationTip": "Endereço e mapa apresentados na página de contactos pública. Pesquise ou toque no mapa para definir o pino."
       },
       "branding": {
-        "title": "Marca",
+        "title": "Site",
         "accentLabel": "Cor de destaque",
         "accentTip": "Cor principal para botões e destaques.",
         "showTitleLabel": "Mostrar nome na página inicial",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nome e subtítulo do restaurante.",
         "contacts": "Contactos e localização",
         "contactsDesc": "Telefone, Instagram, WhatsApp, pino no mapa.",
-        "branding": "Marca",
-        "brandingDesc": "Cor de destaque, visibilidade do nome, imagem ou vídeo de fundo.",
+        "branding": "Site",
+        "brandingDesc": "URL do menu público, nome, cor de destaque, imagem ou vídeo de fundo.",
         "general": "Geral",
         "generalDesc": "Link do menu público, moeda predefinida.",
         "tables": "Mesas",

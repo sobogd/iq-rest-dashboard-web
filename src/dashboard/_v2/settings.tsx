@@ -337,9 +337,11 @@ export function BrandingSettingsPage({
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.branding");
  const ta = useTranslations("dashboard.settings.about");
+ const tg = useTranslations("dashboard.settings.general");
  const [draft, setDraft] = useState({
  name: restaurant.name,
  subtitle: restaurant.subtitle,
+ slug: restaurant.slug,
  backgroundUrl: restaurant.backgroundUrl,
  backgroundType: restaurant.backgroundType,
  accentColor: restaurant.accentColor,
@@ -350,6 +352,20 @@ export function BrandingSettingsPage({
  const colorPickerRef = useRef<HTMLInputElement | null>(null);
  const [uploading, setUploading] = useState(false);
  const [aiOpen, setAiOpen] = useState(false);
+ const [slugCopied, setSlugCopied] = useState(false);
+
+ const validSlug = /^[a-z0-9-]{2,40}$/.test(draft.slug);
+
+ function copySlugUrl() {
+   track("dash_settings_branding_copy_url");
+   const fullUrl = getMenuUrl(draft.slug);
+   if (navigator.clipboard?.writeText) {
+     navigator.clipboard.writeText(fullUrl).then(() => {
+       setSlugCopied(true);
+       setTimeout(() => setSlugCopied(false), 1800);
+     }).catch(() => undefined);
+   }
+ }
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
@@ -358,11 +374,15 @@ export function BrandingSettingsPage({
  async function save() {
  track("dash_settings_branding_save");
  const trimmedName = draft.name.trim();
+ const trimmedSlug = (draft.slug || "").trim();
  if (!trimmedName) return;
  try {
  await updateRestaurant({
  title: trimmedName,
  description: draft.subtitle.trim() || null,
+ // Server-side slugify + reserved-list check lives in
+ // pickFields → safe to pass the raw text; backend normalises.
+ ...(trimmedSlug !== restaurant.slug ? { slug: trimmedSlug || null } : {}),
  source: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
@@ -376,6 +396,7 @@ export function BrandingSettingsPage({
  ...r,
  name: trimmedName,
  subtitle: draft.subtitle.trim(),
+ slug: trimmedSlug || r.slug,
  backgroundUrl: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
@@ -412,7 +433,7 @@ export function BrandingSettingsPage({
  }
 
 
- const canSave = draft.name.trim().length > 0;
+ const canSave = draft.name.trim().length > 0 && validSlug;
  return (
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_branding_back"); onBack(); }} onSave={save} canSave={canSave} />
@@ -442,6 +463,34 @@ export function BrandingSettingsPage({
  placeholder={ta("subtitlePlaceholder")}
  className={inputClass}
  />
+ <label htmlFor="brand-slug" className="block text-sm font-medium text-foreground mb-2.5 mt-4">{tg("menuLinkLabel")}</label>
+ <div className="relative flex items-center w-full h-10 bg-card border border-input rounded-lg overflow-hidden">
+ <input
+ id="brand-slug"
+ type="text"
+ value={draft.slug}
+ onChange={(e) => setDraft((d) => ({ ...d, slug: slugify(e.target.value) }))}
+ onFocus={() => track("dash_settings_general_focus_link")}
+ placeholder={tg("slugPlaceholder")}
+ className="flex-1 min-w-0 h-full pl-3 text-sm text-foreground bg-transparent border-0 placeholder:text-muted-foreground focus:outline-none"
+ />
+ <span className="pr-12 text-sm text-muted-foreground whitespace-nowrap select-none">
+ {getMenuUrlPrefix()}
+ </span>
+ <button
+ type="button"
+ onClick={copySlugUrl}
+ className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground transition-colors"
+ aria-label={tg("copyUrl")}
+ title={tg("copyUrl")}
+ >
+ {slugCopied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
+ </button>
+ </div>
+ <p className="text-xs text-muted-foreground mt-1.5 leading-snug">{tg("menuLinkTip")}</p>
+ {!validSlug && draft.slug.length > 0 ? (
+ <p className="text-xs text-red-600 mt-1">{tg("slugError")}</p>
+ ) : null}
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-start">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
@@ -665,91 +714,36 @@ export function GeneralSettingsPage({
  const t = useTranslations("dashboard.settings");
  const tg = useTranslations("dashboard.settings.general");
  const [draft, setDraft] = useState({
- slug: restaurant.slug || slugify(restaurant.name),
  currency: restaurant.currency,
  });
- const [copied, setCopied] = useState(false);
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
- const validSlug = /^[a-z0-9-]{2,40}$/.test(draft.slug);
- const canSave = validSlug;
-
  async function save() {
  track("dash_settings_general_save");
- if (!canSave) return;
  try {
- await updateRestaurant({ slug: draft.slug, currency: draft.currency });
+ await updateRestaurant({ currency: draft.currency });
  } catch {
  return;
  }
  setRestaurant((r) => ({
  ...r,
- slug: draft.slug,
  currency: draft.currency,
- menuUrl: getMenuUrl(draft.slug),
  }));
  onBack();
  }
 
- function copyUrl() {
- track("dash_settings_general_click_copy");
- const fullUrl = getMenuUrl(draft.slug);
- if (navigator.clipboard?.writeText) {
- navigator.clipboard
- .writeText(fullUrl)
- .then(() => {
- setCopied(true);
- setTimeout(() => setCopied(false), 1800);
- })
- .catch(() => {});
- }
- }
-
  return (
  <div>
- <SubpageStickyBar onBack={() => { track("dash_settings_general_back"); onBack(); }} onSave={save} canSave={canSave} />
+ <SubpageStickyBar onBack={() => { track("dash_settings_general_back"); onBack(); }} onSave={save} canSave />
  <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tg("title")}</h2>
  </div>
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
- <label htmlFor="gen-slug" className="block text-sm font-medium text-foreground mb-2.5">{tg("menuLinkLabel")}</label>
- <div className="relative flex items-center w-full h-10 bg-card border border-input rounded-lg overflow-hidden">
- <input
- id="gen-slug"
- type="text"
- value={draft.slug}
- onChange={(e) => setDraft((d) => ({ ...d, slug: slugify(e.target.value) }))}
- onFocus={() => track("dash_settings_general_focus_link")}
- placeholder={tg("slugPlaceholder")}
- className="flex-1 min-w-0 h-full pl-3 text-sm text-foreground bg-transparent border-0 placeholder:text-muted-foreground focus:outline-none"
- />
- <span className="pr-12 text-sm text-muted-foreground whitespace-nowrap select-none">
- {getMenuUrlPrefix()}
- </span>
- <button
- type="button"
- onClick={copyUrl}
- className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground transition-colors"
- aria-label={tg("copyUrl")}
- title={tg("copyUrl")}
- >
- {copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}
- </button>
- </div>
- <p className="text-xs text-muted-foreground mt-1.5 leading-snug">
- {tg("menuLinkTip")}
- </p>
- {!validSlug && draft.slug.length > 0 ? (
- <p className="text-xs text-red-600 mt-1">{tg("slugError")}</p>
- ) : null}
-
- <Divider />
-
  <label htmlFor="gen-currency" className="block text-sm font-medium text-foreground mb-2.5">{tg("currencyLabel")}</label>
  <select
  id="gen-currency"

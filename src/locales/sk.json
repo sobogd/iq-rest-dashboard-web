@@ -458,7 +458,7 @@
         "locationTip": "Adresa a mapa zobrazené na verejnej kontaktnej stránke. Hľadajte alebo klepnite na mapu pre umiestnenie špendlíka."
       },
       "branding": {
-        "title": "Branding",
+        "title": "Web",
         "accentLabel": "Akcentová farba",
         "accentTip": "Hlavná farba pre tlačidlá a zvýraznenia.",
         "showTitleLabel": "Zobraziť názov na úvodnej stránke",
@@ -635,8 +635,8 @@
         "aboutDesc": "Názov reštaurácie a podtitulok.",
         "contacts": "Kontakty a poloha",
         "contactsDesc": "Telefón, Instagram, WhatsApp, špendlík na mape.",
-        "branding": "Branding",
-        "brandingDesc": "Akcentová farba, viditeľnosť názvu, obrázok alebo video pozadia.",
+        "branding": "Web",
+        "brandingDesc": "URL verejného menu, názov, akcentová farba, obrázok alebo video pozadia.",
         "general": "Všeobecné",
         "generalDesc": "Odkaz verejného menu, predvolená mena.",
         "tables": "Stoly",

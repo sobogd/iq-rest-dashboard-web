@@ -458,7 +458,7 @@
         "locationTip": "Adres en kaart op uw publieke contactpagina. Zoek of tik op de kaart om de pin te plaatsen."
       },
       "branding": {
-        "title": "Branding",
+        "title": "Site",
         "accentLabel": "Accentkleur",
         "accentTip": "Hoofdkleur voor knoppen en accenten.",
         "showTitleLabel": "Naam op startpagina tonen",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restaurantnaam en ondertitel.",
         "contacts": "Contacten en locatie",
         "contactsDesc": "Telefoon, Instagram, WhatsApp, adres op de kaart.",
-        "branding": "Branding",
-        "brandingDesc": "Accentkleur, zichtbaarheid van naam, achtergrondafbeelding of -video.",
+        "branding": "Site",
+        "brandingDesc": "URL van het openbare menu, naam, accentkleur, achtergrondafbeelding of -video.",
         "general": "Algemeen",
         "generalDesc": "Publieke menulink, standaardvaluta.",
         "tables": "Tafels",

@@ -458,7 +458,7 @@
         "locationTip": "Adres i mapa wyświetlane na publicznej stronie kontaktowej. Wyszukaj lub stuknij mapę, aby ustawić pinezkę."
       },
       "branding": {
-        "title": "Branding",
+        "title": "Witryna",
         "accentLabel": "Kolor akcentu",
         "accentTip": "Główny kolor przycisków i wyróżnień.",
         "showTitleLabel": "Pokaż nazwę na stronie głównej",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nazwa restauracji i podtytuł.",
         "contacts": "Kontakt i lokalizacja",
         "contactsDesc": "Telefon, Instagram, WhatsApp, pinezka na mapie.",
-        "branding": "Branding",
-        "brandingDesc": "Kolor akcentu, widoczność nazwy, obraz lub wideo tła.",
+        "branding": "Witryna",
+        "brandingDesc": "URL publicznego menu, nazwa, kolor akcentu, obraz lub film w tle.",
         "general": "Ogólne",
         "generalDesc": "Link publicznego menu, domyślna waluta.",
         "tables": "Stoliki",

@@ -458,7 +458,7 @@
         "locationTip": "Seoladh agus léarscáil léirithe ar do leathanach teagmhála phoiblí. Cuardaigh nó tapáil ar an léarscáil chun an pionna a shocrú."
       },
       "branding": {
-        "title": "Brandáil",
+        "title": "Suíomh",
         "accentLabel": "Dath aibhsithe",
         "accentTip": "Príomhdhath do chnaipí agus aibhsithe.",
         "showTitleLabel": "Taispeáin ainm ar an mbaile",
@@ -635,8 +635,8 @@
         "aboutDesc": "Ainm bialainne agus fotheideal.",
         "contacts": "Teagmhálacha agus suíomh",
         "contactsDesc": "Teileafón, Instagram, WhatsApp, pionna ar an léarscáil.",
-        "branding": "Brandáil",
-        "brandingDesc": "Dath aibhsithe, infheictheacht ainm, íomhá nó físeán cúlra.",
+        "branding": "Suíomh",
+        "brandingDesc": "URL biachláir poiblí, ainm, dath béime, íomhá nó físeán cúlra.",
         "general": "Ginearálta",
         "generalDesc": "Nasc bhiachláir phoiblí, airgeadra réamhshocraithe.",
         "tables": "Boird",

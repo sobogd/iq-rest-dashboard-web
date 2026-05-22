@@ -458,7 +458,7 @@
         "locationTip": "Naslov in zemljevid prikazana na javni strani s kontakti. Iščite ali tapnite na zemljevid, da postavite zatič."
       },
       "branding": {
-        "title": "Blagovna znamka",
+        "title": "Spletna stran",
         "accentLabel": "Poudarjena barva",
         "accentTip": "Glavna barva za gumbe in poudarke.",
         "showTitleLabel": "Prikaži ime na domači strani",
@@ -635,8 +635,8 @@
         "aboutDesc": "Ime restavracije in podnaslov.",
         "contacts": "Kontakti in lokacija",
         "contactsDesc": "Telefon, Instagram, WhatsApp, zatič na zemljevidu.",
-        "branding": "Blagovna znamka",
-        "brandingDesc": "Poudarjena barva, vidnost imena, slika ali video ozadja.",
+        "branding": "Spletna stran",
+        "brandingDesc": "URL javnega menija, ime, poudarjena barva, slika ali videoposnetek ozadja.",
         "general": "Splošno",
         "generalDesc": "Povezava javnega menija, privzeta valuta.",
         "tables": "Mize",

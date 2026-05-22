@@ -458,7 +458,7 @@
         "locationTip": "公開連絡先ページに表示される住所と地図。検索するか地図をタップしてピンを設定します。"
       },
       "branding": {
-        "title": "ブランディング",
+        "title": "サイト",
         "accentLabel": "アクセントカラー",
         "accentTip": "ボタンとハイライトのメインカラー。",
         "showTitleLabel": "ホームページに名前を表示",
@@ -635,8 +635,8 @@
         "aboutDesc": "レストラン名とサブタイトル。",
         "contacts": "連絡先と場所",
         "contactsDesc": "電話、Instagram、WhatsApp、地図のピン。",
-        "branding": "ブランディング",
-        "brandingDesc": "アクセントカラー、名前の表示、背景画像または動画。",
+        "branding": "サイト",
+        "brandingDesc": "公開メニュー URL、店名、アクセントカラー、背景画像または動画。",
         "general": "一般",
         "generalDesc": "公開メニューリンク、デフォルト通貨。",
         "tables": "テーブル",

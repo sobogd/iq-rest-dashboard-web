@@ -458,7 +458,7 @@
         "locationTip": "公开联系页面上显示的地址和地图。搜索或点击地图设置定位点。"
       },
       "branding": {
-        "title": "品牌",
+        "title": "网站",
         "accentLabel": "强调色",
         "accentTip": "按钮和高亮的主色。",
         "showTitleLabel": "在主页显示名称",
@@ -635,8 +635,8 @@
         "aboutDesc": "餐厅名称和副标题。",
         "contacts": "联系方式与位置",
         "contactsDesc": "电话、Instagram、WhatsApp、地图定位点。",
-        "branding": "品牌",
-        "brandingDesc": "强调色、名称可见性、背景图片或视频。",
+        "branding": "网站",
+        "brandingDesc": "公共菜单 URL、名称、强调色、背景图片或视频。",
         "general": "通用",
         "generalDesc": "公开菜单链接、默认货币。",
         "tables": "桌台",

@@ -458,7 +458,7 @@
         "locationTip": "A cím és térkép a nyilvános kapcsolat oldalon jelenik meg. Keress vagy érintsd meg a térképet a tű elhelyezéséhez."
       },
       "branding": {
-        "title": "Márka",
+        "title": "Webhely",
         "accentLabel": "Kiemelő szín",
         "accentTip": "Fő szín gombokhoz és kiemelésekhez.",
         "showTitleLabel": "Név megjelenítése a kezdőlapon",
@@ -635,8 +635,8 @@
         "aboutDesc": "Étterem neve és alcíme.",
         "contacts": "Kapcsolat és helyszín",
         "contactsDesc": "Telefon, Instagram, WhatsApp, tű a térképen.",
-        "branding": "Márka",
-        "brandingDesc": "Kiemelő szín, név láthatóság, háttérkép vagy -videó.",
+        "branding": "Webhely",
+        "brandingDesc": "Nyilvános menü URL, név, kiemelőszín, háttérkép vagy -videó.",
         "general": "Általános",
         "generalDesc": "Nyilvános étlap link, alapértelmezett pénznem.",
         "tables": "Asztalok",

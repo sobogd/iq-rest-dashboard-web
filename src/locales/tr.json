@@ -458,7 +458,7 @@
         "locationTip": "Adres ve harita genel iletişim sayfanızda gösterilir. Pin koymak için arayın veya haritaya dokunun."
       },
       "branding": {
-        "title": "Marka",
+        "title": "Site",
         "accentLabel": "Vurgu rengi",
         "accentTip": "Düğmeler ve vurgular için ana renk.",
         "showTitleLabel": "Ana sayfada adı göster",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restoran adı ve alt başlık.",
         "contacts": "İletişim ve konum",
         "contactsDesc": "Telefon, Instagram, WhatsApp, haritada pin.",
-        "branding": "Marka",
-        "brandingDesc": "Vurgu rengi, ad görünürlüğü, arka plan görseli veya videosu.",
+        "branding": "Site",
+        "brandingDesc": "Genel menü URL'si, ad, vurgu rengi, arka plan görseli veya videosu.",
         "general": "Genel",
         "generalDesc": "Genel menü bağlantısı, varsayılan para birimi.",
         "tables": "Masalar",

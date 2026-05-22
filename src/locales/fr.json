@@ -458,7 +458,7 @@
         "locationTip": "Adresse et carte affichées sur votre page contacts publique. Recherchez ou appuyez sur la carte pour placer le point."
       },
       "branding": {
-        "title": "Identité",
+        "title": "Site",
         "accentLabel": "Couleur d'accent",
         "accentTip": "Couleur principale pour boutons et mises en valeur.",
         "showTitleLabel": "Afficher le nom sur la page d'accueil",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nom et sous-titre du restaurant.",
         "contacts": "Contacts et adresse",
         "contactsDesc": "Téléphone, Instagram, WhatsApp, point sur la carte.",
-        "branding": "Identité",
-        "brandingDesc": "Couleur d'accent, visibilité du nom, image ou vidéo de fond.",
+        "branding": "Site",
+        "brandingDesc": "URL du menu public, nom, couleur d'accent, image ou vidéo de fond.",
         "general": "Général",
         "generalDesc": "Lien du menu public, devise par défaut.",
         "tables": "Tables",

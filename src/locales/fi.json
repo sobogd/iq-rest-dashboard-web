@@ -458,7 +458,7 @@
         "locationTip": "Osoite ja kartta näytetään julkisella yhteystietosivullasi. Hae tai napauta karttaa asettaaksesi nuppineulan."
       },
       "branding": {
-        "title": "Brändi",
+        "title": "Sivusto",
         "accentLabel": "Korostusväri",
         "accentTip": "Pääväri painikkeille ja korostuksille.",
         "showTitleLabel": "Näytä nimi etusivulla",
@@ -635,8 +635,8 @@
         "aboutDesc": "Ravintolan nimi ja alaotsikko.",
         "contacts": "Yhteystiedot ja sijainti",
         "contactsDesc": "Puhelin, Instagram, WhatsApp, sijainti kartalla.",
-        "branding": "Brändi",
-        "brandingDesc": "Korostusväri, nimen näkyvyys, taustakuva tai -video.",
+        "branding": "Sivusto",
+        "brandingDesc": "Julkisen ruokalistan URL, nimi, korostusväri, taustakuva tai -video.",
         "general": "Yleiset",
         "generalDesc": "Julkisen menun linkki, oletusvaluutta.",
         "tables": "Pöydät",

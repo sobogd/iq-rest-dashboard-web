@@ -458,7 +458,7 @@
         "locationTip": "Adresas ir žemėlapis rodomi jūsų viešo kontaktų puslapyje. Ieškokite arba bakstelėkite žemėlapį, kad nustatytumėte kaištį."
       },
       "branding": {
-        "title": "Prekės ženklas",
+        "title": "Svetainė",
         "accentLabel": "Akcento spalva",
         "accentTip": "Pagrindinė spalva mygtukams ir paryškinimams.",
         "showTitleLabel": "Rodyti pavadinimą pagrindiniame puslapyje",
@@ -635,8 +635,8 @@
         "aboutDesc": "Restorano pavadinimas ir paantraštė.",
         "contacts": "Kontaktai ir vieta",
         "contactsDesc": "Telefonas, Instagram, WhatsApp, kaištis žemėlapyje.",
-        "branding": "Prekės ženklas",
-        "brandingDesc": "Akcento spalva, pavadinimo matomumas, fono paveikslėlis arba vaizdo įrašas.",
+        "branding": "Svetainė",
+        "brandingDesc": "Viešo meniu URL, pavadinimas, akcentinė spalva, fono nuotrauka ar vaizdo įrašas.",
         "general": "Bendrieji",
         "generalDesc": "Viešo meniu nuoroda, numatytoji valiuta.",
         "tables": "Stalai",

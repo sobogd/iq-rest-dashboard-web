@@ -458,7 +458,7 @@
         "locationTip": "Adresa i karta na vašoj javnoj stranici kontakta. Pretražite ili dodirnite kartu za postavljanje špenadla."
       },
       "branding": {
-        "title": "Brendiranje",
+        "title": "Web",
         "accentLabel": "Boja naglaska",
         "accentTip": "Glavna boja za gumbe i isticanja.",
         "showTitleLabel": "Prikaži naziv na početnoj",
@@ -635,8 +635,8 @@
         "aboutDesc": "Naziv restorana i podnaslov.",
         "contacts": "Kontakti i lokacija",
         "contactsDesc": "Telefon, Instagram, WhatsApp, špenadl na karti.",
-        "branding": "Brendiranje",
-        "brandingDesc": "Boja naglaska, vidljivost naziva, pozadinska slika ili video.",
+        "branding": "Web",
+        "brandingDesc": "URL javnog menija, naziv, akcentna boja, slika ili videozapis pozadine.",
         "general": "Općenito",
         "generalDesc": "Poveznica javnog jelovnika, zadana valuta.",
         "tables": "Stolovi",

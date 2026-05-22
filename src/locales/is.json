@@ -458,7 +458,7 @@
         "locationTip": "Heimilisfang og kort sem birtast á opinberu tengiliðasíðunni. Leitaðu eða smelltu á kortið til að setja prjón."
       },
       "branding": {
-        "title": "Vörumerki",
+        "title": "Vefur",
         "accentLabel": "Áherslulitur",
         "accentTip": "Aðalitur fyrir takka og áherslur.",
         "showTitleLabel": "Sýna nafn á forsíðu",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nafn veitingastaðar og undirtitill.",
         "contacts": "Tengiliðir og staðsetning",
         "contactsDesc": "Sími, Instagram, WhatsApp, prjón á korti.",
-        "branding": "Vörumerki",
-        "brandingDesc": "Áherslulitur, sýnileiki nafns, bakgrunnsmynd eða myndband.",
+        "branding": "Vefur",
+        "brandingDesc": "Slóð opins matseðils, nafn, áherslulitur, bakgrunnsmynd eða -myndband.",
         "general": "Almennt",
         "generalDesc": "Tengill opinbera matseðilsins, sjálfgefinn gjaldmiðill.",
         "tables": "Borð",

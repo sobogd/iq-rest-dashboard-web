@@ -458,7 +458,7 @@
         "locationTip": "Indirizzo e mappa mostrati nella pagina contatti pubblica. Cerca o tocca la mappa per posizionare il pin."
       },
       "branding": {
-        "title": "Brand",
+        "title": "Sito",
         "accentLabel": "Colore accento",
         "accentTip": "Colore principale per pulsanti ed evidenziazioni.",
         "showTitleLabel": "Mostra il nome nella home",
@@ -635,8 +635,8 @@
         "aboutDesc": "Nome del ristorante e sottotitolo.",
         "contacts": "Contatti e posizione",
         "contactsDesc": "Telefono, Instagram, WhatsApp, indirizzo sulla mappa.",
-        "branding": "Brand",
-        "brandingDesc": "Colore accento, visibilità del nome, immagine o video di sfondo.",
+        "branding": "Sito",
+        "brandingDesc": "URL del menu pubblico, nome, colore di accento, immagine o video di sfondo.",
         "general": "Generale",
         "generalDesc": "Link del menu pubblico, valuta predefinita.",
         "tables": "Tavoli",
