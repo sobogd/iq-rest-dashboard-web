@@ -664,8 +664,8 @@ export function OrdersPage({
  </div>
  </div>
  ) : (
- <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col h-full">
- <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-border">
+ <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col max-h-full">
+ <div className="min-h-0 overflow-y-auto divide-y divide-border">
  {activeOrders.map((o) => (
  <OrderListCard
  key={o.id}
@@ -850,10 +850,11 @@ function OrderListCard({
  : overallStatus === "inProgress"
  ? t("inProgress", { defaultValue: "In progress" })
  : null;
- const orderLabel = t("orderLabel", {
- defaultValue: "Order #{number}",
- number: order.dailyNumber,
- });
+ const orderNum = `#${order.dailyNumber}`;
+ const tableLabel =
+ order.tableNumber != null
+ ? t("tableLabel", { number: order.tableNumber })
+ : t("noTableLabel", { defaultValue: "No table" });
 
  const cls =
  variant === "card"
@@ -863,7 +864,9 @@ function OrderListCard({
  <button type="button" onClick={onClick} className={cls}>
  <div className="flex items-center gap-2">
  <div className="min-w-0 flex-1 text-sm font-medium text-foreground truncate">
- {orderLabel}
+ <span>{orderNum}</span>
+ <span className="text-muted-foreground font-normal"> · </span>
+ <span>{tableLabel}</span>
  {statusLabel && overallStatus ? (
  <>
  <span className="text-muted-foreground font-normal"> · </span>
