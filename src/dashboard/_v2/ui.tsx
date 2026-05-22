@@ -82,7 +82,7 @@ export function Modal({
  }
  >
  {hideHeader ? null : (
- <div className="flex items-center gap-2 px-5 py-3.5 border-b border-border shrink-0">
+ <div className="flex items-start gap-2 px-5 py-3.5 border-b border-border shrink-0">
  {onBack ? (
  <button
  type="button"
