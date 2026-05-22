@@ -885,7 +885,7 @@
         "WAITER": "Freastalaí"
       },
       "codeTitle": "Cód péireála — {name}",
-      "codeInstructions": "Oscail k.iq-rest.com ar an táibléad agus cuir isteach an cód seo chun é a phéireáil mar {type}. Téann an cód in éag go luath — gin ceann nua más gá.",
+      "codeInstructions": "Oscail {host} ar an táibléad agus cuir isteach an cód seo chun é a phéireáil mar {type}. Téann an cód in éag go luath — gin ceann nua más gá.",
       "expiresIn": "Imíonn in éag i gceann {time}",
       "expired": "Cód imithe in éag — gin ceann nua.",
       "codeCopied": "Cód cóipeáilte",

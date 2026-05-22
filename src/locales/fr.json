@@ -885,7 +885,7 @@
         "WAITER": "Serveur"
       },
       "codeTitle": "Code d'association — {name}",
-      "codeInstructions": "Ouvrez k.iq-rest.com sur la tablette et saisissez ce code pour l'associer en tant que {type}. Le code expire bientôt — générez-en un nouveau si nécessaire.",
+      "codeInstructions": "Ouvrez {host} sur la tablette et saisissez ce code pour l'associer en tant que {type}. Le code expire bientôt — générez-en un nouveau si nécessaire.",
       "expiresIn": "Expire dans {time}",
       "expired": "Code expiré — générez-en un nouveau.",
       "codeCopied": "Code copié",

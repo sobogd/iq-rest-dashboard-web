@@ -885,7 +885,7 @@
         "WAITER": "Ospătar"
       },
       "codeTitle": "Cod de asociere — {name}",
-      "codeInstructions": "Deschide k.iq-rest.com pe tabletă și introdu acest cod pentru a o asocia ca {type}. Codul expiră curând — generează altul dacă este nevoie.",
+      "codeInstructions": "Deschide {host} pe tabletă și introdu acest cod pentru a o asocia ca {type}. Codul expiră curând — generează altul dacă este nevoie.",
       "expiresIn": "Expiră în {time}",
       "expired": "Cod expirat — generează unul nou.",
       "codeCopied": "Cod copiat",

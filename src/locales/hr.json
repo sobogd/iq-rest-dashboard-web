@@ -885,7 +885,7 @@
         "WAITER": "Konobar"
       },
       "codeTitle": "Kod za uparivanje — {name}",
-      "codeInstructions": "Otvorite k.iq-rest.com na tabletu i unesite ovaj kod da biste ga uparili kao {type}. Kod uskoro istječe — po potrebi generirajte novi.",
+      "codeInstructions": "Otvorite {host} na tabletu i unesite ovaj kod da biste ga uparili kao {type}. Kod uskoro istječe — po potrebi generirajte novi.",
       "expiresIn": "Istječe za {time}",
       "expired": "Kod je istekao — generirajte novi.",
       "codeCopied": "Kod kopiran",

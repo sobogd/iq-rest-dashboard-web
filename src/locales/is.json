@@ -885,7 +885,7 @@
         "WAITER": "Þjónn"
       },
       "codeTitle": "Pörunarkóði — {name}",
-      "codeInstructions": "Opnaðu k.iq-rest.com á spjaldtölvunni og sláðu inn þennan kóða til að para hana sem {type}. Kóðinn rennur fljótlega út — búðu til nýjan ef þarf.",
+      "codeInstructions": "Opnaðu {host} á spjaldtölvunni og sláðu inn þennan kóða til að para hana sem {type}. Kóðinn rennur fljótlega út — búðu til nýjan ef þarf.",
       "expiresIn": "Rennur út eftir {time}",
       "expired": "Kóðinn rann út — búðu til nýjan.",
       "codeCopied": "Kóði afritaður",

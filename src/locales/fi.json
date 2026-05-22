@@ -885,7 +885,7 @@
         "WAITER": "Tarjoilija"
       },
       "codeTitle": "Yhdistämiskoodi — {name}",
-      "codeInstructions": "Avaa k.iq-rest.com tabletilla ja syötä tämä koodi yhdistääksesi sen {type}-laitteena. Koodi vanhenee pian — luo tarvittaessa uusi.",
+      "codeInstructions": "Avaa {host} tabletilla ja syötä tämä koodi yhdistääksesi sen {type}-laitteena. Koodi vanhenee pian — luo tarvittaessa uusi.",
       "expiresIn": "Vanhenee ajassa {time}",
       "expired": "Koodi vanheni — luo uusi.",
       "codeCopied": "Koodi kopioitu",

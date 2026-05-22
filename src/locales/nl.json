@@ -885,7 +885,7 @@
         "WAITER": "Bediening"
       },
       "codeTitle": "Koppelingscode — {name}",
-      "codeInstructions": "Open k.iq-rest.com op de tablet en voer deze code in om hem als {type} te koppelen. De code verloopt binnenkort — genereer indien nodig een nieuwe.",
+      "codeInstructions": "Open {host} op de tablet en voer deze code in om hem als {type} te koppelen. De code verloopt binnenkort — genereer indien nodig een nieuwe.",
       "expiresIn": "Verloopt over {time}",
       "expired": "Code verlopen — genereer een nieuwe.",
       "codeCopied": "Code gekopieerd",

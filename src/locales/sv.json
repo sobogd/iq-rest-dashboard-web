@@ -885,7 +885,7 @@
         "WAITER": "Servitör"
       },
       "codeTitle": "Parkopplingskod — {name}",
-      "codeInstructions": "Öppna k.iq-rest.com på surfplattan och ange den här koden för att parkoppla den som {type}. Koden går snart ut — generera en ny vid behov.",
+      "codeInstructions": "Öppna {host} på surfplattan och ange den här koden för att parkoppla den som {type}. Koden går snart ut — generera en ny vid behov.",
       "expiresIn": "Går ut om {time}",
       "expired": "Koden har gått ut — skapa en ny.",
       "codeCopied": "Kod kopierad",

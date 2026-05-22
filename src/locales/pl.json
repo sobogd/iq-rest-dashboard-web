@@ -885,7 +885,7 @@
         "WAITER": "Kelner"
       },
       "codeTitle": "Kod parowania — {name}",
-      "codeInstructions": "Otwórz k.iq-rest.com na tablecie i wprowadź ten kod, aby sparować go jako {type}. Kod wkrótce wygaśnie — w razie potrzeby wygeneruj nowy.",
+      "codeInstructions": "Otwórz {host} na tablecie i wprowadź ten kod, aby sparować go jako {type}. Kod wkrótce wygaśnie — w razie potrzeby wygeneruj nowy.",
       "expiresIn": "Wygasa za {time}",
       "expired": "Kod wygasł — wygeneruj nowy.",
       "codeCopied": "Kod skopiowany",

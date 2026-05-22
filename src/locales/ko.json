@@ -885,7 +885,7 @@
         "WAITER": "서빙"
       },
       "codeTitle": "페어링 코드 — {name}",
-      "codeInstructions": "태블릿에서 k.iq-rest.com을 열고 이 코드를 입력해 {type}으로 페어링하세요. 코드는 곧 만료됩니다 — 필요 시 새로 생성하세요.",
+      "codeInstructions": "태블릿에서 {host}을 열고 이 코드를 입력해 {type}으로 페어링하세요. 코드는 곧 만료됩니다 — 필요 시 새로 생성하세요.",
       "expiresIn": "{time} 후 만료",
       "expired": "코드가 만료되었습니다 — 새로 생성하세요.",
       "codeCopied": "코드 복사됨",

@@ -885,7 +885,7 @@
         "WAITER": "Garson"
       },
       "codeTitle": "Eşleştirme kodu — {name}",
-      "codeInstructions": "Tablette k.iq-rest.com adresini açın ve bu kodu girerek {type} olarak eşleştirin. Kodun süresi yakında dolar — gerekirse yeni bir kod oluşturun.",
+      "codeInstructions": "Tablette {host} adresini açın ve bu kodu girerek {type} olarak eşleştirin. Kodun süresi yakında dolar — gerekirse yeni bir kod oluşturun.",
       "expiresIn": "{time} içinde sona erer",
       "expired": "Kodun süresi doldu — yeni bir tane oluşturun.",
       "codeCopied": "Kod kopyalandı",

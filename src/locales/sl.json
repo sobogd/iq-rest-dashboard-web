@@ -885,7 +885,7 @@
         "WAITER": "Natakar"
       },
       "codeTitle": "Koda za seznanitev — {name}",
-      "codeInstructions": "Odprite k.iq-rest.com na tablici in vnesite to kodo, da jo seznanite kot {type}. Koda kmalu poteče — po potrebi ustvarite novo.",
+      "codeInstructions": "Odprite {host} na tablici in vnesite to kodo, da jo seznanite kot {type}. Koda kmalu poteče — po potrebi ustvarite novo.",
       "expiresIn": "Poteče čez {time}",
       "expired": "Koda je potekla — ustvarite novo.",
       "codeCopied": "Koda kopirana",

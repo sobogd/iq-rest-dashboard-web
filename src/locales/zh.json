@@ -885,7 +885,7 @@
         "WAITER": "服务员"
       },
       "codeTitle": "配对代码 — {name}",
-      "codeInstructions": "在平板上打开 k.iq-rest.com,输入此代码以将其配对为 {type}。代码即将过期 — 如有需要请重新生成。",
+      "codeInstructions": "在平板上打开 {host},输入此代码以将其配对为 {type}。代码即将过期 — 如有需要请重新生成。",
       "expiresIn": "{time} 后过期",
       "expired": "代码已过期 — 请重新生成。",
       "codeCopied": "代码已复制",

@@ -466,7 +466,10 @@ function PairingCodeModal({
           {remaining > 0 ? t("expiresIn", { time: `${mm}:${ss}` }) : t("expired")}
         </div>
         <div className="text-[13px] text-muted-foreground leading-snug">
-          {t("codeInstructions", { type: t(`type.${device.type}`).toLowerCase() })}
+          {t("codeInstructions", {
+            host: device.type === "WAITER" ? "w.iq-rest.com" : "k.iq-rest.com",
+            type: t(`type.${device.type}`).toLowerCase(),
+          })}
         </div>
         <div className="flex items-center justify-center gap-2">
           <button

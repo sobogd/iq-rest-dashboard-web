@@ -885,7 +885,7 @@
         "WAITER": "Číšník"
       },
       "codeTitle": "Párovací kód — {name}",
-      "codeInstructions": "Otevřete k.iq-rest.com na tabletu a zadejte tento kód, abyste jej spárovali jako {type}. Kód brzy vyprší — vygenerujte nový, pokud je třeba.",
+      "codeInstructions": "Otevřete {host} na tabletu a zadejte tento kód, abyste jej spárovali jako {type}. Kód brzy vyprší — vygenerujte nový, pokud je třeba.",
       "expiresIn": "Vyprší za {time}",
       "expired": "Kód vypršel — vygenerujte nový.",
       "codeCopied": "Kód zkopírován",

@@ -885,7 +885,7 @@
         "WAITER": "Kelner"
       },
       "codeTitle": "Sidumiskood — {name}",
-      "codeInstructions": "Ava k.iq-rest.com tahvelarvutis ja sisesta see kood, et siduda see {type}-na. Kood aegub varsti — vajadusel loo uus.",
+      "codeInstructions": "Ava {host} tahvelarvutis ja sisesta see kood, et siduda see {type}-na. Kood aegub varsti — vajadusel loo uus.",
       "expiresIn": "Aegub {time} pärast",
       "expired": "Kood aegus — loo uus.",
       "codeCopied": "Kood kopeeritud",

@@ -885,7 +885,7 @@
         "WAITER": "Cameriere"
       },
       "codeTitle": "Codice di associazione — {name}",
-      "codeInstructions": "Apri k.iq-rest.com sul tablet e inserisci questo codice per associarlo come {type}. Il codice scade a breve — generane uno nuovo se serve.",
+      "codeInstructions": "Apri {host} sul tablet e inserisci questo codice per associarlo come {type}. Il codice scade a breve — generane uno nuovo se serve.",
       "expiresIn": "Scade tra {time}",
       "expired": "Codice scaduto — generane uno nuovo.",
       "codeCopied": "Codice copiato",

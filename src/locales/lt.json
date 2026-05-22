@@ -885,7 +885,7 @@
         "WAITER": "Padavėjas"
       },
       "codeTitle": "Susiejimo kodas — {name}",
-      "codeInstructions": "Atidarykite k.iq-rest.com planšetėje ir įveskite šį kodą, kad ją susietumėte kaip {type}. Kodas netrukus baigs galioti — prireikus sukurkite naują.",
+      "codeInstructions": "Atidarykite {host} planšetėje ir įveskite šį kodą, kad ją susietumėte kaip {type}. Kodas netrukus baigs galioti — prireikus sukurkite naują.",
       "expiresIn": "Galioja dar {time}",
       "expired": "Kodas baigė galioti — sukurkite naują.",
       "codeCopied": "Kodas nukopijuotas",

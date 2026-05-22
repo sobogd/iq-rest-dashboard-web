@@ -885,7 +885,7 @@
         "WAITER": "Service"
       },
       "codeTitle": "Kopplungscode — {name}",
-      "codeInstructions": "Öffne k.iq-rest.com auf dem Tablet und gib diesen Code ein, um es als {type} zu koppeln. Der Code läuft bald ab — bei Bedarf einen neuen erzeugen.",
+      "codeInstructions": "Öffne {host} auf dem Tablet und gib diesen Code ein, um es als {type} zu koppeln. Der Code läuft bald ab — bei Bedarf einen neuen erzeugen.",
       "expiresIn": "Läuft ab in {time}",
       "expired": "Code abgelaufen — bitte einen neuen erzeugen.",
       "codeCopied": "Code kopiert",

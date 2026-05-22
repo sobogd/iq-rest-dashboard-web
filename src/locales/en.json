@@ -336,7 +336,7 @@
         "WAITER": "Waiter"
       },
       "codeTitle": "Pairing code — {name}",
-      "codeInstructions": "Open k.iq-rest.com on the tablet and enter this code to pair it as the {type}. The code expires shortly — generate a new one if it runs out.",
+      "codeInstructions": "Open {host} on the tablet and enter this code to pair it as the {type}. The code expires shortly — generate a new one if it runs out.",
       "expiresIn": "Expires in {time}",
       "expired": "Code expired — generate a new one.",
       "codeCopied": "Code copied",

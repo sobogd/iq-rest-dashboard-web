@@ -885,7 +885,7 @@
         "WAITER": "Empregado"
       },
       "codeTitle": "Código de emparelhamento — {name}",
-      "codeInstructions": "Abra k.iq-rest.com no tablet e introduza este código para o emparelhar como {type}. O código expira em breve — gere outro se necessário.",
+      "codeInstructions": "Abra {host} no tablet e introduza este código para o emparelhar como {type}. O código expira em breve — gere outro se necessário.",
       "expiresIn": "Expira em {time}",
       "expired": "Código expirado — gere um novo.",
       "codeCopied": "Código copiado",

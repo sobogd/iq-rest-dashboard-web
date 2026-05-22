@@ -885,7 +885,7 @@
         "WAITER": "Tjener"
       },
       "codeTitle": "Parringskode — {name}",
-      "codeInstructions": "Åbn k.iq-rest.com på tabletten og indtast denne kode for at parre den som {type}. Koden udløber snart — generér en ny, hvis det er nødvendigt.",
+      "codeInstructions": "Åbn {host} på tabletten og indtast denne kode for at parre den som {type}. Koden udløber snart — generér en ny, hvis det er nødvendigt.",
       "expiresIn": "Udløber om {time}",
       "expired": "Koden er udløbet — generér en ny.",
       "codeCopied": "Kode kopieret",

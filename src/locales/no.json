@@ -885,7 +885,7 @@
         "WAITER": "Servitør"
       },
       "codeTitle": "Paringskode — {name}",
-      "codeInstructions": "Åpne k.iq-rest.com på nettbrettet og skriv inn denne koden for å pare det som {type}. Koden utløper snart — generer en ny ved behov.",
+      "codeInstructions": "Åpne {host} på nettbrettet og skriv inn denne koden for å pare det som {type}. Koden utløper snart — generer en ny ved behov.",
       "expiresIn": "Utløper om {time}",
       "expired": "Koden er utløpt — generer en ny.",
       "codeCopied": "Kode kopiert",

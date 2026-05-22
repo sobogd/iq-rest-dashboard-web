@@ -885,7 +885,7 @@
         "WAITER": "Viesmīlis"
       },
       "codeTitle": "Savienošanas kods — {name}",
-      "codeInstructions": "Atveriet k.iq-rest.com planšetdatorā un ievadiet šo kodu, lai to savienotu kā {type}. Kods drīz beigsies — ja nepieciešams, ģenerējiet jaunu.",
+      "codeInstructions": "Atveriet {host} planšetdatorā un ievadiet šo kodu, lai to savienotu kā {type}. Kods drīz beigsies — ja nepieciešams, ģenerējiet jaunu.",
       "expiresIn": "Beigsies pēc {time}",
       "expired": "Kods beidzās — ģenerējiet jaunu.",
       "codeCopied": "Kods nokopēts",

@@ -885,7 +885,7 @@
         "WAITER": "Cambrer"
       },
       "codeTitle": "Codi de vinculació — {name}",
-      "codeInstructions": "Obre k.iq-rest.com a la tauleta i introdueix aquest codi per vincular-la com a {type}. El codi caduca aviat — genera'n un de nou si cal.",
+      "codeInstructions": "Obre {host} a la tauleta i introdueix aquest codi per vincular-la com a {type}. El codi caduca aviat — genera'n un de nou si cal.",
       "expiresIn": "Caduca en {time}",
       "expired": "Codi caducat — genera'n un de nou.",
       "codeCopied": "Codi copiat",
