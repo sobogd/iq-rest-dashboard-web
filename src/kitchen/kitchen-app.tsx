@@ -426,6 +426,7 @@ function KitchenAppBody() {
           onOrderPendingChange={handleOrderPendingChange}
           filterBarExtras={<ZoomControls />}
           fullWidthFilterBar
+          kioskLayout
         />
       </KitchenShell>
       <OfflineOverlay

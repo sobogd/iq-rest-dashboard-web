@@ -59,6 +59,12 @@ interface KitchenPageProps {
   // admin host keeps the constrained width for visual consistency
   // with the rest of the dashboard.
   fullWidthFilterBar?: boolean;
+  // Kiosk layout: switches to kanban-style rendering — the page itself
+  // never scrolls vertically, each table card scrolls internally. Filter
+  // bar becomes inline (not sticky) at the top of the column so the
+  // notch backplate sits flush behind it. Admin host (false) keeps the
+  // document-scroll layout the rest of the dashboard uses.
+  kioskLayout?: boolean;
 }
 
 const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
@@ -78,6 +84,7 @@ export function KitchenPage({
   onOrderPendingChange,
   filterBarExtras,
   fullWidthFilterBar,
+  kioskLayout,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -252,10 +259,14 @@ export function KitchenPage({
   const filterBtnOff = "bg-secondary text-muted-foreground hover:text-foreground";
 
   return (
-    <div>
+    <div className={kioskLayout ? "h-full flex flex-col min-h-0" : undefined}>
       <div
-        className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
-        style={{ top: "var(--topbar-h, 0px)" }}
+        className={
+          (kioskLayout
+            ? "shrink-0 bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
+            : "sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60")
+        }
+        style={kioskLayout ? undefined : { top: "var(--topbar-h, 0px)" }}
       >
         <div
           className={
@@ -324,8 +335,24 @@ export function KitchenPage({
       />
 
       {visibleGroups.length === 0 ? (
-        <div className="max-w-5xl mx-auto md:px-6 pt-7 md:pt-6">
+        <div className={kioskLayout ? "flex-1 min-h-0 flex items-center justify-center" : "max-w-5xl mx-auto md:px-6 pt-7 md:pt-6"}>
           <EmptyState title={t("kitchenClear")} subtitle={t("kitchenClearSub")} />
+        </div>
+      ) : kioskLayout ? (
+        <div className="flex-1 min-h-0 overflow-x-auto pb-1 px-4 md:px-6 mt-3">
+          <div className="flex items-stretch gap-3 h-full" style={{ width: "max-content" }}>
+            {visibleGroups.map((g) => (
+              <KitchenTableCard
+                key={g.key}
+                entries={g.items}
+                table={g.tableId ? tables.find((t) => t.id === g.tableId) || null : null}
+                tableNumberFallback={g.tableNumber}
+                defaultLang={defaultLang}
+                onItemAdvance={advanceItemStatus}
+                fullHeight
+              />
+            ))}
+          </div>
         </div>
       ) : (
         <div className="-mx-4 md:-mx-6 mt-4 md:mt-3">
@@ -355,12 +382,14 @@ function KitchenTableCard({
   tableNumberFallback,
   defaultLang,
   onItemAdvance,
+  fullHeight,
 }: {
   entries: { item: OrderItem; orderId: string }[];
   table: TableEntity | null;
   tableNumberFallback: number | string | null;
   defaultLang: string;
   onItemAdvance: (orderId: string, itemId: string) => void;
+  fullHeight?: boolean;
 }) {
   const t = useTranslations("dashboard.orders");
   const allReady = entries.length > 0 && entries.every((e) => e.item.status === "ready");
@@ -370,15 +399,27 @@ function KitchenTableCard({
   const tableNumber = table ? table.number : tableNumberFallback ?? "?";
 
   return (
-    <div className={"w-72 shrink-0 rounded-xl border overflow-hidden " + cardCls + " flex flex-col"}>
-      <div className="px-3.5 py-3 border-b border-border/60 bg-subheader rounded-t-xl">
+    <div
+      className={
+        "w-72 shrink-0 rounded-xl border overflow-hidden " +
+        cardCls +
+        " flex flex-col" +
+        (fullHeight ? " h-full" : "")
+      }
+    >
+      <div className="px-3.5 py-3 border-b border-border/60 bg-subheader rounded-t-xl shrink-0">
         <div className="text-base font-medium text-foreground">
           {t("tableLabel", { number: tableNumber })}
         </div>
         {table?.name ? <div className="text-xs text-muted-foreground mt-0.5">{table.name}</div> : null}
       </div>
 
-      <div className="flex-1 divide-y divide-border">
+      <div
+        className={
+          "divide-y divide-border " +
+          (fullHeight ? "flex-1 min-h-0 overflow-y-auto" : "flex-1")
+        }
+      >
         {[...entries]
           .sort((a, b) => {
             const sa = a.item.status === "served" ? 1 : 0;
