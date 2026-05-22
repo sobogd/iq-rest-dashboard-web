@@ -466,7 +466,7 @@ export function TableFormPage({
  <div>
  <SubpageStickyBar onBack={() => { track("dash_settings_table_click_back"); onBack(); }} onSave={save} canSave={!saving} />
 
- <div className="max-w-2xl md:max-w-5xl mx-auto pt-5 md:pt-4">
+ <div className="max-w-2xl md:max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 min-w-0">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">
  {t("settingsBreadcrumb")} / {t("title")}
