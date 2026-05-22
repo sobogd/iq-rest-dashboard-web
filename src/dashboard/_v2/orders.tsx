@@ -20,6 +20,7 @@ import {
  TrashIcon,
 } from "./icons";
 import { ConfirmDialog, EmptyState, Modal, PageHeader } from "./ui";
+import { DiscountModal } from "./discount-modal";
 import { FloorMap } from "./tables";
 import {
  formatPrice,
@@ -112,6 +113,11 @@ export function OrdersPage({
  const [moreOpen, setMoreOpen] = useState(false);
  const [changeTableForOrder, setChangeTableForOrder] = useState<string | null>(null);
  const [splitForOrder, setSplitForOrder] = useState<string | null>(null);
+ // Discount editor targets. Either an order id (order-level discount) or
+ // an {orderId, itemId} pair (item-level discount). Mutually exclusive —
+ // the same modal renders for both.
+ const [discountForOrder, setDiscountForOrder] = useState<string | null>(null);
+ const [discountForItem, setDiscountForItem] = useState<{ orderId: string; itemId: string } | null>(null);
  const [headerBack, setHeaderBack] = useState<(() => void) | null>(null);
  const [wizardTitle, setWizardTitle] = useState<string | null>(null);
  const [wizardFooter, setWizardFooter] = useState<React.ReactNode | null>(null);
@@ -199,6 +205,7 @@ export function OrdersPage({
  items: next.items,
  total: calcOrderTotal(next),
  ...(patch.paymentMethodId !== undefined ? { paymentMethodId: patch.paymentMethodId } : {}),
+ ...(patch.discount !== undefined ? { discount: patch.discount } : {}),
  });
  // No invalidate / no rollback — SSE will push the server-confirmed
  // copy back through the cache. On failure we just toast; the next
@@ -478,6 +485,7 @@ export function OrdersPage({
  }
  onRemoveItem={(itemId) => removeItem(currentOrder.id, itemId)}
  onDuplicateItem={(itemId) => duplicateItem(currentOrder.id, itemId)}
+ onItemDiscount={(itemId) => setDiscountForItem({ orderId: currentOrder.id, itemId })}
  />
  );
  const hasUnservedItems =
@@ -526,6 +534,19 @@ export function OrdersPage({
  >
  <SplitIcon size={13} />
  {t("splitOrder", { defaultValue: "Split order" })}
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setMoreOpen(false);
+ setDiscountForOrder(currentOrder.id);
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors"
+ >
+ <span className="inline-flex items-center justify-center w-[13px] text-[13px] font-bold">%</span>
+ {currentOrder.discount
+ ? t("discountEdit", { defaultValue: "Edit discount" })
+ : t("discountAdd", { defaultValue: "Add discount" })}
  </button>
  <button
  type="button"
@@ -790,6 +811,48 @@ export function OrdersPage({
  setSplitForOrder(null);
  }}
  />
+
+ <DiscountModal
+ open={discountForOrder !== null}
+ initial={discountForOrder ? orders.find((o) => o.id === discountForOrder)?.discount ?? null : null}
+ currencySymbol={currencySymbol}
+ title={t("discountOrderTitle", { defaultValue: "Order discount" })}
+ onClose={() => setDiscountForOrder(null)}
+ onSave={async (next) => {
+ if (!discountForOrder) return;
+ const target = orders.find((o) => o.id === discountForOrder);
+ if (target) {
+ await persistOrder(discountForOrder, { discount: next });
+ }
+ setDiscountForOrder(null);
+ }}
+ />
+
+ <DiscountModal
+ open={discountForItem !== null}
+ initial={
+ discountForItem
+ ? orders
+ .find((o) => o.id === discountForItem.orderId)
+ ?.items.find((it) => it.id === discountForItem.itemId)
+ ?.discount ?? null
+ : null
+ }
+ currencySymbol={currencySymbol}
+ title={t("discountItemTitle", { defaultValue: "Item discount" })}
+ onClose={() => setDiscountForItem(null)}
+ onSave={async (next) => {
+ if (!discountForItem) return;
+ const target = orders.find((o) => o.id === discountForItem.orderId);
+ if (target) {
+ const nextItems = target.items.map((it) =>
+ it.id === discountForItem.itemId ? { ...it, discount: next } : it,
+ );
+ await persistOrder(discountForItem.orderId, { items: nextItems });
+ }
+ setDiscountForItem(null);
+ }}
+ />
  </>
  );
 }
@@ -917,6 +980,7 @@ function OrderDetailView({
  onItemStatusChange,
  onRemoveItem,
  onDuplicateItem,
+ onItemDiscount,
 }: {
  order: Order;
  defaultLang: string;
@@ -924,6 +988,7 @@ function OrderDetailView({
  onItemStatusChange: (itemId: string, status: OrderItemStatus) => void;
  onRemoveItem: (itemId: string) => void;
  onDuplicateItem: (itemId: string) => void;
+ onItemDiscount: (itemId: string) => void;
 }) {
  const t = useTranslations("dashboard.orders");
 
@@ -951,6 +1016,7 @@ function OrderDetailView({
  onStatusChange={(status) => onItemStatusChange(item.id, status)}
  onRemove={() => onRemoveItem(item.id)}
  onDuplicate={() => onDuplicateItem(item.id)}
+ onDiscount={() => onItemDiscount(item.id)}
  />
  ))}
  </div>
@@ -964,6 +1030,7 @@ function OrderItemCard({
  onStatusChange,
  onRemove,
  onDuplicate,
+ onDiscount,
 }: {
  item: OrderItem;
  defaultLang: string;
@@ -971,6 +1038,7 @@ function OrderItemCard({
  onStatusChange: (status: OrderItemStatus) => void;
  onRemove: () => void;
  onDuplicate: () => void;
+ onDiscount: () => void;
 }) {
  const t = useTranslations("dashboard.orders");
  const statusKey = ITEM_STATUS_KEYS[item.status] || ITEM_STATUS_KEYS.pending;
@@ -996,6 +1064,8 @@ function OrderItemCard({
  currentStatus={item.status}
  onStatusChange={onStatusChange}
  onDuplicate={onDuplicate}
+ onDiscount={onDiscount}
+ hasDiscount={!!item.discount}
  onRemove={onRemove}
  statusLabels={{
  pending: t("statusPending"),
@@ -1004,6 +1074,9 @@ function OrderItemCard({
  served: t("statusServed"),
  }}
  duplicateLabel={t("duplicateItem", { defaultValue: "Duplicate" })}
+ discountLabel={item.discount
+ ? t("discountEdit", { defaultValue: "Edit discount" })
+ : t("discountAdd", { defaultValue: "Add discount" })}
  removeLabel={t("removeItem")}
  />
  </div>
@@ -1771,17 +1844,23 @@ function ItemMoreMenu({
  currentStatus,
  onStatusChange,
  onDuplicate,
+ onDiscount,
+ hasDiscount,
  onRemove,
  statusLabels,
  duplicateLabel,
+ discountLabel,
  removeLabel,
 }: {
  currentStatus: OrderItemStatus;
  onStatusChange: (status: OrderItemStatus) => void;
  onDuplicate: () => void;
+ onDiscount: () => void;
+ hasDiscount: boolean;
  onRemove: () => void;
  statusLabels: Record<OrderItemStatus, string>;
  duplicateLabel: string;
+ discountLabel: string;
  removeLabel: string;
 }) {
  const [open, setOpen] = useState(false);
@@ -1861,6 +1940,18 @@ function ItemMoreMenu({
  >
  <CopyIcon size={13} />
  {duplicateLabel}
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setOpen(false);
+ onDiscount();
+ }}
+ className="w-full flex items-center gap-2 px-3 h-9 text-left text-xs font-medium text-foreground transition-colors"
+ >
+ <span className="inline-flex items-center justify-center w-[13px] text-[13px] font-bold">%</span>
+ {discountLabel}
+ {hasDiscount ? <span className="ml-auto text-[10px] text-muted-foreground">●</span> : null}
  </button>
  <button
  type="button"

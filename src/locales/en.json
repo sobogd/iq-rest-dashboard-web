@@ -432,7 +432,21 @@
       "disabledBody": "Enable orders in settings to start receiving them.",
       "disabledCta": "Go to settings",
       "paymentMethodLabel": "Payment method",
-      "selectPaymentMethod": "Select a payment method."
+      "selectPaymentMethod": "Select a payment method.",
+      "discountAdd": "Add discount",
+      "discountEdit": "Edit discount",
+      "discountRemove": "Remove",
+      "discountSave": "Save",
+      "discountTitle": "Discount",
+      "discountSubtitle": "Apply a discount to the price.",
+      "discountOrderTitle": "Order discount",
+      "discountItemTitle": "Item discount",
+      "discountTypeLabel": "Type",
+      "discountTypePercent": "Percent",
+      "discountTypeFixed": "Fixed",
+      "discountValueLabel": "Value",
+      "discountReasonLabel": "Reason (optional)",
+      "discountReasonPlaceholder": "e.g. Loyal customer"
     },
     "reservations": {
       "title": "Bookings",

@@ -64,6 +64,14 @@ export interface OrderItemOptionSnapshot {
 
 export type OrderItemStatus = "pending" | "cooking" | "ready" | "served";
 
+export type DiscountType = "percent" | "fixed";
+
+export interface Discount {
+ type: DiscountType;
+ value: number;
+ reason?: string;
+}
+
 export interface OrderItem {
  id: string;
  dishId: string;
@@ -73,6 +81,7 @@ export interface OrderItem {
  notes: string;
  status: OrderItemStatus;
  createdAt: string;
+ discount?: Discount | null;
 }
 
 export interface Order {
@@ -87,6 +96,7 @@ export interface Order {
  total: number;
  paymentMethodId?: string | null;
  statusBeforeClose?: string | null;
+ discount?: Discount | null;
 }
 
 export interface Booking {

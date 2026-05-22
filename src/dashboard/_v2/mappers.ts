@@ -299,7 +299,9 @@ export function apiOrderToOrder(o: ApiOrder, tablesByNumber: Map<number, string>
  notes: it.notes,
  status: it.status,
  createdAt: it.createdAt,
+ discount: it.discount ?? null,
  })),
  total: Number(o.total) || 0,
+ discount: o.discount ?? null,
  };
 }

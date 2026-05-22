@@ -550,6 +550,12 @@ export async function patchReservation(
 
 // ── Orders ──
 
+export interface ApiDiscount {
+ type: "percent" | "fixed";
+ value: number;
+ reason?: string;
+}
+
 export interface ApiOrderItem {
  id: string;
  dishId: string;
@@ -559,6 +565,7 @@ export interface ApiOrderItem {
  notes: string;
  status: "pending" | "cooking" | "ready" | "served";
  createdAt: string;
+ discount?: ApiDiscount | null;
 }
 
 export interface ApiOrder {
@@ -578,6 +585,8 @@ export interface ApiOrder {
  dailyNumber: number;
  createdAt: string;
  updatedAt: string;
+ discount?: ApiDiscount | null;
+ discountTotal?: number | null;
 }
 
 export async function fetchOrders(status?: string): Promise<ApiOrder[]> {
@@ -605,7 +614,14 @@ export async function createOrder(payload: {
 
 export async function patchOrder(
  id: string,
- payload: { status?: string; items?: ApiOrderItem[]; total?: number; tableNumber?: number | null; paymentMethodId?: string | null },
+ payload: {
+   status?: string;
+   items?: ApiOrderItem[];
+   total?: number;
+   tableNumber?: number | null;
+   paymentMethodId?: string | null;
+   discount?: ApiDiscount | null;
+ },
 ): Promise<ApiOrder> {
  const res = await apiFetch(`/api/orders/${id}`, {
         credentials: "include",
@@ -726,6 +742,18 @@ export async function logout(): Promise<void> {
 // Server stores Order.items as a JSON array on the row. We extend each item with a
 // per-item kitchen status and option snapshots client-side, persisting via PATCH /orders/[id].
 
+function normalizeDiscount(raw: unknown): ApiDiscount | null {
+ if (!raw || typeof raw !== "object") return null;
+ const r = raw as Record<string, unknown>;
+ const type = r.type;
+ const value = Number(r.value);
+ if ((type !== "percent" && type !== "fixed") || !Number.isFinite(value) || value <= 0) {
+   return null;
+ }
+ const reason = typeof r.reason === "string" && r.reason.trim() ? r.reason : undefined;
+ return { type, value, ...(reason ? { reason } : {}) };
+}
+
 export function normalizeOrderItems(items: unknown): ApiOrderItem[] {
  if (!Array.isArray(items)) return [];
  return items
@@ -745,6 +773,7 @@ export function normalizeOrderItems(items: unknown): ApiOrderItem[] {
  notes: typeof r.notes === "string" ? r.notes : "",
  status,
  createdAt: typeof r.createdAt === "string" ? r.createdAt : new Date().toISOString(),
+ discount: normalizeDiscount(r.discount),
  };
  });
 }
