@@ -350,11 +350,14 @@ function KitchenAppBody() {
   return (
     <>
       <KitchenShell
-        restaurant={snapshot.restaurant}
         soundReady={soundReady}
         onEnableSound={async () => {
           await unlockSound();
           setSoundReady(isSoundUnlocked());
+          // Audible confirmation that the toggle worked. Without this the
+          // user has to wait for an actual new order to know if the chime
+          // is actually wired up.
+          playOrderChime();
         }}
       >
         <KitchenPage

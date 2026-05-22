@@ -41,6 +41,15 @@ export async function unlockSound(): Promise<void> {
     osc.start();
     osc.stop(audioCtx.currentTime + 0.01);
     unlocked = true;
+    // Wake the context any time the tab returns to the foreground. iOS
+    // suspends AudioContext on screen lock / app switch and doesn't
+    // auto-resume — without this hook the kiosk goes silent until the
+    // user re-taps "Enable sound".
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
+        void audioCtx.resume();
+      }
+    });
   } catch {
     // ignore — sound will simply not play
   }
@@ -49,24 +58,35 @@ export async function unlockSound(): Promise<void> {
 export function playOrderChime(): void {
   if (!unlocked || !audioCtx) return;
   const ctx = audioCtx;
-  // Two-note "ding-ding" — 880 Hz then 1175 Hz, ~150ms each, with a short
-  // decay envelope so it sounds like a bell rather than a square wave.
+  // Safari/iOS aggressively suspends the context when the tab is in the
+  // background, then leaves it suspended after returning. Resuming on
+  // every chime attempt is cheap and pulls the kiosk back to audible
+  // state without staff intervention.
+  if (ctx.state === "suspended") {
+    void ctx.resume();
+  }
+  // Three rising chirps — 660 → 880 → 1175 Hz. Triangle wave is brighter
+  // than sine through a tablet speaker, and a longer attack envelope
+  // (~25 ms) cuts the click sound on cheap drivers. Gain pushed close
+  // to clipping (0.9) because kitchens are loud.
   const tones: { freq: number; at: number }[] = [
-    { freq: 880, at: 0 },
-    { freq: 1175, at: 0.16 },
+    { freq: 660, at: 0 },
+    { freq: 880, at: 0.18 },
+    { freq: 1175, at: 0.36 },
   ];
+  const now = ctx.currentTime;
   for (const t of tones) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.type = "sine";
+    osc.type = "triangle";
     osc.frequency.value = t.freq;
-    const start = ctx.currentTime + t.at;
+    const start = now + t.at;
     gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(0.5, start + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+    gain.gain.exponentialRampToValueAtTime(0.9, start + 0.025);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.4);
     osc.connect(gain).connect(ctx.destination);
     osc.start(start);
-    osc.stop(start + 0.4);
+    osc.stop(start + 0.45);
   }
 }
 
