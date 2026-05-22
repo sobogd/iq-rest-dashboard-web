@@ -11,6 +11,28 @@
 let audioCtx: AudioContext | null = null;
 let unlocked = false;
 
+// Persisted across reloads. Once the staff has explicitly opted in, the
+// kiosk treats them as "wants sound on" forever and silently re-unlocks
+// the AudioContext on the first user interaction after each reload —
+// no need to re-tap the Enable-sound banner every page refresh.
+const PREF_KEY = "k-sound-pref";
+
+export function getSoundPreference(): boolean {
+  try {
+    return window.localStorage.getItem(PREF_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setSoundPreference(on: boolean): void {
+  try {
+    window.localStorage.setItem(PREF_KEY, on ? "1" : "0");
+  } catch {
+    // ignore — private mode etc.
+  }
+}
+
 interface MinimalWakeLockSentinel {
   release: () => Promise<void>;
 }
