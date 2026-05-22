@@ -10,14 +10,13 @@ import { PairingScreen } from "./pairing-screen";
 import { KitchenShell } from "./kitchen-shell";
 import { OfflineOverlay } from "./offline-overlay";
 import {
-  getSoundPreference,
   isSoundUnlocked,
   playOrderChime,
   releaseWakeLock,
   requestWakeLock,
-  setSoundPreference,
   unlockSound,
 } from "./sound";
+import { SoundPrompt } from "./sound-prompt";
 import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
 import { ZoomControls } from "./zoom-controls";
 import { KitchenPage } from "@/dashboard/_v2/kitchen-page";
@@ -91,23 +90,11 @@ function KitchenAppBody() {
   const [bootstrapping, setBootstrapping] = useState<boolean>(!!token);
   const [error, setError] = useState<string | null>(null);
   const [soundReady, setSoundReady] = useState<boolean>(isSoundUnlocked());
-  // Persisted opt-in. When true, we hide the "Enable sound" banner on
-  // reload and arm a one-shot pointerdown listener that silently unlocks
-  // the AudioContext on the first user interaction — staff doesn't have
-  // to re-tap an extra button every page refresh.
-  const [soundPref, setSoundPref] = useState<boolean>(() => getSoundPreference());
-
-  useEffect(() => {
-    if (!soundPref || soundReady) return;
-    const handler = () => {
-      void unlockSound().then(() => setSoundReady(isSoundUnlocked()));
-    };
-    // capture:true so we still catch the gesture even when the target
-    // is a button that calls stopPropagation. once:true releases the
-    // handler after the first tap.
-    document.addEventListener("pointerdown", handler, { once: true, capture: true });
-    return () => document.removeEventListener("pointerdown", handler, true);
-  }, [soundPref, soundReady]);
+  // Modal dismissal for this page load only. Resets on every reload so
+  // staff sees the prompt again next time — silent auto-unlock proved
+  // unreliable in Safari, and an explicit prompt is the simplest
+  // contract.
+  const [soundDismissed, setSoundDismissed] = useState<boolean>(false);
 
   // Kept current so SSE event handlers (created via useKitchenStream) can
   // read the latest state without re-binding the stream effect on every
@@ -410,19 +397,7 @@ function KitchenAppBody() {
 
   return (
     <>
-      <KitchenShell
-        soundReady={soundReady || soundPref}
-        onEnableSound={async () => {
-          await unlockSound();
-          setSoundReady(isSoundUnlocked());
-          setSoundPreference(true);
-          setSoundPref(true);
-          // Audible confirmation that the toggle worked. Without this the
-          // user has to wait for an actual new order to know if the chime
-          // is actually wired up.
-          playOrderChime();
-        }}
-      >
+      <KitchenShell>
         <KitchenPage
           orders={snapshot.orders}
           setOrders={(updater) => {
@@ -450,6 +425,7 @@ function KitchenAppBody() {
           }}
           onOrderPendingChange={handleOrderPendingChange}
           filterBarExtras={<ZoomControls />}
+          fullWidthFilterBar
         />
       </KitchenShell>
       <OfflineOverlay
@@ -459,6 +435,22 @@ function KitchenAppBody() {
           reconnect();
         }}
         forceOffline={probeFailed}
+      />
+      <SoundPrompt
+        open={!soundReady && !soundDismissed}
+        onEnable={async () => {
+          await unlockSound();
+          const ok = isSoundUnlocked();
+          setSoundReady(ok);
+          if (ok) {
+            // Audible confirmation that the toggle worked. Without this the
+            // staff has to wait for an actual new order to know if sound
+            // really came on.
+            playOrderChime();
+          }
+          setSoundDismissed(true);
+        }}
+        onDismiss={() => setSoundDismissed(true)}
       />
     </>
   );

@@ -836,7 +836,10 @@
       "retryHint": "Seolfar athruithe stádais go huathoibríoch nuair a fhillfidh an ceangal.",
       "loading": "Á luchtú…",
       "failedToLoad": "Theip ar shonraí na cistine a luchtú",
-      "retry": "Bain triail eile"
+      "retry": "Bain triail eile",
+      "soundDismiss": "Ní anois",
+      "soundPromptTitle": "Cumasaigh an fhuaim?",
+      "soundPromptMessage": "Cuireann brabhsálaithe fuaim faoi chosc go dtí go bpriocfaidh tú lena chumasú. Cumasaigh fógra na n-orduithe nua ionas go gcloisfidh an chistin iad."
     },
     "devices": {
       "title": "Gléasanna",

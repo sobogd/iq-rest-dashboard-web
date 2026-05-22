@@ -836,7 +836,10 @@
       "retryHint": "Les changements de statut seront renvoyés automatiquement dès le retour de la connexion.",
       "loading": "Chargement…",
       "failedToLoad": "Impossible de charger les données de la cuisine",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "soundDismiss": "Pas maintenant",
+      "soundPromptTitle": "Activer le son ?",
+      "soundPromptMessage": "Les navigateurs bloquent l'audio tant que vous n'avez pas appuyé pour l'autoriser. Activez le signal sonore pour que la cuisine entende les nouvelles commandes."
     },
     "devices": {
       "title": "Appareils",

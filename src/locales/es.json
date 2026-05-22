@@ -836,7 +836,10 @@
       "retryHint": "Los cambios de estado se reintentarán automáticamente cuando vuelva la conexión.",
       "loading": "Cargando…",
       "failedToLoad": "No se han podido cargar los datos de la cocina",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "soundDismiss": "Ahora no",
+      "soundPromptTitle": "¿Activar sonido?",
+      "soundPromptMessage": "Los navegadores bloquean el audio hasta que tocas para permitirlo. Activa el aviso de pedidos nuevos para que la cocina los oiga."
     },
     "devices": {
       "title": "Dispositivos",

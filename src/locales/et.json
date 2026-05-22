@@ -836,7 +836,10 @@
       "retryHint": "Olekumuudatused saadetakse automaatselt, kui ühendus on taastatud.",
       "loading": "Laadimine…",
       "failedToLoad": "Köögi andmeid ei õnnestunud laadida",
-      "retry": "Proovi uuesti"
+      "retry": "Proovi uuesti",
+      "soundDismiss": "Mitte praegu",
+      "soundPromptTitle": "Lülitada heli sisse?",
+      "soundPromptMessage": "Brauserid blokeerivad heli, kuni puudutad selle lubamiseks. Lülita uue tellimuse helisignaal sisse, et köök kuuleks tellimusi."
     },
     "devices": {
       "title": "Seadmed",

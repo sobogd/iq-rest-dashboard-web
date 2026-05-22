@@ -836,7 +836,10 @@
       "retryHint": "Modificările de stare vor fi trimise automat când conexiunea revine.",
       "loading": "Se încarcă…",
       "failedToLoad": "Nu s-au putut încărca datele bucătăriei",
-      "retry": "Încearcă din nou"
+      "retry": "Încearcă din nou",
+      "soundDismiss": "Nu acum",
+      "soundPromptTitle": "Activează sunetul?",
+      "soundPromptMessage": "Browserele blochează sunetul până când atingi pentru a-l permite. Activează sunetul pentru comenzi noi pentru ca bucătăria să le audă."
     },
     "devices": {
       "title": "Dispozitive",

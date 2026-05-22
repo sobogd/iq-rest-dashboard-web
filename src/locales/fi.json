@@ -836,7 +836,10 @@
       "retryHint": "Tilamuutokset lähetetään automaattisesti yhteyden palatessa.",
       "loading": "Ladataan…",
       "failedToLoad": "Keittiön tietojen lataus epäonnistui",
-      "retry": "Yritä uudelleen"
+      "retry": "Yritä uudelleen",
+      "soundDismiss": "Ei nyt",
+      "soundPromptTitle": "Otetaanko ääni käyttöön?",
+      "soundPromptMessage": "Selaimet estävät äänen, kunnes napautat sallia. Ota uuden tilauksen merkkiääni käyttöön, jotta keittiö kuulee tilaukset."
     },
     "devices": {
       "title": "Laitteet",

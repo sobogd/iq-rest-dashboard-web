@@ -836,7 +836,10 @@
       "retryHint": "Promjene statusa poslat će se automatski čim se veza obnovi.",
       "loading": "Učitavanje…",
       "failedToLoad": "Nije moguće učitati podatke kuhinje",
-      "retry": "Pokušaj ponovno"
+      "retry": "Pokušaj ponovno",
+      "soundDismiss": "Ne sada",
+      "soundPromptTitle": "Uključiti zvuk?",
+      "soundPromptMessage": "Preglednici blokiraju zvuk dok ga ne dopustite dodirom. Uključite zvuk novih narudžbi kako bi ih kuhinja čula."
     },
     "devices": {
       "title": "Uređaji",

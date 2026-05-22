@@ -836,7 +836,10 @@
       "retryHint": "Statusændringer sendes automatisk, når forbindelsen er tilbage.",
       "loading": "Indlæser…",
       "failedToLoad": "Køkkendata kunne ikke indlæses",
-      "retry": "Prøv igen"
+      "retry": "Prøv igen",
+      "soundDismiss": "Ikke nu",
+      "soundPromptTitle": "Aktivér lyd?",
+      "soundPromptMessage": "Browsere blokerer lyd indtil du trykker for at tillade den. Slå lyden til, så køkkenet hører nye ordrer."
     },
     "devices": {
       "title": "Enheder",

@@ -836,7 +836,10 @@
       "retryHint": "Els canvis d'estat es reintentaran automàticament quan torni la connexió.",
       "loading": "Carregant…",
       "failedToLoad": "No s'han pogut carregar les dades de la cuina",
-      "retry": "Torna-ho a intentar"
+      "retry": "Torna-ho a intentar",
+      "soundDismiss": "Ara no",
+      "soundPromptTitle": "Activar el so?",
+      "soundPromptMessage": "Els navegadors bloquegen el so fins que toques per permetre'l. Activa l'avís de noves comandes perquè la cuina les senti."
     },
     "devices": {
       "title": "Dispositius",

@@ -836,7 +836,10 @@
       "retryHint": "Būsenos pakeitimai bus išsiųsti automatiškai, kai ryšys atsistatys.",
       "loading": "Įkeliama…",
       "failedToLoad": "Nepavyko įkelti virtuvės duomenų",
-      "retry": "Bandyti dar kartą"
+      "retry": "Bandyti dar kartą",
+      "soundDismiss": "Ne dabar",
+      "soundPromptTitle": "Įjungti garsą?",
+      "soundPromptMessage": "Naršyklės blokuoja garsą, kol bakstelėjate jam leisti. Įjunkite naujų užsakymų signalą, kad virtuvė girdėtų atvykstančius užsakymus."
     },
     "devices": {
       "title": "Įrenginiai",

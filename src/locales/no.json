@@ -836,7 +836,10 @@
       "retryHint": "Statusendringer sendes automatisk når tilkoblingen er tilbake.",
       "loading": "Laster…",
       "failedToLoad": "Kunne ikke laste kjøkkendata",
-      "retry": "Prøv igjen"
+      "retry": "Prøv igjen",
+      "soundDismiss": "Ikke nå",
+      "soundPromptTitle": "Aktivere lyd?",
+      "soundPromptMessage": "Nettlesere blokkerer lyd til du trykker for å tillate det. Slå på varsellyd for nye bestillinger så kjøkkenet hører dem."
     },
     "devices": {
       "title": "Enheter",

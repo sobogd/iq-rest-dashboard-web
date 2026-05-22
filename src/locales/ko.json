@@ -836,7 +836,10 @@
       "retryHint": "연결이 복구되면 상태 변경 사항이 자동으로 전송됩니다.",
       "loading": "불러오는 중…",
       "failedToLoad": "주방 데이터를 불러오지 못했습니다",
-      "retry": "다시 시도"
+      "retry": "다시 시도",
+      "soundDismiss": "나중에",
+      "soundPromptTitle": "사운드를 활성화할까요?",
+      "soundPromptMessage": "브라우저는 탭으로 허용할 때까지 오디오를 차단합니다. 새 주문 알림음을 켜서 주방이 들어오는 주문을 들을 수 있게 하세요."
     },
     "devices": {
       "title": "기기",

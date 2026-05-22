@@ -836,7 +836,10 @@
       "retryHint": "Zmeny stavov sa odošlú automaticky po obnovení spojenia.",
       "loading": "Načítava sa…",
       "failedToLoad": "Údaje kuchyne sa nepodarilo načítať",
-      "retry": "Skúsiť znovu"
+      "retry": "Skúsiť znovu",
+      "soundDismiss": "Teraz nie",
+      "soundPromptTitle": "Zapnúť zvuk?",
+      "soundPromptMessage": "Prehliadače blokujú zvuk, kým ho klepnutím nepovolíte. Zapnite zvuk nových objednávok, aby ich kuchyňa počula."
     },
     "devices": {
       "title": "Zariadenia",

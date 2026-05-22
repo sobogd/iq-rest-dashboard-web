@@ -836,7 +836,10 @@
       "retryHint": "Zmiany statusów zostaną wysłane automatycznie po wznowieniu połączenia.",
       "loading": "Ładowanie…",
       "failedToLoad": "Nie udało się załadować danych kuchni",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "soundDismiss": "Nie teraz",
+      "soundPromptTitle": "Włączyć dźwięk?",
+      "soundPromptMessage": "Przeglądarki blokują dźwięk, dopóki nie zezwolisz na niego dotknięciem. Włącz sygnał nowych zamówień, żeby kuchnia je słyszała."
     },
     "devices": {
       "title": "Urządzenia",

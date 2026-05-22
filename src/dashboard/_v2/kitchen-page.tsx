@@ -54,6 +54,11 @@ interface KitchenPageProps {
   // sticky sub-header. The kitchen kiosk uses this for zoom +/- buttons;
   // admin host passes nothing.
   filterBarExtras?: React.ReactNode;
+  // Drops the max-w-5xl container on the sticky filter bar. Kitchen
+  // kiosk uses full viewport width to fit more table cards per row;
+  // admin host keeps the constrained width for visual consistency
+  // with the rest of the dashboard.
+  fullWidthFilterBar?: boolean;
 }
 
 const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
@@ -72,6 +77,7 @@ export function KitchenPage({
   onItemAdvanced,
   onOrderPendingChange,
   filterBarExtras,
+  fullWidthFilterBar,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -251,7 +257,12 @@ export function KitchenPage({
         className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
         style={{ top: "var(--topbar-h, 0px)" }}
       >
-        <div className="max-w-5xl mx-auto md:px-6 flex items-center gap-2 px-4 py-2">
+        <div
+          className={
+            (fullWidthFilterBar ? "" : "max-w-5xl mx-auto md:px-6 ") +
+            "flex items-center gap-2 px-4 py-2"
+          }
+        >
           <button
             type="button"
             onClick={() => setOpenFilter("status")}

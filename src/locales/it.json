@@ -836,7 +836,10 @@
       "retryHint": "Le modifiche di stato verranno inviate automaticamente al ripristino della connessione.",
       "loading": "Caricamento…",
       "failedToLoad": "Impossibile caricare i dati della cucina",
-      "retry": "Riprova"
+      "retry": "Riprova",
+      "soundDismiss": "Non ora",
+      "soundPromptTitle": "Attivare l'audio?",
+      "soundPromptMessage": "I browser bloccano l'audio finché non tocchi per consentirlo. Attiva il suono dei nuovi ordini in modo che la cucina li senta."
     },
     "devices": {
       "title": "Dispositivi",

@@ -836,7 +836,10 @@
       "retryHint": "A státuszváltozások automatikusan elküldődnek, amint a kapcsolat helyreáll.",
       "loading": "Betöltés…",
       "failedToLoad": "Nem sikerült betölteni a konyha adatait",
-      "retry": "Újrapróbálás"
+      "retry": "Újrapróbálás",
+      "soundDismiss": "Most nem",
+      "soundPromptTitle": "Hang bekapcsolása?",
+      "soundPromptMessage": "A böngészők letiltják a hangot, amíg koppintással engedélyezést nem adsz. Kapcsold be az új rendelés hangját, hogy a konyha hallja a rendeléseket."
     },
     "devices": {
       "title": "Eszközök",

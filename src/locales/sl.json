@@ -836,7 +836,10 @@
       "retryHint": "Spremembe statusov bodo poslane samodejno, ko se povezava obnovi.",
       "loading": "Nalaganje…",
       "failedToLoad": "Podatkov kuhinje ni bilo mogoče naložiti",
-      "retry": "Poskusi znova"
+      "retry": "Poskusi znova",
+      "soundDismiss": "Ne zdaj",
+      "soundPromptTitle": "Vklopiti zvok?",
+      "soundPromptMessage": "Brskalniki blokirajo zvok, dokler ga ne dovoliš s tapom. Vklopi zvok za nova naročila, da jih kuhinja sliši."
     },
     "devices": {
       "title": "Naprave",

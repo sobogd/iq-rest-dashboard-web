@@ -836,7 +836,10 @@
       "retryHint": "连接恢复后,状态变更将自动重新发送。",
       "loading": "加载中…",
       "failedToLoad": "无法加载厨房数据",
-      "retry": "重试"
+      "retry": "重试",
+      "soundDismiss": "暂不",
+      "soundPromptTitle": "启用声音?",
+      "soundPromptMessage": "浏览器会阻止音频,直到你点按授权。请启用新订单提示音,以便厨房能听到来单。"
     },
     "devices": {
       "title": "设备",

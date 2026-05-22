@@ -836,7 +836,10 @@
       "retryHint": "Statusa izmaiņas tiks nosūtītas automātiski, tiklīdz atjaunosies savienojums.",
       "loading": "Notiek ielāde…",
       "failedToLoad": "Neizdevās ielādēt virtuves datus",
-      "retry": "Mēģināt vēlreiz"
+      "retry": "Mēģināt vēlreiz",
+      "soundDismiss": "Ne tagad",
+      "soundPromptTitle": "Ieslēgt skaņu?",
+      "soundPromptMessage": "Pārlūki bloķē skaņu, līdz pieskaraties, lai to atļautu. Ieslēdziet jaunu pasūtījumu signālu, lai virtuve dzird ienākošos pasūtījumus."
     },
     "devices": {
       "title": "Ierīces",

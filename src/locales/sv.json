@@ -836,7 +836,10 @@
       "retryHint": "Statusändringar skickas automatiskt när anslutningen kommer tillbaka.",
       "loading": "Läser in…",
       "failedToLoad": "Kunde inte ladda köksdata",
-      "retry": "Försök igen"
+      "retry": "Försök igen",
+      "soundDismiss": "Inte nu",
+      "soundPromptTitle": "Aktivera ljud?",
+      "soundPromptMessage": "Webbläsare blockerar ljud tills du trycker för att tillåta det. Slå på ljudet för nya beställningar så köket hör dem."
     },
     "devices": {
       "title": "Enheter",

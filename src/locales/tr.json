@@ -836,7 +836,10 @@
       "retryHint": "Bağlantı geri geldiğinde durum değişiklikleri otomatik olarak gönderilir.",
       "loading": "Yükleniyor…",
       "failedToLoad": "Mutfak verileri yüklenemedi",
-      "retry": "Tekrar dene"
+      "retry": "Tekrar dene",
+      "soundDismiss": "Şimdi değil",
+      "soundPromptTitle": "Sesi aç?",
+      "soundPromptMessage": "Tarayıcılar siz dokunup izin verene kadar sesi engeller. Yeni sipariş bildirim sesini açın ki mutfak siparişleri duysun."
     },
     "devices": {
       "title": "Cihazlar",

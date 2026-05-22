@@ -836,7 +836,10 @@
       "retryHint": "Statusänderungen werden automatisch nachgereicht, sobald die Verbindung wieder steht.",
       "loading": "Wird geladen…",
       "failedToLoad": "Küchendaten konnten nicht geladen werden",
-      "retry": "Erneut versuchen"
+      "retry": "Erneut versuchen",
+      "soundDismiss": "Jetzt nicht",
+      "soundPromptTitle": "Ton aktivieren?",
+      "soundPromptMessage": "Browser blockieren Audio, bis du es per Tippen erlaubst. Aktiviere den Hinweiston, damit die Küche neue Bestellungen hört."
     },
     "devices": {
       "title": "Geräte",

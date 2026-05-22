@@ -836,7 +836,10 @@
       "retryHint": "Statuswijzigingen worden automatisch opnieuw verzonden zodra de verbinding is hersteld.",
       "loading": "Laden…",
       "failedToLoad": "Keukengegevens konden niet worden geladen",
-      "retry": "Opnieuw proberen"
+      "retry": "Opnieuw proberen",
+      "soundDismiss": "Niet nu",
+      "soundPromptTitle": "Geluid inschakelen?",
+      "soundPromptMessage": "Browsers blokkeren audio totdat je tikt om het toe te staan. Schakel het geluid voor nieuwe bestellingen in zodat de keuken ze hoort."
     },
     "devices": {
       "title": "Apparaten",

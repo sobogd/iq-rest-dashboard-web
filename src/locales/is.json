@@ -836,7 +836,10 @@
       "retryHint": "Stöðubreytingar verða sendar sjálfkrafa þegar tenging er komin aftur.",
       "loading": "Hleður…",
       "failedToLoad": "Tókst ekki að hlaða gögnum eldhússins",
-      "retry": "Reyna aftur"
+      "retry": "Reyna aftur",
+      "soundDismiss": "Ekki núna",
+      "soundPromptTitle": "Kveikja á hljóði?",
+      "soundPromptMessage": "Vafrar loka fyrir hljóð þar til þú snertir til að leyfa það. Kveiktu á hljóði fyrir nýjar pantanir svo eldhúsið heyri þær."
     },
     "devices": {
       "title": "Tæki",
