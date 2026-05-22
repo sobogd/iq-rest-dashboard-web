@@ -11,7 +11,12 @@ import { track } from "./dashboard-events";
 // is a known trade-off; we choose it because the user wants to see the exact
 // failure cause without opening event payloads in the admin panel.
 export function showApiError(err: unknown, action: string): void {
-  const t = i18n.getFixedT(null, "dashboard.common");
+  // i18next is configured with a single `translation` namespace whose value
+  // is the locale's whole JSON — so the namespace argument is omitted and the
+  // full dotted path is passed to `t()`. The previous `getFixedT(null, "ns")`
+  // tried to scope to a non-existent namespace and consistently returned the
+  // raw key.
+  const t = i18n.t.bind(i18n);
 
   let status = 0;
   let message = "unknown_error";
@@ -27,8 +32,8 @@ export function showApiError(err: unknown, action: string): void {
   const eventName = `dash_error_${status || "net"}_${slug}`.slice(0, 120);
   track(eventName, { action, status, message });
 
-  toast.error(t("genericErrorTitle"), {
-    description: t("genericErrorMessage"),
+  toast.error(t("dashboard.common.genericErrorTitle") as string, {
+    description: t("dashboard.common.genericErrorMessage") as string,
   });
 
   // eslint-disable-next-line no-console

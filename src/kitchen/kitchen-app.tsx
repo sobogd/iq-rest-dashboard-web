@@ -1,0 +1,425 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
+import i18n from "i18next";
+import { ThemeProvider } from "@/components/theme-provider";
+import { apiUrl } from "@/lib/api";
+import { clearDeviceToken, getDeviceToken, setDeviceToken } from "@/lib/device-mode";
+import { PairingScreen } from "./pairing-screen";
+import { KitchenShell } from "./kitchen-shell";
+import { OfflineOverlay } from "./offline-overlay";
+import {
+  isSoundUnlocked,
+  playOrderChime,
+  releaseWakeLock,
+  requestWakeLock,
+  unlockSound,
+} from "./sound";
+import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
+import { KitchenPage } from "@/dashboard/_v2/kitchen-page";
+import {
+  apiOrderToOrder,
+  apiTableToTable,
+  apiRestaurantToRestaurant,
+  buildCategories,
+} from "@/dashboard/_v2/mappers";
+import type {
+  ApiCategory,
+  ApiItem,
+  ApiOrder,
+  ApiRestaurant,
+  ApiTable,
+} from "@/dashboard/_v2/api";
+import type {
+  Category,
+  Order,
+  OrderItem,
+  Restaurant,
+  TableEntity,
+} from "@/dashboard/_v2/types";
+
+type DeviceType = "KITCHEN" | "WAITER";
+
+interface BootstrapResponse {
+  device: { id: string; type: DeviceType; restaurantId: string };
+  restaurant: ApiRestaurant;
+  categories: ApiCategory[];
+  items: ApiItem[];
+  tables: ApiTable[];
+  orders: ApiOrder[];
+}
+
+interface KitchenSnapshot {
+  deviceType: DeviceType;
+  restaurant: Restaurant;
+  categories: Category[];
+  tables: TableEntity[];
+  orders: Order[];
+  tablesByNumber: Map<number, string>;
+}
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export function KitchenApp() {
+  return (
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <KitchenAppBody />
+        <Toaster position="top-center" richColors closeButton />
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
+}
+
+function KitchenAppBody() {
+  // Source of truth for auth state. Null until bootstrap succeeds.
+  const [token, setToken] = useState<string | null>(() => getDeviceToken());
+  const [snapshot, setSnapshot] = useState<KitchenSnapshot | null>(null);
+  const [bootstrapping, setBootstrapping] = useState<boolean>(!!token);
+  const [error, setError] = useState<string | null>(null);
+  const [soundReady, setSoundReady] = useState<boolean>(isSoundUnlocked());
+
+  // Kept current so SSE event handlers (created via useKitchenStream) can
+  // read the latest state without re-binding the stream effect on every
+  // re-render. The stream effect only re-binds when `token` changes.
+  const snapshotRef = useRef<KitchenSnapshot | null>(null);
+  snapshotRef.current = snapshot;
+
+  const handleLogout = useCallback(() => {
+    clearDeviceToken();
+    setToken(null);
+    setSnapshot(null);
+    setError(null);
+  }, []);
+
+  const handlePaired = useCallback((nextToken: string) => {
+    setDeviceToken(nextToken);
+    setToken(nextToken);
+    setBootstrapping(true);
+  }, []);
+
+  // Full bootstrap on (re)pair. Used both on initial token mount and as a
+  // fallback when an SSE event arrives whose action we can't apply locally.
+  const fetchBootstrap = useCallback(
+    async (signal?: AbortSignal): Promise<BootstrapResponse | "unauthorized" | "error"> => {
+      if (!token) return "error";
+      try {
+        const res = await fetch(apiUrl("/devices/bootstrap"), {
+          headers: { Authorization: `Bearer ${token}` },
+          signal,
+        });
+        if (res.status === 401) return "unauthorized";
+        if (!res.ok) return "error";
+        return (await res.json()) as BootstrapResponse;
+      } catch {
+        return "error";
+      }
+    },
+    [token],
+  );
+
+  // Initial bootstrap on token change.
+  useEffect(() => {
+    if (!token) {
+      setSnapshot(null);
+      setBootstrapping(false);
+      return;
+    }
+    const controller = new AbortController();
+    setBootstrapping(true);
+    setError(null);
+    void (async () => {
+      const result = await fetchBootstrap(controller.signal);
+      if (controller.signal.aborted) return;
+      if (result === "unauthorized") {
+        handleLogout();
+        return;
+      }
+      if (result === "error") {
+        setError("Failed to load kitchen data");
+        setBootstrapping(false);
+        return;
+      }
+      applySnapshot(result);
+      setBootstrapping(false);
+    })();
+    return () => controller.abort();
+  }, [token, fetchBootstrap, handleLogout]);
+
+  function applySnapshot(data: BootstrapResponse) {
+    const restaurant = apiRestaurantToRestaurant(data.restaurant);
+    const items = data.items.map((it) => ({
+      ...it,
+      price: typeof it.price === "string" ? Number(it.price) : it.price,
+    })) as ApiItem[];
+    const categories = buildCategories(data.categories, items, restaurant.defaultLang || "en");
+    const tables = data.tables.map(apiTableToTable);
+    const tablesByNumber = new Map(data.tables.map((t) => [t.number, t.id]));
+    const orders = data.orders.map((o) => apiOrderToOrder(o, tablesByNumber));
+    setSnapshot({
+      deviceType: data.device.type,
+      restaurant,
+      categories,
+      tables,
+      orders,
+      tablesByNumber,
+    });
+    // Switch UI language to restaurant's default once we know it. i18next
+    // lazy-loads the locale chunk on first changeLanguage; subsequent
+    // identical calls are no-ops.
+    if (restaurant.defaultLang && i18n.language !== restaurant.defaultLang) {
+      void i18n.changeLanguage(restaurant.defaultLang);
+    }
+  }
+
+  // Wake lock — keep the screen alive while the kiosk is logged in.
+  useEffect(() => {
+    if (!token) return;
+    void requestWakeLock();
+    return () => {
+      void releaseWakeLock();
+    };
+  }, [token]);
+
+  // Active reachability probe. SSE alone can lie — the EventSource can
+  // sit in OPEN long after Wi-Fi died because the browser doesn't
+  // proactively detect dead TCP. So we poll /devices/me every 7s with a
+  // tight timeout. Side effects:
+  //   - Doubles as a server-side lastSeenAt heartbeat (the admin "online"
+  //     dot stays fresh even during idle kitchen periods).
+  //   - On a 401, the token has been revoked → force logout.
+  //   - On any other failure (network, 5xx, timeout) flip `probeFailed`
+  //     so the offline overlay shows immediately, without waiting for the
+  //     20s SSE watchdog.
+  const [probeFailed, setProbeFailed] = useState(false);
+  useEffect(() => {
+    if (!token) {
+      setProbeFailed(false);
+      return;
+    }
+    let cancelled = false;
+    let consecutiveFailures = 0;
+    const probe = async () => {
+      if (cancelled) return;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 4_000);
+      try {
+        const res = await fetch(apiUrl("/devices/me"), {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
+        if (!res.ok) {
+          consecutiveFailures++;
+        } else {
+          consecutiveFailures = 0;
+          if (!cancelled) setProbeFailed(false);
+        }
+      } catch {
+        clearTimeout(timeout);
+        consecutiveFailures++;
+      }
+      // Two-failure threshold absorbs single-probe flakes (a packet drop
+      // during the 4s window) while still flagging real outages quickly.
+      if (consecutiveFailures >= 2 && !cancelled) {
+        setProbeFailed(true);
+      }
+    };
+    void probe();
+    const id = setInterval(probe, 7_000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [token, handleLogout]);
+
+  // SSE event → incremental cache patch. The full-bootstrap fallback runs
+  // only when the event payload is incomplete (server omitted `order`
+  // because the NOTIFY payload exceeded Postgres' 8000-char limit).
+  const onSseOrder = useCallback(
+    (event: KitchenOrderEvent) => {
+      const snap = snapshotRef.current;
+      if (!snap) return;
+
+      if (event.action === "deleted") {
+        if (!event.orderId) return;
+        setSnapshot((cur) =>
+          cur ? { ...cur, orders: cur.orders.filter((o) => o.id !== event.orderId) } : cur,
+        );
+        return;
+      }
+
+      const incoming = collectIncoming(event);
+      if (incoming.length === 0) {
+        // Slim payload — no `order` body. Re-fetch the snapshot.
+        void fetchBootstrap().then((res) => {
+          if (res === "unauthorized") handleLogout();
+          else if (res !== "error") applySnapshot(res);
+        });
+        return;
+      }
+
+      const mapped = incoming.map((raw) => apiOrderToOrder(raw, snap.tablesByNumber));
+      const prevOrdersById = new Map(snap.orders.map((o) => [o.id, o]));
+
+      setSnapshot((cur) => {
+        if (!cur) return cur;
+        const byId = new Map(cur.orders.map((o) => [o.id, o]));
+        for (const m of mapped) byId.set(m.id, m);
+        return { ...cur, orders: [...byId.values()] };
+      });
+
+      // Sound policy. Chime decisions are based on the device type AND the
+      // shape of the transition; firing happens after state update so we
+      // can diff against the previous snapshot's items.
+      if (!soundReady) return;
+      if (snap.deviceType === "KITCHEN") {
+        // Cooks care about NEW orders landing. Pre-existing orders that
+        // got their items advanced by another tablet are noise.
+        if (event.action === "created") playOrderChime();
+        return;
+      }
+      if (snap.deviceType === "WAITER") {
+        // Waiters care about items transitioning to "ready" — that's when
+        // food needs to be picked up from the pass. Created orders alone
+        // don't matter (kitchen has to cook first).
+        if (didAnyItemBecomeReady(prevOrdersById, mapped)) playOrderChime();
+      }
+    },
+    [fetchBootstrap, handleLogout, soundReady],
+  );
+
+  const { state: streamState, reconnect } = useKitchenStream({
+    token,
+    onOrder: onSseOrder,
+    onRevoked: handleLogout,
+  });
+
+  if (!token) {
+    return <PairingScreen onPaired={handlePaired} />;
+  }
+
+  if (bootstrapping && !snapshot) {
+    return (
+      <div className="min-h-dvh bg-background flex items-center justify-center text-sm text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
+
+  if (!snapshot) {
+    return (
+      <div className="min-h-dvh bg-background flex items-center justify-center px-6 text-center">
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">{error || "Loading…"}</div>
+          <button
+            type="button"
+            onClick={() => {
+              setBootstrapping(true);
+              setError(null);
+              void fetchBootstrap().then((res) => {
+                if (res === "unauthorized") handleLogout();
+                else if (res !== "error") applySnapshot(res);
+                else setError("Failed to load kitchen data");
+                setBootstrapping(false);
+              });
+            }}
+            className="h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <KitchenShell
+        restaurant={snapshot.restaurant}
+        soundReady={soundReady}
+        onEnableSound={async () => {
+          await unlockSound();
+          setSoundReady(isSoundUnlocked());
+        }}
+      >
+        <KitchenPage
+          orders={snapshot.orders}
+          setOrders={(updater) => {
+            setSnapshot((cur) =>
+              cur
+                ? {
+                    ...cur,
+                    orders:
+                      typeof updater === "function"
+                        ? (updater as (prev: Order[]) => Order[])(cur.orders)
+                        : updater,
+                  }
+                : cur,
+            );
+          }}
+          tables={snapshot.tables}
+          categories={snapshot.categories}
+          defaultLang={snapshot.restaurant.defaultLang}
+          onItemAdvanced={(_prev, next) => {
+            // Local-tap chime: a waiter station shouldn't ring on its own
+            // taps, since the user already knows what they just did. Same
+            // for a kitchen station. Sound only fires through SSE events.
+            void _prev;
+            void next;
+          }}
+        />
+      </KitchenShell>
+      <OfflineOverlay
+        streamState={streamState}
+        onReconnect={() => {
+          setProbeFailed(false);
+          reconnect();
+        }}
+        forceOffline={probeFailed}
+      />
+    </>
+  );
+}
+
+function collectIncoming(event: KitchenOrderEvent): ApiOrder[] {
+  const out: ApiOrder[] = [];
+  if (event.order && typeof event.order === "object") out.push(event.order as ApiOrder);
+  if (event.createdOrder && typeof event.createdOrder === "object") {
+    out.push(event.createdOrder as ApiOrder);
+  }
+  return out;
+}
+
+function didAnyItemBecomeReady(
+  prevOrdersById: Map<string, Order>,
+  incoming: Order[],
+): boolean {
+  for (const order of incoming) {
+    const prev = prevOrdersById.get(order.id);
+    const prevReady = new Set<string>();
+    if (prev) {
+      for (const it of prev.items) {
+        if (it.status === "ready") prevReady.add(it.id);
+      }
+    }
+    for (const it of order.items as OrderItem[]) {
+      if (it.status === "ready" && !prevReady.has(it.id)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

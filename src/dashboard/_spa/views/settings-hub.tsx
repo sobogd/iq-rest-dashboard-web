@@ -24,6 +24,7 @@ const CARDS: CardDef[] = [
   { view: { name: "settings.branding" }, titleKey: "branding", descKey: "brandingDesc", event: "dash_settings_click_tab_brand" },
   { view: { name: "settings.general" }, titleKey: "general", descKey: "generalDesc", event: "dash_settings_click_tab_general" },
   { view: { name: "settings.tables" }, titleKey: "tables", descKey: "tablesDesc", event: "dash_settings_click_tab_tables" },
+  { view: { name: "settings.devices" }, titleKey: "devices", descKey: "devicesDesc", event: "dash_settings_click_tab_devices" },
   { view: { name: "settings.orders" }, titleKey: "orders", descKey: "ordersDesc", event: "dash_settings_click_tab_orders" },
   { view: { name: "settings.bookings" }, titleKey: "bookings", descKey: "bookingsDesc", event: "dash_settings_click_tab_bookings" },
   { view: { name: "settings.languages" }, titleKey: "languages", descKey: "languagesDesc", event: "dash_settings_click_tab_langs" },

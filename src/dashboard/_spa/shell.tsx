@@ -29,6 +29,7 @@ import {
 } from "../_v2/settings";
 import { AnalyticsClient } from "../analytics/analytics-client";
 import { SettingsHubView } from "./views/settings-hub";
+import { DevicesSettingsPage } from "../_v2/devices-settings";
 import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
@@ -305,6 +306,8 @@ function ViewSwitch(p: SwitchProps) {
       return <SettingsBillingWrapper onBack={view.from === "menu" ? backToMenu : backToSettings} />;
     case "settings.support":
       return <SettingsSupportWrapper onBack={backToSettings} />;
+    case "settings.devices":
+      return <DevicesSettingsPage onBack={backToSettings} />;
     case "settings.restaurants":
       return <RestaurantsListPage onBack={backToSettings} />;
     case "settings.restaurants.new":
