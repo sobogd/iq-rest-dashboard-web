@@ -549,7 +549,7 @@ function AiTranslateButton({
 // Textarea that grows to fit its content. Starts at the height of a regular
 // input (h-10) and expands one line at a time. On md+ it keeps a min height
 // matching the dish photo column so the form stays balanced.
-function AutoGrowTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function AutoGrowTextarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
  const ref = useRef<HTMLTextAreaElement | null>(null);
 
  useEffect(() => {

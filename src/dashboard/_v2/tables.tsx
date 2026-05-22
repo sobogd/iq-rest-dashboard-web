@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, QrIcon, TrashIcon } from "./icons";
 import {
+ AutoGrowTextarea,
  ConfirmDialog,
  EmptyState,
  PhotoPicker,
@@ -103,6 +104,7 @@ export function FloorMap({
  readyIds,
  badgeFor,
  wide,
+ dimUnselected,
 }: {
  tables: TableEntity[];
  selectedId: string | null;
@@ -112,6 +114,10 @@ export function FloorMap({
  readyIds?: Set<string>;
  badgeFor?: (tableId: string) => number | null | undefined;
  wide?: boolean;
+ // When true, every table that isn't `selectedId` is rendered muted so
+ // the form's chosen table stands out. Used on the table edit page —
+ // the staff is editing one table, the rest are context.
+ dimUnselected?: boolean;
 }) {
  const tt = useTranslations("dashboard.tables");
  const occupied = occupiedIds || new Set<string>();
@@ -129,7 +135,7 @@ export function FloorMap({
  overflow: hidden;
  box-sizing: border-box;
  }
- ${wide ? ".floor-map { width: 100%; height: 100%; aspect-ratio: auto; }" : "@media (min-width: 768px) { .floor-map { width: 280px; height: 280px; aspect-ratio: auto; } }"}
+ ${wide ? "" : "@media (min-width: 768px) { .floor-map { width: 280px; height: 280px; aspect-ratio: auto; } }"}
  `}</style>
  <div
  className={"floor-map" + (onPickPosition ? " cursor-crosshair" : "")}
@@ -173,6 +179,7 @@ export function FloorMap({
  ? "bg-primary-gradient text-primary-foreground"
  : "bg-card text-foreground";
  const badge = badgeFor ? badgeFor(t.id) : null;
+ const dimCls = dimUnselected && !isSelected ? " opacity-30" : "";
  return (
  <button
  key={t.id}
@@ -180,7 +187,7 @@ export function FloorMap({
  onClick={(e) => { e.stopPropagation(); onSelectTable(t.id); }}
  className={
  "absolute flex items-center justify-center rounded-full font-medium tabular-nums transition-all " +
- stateCls
+ stateCls + dimCls
  }
  style={{
  width: size + "px",
@@ -489,6 +496,8 @@ export function TableFormPage({
  selectedId={draft.id}
  onSelectTable={() => {}}
  onPickPosition={(x, y) => { track("dash_settings_table_click_map"); setDraft((d) => ({ ...d, x, y })); }}
+ wide
+ dimUnselected
  />
  </div>
  <div className="min-w-0">
@@ -564,13 +573,11 @@ function TableSettings({
 
  <div>
  <label className="block text-sm font-medium text-foreground mb-2.5">{t("descriptionLabel")}</label>
- <textarea
+ <AutoGrowTextarea
  value={table.description}
  onChange={(e) => onChange({ description: e.target.value })}
  onFocus={() => track("dash_settings_table_focus_description")}
  placeholder={t("descriptionPlaceholder")}
- rows={2}
- className={inputClass + " resize-none"}
  />
  </div>
 
