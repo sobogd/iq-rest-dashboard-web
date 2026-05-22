@@ -19,7 +19,7 @@ import {
 import { SoundPrompt } from "./sound-prompt";
 import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
 import { ZoomControls } from "./zoom-controls";
-import { KitchenPage } from "@/dashboard/_v2/kitchen-page";
+import { KitchenPage, type KitchenFilterState } from "@/dashboard/_v2/kitchen-page";
 import {
   apiOrderToOrder,
   apiTableToTable,
@@ -112,6 +112,14 @@ function KitchenAppBody() {
   const handleOrderPendingChange = useCallback((orderId: string, pending: boolean) => {
     if (pending) pendingOrderIdsRef.current.add(orderId);
     else pendingOrderIdsRef.current.delete(orderId);
+  }, []);
+
+  // Mirror of the kitchen-page filter state. Used by the chime policy so
+  // a kitchen station that's narrowed its view (e.g. only the cold-pasta
+  // category) doesn't get pinged for hot-pasta items it can't see.
+  const filterStateRef = useRef<KitchenFilterState | null>(null);
+  const handleFiltersChange = useCallback((state: KitchenFilterState) => {
+    filterStateRef.current = state;
   }, []);
 
   const handleLogout = useCallback(() => {
@@ -318,10 +326,13 @@ function KitchenAppBody() {
         // Cooks care about anything new landing on the pass — a brand-new
         // order, or a single dessert appended to an existing check. The
         // industry convention (Square/Toast/Lightspeed) is one chime per
-        // "new item hits kitchen" regardless of which container it came
-        // in. Status advancements / mutations on existing items don't
-        // qualify; pendingOrderIdsRef already strips our own echoes.
-        if (event.action === "created" || didAnyItemAppear(prevOrdersById, mapped)) {
+        // "new item hits kitchen". When the station has narrowed its
+        // view via the filter bar (e.g. only their own category), we
+        // respect that — chime only when at least one new item also
+        // passes the active filter, otherwise the station gets pinged
+        // about items another station owns. Empty filters = chime on
+        // anything new.
+        if (didAnyNewItemPassFilter(prevOrdersById, mapped, filterStateRef.current)) {
           playOrderChime();
         }
         return;
@@ -433,6 +444,7 @@ function KitchenAppBody() {
           filterBarExtras={<ZoomControls />}
           fullWidthFilterBar
           kioskLayout
+          onFiltersChange={handleFiltersChange}
         />
       </KitchenShell>
       <OfflineOverlay
@@ -473,20 +485,27 @@ function collectIncoming(event: KitchenOrderEvent): ApiOrder[] {
 }
 
 // True when an incoming order contains any item id that the previous
-// snapshot's version of the order didn't have. Covers the "customer
-// added a dessert to an existing tab" case where the order is updated
-// (not created), but the kitchen still has new work to do.
-function didAnyItemAppear(prevOrdersById: Map<string, Order>, incoming: Order[]): boolean {
+// snapshot's version of the order didn't have AND that item passes the
+// current kitchen filter (status + category). Filter null/empty means
+// "no filter" — every new item passes. Covers both "brand new order
+// just appeared" (prev=null, every item counts as new) and "dessert
+// added to an existing tab" (prev exists, only new ids count).
+function didAnyNewItemPassFilter(
+  prevOrdersById: Map<string, Order>,
+  incoming: Order[],
+  filter: KitchenFilterState | null,
+): boolean {
+  const statuses = filter?.statuses ?? [];
+  const categoryIds = filter?.categoryIds ?? [];
+  const dishToCat = filter?.dishToCategory ?? {};
   for (const order of incoming) {
     const prev = prevOrdersById.get(order.id);
-    if (!prev) {
-      // Order is new to us, every item counts as appearing.
-      if (order.items.length > 0) return true;
-      continue;
-    }
-    const prevIds = new Set(prev.items.map((it) => it.id));
+    const prevIds = prev ? new Set(prev.items.map((it) => it.id)) : null;
     for (const it of order.items) {
-      if (!prevIds.has(it.id)) return true;
+      if (prevIds && prevIds.has(it.id)) continue;
+      if (statuses.length > 0 && !statuses.includes(it.status)) continue;
+      if (categoryIds.length > 0 && !categoryIds.includes(dishToCat[it.dishId])) continue;
+      return true;
     }
   }
   return false;

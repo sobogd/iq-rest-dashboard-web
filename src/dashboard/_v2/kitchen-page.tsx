@@ -65,6 +65,18 @@ interface KitchenPageProps {
   // notch backplate sits flush behind it. Admin host (false) keeps the
   // document-scroll layout the rest of the dashboard uses.
   kioskLayout?: boolean;
+  // Pushes the current filter state up to the kiosk shell so it can
+  // decide whether an incoming SSE item deserves a chime. Empty arrays
+  // mean "no filter" — every item passes.
+  onFiltersChange?: (state: KitchenFilterState) => void;
+}
+
+export interface KitchenFilterState {
+  statuses: OrderItemStatus[];
+  categoryIds: string[];
+  // dishId → categoryId so the chime predicate can resolve an item's
+  // category without re-walking the categories tree on every SSE event.
+  dishToCategory: Record<string, string>;
 }
 
 const KITCHEN_NEXT: Record<OrderItemStatus, OrderItemStatus> = {
@@ -85,6 +97,7 @@ export function KitchenPage({
   filterBarExtras,
   fullWidthFilterBar,
   kioskLayout,
+  onFiltersChange,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -204,6 +217,16 @@ export function KitchenPage({
     });
     return map;
   }, [categories]);
+
+  // Surface filter state to the kiosk shell so it can decide whether an
+  // incoming SSE item is in-scope for a chime.
+  useEffect(() => {
+    onFiltersChange?.({
+      statuses: statusFilter,
+      categoryIds: categoryFilter,
+      dishToCategory,
+    });
+  }, [statusFilter, categoryFilter, dishToCategory, onFiltersChange]);
 
   function filterItems(items: OrderItem[]): OrderItem[] {
     return items.filter((it) => {
