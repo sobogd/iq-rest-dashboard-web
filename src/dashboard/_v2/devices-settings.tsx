@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ChefHatIcon, CopyIcon, PlusIcon, TrashIcon } from "./icons";
-import { ConfirmDialog, Modal, PageHeader, Select } from "./ui";
+import { ConfirmDialog, EmptyState, Modal, Select, SubpageStickyBar } from "./ui";
 import { inputClass } from "./tokens";
 import {
   createDevice,
@@ -91,41 +91,27 @@ export function DevicesSettingsPage({ onBack }: DevicesSettingsPageProps) {
     }
   }
 
+  const devices = devicesQuery.data ?? [];
+
   return (
-    <div className="max-w-5xl mx-auto md:px-6">
-      <PageHeader
-        title={t("title")}
-        subtitle={t("subtitle")}
-        action={
-          <button
-            type="button"
-            onClick={onBack}
-            className="h-8 px-3 text-xs font-medium text-foreground bg-secondary rounded-md"
-          >
-            {t("back")}
-          </button>
-        }
-      />
+    <div>
+      <SubpageStickyBar onBack={onBack} hideSave />
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
+        <div className="mb-5">
+          <h2 className="text-xl font-medium text-foreground">{t("title")}</h2>
+          <p className="text-[13px] text-muted-foreground leading-snug mt-1">{t("subtitle")}</p>
+        </div>
 
-      <div className="mb-4">
-        <button
-          type="button"
-          onClick={() => setAddOpen(true)}
-          className="inline-flex items-center gap-1.5 h-9 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg"
-        >
-          <PlusIcon size={14} />
-          {t("addDevice")}
-        </button>
+        <DevicesList
+          items={devices}
+          loading={devicesQuery.isLoading}
+          onRevoke={(d) => setConfirmRevoke(d)}
+          onDelete={(d) => setConfirmDelete(d)}
+          onShowCode={(d) => setCodeFor(d)}
+          onRegenerate={handleRegenerate}
+          onAdd={() => setAddOpen(true)}
+        />
       </div>
-
-      <DevicesList
-        items={devicesQuery.data ?? []}
-        loading={devicesQuery.isLoading}
-        onRevoke={(d) => setConfirmRevoke(d)}
-        onDelete={(d) => setConfirmDelete(d)}
-        onShowCode={(d) => setCodeFor(d)}
-        onRegenerate={handleRegenerate}
-      />
 
       <AddDeviceModal
         open={addOpen}
@@ -157,7 +143,6 @@ export function DevicesSettingsPage({ onBack }: DevicesSettingsPageProps) {
         onConfirm={() => confirmDelete && void handleDelete(confirmDelete)}
         onCancel={() => setConfirmDelete(null)}
       />
-
     </div>
   );
 }
@@ -169,6 +154,7 @@ function DevicesList({
   onDelete,
   onShowCode,
   onRegenerate,
+  onAdd,
 }: {
   items: ApiDevice[];
   loading: boolean;
@@ -176,30 +162,46 @@ function DevicesList({
   onDelete: (d: ApiDevice) => void;
   onShowCode: (d: ApiDevice) => void;
   onRegenerate: (d: ApiDevice) => void;
+  onAdd: () => void;
 }) {
   const t = useTranslations("dashboard.devices");
+  const addButton = (
+    <button
+      type="button"
+      onClick={onAdd}
+      className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+    >
+      <PlusIcon size={14} />
+      {t("addDevice")}
+    </button>
+  );
+
   if (loading) {
     return <div className="text-sm text-muted-foreground py-10 text-center">{t("loading")}</div>;
   }
   if (items.length === 0) {
     return (
-      <div className="border border-dashed border-border rounded-xl p-8 text-center text-sm text-muted-foreground">
-        {t("empty")}
-      </div>
+      <>
+        <EmptyState title={t("empty")} />
+        {addButton}
+      </>
     );
   }
   return (
-    <div className="space-y-2.5">
-      {items.map((d) => (
-        <DeviceRow
-          key={d.id}
-          device={d}
-          onRevoke={() => onRevoke(d)}
-          onDelete={() => onDelete(d)}
-          onShowCode={() => onShowCode(d)}
-          onRegenerate={() => onRegenerate(d)}
-        />
-      ))}
+    <div>
+      <div className="space-y-2.5">
+        {items.map((d) => (
+          <DeviceRow
+            key={d.id}
+            device={d}
+            onRevoke={() => onRevoke(d)}
+            onDelete={() => onDelete(d)}
+            onShowCode={() => onShowCode(d)}
+            onRegenerate={() => onRegenerate(d)}
+          />
+        ))}
+      </div>
+      {addButton}
     </div>
   );
 }
@@ -243,63 +245,59 @@ function DeviceRow({
 
   return (
     <div className="p-4 bg-card border border-border rounded-xl">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <ChefHatIcon size={16} className="text-muted-foreground shrink-0" />
-            <div className="text-sm font-medium text-foreground truncate">{device.name}</div>
-          </div>
-          <div className="text-xs text-muted-foreground leading-snug mt-1 flex items-center gap-1.5">
-            <span className={"w-1.5 h-1.5 rounded-full " + dotCls} />
-            <span>{status}</span>
-            <span>·</span>
-            <span>{t(`type.${device.type}`)}</span>
-            {device.lastSeenAt ? (
-              <>
-                <span>·</span>
-                <span>{t("lastSeen", { at: new Date(device.lastSeenAt).toLocaleString() })}</span>
-              </>
-            ) : null}
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5 shrink-0">
-          {isActive && pending ? (
-            <button
-              type="button"
-              onClick={onShowCode}
-              className="h-8 px-3 text-xs font-medium text-foreground bg-secondary rounded-md"
-            >
-              {t("showCode")}
-            </button>
-          ) : null}
-          {isActive && !pending ? (
-            <button
-              type="button"
-              onClick={onRegenerate}
-              className="h-8 px-3 text-xs font-medium text-foreground bg-secondary rounded-md"
-            >
-              {t("generateCode")}
-            </button>
-          ) : null}
-          {isActive ? (
-            <button
-              type="button"
-              onClick={onRevoke}
-              className="h-8 px-3 text-xs font-medium text-red-600 bg-secondary rounded-md"
-            >
-              {t("revoke")}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onDelete}
-              className="h-8 w-8 inline-flex items-center justify-center text-red-600 bg-secondary rounded-md"
-              title={t("delete")}
-            >
-              <TrashIcon size={14} />
-            </button>
-          )}
-        </div>
+      <div className="flex items-center gap-2">
+        <ChefHatIcon size={16} className="text-muted-foreground shrink-0" />
+        <div className="text-sm font-medium text-foreground truncate min-w-0 flex-1">{device.name}</div>
+      </div>
+      <div className="text-xs text-muted-foreground leading-snug mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+        <span className={"w-1.5 h-1.5 rounded-full shrink-0 " + dotCls} />
+        <span>{status}</span>
+        <span aria-hidden>·</span>
+        <span>{t(`type.${device.type}`)}</span>
+        {device.lastSeenAt ? (
+          <>
+            <span aria-hidden>·</span>
+            <span>{t("lastSeen", { at: new Date(device.lastSeenAt).toLocaleString() })}</span>
+          </>
+        ) : null}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        {isActive && pending ? (
+          <button
+            type="button"
+            onClick={onShowCode}
+            className="h-8 px-3 text-xs font-medium text-foreground bg-secondary rounded-md"
+          >
+            {t("showCode")}
+          </button>
+        ) : null}
+        {isActive && !pending ? (
+          <button
+            type="button"
+            onClick={onRegenerate}
+            className="h-8 px-3 text-xs font-medium text-foreground bg-secondary rounded-md"
+          >
+            {t("generateCode")}
+          </button>
+        ) : null}
+        {isActive ? (
+          <button
+            type="button"
+            onClick={onRevoke}
+            className="h-8 px-3 text-xs font-medium text-red-600 bg-secondary rounded-md ml-auto"
+          >
+            {t("revoke")}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="h-8 px-3 text-xs font-medium inline-flex items-center gap-1.5 text-red-600 bg-secondary rounded-md ml-auto"
+          >
+            <TrashIcon size={13} />
+            {t("delete")}
+          </button>
+        )}
       </div>
     </div>
   );
