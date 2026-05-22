@@ -48,7 +48,7 @@ export function Modal({
  onBack?: (() => void) | null;
  title?: ReactNode;
  subtitle?: ReactNode;
- children: ReactNode;
+ children?: ReactNode;
  size?: "sm" | "md" | "lg";
  footer?: ReactNode;
  closeOnBackdrop?: boolean;
@@ -234,6 +234,7 @@ export function UnsavedChangesDialog({
  open={open}
  onClose={() => !saving && onClose()}
  title={t("unsavedTitle")}
+ subtitle={t("unsavedMessage")}
  size="sm"
  closeOnBackdrop={!saving}
  footer={
@@ -262,9 +263,7 @@ export function UnsavedChangesDialog({
  </button>
  </div>
  }
- >
- <p className="text-sm text-muted-foreground leading-snug">{t("unsavedMessage")}</p>
- </Modal>
+ />
  );
 }
 
@@ -301,6 +300,7 @@ export function ConfirmDialog({
  open={open}
  onClose={onCancel}
  title={title || tc("confirm")}
+ subtitle={message}
  size="sm"
  footer={
  <div className="flex gap-2 justify-end">
@@ -322,9 +322,7 @@ export function ConfirmDialog({
  </button>
  </div>
  }
- >
- <p className="text-sm text-muted-foreground leading-snug">{message}</p>
- </Modal>
+ />
  );
 }
 
