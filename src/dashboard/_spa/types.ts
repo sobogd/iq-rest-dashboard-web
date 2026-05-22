@@ -13,7 +13,6 @@ export type View =
   | { name: "kitchen" }
   | { name: "analytics" }
   | { name: "settings" }
-  | { name: "settings.about" }
   | { name: "settings.contacts" }
   | { name: "settings.branding" }
   | { name: "settings.general" }

@@ -27,8 +27,6 @@ export function viewToPath(view: View): string {
       return "/dashboard/analytics";
     case "settings":
       return "/dashboard/settings";
-    case "settings.about":
-      return "/dashboard/settings/about";
     case "settings.contacts":
       return "/dashboard/settings/contacts";
     case "settings.branding":
@@ -107,7 +105,7 @@ export function pathToView(path: string): View {
 
   // Settings family
   if (stripped === "/dashboard/settings") return { name: "settings" };
-  if (stripped === "/dashboard/settings/about") return { name: "settings.about" };
+  if (stripped === "/dashboard/settings/about") return { name: "settings.branding" };
   if (stripped === "/dashboard/settings/contacts") return { name: "settings.contacts" };
   if (stripped === "/dashboard/settings/branding") return { name: "settings.branding" };
   if (stripped === "/dashboard/settings/general") return { name: "settings.general" };

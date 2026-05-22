@@ -19,9 +19,8 @@ interface CardDef {
 }
 
 const CARDS: CardDef[] = [
-  { view: { name: "settings.about" }, titleKey: "about", descKey: "aboutDesc", event: "dash_settings_click_tab_about" },
-  { view: { name: "settings.contacts" }, titleKey: "contacts", descKey: "contactsDesc", event: "dash_settings_click_tab_contacts" },
   { view: { name: "settings.branding" }, titleKey: "branding", descKey: "brandingDesc", event: "dash_settings_click_tab_brand" },
+  { view: { name: "settings.contacts" }, titleKey: "contacts", descKey: "contactsDesc", event: "dash_settings_click_tab_contacts" },
   { view: { name: "settings.general" }, titleKey: "general", descKey: "generalDesc", event: "dash_settings_click_tab_general" },
   { view: { name: "settings.tables" }, titleKey: "tables", descKey: "tablesDesc", event: "dash_settings_click_tab_tables" },
   { view: { name: "settings.devices" }, titleKey: "devices", descKey: "devicesDesc", event: "dash_settings_click_tab_devices" },

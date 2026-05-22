@@ -336,7 +336,10 @@ export function BrandingSettingsPage({
 }) {
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.branding");
+ const ta = useTranslations("dashboard.settings.about");
  const [draft, setDraft] = useState({
+ name: restaurant.name,
+ subtitle: restaurant.subtitle,
  backgroundUrl: restaurant.backgroundUrl,
  backgroundType: restaurant.backgroundType,
  accentColor: restaurant.accentColor,
@@ -354,8 +357,12 @@ export function BrandingSettingsPage({
 
  async function save() {
  track("dash_settings_branding_save");
+ const trimmedName = draft.name.trim();
+ if (!trimmedName) return;
  try {
  await updateRestaurant({
+ title: trimmedName,
+ description: draft.subtitle.trim() || null,
  source: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
@@ -367,6 +374,8 @@ export function BrandingSettingsPage({
  }
  setRestaurant((r) => ({
  ...r,
+ name: trimmedName,
+ subtitle: draft.subtitle.trim(),
  backgroundUrl: draft.backgroundUrl,
  backgroundType: draft.backgroundType,
  accentColor: draft.accentColor,
@@ -403,13 +412,36 @@ export function BrandingSettingsPage({
  }
 
 
+ const canSave = draft.name.trim().length > 0;
  return (
  <div>
- <SubpageStickyBar onBack={() => { track("dash_settings_branding_back"); onBack(); }} onSave={save} canSave />
+ <SubpageStickyBar onBack={() => { track("dash_settings_branding_back"); onBack(); }} onSave={save} canSave={canSave} />
  <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
  <h2 className="text-xl font-medium text-foreground mt-1">{tb("title")}</h2>
+ </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6 mb-3">
+ <label htmlFor="brand-name" className="block text-sm font-medium text-foreground mb-2.5">{ta("titleLabel")}</label>
+ <input
+ id="brand-name"
+ type="text"
+ value={draft.name}
+ onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+ onFocus={() => track("dash_settings_about_focus_name")}
+ placeholder={ta("titlePlaceholder")}
+ className={inputClass}
+ />
+ <label htmlFor="brand-subtitle" className="block text-sm font-medium text-foreground mb-2.5 mt-4">{ta("subtitleLabel")}</label>
+ <input
+ id="brand-subtitle"
+ type="text"
+ value={draft.subtitle}
+ onChange={(e) => setDraft((d) => ({ ...d, subtitle: e.target.value }))}
+ onFocus={() => track("dash_settings_about_focus_description")}
+ placeholder={ta("subtitlePlaceholder")}
+ className={inputClass}
+ />
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-start">
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">

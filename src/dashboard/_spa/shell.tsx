@@ -17,7 +17,6 @@ import { buildCategories } from "../_v2/mappers";
 import { getMlWithFallback } from "../_v2/i18n";
 import type { ApiCategory, ApiItem } from "../_v2/api";
 import {
-  AboutSettingsPage,
   ContactsSettingsPage,
   BrandingSettingsPage,
   GeneralSettingsPage,
@@ -252,8 +251,6 @@ function ViewSwitch(p: SwitchProps) {
 
     case "settings":
       return <SettingsHubView isAdmin={isAdmin} impersonatedBy={impersonatedBy} />;
-    case "settings.about":
-      return <SettingsAboutWrapper onBack={backToSettings} />;
     case "settings.contacts":
       return <SettingsContactsWrapper onBack={backToSettings} />;
     case "settings.branding":
@@ -474,10 +471,6 @@ function useRestaurantDraft(): [UIRestaurant, React.Dispatch<React.SetStateActio
   return [r, setAndInvalidate];
 }
 
-function SettingsAboutWrapper({ onBack }: BackProp) {
-  const [r, setR] = useRestaurantDraft();
-  return <AboutSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
-}
 function SettingsContactsWrapper({ onBack }: BackProp) {
   const [r, setR] = useRestaurantDraft();
   return <ContactsSettingsPage restaurant={r} setRestaurant={setR} onBack={onBack} />;
