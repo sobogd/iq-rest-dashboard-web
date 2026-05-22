@@ -83,6 +83,7 @@ export function OrdersPage({
  categories,
  defaultLang,
  currency,
+ kioskLayout,
 }: {
  orders: Order[];
  setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
@@ -90,6 +91,11 @@ export function OrdersPage({
  categories: Category[];
  defaultLang: string;
  currency: string;
+ // Waiter kiosk layout: removes PageHeader, makes the page a flex column
+ // (lg: row) filling the viewport. Floor map keeps its square aspect ratio
+ // as the priority element; the active-orders list lives next to it in a
+ // single card with divider-separated rows, internally scrollable.
+ kioskLayout?: boolean;
 }) {
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
@@ -623,33 +629,8 @@ export function OrdersPage({
  setView({ kind: "addItem", orderId: null, step: "category" });
  }
 
- return (
- <div className="max-w-5xl mx-auto md:px-6">
- <PageHeader title={t("title")} subtitle={hasTables ? t("tapTable") : undefined} />
-
- <div className={hasTables ? "lg:flex lg:gap-4 lg:items-start" : ""}>
- {hasTables ? (
- <div
- className="aspect-square mx-auto lg:mx-0 lg:shrink-0 w-full lg:w-auto lg:h-[var(--map-h)]"
- style={{ "--map-h": mapHeight } as React.CSSProperties}
- >
- <FloorMap
- tables={tables}
- selectedId={null}
- onSelectTable={(id) => {
- if (!id) return;
- track("dash_orders_click_table");
- openTable(id);
- }}
- occupiedIds={occupiedIds}
- readyIds={readyIds}
- badgeFor={tileBadge}
- wide
- />
- </div>
- ) : null}
-
- <div className={(hasTables ? "lg:flex-1 lg:min-w-0 mt-4 lg:mt-0" : "mt-4") + " flex flex-col gap-3"}>
+ const ordersPane = (
+ <>
  {!hasTables ? (
  <button
  type="button"
@@ -668,10 +649,22 @@ export function OrdersPage({
  {t("noActiveTitle", { defaultValue: "No active orders" })}
  </div>
  <div className="text-xs text-muted-foreground">
- {t("noActiveBody", {
- defaultValue: "New orders will show up here.",
- })}
+ {t("noActiveBody", { defaultValue: "New orders will show up here." })}
  </div>
+ </div>
+ </div>
+ ) : kioskLayout ? (
+ <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col h-full">
+ <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-border">
+ {activeOrders.map((o) => (
+ <OrderListCard
+ key={o.id}
+ order={o}
+ currencySymbol={currencySymbol}
+ onClick={() => openOrderDirect(o)}
+ variant="row"
+ />
+ ))}
  </div>
  </div>
  ) : (
@@ -687,8 +680,61 @@ export function OrdersPage({
  ))}
  </div>
  )}
+ </>
+ );
+
+ const floorPane = hasTables ? (
+ <FloorMap
+ tables={tables}
+ selectedId={null}
+ onSelectTable={(id) => {
+ if (!id) return;
+ track("dash_orders_click_table");
+ openTable(id);
+ }}
+ occupiedIds={occupiedIds}
+ readyIds={readyIds}
+ badgeFor={tileBadge}
+ wide
+ />
+ ) : null;
+
+ return (
+ <div className={kioskLayout ? "h-full p-4 md:p-6" : "max-w-5xl mx-auto md:px-6"}>
+ {kioskLayout ? null : (
+ <PageHeader title={t("title")} subtitle={hasTables ? t("tapTable") : undefined} />
+ )}
+
+ {kioskLayout ? (
+ // Kiosk waiter layout: column on mobile (map square on top, orders
+ // card filling the rest), row on desktop (map keeps its square
+ // size as the priority element, orders card stretches to match
+ // height with internal scroll).
+ <div className="h-full flex flex-col lg:flex-row gap-3 lg:gap-4 min-h-0">
+ {hasTables ? (
+ <div className="aspect-square w-full lg:w-auto lg:h-full lg:aspect-square shrink-0">
+ {floorPane}
+ </div>
+ ) : null}
+ <div className="flex-1 min-h-0 lg:min-w-0 flex flex-col gap-3">
+ {ordersPane}
  </div>
  </div>
+ ) : (
+ <div className={hasTables ? "lg:flex lg:gap-4 lg:items-start" : ""}>
+ {hasTables ? (
+ <div
+ className="aspect-square mx-auto lg:mx-0 lg:shrink-0 w-full lg:w-auto lg:h-[var(--map-h)]"
+ style={{ "--map-h": mapHeight } as React.CSSProperties}
+ >
+ {floorPane}
+ </div>
+ ) : null}
+ <div className={(hasTables ? "lg:flex-1 lg:min-w-0 mt-4 lg:mt-0" : "mt-4") + " flex flex-col gap-3"}>
+ {ordersPane}
+ </div>
+ </div>
+ )}
 
 
  <Modal

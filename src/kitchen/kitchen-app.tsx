@@ -480,6 +480,7 @@ function KitchenAppBody() {
                 categories={snapshot.categories}
                 defaultLang={snapshot.restaurant.defaultLang}
                 currency={snapshot.restaurant.currency}
+                kioskLayout
               />
             </DashboardRouterProvider>
           </RestaurantProvider>
