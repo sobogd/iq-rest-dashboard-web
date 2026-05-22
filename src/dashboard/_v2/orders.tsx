@@ -561,13 +561,11 @@ export function OrdersPage({
  <button
  type="button"
  onClick={() => {
- // When the restaurant didn't enable any payment methods, skip the
- // selector and complete directly.
- if (!restaurant.paymentMethods || restaurant.paymentMethods.length === 0) {
- completeOrder(currentOrder.id, null);
- } else {
+ // Always go through the confirm modal — even when no payment
+ // methods are configured. The modal collapses to just the
+ // close-confirmation header + footer in that case, so the
+ // staff still gets an explicit "are you sure" step.
  setConfirmCompleteOrder(currentOrder.id);
- }
  }}
  disabled={currentOrder.items.length === 0}
  className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors disabled:opacity-40"
