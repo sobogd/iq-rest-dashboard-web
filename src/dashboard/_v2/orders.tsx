@@ -1916,11 +1916,19 @@ function CompleteOrderModal({
  useEffect(() => {
  if (open) setSelected(paymentMethods[0] ?? null);
  }, [open, paymentMethods]);
+ const hasMethods = paymentMethods.length > 0;
+ const baseMsg = hasUnserved
+ ? t("completeOrderUnservedMessage", { defaultValue: "Some items are not served yet. Complete order anyway?" })
+ : t("completeOrderMessage", { defaultValue: "Close this order?" });
+ const subtitle = hasMethods
+ ? baseMsg + " " + t("selectPaymentMethod", { defaultValue: "Select a payment method." })
+ : baseMsg;
  return (
  <Modal
  open={open}
  onClose={onCancel}
  title={t("completeOrder")}
+ subtitle={subtitle}
  size="sm"
  footer={
  <div className="flex gap-2 justify-end">
@@ -1941,14 +1949,8 @@ function CompleteOrderModal({
  </div>
  }
  >
- <p className="text-sm text-muted-foreground leading-snug">
- {(hasUnserved
- ? t("completeOrderUnservedMessage", { defaultValue: "Some items are not served yet. Complete order anyway?" })
- : t("completeOrderMessage", { defaultValue: "Close this order?" })) +
- " " +
- t("selectPaymentMethod", { defaultValue: "Select a payment method." })}
- </p>
- <div className="mt-4 space-y-1.5">
+ {hasMethods ? (
+ <div className="-m-5 divide-y divide-border">
  {paymentMethods.map((code) => {
  const isOn = selected === code;
  return (
@@ -1957,27 +1959,19 @@ function CompleteOrderModal({
  type="button"
  onClick={() => setSelected(code)}
  className={
- "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left " +
- (isOn ? "border-primary bg-primary/5" : "border-input")
+ "w-full flex items-center gap-3 px-5 py-3 text-left transition-colors " +
+ (isOn ? "bg-primary/5" : "")
  }
  >
- <span
- className={
- "w-5 h-5 rounded-full inline-flex items-center justify-center shrink-0 transition-colors " +
- (isOn ? "bg-primary-gradient text-primary-foreground" : "border border-input")
- }
- >
- {isOn ? (
- <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
- ) : null}
- </span>
- <span className="text-sm text-foreground flex-1">
+ <span className="min-w-0 flex-1 text-sm text-foreground truncate">
  {tpm(code as never, { defaultValue: code })}
  </span>
+ {isOn ? <CheckIcon size={14} className="shrink-0 text-primary" /> : null}
  </button>
  );
  })}
  </div>
+ ) : null}
  </Modal>
  );
 }
