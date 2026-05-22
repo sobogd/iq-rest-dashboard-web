@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import i18n from "i18next";
+import { useTranslations } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import { apiUrl } from "@/lib/api";
 import { clearDeviceToken, getDeviceToken, setDeviceToken } from "@/lib/device-mode";
@@ -80,6 +81,7 @@ export function KitchenApp() {
 }
 
 function KitchenAppBody() {
+  const t = useTranslations("dashboard.kitchen");
   // Source of truth for auth state. Null until bootstrap succeeds.
   const [token, setToken] = useState<string | null>(() => getDeviceToken());
   const [snapshot, setSnapshot] = useState<KitchenSnapshot | null>(null);
@@ -144,7 +146,7 @@ function KitchenAppBody() {
         return;
       }
       if (result === "error") {
-        setError("Failed to load kitchen data");
+        setError(t("failedToLoad"));
         setBootstrapping(false);
         return;
       }
@@ -314,7 +316,7 @@ function KitchenAppBody() {
   if (bootstrapping && !snapshot) {
     return (
       <div className="min-h-dvh bg-background flex items-center justify-center text-sm text-muted-foreground">
-        Loading…
+        {t("loading")}
       </div>
     );
   }
@@ -323,7 +325,7 @@ function KitchenAppBody() {
     return (
       <div className="min-h-dvh bg-background flex items-center justify-center px-6 text-center">
         <div>
-          <div className="text-sm text-muted-foreground mb-3">{error || "Loading…"}</div>
+          <div className="text-sm text-muted-foreground mb-3">{error || t("loading")}</div>
           <button
             type="button"
             onClick={() => {
@@ -332,13 +334,13 @@ function KitchenAppBody() {
               void fetchBootstrap().then((res) => {
                 if (res === "unauthorized") handleLogout();
                 else if (res !== "error") applySnapshot(res);
-                else setError("Failed to load kitchen data");
+                else setError(t("failedToLoad"));
                 setBootstrapping(false);
               });
             }}
             className="h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg"
           >
-            Retry
+            {t("retry")}
           </button>
         </div>
       </div>

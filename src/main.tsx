@@ -26,6 +26,36 @@ if (typeof window !== "undefined") {
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("#root not found");
 
+// Kitchen-host PWA bootstrap. Swaps the admin manifest for the kitchen-
+// specific one (different name, fullscreen display) and registers a
+// service worker. The SW's primary purpose is **storage persistence**:
+// once installed via Add-to-Home-Screen on iPad, the kitchen escapes
+// Safari's 7-day ITP eviction so a paired tablet survives long idle
+// stretches without re-pairing. Offline functionality is a side effect.
+function setupKitchenPwa(): void {
+  const existing = document.querySelector('link[rel="manifest"]') as HTMLLinkElement | null;
+  if (existing) {
+    existing.href = "/k-manifest.webmanifest";
+  } else {
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = "/k-manifest.webmanifest";
+    document.head.appendChild(link);
+  }
+  const titleEl = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+  if (titleEl) titleEl.setAttribute("content", "Kitchen");
+  if ("serviceWorker" in navigator) {
+    // Defer registration to the load event so the boot path isn't held up
+    // by SW install on slower tablets.
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/k-sw.js", { scope: "/" }).catch(() => {
+        // Registration failure is non-fatal — the kitchen still works,
+        // just without install-as-PWA benefits.
+      });
+    });
+  }
+}
+
 // Two entrypoints share one bundle:
 //   - kitchen.*  → tiny kiosk shell with no router, no admin/settings code.
 //   - everything else → full admin SPA with TanStack Router.
@@ -37,6 +67,7 @@ void (async () => {
   const i18nReady = bootstrapI18n();
 
   if (isKitchenHost()) {
+    setupKitchenPwa();
     const [{ KitchenApp }] = await Promise.all([
       import("./kitchen/kitchen-app"),
       i18nReady,

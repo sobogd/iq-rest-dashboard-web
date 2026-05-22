@@ -2,7 +2,7 @@
 //
 // The dashboard SPA is served on TWO origins from the same bundle:
 //   - app.iq-rest.com   → cookie-authed admin/dashboard
-//   - kitchen.iq-rest.com → device-authed kiosk
+//   - k.iq-rest.com → device-authed kiosk
 //
 // `isKitchenHost()` is the single source of truth for the routing branch
 // taken at boot in main.tsx. `getDeviceToken()` / `setDeviceToken()` /
@@ -14,9 +14,10 @@ const TOKEN_KEY = "iqr_device_token";
 export function isKitchenHost(): boolean {
   if (typeof window === "undefined") return false;
   const host = window.location.hostname.toLowerCase();
-  // "kitchen.iq-rest.com", "kitchen.localhost", "kitchen.local" — anything
-  // explicitly carved out for the kitchen subdomain.
-  return host === "kitchen" || host.startsWith("kitchen.");
+  // Prod: k.iq-rest.com. Dev: k.lvh.me, k.localhost. Short subdomain on
+  // purpose — staff type this on touchscreen keyboards and every saved
+  // character matters.
+  return host === "k" || host.startsWith("k.");
 }
 
 export function getDeviceToken(): string | null {

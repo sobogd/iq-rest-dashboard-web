@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { StreamState } from "./use-kitchen-stream";
 
 // Full-screen modal shown when the kitchen has been disconnected from the
@@ -27,6 +28,7 @@ export function OfflineOverlay({
   onReconnect,
   forceOffline = false,
 }: OfflineOverlayProps) {
+  const t = useTranslations("dashboard.kitchen");
   const [navigatorOffline, setNavigatorOffline] = useState<boolean>(() =>
     typeof navigator !== "undefined" && !navigator.onLine,
   );
@@ -60,12 +62,12 @@ export function OfflineOverlay({
 
   if (!delayedShow) return null;
 
-  const stale = navigatorOffline ? "No internet connection" : "Connection lost";
+  const title = navigatorOffline ? t("noInternetTitle") : t("connectionLostTitle");
   const sub = navigatorOffline
-    ? "The tablet is offline. Reconnect to Wi-Fi to receive new orders."
+    ? t("noInternetSub")
     : streamState === "connecting"
-      ? "Reconnecting…"
-      : "Server unreachable.";
+      ? t("reconnecting")
+      : t("serverUnreachable");
 
   return (
     <div
@@ -77,18 +79,16 @@ export function OfflineOverlay({
         <div className="w-12 h-12 mx-auto rounded-full bg-red-500/10 flex items-center justify-center mb-4">
           <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
         </div>
-        <h2 className="text-lg font-medium text-foreground mb-1">{stale}</h2>
+        <h2 className="text-lg font-medium text-foreground mb-1">{title}</h2>
         <p className="text-sm text-muted-foreground leading-snug mb-5">{sub}</p>
         <button
           type="button"
           onClick={onReconnect}
           className="w-full h-10 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg"
         >
-          Reconnect now
+          {t("reconnectNow")}
         </button>
-        <div className="text-[11px] text-muted-foreground mt-3">
-          New status changes will be retried automatically once the connection is back.
-        </div>
+        <div className="text-[11px] text-muted-foreground mt-3">{t("retryHint")}</div>
       </div>
     </div>
   );
