@@ -315,9 +315,15 @@ function KitchenAppBody() {
       // can diff against the previous snapshot's items.
       if (!soundReady) return;
       if (snap.deviceType === "KITCHEN") {
-        // Cooks care about NEW orders landing. Pre-existing orders that
-        // got their items advanced by another tablet are noise.
-        if (event.action === "created") playOrderChime();
+        // Cooks care about anything new landing on the pass — a brand-new
+        // order, or a single dessert appended to an existing check. The
+        // industry convention (Square/Toast/Lightspeed) is one chime per
+        // "new item hits kitchen" regardless of which container it came
+        // in. Status advancements / mutations on existing items don't
+        // qualify; pendingOrderIdsRef already strips our own echoes.
+        if (event.action === "created" || didAnyItemAppear(prevOrdersById, mapped)) {
+          playOrderChime();
+        }
         return;
       }
       if (snap.deviceType === "WAITER") {
@@ -464,6 +470,26 @@ function collectIncoming(event: KitchenOrderEvent): ApiOrder[] {
     out.push(event.createdOrder as ApiOrder);
   }
   return out;
+}
+
+// True when an incoming order contains any item id that the previous
+// snapshot's version of the order didn't have. Covers the "customer
+// added a dessert to an existing tab" case where the order is updated
+// (not created), but the kitchen still has new work to do.
+function didAnyItemAppear(prevOrdersById: Map<string, Order>, incoming: Order[]): boolean {
+  for (const order of incoming) {
+    const prev = prevOrdersById.get(order.id);
+    if (!prev) {
+      // Order is new to us, every item counts as appearing.
+      if (order.items.length > 0) return true;
+      continue;
+    }
+    const prevIds = new Set(prev.items.map((it) => it.id));
+    for (const it of order.items) {
+      if (!prevIds.has(it.id)) return true;
+    }
+  }
+  return false;
 }
 
 function didAnyItemBecomeReady(
