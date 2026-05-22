@@ -16,6 +16,7 @@ export interface KitchenOrderEvent {
   order?: unknown;
   createdOrder?: unknown;
   orderId?: string;
+  itemSummary?: { id: string; dishId: string; status: string }[];
 }
 
 export type StreamState = "connecting" | "open" | "closed";

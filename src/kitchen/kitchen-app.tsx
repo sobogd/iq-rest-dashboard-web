@@ -292,7 +292,22 @@ function KitchenAppBody() {
 
       const incoming = collectIncoming(event);
       if (incoming.length === 0) {
-        // Slim payload — no `order` body. Re-fetch the snapshot.
+        // Slim payload — full `order` body was stripped because the
+        // pg_notify size limit kicked in. Re-fetch the snapshot for
+        // state, but use the lightweight itemSummary (if shipped) to
+        // run the chime predicate now so the kiosk doesn't go silent
+        // for orders whose full body would have overflowed.
+        if (
+          event.itemSummary &&
+          event.orderId &&
+          snap.deviceType === "KITCHEN" &&
+          soundReady &&
+          !pendingOrderIdsRef.current.has(event.orderId)
+        ) {
+          if (slimSummaryPassesFilter(snap.orders, event.orderId, event.itemSummary, filterStateRef.current)) {
+            playOrderChime();
+          }
+        }
         void fetchBootstrap().then((res) => {
           if (res === "unauthorized") handleLogout();
           else if (res !== "error") applySnapshot(res);
@@ -513,6 +528,32 @@ function collectIncoming(event: KitchenOrderEvent): ApiOrder[] {
 // as a match: better to chime a false positive than swallow a real one
 // because the kitchen's cached menu happens to be a few seconds behind
 // a freshly-created dish.
+// Same predicate as didAnyNewItemPassFilter but works on a slim itemSummary
+// payload — used when pg_notify stripped the full order body so the
+// kitchen-app still has to decide whether to chime.
+function slimSummaryPassesFilter(
+  prevOrders: Order[],
+  orderId: string,
+  summary: { id: string; dishId: string; status: string }[],
+  filter: KitchenFilterState | null,
+): boolean {
+  const statuses = filter?.statuses ?? [];
+  const categoryIds = filter?.categoryIds ?? [];
+  const dishToCat = filter?.dishToCategory ?? {};
+  const prev = prevOrders.find((o) => o.id === orderId);
+  const prevIds = prev ? new Set(prev.items.map((it) => it.id)) : null;
+  for (const it of summary) {
+    if (prevIds && prevIds.has(it.id)) continue;
+    if (statuses.length > 0 && !statuses.includes(it.status as never)) continue;
+    if (categoryIds.length > 0) {
+      const cat = dishToCat[it.dishId];
+      if (cat !== undefined && !categoryIds.includes(cat)) continue;
+    }
+    return true;
+  }
+  return false;
+}
+
 function didAnyNewItemPassFilter(
   prevOrdersById: Map<string, Order>,
   incoming: Order[],
