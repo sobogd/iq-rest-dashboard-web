@@ -20,6 +20,9 @@ import { SoundPrompt } from "./sound-prompt";
 import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
 import { ZoomControls } from "./zoom-controls";
 import { KitchenPage, type KitchenFilterState } from "@/dashboard/_v2/kitchen-page";
+import { OrdersPage } from "@/dashboard/_v2/orders";
+import { RestaurantProvider } from "@/dashboard/_v2/restaurant-context";
+import { DashboardRouterProvider } from "@/dashboard/_spa/router";
 import {
   apiOrderToOrder,
   apiTableToTable,
@@ -445,40 +448,61 @@ function KitchenAppBody() {
     );
   }
 
+  const updateOrders = (updater: React.SetStateAction<Order[]>) => {
+    setSnapshot((cur) =>
+      cur
+        ? {
+            ...cur,
+            orders:
+              typeof updater === "function"
+                ? (updater as (prev: Order[]) => Order[])(cur.orders)
+                : updater,
+          }
+        : cur,
+    );
+  };
+
   return (
     <>
       <KitchenShell>
-        <KitchenPage
-          orders={snapshot.orders}
-          setOrders={(updater) => {
-            setSnapshot((cur) =>
-              cur
-                ? {
-                    ...cur,
-                    orders:
-                      typeof updater === "function"
-                        ? (updater as (prev: Order[]) => Order[])(cur.orders)
-                        : updater,
-                  }
-                : cur,
-            );
-          }}
-          tables={snapshot.tables}
-          categories={snapshot.categories}
-          defaultLang={snapshot.restaurant.defaultLang}
-          onItemAdvanced={(_prev, next) => {
-            // Local-tap chime: a waiter station shouldn't ring on its own
-            // taps, since the user already knows what they just did. Same
-            // for a kitchen station. Sound only fires through SSE events.
-            void _prev;
-            void next;
-          }}
-          onOrderPendingChange={handleOrderPendingChange}
-          filterBarExtras={<ZoomControls />}
-          fullWidthFilterBar
-          kioskLayout
-          onFiltersChange={handleFiltersChange}
-        />
+        {snapshot.deviceType === "WAITER" ? (
+          // Waiter kiosk reuses the admin OrdersPage verbatim — its own
+          // internal navigation between table list / order detail / item
+          // wizard rides on the dashboard SPA router, which we provide
+          // here scoped to this single tab. RestaurantProvider satisfies
+          // OrdersPage's useRestaurant() call.
+          <RestaurantProvider restaurant={snapshot.restaurant}>
+            <DashboardRouterProvider initialPath="/dashboard/orders" locale="en">
+              <OrdersPage
+                orders={snapshot.orders}
+                setOrders={updateOrders}
+                tables={snapshot.tables}
+                categories={snapshot.categories}
+                defaultLang={snapshot.restaurant.defaultLang}
+                currency={snapshot.restaurant.currency}
+              />
+            </DashboardRouterProvider>
+          </RestaurantProvider>
+        ) : (
+          <KitchenPage
+            orders={snapshot.orders}
+            setOrders={updateOrders}
+            tables={snapshot.tables}
+            categories={snapshot.categories}
+            defaultLang={snapshot.restaurant.defaultLang}
+            onItemAdvanced={(_prev, next) => {
+              // Local-tap chime: kitchen station already knows what it
+              // just tapped. Sound only fires from SSE-driven changes.
+              void _prev;
+              void next;
+            }}
+            onOrderPendingChange={handleOrderPendingChange}
+            filterBarExtras={<ZoomControls />}
+            fullWidthFilterBar
+            kioskLayout
+            onFiltersChange={handleFiltersChange}
+          />
+        )}
       </KitchenShell>
       <OfflineOverlay
         streamState={streamState}

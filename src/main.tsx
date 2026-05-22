@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { FullPageLoader } from "./components/full-page-loader";
 import { bootstrapI18n } from "./i18n";
 import { observeResponseVersion } from "./lib/version-check";
-import { isKitchenHost } from "./lib/device-mode";
+import { isKioskHost } from "./lib/device-mode";
 import "./styles.css";
 
 // Wrap global fetch once so every response — wherever in the codebase it
@@ -66,7 +66,7 @@ function setupKitchenPwa(): void {
 void (async () => {
   const i18nReady = bootstrapI18n();
 
-  if (isKitchenHost()) {
+  if (isKioskHost()) {
     setupKitchenPwa();
     const [{ KitchenApp }] = await Promise.all([
       import("./kitchen/kitchen-app"),

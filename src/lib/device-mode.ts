@@ -1,23 +1,35 @@
-// Kitchen subdomain runtime mode.
+// Kiosk subdomain runtime mode.
 //
-// The dashboard SPA is served on TWO origins from the same bundle:
-//   - app.iq-rest.com   → cookie-authed admin/dashboard
-//   - k.iq-rest.com → device-authed kiosk
+// The dashboard SPA is served on multiple origins from the same bundle:
+//   - app.iq-rest.com → cookie-authed admin/dashboard
+//   - k.iq-rest.com   → kitchen-display kiosk (device-authed)
+//   - w.iq-rest.com   → waiter terminal kiosk (device-authed)
 //
-// `isKitchenHost()` is the single source of truth for the routing branch
-// taken at boot in main.tsx. `getDeviceToken()` / `setDeviceToken()` /
-// `clearDeviceToken()` manage the long-lived bearer token the tablet stores
-// after a successful pair.
+// One-letter subdomains on purpose — staff types this on touchscreen
+// keyboards and every saved character matters. `getKioskRole()` is the
+// single source of truth for the routing branch in main.tsx.
 
 const TOKEN_KEY = "iqr_device_token";
 
-export function isKitchenHost(): boolean {
-  if (typeof window === "undefined") return false;
+export type KioskRole = "kitchen" | "waiter";
+
+export function getKioskRole(): KioskRole | null {
+  if (typeof window === "undefined") return null;
   const host = window.location.hostname.toLowerCase();
-  // Prod: k.iq-rest.com. Dev: k.lvh.me, k.localhost. Short subdomain on
-  // purpose — staff type this on touchscreen keyboards and every saved
-  // character matters.
-  return host === "k" || host.startsWith("k.");
+  if (host === "k" || host.startsWith("k.")) return "kitchen";
+  if (host === "w" || host.startsWith("w.")) return "waiter";
+  return null;
+}
+
+export function isKioskHost(): boolean {
+  return getKioskRole() !== null;
+}
+
+// Back-compat alias — older call sites only branched on "is this a
+// kiosk?", not which role. Keep returning true for any kiosk host so the
+// /api proxy + device token wiring lights up uniformly.
+export function isKitchenHost(): boolean {
+  return isKioskHost();
 }
 
 export function getDeviceToken(): string | null {

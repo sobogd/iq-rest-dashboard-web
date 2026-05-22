@@ -3,27 +3,31 @@
 import type { Ml, DishOption } from "./types";
 import { apiUrl } from "@/lib/api";
 import { activeRestaurantHeader } from "@/lib/active-restaurant";
-import { getDeviceToken, isKitchenHost } from "@/lib/device-mode";
+import { getDeviceToken, getKioskRole } from "@/lib/device-mode";
 
 // Tiny wrapper around fetch that auto-attaches X-Restaurant-Id and
 // credentials so every call in this module scopes to the active
 // restaurant without us repeating the header per-call.
 //
-// Kitchen-mode branch: when the bundle is loaded from the kitchen.* host
-// it sends the device bearer instead of the cookie session, AND rewrites
-// `PATCH /orders/:id` to the locked-down device variant. Everything else
-// the kitchen page reads (orders list etc.) comes from /devices/bootstrap
-// on mount, not from these helpers.
+// Kiosk-mode branch: when the bundle is loaded from any kiosk host
+// (k.* / w.*) it sends the device bearer instead of the cookie session.
+// Kitchen role additionally rewrites `PATCH /orders/:id` to the
+// locked-down `/api/devices/orders/:id` variant — kitchens are only
+// allowed to flip item statuses, not change payment/table/etc. Waiter
+// kiosks need the full order surface so they hit /api/orders directly
+// (the backend OrdersController guard accepts device tokens).
 function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers || {});
   let target = path;
-  const kitchen = isKitchenHost();
-  if (kitchen) {
+  const role = getKioskRole();
+  if (role) {
     const token = getDeviceToken();
     if (token) headers.set("Authorization", `Bearer ${token}`);
-    const orderPatch = init.method === "PATCH" && /^\/api\/orders\/[^/]+$/.test(path);
-    if (orderPatch) {
-      target = path.replace("/api/orders/", "/api/devices/orders/");
+    if (role === "kitchen") {
+      const orderPatch = init.method === "PATCH" && /^\/api\/orders\/[^/]+$/.test(path);
+      if (orderPatch) {
+        target = path.replace("/api/orders/", "/api/devices/orders/");
+      }
     }
   } else {
     for (const [k, v] of Object.entries(activeRestaurantHeader())) headers.set(k, v);
