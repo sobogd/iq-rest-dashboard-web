@@ -481,7 +481,7 @@
         "layout_drill_desc": "Dodirnite kategoriju da otvorite njen zaslon s jelima."
       },
       "general": {
-        "title": "Općenito",
+        "title": "Lokalizacija",
         "menuLinkLabel": "Poveznica jelovnika",
         "slugPlaceholder": "vaš-slug",
         "copyUrl": "Kopiraj URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, špenadl na karti.",
         "branding": "Web",
         "brandingDesc": "URL javnog menija, naziv, akcentna boja, slika ili videozapis pozadine.",
-        "general": "Općenito",
-        "generalDesc": "Poveznica javnog jelovnika, zadana valuta.",
+        "general": "Lokalizacija",
+        "generalDesc": "Valuta i vremenska zona.",
         "tables": "Stolovi",
         "tablesDesc": "Plan, mjesta i QR kodovi po stolu.",
         "orders": "Narudžbe",

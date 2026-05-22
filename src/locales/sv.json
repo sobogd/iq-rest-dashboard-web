@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tryck på en kategori för att öppna dess skärm med rätter."
       },
       "general": {
-        "title": "Allmänt",
+        "title": "Region",
         "menuLinkLabel": "Menylänk",
         "slugPlaceholder": "din-slug",
         "copyUrl": "Kopiera URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, nål på kartan.",
         "branding": "Webbplats",
         "brandingDesc": "URL till offentlig meny, namn, accentfärg, bakgrundsbild eller -video.",
-        "general": "Allmänt",
-        "generalDesc": "Offentlig menylänk, standardvaluta.",
+        "general": "Region",
+        "generalDesc": "Valuta och tidszon.",
         "tables": "Bord",
         "tablesDesc": "Plan, platser per bord och QR-koder.",
         "orders": "Beställningar",

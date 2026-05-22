@@ -481,7 +481,7 @@
         "layout_drill_desc": "Bakstelėkite kategoriją, kad atidarytumėte jos ekraną su patiekalais."
       },
       "general": {
-        "title": "Bendrieji",
+        "title": "Regiono nustatymai",
         "menuLinkLabel": "Meniu nuoroda",
         "slugPlaceholder": "jusu-slug",
         "copyUrl": "Kopijuoti URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefonas, Instagram, WhatsApp, kaištis žemėlapyje.",
         "branding": "Svetainė",
         "brandingDesc": "Viešo meniu URL, pavadinimas, akcentinė spalva, fono nuotrauka ar vaizdo įrašas.",
-        "general": "Bendrieji",
-        "generalDesc": "Viešo meniu nuoroda, numatytoji valiuta.",
+        "general": "Regiono nustatymai",
+        "generalDesc": "Valiuta ir laiko juosta.",
         "tables": "Stalai",
         "tablesDesc": "Planas, vietos ir QR kodai pagal stalą.",
         "orders": "Užsakymai",

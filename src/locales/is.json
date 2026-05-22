@@ -481,7 +481,7 @@
         "layout_drill_desc": "Pikkaðu á flokk til að opna skjáinn hans með réttum."
       },
       "general": {
-        "title": "Almennt",
+        "title": "Staðsetning",
         "menuLinkLabel": "Tengill matseðils",
         "slugPlaceholder": "thinn-slug",
         "copyUrl": "Afrita URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Sími, Instagram, WhatsApp, prjón á korti.",
         "branding": "Vefur",
         "brandingDesc": "Slóð opins matseðils, nafn, áherslulitur, bakgrunnsmynd eða -myndband.",
-        "general": "Almennt",
-        "generalDesc": "Tengill opinbera matseðilsins, sjálfgefinn gjaldmiðill.",
+        "general": "Staðsetning",
+        "generalDesc": "Gjaldmiðill og tímabelti.",
         "tables": "Borð",
         "tablesDesc": "Áætlun, sæti og QR-kóðar eftir borði.",
         "orders": "Pantanir",

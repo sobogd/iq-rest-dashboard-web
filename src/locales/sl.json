@@ -481,7 +481,7 @@
         "layout_drill_desc": "Dotaknite se kategorije, da odprete njen zaslon z jedmi."
       },
       "general": {
-        "title": "Splošno",
+        "title": "Lokalne nastavitve",
         "menuLinkLabel": "Povezava menija",
         "slugPlaceholder": "vas-slug",
         "copyUrl": "Kopiraj URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, zatič na zemljevidu.",
         "branding": "Spletna stran",
         "brandingDesc": "URL javnega menija, ime, poudarjena barva, slika ali videoposnetek ozadja.",
-        "general": "Splošno",
-        "generalDesc": "Povezava javnega menija, privzeta valuta.",
+        "general": "Lokalne nastavitve",
+        "generalDesc": "Valuta in časovni pas.",
         "tables": "Mize",
         "tablesDesc": "Načrt, sedeži in QR kode po mizah.",
         "orders": "Naročila",

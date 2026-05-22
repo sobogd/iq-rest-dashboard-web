@@ -481,7 +481,7 @@
         "layout_drill_desc": "Додирните категорију да отворите њен екран са јелима."
       },
       "general": {
-        "title": "Opšte",
+        "title": "Локализација",
         "menuLinkLabel": "Link menija",
         "slugPlaceholder": "vaš-slug",
         "copyUrl": "Kopiraj URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, čioda na mapi.",
         "branding": "Сајт",
         "brandingDesc": "URL јавног менија, назив, акцентна боја, слика или видео позадине.",
-        "general": "Opšte",
-        "generalDesc": "Link javnog menija, podrazumevana valuta.",
+        "general": "Локализација",
+        "generalDesc": "Валута и временска зона.",
         "tables": "Stolovi",
         "tablesDesc": "Plan, mesta i QR kodovi po stolu.",
         "orders": "Porudžbine",

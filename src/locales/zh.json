@@ -481,7 +481,7 @@
         "layout_drill_desc": "点击类别打开其菜品页面。"
       },
       "general": {
-        "title": "通用",
+        "title": "区域",
         "menuLinkLabel": "菜单链接",
         "slugPlaceholder": "your-slug",
         "copyUrl": "复制链接",
@@ -637,8 +637,8 @@
         "contactsDesc": "电话、Instagram、WhatsApp、地图定位点。",
         "branding": "网站",
         "brandingDesc": "公共菜单 URL、名称、强调色、背景图片或视频。",
-        "general": "通用",
-        "generalDesc": "公开菜单链接、默认货币。",
+        "general": "区域",
+        "generalDesc": "货币和时区。",
         "tables": "桌台",
         "tablesDesc": "平面图、按桌座位和二维码。",
         "orders": "订单",

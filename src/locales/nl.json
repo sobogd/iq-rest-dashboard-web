@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tik op een categorie om het scherm met gerechten te openen."
       },
       "general": {
-        "title": "Algemeen",
+        "title": "Regio",
         "menuLinkLabel": "Menulink",
         "slugPlaceholder": "uw-slug",
         "copyUrl": "URL kopiëren",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefoon, Instagram, WhatsApp, adres op de kaart.",
         "branding": "Site",
         "brandingDesc": "URL van het openbare menu, naam, accentkleur, achtergrondafbeelding of -video.",
-        "general": "Algemeen",
-        "generalDesc": "Publieke menulink, standaardvaluta.",
+        "general": "Regio",
+        "generalDesc": "Valuta en tijdzone.",
         "tables": "Tafels",
         "tablesDesc": "Plattegrond, plaatsen per tafel en QR-codes.",
         "orders": "Bestellingen",

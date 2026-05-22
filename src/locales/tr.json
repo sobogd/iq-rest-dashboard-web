@@ -481,7 +481,7 @@
         "layout_drill_desc": "Yemekleri içeren ekranı açmak için bir kategoriye dokunun."
       },
       "general": {
-        "title": "Genel",
+        "title": "Bölge",
         "menuLinkLabel": "Menü bağlantısı",
         "slugPlaceholder": "your-slug",
         "copyUrl": "URL'yi kopyala",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, haritada pin.",
         "branding": "Site",
         "brandingDesc": "Genel menü URL'si, ad, vurgu rengi, arka plan görseli veya videosu.",
-        "general": "Genel",
-        "generalDesc": "Genel menü bağlantısı, varsayılan para birimi.",
+        "general": "Bölge",
+        "generalDesc": "Para birimi ve saat dilimi.",
         "tables": "Masalar",
         "tablesDesc": "Plan, masa başı koltuk ve QR kodları.",
         "orders": "Siparişler",

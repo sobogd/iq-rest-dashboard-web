@@ -713,8 +713,10 @@ export function GeneralSettingsPage({
 }) {
  const t = useTranslations("dashboard.settings");
  const tg = useTranslations("dashboard.settings.general");
+ const tb = useTranslations("dashboard.settings.bookings");
  const [draft, setDraft] = useState({
  currency: restaurant.currency,
+ timezone: restaurant.bookingSettings.timezone,
  });
 
  useEffect(() => {
@@ -724,13 +726,14 @@ export function GeneralSettingsPage({
  async function save() {
  track("dash_settings_general_save");
  try {
- await updateRestaurant({ currency: draft.currency });
+ await updateRestaurant({ currency: draft.currency, timezone: draft.timezone });
  } catch {
  return;
  }
  setRestaurant((r) => ({
  ...r,
  currency: draft.currency,
+ bookingSettings: { ...r.bookingSettings, timezone: draft.timezone },
  }));
  onBack();
  }
@@ -761,6 +764,24 @@ export function GeneralSettingsPage({
  ))}
  </select>
  <p className="text-xs text-muted-foreground mt-1.5 leading-snug">{tg("currencyTip")}</p>
+
+ <Divider />
+
+ <label htmlFor="gen-timezone" className="block text-sm font-medium text-foreground mb-2.5">{tb("timezoneLabel")}</label>
+ <select
+ id="gen-timezone"
+ value={draft.timezone}
+ onChange={(e) => {
+ track("dash_settings_general_change_timezone", { tz: e.target.value });
+ setDraft((d) => ({ ...d, timezone: e.target.value }));
+ }}
+ className={inputClass}
+ >
+ {TIMEZONE_OPTIONS.map((tz) => (
+ <option key={tz} value={tz}>{tz}</option>
+ ))}
+ </select>
+ <p className="text-xs text-muted-foreground mt-1.5 leading-snug">{tb("timezoneTip")}</p>
  </div>
  </div>
  </div>
@@ -1090,30 +1111,6 @@ export function BookingSettingsPage({
  ))}
  </div>
 
- {/* Timezone — IANA identifier. Used by reservation logic to compute
-   "is slot in the past" against the restaurant's local clock. */}
- <div className={"mt-5 bg-card border border-border rounded-2xl p-5 md:p-6 " + (disabled ? "opacity-50 pointer-events-none" : "")}>
- <div className="flex items-center justify-between gap-3">
- <div>
- <div className="text-sm font-medium text-foreground">{tb("timezoneLabel")}</div>
- <div className="text-xs text-muted-foreground leading-snug mt-0.5">
- {tb("timezoneTip")}
- </div>
- </div>
- <select
- value={draft.timezone}
- onChange={(e) => {
- track("dash_settings_booking_change_timezone", { tz: e.target.value });
- setDraft((d) => ({ ...d, timezone: e.target.value }));
- }}
- className={inputClass + " w-56"}
- >
- {TIMEZONE_OPTIONS.map((tz) => (
- <option key={tz} value={tz}>{tz}</option>
- ))}
- </select>
- </div>
- </div>
  </div>
  </div>
  );

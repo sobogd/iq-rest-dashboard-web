@@ -481,7 +481,7 @@
         "layout_drill_desc": "Puuduta kategooriat, et avada selle ekraan roogadega."
       },
       "general": {
-        "title": "Üldine",
+        "title": "Lokaadi seaded",
         "menuLinkLabel": "Menüü link",
         "slugPlaceholder": "sinu-slug",
         "copyUrl": "Kopeeri URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, nõel kaardil.",
         "branding": "Sait",
         "brandingDesc": "Avalik menüü-URL, nimi, rõhutusvärv, tausta pilt või video.",
-        "general": "Üldine",
-        "generalDesc": "Avaliku menüü link, vaikevaluuta.",
+        "general": "Lokaadi seaded",
+        "generalDesc": "Valuuta ja ajavöönd.",
         "tables": "Lauad",
         "tablesDesc": "Plaan, kohad ja QR-koodid laua kaupa.",
         "orders": "Tellimused",

@@ -481,7 +481,7 @@
         "layout_drill_desc": "Тап по категории открывает её отдельную страницу с блюдами."
       },
       "general": {
-        "title": "Общее",
+        "title": "Регион",
         "menuLinkLabel": "Ссылка на меню",
         "slugPlaceholder": "ваш-slug",
         "copyUrl": "Копировать URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Телефон, Instagram, WhatsApp, метка на карте.",
         "branding": "Сайт",
         "brandingDesc": "URL публичного меню, название, акцентный цвет, фон-изображение или видео.",
-        "general": "Общее",
-        "generalDesc": "Ссылка на публичное меню, валюта по умолчанию.",
+        "general": "Регион",
+        "generalDesc": "Валюта и часовой пояс.",
         "tables": "Столы",
         "tablesDesc": "Схема зала, места и QR-коды для столов.",
         "orders": "Заказы",

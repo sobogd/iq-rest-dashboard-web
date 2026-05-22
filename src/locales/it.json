@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tocca una categoria per aprire la sua schermata con i piatti."
       },
       "general": {
-        "title": "Generale",
+        "title": "Localizzazione",
         "menuLinkLabel": "Link del menu",
         "slugPlaceholder": "tuo-slug",
         "copyUrl": "Copia URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefono, Instagram, WhatsApp, indirizzo sulla mappa.",
         "branding": "Sito",
         "brandingDesc": "URL del menu pubblico, nome, colore di accento, immagine o video di sfondo.",
-        "general": "Generale",
-        "generalDesc": "Link del menu pubblico, valuta predefinita.",
+        "general": "Localizzazione",
+        "generalDesc": "Valuta e fuso orario.",
         "tables": "Tavoli",
         "tablesDesc": "Mappa, posti per tavolo e codici QR.",
         "orders": "Ordini",

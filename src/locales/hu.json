@@ -481,7 +481,7 @@
         "layout_drill_desc": "Koppintson egy kategóriára a saját képernyő megnyitásához."
       },
       "general": {
-        "title": "Általános",
+        "title": "Területi beállítások",
         "menuLinkLabel": "Étlap link",
         "slugPlaceholder": "your-slug",
         "copyUrl": "URL másolása",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, tű a térképen.",
         "branding": "Webhely",
         "brandingDesc": "Nyilvános menü URL, név, kiemelőszín, háttérkép vagy -videó.",
-        "general": "Általános",
-        "generalDesc": "Nyilvános étlap link, alapértelmezett pénznem.",
+        "general": "Területi beállítások",
+        "generalDesc": "Pénznem és időzóna.",
         "tables": "Asztalok",
         "tablesDesc": "Tervrajz, asztalonkénti helyek és QR-kódok.",
         "orders": "Rendelések",

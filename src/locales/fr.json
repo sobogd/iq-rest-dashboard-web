@@ -481,7 +481,7 @@
         "layout_drill_desc": "Touchez une catégorie pour ouvrir son écran avec les plats."
       },
       "general": {
-        "title": "Général",
+        "title": "Localisation",
         "menuLinkLabel": "Lien du menu",
         "slugPlaceholder": "votre-slug",
         "copyUrl": "Copier l'URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Téléphone, Instagram, WhatsApp, point sur la carte.",
         "branding": "Site",
         "brandingDesc": "URL du menu public, nom, couleur d'accent, image ou vidéo de fond.",
-        "general": "Général",
-        "generalDesc": "Lien du menu public, devise par défaut.",
+        "general": "Localisation",
+        "generalDesc": "Devise et fuseau horaire.",
         "tables": "Tables",
         "tablesDesc": "Plan, places et codes QR par table.",
         "orders": "Commandes",

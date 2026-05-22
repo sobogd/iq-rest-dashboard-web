@@ -481,7 +481,7 @@
         "layout_drill_desc": "Napauta luokkaa avataksesi sen näytön annoksilla."
       },
       "general": {
-        "title": "Yleiset",
+        "title": "Aluekohtaiset",
         "menuLinkLabel": "Menulinkki",
         "slugPlaceholder": "oma-slug",
         "copyUrl": "Kopioi URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Puhelin, Instagram, WhatsApp, sijainti kartalla.",
         "branding": "Sivusto",
         "brandingDesc": "Julkisen ruokalistan URL, nimi, korostusväri, taustakuva tai -video.",
-        "general": "Yleiset",
-        "generalDesc": "Julkisen menun linkki, oletusvaluutta.",
+        "general": "Aluekohtaiset",
+        "generalDesc": "Valuutta ja aikavyöhyke.",
         "tables": "Pöydät",
         "tablesDesc": "Pohjapiirros, paikat ja QR-koodit pöytäkohtaisesti.",
         "orders": "Tilaukset",

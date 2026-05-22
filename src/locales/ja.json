@@ -481,7 +481,7 @@
         "layout_drill_desc": "カテゴリーをタップして料理画面を開く。"
       },
       "general": {
-        "title": "一般",
+        "title": "地域設定",
         "menuLinkLabel": "メニューリンク",
         "slugPlaceholder": "your-slug",
         "copyUrl": "URLをコピー",
@@ -637,8 +637,8 @@
         "contactsDesc": "電話、Instagram、WhatsApp、地図のピン。",
         "branding": "サイト",
         "brandingDesc": "公開メニュー URL、店名、アクセントカラー、背景画像または動画。",
-        "general": "一般",
-        "generalDesc": "公開メニューリンク、デフォルト通貨。",
+        "general": "地域設定",
+        "generalDesc": "通貨とタイムゾーン。",
         "tables": "テーブル",
         "tablesDesc": "プラン、テーブルごとの席とQRコード。",
         "orders": "注文",

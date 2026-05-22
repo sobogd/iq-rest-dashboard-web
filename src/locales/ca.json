@@ -481,7 +481,7 @@
         "layout_drill_desc": "Toca una categoria per obrir la seva pantalla amb plats."
       },
       "general": {
-        "title": "General",
+        "title": "Configuració regional",
         "menuLinkLabel": "Enllaç del menú",
         "slugPlaceholder": "el-teu-slug",
         "copyUrl": "Copia URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telèfon, Instagram, WhatsApp, pin al mapa.",
         "branding": "Lloc",
         "brandingDesc": "URL del menú públic, nom, color d'accent, imatge o vídeo de fons.",
-        "general": "General",
-        "generalDesc": "Enllaç del menú públic, moneda per defecte.",
+        "general": "Configuració regional",
+        "generalDesc": "Moneda i fus horari.",
         "tables": "Taules",
         "tablesDesc": "Plànol, places i codis QR per taula.",
         "orders": "Comandes",

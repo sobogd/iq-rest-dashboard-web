@@ -481,7 +481,7 @@
         "layout_drill_desc": "카테고리를 탭하여 요리 화면을 엽니다."
       },
       "general": {
-        "title": "일반",
+        "title": "지역 설정",
         "menuLinkLabel": "메뉴 링크",
         "slugPlaceholder": "your-slug",
         "copyUrl": "URL 복사",
@@ -637,8 +637,8 @@
         "contactsDesc": "전화, Instagram, WhatsApp, 지도 핀.",
         "branding": "사이트",
         "brandingDesc": "공개 메뉴 URL, 이름, 강조색, 배경 이미지 또는 동영상.",
-        "general": "일반",
-        "generalDesc": "공개 메뉴 링크, 기본 통화.",
+        "general": "지역 설정",
+        "generalDesc": "통화 및 시간대.",
         "tables": "테이블",
         "tablesDesc": "평면도, 테이블별 좌석과 QR 코드.",
         "orders": "주문",

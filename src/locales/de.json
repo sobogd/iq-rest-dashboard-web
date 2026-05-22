@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tippen Sie auf eine Kategorie, um ihren Bildschirm mit Gerichten zu öffnen."
       },
       "general": {
-        "title": "Allgemein",
+        "title": "Region",
         "menuLinkLabel": "Karten-Link",
         "slugPlaceholder": "ihr-slug",
         "copyUrl": "URL kopieren",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, Adresse auf der Karte.",
         "branding": "Webseite",
         "brandingDesc": "Öffentliche Menü-URL, Name, Akzentfarbe, Hintergrundbild oder -video.",
-        "general": "Allgemein",
-        "generalDesc": "Öffentlicher Karten-Link, Standardwährung.",
+        "general": "Region",
+        "generalDesc": "Währung und Zeitzone.",
         "tables": "Tische",
         "tablesDesc": "Plan, Plätze pro Tisch und QR-Codes.",
         "orders": "Bestellungen",

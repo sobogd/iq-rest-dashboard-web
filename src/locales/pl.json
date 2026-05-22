@@ -481,7 +481,7 @@
         "layout_drill_desc": "Dotknij kategorię, aby otworzyć jej ekran z daniami."
       },
       "general": {
-        "title": "Ogólne",
+        "title": "Lokalizacja",
         "menuLinkLabel": "Link do menu",
         "slugPlaceholder": "twój-slug",
         "copyUrl": "Kopiuj URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, pinezka na mapie.",
         "branding": "Witryna",
         "brandingDesc": "URL publicznego menu, nazwa, kolor akcentu, obraz lub film w tle.",
-        "general": "Ogólne",
-        "generalDesc": "Link publicznego menu, domyślna waluta.",
+        "general": "Lokalizacja",
+        "generalDesc": "Waluta i strefa czasowa.",
         "tables": "Stoliki",
         "tablesDesc": "Plan, miejsca per stolik i kody QR.",
         "orders": "Zamówienia",

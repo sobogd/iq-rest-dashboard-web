@@ -481,7 +481,7 @@
         "layout_drill_desc": "Докоснете категория, за да отворите нейния екран с ястия."
       },
       "general": {
-        "title": "Общи",
+        "title": "Локализация",
         "menuLinkLabel": "Линк към меню",
         "slugPlaceholder": "вашият-slug",
         "copyUrl": "Копирай URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Телефон, Instagram, WhatsApp, карфица на картата.",
         "branding": "Сайт",
         "brandingDesc": "URL на публичното меню, име, акцентен цвят, фоново изображение или видео.",
-        "general": "Общи",
-        "generalDesc": "Линк към публичното меню, валута по подразбиране.",
+        "general": "Локализация",
+        "generalDesc": "Валута и часова зона.",
         "tables": "Маси",
         "tablesDesc": "План, места и QR кодове по маси.",
         "orders": "Поръчки",

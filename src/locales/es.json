@@ -481,7 +481,7 @@
         "layout_drill_desc": "Toca una categoría para abrir su pantalla con platos."
       },
       "general": {
-        "title": "General",
+        "title": "Configuración regional",
         "menuLinkLabel": "Enlace del menú",
         "slugPlaceholder": "tu-slug",
         "copyUrl": "Copiar URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Teléfono, Instagram, WhatsApp, dirección en el mapa.",
         "branding": "Sitio",
         "brandingDesc": "URL del menú público, nombre, color de acento, imagen o vídeo de fondo.",
-        "general": "General",
-        "generalDesc": "Enlace del menú público, moneda predeterminada.",
+        "general": "Configuración regional",
+        "generalDesc": "Moneda y zona horaria.",
         "tables": "Mesas",
         "tablesDesc": "Plano, sillas por mesa y códigos QR.",
         "orders": "Pedidos",

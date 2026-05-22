@@ -481,7 +481,7 @@
         "layout_drill_desc": "Pieskarieties kategorijai, lai atvērtu tās ekrānu ar ēdieniem."
       },
       "general": {
-        "title": "Vispārīgi",
+        "title": "Reģiona iestatījumi",
         "menuLinkLabel": "Ēdienkartes saite",
         "slugPlaceholder": "jūsu-slug",
         "copyUrl": "Kopēt URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Tālrunis, Instagram, WhatsApp, adata kartē.",
         "branding": "Vietne",
         "brandingDesc": "Publiskā ēdienkartes URL, nosaukums, akcenta krāsa, fona attēls vai video.",
-        "general": "Vispārīgi",
-        "generalDesc": "Publiskās ēdienkartes saite, noklusējuma valūta.",
+        "general": "Reģiona iestatījumi",
+        "generalDesc": "Valūta un laika josla.",
         "tables": "Galdi",
         "tablesDesc": "Plāns, vietas un QR kodi pa galdiem.",
         "orders": "Pasūtījumi",

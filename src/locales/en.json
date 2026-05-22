@@ -555,7 +555,7 @@
         "layout_drill_desc": "Tap a category to open its own screen with dishes."
       },
       "general": {
-        "title": "General",
+        "title": "Locale",
         "menuLinkLabel": "Menu link",
         "slugPlaceholder": "your-slug",
         "copyUrl": "Copy URL",
@@ -714,8 +714,8 @@
         "contactsDesc": "Phone, Instagram, WhatsApp, address pin on the map.",
         "branding": "Site",
         "brandingDesc": "Public menu URL, name, accent color, background image or video.",
-        "general": "General",
-        "generalDesc": "Public menu link, default currency.",
+        "general": "Locale",
+        "generalDesc": "Currency and timezone.",
         "tables": "Tables",
         "tablesDesc": "Floor plan, per-table seats and QR codes.",
         "devices": "Devices",

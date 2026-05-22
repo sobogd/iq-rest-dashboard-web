@@ -481,7 +481,7 @@
         "layout_drill_desc": "Ťuknutím na kategóriu otvoríte jej obrazovku s pokrmami."
       },
       "general": {
-        "title": "Všeobecné",
+        "title": "Miestne nastavenia",
         "menuLinkLabel": "Odkaz menu",
         "slugPlaceholder": "vaš-slug",
         "copyUrl": "Kopírovať URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefón, Instagram, WhatsApp, špendlík na mape.",
         "branding": "Web",
         "brandingDesc": "URL verejného menu, názov, akcentová farba, obrázok alebo video pozadia.",
-        "general": "Všeobecné",
-        "generalDesc": "Odkaz verejného menu, predvolená mena.",
+        "general": "Miestne nastavenia",
+        "generalDesc": "Mena a časové pásmo.",
         "tables": "Stoly",
         "tablesDesc": "Plán, miesta a QR kódy podľa stola.",
         "orders": "Objednávky",

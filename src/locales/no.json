@@ -481,7 +481,7 @@
         "layout_drill_desc": "Trykk på en kategori for å åpne dens skjerm med retter."
       },
       "general": {
-        "title": "Generelt",
+        "title": "Regional",
         "menuLinkLabel": "Menylink",
         "slugPlaceholder": "din-slug",
         "copyUrl": "Kopier URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, nål på kartet.",
         "branding": "Nettsted",
         "brandingDesc": "URL til offentlig meny, navn, aksentfarge, bakgrunnsbilde eller -video.",
-        "general": "Generelt",
-        "generalDesc": "Offentlig menylink, standardvaluta.",
+        "general": "Regional",
+        "generalDesc": "Valuta og tidssone.",
         "tables": "Bord",
         "tablesDesc": "Plan, plasser per bord og QR-koder.",
         "orders": "Bestillinger",

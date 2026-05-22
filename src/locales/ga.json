@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tapáil ar chatagóir chun a scáileán le miasa a oscailt."
       },
       "general": {
-        "title": "Ginearálta",
+        "title": "Áitiúil",
         "menuLinkLabel": "Nasc bhiachláir",
         "slugPlaceholder": "do-slug",
         "copyUrl": "Cóipeáil URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Teileafón, Instagram, WhatsApp, pionna ar an léarscáil.",
         "branding": "Suíomh",
         "brandingDesc": "URL biachláir poiblí, ainm, dath béime, íomhá nó físeán cúlra.",
-        "general": "Ginearálta",
-        "generalDesc": "Nasc bhiachláir phoiblí, airgeadra réamhshocraithe.",
+        "general": "Áitiúil",
+        "generalDesc": "Airgeadra agus crios ama.",
         "tables": "Boird",
         "tablesDesc": "Plean, suíocháin agus cóid QR in aghaidh an bhoird.",
         "orders": "Orduithe",

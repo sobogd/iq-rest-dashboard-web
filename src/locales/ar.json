@@ -481,7 +481,7 @@
         "layout_drill_desc": "انقر على فئة لفتح شاشتها مع الأطباق."
       },
       "general": {
-        "title": "عام",
+        "title": "اللغة والمنطقة",
         "menuLinkLabel": "رابط القائمة",
         "slugPlaceholder": "your-slug",
         "copyUrl": "نسخ URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "الهاتف وInstagram وWhatsApp ودبوس على الخريطة.",
         "branding": "الموقع",
         "brandingDesc": "رابط القائمة العامة، الاسم، اللون المميز، الصورة أو الفيديو الخلفي.",
-        "general": "عام",
-        "generalDesc": "رابط القائمة العامة، العملة الافتراضية.",
+        "general": "اللغة والمنطقة",
+        "generalDesc": "العملة والمنطقة الزمنية.",
         "tables": "الطاولات",
         "tablesDesc": "المخطط، المقاعد ورموز QR لكل طاولة.",
         "orders": "الطلبات",

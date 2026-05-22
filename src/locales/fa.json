@@ -481,7 +481,7 @@
         "layout_drill_desc": "برای باز کردن صفحه غذاهای دسته، روی آن بزنید."
       },
       "general": {
-        "title": "عمومی",
+        "title": "منطقه و زبان",
         "menuLinkLabel": "لینک منو",
         "slugPlaceholder": "your-slug",
         "copyUrl": "کپی URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "تلفن، Instagram، WhatsApp، پین روی نقشه.",
         "branding": "سایت",
         "brandingDesc": "آدرس منوی عمومی، نام، رنگ شاخص، تصویر یا ویدئوی پس‌زمینه.",
-        "general": "عمومی",
-        "generalDesc": "لینک منوی عمومی، ارز پیش‌فرض.",
+        "general": "منطقه و زبان",
+        "generalDesc": "ارز و منطقه زمانی.",
         "tables": "میزها",
         "tablesDesc": "پلان، صندلی و کدهای QR هر میز.",
         "orders": "سفارش‌ها",

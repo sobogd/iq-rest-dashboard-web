@@ -481,7 +481,7 @@
         "layout_drill_desc": "Atinge o categorie pentru a deschide ecranul ei cu preparate."
       },
       "general": {
-        "title": "General",
+        "title": "Regional",
         "menuLinkLabel": "Link meniu",
         "slugPlaceholder": "slug-ul-tău",
         "copyUrl": "Copiază URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, pin pe hartă.",
         "branding": "Site",
         "brandingDesc": "URL meniu public, nume, culoare de accent, imagine sau video de fundal.",
-        "general": "General",
-        "generalDesc": "Link meniu public, monedă implicită.",
+        "general": "Regional",
+        "generalDesc": "Monedă și fus orar.",
         "tables": "Mese",
         "tablesDesc": "Plan, locuri pe masă și coduri QR.",
         "orders": "Comenzi",

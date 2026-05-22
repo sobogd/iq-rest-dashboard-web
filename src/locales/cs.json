@@ -481,7 +481,7 @@
         "layout_drill_desc": "Klepnutím na kategorii otevřete její obrazovku s pokrmy."
       },
       "general": {
-        "title": "Obecné",
+        "title": "Místní nastavení",
         "menuLinkLabel": "Odkaz na menu",
         "slugPlaceholder": "vase-slug",
         "copyUrl": "Kopírovat URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, špendlík na mapě.",
         "branding": "Web",
         "brandingDesc": "Veřejná URL menu, název, akcentní barva, obrázek nebo video pozadí.",
-        "general": "Obecné",
-        "generalDesc": "Odkaz veřejného menu, výchozí měna.",
+        "general": "Místní nastavení",
+        "generalDesc": "Měna a časové pásmo.",
         "tables": "Stoly",
         "tablesDesc": "Plánek, místa a QR kódy podle stolů.",
         "orders": "Objednávky",

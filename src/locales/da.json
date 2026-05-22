@@ -481,7 +481,7 @@
         "layout_drill_desc": "Tryk på en kategori for at åbne dens skærm med retter."
       },
       "general": {
-        "title": "Generelt",
+        "title": "Lokalisering",
         "menuLinkLabel": "Menulink",
         "slugPlaceholder": "din-slug",
         "copyUrl": "Kopier URL",
@@ -637,8 +637,8 @@
         "contactsDesc": "Telefon, Instagram, WhatsApp, nål på kortet.",
         "branding": "Site",
         "brandingDesc": "Offentlig menu-URL, navn, accentfarve, baggrundsbillede eller -video.",
-        "general": "Generelt",
-        "generalDesc": "Offentligt menulink, standardvaluta.",
+        "general": "Lokalisering",
+        "generalDesc": "Valuta og tidszone.",
         "tables": "Borde",
         "tablesDesc": "Plan, pladser pr. bord og QR-koder.",
         "orders": "Bestillinger",
