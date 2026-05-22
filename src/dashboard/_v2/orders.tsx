@@ -948,18 +948,22 @@ function OrderListCard({
  </>
  ) : null}
  </div>
- <div className="shrink-0 text-sm font-medium text-foreground tabular-nums inline-flex items-center gap-1.5">
+ <div className="shrink-0 text-sm font-medium text-foreground tabular-nums">
  {formatPrice(total, currencySymbol)}
- {order.discount ? <DiscountBadge discount={order.discount} currencySymbol={currencySymbol} /> : null}
  </div>
  <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </div>
- <div className="text-xs text-muted-foreground mt-0.5 truncate">
+ <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 truncate">
+ <span className="truncate">
  {t("createdLabel", { defaultValue: "Created" })} {formatTimeShort(order.createdAt)}
  {" · "}
  {itemsCount === 1
  ? t("itemOne", { count: itemsCount })
  : t("itemOther", { count: itemsCount })}
+ </span>
+ {order.discount ? (
+ <DiscountBadge discount={order.discount} currencySymbol={currencySymbol} />
+ ) : null}
  </div>
  </button>
  );
