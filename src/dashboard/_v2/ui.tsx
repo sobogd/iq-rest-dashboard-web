@@ -109,7 +109,9 @@ export function Modal({
  </button>
  </div>
  )}
+ {children != null && children !== false ? (
  <div className="flex-1 min-h-0 overflow-y-auto p-5">{children}</div>
+ ) : null}
  {footer ? (
  <div className="px-5 py-3 border-t border-border shrink-0">{footer}</div>
  ) : null}
