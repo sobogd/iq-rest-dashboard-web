@@ -157,6 +157,7 @@ export function DevicesSettingsPage({ onBack }: DevicesSettingsPageProps) {
         onConfirm={() => confirmDelete && void handleDelete(confirmDelete)}
         onCancel={() => setConfirmDelete(null)}
       />
+
     </div>
   );
 }

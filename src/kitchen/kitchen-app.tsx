@@ -328,6 +328,27 @@ function KitchenAppBody() {
     token,
     onOrder: onSseOrder,
     onRevoked: handleLogout,
+    onForceReload: () => {
+      // Admin pressed "Reload all tablets" — usually right after deploying
+      // a hotfix. Tear down the cached shell so the SW doesn't serve the
+      // stale index.html on the way back in, then hard-reload to pull the
+      // new bundle.
+      void (async () => {
+        try {
+          if ("caches" in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          }
+          if ("serviceWorker" in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map((r) => r.update().catch(() => undefined)));
+          }
+        } catch {
+          // best-effort — fall through to reload regardless
+        }
+        window.location.reload();
+      })();
+    },
   });
 
   if (!token) {

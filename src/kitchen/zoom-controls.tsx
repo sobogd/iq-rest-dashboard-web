@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
-// In-page zoom for the kitchen kiosk. Implemented via the non-standard
-// `zoom` CSS property because it works on every WebKit/Blink browser
-// our planshets run (Safari/iPadOS, Android Chrome) and rescales layout
-// proportionally — unlike font-size changes, which would distort cards.
+// In-page zoom for the kitchen kiosk. Implemented by scaling the root
+// font-size: Tailwind compiles spacing + typography to rem units, so
+// changing `html { font-size: ... }` rescales everything proportionally
+// without touching transform (which breaks sticky positioning) or the
+// legacy CSS `zoom` property (which iOS Safari ignored entirely until
+// very recently). env(safe-area-inset-*) stays in pixels, as desired.
 //
 // Persisted to localStorage so the staff's chosen scale survives reloads
 // and reinstalls of the PWA. Range chosen by trial: 80–150 in 10%
@@ -14,6 +16,7 @@ const MIN = 80;
 const MAX = 150;
 const STEP = 10;
 const DEFAULT_ZOOM = 100;
+const BASE_FONT_PX = 16;
 
 function readStoredZoom(): number {
   try {
@@ -28,11 +31,14 @@ function readStoredZoom(): number {
 }
 
 function applyZoom(percent: number): void {
-  // Non-standard `zoom` is the only cross-browser proportional scale on
-  // iPad Safari today (transform: scale moves the layout origin and
-  // breaks sticky positioning). TypeScript doesn't model `zoom` on
-  // CSSStyleDeclaration, hence the cast.
-  (document.documentElement.style as CSSStyleDeclaration & { zoom: string }).zoom = String(percent / 100);
+  // Setting the root font-size in px scales every rem-based unit Tailwind
+  // emits (spacing, typography, sizing). Default at 100% restores to ""
+  // so the global stylesheet's value takes back over on unmount.
+  if (percent === DEFAULT_ZOOM) {
+    document.documentElement.style.fontSize = "";
+  } else {
+    document.documentElement.style.fontSize = `${(BASE_FONT_PX * percent) / 100}px`;
+  }
 }
 
 export function ZoomControls() {

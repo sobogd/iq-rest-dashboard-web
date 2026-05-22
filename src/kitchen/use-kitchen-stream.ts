@@ -32,6 +32,7 @@ interface UseKitchenStreamArgs {
   token: string | null;
   onOrder: (event: KitchenOrderEvent) => void;
   onRevoked: () => void;
+  onForceReload: () => void;
 }
 
 interface UseKitchenStreamReturn {
@@ -43,11 +44,14 @@ export function useKitchenStream({
   token,
   onOrder,
   onRevoked,
+  onForceReload,
 }: UseKitchenStreamArgs): UseKitchenStreamReturn {
   const orderRef = useRef(onOrder);
   orderRef.current = onOrder;
   const revokeRef = useRef(onRevoked);
   revokeRef.current = onRevoked;
+  const reloadRef = useRef(onForceReload);
+  reloadRef.current = onForceReload;
 
   const [state, setState] = useState<StreamState>("closed");
 
@@ -155,6 +159,9 @@ export function useKitchenStream({
       });
       next.addEventListener("device-revoked", () => {
         revokeRef.current();
+      });
+      next.addEventListener("force-reload", () => {
+        reloadRef.current();
       });
       next.onerror = () => {
         if (next.readyState === EventSource.CLOSED) {

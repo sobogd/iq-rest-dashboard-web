@@ -79,6 +79,32 @@ export function AdminPage() {
     void fetchCompanies("refresh");
   }
 
+  // Push a force-reload SSE event to every paired kitchen tablet across
+  // every company. Used after deploying an urgent kitchen-bundle fix so
+  // staff doesn't have to walk the floors manually refreshing.
+  const [reloading, setReloading] = useState(false);
+  async function reloadAllTablets() {
+    if (reloading) return;
+    if (!window.confirm("Reload every paired tablet across all companies?")) return;
+    setReloading(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/devices/reload-all`), {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        alert("Failed to send reload");
+        return;
+      }
+      const data = (await res.json()) as { devices: number; restaurants: number };
+      alert(`Reload sent to ${data.devices} tablet(s) across ${data.restaurants} restaurant(s)`);
+    } catch {
+      alert("Network error");
+    } finally {
+      setReloading(false);
+    }
+  }
+
   return (
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
@@ -121,6 +147,15 @@ export function AdminPage() {
             ) : (
               <RefreshIcon size={13} />
             )}
+          </button>
+          <button
+            type="button"
+            onClick={reloadAllTablets}
+            disabled={reloading}
+            title="Reload every paired tablet across all companies"
+            className="h-8 px-3 text-xs font-medium inline-flex items-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+          >
+            {reloading ? "Sending…" : "Reload tablets"}
           </button>
         </div>
       </SubpageStickyBar>
