@@ -608,9 +608,6 @@ export function OrdersPage({
  }
  }
 
- const reserved = 220;
- const mapHeight = `calc(100dvh - var(--topbar-h, 0px) - ${reserved}px - env(safe-area-inset-bottom))`;
-
  function openOrderDirect(order: Order) {
  setActiveTableId(order.tableId ?? NO_TABLE);
  setOpenedFrom("list");
@@ -629,60 +626,6 @@ export function OrdersPage({
  setView({ kind: "addItem", orderId: null, step: "category" });
  }
 
- const ordersPane = (
- <>
- {!hasTables ? (
- <button
- type="button"
- onClick={startTablelessOrder}
- disabled={creating}
- className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition disabled:opacity-50"
- >
- <PlusIcon size={16} className="mr-1.5" />
- {t("newOrder")}
- </button>
- ) : null}
- {activeOrders.length === 0 ? (
- <div className="w-full h-full min-h-[200px] flex items-center justify-center bg-card border border-border rounded-xl px-6 py-10 text-center">
- <div>
- <div className="text-sm font-medium text-foreground mb-1">
- {t("noActiveTitle", { defaultValue: "No active orders" })}
- </div>
- <div className="text-xs text-muted-foreground">
- {t("noActiveBody", { defaultValue: "New orders will show up here." })}
- </div>
- </div>
- </div>
- ) : kioskLayout ? (
- <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col h-full">
- <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-border">
- {activeOrders.map((o) => (
- <OrderListCard
- key={o.id}
- order={o}
- currencySymbol={currencySymbol}
- onClick={() => openOrderDirect(o)}
- variant="row"
- />
- ))}
- </div>
- </div>
- ) : (
- <div className="flex flex-col gap-2">
- {activeOrders.map((o) => (
- <OrderListCard
- key={o.id}
- order={o}
- currencySymbol={currencySymbol}
- onClick={() => openOrderDirect(o)}
- variant="card"
- />
- ))}
- </div>
- )}
- </>
- );
-
  const floorPane = hasTables ? (
  <FloorMap
  tables={tables}
@@ -699,18 +642,64 @@ export function OrdersPage({
  />
  ) : null;
 
- return (
- <div className={kioskLayout ? "h-full p-4 md:p-6" : "max-w-5xl mx-auto md:px-6"}>
- {kioskLayout ? null : (
- <PageHeader title={t("title")} subtitle={hasTables ? t("tapTable") : undefined} />
- )}
+ const ordersPane = !hasTables ? (
+ <button
+ type="button"
+ onClick={startTablelessOrder}
+ disabled={creating}
+ className="inline-flex items-center justify-center h-10 px-5 rounded-lg bg-primary-gradient text-primary-foreground text-sm font-medium hover:bg-primary/90 active:scale-[0.99] transition disabled:opacity-50 self-start"
+ >
+ <PlusIcon size={16} className="mr-1.5" />
+ {t("newOrder")}
+ </button>
+ ) : activeOrders.length === 0 ? (
+ <div className="bg-card border border-border rounded-xl px-6 py-10 text-center h-full flex items-center justify-center">
+ <div>
+ <div className="text-sm font-medium text-foreground mb-1">
+ {t("noActiveTitle", { defaultValue: "No active orders" })}
+ </div>
+ <div className="text-xs text-muted-foreground">
+ {t("noActiveBody", { defaultValue: "New orders will show up here." })}
+ </div>
+ </div>
+ </div>
+ ) : (
+ <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col h-full">
+ <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-border">
+ {activeOrders.map((o) => (
+ <OrderListCard
+ key={o.id}
+ order={o}
+ currencySymbol={currencySymbol}
+ onClick={() => openOrderDirect(o)}
+ variant="row"
+ />
+ ))}
+ </div>
+ </div>
+ );
 
- {kioskLayout ? (
- // Kiosk waiter layout: column on mobile (map square on top, orders
- // card filling the rest), row on desktop (map keeps its square
- // size as the priority element, orders card stretches to match
- // height with internal scroll).
- <div className="h-full flex flex-col lg:flex-row gap-3 lg:gap-4 min-h-0">
+ // Unified dual-pane layout: kanban-like floor map (square, priority on
+ // desktop) + a single orders card with divider-separated rows that
+ // scroll inside. Admin host adds the standard max-w-5xl container so
+ // the page doesn't stretch on wide displays; kiosk host runs
+ // edge-to-edge. Outer height pins to viewport (minus topbar) so the
+ // orders card has an explicit height to fill — without that the
+ // internal scroll has no upper bound and the card sprawls.
+ const outerHeightStyle = {
+ height:
+ "calc(100dvh - var(--topbar-h, 0px) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 6rem)",
+ } as React.CSSProperties;
+
+ return (
+ <>
+ <div
+ className={
+ (kioskLayout ? "h-full p-4 md:p-6 " : "max-w-5xl mx-auto md:px-6 ") +
+ "flex flex-col lg:flex-row gap-3 lg:gap-4 min-h-0"
+ }
+ style={kioskLayout ? undefined : outerHeightStyle}
+ >
  {hasTables ? (
  <div className="aspect-square w-full lg:w-auto lg:h-full lg:aspect-square shrink-0">
  {floorPane}
@@ -720,21 +709,6 @@ export function OrdersPage({
  {ordersPane}
  </div>
  </div>
- ) : (
- <div className={hasTables ? "lg:flex lg:gap-4 lg:items-start" : ""}>
- {hasTables ? (
- <div
- className="aspect-square mx-auto lg:mx-0 lg:shrink-0 w-full lg:w-auto lg:h-[var(--map-h)]"
- style={{ "--map-h": mapHeight } as React.CSSProperties}
- >
- {floorPane}
- </div>
- ) : null}
- <div className={(hasTables ? "lg:flex-1 lg:min-w-0 mt-4 lg:mt-0" : "mt-4") + " flex flex-col gap-3"}>
- {ordersPane}
- </div>
- </div>
- )}
 
 
  <Modal
@@ -818,7 +792,7 @@ export function OrdersPage({
  setSplitForOrder(null);
  }}
  />
- </div>
+ </>
  );
 }
 
