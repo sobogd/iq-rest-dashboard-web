@@ -113,7 +113,14 @@ export function Modal({
  <div className="flex-1 min-h-0 overflow-y-auto p-5">{children}</div>
  ) : null}
  {footer ? (
- <div className="px-5 py-3 border-t border-border shrink-0">{footer}</div>
+ <div
+ className={
+ "px-5 py-3 shrink-0" +
+ (children != null && children !== false ? " border-t border-border" : "")
+ }
+ >
+ {footer}
+ </div>
  ) : null}
  </div>
  </div>
