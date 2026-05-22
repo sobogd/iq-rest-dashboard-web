@@ -1678,7 +1678,6 @@ function SplitOrderModal({
  onConfirm: (orderId: string, itemIds: string[]) => void | Promise<void>;
 }) {
  const t = useTranslations("dashboard.orders");
- const tc = useTranslations("dashboard.common");
  const order = orders.find((o) => o.id === orderId) || null;
  const [picked, setPicked] = useState<Set<string>>(new Set());
  useEffect(() => {
@@ -1718,14 +1717,6 @@ function SplitOrderModal({
  <div className="text-xs text-muted-foreground tabular-nums">
  {formatPrice(keptTotal, currencySymbol)} · {formatPrice(pickedTotal, currencySymbol)}
  </div>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={onClose}
- className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
- >
- {tc("cancel")}
- </button>
  <button
  type="button"
  onClick={() => onConfirm(orderId, Array.from(picked))}
@@ -1735,7 +1726,6 @@ function SplitOrderModal({
  <SplitIcon size={13} />
  {t("splitOrder", { defaultValue: "Split order" })}
  </button>
- </div>
  </div>
  }
  >
