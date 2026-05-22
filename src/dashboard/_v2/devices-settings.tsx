@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ChefHatIcon, CopyIcon, PlusIcon, TrashIcon } from "./icons";
+import { ChefHatIcon, CopyIcon, PlateForkKnifeIcon, PlusIcon, TrashIcon } from "./icons";
 import { ConfirmDialog, EmptyState, Modal, Select, SubpageStickyBar } from "./ui";
 import { inputClass } from "./tokens";
 import {
@@ -246,7 +246,11 @@ function DeviceRow({
   return (
     <div className="p-4 bg-card border border-border rounded-xl">
       <div className="flex items-center gap-2">
-        <ChefHatIcon size={16} className="text-muted-foreground shrink-0" />
+        {device.type === "WAITER" ? (
+          <PlateForkKnifeIcon size={16} className="text-muted-foreground shrink-0" />
+        ) : (
+          <ChefHatIcon size={16} className="text-muted-foreground shrink-0" />
+        )}
         <div className="text-sm font-medium text-foreground truncate min-w-0 flex-1">{device.name}</div>
       </div>
       <div className="text-xs text-muted-foreground leading-snug mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
