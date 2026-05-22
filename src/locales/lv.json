@@ -741,7 +741,8 @@
       "exportCsv": "Eksportēt CSV",
       "periodThisWeek": "Šonedēļ",
       "scopeActive": "Aktīvs restorāns",
-      "scopeAll": "Visi restorāni"
+      "scopeAll": "Visi restorāni",
+      "discountGiven": "Atlaide"
     },
     "auth": {
       "title": "Izveidojiet savu ēdienkarti",

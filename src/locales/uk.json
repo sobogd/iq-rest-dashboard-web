@@ -741,7 +741,8 @@
       "exportCsv": "Експорт CSV",
       "periodThisWeek": "Цей тиждень",
       "scopeActive": "Активний ресторан",
-      "scopeAll": "Усі ресторани"
+      "scopeAll": "Усі ресторани",
+      "discountGiven": "Знижка"
     },
     "auth": {
       "title": "Створіть своє меню",

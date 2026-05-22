@@ -741,7 +741,8 @@
       "exportCsv": "Eksporter CSV",
       "periodThisWeek": "Denne uken",
       "scopeActive": "Aktiv restaurant",
-      "scopeAll": "Alle restauranter"
+      "scopeAll": "Alle restauranter",
+      "discountGiven": "Rabatt"
     },
     "auth": {
       "title": "Lag menyen din",

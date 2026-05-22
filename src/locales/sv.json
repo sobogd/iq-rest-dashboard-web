@@ -741,7 +741,8 @@
       "exportCsv": "Exportera CSV",
       "periodThisWeek": "Denna vecka",
       "scopeActive": "Aktiv restaurang",
-      "scopeAll": "Alla restauranger"
+      "scopeAll": "Alla restauranger",
+      "discountGiven": "Rabatt"
     },
     "auth": {
       "title": "Skapa din meny",

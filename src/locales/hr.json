@@ -741,7 +741,8 @@
       "exportCsv": "Izvezi CSV",
       "periodThisWeek": "Ovaj tjedan",
       "scopeActive": "Aktivan restoran",
-      "scopeAll": "Svi restorani"
+      "scopeAll": "Svi restorani",
+      "discountGiven": "Popust"
     },
     "auth": {
       "title": "Stvorite svoj jelovnik",

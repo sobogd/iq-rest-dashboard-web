@@ -741,7 +741,8 @@
       "exportCsv": "Eksportuoti CSV",
       "periodThisWeek": "Šią savaitę",
       "scopeActive": "Aktyvus restoranas",
-      "scopeAll": "Visi restoranai"
+      "scopeAll": "Visi restoranai",
+      "discountGiven": "Nuolaida"
     },
     "auth": {
       "title": "Sukurkite savo meniu",

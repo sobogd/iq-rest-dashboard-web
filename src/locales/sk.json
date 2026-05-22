@@ -741,7 +741,8 @@
       "exportCsv": "Exportovať CSV",
       "periodThisWeek": "Tento týždeň",
       "scopeActive": "Aktívna reštaurácia",
-      "scopeAll": "Všetky reštaurácie"
+      "scopeAll": "Všetky reštaurácie",
+      "discountGiven": "Zľava"
     },
     "auth": {
       "title": "Vytvorte si menu",

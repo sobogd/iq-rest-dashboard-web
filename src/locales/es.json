@@ -741,7 +741,8 @@
       "exportCsv": "Exportar CSV",
       "periodThisWeek": "Esta semana",
       "scopeActive": "Restaurante activo",
-      "scopeAll": "Todos los restaurantes"
+      "scopeAll": "Todos los restaurantes",
+      "discountGiven": "Descuento"
     },
     "auth": {
       "title": "Crea tu menú",

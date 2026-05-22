@@ -741,7 +741,8 @@
       "exportCsv": "Εξαγωγή CSV",
       "periodThisWeek": "Αυτή την εβδομάδα",
       "scopeActive": "Ενεργό εστιατόριο",
-      "scopeAll": "Όλα τα εστιατόρια"
+      "scopeAll": "Όλα τα εστιατόρια",
+      "discountGiven": "Έκπτωση"
     },
     "auth": {
       "title": "Δημιουργήστε το μενού σας",

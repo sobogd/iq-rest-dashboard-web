@@ -741,7 +741,8 @@
       "exportCsv": "CSV exportieren",
       "periodThisWeek": "Diese Woche",
       "scopeActive": "Aktives Restaurant",
-      "scopeAll": "Alle Restaurants"
+      "scopeAll": "Alle Restaurants",
+      "discountGiven": "Rabatt"
     },
     "auth": {
       "title": "Erstellen Sie Ihre Karte",

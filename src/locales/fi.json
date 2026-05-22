@@ -741,7 +741,8 @@
       "exportCsv": "Vie CSV",
       "periodThisWeek": "Tällä viikolla",
       "scopeActive": "Aktiivinen ravintola",
-      "scopeAll": "Kaikki ravintolat"
+      "scopeAll": "Kaikki ravintolat",
+      "discountGiven": "Alennus"
     },
     "auth": {
       "title": "Luo menusi",

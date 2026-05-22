@@ -741,7 +741,8 @@
       "exportCsv": "Izvozi CSV",
       "periodThisWeek": "Ta teden",
       "scopeActive": "Aktivna restavracija",
-      "scopeAll": "Vse restavracije"
+      "scopeAll": "Vse restavracije",
+      "discountGiven": "Popust"
     },
     "auth": {
       "title": "Ustvarite svoj meni",

@@ -741,7 +741,8 @@
       "exportCsv": "Ekspordi CSV",
       "periodThisWeek": "Sel nädalal",
       "scopeActive": "Aktiivne restoran",
-      "scopeAll": "Kõik restoranid"
+      "scopeAll": "Kõik restoranid",
+      "discountGiven": "Allahindlus"
     },
     "auth": {
       "title": "Loo oma menüü",

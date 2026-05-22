@@ -35,6 +35,7 @@ import { inputClass } from "./tokens";
 import { createOrder, deleteOrder, patchOrder, splitOrder } from "./api";
 import type {
  Category,
+ Discount,
  Dish,
  DishOption,
  OptionVariant,
@@ -50,7 +51,9 @@ import {
  STATUS_DOT_CLS,
  STATUS_TEXT_CLS,
  STATUS_ORDER,
+ applyDiscount,
  calcItemPrice,
+ calcOrderSubtotal,
  calcOrderTotal,
 } from "./orders-shared";
 // KitchenPage moved to its own file so the kitchen.* kiosk bundle can
@@ -447,6 +450,10 @@ export function OrdersPage({
  }
  } else if (view.kind === "order" && currentOrder) {
  const total = calcOrderTotal(currentOrder);
+ const orderDiscountAmount = (() => {
+   const sub = calcOrderSubtotal(currentOrder);
+   return applyDiscount(sub, currentOrder.discount ?? null);
+ })();
  const overall = computeOrderStatus(currentOrder);
  const overallText = overall
  ? overall === "served"
@@ -473,6 +480,12 @@ export function OrdersPage({
  {t("createdLabel", { defaultValue: "Created" })}: {formatTimeShort(currentOrder.createdAt)}
  {" · "}
  {t("total")}: {formatPrice(total, currencySymbol)}
+ {currentOrder.discount ? (
+ <>
+ {" "}
+ <DiscountBadge discount={currentOrder.discount} currencySymbol={currencySymbol} />
+ </>
+ ) : null}
  </span>
  );
  modalContent = (
@@ -935,8 +948,9 @@ function OrderListCard({
  </>
  ) : null}
  </div>
- <div className="shrink-0 text-sm font-medium text-foreground tabular-nums">
+ <div className="shrink-0 text-sm font-medium text-foreground tabular-nums inline-flex items-center gap-1.5">
  {formatPrice(total, currencySymbol)}
+ {order.discount ? <DiscountBadge discount={order.discount} currencySymbol={currencySymbol} /> : null}
  </div>
  <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </div>
@@ -1056,8 +1070,9 @@ function OrderItemCard({
  <span className="min-w-0 truncate">
  {getMlWithFallback(item.dishNameSnapshot, defaultLang, defaultLang)}
  </span>
- <span className="shrink-0 text-[13px] text-muted-foreground font-normal tabular-nums">
+ <span className="shrink-0 text-[13px] text-muted-foreground font-normal tabular-nums inline-flex items-center gap-1.5">
  · {formatPrice(price, currencySymbol)}
+ {item.discount ? <DiscountBadge discount={item.discount} currencySymbol={currencySymbol} /> : null}
  </span>
  </div>
  <ItemMoreMenu
@@ -2052,5 +2067,26 @@ function CompleteOrderModal({
  </div>
  ) : null}
  </Modal>
+ );
+}
+
+// Tiny inline badge rendered next to a price/total whenever a discount
+// is set. Percent shows as "-10%"; fixed shows as "-3.00€" (formatted
+// via the parent's currency symbol). Emerald colour because savings.
+export function DiscountBadge({
+ discount,
+ currencySymbol,
+}: {
+ discount: Discount;
+ currencySymbol: string;
+}) {
+ const label =
+ discount.type === "percent"
+ ? `-${Math.round(discount.value * 100) / 100}%`
+ : `-${formatPrice(discount.value, currencySymbol)}`;
+ return (
+ <span className="inline-flex items-center h-[18px] px-1.5 rounded text-[10px] font-semibold tabular-nums bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 align-middle">
+ {label}
+ </span>
  );
 }

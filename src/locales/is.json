@@ -741,7 +741,8 @@
       "exportCsv": "Flytja út CSV",
       "periodThisWeek": "Þessa viku",
       "scopeActive": "Virkur veitingastaður",
-      "scopeAll": "Allir veitingastaðir"
+      "scopeAll": "Allir veitingastaðir",
+      "discountGiven": "Afsláttur"
     },
     "auth": {
       "title": "Búðu til matseðilinn þinn",

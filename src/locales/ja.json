@@ -741,7 +741,8 @@
       "exportCsv": "CSVをエクスポート",
       "periodThisWeek": "今週",
       "scopeActive": "アクティブなレストラン",
-      "scopeAll": "すべてのレストラン"
+      "scopeAll": "すべてのレストラン",
+      "discountGiven": "割引"
     },
     "auth": {
       "title": "メニューを作成",

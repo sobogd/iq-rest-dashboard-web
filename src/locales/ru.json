@@ -741,7 +741,8 @@
       "exportCsv": "Экспорт CSV",
       "periodThisWeek": "Эта неделя",
       "scopeActive": "Активный ресторан",
-      "scopeAll": "Все рестораны"
+      "scopeAll": "Все рестораны",
+      "discountGiven": "Скидка"
     },
     "auth": {
       "title": "Создайте своё меню",

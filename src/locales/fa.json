@@ -741,7 +741,8 @@
       "exportCsv": "خروجی CSV",
       "periodThisWeek": "این هفته",
       "scopeActive": "رستوران فعال",
-      "scopeAll": "همه رستوران‌ها"
+      "scopeAll": "همه رستوران‌ها",
+      "discountGiven": "تخفیف"
     },
     "auth": {
       "title": "منوی خود را بسازید",

@@ -741,7 +741,8 @@
       "exportCsv": "导出 CSV",
       "periodThisWeek": "本周",
       "scopeActive": "当前餐厅",
-      "scopeAll": "所有餐厅"
+      "scopeAll": "所有餐厅",
+      "discountGiven": "折扣"
     },
     "auth": {
       "title": "创建您的菜单",

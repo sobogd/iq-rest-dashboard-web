@@ -28,6 +28,7 @@ interface OrderRow {
   customerPhone: string | null;
   customerAddress: string | null;
   comment: string | null;
+  discountTotal: string | number | null;
 }
 
 function periodRange(period: string): { from: string; to: string } {
@@ -330,6 +331,11 @@ function OrderDetailModal({ order, currency, onClose, onReopened }: DetailProps)
       <div className="space-y-4">
           <div className="flex items-center flex-nowrap gap-x-3 text-[11px] text-muted-foreground whitespace-nowrap">
             <span className="tabular-nums">{fmtCurrency(Number(order.total), order.currency || currency)}</span>
+            {order.discountTotal !== null && order.discountTotal !== undefined && Number(order.discountTotal) > 0 ? (
+              <span className="tabular-nums text-emerald-700 dark:text-emerald-300">
+                {t("discountGiven", { defaultValue: "Discount" })}: {fmtCurrency(Number(order.discountTotal), order.currency || currency)}
+              </span>
+            ) : null}
             {order.tableNumber !== null ? (
               <span className="inline-flex items-center gap-1">
                 <Armchair className="w-3 h-3" />

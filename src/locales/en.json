@@ -799,6 +799,7 @@
       "colItems": "Items",
       "colStatus": "Status",
       "returnToKitchen": "Return to kitchen",
+      "discountGiven": "Discount",
       "ordersListTitle": "Orders",
       "noOrdersInPeriod": "No orders in this period.",
       "revenueLabel": "Revenue",

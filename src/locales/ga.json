@@ -741,7 +741,8 @@
       "exportCsv": "Easpórtáil CSV",
       "periodThisWeek": "An tseachtain seo",
       "scopeActive": "Bialann gníomhach",
-      "scopeAll": "Gach bialann"
+      "scopeAll": "Gach bialann",
+      "discountGiven": "Lascaine"
     },
     "auth": {
       "title": "Cruthaigh do bhiachlár",

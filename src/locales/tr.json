@@ -741,7 +741,8 @@
       "exportCsv": "CSV dışa aktar",
       "periodThisWeek": "Bu hafta",
       "scopeActive": "Aktif restoran",
-      "scopeAll": "Tüm restoranlar"
+      "scopeAll": "Tüm restoranlar",
+      "discountGiven": "İndirim"
     },
     "auth": {
       "title": "Menünüzü oluşturun",
