@@ -329,12 +329,30 @@ function KitchenAppBody() {
         // "new item hits kitchen". When the station has narrowed its
         // view via the filter bar (e.g. only their own category), we
         // respect that — chime only when at least one new item also
-        // passes the active filter, otherwise the station gets pinged
-        // about items another station owns. Empty filters = chime on
-        // anything new.
-        if (didAnyNewItemPassFilter(prevOrdersById, mapped, filterStateRef.current)) {
-          playOrderChime();
-        }
+        // passes the active filter. Empty filters = chime on anything
+        // new.
+        const fires = didAnyNewItemPassFilter(
+          prevOrdersById,
+          mapped,
+          filterStateRef.current,
+        );
+        // eslint-disable-next-line no-console
+        console.debug("[k] chime", {
+          action: event.action,
+          fires,
+          filter: filterStateRef.current
+            ? {
+                statuses: filterStateRef.current.statuses,
+                categoryIds: filterStateRef.current.categoryIds,
+                dishToCatSize: Object.keys(filterStateRef.current.dishToCategory).length,
+              }
+            : null,
+          incomingIds: mapped.map((o) => ({
+            orderId: o.id,
+            items: o.items.map((it) => ({ id: it.id, dishId: it.dishId, status: it.status })),
+          })),
+        });
+        if (fires) playOrderChime();
         return;
       }
       if (snap.deviceType === "WAITER") {
@@ -490,6 +508,11 @@ function collectIncoming(event: KitchenOrderEvent): ApiOrder[] {
 // "no filter" — every new item passes. Covers both "brand new order
 // just appeared" (prev=null, every item counts as new) and "dessert
 // added to an existing tab" (prev exists, only new ids count).
+//
+// Unknown category lookup (dishToCat[dishId] === undefined) is treated
+// as a match: better to chime a false positive than swallow a real one
+// because the kitchen's cached menu happens to be a few seconds behind
+// a freshly-created dish.
 function didAnyNewItemPassFilter(
   prevOrdersById: Map<string, Order>,
   incoming: Order[],
@@ -504,7 +527,12 @@ function didAnyNewItemPassFilter(
     for (const it of order.items) {
       if (prevIds && prevIds.has(it.id)) continue;
       if (statuses.length > 0 && !statuses.includes(it.status)) continue;
-      if (categoryIds.length > 0 && !categoryIds.includes(dishToCat[it.dishId])) continue;
+      if (categoryIds.length > 0) {
+        const cat = dishToCat[it.dishId];
+        // No category mapping yet → match (avoid silently missing the
+        // chime). Otherwise require explicit membership.
+        if (cat !== undefined && !categoryIds.includes(cat)) continue;
+      }
       return true;
     }
   }
