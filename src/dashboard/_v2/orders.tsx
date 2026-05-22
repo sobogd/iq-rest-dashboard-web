@@ -936,6 +936,8 @@ function OrderListCard({
  : "w-full text-left px-5 py-3 transition-colors";
  return (
  <button type="button" onClick={onClick} className={cls}>
+ <div className="flex items-center gap-3">
+ <div className="min-w-0 flex-1">
  <div className="flex items-center gap-2">
  <div className="min-w-0 flex-1 text-sm font-medium text-foreground truncate">
  <span>{orderNum}</span>
@@ -951,10 +953,9 @@ function OrderListCard({
  <div className="shrink-0 text-sm font-medium text-foreground tabular-nums">
  {formatPrice(total, currencySymbol)}
  </div>
- <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground" />
  </div>
- <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 truncate">
- <span className="truncate">
+ <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5">
+ <span className="min-w-0 flex-1 truncate">
  {t("createdLabel", { defaultValue: "Created" })} {formatTimeShort(order.createdAt)}
  {" · "}
  {itemsCount === 1
@@ -964,6 +965,9 @@ function OrderListCard({
  {order.discount ? (
  <DiscountBadge discount={order.discount} currencySymbol={currencySymbol} />
  ) : null}
+ </div>
+ </div>
+ <ChevronRightIcon size={14} className="shrink-0 text-muted-foreground -mr-2" />
  </div>
  </button>
  );
