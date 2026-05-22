@@ -363,7 +363,7 @@ export function KitchenPage({
         </div>
       ) : kioskLayout ? (
         <div className="flex-1 min-h-0 overflow-x-auto pb-1 px-4 md:px-6 mt-3">
-          <div className="flex items-stretch gap-3 h-full" style={{ width: "max-content" }}>
+          <div className="flex items-start gap-3 h-full" style={{ width: "max-content" }}>
             {visibleGroups.map((g) => (
               <KitchenTableCard
                 key={g.key}
@@ -427,7 +427,7 @@ function KitchenTableCard({
         "w-72 shrink-0 rounded-xl border overflow-hidden " +
         cardCls +
         " flex flex-col" +
-        (fullHeight ? " h-full" : "")
+        (fullHeight ? " max-h-full" : "")
       }
     >
       <div className="px-3.5 py-3 border-b border-border/60 bg-subheader rounded-t-xl shrink-0">
@@ -440,7 +440,7 @@ function KitchenTableCard({
       <div
         className={
           "divide-y divide-border " +
-          (fullHeight ? "flex-1 min-h-0 overflow-y-auto" : "flex-1")
+          (fullHeight ? "min-h-0 overflow-y-auto" : "flex-1")
         }
       >
         {[...entries]
