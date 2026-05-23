@@ -22,6 +22,7 @@ export interface UsageRow {
   ip: string | null;
   isSearch: boolean;
   isGoogleAds: boolean;
+  isFacebookAds: boolean;
 }
 
 /** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
@@ -535,6 +536,14 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                 >
                   G
                 </span>
+              ) : row.isFacebookAds ? (
+                <span
+                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#1877F2] text-[8px] font-bold text-white shrink-0"
+                  title="Facebook/Instagram Ads (fbclid)"
+                  aria-hidden
+                >
+                  F
+                </span>
               ) : row.isSearch ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0"
@@ -909,6 +918,7 @@ function UsageEventDetail({
     ["Company ID", event.companyId || "—"],
     ["gclid", event.gclid || "—"],
     ["Google Ads", event.isGoogleAds ? "yes" : "no"],
+    ["Facebook Ads", event.isFacebookAds ? "yes" : "no"],
     ["From search", event.isSearch ? "yes" : "no"],
     ...adParamFields,
     ["Event ID", event.id],
