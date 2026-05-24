@@ -69,6 +69,9 @@ interface KitchenPageProps {
   // decide whether an incoming SSE item deserves a chime. Empty arrays
   // mean "no filter" — every item passes.
   onFiltersChange?: (state: KitchenFilterState) => void;
+  // Public landing demo: keep the optimistic tap UX but never call the API
+  // (there's no device token). Taps advance status on local state only.
+  demoMode?: boolean;
 }
 
 export interface KitchenFilterState {
@@ -98,6 +101,7 @@ export function KitchenPage({
   fullWidthFilterBar,
   kioskLayout,
   onFiltersChange,
+  demoMode,
 }: KitchenPageProps) {
   const t = useTranslations("dashboard.orders");
   const [, setTick] = useState(0);
@@ -163,6 +167,9 @@ export function KitchenPage({
   }
 
   function schedulePatch(orderId: string, snapshotItems: OrderItem[]) {
+    // Demo mode: optimistic state is the whole story — there's no device
+    // token to PATCH against. Skip the network round-trip entirely.
+    if (demoMode) return;
     const prev = pendingPatch.current.get(orderId);
     if (prev) {
       clearTimeout(prev.timer);

@@ -25,6 +25,20 @@ export function isKioskHost(): boolean {
   return getKioskRole() !== null;
 }
 
+// Public, no-auth kitchen-display demo. Driven by `?demo=1` so the marketing
+// landing can embed a real KDS in an iframe (tablet frame) without pairing a
+// device or touching the API. Recognised on any host (not just k.*) so it
+// also works in local dev. Optional `lang` query picks the UI language.
+export function isDemoMode(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("demo") === "1";
+}
+
+export function getDemoLang(): string | null {
+  if (typeof window === "undefined") return null;
+  return new URLSearchParams(window.location.search).get("lang");
+}
+
 // Back-compat alias — older call sites only branched on "is this a
 // kiosk?", not which role. Keep returning true for any kiosk host so the
 // /api proxy + device token wiring lights up uniformly.

@@ -5,7 +5,8 @@ import i18n from "i18next";
 import { useTranslations } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import { apiUrl } from "@/lib/api";
-import { clearDeviceToken, getDeviceToken, setDeviceToken } from "@/lib/device-mode";
+import { clearDeviceToken, getDeviceToken, setDeviceToken, getDemoLang } from "@/lib/device-mode";
+import { buildKitchenDemoSnapshot } from "./demo-data";
 import { PairingScreen } from "./pairing-screen";
 import { KitchenShell } from "./kitchen-shell";
 import { OfflineOverlay } from "./offline-overlay";
@@ -74,14 +75,44 @@ const queryClient = new QueryClient({
   },
 });
 
-export function KitchenApp() {
+export function KitchenApp({ demo = false }: { demo?: boolean }) {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <KitchenAppBody />
+        {demo ? <KitchenDemoBody /> : <KitchenAppBody />}
         <Toaster position="top-center" richColors closeButton />
       </QueryClientProvider>
     </ThemeProvider>
+  );
+}
+
+// Public landing demo. No pairing, no bootstrap, no SSE/probe/wake-lock —
+// just the real KitchenPage fed a hardcoded snapshot. Taps advance item
+// status on local optimistic state only (KitchenPage `demoMode` skips the
+// PATCH), so a reload resets the board.
+function KitchenDemoBody() {
+  const [snapshot] = useState(() => buildKitchenDemoSnapshot(getDemoLang() || "en"));
+  const [orders, setOrders] = useState<Order[]>(snapshot.orders);
+
+  useEffect(() => {
+    const lang = getDemoLang();
+    if (lang && i18n.language !== lang) void i18n.changeLanguage(lang);
+  }, []);
+
+  return (
+    <KitchenShell>
+      <KitchenPage
+        orders={orders}
+        setOrders={setOrders}
+        tables={snapshot.tables}
+        categories={snapshot.categories}
+        defaultLang={snapshot.restaurant.defaultLang}
+        filterBarExtras={<ZoomControls />}
+        fullWidthFilterBar
+        kioskLayout
+        demoMode
+      />
+    </KitchenShell>
   );
 }
 

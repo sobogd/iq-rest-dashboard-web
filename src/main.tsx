@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { FullPageLoader } from "./components/full-page-loader";
 import { bootstrapI18n } from "./i18n";
 import { observeResponseVersion } from "./lib/version-check";
-import { isKioskHost } from "./lib/device-mode";
+import { isKioskHost, isDemoMode } from "./lib/device-mode";
 import "./styles.css";
 
 // Wrap global fetch once so every response — wherever in the codebase it
@@ -66,15 +66,21 @@ function setupKitchenPwa(): void {
 void (async () => {
   const i18nReady = bootstrapI18n();
 
-  if (isKioskHost()) {
-    setupKitchenPwa();
+  // Public landing demo: render the real KDS kiosk with hardcoded sample
+  // data, no pairing, no API. Must come before the kiosk-host branch so it
+  // also works on non-k.* hosts (e.g. local dev), and must NOT register the
+  // PWA/SW — we don't want the demo installed as the kitchen home screen.
+  const demo = isDemoMode();
+
+  if (demo || isKioskHost()) {
+    if (!demo) setupKitchenPwa();
     const [{ KitchenApp }] = await Promise.all([
       import("./kitchen/kitchen-app"),
       i18nReady,
     ]);
     createRoot(rootEl).render(
       <StrictMode>
-        <KitchenApp />
+        <KitchenApp demo={demo} />
       </StrictMode>,
     );
     return;
