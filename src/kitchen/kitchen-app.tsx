@@ -5,7 +5,7 @@ import i18n from "i18next";
 import { useTranslations } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import { apiUrl } from "@/lib/api";
-import { clearDeviceToken, getDeviceToken, setDeviceToken, getDemoLang } from "@/lib/device-mode";
+import { clearDeviceToken, getDeviceToken, setDeviceToken, getDemoLang, getDemoZoom } from "@/lib/device-mode";
 import { buildKitchenDemoSnapshot } from "./demo-data";
 import { PairingScreen } from "./pairing-screen";
 import { KitchenShell } from "./kitchen-shell";
@@ -93,6 +93,9 @@ export function KitchenApp({ demo = false }: { demo?: boolean }) {
 function KitchenDemoBody() {
   const [snapshot] = useState(() => buildKitchenDemoSnapshot(getDemoLang() || "en"));
   const [orders, setOrders] = useState<Order[]>(snapshot.orders);
+  // Phones get a larger default scale (passed by the landing as ?zoom=) so
+  // the kiosk is legible inside the small embedded tablet frame.
+  const [demoZoom] = useState(() => getDemoZoom());
 
   useEffect(() => {
     const lang = getDemoLang();
@@ -107,7 +110,7 @@ function KitchenDemoBody() {
         tables={snapshot.tables}
         categories={snapshot.categories}
         defaultLang={snapshot.restaurant.defaultLang}
-        filterBarExtras={<ZoomControls />}
+        filterBarExtras={<ZoomControls initialZoom={demoZoom} persist={false} />}
         fullWidthFilterBar
         kioskLayout
         demoMode

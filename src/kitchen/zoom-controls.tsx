@@ -13,10 +13,14 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "k-zoom";
 const MIN = 80;
-const MAX = 150;
+const MAX = 200;
 const STEP = 10;
 const DEFAULT_ZOOM = 100;
 const BASE_FONT_PX = 16;
+
+function clampZoom(n: number): number {
+  return Math.min(MAX, Math.max(MIN, n));
+}
 
 function readStoredZoom(): number {
   try {
@@ -24,7 +28,7 @@ function readStoredZoom(): number {
     if (!raw) return DEFAULT_ZOOM;
     const n = Number.parseInt(raw, 10);
     if (Number.isNaN(n)) return DEFAULT_ZOOM;
-    return Math.min(MAX, Math.max(MIN, n));
+    return clampZoom(n);
   } catch {
     return DEFAULT_ZOOM;
   }
@@ -41,22 +45,35 @@ function applyZoom(percent: number): void {
   }
 }
 
-export function ZoomControls() {
-  const [zoom, setZoom] = useState<number>(() => readStoredZoom());
+interface ZoomControlsProps {
+  // Starting zoom %. Used by the public landing demo to open the kiosk at a
+  // larger scale on phones. Defaults to the persisted/100% value.
+  initialZoom?: number;
+  // When false, the chosen zoom isn't written to localStorage — the demo
+  // shouldn't leave a `k-zoom` behind in a real visitor's browser.
+  persist?: boolean;
+}
+
+export function ZoomControls({ initialZoom, persist = true }: ZoomControlsProps = {}) {
+  const [zoom, setZoom] = useState<number>(() =>
+    initialZoom !== undefined ? clampZoom(initialZoom) : readStoredZoom(),
+  );
 
   useEffect(() => {
     applyZoom(zoom);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, String(zoom));
-    } catch {
-      // ignore — zoom will revert next reload on private-mode tabs
+    if (persist) {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, String(zoom));
+      } catch {
+        // ignore — zoom will revert next reload on private-mode tabs
+      }
     }
     return () => {
       // Reset on unmount so the admin host (which never mounts this
       // component) isn't left zoomed when the kitchen view is closed.
       applyZoom(DEFAULT_ZOOM);
     };
-  }, [zoom]);
+  }, [zoom, persist]);
 
   const dec = () => setZoom((z) => Math.max(MIN, z - STEP));
   const inc = () => setZoom((z) => Math.min(MAX, z + STEP));

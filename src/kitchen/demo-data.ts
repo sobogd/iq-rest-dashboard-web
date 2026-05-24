@@ -5,11 +5,20 @@
 // items to advance their status (cooking → ready → served) — that runs on
 // purely local optimistic state (see KitchenPage `demoMode`), so refreshing
 // the iframe resets the board.
+//
+// Dish names and item options are multilingual (Ml). The demo's defaultLang
+// is the landing locale forwarded as `?lang=`, so a Spanish visitor sees the
+// board in Spanish. getMlWithFallback resolves lang → defaultLang → first
+// available, so the `en` entry (always first) covers any locale we didn't
+// translate by hand. Internationally-identical food names (Pizza Margherita,
+// Espresso, Tiramisù, Bruschetta) carry only en/es.
 
 import type {
   Category,
+  Ml,
   Order,
   OrderItem,
+  OrderItemOptionSnapshot,
   OrderItemStatus,
   Restaurant,
   TableEntity,
@@ -24,36 +33,230 @@ export interface KitchenDemoSnapshot {
   tablesByNumber: Map<number, string>;
 }
 
-// English-only dish names — the surrounding KDS chrome (buttons, status
-// labels, headers) still localises via i18next from the `lang` query param;
-// only the sample dish names stay fixed. Good enough for a feel-it demo.
-function ml(name: string): Record<string, string> {
-  return { en: name };
-}
-
 // Minutes-ago → ISO string, evaluated per call so the "time on the pass"
 // badges look fresh every time the demo loads.
 function minsAgo(min: number): string {
   return new Date(Date.now() - min * 60_000).toISOString();
 }
 
+// --- localized labels -------------------------------------------------------
+// `en` first so it acts as the universal fallback for untranslated locales.
+
+const NAMES = {
+  // Internationally identical in Latin scripts — only non-Latin scripts and
+  // es carry overrides; everything else falls back to `en`.
+  bruschetta: {
+    en: "Bruschetta", es: "Bruschetta",
+    ar: "بروسكيتا", bg: "Брускета", el: "Μπρουσκέτα", fa: "بروسکتا",
+    ja: "ブルスケッタ", ko: "브루스케타", ru: "Брускетта", sr: "Брускета",
+    uk: "Брускета", zh: "普切塔",
+  },
+  caesar: {
+    en: "Caesar Salad", es: "Ensalada César", ar: "سلطة سيزر", bg: "Цезар салата",
+    ca: "Amanida Cèsar", cs: "Caesar salát", da: "Cæsarsalat", de: "Caesar Salat",
+    el: "Σαλάτα Καίσαρα", et: "Caesari salat", fa: "سالاد سزار", fi: "Caesar-salaatti",
+    fr: "Salade César", ga: "Sailéad Caesar", hr: "Cezar salata", hu: "Cézár saláta",
+    is: "Caesar salat", it: "Insalata Caesar", ja: "シーザーサラダ", ko: "시저 샐러드",
+    lt: "Cezario salotos", lv: "Cēzara salāti", nl: "Caesarsalade", no: "Cæsarsalat",
+    pl: "Sałatka Cezar", pt: "Salada Caesar", ro: "Salată Caesar", ru: "Салат Цезарь",
+    sk: "Caesar šalát", sl: "Cezarjeva solata", sr: "Цезар салата", sv: "Caesarsallad",
+    tr: "Sezar Salatası", uk: "Салат Цезар", zh: "凯撒沙拉",
+  },
+  margherita: {
+    en: "Pizza Margherita", es: "Pizza Margarita",
+    ar: "بيتزا مارغريتا", bg: "Пица Маргарита", el: "Πίτσα Μαργαρίτα", fa: "پیتزا مارگاریتا",
+    ja: "マルゲリータピザ", ko: "마르게리타 피자", ru: "Пицца Маргарита", sr: "Пица Маргарита",
+    uk: "Піца Маргарита", zh: "玛格丽特披萨",
+  },
+  carbonara: {
+    en: "Spaghetti Carbonara", es: "Espaguetis Carbonara", pt: "Espaguete Carbonara",
+    ar: "سباغيتي كاربونارا", bg: "Спагети Карбонара", el: "Σπαγγέτι Καρμπονάρα",
+    fa: "اسپاگتی کاربونارا", ja: "スパゲッティ・カルボナーラ", ko: "스파게티 카르보나라",
+    ru: "Спагетти Карбонара", sr: "Шпагете Карбонара", uk: "Спагеті Карбонара",
+    zh: "卡邦尼意面",
+  },
+  burger: {
+    en: "Classic Burger", es: "Hamburguesa Clásica", ar: "برغر كلاسيكي", bg: "Класически бургер",
+    ca: "Hamburguesa clàssica", cs: "Klasický burger", da: "Klassisk burger", de: "Klassischer Burger",
+    el: "Κλασικό μπέργκερ", et: "Klassikaline burger", fa: "برگر کلاسیک", fi: "Klassinen burgeri",
+    fr: "Burger Classique", ga: "Borgaire Clasaiceach", hr: "Klasični burger", hu: "Klasszikus burger",
+    is: "Klassískur borgari", it: "Burger Classico", ja: "クラシックバーガー", ko: "클래식 버거",
+    lt: "Klasikinis mėsainis", lv: "Klasiskais burgers", nl: "Klassieke burger", no: "Klassisk burger",
+    pl: "Klasyczny burger", pt: "Hambúrguer Clássico", ro: "Burger clasic", ru: "Классический бургер",
+    sk: "Klasický burger", sl: "Klasični burger", sr: "Класични бургер", sv: "Klassisk burgare",
+    tr: "Klasik Burger", uk: "Класичний бургер", zh: "经典汉堡",
+  },
+  fries: {
+    en: "French Fries", es: "Patatas Fritas", ar: "بطاطس مقلية", bg: "Пържени картофи",
+    ca: "Patates fregides", cs: "Hranolky", da: "Pommes frites", de: "Pommes",
+    el: "Τηγανητές πατάτες", et: "Friikartulid", fa: "سیب‌زمینی سرخ‌کرده", fi: "Ranskalaiset",
+    fr: "Frites", ga: "Sceallóga", hr: "Pomfrit", hu: "Hasábburgonya",
+    is: "Franskar kartöflur", it: "Patatine Fritte", ja: "フライドポテト", ko: "감자튀김",
+    lt: "Gruzdintos bulvytės", lv: "Frī kartupeļi", nl: "Frietjes", no: "Pommes frites",
+    pl: "Frytki", pt: "Batatas Fritas", ro: "Cartofi prăjiți", ru: "Картофель фри",
+    sk: "Hranolky", sl: "Pomfri", sr: "Помфрит", sv: "Pommes frites",
+    tr: "Patates Kızartması", uk: "Картопля фрі", zh: "薯条",
+  },
+  tiramisu: {
+    en: "Tiramisù", es: "Tiramisú",
+    ar: "تيراميسو", bg: "Тирамису", el: "Τιραμισού", fa: "تیرامیسو",
+    ja: "ティラミス", ko: "티라미수", ru: "Тирамису", sr: "Тирамису",
+    uk: "Тірамісу", zh: "提拉米苏",
+  },
+  espresso: {
+    en: "Espresso", es: "Espresso",
+    ar: "إسبريسو", bg: "Еспресо", el: "Εσπρέσο", fa: "اسپرسو",
+    ja: "エスプレッソ", ko: "에스프레소", ru: "Эспрессо", sr: "Еспресо",
+    uk: "Еспресо", zh: "浓缩咖啡",
+  },
+} satisfies Record<string, Ml>;
+
+const CATEGORY_NAMES = {
+  starters: {
+    en: "Starters", es: "Entrantes", ar: "مقبلات", bg: "Предястия",
+    ca: "Entrants", cs: "Předkrmy", da: "Forretter", de: "Vorspeisen",
+    el: "Ορεκτικά", et: "Eelroad", fa: "پیش‌غذا", fi: "Alkuruoat",
+    fr: "Entrées", ga: "Cúrsaí tosaigh", hr: "Predjela", hu: "Előételek",
+    is: "Forréttir", it: "Antipasti", ja: "前菜", ko: "전채",
+    lt: "Užkandžiai", lv: "Uzkodas", nl: "Voorgerechten", no: "Forretter",
+    pl: "Przystawki", pt: "Entradas", ro: "Aperitive", ru: "Закуски",
+    sk: "Predjedlá", sl: "Predjedi", sr: "Предјела", sv: "Förrätter",
+    tr: "Başlangıçlar", uk: "Закуски", zh: "开胃菜",
+  },
+  mains: {
+    en: "Mains", es: "Principales", ar: "الأطباق الرئيسية", bg: "Основни ястия",
+    ca: "Plats principals", cs: "Hlavní jídla", da: "Hovedretter", de: "Hauptgerichte",
+    el: "Κυρίως πιάτα", et: "Pearoad", fa: "غذای اصلی", fi: "Pääruoat",
+    fr: "Plats", ga: "Príomhchúrsaí", hr: "Glavna jela", hu: "Főételek",
+    is: "Aðalréttir", it: "Piatti principali", ja: "メイン", ko: "메인",
+    lt: "Pagrindiniai patiekalai", lv: "Pamatēdieni", nl: "Hoofdgerechten", no: "Hovedretter",
+    pl: "Dania główne", pt: "Pratos Principais", ro: "Feluri principale", ru: "Основные блюда",
+    sk: "Hlavné jedlá", sl: "Glavne jedi", sr: "Главна јела", sv: "Huvudrätter",
+    tr: "Ana Yemekler", uk: "Основні страви", zh: "主菜",
+  },
+  desserts: {
+    en: "Desserts & Coffee", es: "Postres y Café", ar: "الحلويات والقهوة", bg: "Десерти и кафе",
+    ca: "Postres i cafè", cs: "Dezerty a káva", da: "Desserter & kaffe", de: "Desserts & Kaffee",
+    el: "Επιδόρπια & καφές", et: "Magustoidud ja kohv", fa: "دسر و قهوه", fi: "Jälkiruoat & kahvi",
+    fr: "Desserts & café", ga: "Milseoga & caife", hr: "Deserti i kava", hu: "Desszertek és kávé",
+    is: "Eftirréttir og kaffi", it: "Dolci & caffè", ja: "デザート＆コーヒー", ko: "디저트 & 커피",
+    lt: "Desertai ir kava", lv: "Deserti un kafija", nl: "Desserts & koffie", no: "Desserter og kaffe",
+    pl: "Desery i kawa", pt: "Sobremesas e Café", ro: "Deserturi & cafea", ru: "Десерты и кофе",
+    sk: "Dezerty a káva", sl: "Sladice in kava", sr: "Десерти и кафа", sv: "Efterrätter & kaffe",
+    tr: "Tatlılar & Kahve", uk: "Десерти та кава", zh: "甜点和咖啡",
+  },
+} satisfies Record<string, Ml>;
+
+const VARIANTS = {
+  mediumRare: {
+    en: "Medium rare", es: "Al punto", ar: "نصف استواء", bg: "Средно изпечено",
+    ca: "Al punt", cs: "Medium rare", da: "Medium rare", de: "Medium",
+    el: "Medium rare", et: "Poolküps", fa: "نیم‌پز", fi: "Medium",
+    fr: "Saignant", ga: "Leathbhruite", hr: "Srednje pečeno", hu: "Közepesen átsütve",
+    is: "Miðlungssteikt", it: "Media cottura", ja: "ミディアムレア", ko: "미디엄 레어",
+    lt: "Vidutiniškai iškepta", lv: "Vidēji izcepta", nl: "Medium rare", no: "Medium rare",
+    pl: "Średnio wysmażony", pt: "Mal passado", ro: "În sânge", ru: "Средняя прожарка",
+    sk: "Stredne prepečené", sl: "Srednje pečeno", sr: "Средње печено", sv: "Medium rare",
+    tr: "Az pişmiş", uk: "Середня прожарка", zh: "三分熟",
+  },
+  extraCheese: {
+    en: "Extra cheese", es: "Queso extra", ar: "جبن إضافي", bg: "Допълнително сирене",
+    ca: "Formatge extra", cs: "Extra sýr", da: "Ekstra ost", de: "Extra Käse",
+    el: "Επιπλέον τυρί", et: "Lisajuust", fa: "پنیر اضافه", fi: "Lisäjuusto",
+    fr: "Fromage en plus", ga: "Cáis bhreise", hr: "Dodatni sir", hu: "Extra sajt",
+    is: "Auka ostur", it: "Formaggio extra", ja: "チーズ増量", ko: "치즈 추가",
+    lt: "Daugiau sūrio", lv: "Papildu siers", nl: "Extra kaas", no: "Ekstra ost",
+    pl: "Dodatkowy ser", pt: "Queijo extra", ro: "Brânză în plus", ru: "Двойной сыр",
+    sk: "Extra syr", sl: "Dodatni sir", sr: "Додатни сир", sv: "Extra ost",
+    tr: "Ekstra peynir", uk: "Додатковий сир", zh: "加芝士",
+  },
+  thinCrust: {
+    en: "Thin crust", es: "Masa fina", ar: "عجينة رقيقة", bg: "Тънка основа",
+    ca: "Massa fina", cs: "Tenké těsto", da: "Tynd bund", de: "Dünner Boden",
+    el: "Λεπτή ζύμη", et: "Õhuke põhi", fa: "خمیر نازک", fi: "Ohut pohja",
+    fr: "Pâte fine", ga: "Crústa tanaí", hr: "Tanko tijesto", hu: "Vékony tészta",
+    is: "Þunnur botn", it: "Impasto sottile", ja: "薄焼き生地", ko: "씬 크러스트",
+    lt: "Plona tešla", lv: "Plāna mīkla", nl: "Dunne bodem", no: "Tynn bunn",
+    pl: "Cienkie ciasto", pt: "Massa fina", ro: "Blat subțire", ru: "Тонкое тесто",
+    sk: "Tenké cesto", sl: "Tanko testo", sr: "Танко тесто", sv: "Tunn botten",
+    tr: "İnce hamur", uk: "Тонке тісто", zh: "薄底",
+  },
+  addChicken: {
+    en: "Add chicken", es: "Con pollo", ar: "مع دجاج", bg: "С пиле",
+    ca: "Amb pollastre", cs: "S kuřecím", da: "Med kylling", de: "Mit Hähnchen",
+    el: "Με κοτόπουλο", et: "Kanaga", fa: "با مرغ", fi: "Kanalla",
+    fr: "Avec poulet", ga: "Le sicín", hr: "S piletinom", hu: "Csirkével",
+    is: "Með kjúklingi", it: "Con pollo", ja: "チキン追加", ko: "치킨 추가",
+    lt: "Su vištiena", lv: "Ar vistu", nl: "Met kip", no: "Med kylling",
+    pl: "Z kurczakiem", pt: "Com frango", ro: "Cu pui", ru: "С курицей",
+    sk: "S kuracím", sl: "S piščancem", sr: "Са пилетином", sv: "Med kyckling",
+    tr: "Tavuklu", uk: "З куркою", zh: "加鸡肉",
+  },
+  large: {
+    en: "Large", es: "Grande", ar: "كبير", bg: "Голяма",
+    ca: "Gran", cs: "Velké", da: "Stor", de: "Groß",
+    el: "Μεγάλο", et: "Suur", fa: "بزرگ", fi: "Iso",
+    fr: "Grande", ga: "Mór", hr: "Velika", hu: "Nagy",
+    is: "Stór", it: "Grande", ja: "大盛り", ko: "라지",
+    lt: "Didelė", lv: "Liela", nl: "Groot", no: "Stor",
+    pl: "Duża", pt: "Grande", ro: "Mare", ru: "Большая",
+    sk: "Veľké", sl: "Velika", sr: "Велика", sv: "Stor",
+    tr: "Büyük", uk: "Велика", zh: "大份",
+  },
+  noPancetta: {
+    en: "No pancetta", es: "Sin panceta", ar: "بدون بانشيتا", bg: "Без панчета",
+    ca: "Sense pancetta", cs: "Bez pancetty", da: "Uden pancetta", de: "Ohne Pancetta",
+    el: "Χωρίς πανσέτα", et: "Pancetta'ta", fa: "بدون پانچتا", fi: "Ilman pancettaa",
+    fr: "Sans pancetta", ga: "Gan pancetta", hr: "Bez panchete", hu: "Pancetta nélkül",
+    is: "Án pancetta", it: "Senza pancetta", ja: "パンチェッタ抜き", ko: "판체타 빼기",
+    lt: "Be pančetos", lv: "Bez pančetas", nl: "Zonder pancetta", no: "Uten pancetta",
+    pl: "Bez pancetty", pt: "Sem panceta", ro: "Fără pancetta", ru: "Без панчетты",
+    sk: "Bez pancetty", sl: "Brez pancete", sr: "Без панчете", sv: "Utan pancetta",
+    tr: "Pancetta yok", uk: "Без панчети", zh: "不要培根",
+  },
+  doubleShot: {
+    en: "Double", es: "Doble", ar: "مزدوج", bg: "Двойно",
+    ca: "Doble", cs: "Dvojité", da: "Dobbelt", de: "Doppelt",
+    el: "Διπλό", et: "Topelt", fa: "دوبل", fi: "Tupla",
+    fr: "Double", ga: "Dúbailte", hr: "Dvostruki", hu: "Dupla",
+    is: "Tvöfaldur", it: "Doppio", ja: "ダブル", ko: "더블",
+    lt: "Dvigubas", lv: "Dubults", nl: "Dubbel", no: "Dobbel",
+    pl: "Podwójne", pt: "Duplo", ro: "Dublu", ru: "Двойной",
+    sk: "Dvojité", sl: "Dvojni", sr: "Дупли", sv: "Dubbel",
+    tr: "Duble", uk: "Подвійний", zh: "双份",
+  },
+} satisfies Record<string, Ml>;
+
+// optionName isn't rendered on the card (only variantName is), but the type
+// requires it — keep it light (en/es).
+const OPTION_GROUP = {
+  cooking: { en: "Cooking", es: "Punto" },
+  extras: { en: "Extras", es: "Extras" },
+  base: { en: "Base", es: "Base" },
+  size: { en: "Size", es: "Tamaño" },
+} satisfies Record<string, Ml>;
+
+function opt(group: Ml, variant: Ml, quantity?: number): OrderItemOptionSnapshot {
+  return { optionName: group, variantName: variant, priceDelta: "0", ...(quantity ? { quantity } : {}) };
+}
+
 let seq = 0;
 function item(
   dishId: string,
-  name: string,
+  name: Ml,
   price: string,
   status: OrderItemStatus,
   ageMin: number,
-  notes = "",
+  options: OrderItemOptionSnapshot[] = [],
 ): OrderItem {
   seq += 1;
   return {
     id: `demo-item-${seq}`,
     dishId,
-    dishNameSnapshot: ml(name),
+    dishNameSnapshot: name,
     basePriceSnapshot: price,
-    options: [],
-    notes,
+    options,
+    notes: "",
     status,
     createdAt: minsAgo(ageMin),
   };
@@ -76,37 +279,37 @@ export function buildKitchenDemoSnapshot(lang: string): KitchenDemoSnapshot {
   const categories: Category[] = [
     {
       id: "demo-cat-starters",
-      name: ml("Starters"),
+      name: CATEGORY_NAMES.starters,
       sortOrder: 0,
       isGroup: false,
       parentId: null,
       dishes: [
-        dish(DISHES.bruschetta, "Bruschetta", "demo-cat-starters", 0),
-        dish(DISHES.caesar, "Caesar Salad", "demo-cat-starters", 1),
+        dish(DISHES.bruschetta, NAMES.bruschetta, "demo-cat-starters", 0),
+        dish(DISHES.caesar, NAMES.caesar, "demo-cat-starters", 1),
       ],
     },
     {
       id: "demo-cat-mains",
-      name: ml("Mains"),
+      name: CATEGORY_NAMES.mains,
       sortOrder: 1,
       isGroup: false,
       parentId: null,
       dishes: [
-        dish(DISHES.margherita, "Pizza Margherita", "demo-cat-mains", 0),
-        dish(DISHES.carbonara, "Spaghetti Carbonara", "demo-cat-mains", 1),
-        dish(DISHES.burger, "Classic Burger", "demo-cat-mains", 2),
-        dish(DISHES.fries, "French Fries", "demo-cat-mains", 3),
+        dish(DISHES.margherita, NAMES.margherita, "demo-cat-mains", 0),
+        dish(DISHES.carbonara, NAMES.carbonara, "demo-cat-mains", 1),
+        dish(DISHES.burger, NAMES.burger, "demo-cat-mains", 2),
+        dish(DISHES.fries, NAMES.fries, "demo-cat-mains", 3),
       ],
     },
     {
       id: "demo-cat-desserts",
-      name: ml("Desserts & Coffee"),
+      name: CATEGORY_NAMES.desserts,
       sortOrder: 2,
       isGroup: false,
       parentId: null,
       dishes: [
-        dish(DISHES.tiramisu, "Tiramisu", "demo-cat-desserts", 0),
-        dish(DISHES.espresso, "Espresso", "demo-cat-desserts", 1),
+        dish(DISHES.tiramisu, NAMES.tiramisu, "demo-cat-desserts", 0),
+        dish(DISHES.espresso, NAMES.espresso, "demo-cat-desserts", 1),
       ],
     },
   ];
@@ -120,23 +323,39 @@ export function buildKitchenDemoSnapshot(lang: string): KitchenDemoSnapshot {
   const tablesByNumber = new Map(tables.map((t) => [t.number, t.id]));
 
   const orders: Order[] = [
-    order("demo-order-1", "demo-table-1", 1, 1, "Guest", 11, [
-      item(DISHES.bruschetta, "Bruschetta", "7.50", "ready", 11),
-      item(DISHES.margherita, "Pizza Margherita", "12.00", "cooking", 11),
-      item(DISHES.carbonara, "Spaghetti Carbonara", "13.50", "cooking", 11, "No bacon"),
+    order("demo-order-1", "demo-table-1", 1, 1, 11, [
+      item(DISHES.bruschetta, NAMES.bruschetta, "7.50", "ready", 11),
+      item(DISHES.margherita, NAMES.margherita, "12.00", "cooking", 11, [
+        opt(OPTION_GROUP.base, VARIANTS.thinCrust),
+        opt(OPTION_GROUP.extras, VARIANTS.extraCheese),
+      ]),
+      item(DISHES.carbonara, NAMES.carbonara, "13.50", "cooking", 11, [
+        opt(OPTION_GROUP.extras, VARIANTS.noPancetta),
+      ]),
     ]),
-    order("demo-order-2", "demo-table-3", 3, 2, "Guest", 6, [
-      item(DISHES.burger, "Classic Burger", "11.00", "cooking", 6),
-      item(DISHES.fries, "French Fries", "4.50", "pending", 6),
-      item(DISHES.caesar, "Caesar Salad", "8.50", "ready", 6),
+    order("demo-order-2", "demo-table-3", 3, 2, 6, [
+      item(DISHES.burger, NAMES.burger, "11.00", "cooking", 6, [
+        opt(OPTION_GROUP.cooking, VARIANTS.mediumRare),
+        opt(OPTION_GROUP.extras, VARIANTS.extraCheese),
+      ]),
+      item(DISHES.fries, NAMES.fries, "4.50", "pending", 6, [
+        opt(OPTION_GROUP.size, VARIANTS.large),
+      ]),
+      item(DISHES.caesar, NAMES.caesar, "8.50", "ready", 6, [
+        opt(OPTION_GROUP.extras, VARIANTS.addChicken),
+      ]),
     ]),
-    order("demo-order-3", "demo-table-5", 5, 3, "Guest", 3, [
-      item(DISHES.margherita, "Pizza Margherita", "12.00", "pending", 3),
-      item(DISHES.margherita, "Pizza Margherita", "12.00", "pending", 3, "Extra cheese"),
+    order("demo-order-3", "demo-table-5", 5, 3, 3, [
+      item(DISHES.margherita, NAMES.margherita, "12.00", "pending", 3),
+      item(DISHES.margherita, NAMES.margherita, "12.00", "pending", 3, [
+        opt(OPTION_GROUP.extras, VARIANTS.extraCheese),
+      ]),
     ]),
-    order("demo-order-4", "demo-table-8", 8, 4, "Guest", 1, [
-      item(DISHES.tiramisu, "Tiramisu", "6.00", "pending", 1),
-      item(DISHES.espresso, "Espresso", "2.50", "pending", 1, "x2"),
+    order("demo-order-4", "demo-table-8", 8, 4, 1, [
+      item(DISHES.tiramisu, NAMES.tiramisu, "6.00", "pending", 1),
+      item(DISHES.espresso, NAMES.espresso, "2.50", "pending", 1, [
+        opt(OPTION_GROUP.size, VARIANTS.doubleShot, 2),
+      ]),
     ]),
   ];
 
@@ -150,11 +369,11 @@ export function buildKitchenDemoSnapshot(lang: string): KitchenDemoSnapshot {
   };
 }
 
-function dish(id: string, name: string, categoryId: string, sortOrder: number) {
+function dish(id: string, name: Ml, categoryId: string, sortOrder: number) {
   return {
     id,
-    name: ml(name),
-    description: ml(""),
+    name,
+    description: { en: "" },
     price: "0",
     visible: true,
     allergens: [],
@@ -186,7 +405,6 @@ function order(
   tableId: string,
   tableNumber: number,
   dailyNumber: number,
-  guestName: string,
   ageMin: number,
   items: OrderItem[],
 ): Order {
@@ -195,7 +413,7 @@ function order(
     tableId,
     tableNumber,
     dailyNumber,
-    guestName,
+    guestName: "Guest",
     createdAt: minsAgo(ageMin),
     status: "active",
     items,
@@ -203,9 +421,9 @@ function order(
   };
 }
 
-// Dish names stay English; everything else (currency formatting, UI strings)
-// follows `lang`. defaultLang is set to the requested language so the menu
-// builder and any ml() lookups fall back cleanly to the English entry.
+// Dish names follow the multilingual maps above; UI chrome follows `lang`.
+// defaultLang is set to the requested language so the menu builder and ml()
+// lookups resolve to that locale (falling back to the English entry).
 function buildDemoRestaurant(lang: string): Restaurant {
   return {
     id: "demo-restaurant",

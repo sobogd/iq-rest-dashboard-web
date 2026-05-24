@@ -39,6 +39,17 @@ export function getDemoLang(): string | null {
   return new URLSearchParams(window.location.search).get("lang");
 }
 
+// Initial KDS zoom (root font-size %) for the demo. The landing passes a
+// larger value (e.g. 150) when the visitor is on a phone, since the iframe
+// renders at a fixed 1024px logical width and can't sense the real device —
+// the parent has to decide. Falls back to 100 (normal scale).
+export function getDemoZoom(): number {
+  if (typeof window === "undefined") return 100;
+  const raw = new URLSearchParams(window.location.search).get("zoom");
+  const n = raw ? Number.parseInt(raw, 10) : NaN;
+  return Number.isFinite(n) ? n : 100;
+}
+
 // Back-compat alias — older call sites only branched on "is this a
 // kiosk?", not which role. Keep returning true for any kiosk host so the
 // /api proxy + device token wiring lights up uniformly.
