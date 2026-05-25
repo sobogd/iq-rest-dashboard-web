@@ -135,7 +135,14 @@ export function ReservationsPage({
   <>
    {/* Sticky sub-header — view toggle on the left, prev/next on the right. */}
    <div
-    className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
+    className={
+      // Admin tab breaks out of the centered content padding with negative
+      // margins so the bar's background spans edge-to-edge. The kiosk shell
+      // has no horizontal padding to break out of, so keep the bar in-flow —
+      // its own px-4/px-6 then gives the content real side padding.
+      (kioskLayout ? "-mt-5 md:-mt-4" : "-mx-4 md:-mx-6 -mt-5 md:-mt-4") +
+      " sticky z-10 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
+    }
     style={{ top: "var(--topbar-h, 0px)" }}
    >
     <div className={wrapWidth + " md:px-6 w-full flex items-center justify-between gap-3"}>
