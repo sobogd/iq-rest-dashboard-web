@@ -145,7 +145,7 @@ export function ReservationsPage({
     }
     style={{ top: "var(--topbar-h, 0px)" }}
    >
-    <div className={wrapWidth + " md:px-6 w-full flex items-center justify-between gap-3"}>
+    <div className={(kioskLayout ? "w-full" : "max-w-5xl mx-auto md:px-6 w-full") + " flex items-center justify-between gap-3"}>
      <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">
       <ViewBtn active={view === "month"} onClick={() => { track("dash_booking_view_month"); setView("month"); }}>
        {t("viewMonth")}
