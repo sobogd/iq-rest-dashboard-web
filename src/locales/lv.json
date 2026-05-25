@@ -172,8 +172,7 @@
       },
       "addGroup": "Pievienot grupu",
       "backToMenu": "Atpakaļ uz izvēlni",
-      "groupsHeading": "Grupas",
-      "noCategoryLabel": "Bez kategorijas"
+      "groupsHeading": "Grupas"
     },
     "categoryForm": {
       "newTitle": "Jauna kategorija",

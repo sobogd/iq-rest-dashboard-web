@@ -172,8 +172,7 @@
       },
       "addGroup": "افزودن گروه",
       "backToMenu": "بازگشت به منو",
-      "groupsHeading": "گروه‌ها",
-      "noCategoryLabel": "بدون دسته‌بندی"
+      "groupsHeading": "گروه‌ها"
     },
     "categoryForm": {
       "newTitle": "دسته جدید",

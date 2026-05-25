@@ -172,8 +172,7 @@
       },
       "addGroup": "Adaugă grup",
       "backToMenu": "Înapoi la meniu",
-      "groupsHeading": "Grupuri",
-      "noCategoryLabel": "Fără categorie"
+      "groupsHeading": "Grupuri"
     },
     "categoryForm": {
       "newTitle": "Categorie nouă",

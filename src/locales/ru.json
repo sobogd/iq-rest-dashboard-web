@@ -172,8 +172,7 @@
       },
       "addGroup": "Добавить группу",
       "backToMenu": "Назад в меню",
-      "groupsHeading": "Группы",
-      "noCategoryLabel": "Без категории"
+      "groupsHeading": "Группы"
     },
     "categoryForm": {
       "newTitle": "Новая категория",

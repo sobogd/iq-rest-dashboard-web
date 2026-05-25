@@ -172,8 +172,7 @@
       },
       "addGroup": "Додај групу",
       "backToMenu": "Назад на мени",
-      "groupsHeading": "Групе",
-      "noCategoryLabel": "Без категорије"
+      "groupsHeading": "Групе"
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",

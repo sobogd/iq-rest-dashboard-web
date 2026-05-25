@@ -172,8 +172,7 @@
       },
       "addGroup": "Bæta við hóp",
       "backToMenu": "Aftur í valmynd",
-      "groupsHeading": "Hópar",
-      "noCategoryLabel": "Án flokks"
+      "groupsHeading": "Hópar"
     },
     "categoryForm": {
       "newTitle": "Nýr flokkur",

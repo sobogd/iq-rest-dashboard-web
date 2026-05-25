@@ -172,8 +172,7 @@
       },
       "addGroup": "Dodaj skupino",
       "backToMenu": "Nazaj na meni",
-      "groupsHeading": "Skupine",
-      "noCategoryLabel": "Brez kategorije"
+      "groupsHeading": "Skupine"
     },
     "categoryForm": {
       "newTitle": "Nova kategorija",

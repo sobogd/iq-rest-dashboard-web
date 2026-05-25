@@ -172,8 +172,7 @@
       },
       "addGroup": "Lisää ryhmä",
       "backToMenu": "Takaisin valikkoon",
-      "groupsHeading": "Ryhmät",
-      "noCategoryLabel": "Ei kategoriaa"
+      "groupsHeading": "Ryhmät"
     },
     "categoryForm": {
       "newTitle": "Uusi kategoria",

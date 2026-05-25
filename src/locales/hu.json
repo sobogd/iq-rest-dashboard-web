@@ -172,8 +172,7 @@
       },
       "addGroup": "Csoport hozzáadása",
       "backToMenu": "Vissza a menübe",
-      "groupsHeading": "Csoportok",
-      "noCategoryLabel": "Nincs kategória"
+      "groupsHeading": "Csoportok"
     },
     "categoryForm": {
       "newTitle": "Új kategória",

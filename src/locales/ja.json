@@ -172,8 +172,7 @@
       },
       "addGroup": "グループを追加",
       "backToMenu": "メニューに戻る",
-      "groupsHeading": "グループ",
-      "noCategoryLabel": "カテゴリーなし"
+      "groupsHeading": "グループ"
     },
     "categoryForm": {
       "newTitle": "新しいカテゴリ",

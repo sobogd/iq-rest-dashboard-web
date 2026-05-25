@@ -172,8 +172,7 @@
       },
       "addGroup": "Pridėti grupę",
       "backToMenu": "Atgal į meniu",
-      "groupsHeading": "Grupės",
-      "noCategoryLabel": "Be kategorijos"
+      "groupsHeading": "Grupės"
     },
     "categoryForm": {
       "newTitle": "Nauja kategorija",

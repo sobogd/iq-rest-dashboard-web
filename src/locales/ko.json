@@ -172,8 +172,7 @@
       },
       "addGroup": "그룹 추가",
       "backToMenu": "메뉴로 돌아가기",
-      "groupsHeading": "그룹",
-      "noCategoryLabel": "카테고리 없음"
+      "groupsHeading": "그룹"
     },
     "categoryForm": {
       "newTitle": "새 카테고리",

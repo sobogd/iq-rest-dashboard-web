@@ -129,11 +129,6 @@ export function buildCategoryTranslations(
  return Object.keys(out).length > 0 ? out : null;
 }
 
-// Sentinel id for the synthetic "No category" bucket holding orphaned items
-// (their category was deleted → categoryId null). Read-only: pinned to the
-// bottom, not sortable, not editable as a category.
-export const NO_CATEGORY_ID = "__no_category__";
-
 export function apiItemToDish(item: ApiItem, defaultLang: string): Dish {
  return {
  id: item.id,
@@ -175,26 +170,9 @@ export function buildCategories(
  apiItems: ApiItem[],
  defaultLang: string,
 ): Category[] {
- const built = [...apiCategories]
+ return [...apiCategories]
  .sort((a, b) => a.sortOrder - b.sortOrder)
  .map((c) => apiCategoryToCategory(c, apiItems, defaultLang));
- // Orphaned items (categoryId null) go into a synthetic read-only bucket
- // pinned to the bottom (max sortOrder). Empty bucket = not shown.
- const orphans = apiItems
- .filter((i) => i.categoryId == null)
- .sort((a, b) => a.sortOrder - b.sortOrder)
- .map((item) => apiItemToDish(item, defaultLang));
- if (orphans.length > 0) {
- built.push({
- id: NO_CATEGORY_ID,
- name: {} as Ml,
- sortOrder: Number.MAX_SAFE_INTEGER,
- dishes: orphans,
- isGroup: false,
- parentId: null,
- });
- }
- return built;
 }
 
 export function apiTableToTable(t: ApiTable): TableEntity {
