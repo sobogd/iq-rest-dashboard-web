@@ -441,22 +441,6 @@ function KitchenAppBody() {
           mapped,
           filterStateRef.current,
         );
-        // eslint-disable-next-line no-console
-        console.debug("[k] chime", {
-          action: event.action,
-          fires,
-          filter: filterStateRef.current
-            ? {
-                statuses: filterStateRef.current.statuses,
-                categoryIds: filterStateRef.current.categoryIds,
-                dishToCatSize: Object.keys(filterStateRef.current.dishToCategory).length,
-              }
-            : null,
-          incomingIds: mapped.map((o) => ({
-            orderId: o.id,
-            items: o.items.map((it) => ({ id: it.id, dishId: it.dishId, status: it.status })),
-          })),
-        });
         if (fires) playOrderChime();
         return;
       }

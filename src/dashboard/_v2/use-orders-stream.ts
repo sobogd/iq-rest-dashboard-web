@@ -20,7 +20,15 @@ import { useOrdersStreamStateStore } from "./orders-sync-state";
 //    while reconnecting.
 
 interface OrderEvent {
-  action: "created" | "updated" | "deleted" | "split";
+  action:
+    | "created"
+    | "updated"
+    | "deleted"
+    | "split"
+    // Reservation events ride the same restaurant-scoped SSE channel.
+    | "booking-created"
+    | "booking-updated"
+    | "booking-deleted";
   restaurantId: string;
   order?: unknown;
   createdOrder?: unknown;
@@ -220,6 +228,18 @@ export function useOrdersStream(restaurantId: string | null | undefined): Connec
 // to invalidation when a slim payload (no `order` body) arrives or the
 // cache is empty.
 function applyEvent(qc: QueryClient, event: OrderEvent): void {
+  // Reservation events: the admin reservations cache is cheap to refetch and
+  // booking volume is low, so just invalidate it (no order cache touch).
+  // Without this, new bookings only surfaced on the 30s poll / window focus.
+  if (
+    event.action === "booking-created" ||
+    event.action === "booking-updated" ||
+    event.action === "booking-deleted"
+  ) {
+    void qc.invalidateQueries({ queryKey: ["reservations"] });
+    return;
+  }
+
   const key = ["orders"] as const;
   const existing = qc.getQueryData<unknown[]>(key);
   if (!Array.isArray(existing)) {
