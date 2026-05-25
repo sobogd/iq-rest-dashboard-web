@@ -334,7 +334,7 @@ export function OrdersPage({
  const sourceTotal = kept.reduce((sum, it) => sum + calcItemPrice(it), 0);
  const createdTotal = taken.reduce((sum, it) => sum + calcItemPrice(it), 0);
  try {
- const res = await splitOrder(orderId, { itemIds, sourceTotal, createdTotal });
+ const res = await splitOrder(orderId, { itemIds });
  const newOrder: Order = {
  id: res.created.id,
  tableId: source.tableId,

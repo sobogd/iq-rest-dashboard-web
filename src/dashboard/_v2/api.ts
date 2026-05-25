@@ -647,7 +647,7 @@ export async function patchOrder(
 
 export async function splitOrder(
  id: string,
- payload: { itemIds: string[]; sourceTotal: number; createdTotal: number },
+ payload: { itemIds: string[] },
 ): Promise<{ source: ApiOrder; created: ApiOrder }> {
  const res = await apiFetch(`/api/orders/${id}/split`, {
         credentials: "include",
