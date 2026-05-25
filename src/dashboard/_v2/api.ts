@@ -339,7 +339,9 @@ export interface ApiItem {
  sortOrder: number;
  isActive: boolean;
  isExample?: boolean;
- categoryId: string;
+ // null = orphaned item (its category was deleted) — surfaced in the
+ // synthetic "No category" bucket.
+ categoryId: string | null;
 }
 
 export async function fetchItems(): Promise<ApiItem[]> {
@@ -378,7 +380,9 @@ export async function updateItem(
  description?: string | null;
  price: number;
  imageUrl?: string | null;
- categoryId: string;
+ // Optional: omitted when editing an orphaned dish so it stays orphaned
+ // (the server rejects a null categoryId).
+ categoryId?: string;
  isActive?: boolean;
  translations?: ItemTranslations;
  allergens?: string[];

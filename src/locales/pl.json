@@ -172,7 +172,8 @@
       },
       "addGroup": "Dodaj grupę",
       "backToMenu": "Powrót do menu",
-      "groupsHeading": "Grupy"
+      "groupsHeading": "Grupy",
+      "noCategoryLabel": "Bez kategorii"
     },
     "categoryForm": {
       "newTitle": "Nowa kategoria",

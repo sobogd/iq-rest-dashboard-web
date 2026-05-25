@@ -172,7 +172,8 @@
       },
       "addGroup": "Přidat skupinu",
       "backToMenu": "Zpět do menu",
-      "groupsHeading": "Skupiny"
+      "groupsHeading": "Skupiny",
+      "noCategoryLabel": "Bez kategorie"
     },
     "categoryForm": {
       "newTitle": "Nová kategorie",

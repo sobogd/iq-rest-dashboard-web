@@ -172,7 +172,8 @@
       },
       "addGroup": "Groep toevoegen",
       "backToMenu": "Terug naar menu",
-      "groupsHeading": "Groepen"
+      "groupsHeading": "Groepen",
+      "noCategoryLabel": "Geen categorie"
     },
     "categoryForm": {
       "newTitle": "Nieuwe categorie",

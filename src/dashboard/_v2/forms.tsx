@@ -384,7 +384,9 @@ export function DishForm({
  onOptionsRefresh,
 }: {
  dish: Dish | null;
- categoryId: string;
+ // null only for an orphaned dish opened from the synthetic "No category"
+ // bucket. New dishes always carry a real category from the item.new route.
+ categoryId: string | null;
  categoryName: string;
  onSavedRedirect: (newId: string) => void;
  onBack: () => void;
@@ -512,6 +514,12 @@ export function DishForm({
  try {
  let savedId: string;
  if (isNew) {
+ if (!categoryId) {
+ // New dishes always come from the item.new route with a real category;
+ // a null here is a programming error, not a user-reachable state.
+ setSaving(false);
+ return null;
+ }
  const created = await createItem({
  name: namePrimary,
  description: descPrimary,
@@ -531,7 +539,9 @@ export function DishForm({
  description: descPrimary,
  price: priceNum,
  imageUrl: form.photoUrl,
- categoryId,
+ // Orphaned dish (no category): leave it orphaned rather than send a
+ // null the API would reject — editing name/price/etc still works.
+ ...(categoryId ? { categoryId } : {}),
  isActive: form.visible,
  translations,
  allergens: form.allergens,
@@ -601,7 +611,9 @@ export function DishForm({
  }
 
  async function handleDuplicate() {
- if (!dish || duplicating) return;
+ // Can't duplicate an orphaned dish — there's no category to place the copy
+ // in. (The duplicate button is hidden for the No-category bucket anyway.)
+ if (!dish || !dish.categoryId || duplicating) return;
  track("dash_item_click_duplicate");
  setDuplicating(true);
  const copySuffix = " (" + tc("copy", { defaultValue: "copy" }) + ")";
@@ -839,6 +851,7 @@ export function DishForm({
 
  {!isNew ? (
  <div className="max-w-5xl mx-auto md:px-6 mt-6 flex items-center justify-center gap-3">
+ {categoryId ? (
  <button
  type="button"
  onClick={handleDuplicate}
@@ -848,6 +861,7 @@ export function DishForm({
  <CopyIcon size={13} />
  {duplicating ? tc("saving") : t("duplicateButton", { defaultValue: "Duplicate" })}
  </button>
+ ) : null}
  <button
  type="button"
  onClick={() => setConfirmOpen(true)}
@@ -1567,7 +1581,7 @@ async function persistDishOptions(dish: Dish, nextOptions: DishOption[], default
  // silently mangles "9,90" to 9 and drops everything after the comma.
  price: parseDecimal(dish.price),
  imageUrl: dish.photoUrl,
- categoryId: dish.categoryId,
+ ...(dish.categoryId ? { categoryId: dish.categoryId } : {}),
  isActive: dish.visible,
  translations,
  allergens: dish.allergens,

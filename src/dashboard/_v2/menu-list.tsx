@@ -23,6 +23,7 @@ import {
 import { EmptyState, PreviewButton, ShareButton, ShareModal, SubscriptionChip } from "./ui";
 import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
+import { NO_CATEGORY_ID } from "./mappers";
 import { currencySymbolOf, moveItem } from "./helpers";
 import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItemsBulk } from "./api";
 import { useRestaurant } from "./restaurant-context";
@@ -68,15 +69,21 @@ export function MenuList({
  const scopedLeaves = useMemo(
    () =>
      categories
-       .filter((c) => !c.isGroup)
+       .filter((c) => !c.isGroup && c.id !== NO_CATEGORY_ID)
        .sort((a, b) => a.sortOrder - b.sortOrder),
    [categories],
  );
  const ungroupedCategories = useMemo(
    () =>
      categories
-       .filter((c) => !c.isGroup && (c.parentId ?? null) === null)
+       .filter((c) => !c.isGroup && c.id !== NO_CATEGORY_ID && (c.parentId ?? null) === null)
        .sort((a, b) => a.sortOrder - b.sortOrder),
+   [categories],
+ );
+ // Synthetic read-only bucket of orphaned items (their category was deleted).
+ // Rendered at the very bottom, not sortable/editable as a category.
+ const noCategoryBucket = useMemo(
+   () => categories.find((c) => c.id === NO_CATEGORY_ID) ?? null,
    [categories],
  );
  const topLevelGroups = useMemo(
@@ -639,6 +646,25 @@ export function MenuList({
  </div>
  )}
 
+ {noCategoryBucket && noCategoryBucket.dishes.length > 0 ? (
+ <div className="mt-3">
+ <CategoryAccordion
+ category={noCategoryBucket}
+ defaultLang={defaultLang}
+ currencySymbol={currencySymbol}
+ isOpen={openIds[NO_CATEGORY_ID] !== false}
+ onToggle={() => toggleCategory(NO_CATEGORY_ID)}
+ isFirst
+ isLast
+ onMoveUp={() => {}}
+ onMoveDown={() => {}}
+ onMoveDish={() => {}}
+ onToggleDishVisible={toggleDishVisible}
+ readOnly
+ />
+ </div>
+ ) : null}
+
  <div className="flex items-center justify-center gap-6 pt-6 pb-8 md:pb-0">
  <button
  type="button"
@@ -822,6 +848,7 @@ function CategoryAccordion({
  onMoveDown,
  onMoveDish,
  onToggleDishVisible,
+ readOnly = false,
 }: {
  category: Category;
  defaultLang: string;
@@ -835,10 +862,17 @@ function CategoryAccordion({
  onMoveDown: () => void;
  onMoveDish: (categoryId: string, idx: number, dir: number) => void;
  onToggleDishVisible: (categoryId: string, dishId: string) => void;
+ // Synthetic "No category" bucket: no rename/move/delete/add-dish, items
+ // not reorderable. Items keep their visible-toggle + edit (editing lets the
+ // owner re-file the dish into a real category).
+ readOnly?: boolean;
 }) {
  const t = useTranslations("dashboard.menu");
  const router = useDashboardRouter();
  const dishesFlipRef = useFlip<HTMLDivElement>([category.dishes.map((d) => d.id).join(",")]);
+ const title = readOnly
+ ? t("noCategoryLabel", { defaultValue: "No category" })
+ : getMlWithFallback(category.name, defaultLang, defaultLang);
  return (
  <div className="bg-card border border-border/60 rounded-xl overflow-hidden">
  <div
@@ -868,9 +902,10 @@ function CategoryAccordion({
  </span>
  </span>
  <span className="flex-1 min-w-0 text-sm font-semibold text-foreground/70 truncate block">
- {getMlWithFallback(category.name, defaultLang, defaultLang)}
+ {title}
  </span>
 
+ {readOnly ? null : (
  <div className="flex items-center gap-0.5 shrink-0">
  <span
  className="inline-flex items-center gap-0"
@@ -909,6 +944,7 @@ function CategoryAccordion({
  <EditIcon size={14} />
  </button>
  </div>
+ )}
  </div>
 
  <Collapsible open={isOpen}>
@@ -931,12 +967,14 @@ function CategoryAccordion({
  onMoveUp={() => onMoveDish(category.id, idx, -1)}
  onMoveDown={() => onMoveDish(category.id, idx, 1)}
  onToggleVisible={() => onToggleDishVisible(category.id, dish.id)}
+ sortable={!readOnly}
  />
  </div>
  ))}
  </div>
  )}
 
+ {readOnly ? null : (
  <button
  type="button"
  onClick={() => {
@@ -951,6 +989,7 @@ function CategoryAccordion({
  </span>
  {t("addDish")}
  </button>
+ )}
  </div>
  </Collapsible>
  </div>
@@ -967,6 +1006,7 @@ function DishRow({
  onMoveUp,
  onMoveDown,
  onToggleVisible,
+ sortable = true,
 }: {
  dish: Dish;
  defaultLang: string;
@@ -977,6 +1017,7 @@ function DishRow({
  onMoveUp: () => void;
  onMoveDown: () => void;
  onToggleVisible: () => void;
+ sortable?: boolean;
 }) {
  const t = useTranslations("dashboard.menu");
  const tc = useTranslations("dashboard.common");
@@ -1003,6 +1044,7 @@ function DishRow({
  aria-label={t("editDish")}
  className={rowCls}
  >
+ {sortable ? (
  <div className="flex items-center gap-0 shrink-0">
  <button
  type="button"
@@ -1023,6 +1065,7 @@ function DishRow({
  <ArrowDownIcon size={14} />
  </button>
  </div>
+ ) : null}
 
  <div className={"flex-1 min-w-0 text-left flex items-center gap-2 " + dimCls}>
  <div className="min-w-0 flex-1 flex items-center gap-1.5">

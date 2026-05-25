@@ -172,7 +172,8 @@
       },
       "addGroup": "添加分组",
       "backToMenu": "返回菜单",
-      "groupsHeading": "分组"
+      "groupsHeading": "分组",
+      "noCategoryLabel": "无分类"
     },
     "categoryForm": {
       "newTitle": "新类别",

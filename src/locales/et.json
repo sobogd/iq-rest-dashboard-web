@@ -172,7 +172,8 @@
       },
       "addGroup": "Lisa rühm",
       "backToMenu": "Tagasi menüüsse",
-      "groupsHeading": "Rühmad"
+      "groupsHeading": "Rühmad",
+      "noCategoryLabel": "Kategooriata"
     },
     "categoryForm": {
       "newTitle": "Uus kategooria",

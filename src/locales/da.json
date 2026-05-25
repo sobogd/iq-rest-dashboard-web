@@ -172,7 +172,8 @@
       },
       "addGroup": "Tilføj gruppe",
       "backToMenu": "Tilbage til menu",
-      "groupsHeading": "Grupper"
+      "groupsHeading": "Grupper",
+      "noCategoryLabel": "Uden kategori"
     },
     "categoryForm": {
       "newTitle": "Ny kategori",

@@ -28,7 +28,7 @@ export interface Dish {
  options: DishOption[];
  photoUrl: string | null;
  sortOrder: number;
- categoryId: string;
+ categoryId: string | null;
  isExample?: boolean;
 }
 

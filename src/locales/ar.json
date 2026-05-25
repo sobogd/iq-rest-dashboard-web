@@ -172,7 +172,8 @@
       },
       "addGroup": "إضافة مجموعة",
       "backToMenu": "العودة إلى القائمة",
-      "groupsHeading": "المجموعات"
+      "groupsHeading": "المجموعات",
+      "noCategoryLabel": "بدون فئة"
     },
     "categoryForm": {
       "newTitle": "فئة جديدة",

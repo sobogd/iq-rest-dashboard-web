@@ -172,7 +172,8 @@
       },
       "addGroup": "Προσθήκη ομάδας",
       "backToMenu": "Επιστροφή στο μενού",
-      "groupsHeading": "Ομάδες"
+      "groupsHeading": "Ομάδες",
+      "noCategoryLabel": "Χωρίς κατηγορία"
     },
     "categoryForm": {
       "newTitle": "Νέα κατηγορία",

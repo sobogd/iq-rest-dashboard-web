@@ -172,7 +172,8 @@
       },
       "addGroup": "Grup ekle",
       "backToMenu": "Menüye dön",
-      "groupsHeading": "Gruplar"
+      "groupsHeading": "Gruplar",
+      "noCategoryLabel": "Kategorisiz"
     },
     "categoryForm": {
       "newTitle": "Yeni kategori",
