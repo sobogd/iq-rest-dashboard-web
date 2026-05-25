@@ -5,7 +5,7 @@
 import { apiUrl } from "@/lib/api";
 import { activeRestaurantHeader } from "@/lib/active-restaurant";
 
-export type DeviceType = "KITCHEN" | "WAITER";
+export type DeviceType = "KITCHEN" | "WAITER" | "RESERVATION";
 export type DeviceStatus = "ACTIVE" | "REVOKED";
 
 export interface ApiDevice {

@@ -333,7 +333,8 @@
       "lastSeen": "last seen {at}",
       "type": {
         "KITCHEN": "Kitchen",
-        "WAITER": "Waiter"
+        "WAITER": "Waiter",
+        "RESERVATION": "Reservations"
       },
       "codeTitle": "Pairing code — {name}",
       "codeInstructions": "Open {host} on the tablet and enter this code to pair it as the {type}. The code expires shortly — generate a new one if it runs out.",

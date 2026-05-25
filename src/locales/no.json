@@ -882,7 +882,8 @@
       "lastSeen": "sist sett {at}",
       "type": {
         "KITCHEN": "Kjøkken",
-        "WAITER": "Servitør"
+        "WAITER": "Servitør",
+        "RESERVATION": "Reservasjoner"
       },
       "codeTitle": "Paringskode — {name}",
       "codeInstructions": "Åpne {host} på nettbrettet og skriv inn denne koden for å pare det som {type}. Koden utløper snart — generer en ny ved behov.",

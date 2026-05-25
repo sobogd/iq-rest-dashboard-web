@@ -882,7 +882,8 @@
       "lastSeen": "son görülme {at}",
       "type": {
         "KITCHEN": "Mutfak",
-        "WAITER": "Garson"
+        "WAITER": "Garson",
+        "RESERVATION": "Rezervasyonlar"
       },
       "codeTitle": "Eşleştirme kodu — {name}",
       "codeInstructions": "Tablette {host} adresini açın ve bu kodu girerek {type} olarak eşleştirin. Kodun süresi yakında dolar — gerekirse yeni bir kod oluşturun.",

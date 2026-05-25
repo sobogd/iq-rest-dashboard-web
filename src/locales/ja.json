@@ -882,7 +882,8 @@
       "lastSeen": "最終接続 {at}",
       "type": {
         "KITCHEN": "キッチン",
-        "WAITER": "ホール"
+        "WAITER": "ホール",
+        "RESERVATION": "予約"
       },
       "codeTitle": "ペアリングコード — {name}",
       "codeInstructions": "タブレットで {host} を開き、このコードを入力して {type} としてペアリングしてください。コードは間もなく期限切れになります — 必要に応じて新しいコードを生成してください。",

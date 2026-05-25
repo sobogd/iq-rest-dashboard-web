@@ -882,7 +882,8 @@
       "lastSeen": "utoljára {at}",
       "type": {
         "KITCHEN": "Konyha",
-        "WAITER": "Pincér"
+        "WAITER": "Pincér",
+        "RESERVATION": "Foglalások"
       },
       "codeTitle": "Párosítási kód — {name}",
       "codeInstructions": "Nyissa meg a {host} oldalt a táblagépen, és írja be ezt a kódot, hogy {type}-ként párosítsa. A kód hamarosan lejár — szükség esetén generáljon újat.",

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ChefHatIcon, CopyIcon, PlateForkKnifeIcon, PlusIcon, TrashIcon } from "./icons";
+import { CalendarIcon, ChefHatIcon, CopyIcon, PlateForkKnifeIcon, PlusIcon, TrashIcon } from "./icons";
 import { ConfirmDialog, EmptyState, Modal, Select, SubpageStickyBar } from "./ui";
 import { inputClass } from "./tokens";
 import {
@@ -248,6 +248,8 @@ function DeviceRow({
       <div className="flex items-center gap-2">
         {device.type === "WAITER" ? (
           <PlateForkKnifeIcon size={16} className="text-muted-foreground shrink-0" />
+        ) : device.type === "RESERVATION" ? (
+          <CalendarIcon size={16} className="text-muted-foreground shrink-0" />
         ) : (
           <ChefHatIcon size={16} className="text-muted-foreground shrink-0" />
         )}
@@ -399,6 +401,7 @@ function AddDeviceModal({
             options={[
               { value: "KITCHEN", label: t("type.KITCHEN") },
               { value: "WAITER", label: t("type.WAITER") },
+              { value: "RESERVATION", label: t("type.RESERVATION") },
             ]}
           />
         </div>
@@ -467,7 +470,12 @@ function PairingCodeModal({
         </div>
         <div className="text-[13px] text-muted-foreground leading-snug">
           {t("codeInstructions", {
-            host: device.type === "WAITER" ? "w.iq-rest.com" : "k.iq-rest.com",
+            host:
+              device.type === "WAITER"
+                ? "w.iq-rest.com"
+                : device.type === "RESERVATION"
+                  ? "r.iq-rest.com"
+                  : "k.iq-rest.com",
             type: t(`type.${device.type}`).toLowerCase(),
           })}
         </div>

@@ -882,7 +882,8 @@
       "lastSeen": "naposledy {at}",
       "type": {
         "KITCHEN": "Kuchyně",
-        "WAITER": "Číšník"
+        "WAITER": "Číšník",
+        "RESERVATION": "Rezervace"
       },
       "codeTitle": "Párovací kód — {name}",
       "codeInstructions": "Otevřete {host} na tabletu a zadejte tento kód, abyste jej spárovali jako {type}. Kód brzy vyprší — vygenerujte nový, pokud je třeba.",

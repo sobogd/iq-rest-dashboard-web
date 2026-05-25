@@ -882,7 +882,8 @@
       "lastSeen": "última atividade {at}",
       "type": {
         "KITCHEN": "Cozinha",
-        "WAITER": "Empregado"
+        "WAITER": "Empregado",
+        "RESERVATION": "Reservas"
       },
       "codeTitle": "Código de emparelhamento — {name}",
       "codeInstructions": "Abra {host} no tablet e introduza este código para o emparelhar como {type}. O código expira em breve — gere outro se necessário.",

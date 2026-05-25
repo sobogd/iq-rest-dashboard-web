@@ -882,7 +882,8 @@
       "lastSeen": "dernière connexion {at}",
       "type": {
         "KITCHEN": "Cuisine",
-        "WAITER": "Serveur"
+        "WAITER": "Serveur",
+        "RESERVATION": "Réservations"
       },
       "codeTitle": "Code d'association — {name}",
       "codeInstructions": "Ouvrez {host} sur la tablette et saisissez ce code pour l'associer en tant que {type}. Le code expire bientôt — générez-en un nouveau si nécessaire.",

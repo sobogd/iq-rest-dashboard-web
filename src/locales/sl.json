@@ -882,7 +882,8 @@
       "lastSeen": "nazadnje {at}",
       "type": {
         "KITCHEN": "Kuhinja",
-        "WAITER": "Natakar"
+        "WAITER": "Natakar",
+        "RESERVATION": "Rezervacije"
       },
       "codeTitle": "Koda za seznanitev — {name}",
       "codeInstructions": "Odprite {host} na tablici in vnesite to kodo, da jo seznanite kot {type}. Koda kmalu poteče — po potrebi ustvarite novo.",

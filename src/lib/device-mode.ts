@@ -4,6 +4,7 @@
 //   - app.iq-rest.com → cookie-authed admin/dashboard
 //   - k.iq-rest.com   → kitchen-display kiosk (device-authed)
 //   - w.iq-rest.com   → waiter terminal kiosk (device-authed)
+//   - r.iq-rest.com   → reservation-board kiosk (device-authed)
 //
 // One-letter subdomains on purpose — staff types this on touchscreen
 // keyboards and every saved character matters. `getKioskRole()` is the
@@ -11,13 +12,14 @@
 
 const TOKEN_KEY = "iqr_device_token";
 
-export type KioskRole = "kitchen" | "waiter";
+export type KioskRole = "kitchen" | "waiter" | "reservation";
 
 export function getKioskRole(): KioskRole | null {
   if (typeof window === "undefined") return null;
   const host = window.location.hostname.toLowerCase();
   if (host === "k" || host.startsWith("k.")) return "kitchen";
   if (host === "w" || host.startsWith("w.")) return "waiter";
+  if (host === "r" || host.startsWith("r.")) return "reservation";
   return null;
 }
 

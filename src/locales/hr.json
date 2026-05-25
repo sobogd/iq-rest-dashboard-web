@@ -882,7 +882,8 @@
       "lastSeen": "posljednji put viđen {at}",
       "type": {
         "KITCHEN": "Kuhinja",
-        "WAITER": "Konobar"
+        "WAITER": "Konobar",
+        "RESERVATION": "Rezervacije"
       },
       "codeTitle": "Kod za uparivanje — {name}",
       "codeInstructions": "Otvorite {host} na tabletu i unesite ovaj kod da biste ga uparili kao {type}. Kod uskoro istječe — po potrebi generirajte novi.",

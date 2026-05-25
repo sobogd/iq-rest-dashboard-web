@@ -8,7 +8,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // Returns the current connection state + a `reconnect()` action for the
 // offline overlay's manual retry button.
 
-type OrderEventAction = "created" | "updated" | "deleted" | "split";
+type OrderEventAction =
+  | "created"
+  | "updated"
+  | "deleted"
+  | "split"
+  // Reservation kiosk events ride the same `order` SSE frame, distinguished
+  // only by action. The kitchen-app dispatches on action.
+  | "booking-created"
+  | "booking-updated"
+  | "booking-deleted";
 
 export interface KitchenOrderEvent {
   action: OrderEventAction;
@@ -17,6 +26,9 @@ export interface KitchenOrderEvent {
   createdOrder?: unknown;
   orderId?: string;
   itemSummary?: { id: string; dishId: string; status: string }[];
+  // Reservation payloads (booking-* actions).
+  booking?: unknown;
+  bookingId?: string;
 }
 
 export type StreamState = "connecting" | "open" | "closed";

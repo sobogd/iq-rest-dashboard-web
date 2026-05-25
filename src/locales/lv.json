@@ -882,7 +882,8 @@
       "lastSeen": "pēdējoreiz {at}",
       "type": {
         "KITCHEN": "Virtuve",
-        "WAITER": "Viesmīlis"
+        "WAITER": "Viesmīlis",
+        "RESERVATION": "Rezervācijas"
       },
       "codeTitle": "Savienošanas kods — {name}",
       "codeInstructions": "Atveriet {host} planšetdatorā un ievadiet šo kodu, lai to savienotu kā {type}. Kods drīz beigsies — ja nepieciešams, ģenerējiet jaunu.",

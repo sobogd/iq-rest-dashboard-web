@@ -882,7 +882,8 @@
       "lastSeen": "ultima oară {at}",
       "type": {
         "KITCHEN": "Bucătărie",
-        "WAITER": "Ospătar"
+        "WAITER": "Ospătar",
+        "RESERVATION": "Rezervări"
       },
       "codeTitle": "Cod de asociere — {name}",
       "codeInstructions": "Deschide {host} pe tabletă și introdu acest cod pentru a o asocia ca {type}. Codul expiră curând — generează altul dacă este nevoie.",

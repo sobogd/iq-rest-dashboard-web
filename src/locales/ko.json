@@ -882,7 +882,8 @@
       "lastSeen": "마지막 접속 {at}",
       "type": {
         "KITCHEN": "주방",
-        "WAITER": "서빙"
+        "WAITER": "서빙",
+        "RESERVATION": "예약"
       },
       "codeTitle": "페어링 코드 — {name}",
       "codeInstructions": "태블릿에서 {host}을 열고 이 코드를 입력해 {type}으로 페어링하세요. 코드는 곧 만료됩니다 — 필요 시 새로 생성하세요.",

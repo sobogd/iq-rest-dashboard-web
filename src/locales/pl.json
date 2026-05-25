@@ -882,7 +882,8 @@
       "lastSeen": "ostatnio {at}",
       "type": {
         "KITCHEN": "Kuchnia",
-        "WAITER": "Kelner"
+        "WAITER": "Kelner",
+        "RESERVATION": "Rezerwacje"
       },
       "codeTitle": "Kod parowania — {name}",
       "codeInstructions": "Otwórz {host} na tablecie i wprowadź ten kod, aby sparować go jako {type}. Kod wkrótce wygaśnie — w razie potrzeby wygeneruj nowy.",

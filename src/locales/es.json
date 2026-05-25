@@ -882,7 +882,8 @@
       "lastSeen": "última conexión {at}",
       "type": {
         "KITCHEN": "Cocina",
-        "WAITER": "Camarero"
+        "WAITER": "Camarero",
+        "RESERVATION": "Reservas"
       },
       "codeTitle": "Código de vinculación — {name}",
       "codeInstructions": "Abre {host} en la tableta e introduce este código para vincularla como {type}. El código caduca pronto — genera otro si se agota.",

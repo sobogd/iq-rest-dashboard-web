@@ -882,7 +882,8 @@
       "lastSeen": "feicthe go deireanach {at}",
       "type": {
         "KITCHEN": "Cistin",
-        "WAITER": "Freastalaí"
+        "WAITER": "Freastalaí",
+        "RESERVATION": "Áirithintí"
       },
       "codeTitle": "Cód péireála — {name}",
       "codeInstructions": "Oscail {host} ar an táibléad agus cuir isteach an cód seo chun é a phéireáil mar {type}. Téann an cód in éag go luath — gin ceann nua más gá.",

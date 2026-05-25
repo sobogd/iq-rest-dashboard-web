@@ -22,10 +22,12 @@ import { useKitchenStream, type KitchenOrderEvent } from "./use-kitchen-stream";
 import { ZoomControls } from "./zoom-controls";
 import { KitchenPage, type KitchenFilterState } from "@/dashboard/_v2/kitchen-page";
 import { OrdersPage } from "@/dashboard/_v2/orders";
+import { ReservationsPage } from "@/dashboard/_v2/reservations";
 import { RestaurantProvider } from "@/dashboard/_v2/restaurant-context";
 import { DashboardRouterProvider } from "@/dashboard/_spa/router";
 import {
   apiOrderToOrder,
+  apiReservationToBooking,
   apiTableToTable,
   apiRestaurantToRestaurant,
   buildCategories,
@@ -34,10 +36,12 @@ import type {
   ApiCategory,
   ApiItem,
   ApiOrder,
+  ApiReservation,
   ApiRestaurant,
   ApiTable,
 } from "@/dashboard/_v2/api";
 import type {
+  Booking,
   Category,
   Order,
   OrderItem,
@@ -45,7 +49,7 @@ import type {
   TableEntity,
 } from "@/dashboard/_v2/types";
 
-type DeviceType = "KITCHEN" | "WAITER";
+type DeviceType = "KITCHEN" | "WAITER" | "RESERVATION";
 
 interface BootstrapResponse {
   device: { id: string; type: DeviceType; restaurantId: string };
@@ -54,6 +58,7 @@ interface BootstrapResponse {
   items: ApiItem[];
   tables: ApiTable[];
   orders: ApiOrder[];
+  reservations: ApiReservation[];
 }
 
 interface KitchenSnapshot {
@@ -62,6 +67,7 @@ interface KitchenSnapshot {
   categories: Category[];
   tables: TableEntity[];
   orders: Order[];
+  bookings: Booking[];
   tablesByNumber: Map<number, string>;
 }
 
@@ -230,12 +236,14 @@ function KitchenAppBody() {
     const tables = data.tables.map(apiTableToTable);
     const tablesByNumber = new Map(data.tables.map((t) => [t.number, t.id]));
     const orders = data.orders.map((o) => apiOrderToOrder(o, tablesByNumber));
+    const bookings = (data.reservations ?? []).map(apiReservationToBooking);
     setSnapshot({
       deviceType: data.device.type,
       restaurant,
       categories,
       tables,
       orders,
+      bookings,
       tablesByNumber,
     });
     // Switch UI language to restaurant's default once we know it. i18next
@@ -318,6 +326,44 @@ function KitchenAppBody() {
     (event: KitchenOrderEvent) => {
       const snap = snapshotRef.current;
       if (!snap) return;
+
+      // Reservation kiosk events — ride the same SSE frame, dispatched by
+      // action. Only the RESERVATION device cares; other types ignore.
+      if (
+        event.action === "booking-created" ||
+        event.action === "booking-updated" ||
+        event.action === "booking-deleted"
+      ) {
+        if (snap.deviceType !== "RESERVATION") return;
+        if (event.action === "booking-deleted") {
+          if (!event.bookingId) return;
+          setSnapshot((cur) =>
+            cur
+              ? { ...cur, bookings: cur.bookings.filter((b) => b.id !== event.bookingId) }
+              : cur,
+          );
+          return;
+        }
+        if (!event.booking) {
+          // Slim payload (pg_notify size cap) — re-bootstrap for fresh state.
+          void fetchBootstrap().then((res) => {
+            if (res === "unauthorized") handleLogout();
+            else if (res !== "error") applySnapshot(res);
+          });
+          return;
+        }
+        const booking = apiReservationToBooking(event.booking as ApiReservation);
+        const isNew = !snap.bookings.some((b) => b.id === booking.id);
+        setSnapshot((cur) => {
+          if (!cur) return cur;
+          const byId = new Map(cur.bookings.map((b) => [b.id, b]));
+          byId.set(booking.id, booking);
+          return { ...cur, bookings: [...byId.values()] };
+        });
+        // Chime on a brand-new booking landing — staff needs to look up.
+        if (isNew && event.action === "booking-created" && soundReady) playOrderChime();
+        return;
+      }
 
       if (event.action === "deleted") {
         if (!event.orderId) return;
@@ -496,10 +542,39 @@ function KitchenAppBody() {
     );
   };
 
+  const updateBookings = (updater: React.SetStateAction<Booking[]>) => {
+    setSnapshot((cur) =>
+      cur
+        ? {
+            ...cur,
+            bookings:
+              typeof updater === "function"
+                ? (updater as (prev: Booking[]) => Booking[])(cur.bookings)
+                : updater,
+          }
+        : cur,
+    );
+  };
+
   return (
     <>
       <KitchenShell>
-        {snapshot.deviceType === "WAITER" ? (
+        {snapshot.deviceType === "RESERVATION" ? (
+          // Reservation kiosk reuses the admin ReservationsPage verbatim.
+          // Like the waiter terminal it needs the SPA router (the page calls
+          // useDashboardRouter for its empty-state CTA) and a restaurant
+          // context, both scoped to this single tab.
+          <RestaurantProvider restaurant={snapshot.restaurant}>
+            <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
+              <ReservationsPage
+                restaurant={snapshot.restaurant}
+                bookings={snapshot.bookings}
+                setBookings={updateBookings}
+                tables={snapshot.tables}
+              />
+            </DashboardRouterProvider>
+          </RestaurantProvider>
+        ) : snapshot.deviceType === "WAITER" ? (
           // Waiter kiosk reuses the admin OrdersPage verbatim — its own
           // internal navigation between table list / order detail / item
           // wizard rides on the dashboard SPA router, which we provide

@@ -882,7 +882,8 @@
       "lastSeen": "síðast séð {at}",
       "type": {
         "KITCHEN": "Eldhús",
-        "WAITER": "Þjónn"
+        "WAITER": "Þjónn",
+        "RESERVATION": "Bókanir"
       },
       "codeTitle": "Pörunarkóði — {name}",
       "codeInstructions": "Opnaðu {host} á spjaldtölvunni og sláðu inn þennan kóða til að para hana sem {type}. Kóðinn rennur fljótlega út — búðu til nýjan ef þarf.",

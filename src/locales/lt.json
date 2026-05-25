@@ -882,7 +882,8 @@
       "lastSeen": "paskutinį kartą {at}",
       "type": {
         "KITCHEN": "Virtuvė",
-        "WAITER": "Padavėjas"
+        "WAITER": "Padavėjas",
+        "RESERVATION": "Rezervacijos"
       },
       "codeTitle": "Susiejimo kodas — {name}",
       "codeInstructions": "Atidarykite {host} planšetėje ir įveskite šį kodą, kad ją susietumėte kaip {type}. Kodas netrukus baigs galioti — prireikus sukurkite naują.",

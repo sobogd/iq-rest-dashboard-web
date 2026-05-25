@@ -882,7 +882,8 @@
       "lastSeen": "viimeksi nähty {at}",
       "type": {
         "KITCHEN": "Keittiö",
-        "WAITER": "Tarjoilija"
+        "WAITER": "Tarjoilija",
+        "RESERVATION": "Varaukset"
       },
       "codeTitle": "Yhdistämiskoodi — {name}",
       "codeInstructions": "Avaa {host} tabletilla ja syötä tämä koodi yhdistääksesi sen {type}-laitteena. Koodi vanhenee pian — luo tarvittaessa uusi.",

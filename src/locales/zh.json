@@ -882,7 +882,8 @@
       "lastSeen": "上次在线 {at}",
       "type": {
         "KITCHEN": "厨房",
-        "WAITER": "服务员"
+        "WAITER": "服务员",
+        "RESERVATION": "预订"
       },
       "codeTitle": "配对代码 — {name}",
       "codeInstructions": "在平板上打开 {host},输入此代码以将其配对为 {type}。代码即将过期 — 如有需要请重新生成。",

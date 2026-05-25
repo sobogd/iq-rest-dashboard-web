@@ -882,7 +882,8 @@
       "lastSeen": "senast sedd {at}",
       "type": {
         "KITCHEN": "Kök",
-        "WAITER": "Servitör"
+        "WAITER": "Servitör",
+        "RESERVATION": "Bokningar"
       },
       "codeTitle": "Parkopplingskod — {name}",
       "codeInstructions": "Öppna {host} på surfplattan och ange den här koden för att parkoppla den som {type}. Koden går snart ut — generera en ny vid behov.",

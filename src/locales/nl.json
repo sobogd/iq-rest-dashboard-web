@@ -882,7 +882,8 @@
       "lastSeen": "laatst gezien {at}",
       "type": {
         "KITCHEN": "Keuken",
-        "WAITER": "Bediening"
+        "WAITER": "Bediening",
+        "RESERVATION": "Reserveringen"
       },
       "codeTitle": "Koppelingscode — {name}",
       "codeInstructions": "Open {host} op de tablet en voer deze code in om hem als {type} te koppelen. De code verloopt binnenkort — genereer indien nodig een nieuwe.",
