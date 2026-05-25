@@ -158,7 +158,7 @@ export function ReservationsPage({
     </div>
    </div>
 
-   <div className={wrapWidth + (kioskLayout ? " px-4" : "") + " md:px-6 pt-5 md:pt-4"}>
+   <div className={wrapWidth + (kioskLayout ? " px-4 pt-8 md:pt-8" : " pt-5 md:pt-4") + " md:px-6"}>
     {view === "month" ? (
      <div className="lg:flex lg:gap-8 lg:items-stretch">
       <div className="lg:flex-1 lg:min-w-0 lg:flex lg:flex-col lg:h-[calc(100dvh-var(--topbar-h,0px)-160px)]">
