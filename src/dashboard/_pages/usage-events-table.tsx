@@ -23,7 +23,21 @@ export interface UsageRow {
   isSearch: boolean;
   isGoogleAds: boolean;
   isFacebookAds: boolean;
+  fbSentEvents: string[];
 }
+
+/** Meta CAPI events that can be sent manually from a fbclid landing event.
+ *  CompleteRegistration is the conversion the campaign optimizes for; the rest
+ *  are funnel signals that feed the optimizer's learning. */
+const FB_EVENTS: Array<{ name: string; desc: string }> = [
+  { name: "CompleteRegistration", desc: "Conversion — campaign optimization goal" },
+  { name: "Lead", desc: "Lead / sign-up intent" },
+  { name: "ViewContent", desc: "Viewed demo / content (learning)" },
+  { name: "InitiateCheckout", desc: "Started onboarding / checkout" },
+  { name: "Subscribe", desc: "Started a subscription" },
+  { name: "Purchase", desc: "Paid subscription (value)" },
+  { name: "PageView", desc: "Landing page view (top funnel)" },
+];
 
 /** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
  *  IP preferred when present (server-anonymized), region as legacy fallback. */
@@ -901,6 +915,48 @@ function UsageEventDetail({
   onShowSimilar: (event: UsageRow) => void;
 }) {
   useScrollLock(Boolean(event));
+  const [fbOpen, setFbOpen] = useState(false);
+  const [fbSending, setFbSending] = useState<string | null>(null);
+  const [fbResponse, setFbResponse] = useState<unknown | null>(null);
+  const [fbError, setFbError] = useState<string | null>(null);
+  const [fbSent, setFbSent] = useState<Set<string>>(() => new Set());
+
+  // Reset the FB panel whenever a different event opens.
+  useEffect(() => {
+    setFbOpen(false);
+    setFbResponse(null);
+    setFbError(null);
+    setFbSending(null);
+    setFbSent(new Set(event?.fbSentEvents ?? []));
+  }, [event?.id]);
+
+  const isFbEvent = Boolean(event && (event.isFacebookAds || event.event.startsWith("l_fbclid_")));
+
+  async function sendFbEvent(eventId: string, name: string) {
+    setFbSending(name);
+    setFbError(null);
+    setFbResponse(null);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/usage-events/${eventId}/fb-send`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event_name: name }),
+      });
+      const json: unknown = await res.json().catch(() => ({}));
+      setFbResponse(json);
+      if (!res.ok) {
+        setFbError(`Error ${res.status}`);
+        return;
+      }
+      setFbSent((prev) => new Set(prev).add(name));
+    } catch (e) {
+      setFbError(String(e));
+      setFbResponse({ error: String(e) });
+    } finally {
+      setFbSending(null);
+    }
+  }
 
   if (!event) return null;
   const at = new Date(event.at);
@@ -955,14 +1011,73 @@ function UsageEventDetail({
           ))}
         </div>
 
-        <div className="px-4 py-3 border-t border-border">
+        {isFbEvent && fbOpen ? (
+          <div className="border-t border-border max-h-[40vh] overflow-y-auto">
+            <div className="px-4 py-2 text-[11px] text-muted-foreground uppercase tracking-wider">
+              Meta CAPI — send (live)
+            </div>
+            <div className="divide-y divide-border">
+              {FB_EVENTS.map((fe) => {
+                const alreadySent = fbSent.has(fe.name);
+                const busy = fbSending === fe.name;
+                return (
+                  <button
+                    key={fe.name}
+                    type="button"
+                    onClick={() => void sendFbEvent(event.id, fe.name)}
+                    disabled={Boolean(fbSending)}
+                    className={
+                      "w-full text-left px-4 py-2.5 transition-colors disabled:opacity-50 " +
+                      (alreadySent ? "bg-emerald-500/5" : "hover:bg-muted/40")
+                    }
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-foreground">{fe.name}</span>
+                      {alreadySent ? (
+                        <span className="text-[10px] text-emerald-500 inline-flex items-center gap-0.5">
+                          <Check className="w-3 h-3" /> sent
+                        </span>
+                      ) : null}
+                      {busy ? <span className="text-[10px] text-muted-foreground">sending…</span> : null}
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-0.5">{fe.desc}</div>
+                  </button>
+                );
+              })}
+            </div>
+            {fbError ? (
+              <div className="px-4 py-2 text-[11px] text-red-500 break-all">{fbError}</div>
+            ) : null}
+            {fbResponse !== null ? (
+              <pre className="mx-4 my-2 p-2 text-[10px] font-mono bg-secondary rounded-md text-foreground overflow-auto max-h-48 whitespace-pre-wrap break-all">
+                {JSON.stringify(fbResponse, null, 2)}
+              </pre>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
           <button
             type="button"
             onClick={() => onShowSimilar(event)}
-            className="w-full h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
+            className="flex-1 h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
           >
             Show similar events
           </button>
+          {isFbEvent ? (
+            <button
+              type="button"
+              onClick={() => setFbOpen((v) => !v)}
+              className={
+                "h-9 px-3 text-sm font-medium rounded-md transition-colors shrink-0 " +
+                (fbOpen
+                  ? "bg-[#1877F2] text-white hover:opacity-90"
+                  : "bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20")
+              }
+            >
+              FB-events
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
