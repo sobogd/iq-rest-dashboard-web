@@ -15,8 +15,10 @@ import { apiUrl } from "@/lib/api";
 //     in two minutes, and the token is stored in localStorage on success.
 //   - Errors are inline (no modal) so the staff doesn't lose context.
 
+import type { DeviceType } from "@/lib/device-mode";
+
 interface PairingScreenProps {
-  onPaired: (token: string) => void;
+  onPaired: (token: string, type: DeviceType) => void;
 }
 
 const CODE_LEN = 6;
@@ -109,8 +111,11 @@ export function PairingScreen({ onPaired }: PairingScreenProps) {
         inputsRef.current[0]?.focus();
         return;
       }
-      const data = (await res.json()) as { token: string };
-      onPaired(data.token);
+      const data = (await res.json()) as {
+        token: string;
+        device: { type: DeviceType };
+      };
+      onPaired(data.token, data.device.type);
     } catch {
       setError(t("errorNetwork"));
     } finally {

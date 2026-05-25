@@ -1,18 +1,33 @@
 // Kiosk subdomain runtime mode.
 //
 // The dashboard SPA is served on multiple origins from the same bundle:
-//   - app.iq-rest.com → cookie-authed admin/dashboard
-//   - k.iq-rest.com   → kitchen-display kiosk (device-authed)
-//   - w.iq-rest.com   → waiter terminal kiosk (device-authed)
-//   - r.iq-rest.com   → reservation-board kiosk (device-authed)
+//   - app.iq-rest.com    → cookie-authed admin/dashboard
+//   - device.iq-rest.com → unified kiosk entry (device-authed). One pairing
+//                           screen; the device TYPE returned by the pairing
+//                           response decides which board renders. No per-role
+//                           subdomain needed.
+//   - k/w/r.iq-rest.com  → legacy per-role kiosk hosts. Kept alive so already-
+//                           paired tablets keep working without re-pairing —
+//                           the bundle still treats them as kiosks and the
+//                           board is chosen by the bootstrapped device type,
+//                           not by the host.
 //
-// One-letter subdomains on purpose — staff types this on touchscreen
-// keyboards and every saved character matters. `getKioskRole()` is the
-// single source of truth for the routing branch in main.tsx.
+// `isKioskHost()` decides "mount KitchenApp vs admin" (main.tsx). The render
+// branch itself is driven by the bootstrapped `device.type`, NOT the host —
+// so the unified host needs no role in its name.
 
 const TOKEN_KEY = "iqr_device_token";
+const TYPE_KEY = "iqr_device_type";
 
 export type KioskRole = "kitchen" | "waiter" | "reservation";
+export type DeviceType = "KITCHEN" | "WAITER" | "RESERVATION";
+
+// Legacy per-role host → device type. Used only as a fallback before the
+// device type has been stored (first PATCH right after a deploy on an
+// already-paired tablet). Once the type is persisted it wins.
+export function roleToDeviceType(role: KioskRole): DeviceType {
+  return role === "kitchen" ? "KITCHEN" : role === "waiter" ? "WAITER" : "RESERVATION";
+}
 
 export function getKioskRole(): KioskRole | null {
   if (typeof window === "undefined") return null;
@@ -23,8 +38,36 @@ export function getKioskRole(): KioskRole | null {
   return null;
 }
 
+// Unified kiosk entry host — no role baked into the hostname.
+function isUnifiedKioskHost(): boolean {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname.toLowerCase();
+  return host === "device" || host.startsWith("device.");
+}
+
 export function isKioskHost(): boolean {
-  return getKioskRole() !== null;
+  return getKioskRole() !== null || isUnifiedKioskHost();
+}
+
+// Persisted device type (authoritative once bootstrap has run). Drives the
+// kitchen-only PATCH rewrite in api.ts without depending on the host.
+export function getStoredDeviceType(): DeviceType | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const v = window.localStorage.getItem(TYPE_KEY);
+    return v === "KITCHEN" || v === "WAITER" || v === "RESERVATION" ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setStoredDeviceType(type: DeviceType): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(TYPE_KEY, type);
+  } catch {
+    // ignore
+  }
 }
 
 // Public, no-auth kitchen-display demo. Driven by `?demo=1` so the marketing
@@ -81,6 +124,7 @@ export function clearDeviceToken(): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(TYPE_KEY);
   } catch {
     // ignore
   }

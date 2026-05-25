@@ -5,7 +5,7 @@ import i18n from "i18next";
 import { useTranslations } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import { apiUrl } from "@/lib/api";
-import { clearDeviceToken, getDeviceToken, setDeviceToken, getDemoLang, getDemoZoom } from "@/lib/device-mode";
+import { clearDeviceToken, getDeviceToken, setDeviceToken, setStoredDeviceType, getDemoLang, getDemoZoom, type DeviceType as StoredDeviceType } from "@/lib/device-mode";
 import { buildKitchenDemoSnapshot } from "./demo-data";
 import { PairingScreen } from "./pairing-screen";
 import { KitchenShell } from "./kitchen-shell";
@@ -172,8 +172,12 @@ function KitchenAppBody() {
     setError(null);
   }, []);
 
-  const handlePaired = useCallback((nextToken: string) => {
+  const handlePaired = useCallback((nextToken: string, type: StoredDeviceType) => {
     setDeviceToken(nextToken);
+    // Persist the type so the api-client's KITCHEN PATCH rewrite works on the
+    // unified host (where the hostname carries no role). Bootstrap re-confirms
+    // it below; this just covers the window before the first bootstrap.
+    setStoredDeviceType(type);
     setToken(nextToken);
     setBootstrapping(true);
   }, []);
@@ -227,6 +231,9 @@ function KitchenAppBody() {
   }, [token, fetchBootstrap, handleLogout]);
 
   function applySnapshot(data: BootstrapResponse) {
+    // Authoritative device type — keep the persisted copy in lock-step so the
+    // api-client routes the KITCHEN PATCH rewrite correctly regardless of host.
+    setStoredDeviceType(data.device.type);
     const restaurant = apiRestaurantToRestaurant(data.restaurant);
     const items = data.items.map((it) => ({
       ...it,

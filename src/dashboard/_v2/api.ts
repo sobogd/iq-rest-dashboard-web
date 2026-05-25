@@ -3,27 +3,39 @@
 import type { Ml, DishOption } from "./types";
 import { apiUrl } from "@/lib/api";
 import { activeRestaurantHeader } from "@/lib/active-restaurant";
-import { getDeviceToken, getKioskRole } from "@/lib/device-mode";
+import {
+  getDeviceToken,
+  getKioskRole,
+  getStoredDeviceType,
+  isKioskHost,
+  roleToDeviceType,
+} from "@/lib/device-mode";
 
 // Tiny wrapper around fetch that auto-attaches X-Restaurant-Id and
 // credentials so every call in this module scopes to the active
 // restaurant without us repeating the header per-call.
 //
-// Kiosk-mode branch: when the bundle is loaded from any kiosk host
-// (k.* / w.*) it sends the device bearer instead of the cookie session.
-// Kitchen role additionally rewrites `PATCH /orders/:id` to the
-// locked-down `/api/devices/orders/:id` variant — kitchens are only
-// allowed to flip item statuses, not change payment/table/etc. Waiter
-// kiosks need the full order surface so they hit /api/orders directly
-// (the backend OrdersController guard accepts device tokens).
+// Kiosk-mode branch: when the bundle is loaded from any kiosk host (unified
+// device.* or legacy k/w/r.*) it sends the device bearer instead of the
+// cookie session. A KITCHEN device additionally rewrites `PATCH /orders/:id`
+// to the locked-down `/api/devices/orders/:id` variant — kitchens may only
+// flip item statuses, not change payment/table/etc. WAITER kiosks need the
+// full order surface so they hit /api/orders directly.
+//
+// The device type drives the rewrite, NOT the host: the unified entry host
+// has no role in its name. We read the persisted type (set on pair/bootstrap)
+// and fall back to the legacy host→type map only when it isn't stored yet
+// (first request right after a deploy on an already-paired tablet). The
+// backend enforces the type regardless, so this is a UX nicety not a gate.
 function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
   const headers = new Headers(init.headers || {});
   let target = path;
-  const role = getKioskRole();
-  if (role) {
+  if (isKioskHost()) {
     const token = getDeviceToken();
     if (token) headers.set("Authorization", `Bearer ${token}`);
-    if (role === "kitchen") {
+    const role = getKioskRole();
+    const deviceType = getStoredDeviceType() ?? (role ? roleToDeviceType(role) : null);
+    if (deviceType === "KITCHEN") {
       const orderPatch = init.method === "PATCH" && /^\/api\/orders\/[^/]+$/.test(path);
       if (orderPatch) {
         target = path.replace("/api/orders/", "/api/devices/orders/");

@@ -79,7 +79,10 @@ export function DashboardHost() {
       // monitor up-to-date when the staff has the window in the background.
       {
         queryKey: ["orders"],
-        queryFn: () => api<ApiOrder[]>("/orders"),
+        // The board only renders open orders (completed/cancelled are filtered
+        // out client-side and live in analytics) — fetch just those so the
+        // payload doesn't grow unbounded with history.
+        queryFn: () => api<ApiOrder[]>("/orders?open=1"),
         enabled,
         refetchInterval: 30_000,
         refetchIntervalInBackground: true,
