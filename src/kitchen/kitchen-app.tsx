@@ -571,6 +571,7 @@ function KitchenAppBody() {
                 bookings={snapshot.bookings}
                 setBookings={updateBookings}
                 tables={snapshot.tables}
+                kioskLayout
               />
             </DashboardRouterProvider>
           </RestaurantProvider>

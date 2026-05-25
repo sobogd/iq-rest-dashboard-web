@@ -44,12 +44,18 @@ export function ReservationsPage({
  bookings,
  setBookings,
  tables,
+ kioskLayout = false,
 }: {
  restaurant: Restaurant;
  bookings: Booking[];
  setBookings: React.Dispatch<React.SetStateAction<Booking[]>>;
  tables: TableEntity[];
+ // Reservation kiosk: drop the centered max-width container so the day /
+ // month views stretch edge-to-edge on the tablet, mirroring OrdersPage.
+ kioskLayout?: boolean;
 }) {
+ // Centered + width-capped in the admin tab; full-bleed on the kiosk.
+ const wrapWidth = kioskLayout ? "w-full" : "max-w-5xl mx-auto";
  const t = useTranslations("dashboard.reservations");
  const router = useDashboardRouter();
 
@@ -132,7 +138,7 @@ export function ReservationsPage({
     className="sticky z-10 -mx-4 md:-mx-6 -mt-5 md:-mt-4 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
     style={{ top: "var(--topbar-h, 0px)" }}
    >
-    <div className="max-w-5xl mx-auto md:px-6 w-full flex items-center justify-between gap-3">
+    <div className={wrapWidth + " md:px-6 w-full flex items-center justify-between gap-3"}>
      <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">
       <ViewBtn active={view === "month"} onClick={() => { track("dash_booking_view_month"); setView("month"); }}>
        {t("viewMonth")}
@@ -152,7 +158,7 @@ export function ReservationsPage({
     </div>
    </div>
 
-   <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
+   <div className={wrapWidth + (kioskLayout ? " px-4" : "") + " md:px-6 pt-5 md:pt-4"}>
     {view === "month" ? (
      <div className="lg:flex lg:gap-8 lg:items-stretch">
       <div className="lg:flex-1 lg:min-w-0 lg:flex lg:flex-col lg:h-[calc(100dvh-var(--topbar-h,0px)-160px)]">
