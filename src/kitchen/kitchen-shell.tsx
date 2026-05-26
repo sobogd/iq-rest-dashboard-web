@@ -15,10 +15,16 @@ interface KitchenShellProps {
   children: ReactNode;
 }
 
+// Real devices report the cutout via env(safe-area-inset-top). The landing
+// demo runs inside an iframe with no safe area, so the phone-frame preview
+// drives `--kiosk-notch` instead; take the larger of the two. The backplate
+// is opaque (bg-background), so scrolling content never shows through the gap.
+const TOP_INSET = "max(env(safe-area-inset-top), var(--kiosk-notch, 0px))";
+
 const shellStyle: CSSProperties = {
   // Filter bar honours `top: var(--topbar-h)`; matches the notch height
   // so when used in sticky-mode the bar floats below the cutout.
-  ["--topbar-h" as never]: "env(safe-area-inset-top)",
+  ["--topbar-h" as never]: TOP_INSET,
   paddingLeft: "env(safe-area-inset-left)",
   paddingRight: "env(safe-area-inset-right)",
   paddingBottom: "env(safe-area-inset-bottom)",
@@ -26,7 +32,7 @@ const shellStyle: CSSProperties = {
 };
 
 const notchStyle: CSSProperties = {
-  height: "env(safe-area-inset-top)",
+  height: TOP_INSET,
 };
 
 export function KitchenShell({ children }: KitchenShellProps) {

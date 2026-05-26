@@ -110,19 +110,27 @@ function useDemoLang(): void {
 }
 
 // On the landing, the orders/reservations demo is embedded in a portrait
-// phone frame (with a camera notch) on mobile. The board content otherwise
-// butts against the very top and slips under the notch, so reserve a small
-// top inset when the demo is rendered at a phone-sized width (the iframe's
-// logical width ≈ 350px for the phone frame, ≥680px for the tablet frame).
-function useNotchInset(): number {
-  const [inset, setInset] = useState(0);
+// phone frame (with a camera notch) on mobile. There's no real safe-area
+// inside the iframe, so drive `--kiosk-notch`: KitchenShell uses it for the
+// opaque notch backplate + `--topbar-h`, so the board content starts below
+// the notch and scrolling content never shows through. Phone-sized width
+// only (the iframe's logical width ≈ 350px for the phone frame, ≥680px for
+// the tablet frame).
+function useKioskNotchVar(): void {
   useEffect(() => {
-    const apply = () => setInset(window.innerWidth <= 420 ? 36 : 0);
+    const apply = () => {
+      document.documentElement.style.setProperty(
+        "--kiosk-notch",
+        window.innerWidth <= 420 ? "36px" : "0px",
+      );
+    };
     apply();
     window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
+    return () => {
+      window.removeEventListener("resize", apply);
+      document.documentElement.style.removeProperty("--kiosk-notch");
+    };
   }, []);
-  return inset;
 }
 
 // Public waiter-orders demo. Same wrapping the real WAITER kiosk uses
@@ -130,13 +138,12 @@ function useNotchInset(): number {
 // `demoMode` so every mutation stays local.
 function OrdersDemoBody() {
   useDemoLang();
-  const inset = useNotchInset();
+  useKioskNotchVar();
   const [snapshot] = useState(() => buildKitchenDemoSnapshot(getDemoLang() || "en"));
   const [orders, setOrders] = useState<Order[]>(snapshot.orders);
 
   return (
     <KitchenShell>
-      <div style={{ paddingTop: inset }} className="h-full min-h-0 flex flex-col">
       <RestaurantProvider restaurant={snapshot.restaurant}>
         <DashboardRouterProvider initialPath="/dashboard/orders" locale="en">
           <OrdersPage
@@ -151,7 +158,6 @@ function OrdersDemoBody() {
           />
         </DashboardRouterProvider>
       </RestaurantProvider>
-      </div>
     </KitchenShell>
   );
 }
@@ -160,13 +166,13 @@ function OrdersDemoBody() {
 // hardcoded bookings snapshot with `demoMode` so accept/reject stays local.
 function ReservationsDemoBody() {
   useDemoLang();
-  const inset = useNotchInset();
+  useKioskNotchVar();
   const [snapshot] = useState(() => buildReservationsDemoSnapshot(getDemoLang() || "en"));
   const [bookings, setBookings] = useState<Booking[]>(snapshot.bookings);
 
   return (
     <KitchenShell>
-      <div style={{ paddingTop: inset }} className="flex-1 min-h-0 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto">
       <RestaurantProvider restaurant={snapshot.restaurant}>
         <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
           <ReservationsPage
