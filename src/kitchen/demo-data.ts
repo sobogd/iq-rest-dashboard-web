@@ -393,15 +393,25 @@ function dish(id: string, name: Ml, categoryId: string, sortOrder: number) {
   };
 }
 
+// x/y are percentages on the floor map (left/top). The demo spreads the four
+// tables across the canvas instead of letting them stack at the default 50/50.
+const TABLE_POS: Record<number, { x: number; y: number }> = {
+  1: { x: 26, y: 30 },
+  3: { x: 72, y: 28 },
+  5: { x: 28, y: 72 },
+  8: { x: 74, y: 70 },
+};
+
 function table(number: number, id: string): TableEntity {
+  const pos = TABLE_POS[number] ?? { x: 50, y: 50 };
   return {
     id,
     number,
     name: `Table ${number}`,
     description: "",
     capacity: 4,
-    x: null,
-    y: null,
+    x: pos.x,
+    y: pos.y,
     photoUrl: null,
     color: null,
     sortOrder: number,
