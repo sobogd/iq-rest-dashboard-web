@@ -145,10 +145,20 @@ export function ReservationsPage({
       // margins so the bar's background spans edge-to-edge. The kiosk shell
       // has no horizontal padding to break out of, so keep the bar in-flow —
       // its own px-4/px-6 then gives the content real side padding.
-      (kioskLayout ? "" : "-mx-4 md:-mx-6 -mt-5 md:-mt-4") +
-      " sticky z-10 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
+      (kioskLayout
+        ? "bg-subheader min-h-14"
+        : "-mx-4 md:-mx-6 -mt-5 md:-mt-4 h-14 bg-subheader/90 backdrop-blur-md") +
+      " sticky z-10 px-4 md:px-6 flex items-center border-b border-border md:border-border/60"
     }
-    style={{ top: "var(--topbar-h, 0px)" }}
+    style={
+      kioskLayout
+        ? // In the embedded phone-frame demo there's no real safe area, so the
+          // preview passes the notch height via --kiosk-notch. Add it as opaque
+          // top padding here so the bar covers the cutout and content scrolls
+          // beneath it. Real devices keep env() via the shell.
+          { top: 0, paddingTop: "var(--kiosk-notch, 0px)" }
+        : { top: "var(--topbar-h, 0px)" }
+    }
    >
     <div className={(kioskLayout ? "w-full" : "max-w-5xl mx-auto md:px-6 w-full") + " flex items-center justify-between gap-3"}>
      <div className="flex items-center rounded-lg border border-border bg-card overflow-hidden">

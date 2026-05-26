@@ -119,9 +119,13 @@ function useDemoLang(): void {
 function useKioskNotchVar(): void {
   useEffect(() => {
     const apply = () => {
+      // Portrait viewport ⇒ rendered in the phone frame (with the camera
+      // notch / Dynamic Island); landscape ⇒ tablet frame (tiny dot, no
+      // inset needed). Robust regardless of the exact iframe pixel width.
+      const portrait = window.innerHeight > window.innerWidth;
       document.documentElement.style.setProperty(
         "--kiosk-notch",
-        window.innerWidth <= 420 ? "36px" : "0px",
+        portrait ? "52px" : "0px",
       );
     };
     apply();
