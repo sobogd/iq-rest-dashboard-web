@@ -109,16 +109,34 @@ function useDemoLang(): void {
   }, []);
 }
 
+// On the landing, the orders/reservations demo is embedded in a portrait
+// phone frame (with a camera notch) on mobile. The board content otherwise
+// butts against the very top and slips under the notch, so reserve a small
+// top inset when the demo is rendered at a phone-sized width (the iframe's
+// logical width ≈ 350px for the phone frame, ≥680px for the tablet frame).
+function useNotchInset(): number {
+  const [inset, setInset] = useState(0);
+  useEffect(() => {
+    const apply = () => setInset(window.innerWidth <= 420 ? 28 : 0);
+    apply();
+    window.addEventListener("resize", apply);
+    return () => window.removeEventListener("resize", apply);
+  }, []);
+  return inset;
+}
+
 // Public waiter-orders demo. Same wrapping the real WAITER kiosk uses
 // (RestaurantProvider + scoped SPA router), fed the hardcoded snapshot with
 // `demoMode` so every mutation stays local.
 function OrdersDemoBody() {
   useDemoLang();
+  const inset = useNotchInset();
   const [snapshot] = useState(() => buildKitchenDemoSnapshot(getDemoLang() || "en"));
   const [orders, setOrders] = useState<Order[]>(snapshot.orders);
 
   return (
     <KitchenShell>
+      <div style={{ paddingTop: inset }} className="h-full min-h-0 flex flex-col">
       <RestaurantProvider restaurant={snapshot.restaurant}>
         <DashboardRouterProvider initialPath="/dashboard/orders" locale="en">
           <OrdersPage
@@ -133,6 +151,7 @@ function OrdersDemoBody() {
           />
         </DashboardRouterProvider>
       </RestaurantProvider>
+      </div>
     </KitchenShell>
   );
 }
@@ -141,11 +160,13 @@ function OrdersDemoBody() {
 // hardcoded bookings snapshot with `demoMode` so accept/reject stays local.
 function ReservationsDemoBody() {
   useDemoLang();
+  const inset = useNotchInset();
   const [snapshot] = useState(() => buildReservationsDemoSnapshot(getDemoLang() || "en"));
   const [bookings, setBookings] = useState<Booking[]>(snapshot.bookings);
 
   return (
     <KitchenShell>
+      <div style={{ paddingTop: inset }} className="h-full min-h-0 flex flex-col">
       <RestaurantProvider restaurant={snapshot.restaurant}>
         <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
           <ReservationsPage
@@ -158,6 +179,7 @@ function ReservationsDemoBody() {
           />
         </DashboardRouterProvider>
       </RestaurantProvider>
+      </div>
     </KitchenShell>
   );
 }
