@@ -742,7 +742,9 @@
       "periodThisWeek": "Šią savaitę",
       "scopeActive": "Aktyvus restoranas",
       "scopeAll": "Visi restoranai",
-      "discountGiven": "Nuolaida"
+      "discountGiven": "Nuolaida",
+      "byPaymentMethod": "Pagal mokėjimo būdą",
+      "paymentUnspecified": "Nenurodyta"
     },
     "auth": {
       "title": "Sukurkite savo meniu",

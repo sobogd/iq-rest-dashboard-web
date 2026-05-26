@@ -742,7 +742,9 @@
       "periodThisWeek": "Aquesta setmana",
       "scopeActive": "Restaurant actiu",
       "scopeAll": "Tots els restaurants",
-      "discountGiven": "Descompte"
+      "discountGiven": "Descompte",
+      "byPaymentMethod": "Per mètode de pagament",
+      "paymentUnspecified": "No especificat"
     },
     "auth": {
       "title": "Crea el teu menú",

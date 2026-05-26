@@ -742,7 +742,9 @@
       "periodThisWeek": "An tseachtain seo",
       "scopeActive": "Bialann gníomhach",
       "scopeAll": "Gach bialann",
-      "discountGiven": "Lascaine"
+      "discountGiven": "Lascaine",
+      "byPaymentMethod": "De réir modh íocaíochta",
+      "paymentUnspecified": "Gan sonrú"
     },
     "auth": {
       "title": "Cruthaigh do bhiachlár",

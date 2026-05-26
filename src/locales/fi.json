@@ -742,7 +742,9 @@
       "periodThisWeek": "Tällä viikolla",
       "scopeActive": "Aktiivinen ravintola",
       "scopeAll": "Kaikki ravintolat",
-      "discountGiven": "Alennus"
+      "discountGiven": "Alennus",
+      "byPaymentMethod": "Maksutavan mukaan",
+      "paymentUnspecified": "Ei määritetty"
     },
     "auth": {
       "title": "Luo menusi",

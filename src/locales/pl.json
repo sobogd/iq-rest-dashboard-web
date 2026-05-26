@@ -742,7 +742,9 @@
       "periodThisWeek": "Ten tydzień",
       "scopeActive": "Aktywna restauracja",
       "scopeAll": "Wszystkie restauracje",
-      "discountGiven": "Rabat"
+      "discountGiven": "Rabat",
+      "byPaymentMethod": "Według metody płatności",
+      "paymentUnspecified": "Nie określono"
     },
     "auth": {
       "title": "Stwórz swoje menu",

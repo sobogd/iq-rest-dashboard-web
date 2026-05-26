@@ -742,7 +742,9 @@
       "periodThisWeek": "Ова недеља",
       "scopeActive": "Активан ресторан",
       "scopeAll": "Сви ресторани",
-      "discountGiven": "Попуст"
+      "discountGiven": "Попуст",
+      "byPaymentMethod": "По начину плаћања",
+      "paymentUnspecified": "Није наведено"
     },
     "auth": {
       "title": "Napravite svoj meni",

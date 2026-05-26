@@ -742,7 +742,9 @@
       "periodThisWeek": "Tento týden",
       "scopeActive": "Aktivní restaurace",
       "scopeAll": "Všechny restaurace",
-      "discountGiven": "Sleva"
+      "discountGiven": "Sleva",
+      "byPaymentMethod": "Podle způsobu platby",
+      "paymentUnspecified": "Neuvedeno"
     },
     "auth": {
       "title": "Vytvořte své menu",

@@ -742,7 +742,9 @@
       "periodThisWeek": "Sel nädalal",
       "scopeActive": "Aktiivne restoran",
       "scopeAll": "Kõik restoranid",
-      "discountGiven": "Allahindlus"
+      "discountGiven": "Allahindlus",
+      "byPaymentMethod": "Makseviisi järgi",
+      "paymentUnspecified": "Määramata"
     },
     "auth": {
       "title": "Loo oma menüü",

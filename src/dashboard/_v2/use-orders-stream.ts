@@ -264,16 +264,43 @@ function applyEvent(qc: QueryClient, event: OrderEvent): void {
   }
 
   if (event.action === "updated") {
+    // The board cache holds OPEN orders only (status notIn completed/cancelled).
+    // When an order is closed on another device the server emits `updated` with
+    // the now-closed body — upserting it would resurrect it on every other
+    // client. Drop it from the cache instead so the board self-cleans live.
+    if (isClosed(event.order)) {
+      const id = orderId(event.order);
+      if (id) qc.setQueryData<unknown[]>(key, existing.filter(byId((x) => x !== id)));
+      return;
+    }
     qc.setQueryData<unknown[]>(key, mergeUpsert(existing, [event.order]));
     return;
   }
 
   if (event.action === "split") {
-    const next = [event.order];
-    if (event.createdOrder) next.push(event.createdOrder);
-    qc.setQueryData<unknown[]>(key, mergeUpsert(existing, next));
+    // Same open-only rule for the source order; the freshly created split is
+    // always open.
+    let next = existing;
+    if (isClosed(event.order)) {
+      const id = orderId(event.order);
+      if (id) next = next.filter(byId((x) => x !== id));
+    } else {
+      next = mergeUpsert(next, [event.order]);
+    }
+    if (event.createdOrder) next = mergeUpsert(next, [event.createdOrder]);
+    qc.setQueryData<unknown[]>(key, next);
     return;
   }
+}
+
+const CLOSED_STATUSES = new Set(["completed", "cancelled"]);
+function isClosed(o: unknown): boolean {
+  const s = (o as { status?: string })?.status;
+  return typeof s === "string" && CLOSED_STATUSES.has(s);
+}
+function orderId(o: unknown): string | undefined {
+  const id = (o as { id?: string })?.id;
+  return typeof id === "string" ? id : undefined;
 }
 
 function byId(predicate: (id: string) => boolean) {

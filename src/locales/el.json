@@ -742,7 +742,9 @@
       "periodThisWeek": "Αυτή την εβδομάδα",
       "scopeActive": "Ενεργό εστιατόριο",
       "scopeAll": "Όλα τα εστιατόρια",
-      "discountGiven": "Έκπτωση"
+      "discountGiven": "Έκπτωση",
+      "byPaymentMethod": "Ανά τρόπο πληρωμής",
+      "paymentUnspecified": "Δεν προσδιορίζεται"
     },
     "auth": {
       "title": "Δημιουργήστε το μενού σας",

@@ -742,7 +742,9 @@
       "periodThisWeek": "Cette semaine",
       "scopeActive": "Restaurant actif",
       "scopeAll": "Tous les restaurants",
-      "discountGiven": "Remise"
+      "discountGiven": "Remise",
+      "byPaymentMethod": "Par moyen de paiement",
+      "paymentUnspecified": "Non spécifié"
     },
     "auth": {
       "title": "Créez votre menu",

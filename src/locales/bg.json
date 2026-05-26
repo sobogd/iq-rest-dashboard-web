@@ -742,7 +742,9 @@
       "periodThisWeek": "Тази седмица",
       "scopeActive": "Активен ресторант",
       "scopeAll": "Всички ресторанти",
-      "discountGiven": "Отстъпка"
+      "discountGiven": "Отстъпка",
+      "byPaymentMethod": "По метод на плащане",
+      "paymentUnspecified": "Не е посочено"
     },
     "auth": {
       "title": "Създайте вашето меню",

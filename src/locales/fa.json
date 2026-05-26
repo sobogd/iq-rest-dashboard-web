@@ -742,7 +742,9 @@
       "periodThisWeek": "این هفته",
       "scopeActive": "رستوران فعال",
       "scopeAll": "همه رستوران‌ها",
-      "discountGiven": "تخفیف"
+      "discountGiven": "تخفیف",
+      "byPaymentMethod": "بر اساس روش پرداخت",
+      "paymentUnspecified": "مشخص نشده"
     },
     "auth": {
       "title": "منوی خود را بسازید",

@@ -742,7 +742,9 @@
       "periodThisWeek": "Tento týždeň",
       "scopeActive": "Aktívna reštaurácia",
       "scopeAll": "Všetky reštaurácie",
-      "discountGiven": "Zľava"
+      "discountGiven": "Zľava",
+      "byPaymentMethod": "Podľa spôsobu platby",
+      "paymentUnspecified": "Neuvedené"
     },
     "auth": {
       "title": "Vytvorte si menu",

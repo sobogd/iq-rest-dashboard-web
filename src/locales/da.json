@@ -742,7 +742,9 @@
       "periodThisWeek": "Denne uge",
       "scopeActive": "Aktiv restaurant",
       "scopeAll": "Alle restauranter",
-      "discountGiven": "Rabat"
+      "discountGiven": "Rabat",
+      "byPaymentMethod": "Efter betalingsmetode",
+      "paymentUnspecified": "Ikke angivet"
     },
     "auth": {
       "title": "Lav din menu",

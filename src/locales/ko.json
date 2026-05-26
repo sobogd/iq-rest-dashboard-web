@@ -742,7 +742,9 @@
       "periodThisWeek": "이번 주",
       "scopeActive": "활성 레스토랑",
       "scopeAll": "모든 레스토랑",
-      "discountGiven": "할인"
+      "discountGiven": "할인",
+      "byPaymentMethod": "결제 수단별",
+      "paymentUnspecified": "미지정"
     },
     "auth": {
       "title": "메뉴 만들기",

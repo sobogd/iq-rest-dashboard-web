@@ -817,7 +817,9 @@
       "size6": "6+ items",
       "pieces": "pcs",
       "exportCsv": "Export CSV",
-      "periodThisWeek": "This week"
+      "periodThisWeek": "This week",
+      "byPaymentMethod": "By payment method",
+      "paymentUnspecified": "Not specified"
     },
     "auth": {
       "title": "Create your menu",

@@ -742,7 +742,9 @@
       "periodThisWeek": "Þessa viku",
       "scopeActive": "Virkur veitingastaður",
       "scopeAll": "Allir veitingastaðir",
-      "discountGiven": "Afsláttur"
+      "discountGiven": "Afsláttur",
+      "byPaymentMethod": "Eftir greiðslumáta",
+      "paymentUnspecified": "Ekki tilgreint"
     },
     "auth": {
       "title": "Búðu til matseðilinn þinn",

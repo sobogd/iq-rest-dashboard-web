@@ -742,7 +742,9 @@
       "periodThisWeek": "Ta teden",
       "scopeActive": "Aktivna restavracija",
       "scopeAll": "Vse restavracije",
-      "discountGiven": "Popust"
+      "discountGiven": "Popust",
+      "byPaymentMethod": "Po načinu plačila",
+      "paymentUnspecified": "Ni določeno"
     },
     "auth": {
       "title": "Ustvarite svoj meni",

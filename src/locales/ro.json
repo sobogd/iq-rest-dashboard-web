@@ -742,7 +742,9 @@
       "periodThisWeek": "Săptămâna aceasta",
       "scopeActive": "Restaurant activ",
       "scopeAll": "Toate restaurantele",
-      "discountGiven": "Reducere"
+      "discountGiven": "Reducere",
+      "byPaymentMethod": "După metoda de plată",
+      "paymentUnspecified": "Nespecificat"
     },
     "auth": {
       "title": "Creează-ți meniul",

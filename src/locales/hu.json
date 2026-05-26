@@ -742,7 +742,9 @@
       "periodThisWeek": "Ezen a héten",
       "scopeActive": "Aktív étterem",
       "scopeAll": "Összes étterem",
-      "discountGiven": "Kedvezmény"
+      "discountGiven": "Kedvezmény",
+      "byPaymentMethod": "Fizetési mód szerint",
+      "paymentUnspecified": "Nincs megadva"
     },
     "auth": {
       "title": "Hozd létre az étlapod",

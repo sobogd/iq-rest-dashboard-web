@@ -742,7 +742,9 @@
       "periodThisWeek": "Bu hafta",
       "scopeActive": "Aktif restoran",
       "scopeAll": "Tüm restoranlar",
-      "discountGiven": "İndirim"
+      "discountGiven": "İndirim",
+      "byPaymentMethod": "Ödeme yöntemine göre",
+      "paymentUnspecified": "Belirtilmemiş"
     },
     "auth": {
       "title": "Menünüzü oluşturun",

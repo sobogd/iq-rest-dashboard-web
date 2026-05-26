@@ -742,7 +742,9 @@
       "periodThisWeek": "هذا الأسبوع",
       "scopeActive": "المطعم النشط",
       "scopeAll": "جميع المطاعم",
-      "discountGiven": "الخصم"
+      "discountGiven": "الخصم",
+      "byPaymentMethod": "حسب طريقة الدفع",
+      "paymentUnspecified": "غير محدد"
     },
     "auth": {
       "title": "أنشئ قائمتك",

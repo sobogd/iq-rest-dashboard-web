@@ -98,12 +98,22 @@ function ShellBody(props: ShellInitialData) {
     }
   }, [restaurant?.id, props.initialOrders, props.initialBookings]);
 
-  // Sync polled data from TanStack Query (dashboard-host refetchInterval: 30s).
-  // Merge keeps locally-created records not yet returned by the server.
+  // Sync from TanStack Query (SSE-fed cache + 30s poll fallback). Keep only
+  // *freshly* created local records that the server snapshot hasn't echoed back
+  // yet — bounded to a short optimistic window. Without the bound, an order
+  // closed/removed on another device (and therefore absent from the snapshot)
+  // would be re-added here as "local-only" forever, so it never disappeared
+  // until F5. The server is authoritative for everything older than the window.
   useEffect(() => {
     setOrders((prev) => {
       const serverIds = new Set(props.initialOrders.map((o) => o.id));
-      const localOnly = prev.filter((o) => !serverIds.has(o.id));
+      const now = Date.now();
+      const OPTIMISTIC_WINDOW_MS = 15_000;
+      const localOnly = prev.filter((o) => {
+        if (serverIds.has(o.id)) return false;
+        const created = o.createdAt ? new Date(o.createdAt).getTime() : 0;
+        return Number.isFinite(created) && now - created < OPTIMISTIC_WINDOW_MS;
+      });
       return [...props.initialOrders, ...localOnly];
     });
   }, [props.initialOrders]);

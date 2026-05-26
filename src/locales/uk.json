@@ -742,7 +742,9 @@
       "periodThisWeek": "Цей тиждень",
       "scopeActive": "Активний ресторан",
       "scopeAll": "Усі ресторани",
-      "discountGiven": "Знижка"
+      "discountGiven": "Знижка",
+      "byPaymentMethod": "За способом оплати",
+      "paymentUnspecified": "Не вказано"
     },
     "auth": {
       "title": "Створіть своє меню",

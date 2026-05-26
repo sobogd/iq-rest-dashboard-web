@@ -742,7 +742,9 @@
       "periodThisWeek": "Deze week",
       "scopeActive": "Actief restaurant",
       "scopeAll": "Alle restaurants",
-      "discountGiven": "Korting"
+      "discountGiven": "Korting",
+      "byPaymentMethod": "Per betaalmethode",
+      "paymentUnspecified": "Niet opgegeven"
     },
     "auth": {
       "title": "Maak uw menu",

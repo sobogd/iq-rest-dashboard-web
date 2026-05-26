@@ -742,7 +742,9 @@
       "periodThisWeek": "Šonedēļ",
       "scopeActive": "Aktīvs restorāns",
       "scopeAll": "Visi restorāni",
-      "discountGiven": "Atlaide"
+      "discountGiven": "Atlaide",
+      "byPaymentMethod": "Pēc maksājuma veida",
+      "paymentUnspecified": "Nav norādīts"
     },
     "auth": {
       "title": "Izveidojiet savu ēdienkarti",

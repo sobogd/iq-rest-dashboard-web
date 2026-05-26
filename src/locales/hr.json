@@ -742,7 +742,9 @@
       "periodThisWeek": "Ovaj tjedan",
       "scopeActive": "Aktivan restoran",
       "scopeAll": "Svi restorani",
-      "discountGiven": "Popust"
+      "discountGiven": "Popust",
+      "byPaymentMethod": "Po načinu plaćanja",
+      "paymentUnspecified": "Nije navedeno"
     },
     "auth": {
       "title": "Stvorite svoj jelovnik",

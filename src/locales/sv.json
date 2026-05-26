@@ -742,7 +742,9 @@
       "periodThisWeek": "Denna vecka",
       "scopeActive": "Aktiv restaurang",
       "scopeAll": "Alla restauranger",
-      "discountGiven": "Rabatt"
+      "discountGiven": "Rabatt",
+      "byPaymentMethod": "Per betalningsmetod",
+      "paymentUnspecified": "Ej angivet"
     },
     "auth": {
       "title": "Skapa din meny",

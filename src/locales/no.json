@@ -742,7 +742,9 @@
       "periodThisWeek": "Denne uken",
       "scopeActive": "Aktiv restaurant",
       "scopeAll": "Alle restauranter",
-      "discountGiven": "Rabatt"
+      "discountGiven": "Rabatt",
+      "byPaymentMethod": "Etter betalingsmåte",
+      "paymentUnspecified": "Ikke angitt"
     },
     "auth": {
       "title": "Lag menyen din",

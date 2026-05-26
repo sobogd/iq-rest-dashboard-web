@@ -742,7 +742,9 @@
       "periodThisWeek": "Diese Woche",
       "scopeActive": "Aktives Restaurant",
       "scopeAll": "Alle Restaurants",
-      "discountGiven": "Rabatt"
+      "discountGiven": "Rabatt",
+      "byPaymentMethod": "Nach Zahlungsart",
+      "paymentUnspecified": "Nicht angegeben"
     },
     "auth": {
       "title": "Erstellen Sie Ihre Karte",

@@ -742,7 +742,9 @@
       "periodThisWeek": "Эта неделя",
       "scopeActive": "Активный ресторан",
       "scopeAll": "Все рестораны",
-      "discountGiven": "Скидка"
+      "discountGiven": "Скидка",
+      "byPaymentMethod": "По способу оплаты",
+      "paymentUnspecified": "Не указан"
     },
     "auth": {
       "title": "Создайте своё меню",

@@ -24,6 +24,8 @@ interface OrderStats {
   topByRevenue: OrderItem[];
   topByQuantity: OrderItem[];
   sizeBuckets: { "1": number; "2-3": number; "4-5": number; "6+": number };
+  paymentMethods: string[];
+  byPaymentMethod: { method: string; revenue: number; orders: number }[];
 }
 
 interface Stats {
@@ -200,6 +202,9 @@ export function AnalyticsClient() {
                     byDayPrev={stats.orders.byDayPrev}
                     currency={stats.orders.currency}
                   />
+                ) : null}
+                {stats.orders.paymentMethods.length > 1 ? (
+                  <PaymentMethodBreakdown orders={stats.orders} />
                 ) : null}
               </>
             ) : null}
@@ -568,6 +573,41 @@ function OrderSizes({ sizeBuckets }: { sizeBuckets: OrderStats["sizeBuckets"] })
               </div>
               <div className="text-xs text-muted-foreground tabular-nums w-16 text-right shrink-0">
                 {n} ({pct}%)
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PaymentMethodBreakdown({ orders }: { orders: OrderStats }) {
+  const t = useTranslations("dashboard.analyticsDashboard");
+  const tpm = useTranslations("dashboard.paymentMethods");
+  const rows = orders.byPaymentMethod;
+  const totalRev = rows.reduce((s, r) => s + r.revenue, 0);
+  if (rows.length === 0) return null;
+  const label = (m: string) =>
+    m === "unspecified"
+      ? t("paymentUnspecified", { defaultValue: "Not specified" })
+      : tpm(m, { defaultValue: m });
+  return (
+    <div className="bg-card border border-border rounded-2xl p-4 md:p-5">
+      <div className="text-sm font-medium text-foreground mb-3">
+        {t("byPaymentMethod", { defaultValue: "By payment method" })}
+      </div>
+      <div className="space-y-2">
+        {rows.map((r) => {
+          const pct = totalRev > 0 ? Math.round((r.revenue / totalRev) * 100) : 0;
+          return (
+            <div key={r.method} className="flex items-center gap-3">
+              <div className="text-xs text-foreground w-24 truncate shrink-0">{label(r.method)}</div>
+              <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                <div className="h-full bg-primary/80 rounded-full" style={{ width: `${pct}%` }} />
+              </div>
+              <div className="text-xs text-muted-foreground tabular-nums w-28 text-right shrink-0">
+                {formatCurrency(r.revenue, orders.currency)} · {r.orders}
               </div>
             </div>
           );
