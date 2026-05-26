@@ -24,8 +24,8 @@ interface OrderStats {
   topByRevenue: OrderItem[];
   topByQuantity: OrderItem[];
   sizeBuckets: { "1": number; "2-3": number; "4-5": number; "6+": number };
-  paymentMethods: string[];
-  byPaymentMethod: { method: string; revenue: number; orders: number }[];
+  paymentMethods?: string[];
+  byPaymentMethod?: { method: string; revenue: number; orders: number }[];
 }
 
 interface Stats {
@@ -203,7 +203,7 @@ export function AnalyticsClient() {
                     currency={stats.orders.currency}
                   />
                 ) : null}
-                {stats.orders.paymentMethods.length > 1 ? (
+                {(stats.orders.paymentMethods?.length ?? 0) > 1 ? (
                   <PaymentMethodBreakdown orders={stats.orders} />
                 ) : null}
               </>
@@ -585,7 +585,7 @@ function OrderSizes({ sizeBuckets }: { sizeBuckets: OrderStats["sizeBuckets"] })
 function PaymentMethodBreakdown({ orders }: { orders: OrderStats }) {
   const t = useTranslations("dashboard.analyticsDashboard");
   const tpm = useTranslations("dashboard.paymentMethods");
-  const rows = orders.byPaymentMethod;
+  const rows = orders.byPaymentMethod ?? [];
   const totalRev = rows.reduce((s, r) => s + r.revenue, 0);
   if (rows.length === 0) return null;
   const label = (m: string) =>
