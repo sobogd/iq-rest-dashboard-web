@@ -117,7 +117,7 @@ function useDemoLang(): void {
 function useNotchInset(): number {
   const [inset, setInset] = useState(0);
   useEffect(() => {
-    const apply = () => setInset(window.innerWidth <= 420 ? 28 : 0);
+    const apply = () => setInset(window.innerWidth <= 420 ? 36 : 0);
     apply();
     window.addEventListener("resize", apply);
     return () => window.removeEventListener("resize", apply);
@@ -166,7 +166,7 @@ function ReservationsDemoBody() {
 
   return (
     <KitchenShell>
-      <div style={{ paddingTop: inset }} className="h-full min-h-0 flex flex-col">
+      <div style={{ paddingTop: inset }} className="flex-1 min-h-0 overflow-y-auto">
       <RestaurantProvider restaurant={snapshot.restaurant}>
         <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
           <ReservationsPage
@@ -647,6 +647,9 @@ function KitchenAppBody() {
           // Like the waiter terminal it needs the SPA router (the page calls
           // useDashboardRouter for its empty-state CTA) and a restaurant
           // context, both scoped to this single tab.
+          // Reservations is a document-scroll page; the shell is a fixed-
+          // height overflow-hidden column, so give it its own scroll area.
+          <div className="flex-1 min-h-0 overflow-y-auto">
           <RestaurantProvider restaurant={snapshot.restaurant}>
             <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
               <ReservationsPage
@@ -658,6 +661,7 @@ function KitchenAppBody() {
               />
             </DashboardRouterProvider>
           </RestaurantProvider>
+          </div>
         ) : snapshot.deviceType === "WAITER" ? (
           // Waiter kiosk reuses the admin OrdersPage verbatim — its own
           // internal navigation between table list / order detail / item

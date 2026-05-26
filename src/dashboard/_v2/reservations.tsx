@@ -145,7 +145,7 @@ export function ReservationsPage({
       // margins so the bar's background spans edge-to-edge. The kiosk shell
       // has no horizontal padding to break out of, so keep the bar in-flow —
       // its own px-4/px-6 then gives the content real side padding.
-      (kioskLayout ? "-mt-5 md:-mt-4" : "-mx-4 md:-mx-6 -mt-5 md:-mt-4") +
+      (kioskLayout ? "" : "-mx-4 md:-mx-6 -mt-5 md:-mt-4") +
       " sticky z-10 px-4 md:px-6 h-14 flex items-center bg-subheader/90 backdrop-blur-md border-b border-border md:border-border/60"
     }
     style={{ top: "var(--topbar-h, 0px)" }}
