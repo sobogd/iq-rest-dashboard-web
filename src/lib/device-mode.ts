@@ -70,13 +70,30 @@ export function setStoredDeviceType(type: DeviceType): void {
   }
 }
 
-// Public, no-auth kitchen-display demo. Driven by `?demo=1` so the marketing
-// landing can embed a real KDS in an iframe (tablet frame) without pairing a
+// Public, no-auth board demos. Driven by `?demo=<board>` so the marketing
+// landing can embed a real board in an iframe (device frame) without pairing a
 // device or touching the API. Recognised on any host (not just k.*) so it
 // also works in local dev. Optional `lang` query picks the UI language.
+//
+//   ?demo=1            → kitchen (legacy value, kept for already-deployed
+//                        landing embeds)
+//   ?demo=kitchen      → kitchen-display kiosk
+//   ?demo=orders       → waiter orders board
+//   ?demo=reservations → reservations board
+export type DemoBoard = "kitchen" | "orders" | "reservations";
+
+export function getDemoBoard(): DemoBoard | null {
+  if (typeof window === "undefined") return null;
+  const v = new URLSearchParams(window.location.search).get("demo");
+  if (!v) return null;
+  if (v === "1" || v === "kitchen") return "kitchen";
+  if (v === "orders") return "orders";
+  if (v === "reservations") return "reservations";
+  return null;
+}
+
 export function isDemoMode(): boolean {
-  if (typeof window === "undefined") return false;
-  return new URLSearchParams(window.location.search).get("demo") === "1";
+  return getDemoBoard() !== null;
 }
 
 export function getDemoLang(): string | null {

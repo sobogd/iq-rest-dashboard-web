@@ -45,6 +45,7 @@ export function ReservationsPage({
  setBookings,
  tables,
  kioskLayout = false,
+ demoMode = false,
 }: {
  restaurant: Restaurant;
  bookings: Booking[];
@@ -53,6 +54,9 @@ export function ReservationsPage({
  // Reservation kiosk: drop the centered max-width container so the day /
  // month views stretch edge-to-edge on the tablet, mirroring OrdersPage.
  kioskLayout?: boolean;
+ // Public landing demo: accept/reject runs on local state only — no API.
+ // A reload resets the board.
+ demoMode?: boolean;
 }) {
  // Centered + width-capped in the admin tab; full-bleed on the kiosk.
  const wrapWidth = kioskLayout ? "w-full" : "max-w-5xl mx-auto";
@@ -123,6 +127,7 @@ export function ReservationsPage({
   else if (status === "cancelled") track("dash_booking_reject");
   const before = bookings;
   setBookings((bks) => bks.map((b) => (b.id === id ? { ...b, status } : b)));
+  if (demoMode) return;
   try {
    await patchReservation(id, { status });
   } catch {

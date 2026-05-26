@@ -14,12 +14,14 @@
 // Espresso, Tiramisù, Bruschetta) carry only en/es.
 
 import type {
+  Booking,
   Category,
   Ml,
   Order,
   OrderItem,
   OrderItemOptionSnapshot,
   OrderItemStatus,
+  ReservationSchedule,
   Restaurant,
   TableEntity,
 } from "@/dashboard/_v2/types";
@@ -31,6 +33,12 @@ export interface KitchenDemoSnapshot {
   tables: TableEntity[];
   orders: Order[];
   tablesByNumber: Map<number, string>;
+}
+
+export interface ReservationsDemoSnapshot {
+  restaurant: Restaurant;
+  tables: TableEntity[];
+  bookings: Booking[];
 }
 
 // Minutes-ago → ISO string, evaluated per call so the "time on the pass"
@@ -457,4 +465,101 @@ function buildDemoRestaurant(lang: string): Restaurant {
     },
     subscription: { plan: null, status: null, renewsAt: null },
   };
+}
+
+// --- reservations demo ------------------------------------------------------
+// Public, no-auth reservations-board demo (?demo=reservations). Mirrors the
+// shape ReservationsPage consumes: a restaurant with booking enabled + a
+// week schedule, the same tables, and a spread of bookings. Accept/reject
+// runs on local optimistic state only (ReservationsPage `demoMode`), so a
+// reload resets the board.
+
+// Open 10:00–23:00 every day so the day-view grid has a realistic range and
+// no day is striped as closed.
+const DEMO_SCHEDULE: ReservationSchedule = Array.from({ length: 7 }, () => ({
+  closed: false,
+  from: "10:00",
+  to: "23:00",
+  lunchFrom: null,
+  lunchTo: null,
+}));
+
+// Guest names stay in the Latin alphabet — Booking.guestName is a plain
+// string (not Ml), and these read naturally across every locale.
+const GUESTS = [
+  "Marco Rossi", "Sofia Garcia", "Liam O'Brien", "Emma Müller", "Noah Dubois",
+  "Olivia Silva", "Lucas Bianchi", "Mia Fernández", "Hugo Martin", "Chloé Laurent",
+] as const;
+
+// Date today (or dayOffset days away) at HH:MM, local time → ISO.
+function dayAt(hour: number, min: number, dayOffset: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + dayOffset);
+  d.setHours(hour, min, 0, 0);
+  return d.toISOString();
+}
+
+let bookingSeq = 0;
+function booking(
+  guest: string,
+  datetime: string,
+  guests: number,
+  tableId: string | null,
+  status: Booking["status"],
+): Booking {
+  bookingSeq += 1;
+  return {
+    id: `demo-booking-${bookingSeq}`,
+    guestName: guest,
+    guestEmail: `${guest.split(" ")[0]?.toLowerCase()}@example.com`,
+    guestPhone: null,
+    datetime,
+    duration: 90,
+    guests,
+    tableId,
+    status,
+    notes: "",
+  };
+}
+
+export function buildReservationsDemoSnapshot(lang: string): ReservationsDemoSnapshot {
+  bookingSeq = 0;
+
+  const tables: TableEntity[] = [
+    table(1, "demo-table-1"),
+    table(3, "demo-table-3"),
+    table(5, "demo-table-5"),
+    table(8, "demo-table-8"),
+  ];
+
+  const bookings: Booking[] = [
+    // Today — a mix of pending (needs accept/reject) and already confirmed,
+    // spread across lunch and dinner so both the day grid and the pending
+    // list have content.
+    booking(GUESTS[0], dayAt(13, 0, 0), 2, "demo-table-1", "confirmed"),
+    booking(GUESTS[1], dayAt(13, 30, 0), 4, "demo-table-5", "pending"),
+    booking(GUESTS[2], dayAt(14, 0, 0), 3, "demo-table-3", "confirmed"),
+    booking(GUESTS[3], dayAt(19, 0, 0), 2, "demo-table-1", "pending"),
+    booking(GUESTS[4], dayAt(19, 30, 0), 6, "demo-table-8", "confirmed"),
+    booking(GUESTS[5], dayAt(20, 0, 0), 4, "demo-table-5", "pending"),
+    booking(GUESTS[6], dayAt(21, 0, 0), 2, "demo-table-3", "confirmed"),
+    // Other days this month → dots on the month calendar.
+    booking(GUESTS[7], dayAt(20, 0, 2), 4, "demo-table-5", "confirmed"),
+    booking(GUESTS[8], dayAt(13, 0, 3), 2, "demo-table-1", "pending"),
+    booking(GUESTS[9], dayAt(19, 30, 5), 5, "demo-table-8", "confirmed"),
+    booking(GUESTS[0], dayAt(21, 0, -2), 2, "demo-table-3", "completed"),
+  ];
+
+  const restaurant: Restaurant = {
+    ...buildDemoRestaurant(lang),
+    bookingSettings: {
+      enabled: true,
+      approval: "manual",
+      duration: 90,
+      schedule: DEMO_SCHEDULE,
+      timezone: "UTC",
+    },
+  };
+
+  return { restaurant, tables, bookings };
 }

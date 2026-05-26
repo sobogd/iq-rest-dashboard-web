@@ -87,6 +87,7 @@ export function OrdersPage({
  defaultLang,
  currency,
  kioskLayout,
+ demoMode,
 }: {
  orders: Order[];
  setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
@@ -99,6 +100,11 @@ export function OrdersPage({
  // as the priority element; the active-orders list lives next to it in a
  // single card with divider-separated rows, internally scrollable.
  kioskLayout?: boolean;
+ // Public landing demo: every mutation runs on local state only — no API
+ // calls. createOrder/splitOrder normally need a server-generated id and
+ // dailyNumber, so in demo mode we mint those locally. A reload resets the
+ // board (the snapshot is rebuilt from scratch).
+ demoMode?: boolean;
 }) {
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
@@ -200,6 +206,7 @@ export function OrdersPage({
  }
  return [...all, next];
  });
+ if (demoMode) return;
  try {
  await patchOrder(orderId, {
  status: next.status === "active" ? "in_progress" : next.status,
@@ -268,6 +275,7 @@ export function OrdersPage({
  : false;
  if (openedFrom !== "list" && stillHasOrders) setView({ kind: "list" });
  else closeModal();
+ if (demoMode) return;
  try {
  await deleteOrder(orderId);
  } catch (err) {
@@ -286,7 +294,13 @@ export function OrdersPage({
  if (creating) return null;
  setCreating(true);
  try {
- const created = await createOrder(table ? { tableNumber: table.number } : {});
+ const created = demoMode
+ ? {
+ id: newId(),
+ dailyNumber: Math.max(0, ...orders.map((o) => o.dailyNumber ?? 0)) + 1,
+ createdAt: new Date().toISOString(),
+ }
+ : await createOrder(table ? { tableNumber: table.number } : {});
  const newOrder: Order = {
  id: created.id,
  tableId: table?.id ?? null,
@@ -316,6 +330,7 @@ export function OrdersPage({
  ),
  );
  closeModal();
+ if (demoMode) return;
  try {
  await patchOrder(orderId, { tableNumber: table.number });
  } catch (err) {
@@ -334,7 +349,15 @@ export function OrdersPage({
  const sourceTotal = kept.reduce((sum, it) => sum + calcItemPrice(it), 0);
  const createdTotal = taken.reduce((sum, it) => sum + calcItemPrice(it), 0);
  try {
- const res = await splitOrder(orderId, { itemIds });
+ const res = demoMode
+ ? {
+ created: {
+ id: newId(),
+ dailyNumber: Math.max(0, ...orders.map((o) => o.dailyNumber ?? 0)) + 1,
+ createdAt: new Date().toISOString(),
+ },
+ }
+ : await splitOrder(orderId, { itemIds });
  const newOrder: Order = {
  id: res.created.id,
  tableId: source.tableId,

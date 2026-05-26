@@ -5,8 +5,8 @@ import i18n from "i18next";
 import { useTranslations } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import { apiUrl } from "@/lib/api";
-import { clearDeviceToken, getDeviceToken, setDeviceToken, setStoredDeviceType, getDemoLang, getDemoZoom, type DeviceType as StoredDeviceType } from "@/lib/device-mode";
-import { buildKitchenDemoSnapshot } from "./demo-data";
+import { clearDeviceToken, getDeviceToken, setDeviceToken, setStoredDeviceType, getDemoLang, getDemoZoom, type DemoBoard, type DeviceType as StoredDeviceType } from "@/lib/device-mode";
+import { buildKitchenDemoSnapshot, buildReservationsDemoSnapshot } from "./demo-data";
 import { PairingScreen } from "./pairing-screen";
 import { KitchenShell } from "./kitchen-shell";
 import { OfflineOverlay } from "./offline-overlay";
@@ -81,14 +81,84 @@ const queryClient = new QueryClient({
   },
 });
 
-export function KitchenApp({ demo = false }: { demo?: boolean }) {
+export function KitchenApp({ demoBoard = null }: { demoBoard?: DemoBoard | null }) {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        {demo ? <KitchenDemoBody /> : <KitchenAppBody />}
+        {demoBoard === "orders" ? (
+          <OrdersDemoBody />
+        ) : demoBoard === "reservations" ? (
+          <ReservationsDemoBody />
+        ) : demoBoard === "kitchen" ? (
+          <KitchenDemoBody />
+        ) : (
+          <KitchenAppBody />
+        )}
         <Toaster position="top-center" richColors closeButton />
       </QueryClientProvider>
     </ThemeProvider>
+  );
+}
+
+// Apply the landing-forwarded `?lang=` on mount, once. Shared by all demo
+// bodies. i18next lazy-loads the locale chunk; identical re-calls are no-ops.
+function useDemoLang(): void {
+  useEffect(() => {
+    const lang = getDemoLang();
+    if (lang && i18n.language !== lang) void i18n.changeLanguage(lang);
+  }, []);
+}
+
+// Public waiter-orders demo. Same wrapping the real WAITER kiosk uses
+// (RestaurantProvider + scoped SPA router), fed the hardcoded snapshot with
+// `demoMode` so every mutation stays local.
+function OrdersDemoBody() {
+  useDemoLang();
+  const [snapshot] = useState(() => buildKitchenDemoSnapshot(getDemoLang() || "en"));
+  const [orders, setOrders] = useState<Order[]>(snapshot.orders);
+
+  return (
+    <KitchenShell>
+      <RestaurantProvider restaurant={snapshot.restaurant}>
+        <DashboardRouterProvider initialPath="/dashboard/orders" locale="en">
+          <OrdersPage
+            orders={orders}
+            setOrders={setOrders}
+            tables={snapshot.tables}
+            categories={snapshot.categories}
+            defaultLang={snapshot.restaurant.defaultLang}
+            currency={snapshot.restaurant.currency}
+            kioskLayout
+            demoMode
+          />
+        </DashboardRouterProvider>
+      </RestaurantProvider>
+    </KitchenShell>
+  );
+}
+
+// Public reservations demo. Mirrors the RESERVATION kiosk wrapping, fed the
+// hardcoded bookings snapshot with `demoMode` so accept/reject stays local.
+function ReservationsDemoBody() {
+  useDemoLang();
+  const [snapshot] = useState(() => buildReservationsDemoSnapshot(getDemoLang() || "en"));
+  const [bookings, setBookings] = useState<Booking[]>(snapshot.bookings);
+
+  return (
+    <KitchenShell>
+      <RestaurantProvider restaurant={snapshot.restaurant}>
+        <DashboardRouterProvider initialPath="/dashboard/reservations" locale="en">
+          <ReservationsPage
+            restaurant={snapshot.restaurant}
+            bookings={bookings}
+            setBookings={setBookings}
+            tables={snapshot.tables}
+            kioskLayout
+            demoMode
+          />
+        </DashboardRouterProvider>
+      </RestaurantProvider>
+    </KitchenShell>
   );
 }
 
