@@ -610,6 +610,7 @@
       "title": "Bialanna",
       "subtitle": "Athraigh idir bialanna nó cuir ceann nua leis.",
       "active": "Gníomhach",
+      "managed": "Bainistithe",
       "delete": "Scrios",
       "confirmDelete": "Scrios an bhialann \"{name}\"? Ní féidir é a chealú.",
       "deleteTitle": "Scrios bialann?",

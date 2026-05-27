@@ -610,6 +610,7 @@
       "title": "Restaurace",
       "subtitle": "Přepínejte mezi restauracemi nebo přidejte novou.",
       "active": "Aktivní",
+      "managed": "Spravováno",
       "delete": "Smazat",
       "confirmDelete": "Smazat restauraci „{name}“? Tuto akci nelze vrátit zpět.",
       "deleteTitle": "Smazat restauraci?",

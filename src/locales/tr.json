@@ -610,6 +610,7 @@
       "title": "Restoranlar",
       "subtitle": "Restoranlar arasında geçiş yapın veya yenisini ekleyin.",
       "active": "Aktif",
+      "managed": "Yönetiliyor",
       "delete": "Sil",
       "confirmDelete": "\"{name}\" restoranı silinsin mi? Bu işlem geri alınamaz.",
       "deleteTitle": "Restoran silinsin mi?",

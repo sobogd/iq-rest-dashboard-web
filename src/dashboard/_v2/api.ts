@@ -93,6 +93,9 @@ export interface ApiRestaurant {
  orderAddressEnabled: boolean;
  orderMode: string;
  scanBannerDismissed?: boolean;
+ // Present only in the switcher list (GET /restaurants): false = managed for
+ // another company via grant (hide delete/billing affordances).
+ owned?: boolean;
 }
 
 export async function fetchRestaurant(): Promise<ApiRestaurant | null> {
@@ -141,6 +144,9 @@ export async function dismissScanBanner(): Promise<void> {
 export interface RestaurantListResponse {
  activeId: string;
  isPaid: boolean;
+ // False when the active restaurant is managed for another company via grant —
+ // billing UI is hidden in that context.
+ canManageBilling?: boolean;
  restaurants: ApiRestaurant[];
 }
 
@@ -704,6 +710,7 @@ export async function fetchSubscriptionStatus(): Promise<{
  currentPeriodEnd: string | null;
  billingCycle: string | null;
  trialEndsAt: string | null;
+ canManageBilling?: boolean;
 } | null> {
  const res = await apiFetch("/api/restaurant/subscription", {
         credentials: "include", cache: "no-store" });

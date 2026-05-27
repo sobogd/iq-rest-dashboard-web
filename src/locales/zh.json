@@ -610,6 +610,7 @@
       "title": "餐厅",
       "subtitle": "在餐厅之间切换或添加新餐厅。",
       "active": "当前",
+      "managed": "受管理",
       "delete": "删除",
       "confirmDelete": "删除餐厅 \"{name}\"？此操作无法撤销。",
       "deleteTitle": "删除餐厅？",

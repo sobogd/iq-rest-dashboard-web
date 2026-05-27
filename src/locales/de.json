@@ -610,6 +610,7 @@
       "title": "Restaurants",
       "subtitle": "Zwischen Restaurants wechseln oder ein neues hinzufügen.",
       "active": "Aktiv",
+      "managed": "Verwaltet",
       "delete": "Löschen",
       "confirmDelete": "Restaurant „{name}“ löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "deleteTitle": "Restaurant löschen?",

@@ -610,6 +610,7 @@
       "title": "Restauranger",
       "subtitle": "Växla mellan restauranger eller lägg till en ny.",
       "active": "Aktiv",
+      "managed": "Hanteras",
       "delete": "Ta bort",
       "confirmDelete": "Ta bort restaurangen ”{name}”? Åtgärden kan inte ångras.",
       "deleteTitle": "Ta bort restaurang?",

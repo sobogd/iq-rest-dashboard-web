@@ -32,6 +32,7 @@ import { DevicesSettingsPage } from "../_v2/devices-settings";
 import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
 import { AdminPage } from "../_pages/admin";
 import { AdminCompanyPage } from "../_pages/admin-company";
+import { AdminGrantsPage } from "../_pages/admin-grants";
 import { UsagePage } from "../_pages/usage";
 import { GoogleAdsPage } from "../_pages/google-ads";
 import { LandingRedirect } from "../../auth/landing-redirect";
@@ -328,6 +329,8 @@ function ViewSwitch(p: SwitchProps) {
       return <UsagePage />;
     case "settings.admin.googleAds":
       return <GoogleAdsPage />;
+    case "settings.admin.grants":
+      return <AdminGrantsPage />;
 
     case "category.new":
       return (

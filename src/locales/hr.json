@@ -610,6 +610,7 @@
       "title": "Restorani",
       "subtitle": "Prebacuj između restorana ili dodaj novi.",
       "active": "Aktivan",
+      "managed": "Upravljano",
       "delete": "Izbriši",
       "confirmDelete": "Izbrisati restoran „{name}“? Ovu radnju nije moguće poništiti.",
       "deleteTitle": "Izbrisati restoran?",

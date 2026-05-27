@@ -13,6 +13,9 @@ interface RestaurantsContextValue {
   list: ApiRestaurant[];
   activeId: string | null;
   isPaid: boolean;
+  // False when the active restaurant is managed for another company via grant —
+  // hide billing UI. Defaults to true (owner) when the server omits it.
+  canManageBilling: boolean;
   switching: boolean;
   setActive: (id: string) => Promise<void>;
   refresh: () => Promise<void>;
@@ -69,6 +72,7 @@ export function RestaurantsProvider({ children }: { children: ReactNode }) {
       list: data?.restaurants ?? [],
       activeId: optimisticActiveId ?? data?.activeId ?? null,
       isPaid: data?.isPaid ?? false,
+      canManageBilling: data?.canManageBilling ?? true,
       switching,
       setActive,
       refresh: async () => {

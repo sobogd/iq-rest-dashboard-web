@@ -610,6 +610,7 @@
       "title": "Restoranid",
       "subtitle": "Vaheta restoranide vahel või lisa uus.",
       "active": "Aktiivne",
+      "managed": "Hallatav",
       "delete": "Kustuta",
       "confirmDelete": "Kustutada restoran „{name}“? Seda toimingut ei saa tagasi võtta.",
       "deleteTitle": "Kustutada restoran?",

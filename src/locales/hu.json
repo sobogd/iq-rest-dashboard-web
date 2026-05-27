@@ -610,6 +610,7 @@
       "title": "Éttermek",
       "subtitle": "Válts éttermek között, vagy adj hozzá újat.",
       "active": "Aktív",
+      "managed": "Kezelt",
       "delete": "Törlés",
       "confirmDelete": "Törlöd a(z) „{name}” éttermet? Ez a művelet nem visszavonható.",
       "deleteTitle": "Étterem törlése?",

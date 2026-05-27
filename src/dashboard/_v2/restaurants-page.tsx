@@ -134,6 +134,11 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
                         {t("active")}
                       </span>
                     )}
+                    {r.owned === false && (
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-secondary text-muted-foreground uppercase tracking-wide">
+                        {t("managed")}
+                      </span>
+                    )}
                   </div>
                   {r.slug && (
                     <div className="text-xs text-muted-foreground leading-snug mt-0.5">
@@ -141,7 +146,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
                     </div>
                   )}
                 </button>
-                {list.length > 1 && isPaid && !isActive && (
+                {list.length > 1 && isPaid && !isActive && r.owned !== false && (
                   <button
                     type="button"
                     onClick={() => askDelete(r.id, r.title)}

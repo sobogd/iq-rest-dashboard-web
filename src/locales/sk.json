@@ -610,6 +610,7 @@
       "title": "Reštaurácie",
       "subtitle": "Prepínajte medzi reštauráciami alebo pridajte novú.",
       "active": "Aktívna",
+      "managed": "Spravované",
       "delete": "Odstrániť",
       "confirmDelete": "Odstrániť reštauráciu „{name}“? Túto akciu nemožno vrátiť späť.",
       "deleteTitle": "Odstrániť reštauráciu?",

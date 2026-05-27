@@ -8,6 +8,9 @@ export type Sub = {
   trialEndsAt: string | null;
   aiImagesUsed?: number;
   aiImagesLimit?: number | null;
+  // False when the active restaurant is managed for another company via grant;
+  // the billing tab/UI is hidden in that case. Defaults to true (owner).
+  canManageBilling?: boolean;
 } | null;
 
 const SubContext = createContext<Sub>(null);

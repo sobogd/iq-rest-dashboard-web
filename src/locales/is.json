@@ -610,6 +610,7 @@
       "title": "Veitingastaðir",
       "subtitle": "Skiptu á milli veitingastaða eða bættu nýjum við.",
       "active": "Virkur",
+      "managed": "Í umsjón",
       "delete": "Eyða",
       "confirmDelete": "Eyða veitingastaðnum „{name}“? Þessari aðgerð er ekki hægt að afturkalla.",
       "deleteTitle": "Eyða veitingastað?",

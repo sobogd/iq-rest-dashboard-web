@@ -610,6 +610,7 @@
       "title": "Restavracije",
       "subtitle": "Preklapljajte med restavracijami ali dodajte novo.",
       "active": "Aktivna",
+      "managed": "Upravljano",
       "delete": "Izbriši",
       "confirmDelete": "Izbrišem restavracijo »{name}«? Tega dejanja ni mogoče razveljaviti.",
       "deleteTitle": "Izbrisati restavracijo?",

@@ -610,6 +610,7 @@
       "title": "Restaurants",
       "subtitle": "Canvia entre restaurants o afegeix-ne un de nou.",
       "active": "Actiu",
+      "managed": "Gestionat",
       "delete": "Suprimeix",
       "confirmDelete": "Vols suprimir el restaurant «{name}»? Aquesta acció no es pot desfer.",
       "deleteTitle": "Suprimir restaurant?",

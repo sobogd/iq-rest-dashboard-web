@@ -610,6 +610,7 @@
       "title": "Restauranter",
       "subtitle": "Bytt mellom restauranter eller legg til en ny.",
       "active": "Aktiv",
+      "managed": "Administrert",
       "delete": "Slett",
       "confirmDelete": "Slette restauranten «{name}»? Dette kan ikke angres.",
       "deleteTitle": "Slette restaurant?",

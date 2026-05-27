@@ -610,6 +610,7 @@
       "title": "Ravintolat",
       "subtitle": "Vaihda ravintolaa tai lisää uusi.",
       "active": "Aktiivinen",
+      "managed": "Hallinnoitu",
       "delete": "Poista",
       "confirmDelete": "Poistetaanko ravintola ”{name}”? Tätä toimintoa ei voi peruuttaa.",
       "deleteTitle": "Poistetaanko ravintola?",

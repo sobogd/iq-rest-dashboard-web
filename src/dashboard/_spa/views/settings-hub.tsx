@@ -44,6 +44,12 @@ export function SettingsHubView({
   const restaurants = useRestaurantsOrNull();
   const showSwitcher = !!restaurants && restaurants.isPaid && restaurants.list.length > 0;
   const activeName = restaurants?.list.find((r) => r.id === restaurants.activeId)?.title ?? "";
+  // Hide the billing tab when the active restaurant is managed for another
+  // company via grant — billing belongs to the owner.
+  const canManageBilling = restaurants?.canManageBilling ?? true;
+  const cards = canManageBilling
+    ? CARDS
+    : CARDS.filter((c) => c.view.name !== "settings.billing");
 
   async function handleExitImpersonation() {
     if (exiting) return;
@@ -91,6 +97,13 @@ export function SettingsHubView({
           >
             Google Ads
           </button>
+          <button
+            type="button"
+            onClick={() => router.push({ name: "settings.admin.grants" })}
+            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
+          >
+            Grants
+          </button>
         </div>
       ) : null}
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
@@ -114,7 +127,7 @@ export function SettingsHubView({
         </button>
       ) : null}
       <div className="space-y-2.5">
-        {CARDS.map((card) => (
+        {cards.map((card) => (
           <button
             key={card.titleKey}
             type="button"

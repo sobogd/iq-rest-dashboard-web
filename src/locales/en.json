@@ -685,6 +685,7 @@
       "title": "Restaurants",
       "subtitle": "Switch between restaurants or add a new one.",
       "active": "Active",
+      "managed": "Managed",
       "delete": "Delete",
       "confirmDelete": "Delete restaurant \"{name}\"? This cannot be undone.",
       "deleteTitle": "Delete restaurant?",

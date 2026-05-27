@@ -610,6 +610,7 @@
       "title": "Restaurants",
       "subtitle": "Wissel tussen restaurants of voeg een nieuw restaurant toe.",
       "active": "Actief",
+      "managed": "Beheerd",
       "delete": "Verwijderen",
       "confirmDelete": "Restaurant \"{name}\" verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
       "deleteTitle": "Restaurant verwijderen?",

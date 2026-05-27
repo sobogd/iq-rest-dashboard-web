@@ -610,6 +610,7 @@
       "title": "Restaurante",
       "subtitle": "Comută între restaurante sau adaugă unul nou.",
       "active": "Activ",
+      "managed": "Gestionat",
       "delete": "Șterge",
       "confirmDelete": "Ștergi restaurantul „{name}”? Această acțiune nu poate fi anulată.",
       "deleteTitle": "Ștergi restaurantul?",

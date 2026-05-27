@@ -610,6 +610,7 @@
       "title": "Restoranai",
       "subtitle": "Perjunkite tarp restoranų arba pridėkite naują.",
       "active": "Aktyvus",
+      "managed": "Valdoma",
       "delete": "Ištrinti",
       "confirmDelete": "Ištrinti restoraną „{name}“? Šio veiksmo atšaukti nepavyks.",
       "deleteTitle": "Ištrinti restoraną?",

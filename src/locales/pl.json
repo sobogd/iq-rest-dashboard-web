@@ -610,6 +610,7 @@
       "title": "Restauracje",
       "subtitle": "Przełączaj między restauracjami lub dodaj nową.",
       "active": "Aktywna",
+      "managed": "Zarządzane",
       "delete": "Usuń",
       "confirmDelete": "Usunąć restaurację „{name}”? Tej operacji nie można cofnąć.",
       "deleteTitle": "Usunąć restaurację?",
