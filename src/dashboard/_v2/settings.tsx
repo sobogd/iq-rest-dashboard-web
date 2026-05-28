@@ -17,6 +17,7 @@ import { inputClass, secondaryBtn } from "./tokens";
 import { MapPicker } from "@/components/map-picker";
 import { slugify } from "./helpers";
 import { getMenuUrl, getMenuUrlPrefix } from "@/lib/menu-url";
+import { CURRENCIES } from "@/lib/currencies";
 import { AVAILABLE_LANGUAGES } from "./i18n";
 import {
  fetchSubscriptionStatus,
@@ -35,20 +36,6 @@ import { track } from "@/lib/dashboard-events";
 const ACCENT_COLORS = [
  "#A8174E", "#C8102E", "#D55427", "#92684C", "#A8531A", "#D4A017", "#D9C29A", "#6F8246", "#3D7259", "#1F5959",
  "#1F3B57", "#314D8C", "#5B6E80", "#7E5F87", "#5E4734", "#9E866B", "#E8541C", "#3B3B3B", "#000000",
-];
-
-const CURRENCIES = [
- { code: "EUR", label: "EUR (€)" },
- { code: "USD", label: "USD ($)" },
- { code: "GBP", label: "GBP (£)" },
- { code: "RUB", label: "RUB (₽)" },
- { code: "UAH", label: "UAH (₴)" },
- { code: "BRL", label: "BRL (R$)" },
- { code: "MXN", label: "MXN ($)" },
- { code: "ARS", label: "ARS ($)" },
- { code: "CLP", label: "CLP ($)" },
- { code: "COP", label: "COP ($)" },
- { code: "TRY", label: "TRY (₺)" },
 ];
 
 const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120, 150, 180];
@@ -748,39 +735,32 @@ export function GeneralSettingsPage({
  </div>
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
  <label htmlFor="gen-currency" className="block text-sm font-medium text-foreground mb-2.5">{tg("currencyLabel")}</label>
- <select
+ <Select<string>
  id="gen-currency"
  value={draft.currency}
- onChange={(e) => {
- track("dash_settings_general_currency_change", { currency: e.target.value });
- setDraft((d) => ({ ...d, currency: e.target.value }));
+ onChange={(next) => {
+ track("dash_settings_general_currency_change", { currency: next });
+ setDraft((d) => ({ ...d, currency: next }));
  }}
- className={inputClass}
- >
- {CURRENCIES.map((c) => (
- <option key={c.code} value={c.code}>
- {c.label}
- </option>
- ))}
- </select>
+ options={CURRENCIES.map((c) => ({
+ value: c.code,
+ label: `${c.code} (${c.symbol}) — ${c.name}`,
+ }))}
+ />
  <p className="text-xs text-muted-foreground mt-1.5 leading-snug">{tg("currencyTip")}</p>
 
  <Divider />
 
  <label htmlFor="gen-timezone" className="block text-sm font-medium text-foreground mb-2.5">{tb("timezoneLabel")}</label>
- <select
+ <Select<string>
  id="gen-timezone"
  value={draft.timezone}
- onChange={(e) => {
- track("dash_settings_general_change_timezone", { tz: e.target.value });
- setDraft((d) => ({ ...d, timezone: e.target.value }));
+ onChange={(next) => {
+ track("dash_settings_general_change_timezone", { tz: next });
+ setDraft((d) => ({ ...d, timezone: next }));
  }}
- className={inputClass}
- >
- {TIMEZONE_OPTIONS.map((tz) => (
- <option key={tz} value={tz}>{tz}</option>
- ))}
- </select>
+ options={TIMEZONE_OPTIONS.map((tz) => ({ value: tz, label: tz }))}
+ />
  <p className="text-xs text-muted-foreground mt-1.5 leading-snug">{tb("timezoneTip")}</p>
  </div>
  </div>
