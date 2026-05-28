@@ -1,10 +1,8 @@
 "use client";
 
 // Admin: flat list of every restaurant in the system. Per-restaurant billing
-// model — replaces the Company-centred admin view for everything except
-// legacy operations that still need company-scope. Clicking a row opens
-// the existing AdminCompanyPage modal as a drill-down (it reads the
-// restaurant's parent company).
+// model — primary admin view. Clicking a row opens the AdminRestaurantPage
+// modal with chat, send-email and delete actions.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
@@ -12,14 +10,12 @@ import { Trash2, Mail, X } from "lucide-react";
 import { BoxIcon, EyeIcon, FolderIcon, MessageIcon } from "../_v2/icons";
 import { formatDateShort } from "./_admin-helpers";
 import { useScrollLock } from "../_v2/use-scroll-lock";
-import { AdminCompanyPage } from "./admin-company";
+import { AdminRestaurantPage } from "./admin-restaurant";
 
 interface RestaurantRow {
   id: string;
   title: string;
   slug: string | null;
-  companyId: string;
-  companyName: string;
   plan: string | null;
   billingCycle: string | null;
   subscriptionStatus: string;
@@ -50,9 +46,9 @@ export function AdminRestaurantsPage() {
   const [rows, setRows] = useState<RestaurantRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
-  const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
+  const [modalRestaurantId, setModalRestaurantId] = useState<string | null>(null);
   const [usersModalRestaurantId, setUsersModalRestaurantId] = useState<string | null>(null);
-  useScrollLock(Boolean(modalCompanyId) || Boolean(usersModalRestaurantId));
+  useScrollLock(Boolean(modalRestaurantId) || Boolean(usersModalRestaurantId));
 
   const fetchRows = useCallback(async () => {
     setLoading(true);
@@ -160,7 +156,7 @@ export function AdminRestaurantsPage() {
                 >
                   <button
                     type="button"
-                    onClick={() => setModalCompanyId(r.companyId)}
+                    onClick={() => setModalRestaurantId(r.id)}
                     className={
                       "font-medium truncate flex-1 text-left " +
                       (nameColor || (r.title ? "text-foreground" : "text-muted-foreground italic"))
@@ -226,16 +222,16 @@ export function AdminRestaurantsPage() {
         )}
       </div>
 
-      {modalCompanyId ? (
+      {modalRestaurantId ? (
         <div
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setModalCompanyId(null)}
+          onClick={() => setModalRestaurantId(null)}
         >
           <div
             className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
+            <AdminRestaurantPage restaurantId={modalRestaurantId} onClose={() => setModalRestaurantId(null)} />
           </div>
         </div>
       ) : null}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Building2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
+import { Trash2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { useScrollLock } from "../_v2/use-scroll-lock";
@@ -17,8 +17,10 @@ export interface UsageRow {
   platform: string | null;
   gclid: string | null;
   adParams: string | null;
-  companyId: string | null;
-  companyLabel: string | null;
+  userId: string | null;
+  restaurantId: string | null;
+  /** Friendly label resolved server-side (restaurant title or user email). */
+  label: string | null;
   ip: string | null;
   isSearch: boolean;
   isGoogleAds: boolean;
@@ -55,15 +57,15 @@ function fmtAt(iso: string): string {
 }
 
 interface Props {
-  /** When set, the table is scoped to a single company. */
-  companyId?: string;
+  /** When set, the table is scoped to a single user. */
+  userId?: string;
   /** Reports the current row count to the parent so it can render it in its own header. */
   onCountChange?: (count: number) => void;
   /** When provided, the toolbar buttons are portalled into this host element. */
   toolbarHost?: HTMLElement | null;
 }
 
-export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Props) {
+export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) {
   const [rows, setRows] = useState<UsageRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -78,25 +80,20 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const [similarToId, setSimilarToId] = useState<string | null>(null);
   const [similarToLabel, setSimilarToLabel] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
   const [bulkBusy, setBulkBusy] = useState(false);
   const [filterFrom, setFilterFrom] = useState<string>("");
   const [filterTo, setFilterTo] = useState<string>("");
-  const [filterCompanyId, setFilterCompanyId] = useState<string>("");
   const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
-  const [filterModal, setFilterModal] = useState<"dates" | "company" | null>(null);
+  const [filterModal, setFilterModal] = useState<"dates" | null>(null);
   const [sortAsc, setSortAsc] = useState(false);
-  const { items: companies, loading: companiesLoading } = useCompanyList();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const selectedCount = selectedIds.size;
   const dateFilterActive = Boolean(filterFrom || filterTo);
-  const companyFilterActive = Boolean(filterCompanyId);
 
   const fetchPage = useCallback(
     async (cursorParam: string | null) => {
       const qs = new URLSearchParams();
-      if (companyId) qs.set("companyId", companyId);
-      else if (filterCompanyId) qs.set("companyId", filterCompanyId);
+      if (userId) qs.set("userId", userId);
       else qs.set("scope", filterOnlyAnonymous ? "anonymous" : "all");
       if (cursorParam) qs.set("cursor", cursorParam);
       if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
@@ -114,7 +111,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         total?: number;
       };
     },
-    [companyId, filterCompanyId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, similarToId],
+    [userId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, similarToId],
   );
 
   const load = useCallback(
@@ -243,27 +240,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     }
   }
 
-  async function applyLinkCompany(targetCompanyId: string) {
-    if (selectedIds.size === 0) return;
-    setBulkBusy(true);
-    try {
-      const res = await fetch(apiUrl("/api/admin/usage/events/link-company"), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: [...selectedIds], companyId: targetCompanyId }),
-      });
-      if (!res.ok) return;
-      setSelectedIds(new Set());
-      setSelectMode(false);
-      setCompanyPickerOpen(false);
-      resetListAndScrollTop();
-      void load("initial");
-    } finally {
-      setBulkBusy(false);
-    }
-  }
-
   // IntersectionObserver — fires loadMore when sentinel scrolls into view.
   // Attaches once per hasMore transition; loadMore is stable via stateRef.
   useEffect(() => {
@@ -296,11 +272,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
   const anonButton = (
     <button
       type="button"
-      onClick={() => {
-        const next = !filterOnlyAnonymous;
-        setFilterOnlyAnonymous(next);
-        if (next) setFilterCompanyId("");
-      }}
+      onClick={() => setFilterOnlyAnonymous((v) => !v)}
       className={
         "h-8 w-8 inline-flex items-center justify-center rounded-md " +
         (filterOnlyAnonymous
@@ -344,22 +316,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       <Calendar className="h-3.5 w-3.5" />
     </button>
   );
-  const companyFilterButton = !companyId ? (
-    <button
-      type="button"
-      onClick={() => setFilterModal("company")}
-      className={
-        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-        (companyFilterActive
-          ? "bg-primary/15 text-primary hover:bg-primary/25"
-          : "bg-secondary text-muted-foreground hover:text-foreground")
-      }
-      title={companyFilterActive ? "Company filter active" : "Company filter"}
-    >
-      <Building2 className="h-3.5 w-3.5" />
-    </button>
-  ) : null;
-
   const similarPill = similarToId ? (
     <button
       type="button"
@@ -414,15 +370,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
       </button>
       <button
         type="button"
-        onClick={() => selectedCount > 0 && setCompanyPickerOpen(true)}
-        disabled={selectedCount === 0 || bulkBusy}
-        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 disabled:opacity-40"
-        title={`Link ${selectedCount} to company`}
-      >
-        <Building2 className="h-3.5 w-3.5" />
-      </button>
-      <button
-        type="button"
         onClick={() => {
           setSelectMode(false);
           setSelectedIds(new Set());
@@ -441,7 +388,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
     <>
       {selectToggle}
       {anonButton}
-      {companyFilterButton}
       {dateButton}
       {similarPill}
       {sortButton}
@@ -462,7 +408,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
               <>
                 {selectToggle}
                 {anonButton}
-                {companyFilterButton}
                 {dateButton}
                 {similarPill}
                 {refreshButton}
@@ -503,12 +448,12 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                   {selectedIds.has(row.id) ? <Check className="w-2.5 h-2.5" /> : null}
                 </span>
               ) : null}
-              {row.companyId ? (
+              {row.label || row.restaurantId || row.userId ? (
                 <span
                   className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0"
-                  title={row.companyLabel || row.companyId}
+                  title={row.label || row.restaurantId || row.userId || ""}
                 >
-                  {truncate8(row.companyLabel || row.companyId)}
+                  {truncate8(row.label || row.restaurantId || row.userId || "")}
                 </span>
               ) : (
                 <>
@@ -556,7 +501,7 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
                   S
                 </span>
               ) : null}
-              {row.device && !row.companyId && (
+              {row.device && !row.userId && !row.restaurantId && (
                 <span className="text-[10px] text-muted-foreground shrink-0" title={`${row.device} / ${row.platform || "—"}`}>
                   {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
                 </span>
@@ -595,18 +540,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         />
       ) : null}
 
-      {companyPickerOpen ? (
-        <CompanyPickerModal
-          title={`Link ${selectedCount} event${selectedCount === 1 ? "" : "s"} to company`}
-          companies={companies}
-          loading={companiesLoading}
-          onClose={() => setCompanyPickerOpen(false)}
-          onPick={(id) => void applyLinkCompany(id)}
-          busy={bulkBusy}
-          showSearch
-        />
-      ) : null}
-
       {filterModal === "dates" ? (
         <FilterModal
           from={filterFrom}
@@ -625,25 +558,6 @@ export function UsageEventsTable({ companyId, onCountChange, toolbarHost }: Prop
         />
       ) : null}
 
-      {filterModal === "company" ? (
-        <CompanyPickerModal
-          title="Filter by company"
-          companies={companies}
-          loading={companiesLoading}
-          initialSelected={filterCompanyId}
-          onClose={() => setFilterModal(null)}
-          onPick={(id) => {
-            setFilterCompanyId(id);
-            if (id) setFilterOnlyAnonymous(false);
-            setFilterModal(null);
-          }}
-          onClear={() => {
-            setFilterCompanyId("");
-            setFilterModal(null);
-          }}
-          showSearch
-        />
-      ) : null}
     </div>
   );
 }
@@ -762,127 +676,6 @@ function ConfirmDialogInline({
   );
 }
 
-interface CompanyOption {
-  id: string;
-  name: string | null;
-}
-
-function useCompanyList() {
-  const [items, setItems] = useState<CompanyOption[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(apiUrl("/api/admin/companies"), { credentials: "include" });
-        if (!res.ok) {
-          if (!cancelled) setItems([]);
-          return;
-        }
-        const j = (await res.json()) as { companies?: Array<{ id: string; name: string | null }> };
-        if (!cancelled) setItems(j.companies ?? []);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  return { items, loading };
-}
-
-function CompanyPickerModal({
-  title,
-  companies,
-  loading,
-  initialSelected,
-  onClose,
-  onPick,
-  onClear,
-  busy,
-  showSearch,
-}: {
-  title: string;
-  companies: CompanyOption[];
-  loading: boolean;
-  initialSelected?: string;
-  onClose: () => void;
-  onPick: (id: string) => void;
-  onClear?: () => void;
-  busy?: boolean;
-  showSearch?: boolean;
-}) {
-  useScrollLock(true);
-  const [query, setQuery] = useState("");
-  const [draft, setDraft] = useState(initialSelected ?? "");
-  const q = query.trim().toLowerCase();
-  const filtered = q
-    ? companies.filter((c) => (c.name || "").toLowerCase().includes(q))
-    : companies;
-  const applyMode = Boolean(onClear);
-  return (
-    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[80vh]">
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between shrink-0">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
-            ✕
-          </button>
-        </div>
-        {showSearch ? (
-          <div className="px-4 py-2.5 border-b border-border shrink-0">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search…"
-              className="w-full h-9 px-3 rounded-md bg-secondary text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-          </div>
-        ) : null}
-        <div className="overflow-y-auto divide-y divide-border">
-          {loading ? (
-            <div className="text-xs text-muted-foreground py-6 text-center">Loading…</div>
-          ) : filtered.length === 0 ? (
-            <div className="text-xs text-muted-foreground py-6 text-center">No companies</div>
-          ) : (
-            filtered.map((c) => {
-              const selected = applyMode && draft === c.id;
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => applyMode ? setDraft(c.id) : onPick(c.id)}
-                  disabled={busy}
-                  className={"w-full text-left px-4 py-2.5 disabled:opacity-50 transition-colors " + (selected ? "bg-primary/10 text-primary" : "hover:bg-muted/40")}
-                >
-                  <div className={"text-sm font-medium truncate " + (selected ? "" : "text-foreground")}>{c.name || "(unnamed)"}</div>
-                </button>
-              );
-            })
-          )}
-        </div>
-        {applyMode ? (
-          <div className="px-4 py-3 border-t border-border flex items-center gap-2 shrink-0">
-            <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
-              Clear
-            </button>
-            <button
-              type="button"
-              onClick={() => onPick(draft)}
-              disabled={!draft}
-              className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90 disabled:opacity-50"
-            >
-              Apply
-            </button>
-          </div>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
 function parseAdParams(raw: string | null): Array<[string, string]> {
   if (!raw) return [];
   try {
@@ -916,8 +709,9 @@ function UsageEventDetail({
     ["IP", event.ip || "—"],
     ["Device", event.device || "—"],
     ["Platform", event.platform || "—"],
-    ["Company", event.companyLabel || event.companyId || "—"],
-    ["Company ID", event.companyId || "—"],
+    ["Label", event.label || "—"],
+    ["Restaurant ID", event.restaurantId || "—"],
+    ["User ID", event.userId || "—"],
     ["gclid", event.gclid || "—"],
     ["Google Ads", event.isGoogleAds ? "yes" : "no"],
     ["Facebook Ads", event.isFacebookAds ? "yes" : "no"],

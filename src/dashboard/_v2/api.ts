@@ -593,7 +593,6 @@ export interface ApiOrderItem {
 export interface ApiOrder {
  id: string;
  restaurantId: string;
- companyId: string;
  items: ApiOrderItem[];
  total: number;
  currency: string;

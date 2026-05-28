@@ -5,7 +5,6 @@ export interface AuthState {
   authenticated: boolean;
   email?: string;
   userId?: string;
-  companyId?: string;
 }
 
 export function useAuth() {

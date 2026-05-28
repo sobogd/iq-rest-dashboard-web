@@ -28,7 +28,6 @@ interface AuthCheck {
   authenticated: boolean;
   email?: string;
   userId?: string;
-  companyId?: string;
   onboardingStep?: number;
   legacyDashboard?: boolean;
   impersonatedBy?: string | null;

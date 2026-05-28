@@ -1,4 +1,4 @@
-// Shared helpers for admin pages (sessions, companies).
+// Shared formatters/helpers for admin pages.
 
 export function countryToFlag(countryCode: string): string {
   const code = countryCode.toUpperCase();

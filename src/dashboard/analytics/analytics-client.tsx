@@ -30,15 +30,15 @@ interface OrderStats {
 
 interface Stats {
   period: string;
-  companyCreatedAt: string;
+  accountCreatedAt: string;
   totalScans: number;
   totalViews: number;
   byDay: { day: string; views: number; scans: number }[];
   byDayPrev: { day: string; views: number; scans: number }[];
   byLanguage: { language: string; scans: number; views: number }[];
   byPage: { page: string; views: number; sessions: number }[];
-  // Null when the requester is not an IQ Rest admin or when no restaurant
-  // in the company has ordersEnabled. Frontend skips the order sections.
+  // Null when no restaurant in scope has ordersEnabled. Frontend skips the
+  // order sections.
   orders: OrderStats | null;
 }
 
@@ -76,11 +76,11 @@ function currentPeriod(): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
-/** Build a descending list of YYYY-MM ids from `now` back to the company's
+/** Build a descending list of YYYY-MM ids from `now` back to the account's
  *  registration month. Used to populate the period dropdown — replaces the
  *  legacy today/7d/30d preset list now that analytics is calendar-bucketed. */
-function buildMonths(companyCreatedAt: string): { id: string; label: string }[] {
-  const start = new Date(companyCreatedAt);
+function buildMonths(accountCreatedAt: string): { id: string; label: string }[] {
+  const start = new Date(accountCreatedAt);
   const startY = start.getUTCFullYear();
   const startM = start.getUTCMonth();
   const now = new Date();
@@ -151,16 +151,16 @@ export function AnalyticsClient() {
   }, [period]);
 
   const months = useMemo(() => {
-    if (!stats?.companyCreatedAt) return [];
+    if (!stats?.accountCreatedAt) return [];
     // Prepend quick-pick buckets (today, current calendar week) before the
     // month list so the most common analytics windows are one tap away.
-    const list = buildMonths(stats.companyCreatedAt);
+    const list = buildMonths(stats.accountCreatedAt);
     return [
       { id: "today", label: t("periodToday", { defaultValue: "Today" }) },
       { id: "week", label: t("periodThisWeek", { defaultValue: "This week" }) },
       ...list,
     ];
-  }, [stats?.companyCreatedAt, t]);
+  }, [stats?.accountCreatedAt, t]);
 
   const isEmpty =
     !stats || (stats.totalViews === 0 && (stats.orders?.ordersCount ?? 0) === 0);

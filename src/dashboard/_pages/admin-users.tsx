@@ -1,13 +1,12 @@
 "use client";
 
 // Admin: flat list of every user in the system with their attached
-// restaurants. Lets the admin see who-owns-what without drilling through
-// Company. Clicking a restaurant inside a user opens the company modal as
-// a drill-down (the modal still works against the legacy company id).
+// restaurants. Lets the admin see who-owns-what at a glance. Clicking a
+// restaurant inside a user opens the AdminRestaurantPage modal.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
-import { AdminCompanyPage } from "./admin-company";
+import { AdminRestaurantPage } from "./admin-restaurant";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 
 interface UserRow {
@@ -35,9 +34,9 @@ export function AdminUsersPage() {
   const [rows, setRows] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
-  const [modalCompanyId, setModalCompanyId] = useState<string | null>(null);
+  const [modalRestaurantId, setModalRestaurantId] = useState<string | null>(null);
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
-  useScrollLock(Boolean(modalCompanyId));
+  useScrollLock(Boolean(modalRestaurantId));
 
   const fetchRows = useCallback(async () => {
     setLoading(true);
@@ -131,16 +130,18 @@ export function AdminUsersPage() {
                       ) : (
                         <div className="space-y-1">
                           {u.restaurants.map((r) => (
-                            <div
+                            <button
                               key={r.id}
-                              className="flex items-center gap-2 text-[11px]"
+                              type="button"
+                              onClick={() => setModalRestaurantId(r.id)}
+                              className="w-full flex items-center gap-2 text-[11px] text-left hover:bg-muted/40 rounded px-1 py-0.5"
                             >
                               <span className="flex-1 truncate font-medium">{r.title}</span>
                               <span className={r.subscriptionStatus === "ACTIVE" ? "text-emerald-600" : "text-muted-foreground"}>
                                 {r.plan ?? "FREE"} · {r.subscriptionStatus}
                                 {r.hasStripeSub ? " · Stripe" : ""}
                               </span>
-                            </div>
+                            </button>
                           ))}
                         </div>
                       )}
@@ -153,16 +154,16 @@ export function AdminUsersPage() {
         )}
       </div>
 
-      {modalCompanyId ? (
+      {modalRestaurantId ? (
         <div
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setModalCompanyId(null)}
+          onClick={() => setModalRestaurantId(null)}
         >
           <div
             className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
+            <AdminRestaurantPage restaurantId={modalRestaurantId} onClose={() => setModalRestaurantId(null)} />
           </div>
         </div>
       ) : null}

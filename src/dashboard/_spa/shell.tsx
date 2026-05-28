@@ -31,8 +31,7 @@ import { SettingsHubView } from "./views/settings-hub";
 import { DevicesSettingsPage } from "../_v2/devices-settings";
 import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
 import { AdminPage } from "../_pages/admin";
-import { AdminCompanyPage } from "../_pages/admin-company";
-import { AdminGrantsPage } from "../_pages/admin-grants";
+import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
 import { LandingRedirect } from "../../auth/landing-redirect";
 
@@ -320,14 +319,12 @@ function ViewSwitch(p: SwitchProps) {
     case "settings.restaurants.new":
       return <RestaurantNewPage onBack={() => router.push({ name: "settings.restaurants" })} />;
 
-    case "settings.admin.companies":
+    case "settings.admin":
       return <AdminPage />;
-    case "settings.admin.company":
-      return <AdminCompanyPage companyId={view.id} />;
+    case "settings.admin.restaurant":
+      return <AdminRestaurantPage restaurantId={view.id} />;
     case "settings.admin.usage":
       return <UsagePage />;
-    case "settings.admin.grants":
-      return <AdminGrantsPage />;
 
     case "category.new":
       return (

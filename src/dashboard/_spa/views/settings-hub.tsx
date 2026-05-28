@@ -78,10 +78,10 @@ export function SettingsHubView({
         <div className="mb-4 flex items-center gap-1.5 flex-wrap">
           <button
             type="button"
-            onClick={() => router.push({ name: "settings.admin.companies" })}
+            onClick={() => router.push({ name: "settings.admin" })}
             className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
           >
-            Companies
+            Admin
           </button>
           <button
             type="button"
@@ -89,13 +89,6 @@ export function SettingsHubView({
             className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
           >
             Usage
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push({ name: "settings.admin.grants" })}
-            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
-          >
-            Grants
           </button>
         </div>
       ) : null}

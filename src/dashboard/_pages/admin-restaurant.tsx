@@ -14,48 +14,43 @@ import { SendIcon } from "../_v2/icons";
 import { Select } from "../_v2/ui";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
-import { useDashboardRouter } from "../_spa/router";
 
-interface User {
+interface RestaurantUser {
   id: string;
   email: string;
-  createdAt: string;
-  role: string;
+  preferredLocale: string | null;
+  hasStripeCustomer: boolean;
+  emailsSent: Record<string, string> | null;
+  emailUnsubscribed: boolean;
+  attachedAt: string;
+  isOwner: boolean;
+  userCreatedAt: string;
 }
 
-interface Restaurant {
+interface RestaurantDetail {
   id: string;
   title: string;
   description: string | null;
   slug: string | null;
-  accentColor: string;
-  createdAt: string;
   address: string | null;
   phone: string | null;
   instagram: string | null;
   whatsapp: string | null;
-  reservationsEnabled: boolean;
-  defaultLanguage: string | null;
   languages: string[];
-  url: string | null;
-}
-
-interface Company {
-  id: string;
-  name: string;
-  createdAt: string;
+  defaultLanguage: string | null;
+  reservationsEnabled: boolean;
   plan: string;
-  subscriptionStatus: string;
   billingCycle: string | null;
+  subscriptionStatus: string;
+  trialEndsAt: string | null;
   currentPeriodEnd: string | null;
-  stripeCustomerId: string | null;
-  stripeSubscriptionId: string | null;
+  hasStripeSub: boolean;
+  paymentProcessing: boolean;
+  createdAt: string;
   categoriesCount: number;
   itemsCount: number;
   messagesCount: number;
-  users: User[];
-  restaurants: Restaurant[];
-  emailsSent: Record<string, string> | null;
+  users: RestaurantUser[];
 }
 
 interface EmailTemplate {
@@ -101,7 +96,7 @@ interface Message {
 type NestedView = "messages" | "email" | null;
 
 interface Props {
-  companyId: string;
+  restaurantId: string;
   /** When provided, used instead of the router-based back nav (modal mode). */
   onClose?: () => void;
 }
@@ -124,11 +119,9 @@ function formatDate(iso: string, withTime = false): string {
   });
 }
 
-export function AdminCompanyPage({ companyId, onClose }: Props) {
-  const router = useDashboardRouter();
-
+export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   const [nested, setNested] = useState<NestedView>(null);
-  const [company, setCompany] = useState<Company | null>(null);
+  const [restaurant, setRestaurant] = useState<RestaurantDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -151,33 +144,33 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
 
-  const fetchCompany = useCallback(async () => {
+  const fetchRestaurant = useCallback(async () => {
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`), { credentials: "include" });
+      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}`), { credentials: "include" });
       if (!res.ok) {
         if (res.status === 403) setError("Access denied");
-        else if (res.status === 404) setError("Company not found");
+        else if (res.status === 404) setError("Restaurant not found");
         else setError("Failed to load");
         return;
       }
       const data = await res.json();
-      setCompany(data);
+      setRestaurant(data);
       setError(null);
     } catch {
       setError("Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [companyId]);
+  }, [restaurantId]);
 
   useEffect(() => {
-    fetchCompany();
-  }, [fetchCompany]);
+    fetchRestaurant();
+  }, [fetchRestaurant]);
 
   const fetchMessages = useCallback(async (silent = false) => {
     if (!silent) setLoadingMessages(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`), { credentials: "include" });
+      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}/messages`), { credentials: "include" });
       if (res.ok) {
         const data = (await res.json()) as Message[];
         setMessages((prev) => {
@@ -192,7 +185,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     } finally {
       if (!silent) setLoadingMessages(false);
     }
-  }, [companyId]);
+  }, [restaurantId]);
 
   useEffect(() => {
     if (nested === "messages" && messages.length === 0) {
@@ -204,7 +197,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     if (deleting) return;
     setDeleting(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}`), {
+      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}`), {
         method: "DELETE",
         credentials: "include",
       });
@@ -241,20 +234,18 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   }, [messages]);
 
   async function handleImpersonate() {
-    if (!company || impersonating) return;
-    const user = company.users[0];
-    if (!user) return;
+    if (!restaurant || impersonating) return;
+    const owner = restaurant.users.find((u) => u.isOwner) ?? restaurant.users[0];
+    if (!owner) return;
     setImpersonating(true);
     try {
       const res = await fetch(apiUrl("/api/admin/impersonate"), {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id }),
+        body: JSON.stringify({ userId: owner.id }),
       });
       if (res.ok) {
-        // Full reload so all queries (auth, restaurant, etc.) re-fetch with the
-        // target user's session cookies.
         window.location.assign("/");
       } else {
         const data = await res.json().catch(() => ({}));
@@ -268,10 +259,12 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
   }
 
   async function sendEmailTemplate(tpl: EmailTemplate) {
-    if (sendingTemplate) return;
+    if (sendingTemplate || !restaurant) return;
+    const owner = restaurant.users.find((u) => u.isOwner) ?? restaurant.users[0];
+    if (!owner) return;
     setSendingTemplate(tpl.id);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/send-email`), {
+      const res = await fetch(apiUrl(`/api/admin/users/${owner.id}/send-email`), {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -279,15 +272,18 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
       });
       if (res.ok) {
         const j = await res.json();
-        // Optimistic update
-        setCompany((prev) =>
-          prev
-            ? {
-                ...prev,
-                emailsSent: { ...(prev.emailsSent || {}), [tpl.id]: j.sentAt },
-              }
-            : prev,
-        );
+        // Optimistic update on the owner's emailsSent map.
+        setRestaurant((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            users: prev.users.map((u) =>
+              u.id === owner.id
+                ? { ...u, emailsSent: { ...(u.emailsSent ?? {}), [tpl.id]: j.sentAt } }
+                : u,
+            ),
+          };
+        });
         setAlert({ title: "Sent", message: `Email "${tpl.label}" sent to ${j.to} in ${j.locale}.` });
       } else {
         const j = await res.json().catch(() => ({}));
@@ -306,7 +302,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     if (!text || sending) return;
     setSending(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/messages`), {
+      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}/messages`), {
         credentials: "include",
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -341,7 +337,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     el.style.height = next + "px";
   }
 
-  if (loading && !company) {
+  if (loading && !restaurant) {
     return (
       <div className="flex-1 overflow-y-auto p-5">
         <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
@@ -351,7 +347,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     );
   }
 
-  if (error || !company) {
+  if (error || !restaurant) {
     return (
       <div className="flex-1 overflow-y-auto p-5">
         <div className="bg-card border border-border rounded-2xl p-8 text-center text-sm text-muted-foreground">
@@ -361,43 +357,37 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
     );
   }
 
-  const restaurant = company.restaurants[0];
-  const title = restaurant?.title || company.name || "No name";
-
-  const companyRows: { label: string; value: string }[] = [
-    { label: "Plan", value: `${company.plan}${company.subscriptionStatus === "ACTIVE" ? " (Active)" : ""}` },
-    { label: "Created", value: formatDate(company.createdAt, true) },
-    { label: "Categories", value: String(company.categoriesCount) },
-    { label: "Items", value: String(company.itemsCount) },
-    { label: "Restaurants", value: String(company.restaurants.length) },
+  const title = restaurant.title || "No name";
+  const planLabel = `${restaurant.plan}${restaurant.subscriptionStatus === "ACTIVE" ? " (Active)" : ""}`;
+  const restaurantRows: { label: string; value: string }[] = [
+    { label: "Plan", value: planLabel },
+    { label: "Created", value: formatDate(restaurant.createdAt, true) },
+    { label: "Categories", value: String(restaurant.categoriesCount) },
+    { label: "Items", value: String(restaurant.itemsCount) },
   ];
-
-  if (company.plan !== "FREE") {
-    if (company.billingCycle) companyRows.push({ label: "Billing", value: company.billingCycle });
-    if (company.currentPeriodEnd) companyRows.push({ label: "Period Ends", value: formatDate(company.currentPeriodEnd) });
-    if (company.stripeCustomerId) companyRows.push({ label: "Stripe Customer", value: company.stripeCustomerId });
+  if (restaurant.plan !== "FREE") {
+    if (restaurant.billingCycle) restaurantRows.push({ label: "Billing", value: restaurant.billingCycle });
+    if (restaurant.currentPeriodEnd) restaurantRows.push({ label: "Period Ends", value: formatDate(restaurant.currentPeriodEnd) });
+  }
+  if (restaurant.trialEndsAt) {
+    restaurantRows.push({ label: "Trial Ends", value: formatDate(restaurant.trialEndsAt) });
   }
 
-  const restaurantRows: { label: string; value: string }[] = [];
-  if (restaurant) {
-    if (restaurant.url) restaurantRows.push({ label: "URL", value: restaurant.url });
-    if (restaurant.description) restaurantRows.push({ label: "Description", value: restaurant.description });
-    if (restaurant.address) restaurantRows.push({ label: "Address", value: restaurant.address });
-    if (restaurant.phone) restaurantRows.push({ label: "Phone", value: restaurant.phone });
-    if (restaurant.instagram) restaurantRows.push({ label: "Instagram", value: `@${restaurant.instagram}` });
-    if (restaurant.whatsapp) restaurantRows.push({ label: "WhatsApp", value: restaurant.whatsapp });
-    if (restaurant.languages.length > 0) restaurantRows.push({ label: "Languages", value: restaurant.languages.join(", ") });
-    if (restaurant.reservationsEnabled) restaurantRows.push({ label: "Reservations", value: "Enabled" });
-  }
+  const detailRows: { label: string; value: string }[] = [];
+  if (restaurant.description) detailRows.push({ label: "Description", value: restaurant.description });
+  if (restaurant.address) detailRows.push({ label: "Address", value: restaurant.address });
+  if (restaurant.phone) detailRows.push({ label: "Phone", value: restaurant.phone });
+  if (restaurant.instagram) detailRows.push({ label: "Instagram", value: `@${restaurant.instagram}` });
+  if (restaurant.whatsapp) detailRows.push({ label: "WhatsApp", value: restaurant.whatsapp });
+  if (restaurant.languages.length > 0) detailRows.push({ label: "Languages", value: restaurant.languages.join(", ") });
+  if (restaurant.reservationsEnabled) detailRows.push({ label: "Reservations", value: "Enabled" });
 
-  const menuLink = restaurant?.slug ? getMenuUrl(restaurant.slug) : null;
-
-
-  const ownerHandle = company.users[0]?.email.split("@")[0] ?? "";
+  const menuLink = restaurant.slug ? getMenuUrl(restaurant.slug) : null;
+  const owner = restaurant.users.find((u) => u.isOwner) ?? restaurant.users[0];
+  const ownerHandle = owner?.email.split("@")[0] ?? "";
 
   return (
     <>
-      {/* Header */}
       <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
         <h3 className="text-sm font-semibold text-foreground truncate">{title}</h3>
         {onClose ? (
@@ -412,12 +402,10 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         ) : null}
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-5">
         <div className="space-y-4">
-          {/* Company info */}
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-            {companyRows.map((row) => (
+            {restaurantRows.map((row) => (
               <div key={row.label} className="flex items-center justify-between px-4 py-2.5">
                 <span className="text-xs text-muted-foreground">{row.label}</span>
                 <span className="text-xs font-mono text-right break-all max-w-[60%] text-foreground">
@@ -427,24 +415,22 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             ))}
           </div>
 
-          {/* Users */}
-          {company.users.length > 0 ? (
+          {restaurant.users.length > 0 ? (
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {company.users.map((user) => (
+              {restaurant.users.map((user) => (
                 <div key={user.id} className="flex items-center justify-between px-4 py-2.5">
                   <span className="text-xs break-all text-foreground">{user.email}</span>
                   <span className="text-xs text-muted-foreground font-mono shrink-0 ml-3 tabular-nums">
-                    {user.role} · {formatDate(user.createdAt)}
+                    {user.isOwner ? "owner" : "member"} · {formatDate(user.attachedAt)}
                   </span>
                 </div>
               ))}
             </div>
           ) : null}
 
-          {/* Restaurant */}
-          {restaurantRows.length > 0 ? (
+          {detailRows.length > 0 ? (
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {restaurantRows.map((row) => (
+              {detailRows.map((row) => (
                 <div key={row.label} className="flex items-center justify-between px-4 py-2.5">
                   <span className="text-xs text-muted-foreground">{row.label}</span>
                   <span className="text-xs font-mono text-right break-all max-w-[60%] text-foreground">
@@ -457,7 +443,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         </div>
       </div>
 
-      {/* Footer — icon-only action row */}
       <div className="shrink-0 px-5 py-3 border-t border-border flex items-center gap-2">
         {menuLink ? (
           <FooterIconButton title="View menu" onClick={() => setPreviewOpen(true)}>
@@ -465,7 +450,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
           </FooterIconButton>
         ) : null}
 
-        {company.users[0] ? (
+        {owner ? (
           <FooterIconButton
             title={impersonating ? "Logging in…" : `Login as ${ownerHandle}`}
             onClick={handleImpersonate}
@@ -482,13 +467,13 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
         <FooterIconButton
           title="Messages"
           onClick={() => setNested("messages")}
-          badge={company.messagesCount}
+          badge={restaurant.messagesCount}
         >
           <MessageSquare className="h-4 w-4" />
         </FooterIconButton>
 
         <FooterIconButton
-          title="Delete company"
+          title="Delete restaurant"
           onClick={() => setConfirmDelete(true)}
         >
           <Trash2 className="h-4 w-4 text-red-600" />
@@ -597,7 +582,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {EMAIL_TEMPLATES.map((tpl) => {
-                const sentAt = company.emailsSent?.[tpl.id];
+                const sentAt = owner?.emailsSent?.[tpl.id];
                 const sentLabel = sentAt
                   ? `Sent ${new Date(sentAt).toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}`
                   : null;
@@ -640,7 +625,7 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             </div>
             <div className="px-4 py-3 space-y-3">
               <p className="text-sm text-muted-foreground leading-snug">
-                Sends the email to {company.users[0]?.email ?? "owner"}.
+                Sends the email to {owner?.email ?? "owner"}.
               </p>
               <label className="block text-xs font-medium text-foreground">
                 Language
@@ -721,10 +706,10 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl"
           >
             <div className="px-4 py-3 border-b border-border">
-              <h3 className="text-sm font-semibold text-foreground">Delete company</h3>
+              <h3 className="text-sm font-semibold text-foreground">Delete restaurant</h3>
             </div>
             <p className="px-4 py-3 text-sm text-muted-foreground leading-snug">
-              Delete {company?.name || "this company"}? This removes the company and all its data. Cannot be undone.
+              Delete {restaurant.title || "this restaurant"}? This removes the restaurant, its menu, orders and chat history. Cannot be undone.
             </p>
             <div className="px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
               <button

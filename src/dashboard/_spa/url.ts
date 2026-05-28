@@ -55,14 +55,12 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/restaurants";
     case "settings.restaurants.new":
       return "/dashboard/settings/restaurants/new";
-    case "settings.admin.companies":
-      return "/dashboard/settings/admin/companies";
-    case "settings.admin.company":
-      return `/dashboard/settings/admin/companies/${view.id}`;
+    case "settings.admin":
+      return "/dashboard/settings/admin";
+    case "settings.admin.restaurant":
+      return `/dashboard/settings/admin/restaurants/${view.id}`;
     case "settings.admin.usage":
       return "/dashboard/settings/admin/usage";
-    case "settings.admin.grants":
-      return "/dashboard/settings/admin/grants";
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -124,13 +122,11 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/settings/devices") return { name: "settings.devices" };
   if (stripped === "/dashboard/settings/restaurants") return { name: "settings.restaurants" };
   if (stripped === "/dashboard/settings/restaurants/new") return { name: "settings.restaurants.new" };
-  if (stripped === "/dashboard/settings/admin/companies")
-    return { name: "settings.admin.companies" };
-  const companyMatch = stripped.match(/^\/dashboard\/settings\/admin\/companies\/([^/]+)$/);
-  if (companyMatch) return { name: "settings.admin.company", id: companyMatch[1] };
+  if (stripped === "/dashboard/settings/admin") return { name: "settings.admin" };
+  const adminRestaurantMatch = stripped.match(/^\/dashboard\/settings\/admin\/restaurants\/([^/]+)$/);
+  if (adminRestaurantMatch) return { name: "settings.admin.restaurant", id: adminRestaurantMatch[1] };
 
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
-  if (stripped === "/dashboard/settings/admin/grants") return { name: "settings.admin.grants" };
 
   // Top-level tabs
   if (stripped === "/dashboard/orders") return { name: "orders" };
