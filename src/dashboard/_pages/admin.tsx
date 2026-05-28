@@ -9,7 +9,11 @@ import { Mail, ArrowUpDown } from "lucide-react";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AdminCompanyPage } from "./admin-company";
+import { AdminRestaurantsPage } from "./admin-restaurants";
+import { AdminUsersPage } from "./admin-users";
 import { useScrollLock } from "../_v2/use-scroll-lock";
+
+type AdminTab = "restaurants" | "users" | "companies";
 
 interface Company {
   id: string;
@@ -33,6 +37,7 @@ interface Company {
 export function AdminPage() {
   const t = useTranslations("dashboard.admin");
   const router = useDashboardRouter();
+  const [tab, setTab] = useState<AdminTab>("restaurants");
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
@@ -105,49 +110,76 @@ export function AdminPage() {
     }
   }
 
+  const tabs: { id: AdminTab; label: string }[] = [
+    { id: "restaurants", label: "Restaurants" },
+    { id: "users", label: "Users" },
+    { id: "companies", label: "Companies (legacy)" },
+  ];
+
   return (
     <div>
       <SubpageStickyBar onBack={() => router.push({ name: "settings" })} hideSave>
-        <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setSortByLastVisit((v) => !v)}
-            title="Sort by last visit"
-            className={
-              "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
-              (sortByLastVisit
-                ? "bg-primary-gradient text-primary-foreground"
-                : "bg-secondary text-muted-foreground hover:text-foreground")
-            }
-          >
-            <ArrowUpDown className="h-3.5 w-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setScanDetails((v) => !v)}
-            title="Scan details (1d/30d/45d/60d/85d)"
-            className={
-              "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
-              (scanDetails
-                ? "bg-primary-gradient text-primary-foreground"
-                : "bg-secondary text-muted-foreground hover:text-foreground")
-            }
-          >
-            <EyeIcon size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={refresh}
-            disabled={refreshing}
-            title={t("refresh")}
-            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-          >
-            {refreshing ? (
-              <span className="w-3.5 h-3.5 border-2 border-input border-t-foreground rounded-full animate-spin" />
-            ) : (
-              <RefreshIcon size={13} />
-            )}
-          </button>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center gap-0.5 bg-secondary rounded-md p-0.5">
+            {tabs.map((tb) => (
+              <button
+                key={tb.id}
+                type="button"
+                onClick={() => setTab(tb.id)}
+                className={
+                  "h-7 px-2.5 text-xs font-medium rounded transition-colors " +
+                  (tab === tb.id
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground")
+                }
+              >
+                {tb.label}
+              </button>
+            ))}
+          </div>
+          {tab === "companies" ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setSortByLastVisit((v) => !v)}
+                title="Sort by last visit"
+                className={
+                  "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+                  (sortByLastVisit
+                    ? "bg-primary-gradient text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground")
+                }
+              >
+                <ArrowUpDown className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setScanDetails((v) => !v)}
+                title="Scan details (1d/30d/45d/60d/85d)"
+                className={
+                  "h-8 w-8 inline-flex items-center justify-center rounded-md transition-colors " +
+                  (scanDetails
+                    ? "bg-primary-gradient text-primary-foreground"
+                    : "bg-secondary text-muted-foreground hover:text-foreground")
+                }
+              >
+                <EyeIcon size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={refresh}
+                disabled={refreshing}
+                title={t("refresh")}
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+              >
+                {refreshing ? (
+                  <span className="w-3.5 h-3.5 border-2 border-input border-t-foreground rounded-full animate-spin" />
+                ) : (
+                  <RefreshIcon size={13} />
+                )}
+              </button>
+            </>
+          ) : null}
           <button
             type="button"
             onClick={reloadAllTablets}
@@ -159,11 +191,62 @@ export function AdminPage() {
           </button>
         </div>
       </SubpageStickyBar>
+
+      {tab === "restaurants" ? <AdminRestaurantsPage /> : null}
+      {tab === "users" ? <AdminUsersPage /> : null}
+
+      {tab === "companies" ? <CompaniesLegacyView
+        companies={companies}
+        loading={loading}
+        visibleCompanies={visibleCompanies}
+        scanDetails={scanDetails}
+        onOpen={setModalCompanyId}
+        t={t}
+      /> : null}
+
+      {modalCompanyId ? (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setModalCompanyId(null)}
+        >
+          <div
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+// Legacy company-centric table — kept reachable from the "Companies" tab so
+// admin can still cross-check the old view during the per-restaurant billing
+// transition. Will be removed once the new Restaurants/Users tabs are
+// confirmed stable.
+function CompaniesLegacyView({
+  companies,
+  loading,
+  visibleCompanies,
+  scanDetails,
+  onOpen,
+  t,
+}: {
+  companies: Company[];
+  loading: boolean;
+  visibleCompanies: Company[];
+  scanDetails: boolean;
+  onOpen: (id: string) => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  return (
+    <>
       <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         {loading && companies.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">{t("loading")}</div>
         ) : companies.length === 0 ? (
-          <div className="text-xs text-muted-foreground py-8 text-center">{t("noCompanies")}</div>
+          <div className="text-xs text-muted-foreground py-8 text-center">{t("noCompanies") || "No companies"}</div>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
             {visibleCompanies.map((company) => {
@@ -192,7 +275,7 @@ export function AdminPage() {
                 <button
                   key={company.id}
                   type="button"
-                  onClick={() => setModalCompanyId(company.id)}
+                  onClick={() => onOpen(company.id)}
                   className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
                 >
                   <span
@@ -277,21 +360,6 @@ export function AdminPage() {
           </div>
         )}
       </div>
-
-      {modalCompanyId ? (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setModalCompanyId(null)}
-        >
-          <div
-            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AdminCompanyPage companyId={modalCompanyId} onClose={() => setModalCompanyId(null)} />
-          </div>
-        </div>
-      ) : null}
-
-    </div>
+    </>
   );
 }

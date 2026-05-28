@@ -92,13 +92,6 @@ export function SettingsHubView({
           </button>
           <button
             type="button"
-            onClick={() => router.push({ name: "settings.admin.googleAds" })}
-            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
-          >
-            Google Ads
-          </button>
-          <button
-            type="button"
             onClick={() => router.push({ name: "settings.admin.grants" })}
             className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
           >

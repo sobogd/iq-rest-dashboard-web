@@ -7,7 +7,6 @@ import {
   Mail,
   MessageSquare,
   X as CloseIcon,
-  Target,
   Trash2,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
@@ -45,8 +44,6 @@ interface Company {
   id: string;
   name: string;
   createdAt: string;
-  googleClickId: string | null;
-  suggestedGclid: string | null;
   plan: string;
   subscriptionStatus: string;
   billingCycle: string | null;
@@ -101,7 +98,7 @@ interface Message {
   user: { email: string };
 }
 
-type NestedView = "messages" | "email" | "conversions" | null;
+type NestedView = "messages" | "email" | null;
 
 interface Props {
   companyId: string;
@@ -490,10 +487,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
           <MessageSquare className="h-4 w-4" />
         </FooterIconButton>
 
-        <FooterIconButton title="Conversions" onClick={() => setNested("conversions")}>
-          <Target className="h-4 w-4" />
-        </FooterIconButton>
-
         <FooterIconButton
           title="Delete company"
           onClick={() => setConfirmDelete(true)}
@@ -631,16 +624,6 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
             </div>
           </div>
         </div>
-      ) : null}
-
-      {nested === "conversions" ? (
-        <ConversionsModal
-          companyId={companyId}
-          googleClickId={company.googleClickId}
-          suggestedGclid={company.suggestedGclid}
-          onClose={() => setNested(null)}
-          onSaved={() => { void fetchCompany(); }}
-        />
       ) : null}
 
       {confirmTemplate ? (
@@ -831,174 +814,6 @@ function MessageBubble({ message }: { message: Message }) {
         <div className={"text-[10px] text-muted-foreground mt-1 px-1 " + (isAdmin ? "text-right" : "text-left")}>
           {time}
         </div>
-      </div>
-    </div>
-  );
-}
-
-
-const CONVERSION_OPTIONS = [
-  { type: "T2" as const, label: "Регистрация", desc: "T2 — sign up conversion" },
-  { type: "T3" as const, label: "Покупка", desc: "T3 — purchase conversion" },
-];
-
-function ConversionsModal({
-  companyId,
-  googleClickId,
-  suggestedGclid,
-  onClose,
-  onSaved,
-}: {
-  companyId: string;
-  googleClickId: string | null;
-  suggestedGclid: string | null;
-  onClose: () => void;
-  onSaved: () => void;
-}) {
-  const [gclidInput, setGclidInput] = useState(suggestedGclid ?? "");
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<"T2" | "T3" | null>(null);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState<string | null>(null);
-  const [response, setResponse] = useState<unknown | null>(null);
-
-  async function saveGclid() {
-    const v = gclidInput.trim();
-    if (!v || saving) return;
-    setSaving(true);
-    setError(null);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/gclid`), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gclid: v }),
-      });
-      if (!res.ok) {
-        const txt = await res.text();
-        setError(`Error ${res.status}: ${txt.slice(0, 200)}`);
-        return;
-      }
-      onSaved();
-    } catch (e) {
-      setError(String(e));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function sendConversion() {
-    if (!selected || sending) return;
-    setSending(true);
-    setError(null);
-    setSent(null);
-    setResponse(null);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/companies/${companyId}/send-conversion`), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: selected }),
-      });
-      const json: unknown = await res.json().catch(() => ({}));
-      setResponse(json);
-      if (!res.ok) {
-        setError(`Error ${res.status}`);
-        return;
-      }
-      setSent(selected);
-      setSelected(null);
-    } catch (e) {
-      setError(String(e));
-      setResponse({ error: String(e) });
-    } finally {
-      setSending(false);
-    }
-  }
-
-  return (
-    <div
-      onClick={onClose}
-      className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
-      >
-        <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold text-foreground truncate">Conversions</h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-            title="Close"
-          >
-            <CloseIcon className="h-4 w-4" />
-          </button>
-        </div>
-
-        {!googleClickId ? (
-          <div className="p-4 space-y-3">
-            <div className="text-[11px] text-muted-foreground uppercase tracking-wider">Google Click ID</div>
-            <input
-              type="text"
-              value={gclidInput}
-              onChange={(e) => setGclidInput(e.target.value)}
-              placeholder="Cj0KCQ..."
-              className="w-full h-9 px-3 rounded-md bg-secondary text-xs font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            {error ? <div className="text-[11px] text-red-500 break-all">{error}</div> : null}
-            <div className="flex justify-end pt-1">
-              <button
-                type="button"
-                onClick={() => void saveGclid()}
-                disabled={!gclidInput.trim() || saving}
-                className="h-9 px-4 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
-              >
-                {saving ? "Saving…" : "Apply"}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="px-4 py-2 text-[11px] text-muted-foreground border-b border-border font-mono break-all">
-              gclid: {googleClickId}
-            </div>
-            <div className="divide-y divide-border">
-              {CONVERSION_OPTIONS.map((c) => {
-                const isSelected = selected === c.type;
-                return (
-                  <button
-                    key={c.type}
-                    type="button"
-                    onClick={() => setSelected(c.type)}
-                    disabled={sending}
-                    className={"w-full text-left px-4 py-3 disabled:opacity-50 transition-colors " + (isSelected ? "bg-primary/10 text-primary" : "hover:bg-muted/40")}
-                  >
-                    <div className="text-sm font-medium">{c.label}</div>
-                    <div className={"text-[11px] mt-0.5 " + (isSelected ? "text-primary/80" : "text-muted-foreground")}>{c.desc}</div>
-                  </button>
-                );
-              })}
-            </div>
-            {error ? <div className="px-4 py-2 text-[11px] text-red-500 break-all">{error}</div> : null}
-            {sent ? <div className="px-4 py-2 text-[11px] text-emerald-500">✓ {sent} sent</div> : null}
-            {response !== null ? (
-              <pre className="mx-4 mb-2 p-2 text-[10px] font-mono bg-secondary rounded-md text-foreground overflow-auto max-h-48 whitespace-pre-wrap break-all">{JSON.stringify(response, null, 2)}</pre>
-            ) : null}
-            <div className="px-4 py-3 border-t border-border">
-              <button
-                type="button"
-                onClick={() => void sendConversion()}
-                disabled={!selected || sending}
-                className="w-full h-9 rounded-md bg-primary-gradient text-primary-foreground text-xs font-medium uppercase tracking-wider disabled:opacity-50 hover:opacity-90 transition-opacity"
-              >
-                {sending ? "Sending…" : "Send"}
-              </button>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );

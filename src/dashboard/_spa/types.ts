@@ -30,7 +30,6 @@ export type View =
   | { name: "settings.admin.companies" }
   | { name: "settings.admin.company"; id: string }
   | { name: "settings.admin.usage" }
-  | { name: "settings.admin.googleAds" }
   | { name: "settings.admin.grants" }
   | { name: "category.new"; group?: string }
   | { name: "category.edit"; id: string }
