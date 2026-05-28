@@ -1035,17 +1035,18 @@ export function BookingSettingsPage({
  {draft.approval === "auto" ? tb("modeAutoTip") : tb("modeManualTip")}
  </div>
  </div>
- <select
+ <Select<string>
  value={draft.approval}
- onChange={(e) => {
- track("dash_settings_booking_change_mode", { mode: e.target.value });
- setDraft((d) => ({ ...d, approval: e.target.value as "auto" | "manual" }));
+ onChange={(next) => {
+ track("dash_settings_booking_change_mode", { mode: next });
+ setDraft((d) => ({ ...d, approval: next as "auto" | "manual" }));
  }}
- className={inputClass + " w-32"}
- >
- <option value="auto">{tb("modeAuto")}</option>
- <option value="manual">{tb("modeManual")}</option>
- </select>
+ className="w-32"
+ options={[
+ { value: "auto", label: tb("modeAuto") },
+ { value: "manual", label: tb("modeManual") },
+ ]}
+ />
  </div>
  </div>
 
@@ -1059,17 +1060,18 @@ export function BookingSettingsPage({
  {tb("durationTip")}
  </div>
  </div>
- <select
- value={draft.duration}
- onChange={(e) => { track("dash_settings_booking_change_duration"); setDraft((d) => ({ ...d, duration: parseInt(e.target.value, 10) })); }}
- className={inputClass + " w-24"}
- >
- {DURATION_OPTIONS.map((min) => (
- <option key={min} value={min}>
- {tb("durationMin", { min })}
- </option>
- ))}
- </select>
+ <Select<string>
+ value={String(draft.duration)}
+ onChange={(next) => {
+ track("dash_settings_booking_change_duration");
+ setDraft((d) => ({ ...d, duration: parseInt(next, 10) }));
+ }}
+ className="w-24"
+ options={DURATION_OPTIONS.map((min) => ({
+ value: String(min),
+ label: tb("durationMin", { min }),
+ }))}
+ />
  </div>
  </div>
  </div>
@@ -1162,23 +1164,21 @@ function ScheduleDayRow({
  <div className="text-sm font-semibold text-foreground truncate min-w-0">{dayName}</div>
  </label>
  <div className={"items-center gap-2 ml-auto shrink-0 " + (day.closed ? "hidden" : "flex")}>
- <select
+ <Select<string>
  value={day.from}
- onChange={(e) => onChange({ from: e.target.value })}
+ onChange={(next) => onChange({ from: next })}
  disabled={day.closed}
- className={inputClass + " w-auto tabular-nums"}
- >
- {TIME_OPTIONS.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
- </select>
+ className="w-24 tabular-nums"
+ options={TIME_OPTIONS.map((tm) => ({ value: tm, label: tm }))}
+ />
  <span className="text-muted-foreground">—</span>
- <select
+ <Select<string>
  value={day.to}
- onChange={(e) => onChange({ to: e.target.value })}
+ onChange={(next) => onChange({ to: next })}
  disabled={day.closed}
- className={inputClass + " w-auto tabular-nums"}
- >
- {TIME_OPTIONS.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
- </select>
+ className="w-24 tabular-nums"
+ options={TIME_OPTIONS.map((tm) => ({ value: tm, label: tm }))}
+ />
  </div>
  </div>
 
@@ -1200,23 +1200,21 @@ function ScheduleDayRow({
  <div className="text-sm font-semibold text-foreground truncate min-w-0">{tb("lunchLabel")}</div>
  </label>
  <div className={"items-center gap-2 ml-auto shrink-0 " + (lunchEnabled ? "flex" : "hidden")}>
- <select
+ <Select<string>
  value={day.lunchFrom || lunchTimes[0] || day.from}
- onChange={(e) => onChange({ lunchFrom: e.target.value })}
+ onChange={(next) => onChange({ lunchFrom: next })}
  disabled={!lunchEnabled}
- className={inputClass + " w-auto tabular-nums"}
- >
- {lunchTimes.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
- </select>
+ className="w-24 tabular-nums"
+ options={lunchTimes.map((tm) => ({ value: tm, label: tm }))}
+ />
  <span className="text-muted-foreground">—</span>
- <select
+ <Select<string>
  value={day.lunchTo || lunchTimes[lunchTimes.length - 1] || day.to}
- onChange={(e) => onChange({ lunchTo: e.target.value })}
+ onChange={(next) => onChange({ lunchTo: next })}
  disabled={!lunchEnabled}
- className={inputClass + " w-auto tabular-nums"}
- >
- {lunchTimes.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
- </select>
+ className="w-24 tabular-nums"
+ options={lunchTimes.map((tm) => ({ value: tm, label: tm }))}
+ />
  </div>
  </div>
 

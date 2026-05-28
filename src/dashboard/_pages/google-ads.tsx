@@ -23,7 +23,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
-import { SubpageStickyBar } from "../_v2/ui";
+import { Select, SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 
@@ -2959,16 +2959,17 @@ function AdGroupFormModal({
                         maxLength={30}
                         className="flex-1 h-9 px-3 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                       />
-                      <select
+                      <Select<string>
                         value={h.pin ?? ""}
-                        onChange={(e) => updateHeadline(i, { pin: (e.target.value || undefined) as HeadlinePin | undefined })}
-                        className="h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                      >
-                        <option value="">unpinned</option>
-                        <option value="HEADLINE_1">Pos 1</option>
-                        <option value="HEADLINE_2">Pos 2</option>
-                        <option value="HEADLINE_3">Pos 3</option>
-                      </select>
+                        onChange={(next) => updateHeadline(i, { pin: (next || undefined) as HeadlinePin | undefined })}
+                        className="!h-9 !w-28 !px-2 text-xs"
+                        options={[
+                          { value: "", label: "unpinned" },
+                          { value: "HEADLINE_1", label: "Pos 1" },
+                          { value: "HEADLINE_2", label: "Pos 2" },
+                          { value: "HEADLINE_3", label: "Pos 3" },
+                        ]}
+                      />
                       <button
                         type="button"
                         onClick={() => removeHeadline(i)}
@@ -3013,15 +3014,16 @@ function AdGroupFormModal({
                         rows={2}
                         className="flex-1 px-3 py-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                       />
-                      <select
+                      <Select<string>
                         value={d.pin ?? ""}
-                        onChange={(e) => updateDescription(i, { pin: (e.target.value || undefined) as DescriptionPin | undefined })}
-                        className="h-9 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                      >
-                        <option value="">unpinned</option>
-                        <option value="DESCRIPTION_1">Pos 1</option>
-                        <option value="DESCRIPTION_2">Pos 2</option>
-                      </select>
+                        onChange={(next) => updateDescription(i, { pin: (next || undefined) as DescriptionPin | undefined })}
+                        className="!h-9 !w-28 !px-2 text-xs"
+                        options={[
+                          { value: "", label: "unpinned" },
+                          { value: "DESCRIPTION_1", label: "Pos 1" },
+                          { value: "DESCRIPTION_2", label: "Pos 2" },
+                        ]}
+                      />
                       <button
                         type="button"
                         onClick={() => removeDescription(i)}
@@ -3553,15 +3555,12 @@ function SnippetTab({
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Add snippet</div>
         <div>
           <div className="text-[10px] text-muted-foreground mb-1">Header</div>
-          <select
+          <Select<string>
             value={header}
-            onChange={(e) => setHeader(e.target.value)}
-            className="w-full h-8 px-2 rounded-md bg-secondary border border-border text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-          >
-            {SNIPPET_HEADERS.map((h) => (
-              <option key={h} value={h}>{h}</option>
-            ))}
-          </select>
+            onChange={(next) => setHeader(next)}
+            className="!h-8 !px-2 text-xs"
+            options={SNIPPET_HEADERS.map((h) => ({ value: h, label: h }))}
+          />
         </div>
         <div>
           <div className="text-[10px] text-muted-foreground mb-1">Values — one per line or comma-separated</div>

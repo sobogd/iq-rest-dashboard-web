@@ -143,6 +143,7 @@ export function Select<T extends string | null>({
  placeholder,
  id,
  disabled,
+ className,
 }: {
  value: T;
  onChange: (next: T) => void;
@@ -150,6 +151,10 @@ export function Select<T extends string | null>({
  placeholder?: string;
  id?: string;
  disabled?: boolean;
+ /** Extra Tailwind classes appended to the trigger button. Useful for
+  *  width overrides (e.g. `"w-24"`, `"w-auto"`) when the Select sits
+  *  inline next to other controls. */
+ className?: string;
 }) {
  const [open, setOpen] = useState(false);
  const tc = useTranslations("dashboard.common");
@@ -162,7 +167,7 @@ export function Select<T extends string | null>({
  type="button"
  disabled={disabled}
  onClick={() => setOpen(true)}
- className={inputClass + " inline-flex items-center justify-between gap-2 text-left disabled:opacity-50"}
+ className={inputClass + " inline-flex items-center justify-between gap-2 text-left disabled:opacity-50" + (className ? " " + className : "")}
  >
  <span
  className={

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SendIcon } from "../_v2/icons";
+import { Select } from "../_v2/ui";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
 import { useDashboardRouter } from "../_spa/router";
@@ -540,16 +541,15 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
 
             <div className="shrink-0 px-3 pt-3 flex items-center gap-2 border-t border-border">
               <label className="text-xs text-muted-foreground">Lang</label>
-              <select
+              <Select<string>
                 value={adminLocale}
-                onChange={(e) => setAdminLocale(e.target.value)}
-                className="h-8 px-2 text-xs bg-card border border-input rounded-md text-foreground"
-              >
-                <option value="">Auto</option>
-                {ADMIN_LOCALES.map((l) => (
-                  <option key={l} value={l}>{l}</option>
-                ))}
-              </select>
+                onChange={(next) => setAdminLocale(next)}
+                className="!h-8 !w-24 !px-2 text-xs"
+                options={[
+                  { value: "", label: "Auto" },
+                  ...ADMIN_LOCALES.map((l) => ({ value: l, label: l })),
+                ]}
+              />
             </div>
             <div className="shrink-0 flex items-start gap-2 p-3 border-t border-border">
               <textarea
@@ -661,16 +661,16 @@ export function AdminCompanyPage({ companyId, onClose }: Props) {
               </p>
               <label className="block text-xs font-medium text-foreground">
                 Language
-                <select
-                  value={adminLocale}
-                  onChange={(e) => setAdminLocale(e.target.value)}
-                  className="mt-1 w-full h-9 px-2 text-sm bg-card border border-input rounded-md text-foreground"
-                >
-                  <option value="">Auto (user preference)</option>
-                  {ADMIN_LOCALES.map((l) => (
-                    <option key={l} value={l}>{l}</option>
-                  ))}
-                </select>
+                <div className="mt-1">
+                  <Select<string>
+                    value={adminLocale}
+                    onChange={(next) => setAdminLocale(next)}
+                    options={[
+                      { value: "", label: "Auto (user preference)" },
+                      ...ADMIN_LOCALES.map((l) => ({ value: l, label: l })),
+                    ]}
+                  />
+                </div>
               </label>
             </div>
             <div className="px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
