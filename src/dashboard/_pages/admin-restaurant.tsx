@@ -6,6 +6,7 @@ import {
   LogIn,
   Mail,
   MessageSquare,
+  StickyNote,
   X as CloseIcon,
   Trash2,
 } from "lucide-react";
@@ -46,6 +47,7 @@ interface RestaurantDetail {
   currentPeriodEnd: string | null;
   hasStripeSub: boolean;
   paymentProcessing: boolean;
+  adminComment: string | null;
   createdAt: string;
   categoriesCount: number;
   itemsCount: number;
@@ -93,7 +95,7 @@ interface Message {
   user: { email: string };
 }
 
-type NestedView = "messages" | "email" | null;
+type NestedView = "messages" | "email" | "comment" | null;
 
 interface Props {
   restaurantId: string;
@@ -140,6 +142,8 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   const [adminLocale, setAdminLocale] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [commentDraft, setCommentDraft] = useState("");
+  const [savingComment, setSavingComment] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -192,6 +196,36 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
       fetchMessages();
     }
   }, [nested, messages.length, fetchMessages]);
+
+  function openCommentModal() {
+    setCommentDraft(restaurant?.adminComment ?? "");
+    setNested("comment");
+  }
+
+  async function saveComment() {
+    if (savingComment) return;
+    setSavingComment(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}/admin-comment`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adminComment: commentDraft }),
+      });
+      if (res.ok) {
+        const j = (await res.json()) as { adminComment: string | null };
+        setRestaurant((prev) => (prev ? { ...prev, adminComment: j.adminComment } : prev));
+        setNested(null);
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setAlert({ title: "Save failed", message: j.message || j.error || "Could not save." });
+      }
+    } catch {
+      setAlert({ title: "Save failed", message: "Network error" });
+    } finally {
+      setSavingComment(false);
+    }
+  }
 
   async function applyDelete() {
     if (deleting) return;
@@ -473,12 +507,78 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
         </FooterIconButton>
 
         <FooterIconButton
+          title={restaurant.adminComment ? "Edit admin note" : "Add admin note"}
+          onClick={openCommentModal}
+        >
+          <StickyNote
+            className={
+              "h-4 w-4 " + (restaurant.adminComment ? "text-amber-500" : "")
+            }
+          />
+        </FooterIconButton>
+
+        <FooterIconButton
           title="Delete restaurant"
           onClick={() => setConfirmDelete(true)}
         >
           <Trash2 className="h-4 w-4 text-red-600" />
         </FooterIconButton>
       </div>
+
+      {nested === "comment" ? (
+        <div
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => (savingComment ? null : setNested(null))}
+        >
+          <div
+            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-foreground truncate">Admin note</h3>
+              <button
+                type="button"
+                onClick={() => (savingComment ? null : setNested(null))}
+                disabled={savingComment}
+                className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0 disabled:opacity-60"
+                title="Close"
+              >
+                <CloseIcon className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <textarea
+                value={commentDraft}
+                onChange={(e) => setCommentDraft(e.target.value)}
+                placeholder="Internal note — only visible to admins"
+                autoFocus
+                className="w-full min-h-[200px] bg-secondary border border-border rounded-lg p-3 text-sm text-foreground placeholder:text-muted-foreground resize-y outline-none focus:border-foreground/40"
+              />
+            </div>
+            <div className="shrink-0 px-4 py-3 border-t border-border flex items-center gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setNested(null)}
+                disabled={savingComment}
+                className="h-9 px-3 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={saveComment}
+                disabled={savingComment}
+                className="h-9 px-3 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {savingComment ? (
+                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                ) : null}
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {nested === "messages" ? (
         <div
