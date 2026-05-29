@@ -747,6 +747,8 @@ function UsageEventDetail({
     ["Country", event.country || "—"],
     ["Region", event.region || "—"],
     ["IP", event.ip || "—"],
+    ["Device", event.device || "—"],
+    ["Platform", event.platform || "—"],
     ...(email ? [["Email", email] as [string, string]] : []),
   ];
 
