@@ -9,6 +9,8 @@ The choice between the two is made at boot in `src/main.tsx` and produces separa
 
 Backend: `iq-rest-dashboard-api` (port 8130).
 
+> **Schema cleanup 2026-05-28 (Stage C).** The `Company` entity is gone. Each `Restaurant` carries its own plan/subscription/trial. Admin UI uses `admin-restaurant.tsx` (per-restaurant modal) instead of the old `admin-company.tsx`; the `RestaurantAccess`/"grants" page is deleted; SPA routes use `settings.admin` + `settings.admin.restaurant` (the `settings.admin.companies/grants/company` triplet was retired). `accountCreatedAt` replaces `companyCreatedAt` in the analytics payload. See `/home/deploy/dev/AUDIT_2026-05-29.md` for the full audit + open follow-ups (notably dead `lib/auth.ts`, dead `RevenueByHourChart`/`TopItemsList`/`OrderSizes` components, swallowed save errors in `_v2/settings.tsx`, stale `owned`/`canManageBilling` types, stale `dashboard.auth`/`settingsHub.rows.companies`/`admin.companiesTitle` i18n keys across 35 locales).
+
 ## Build rule on this server (read first)
 
 This server has ~3.7 GB RAM. **DO NOT run production builds here**:
