@@ -685,17 +685,6 @@ function ConfirmDialogInline({
   );
 }
 
-function parseAdParams(raw: string | null): Array<[string, string]> {
-  if (!raw) return [];
-  try {
-    const obj = JSON.parse(raw) as Record<string, string>;
-    const LABELS: Record<string, string> = { kw: "Keyword", term: "Search term", campaign: "Campaign" };
-    return Object.entries(obj).map(([k, v]) => [LABELS[k] || k, v]);
-  } catch {
-    return [["Ad params", raw]];
-  }
-}
-
 function UsageEventDetail({
   event,
   onClose,
@@ -751,24 +740,14 @@ function UsageEventDetail({
   if (!event) return null;
   const at = new Date(event.at);
   const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
-  const adParamFields = parseAdParams(event.adParams);
+  const email = event.label && event.label.includes("@") ? event.label : null;
   const fields: Array<[string, string | null]> = [
     ["Event", event.event],
     ["When", dt],
     ["Country", event.country || "—"],
     ["Region", event.region || "—"],
     ["IP", event.ip || "—"],
-    ["Device", event.device || "—"],
-    ["Platform", event.platform || "—"],
-    ["Label", event.label || "—"],
-    ["Restaurant ID", event.restaurantId || "—"],
-    ["User ID", event.userId || "—"],
-    ["gclid", event.gclid || "—"],
-    ["Google Ads", event.isGoogleAds ? "yes" : "no"],
-    ["Facebook Ads", event.isFacebookAds ? "yes" : "no"],
-    ["From search", event.isSearch ? "yes" : "no"],
-    ...adParamFields,
-    ["Event ID", event.id],
+    ...(email ? [["Email", email] as [string, string]] : []),
   ];
 
   return (
