@@ -68,6 +68,9 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <SubpageStickyBar onBack={onBack} hideSave>
+        <span className="text-[10px] text-muted-foreground tabular-nums">
+          {visible.length} / {rows.length}
+        </span>
         <div className="flex items-center gap-0.5 bg-secondary rounded-md p-0.5">
           {filters.map((f) => (
             <button
@@ -85,9 +88,6 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
             </button>
           ))}
         </div>
-        <span className="text-[10px] text-muted-foreground tabular-nums">
-          {visible.length} / {rows.length}
-        </span>
         <button
           type="button"
           onClick={() => void fetchRows()}
@@ -109,6 +109,10 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
               const trialEndMs = r.trialEndsAt ? new Date(r.trialEndsAt).getTime() : null;
               const trialActive =
                 r.subscriptionStatus !== "ACTIVE" && trialEndMs !== null && trialEndMs >= Date.now();
+              const trialDaysLeft =
+                trialActive && trialEndMs !== null
+                  ? Math.max(1, Math.ceil((trialEndMs - Date.now()) / 86_400_000))
+                  : null;
               const active = r.subscriptionStatus === "ACTIVE";
               const nameColor =
                 active && r.plan === "PRO"
@@ -137,6 +141,7 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                     title={r.slug || ""}
                   >
                     {r.title}
+                    {trialDaysLeft !== null ? ` (${trialDaysLeft}d)` : ""}
                   </span>
                   <span className="inline-flex items-center gap-2 text-[10px] text-muted-foreground tabular-nums shrink-0">
                     <span className="inline-flex items-center gap-0.5" title="Support messages — total (admin + restaurant)">
