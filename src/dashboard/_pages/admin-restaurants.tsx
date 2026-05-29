@@ -6,7 +6,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
-import { EyeIcon, MessageIcon } from "../_v2/icons";
+import { EyeIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
 import { formatDateShort } from "./_admin-helpers";
 import { useScrollLock } from "../_v2/use-scroll-lock";
@@ -67,29 +67,38 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
 
   return (
     <div>
-      <SubpageStickyBar onBack={onBack} hideSave />
-      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
-        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+      <SubpageStickyBar onBack={onBack} hideSave>
+        <div className="flex items-center gap-0.5 bg-secondary rounded-md p-0.5">
           {filters.map((f) => (
             <button
               key={f.id}
               type="button"
               onClick={() => setFilter(f.id)}
               className={
-                "h-7 px-3 text-xs font-medium rounded-md transition-colors " +
+                "h-7 px-2.5 text-xs font-medium rounded transition-colors " +
                 (filter === f.id
-                  ? "bg-primary-gradient text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:text-foreground")
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground")
               }
             >
               {f.label}
             </button>
           ))}
-          <span className="ml-auto text-[10px] text-muted-foreground tabular-nums">
-            {visible.length} / {rows.length}
-          </span>
         </div>
-
+        <span className="text-[10px] text-muted-foreground tabular-nums">
+          {visible.length} / {rows.length}
+        </span>
+        <button
+          type="button"
+          onClick={() => void fetchRows()}
+          disabled={loading}
+          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+          title="Refresh"
+        >
+          <RefreshIcon size={14} className={loading ? "animate-spin" : ""} />
+        </button>
+      </SubpageStickyBar>
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         {loading && rows.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
         ) : visible.length === 0 ? (
