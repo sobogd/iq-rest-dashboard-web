@@ -21,6 +21,7 @@ interface RestaurantRow {
   scansToday: number;
   messagesCount: number;
   lastVisit: string | null;
+  hasAdminComment: boolean;
 }
 
 type Filter = "all" | "subscribed";
@@ -45,6 +46,11 @@ export function AdminRestaurantsPage() {
   }, []);
 
   useEffect(() => {
+    void fetchRows();
+  }, [fetchRows]);
+
+  const closeModal = useCallback(() => {
+    setModalRestaurantId(null);
     void fetchRows();
   }, [fetchRows]);
 
@@ -108,6 +114,13 @@ export function AdminRestaurantsPage() {
                   onClick={() => setModalRestaurantId(r.id)}
                   className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
                 >
+                  {r.hasAdminComment ? (
+                    <span
+                      className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"
+                      title="Has admin note"
+                      aria-label="Has admin note"
+                    />
+                  ) : null}
                   <span
                     className={"font-medium truncate flex-1 " + (r.title ? nameColor : "text-muted-foreground italic")}
                     title={r.slug || ""}
@@ -141,13 +154,13 @@ export function AdminRestaurantsPage() {
       {modalRestaurantId ? (
         <div
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setModalRestaurantId(null)}
+          onClick={() => closeModal()}
         >
           <div
             className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <AdminRestaurantPage restaurantId={modalRestaurantId} onClose={() => setModalRestaurantId(null)} />
+            <AdminRestaurantPage restaurantId={modalRestaurantId} onClose={() => closeModal()} />
           </div>
         </div>
       ) : null}
