@@ -27,7 +27,8 @@ export type View =
   | { name: "settings.devices" }
   | { name: "settings.restaurants" }
   | { name: "settings.restaurants.new" }
-  | { name: "settings.admin" }
+  | { name: "settings.admin.restaurants" }
+  | { name: "settings.admin.users" }
   | { name: "settings.admin.restaurant"; id: string }
   | { name: "settings.admin.usage" }
   | { name: "category.new"; group?: string }

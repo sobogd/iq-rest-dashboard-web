@@ -7,6 +7,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { EyeIcon, MessageIcon } from "../_v2/icons";
+import { SubpageStickyBar } from "../_v2/ui";
 import { formatDateShort } from "./_admin-helpers";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 import { AdminRestaurantPage } from "./admin-restaurant";
@@ -26,7 +27,7 @@ interface RestaurantRow {
 
 type Filter = "all" | "subscribed";
 
-export function AdminRestaurantsPage() {
+export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
   const [rows, setRows] = useState<RestaurantRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
@@ -66,6 +67,7 @@ export function AdminRestaurantsPage() {
 
   return (
     <div>
+      <SubpageStickyBar onBack={onBack} hideSave />
       <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
         <div className="flex flex-wrap items-center gap-1.5 mb-3">
           {filters.map((f) => (

@@ -30,7 +30,8 @@ import { AnalyticsClient } from "../analytics/analytics-client";
 import { SettingsHubView } from "./views/settings-hub";
 import { DevicesSettingsPage } from "../_v2/devices-settings";
 import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
-import { AdminPage } from "../_pages/admin";
+import { AdminRestaurantsPage } from "../_pages/admin-restaurants";
+import { AdminUsersPage } from "../_pages/admin-users";
 import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
 import { LandingRedirect } from "../../auth/landing-redirect";
@@ -319,8 +320,10 @@ function ViewSwitch(p: SwitchProps) {
     case "settings.restaurants.new":
       return <RestaurantNewPage onBack={() => router.push({ name: "settings.restaurants" })} />;
 
-    case "settings.admin":
-      return <AdminPage />;
+    case "settings.admin.restaurants":
+      return <AdminRestaurantsPage onBack={backToSettings} />;
+    case "settings.admin.users":
+      return <AdminUsersPage onBack={backToSettings} />;
     case "settings.admin.restaurant":
       return <AdminRestaurantPage restaurantId={view.id} />;
     case "settings.admin.usage":

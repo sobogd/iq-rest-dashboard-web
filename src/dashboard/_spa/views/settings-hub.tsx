@@ -31,6 +31,49 @@ const CARDS: CardDef[] = [
   { view: { name: "settings.support" }, titleKey: "support", descKey: "supportDesc", event: "dash_settings_click_tab_support" },
 ];
 
+function AdminToolbar({ router }: { router: ReturnType<typeof useDashboardRouter> }) {
+  const [reloading, setReloading] = useState(false);
+  async function reloadAllTablets() {
+    if (reloading) return;
+    if (!window.confirm("Reload every paired tablet system-wide?")) return;
+    setReloading(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/devices/reload-all`), {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) {
+        alert("Failed to send reload");
+        return;
+      }
+      const data = (await res.json()) as { devices: number; restaurants: number };
+      alert(`Reload sent to ${data.devices} tablet(s) across ${data.restaurants} restaurant(s)`);
+    } catch {
+      alert("Network error");
+    } finally {
+      setReloading(false);
+    }
+  }
+  const btn =
+    "h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors disabled:opacity-60";
+  return (
+    <div className="mb-4 flex items-center gap-1.5 flex-wrap">
+      <button type="button" onClick={() => router.push({ name: "settings.admin.restaurants" })} className={btn}>
+        Restaurants
+      </button>
+      <button type="button" onClick={() => router.push({ name: "settings.admin.users" })} className={btn}>
+        Users
+      </button>
+      <button type="button" onClick={() => router.push({ name: "settings.admin.usage" })} className={btn}>
+        Usage
+      </button>
+      <button type="button" onClick={reloadAllTablets} disabled={reloading} className={btn} title="Reload every paired tablet system-wide">
+        {reloading ? "Sending…" : "Reload tablets"}
+      </button>
+    </div>
+  );
+}
+
 export function SettingsHubView({
   isAdmin,
   impersonatedBy,
@@ -75,22 +118,7 @@ export function SettingsHubView({
   return (
     <div className="max-w-5xl mx-auto md:px-6">
       {isAdmin ? (
-        <div className="mb-4 flex items-center gap-1.5 flex-wrap">
-          <button
-            type="button"
-            onClick={() => router.push({ name: "settings.admin" })}
-            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
-          >
-            Admin
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push({ name: "settings.admin.usage" })}
-            className="h-8 px-3 rounded-md text-xs font-medium bg-secondary text-foreground hover:bg-muted transition-colors"
-          >
-            Usage
-          </button>
-        </div>
+        <AdminToolbar router={router} />
       ) : null}
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
       {showSwitcher ? (

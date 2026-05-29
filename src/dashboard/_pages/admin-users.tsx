@@ -4,8 +4,9 @@
 // restaurants. Lets the admin see who-owns-what at a glance. Clicking a
 // restaurant inside a user opens the AdminRestaurantPage modal.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { apiUrl } from "@/lib/api";
+import { SubpageStickyBar } from "../_v2/ui";
 import { AdminRestaurantPage } from "./admin-restaurant";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 
@@ -28,12 +29,9 @@ interface UserRow {
   }[];
 }
 
-type Filter = "all" | "paying" | "trial" | "multi" | "noRestaurant";
-
-export function AdminUsersPage() {
+export function AdminUsersPage({ onBack }: { onBack: () => void }) {
   const [rows, setRows] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Filter>("all");
   const [modalRestaurantId, setModalRestaurantId] = useState<string | null>(null);
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
   useScrollLock(Boolean(modalRestaurantId));
@@ -54,54 +52,17 @@ export function AdminUsersPage() {
     void fetchRows();
   }, [fetchRows]);
 
-  const visible = useMemo(() => {
-    if (filter === "all") return rows;
-    if (filter === "paying") return rows.filter((u) => u.hasPaying);
-    if (filter === "trial") return rows.filter((u) => u.hasActiveTrial);
-    if (filter === "multi") return rows.filter((u) => u.restaurantsCount > 1);
-    if (filter === "noRestaurant") return rows.filter((u) => u.restaurantsCount === 0);
-    return rows;
-  }, [rows, filter]);
-
-  const filters: { id: Filter; label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "paying", label: "Paying" },
-    { id: "trial", label: "Trial" },
-    { id: "multi", label: "Multi-restaurant" },
-    { id: "noRestaurant", label: "No restaurant" },
-  ];
-
   return (
     <div>
+      <SubpageStickyBar onBack={onBack} hideSave />
       <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
-        <div className="flex flex-wrap items-center gap-1.5 mb-3">
-          {filters.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              onClick={() => setFilter(f.id)}
-              className={
-                "h-7 px-3 text-xs font-medium rounded-md transition-colors " +
-                (filter === f.id
-                  ? "bg-primary-gradient text-primary-foreground"
-                  : "bg-secondary text-muted-foreground hover:text-foreground")
-              }
-            >
-              {f.label}
-            </button>
-          ))}
-          <span className="ml-auto text-[10px] text-muted-foreground tabular-nums">
-            {visible.length} / {rows.length}
-          </span>
-        </div>
-
         {loading && rows.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-        ) : visible.length === 0 ? (
+        ) : rows.length === 0 ? (
           <div className="text-xs text-muted-foreground py-8 text-center">No users</div>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-            {visible.map((u) => {
+            {rows.map((u) => {
               const isExpanded = expandedUserId === u.id;
               return (
                 <div key={u.id}>

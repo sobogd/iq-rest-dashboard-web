@@ -55,8 +55,10 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/restaurants";
     case "settings.restaurants.new":
       return "/dashboard/settings/restaurants/new";
-    case "settings.admin":
-      return "/dashboard/settings/admin";
+    case "settings.admin.restaurants":
+      return "/dashboard/settings/admin/restaurants";
+    case "settings.admin.users":
+      return "/dashboard/settings/admin/users";
     case "settings.admin.restaurant":
       return `/dashboard/settings/admin/restaurants/${view.id}`;
     case "settings.admin.usage":
@@ -122,11 +124,14 @@ export function pathToView(path: string): View {
   if (stripped === "/dashboard/settings/devices") return { name: "settings.devices" };
   if (stripped === "/dashboard/settings/restaurants") return { name: "settings.restaurants" };
   if (stripped === "/dashboard/settings/restaurants/new") return { name: "settings.restaurants.new" };
-  if (stripped === "/dashboard/settings/admin") return { name: "settings.admin" };
+  // Order matters: /admin/restaurants/:id must match before the bare list path.
   const adminRestaurantMatch = stripped.match(/^\/dashboard\/settings\/admin\/restaurants\/([^/]+)$/);
   if (adminRestaurantMatch) return { name: "settings.admin.restaurant", id: adminRestaurantMatch[1] };
-
+  if (stripped === "/dashboard/settings/admin/restaurants") return { name: "settings.admin.restaurants" };
+  if (stripped === "/dashboard/settings/admin/users") return { name: "settings.admin.users" };
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
+  // Legacy redirect: the old combined "Admin" tabs lived at this path.
+  if (stripped === "/dashboard/settings/admin") return { name: "settings.admin.restaurants" };
 
   // Top-level tabs
   if (stripped === "/dashboard/orders") return { name: "orders" };
