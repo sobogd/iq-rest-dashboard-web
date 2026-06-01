@@ -1443,14 +1443,15 @@ interface SubStatus {
 }
 
 // Billing currencies we actually sell in (Stripe prices exist for these).
-type BillingCur = "EUR" | "NOK" | "SEK" | "DKK" | "MXN";
-const BILLING_CURRENCIES: BillingCur[] = ["EUR", "NOK", "SEK", "DKK", "MXN"];
+type BillingCur = "EUR" | "NOK" | "SEK" | "DKK" | "MXN" | "USD";
+const BILLING_CURRENCIES: BillingCur[] = ["EUR", "NOK", "SEK", "DKK", "MXN", "USD"];
 const CUR_META: Record<BillingCur, { symbol: string; after: boolean }> = {
  EUR: { symbol: "€", after: false },
  NOK: { symbol: "kr", after: true },
  SEK: { symbol: "kr", after: true },
  DKK: { symbol: "kr", after: true },
  MXN: { symbol: "MX$", after: false },
+ USD: { symbol: "$", after: false },
 };
 // Per-month display prices (yearly column shows the per-month equivalent),
 // matching the landing pricing table and the Stripe prices.
@@ -1460,6 +1461,7 @@ const BILLING_PRICES: Record<BillingCur, { BASIC: { MONTHLY: string; YEARLY: str
  SEK: { BASIC: { MONTHLY: "109", YEARLY: "79" }, PRO: { MONTHLY: "349", YEARLY: "269" } },
  DKK: { BASIC: { MONTHLY: "79", YEARLY: "49" }, PRO: { MONTHLY: "239", YEARLY: "189" } },
  MXN: { BASIC: { MONTHLY: "149", YEARLY: "99" }, PRO: { MONTHLY: "449", YEARLY: "299" } },
+ USD: { BASIC: { MONTHLY: "14.90", YEARLY: "9.90" }, PRO: { MONTHLY: "44.90", YEARLY: "29.90" } },
 };
 function fmtBilling(amount: string, cur: BillingCur): string {
  const m = CUR_META[cur];
