@@ -1472,7 +1472,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const [sub, setSub] = useState<SubStatus | null>(null);
  const [pendingPlan, setPendingPlan] = useState<{ plan: "BASIC" | "PRO"; cycle: "MONTHLY" | "YEARLY" } | null>(null);
  const [currency, setCurrency] = useState<BillingCur>(
- (BILLING_CURRENCIES as string[]).includes(restaurant.billingCurrency)
+ (BILLING_CURRENCIES as string[]).includes(restaurant.billingCurrency ?? "")
  ? (restaurant.billingCurrency as BillingCur)
  : "EUR",
  );
