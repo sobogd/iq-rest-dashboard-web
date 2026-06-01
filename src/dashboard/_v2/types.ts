@@ -169,6 +169,7 @@ export interface Restaurant {
  paymentMethods: string[];
  slug: string;
  currency: string;
+ billingCurrency: string;
  backgroundUrl: string | null;
  backgroundType: "image" | "video" | null;
  accentColor: string;

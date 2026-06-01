@@ -65,6 +65,7 @@ export interface ApiRestaurant {
  description: string | null;
  slug: string | null;
  currency: string;
+ billingCurrency?: string;
  source: string | null;
  backgroundType: string | null;
  accentColor: string;

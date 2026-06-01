@@ -203,6 +203,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  paymentMethods: Array.isArray(r.paymentMethods) ? r.paymentMethods : ["cash", "card"],
  slug,
  currency: r.currency,
+ billingCurrency: (r as { billingCurrency?: string }).billingCurrency || "EUR",
  backgroundUrl: r.source || null,
  // Older rows have backgroundType=null even when source is a video. Sniff
  // the URL extension before falling back to "image".

@@ -1442,6 +1442,28 @@ interface SubStatus {
  trialEndsAt: string | null;
 }
 
+// Billing currencies we actually sell in (Stripe prices exist for these).
+type BillingCur = "EUR" | "NOK" | "SEK" | "DKK";
+const BILLING_CURRENCIES: BillingCur[] = ["EUR", "NOK", "SEK", "DKK"];
+const CUR_META: Record<BillingCur, { symbol: string; after: boolean }> = {
+ EUR: { symbol: "€", after: false },
+ NOK: { symbol: "kr", after: true },
+ SEK: { symbol: "kr", after: true },
+ DKK: { symbol: "kr", after: true },
+};
+// Per-month display prices (yearly column shows the per-month equivalent),
+// matching the landing pricing table and the Stripe prices.
+const BILLING_PRICES: Record<BillingCur, { BASIC: { MONTHLY: string; YEARLY: string }; PRO: { MONTHLY: string; YEARLY: string } }> = {
+ EUR: { BASIC: { MONTHLY: "9.90", YEARLY: "6.90" }, PRO: { MONTHLY: "31.90", YEARLY: "24.90" } },
+ NOK: { BASIC: { MONTHLY: "109", YEARLY: "79" }, PRO: { MONTHLY: "349", YEARLY: "269" } },
+ SEK: { BASIC: { MONTHLY: "109", YEARLY: "79" }, PRO: { MONTHLY: "349", YEARLY: "269" } },
+ DKK: { BASIC: { MONTHLY: "79", YEARLY: "49" }, PRO: { MONTHLY: "239", YEARLY: "189" } },
+};
+function fmtBilling(amount: string, cur: BillingCur): string {
+ const m = CUR_META[cur];
+ return m.after ? `${amount} ${m.symbol}` : `${m.symbol}${amount}`;
+}
+
 export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.billing");
@@ -1449,11 +1471,29 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const restaurant = useRestaurant();
  const [sub, setSub] = useState<SubStatus | null>(null);
  const [pendingPlan, setPendingPlan] = useState<{ plan: "BASIC" | "PRO"; cycle: "MONTHLY" | "YEARLY" } | null>(null);
+ const [currency, setCurrency] = useState<BillingCur>(
+ (BILLING_CURRENCIES as string[]).includes(restaurant.billingCurrency)
+ ? (restaurant.billingCurrency as BillingCur)
+ : "EUR",
+ );
 
  useEffect(() => {
  window.scrollTo({ top: 0, behavior: "auto" });
  fetchSubscriptionStatus().then((s) => setSub(s)).catch(() => track("dash_error_fetch"));
  }, []);
+
+ // Switching currency: persist to the restaurant (so checkout + landing read
+ // it) and mirror into the geo_currency cookie. Locked once a sub is active —
+ // Stripe can't change a customer's currency mid-subscription.
+ function changeCurrency(c: BillingCur) {
+ if (c === currency) return;
+ setCurrency(c);
+ try {
+ document.cookie = `geo_currency=${c}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+ } catch { /* ignore */ }
+ void updateRestaurant({ billingCurrency: c }).catch(() => undefined);
+ track("dash_settings_billing_currency_change");
+ }
 
  const isActive = sub?.subscriptionStatus === "ACTIVE" && sub.plan !== "FREE";
  const trialEndsAt = sub?.trialEndsAt ? new Date(sub.trialEndsAt) : null;
@@ -1464,9 +1504,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  track(cycle === "YEARLY" ? "dash_settings_billing_subscribe_year" : "dash_settings_billing_subscribe_month");
  setPendingPlan({ plan, cycle });
  try {
- // Billing is EU-only — always check out in EUR regardless of the
- // restaurant's menu currency setting.
- const url = await createCheckoutSession(plan, cycle, "EUR");
+ const url = await createCheckoutSession(plan, cycle, currency);
  if (url) window.location.href = url;
  } catch {
  } finally {
@@ -1537,6 +1575,33 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  .billing-plans { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
  @media (min-width: 600px) { .billing-plans { grid-template-columns: 1fr 1fr; } }
  `}</style>
+
+ {/* Currency selector — segmented control. Locked while a sub is active
+     because Stripe can't switch a customer's currency mid-subscription. */}
+ <div className="flex items-center justify-between gap-3 mb-2">
+ <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+ Currency
+ </span>
+ <div className="inline-flex items-center gap-0.5 bg-secondary rounded-lg p-0.5">
+ {BILLING_CURRENCIES.map((c) => (
+ <button
+ key={c}
+ type="button"
+ onClick={() => changeCurrency(c)}
+ disabled={isActive}
+ className={
+ "h-7 px-2.5 text-xs font-medium rounded-md transition-colors disabled:opacity-50 " +
+ (currency === c
+ ? "bg-card text-foreground shadow-sm"
+ : "text-muted-foreground hover:text-foreground")
+ }
+ >
+ {c}
+ </button>
+ ))}
+ </div>
+ </div>
+
  {(["BASIC", "PRO"] as const).map((tier) => (
  <div key={tier} className="mt-2 first:mt-0">
  <div className="flex items-baseline justify-between mb-2 mt-5">
@@ -1547,12 +1612,12 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  <div className="billing-plans">
  {(tier === "BASIC"
    ? [
-       { plan: "BASIC" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: "9.90", periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
-       { plan: "BASIC" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: "6.90", periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
+       { plan: "BASIC" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: BILLING_PRICES[currency].BASIC.MONTHLY, periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
+       { plan: "BASIC" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: BILLING_PRICES[currency].BASIC.YEARLY, periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
      ]
    : [
-       { plan: "PRO" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: "31.90", periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
-       { plan: "PRO" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: "24.90", periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
+       { plan: "PRO" as const, cycle: "MONTHLY" as const, labelKey: "monthly" as const, priceMonthly: BILLING_PRICES[currency].PRO.MONTHLY, periodKey: "billedMonthly" as const, badgeKey: null, highlight: false },
+       { plan: "PRO" as const, cycle: "YEARLY" as const, labelKey: "yearly" as const, priceMonthly: BILLING_PRICES[currency].PRO.YEARLY, periodKey: "billedYearly" as const, badgeKey: "save30" as const, highlight: true },
      ]
  ).map((p) => {
  const isCurrent = sub?.plan === p.plan && sub?.billingCycle === p.cycle && isActive;
@@ -1577,7 +1642,7 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
 
  <div className="text-sm font-medium text-foreground">{tb(p.labelKey)}</div>
  <div className="mt-1 flex items-baseline gap-1">
- <span className="text-2xl font-medium text-foreground tabular-nums">€{p.priceMonthly}</span>
+ <span className="text-2xl font-medium text-foreground tabular-nums">{fmtBilling(p.priceMonthly, currency)}</span>
  <span className="text-xs text-muted-foreground">{tb("perMo")}</span>
  </div>
  <div className="text-xs text-muted-foreground mt-0.5">{tb(p.periodKey)}</div>
