@@ -1464,6 +1464,72 @@ function fmtBilling(amount: string, cur: BillingCur): string {
  return m.after ? `${amount} ${m.symbol}` : `${m.symbol}${amount}`;
 }
 
+// Currency picker for the billing sub-header — same dropdown pattern as the
+// analytics period selector.
+function CurrencyDropdown({
+ value,
+ onChange,
+ disabled,
+}: {
+ value: BillingCur;
+ onChange: (c: BillingCur) => void;
+ disabled?: boolean;
+}) {
+ const [open, setOpen] = useState(false);
+ const ref = useRef<HTMLDivElement | null>(null);
+ useEffect(() => {
+ if (!open) return;
+ function onDocClick(e: MouseEvent) {
+ if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+ }
+ function onEsc(e: KeyboardEvent) {
+ if (e.key === "Escape") setOpen(false);
+ }
+ document.addEventListener("mousedown", onDocClick);
+ document.addEventListener("keydown", onEsc);
+ return () => {
+ document.removeEventListener("mousedown", onDocClick);
+ document.removeEventListener("keydown", onEsc);
+ };
+ }, [open]);
+ return (
+ <div ref={ref} className="relative">
+ <button
+ type="button"
+ disabled={disabled}
+ onClick={() => setOpen((v) => !v)}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium bg-secondary text-foreground rounded-md transition-colors disabled:opacity-50"
+ aria-haspopup="listbox"
+ aria-expanded={open}
+ >
+ <span>{value} · {CUR_META[value].symbol}</span>
+ <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+ <polyline points="6 9 12 15 18 9" />
+ </svg>
+ </button>
+ {open ? (
+ <div role="listbox" className="absolute right-0 mt-1 z-20 min-w-[120px] bg-card border border-border rounded-lg shadow-lg py-1">
+ {BILLING_CURRENCIES.map((c) => (
+ <button
+ key={c}
+ type="button"
+ role="option"
+ aria-selected={c === value}
+ onClick={() => { onChange(c); setOpen(false); }}
+ className={
+ "w-full flex items-center gap-3 px-3 h-8 text-[12px] text-left transition-colors " +
+ (c === value ? "text-foreground" : "text-muted-foreground hover:text-foreground")
+ }
+ >
+ <span className="truncate">{c} · {CUR_META[c].symbol}</span>
+ </button>
+ ))}
+ </div>
+ ) : null}
+ </div>
+ );
+}
+
 export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  const t = useTranslations("dashboard.settings");
  const tb = useTranslations("dashboard.settings.billing");
@@ -1523,7 +1589,9 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
 
  return (
  <div>
- <SubpageStickyBar onBack={() => { track("dash_settings_billing_back"); onBack(); }} hideSave />
+ <SubpageStickyBar onBack={() => { track("dash_settings_billing_back"); onBack(); }} hideSave>
+ <CurrencyDropdown value={currency} onChange={changeCurrency} disabled={isActive} />
+ </SubpageStickyBar>
  <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
  <div className="mb-5">
  <div className="text-xs text-muted-foreground">{t("breadcrumb")}</div>
@@ -1575,32 +1643,6 @@ export function BillingSettingsPage({ onBack }: { onBack: () => void }) {
  .billing-plans { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
  @media (min-width: 600px) { .billing-plans { grid-template-columns: 1fr 1fr; } }
  `}</style>
-
- {/* Currency selector — segmented control. Locked while a sub is active
-     because Stripe can't switch a customer's currency mid-subscription. */}
- <div className="flex items-center justify-between gap-3 mb-2">
- <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
- Currency
- </span>
- <div className="inline-flex items-center gap-0.5 bg-secondary rounded-lg p-0.5">
- {BILLING_CURRENCIES.map((c) => (
- <button
- key={c}
- type="button"
- onClick={() => changeCurrency(c)}
- disabled={isActive}
- className={
- "h-7 px-2.5 text-xs font-medium rounded-md transition-colors disabled:opacity-50 " +
- (currency === c
- ? "bg-card text-foreground shadow-sm"
- : "text-muted-foreground hover:text-foreground")
- }
- >
- {c}
- </button>
- ))}
- </div>
- </div>
 
  {(["BASIC", "PRO"] as const).map((tier) => (
  <div key={tier} className="mt-2 first:mt-0">
