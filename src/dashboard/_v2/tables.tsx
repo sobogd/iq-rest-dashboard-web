@@ -374,9 +374,14 @@ export function TableFormPage({
  window.scrollTo({ top: 0, behavior: "auto" });
  }, []);
 
+ // A table can't be deleted while it has a live order or a still-active booking
+ // (pending or confirmed). Completed and cancelled/rejected bookings don't block.
  const usedIds = new Set<string>([
  ...orders.filter((o) => o.status === "active").map((o) => o.tableId).filter((x): x is string => !!x),
- ...bookings.filter((b) => b.status !== "cancelled").map((b) => b.tableId).filter((x): x is string => !!x),
+ ...bookings
+  .filter((b) => b.status === "pending" || b.status === "confirmed")
+  .map((b) => b.tableId)
+  .filter((x): x is string => !!x),
  ]);
 
  if (mode === "edit" && !tables.find((x) => x.id === tableId)) {
