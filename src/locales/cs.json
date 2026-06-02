@@ -492,7 +492,12 @@
         "layout_flat_name": "Ploché",
         "layout_flat_desc": "Vodorovné záložky kategorií s pokrmy v řadě.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Klepnutím na kategorii otevřete její obrazovku s pokrmy."
+        "layout_drill_desc": "Klepnutím na kategorii otevřete její obrazovku s pokrmy.",
+        "titleScaleLabel": "Velikost názvu",
+        "titleScaleTip": "Velikost písma názvu a popisu přes pozadí.",
+        "titleScale_small": "Malé",
+        "titleScale_medium": "Střední",
+        "titleScale_large": "Velké"
       },
       "general": {
         "title": "Místní nastavení",

@@ -492,7 +492,12 @@
         "layout_flat_name": "Plokščias",
         "layout_flat_desc": "Horizontalūs kategorijų skirtukai su patiekalais eilėje.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Bakstelėkite kategoriją, kad atidarytumėte jos ekraną su patiekalais."
+        "layout_drill_desc": "Bakstelėkite kategoriją, kad atidarytumėte jos ekraną su patiekalais.",
+        "titleScaleLabel": "Pavadinimo dydis",
+        "titleScaleTip": "Pavadinimo ir aprašymo šrifto dydis virš fono.",
+        "titleScale_small": "Mažas",
+        "titleScale_medium": "Vidutinis",
+        "titleScale_large": "Didelis"
       },
       "general": {
         "title": "Regiono nustatymai",

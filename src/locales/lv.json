@@ -492,7 +492,12 @@
         "layout_flat_name": "Plakana",
         "layout_flat_desc": "Horizontāli kategoriju cilnes ar ēdieniem rindā.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Pieskarieties kategorijai, lai atvērtu tās ekrānu ar ēdieniem."
+        "layout_drill_desc": "Pieskarieties kategorijai, lai atvērtu tās ekrānu ar ēdieniem.",
+        "titleScaleLabel": "Virsraksta izmērs",
+        "titleScaleTip": "Nosaukuma un apraksta fonta izmērs virs fona.",
+        "titleScale_small": "Mazs",
+        "titleScale_medium": "Vidējs",
+        "titleScale_large": "Liels"
       },
       "general": {
         "title": "Reģiona iestatījumi",

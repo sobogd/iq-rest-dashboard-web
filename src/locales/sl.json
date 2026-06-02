@@ -492,7 +492,12 @@
         "layout_flat_name": "Plosko",
         "layout_flat_desc": "Vodoravni zavihki kategorij z jedmi v vrstici.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Dotaknite se kategorije, da odprete njen zaslon z jedmi."
+        "layout_drill_desc": "Dotaknite se kategorije, da odprete njen zaslon z jedmi.",
+        "titleScaleLabel": "Velikost naslova",
+        "titleScaleTip": "Velikost pisave imena in opisa čez ozadje.",
+        "titleScale_small": "Majhno",
+        "titleScale_medium": "Srednje",
+        "titleScale_large": "Veliko"
       },
       "general": {
         "title": "Lokalne nastavitve",

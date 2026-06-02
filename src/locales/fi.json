@@ -492,7 +492,12 @@
         "layout_flat_name": "Litteä",
         "layout_flat_desc": "Vaakasuorat luokkavälilehdet annoksilla rivissä.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Napauta luokkaa avataksesi sen näytön annoksilla."
+        "layout_drill_desc": "Napauta luokkaa avataksesi sen näytön annoksilla.",
+        "titleScaleLabel": "Otsikon koko",
+        "titleScaleTip": "Nimen ja kuvauksen fonttikoko taustan päällä.",
+        "titleScale_small": "Pieni",
+        "titleScale_medium": "Keskikoko",
+        "titleScale_large": "Suuri"
       },
       "general": {
         "title": "Aluekohtaiset",

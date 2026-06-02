@@ -492,7 +492,12 @@
         "layout_flat_name": "Lapos",
         "layout_flat_desc": "Vízszintes kategória fülek ételek sorban.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Koppintson egy kategóriára a saját képernyő megnyitásához."
+        "layout_drill_desc": "Koppintson egy kategóriára a saját képernyő megnyitásához.",
+        "titleScaleLabel": "Címméret",
+        "titleScaleTip": "A név és a leírás betűmérete a háttér felett.",
+        "titleScale_small": "Kicsi",
+        "titleScale_medium": "Közepes",
+        "titleScale_large": "Nagy"
       },
       "general": {
         "title": "Területi beállítások",

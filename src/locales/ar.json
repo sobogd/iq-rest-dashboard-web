@@ -492,7 +492,12 @@
         "layout_flat_name": "مسطح",
         "layout_flat_desc": "علامات تبويب أفقية للفئات مع الأطباق في سطر.",
         "layout_drill_name": "التعمق",
-        "layout_drill_desc": "انقر على فئة لفتح شاشتها مع الأطباق."
+        "layout_drill_desc": "انقر على فئة لفتح شاشتها مع الأطباق.",
+        "titleScaleLabel": "حجم العنوان",
+        "titleScaleTip": "حجم خط الاسم والوصف فوق الخلفية.",
+        "titleScale_small": "صغير",
+        "titleScale_medium": "متوسط",
+        "titleScale_large": "كبير"
       },
       "general": {
         "title": "اللغة والمنطقة",

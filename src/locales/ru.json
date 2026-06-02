@@ -492,7 +492,12 @@
         "layout_flat_name": "Плоский",
         "layout_flat_desc": "Горизонтальные табы категорий, блюда в общей ленте.",
         "layout_drill_name": "Дриллдаун",
-        "layout_drill_desc": "Тап по категории открывает её отдельную страницу с блюдами."
+        "layout_drill_desc": "Тап по категории открывает её отдельную страницу с блюдами.",
+        "titleScaleLabel": "Размер заголовка",
+        "titleScaleTip": "Размер шрифта названия и описания поверх фона.",
+        "titleScale_small": "Маленький",
+        "titleScale_medium": "Средний",
+        "titleScale_large": "Большой"
       },
       "general": {
         "title": "Регион",

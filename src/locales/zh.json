@@ -492,7 +492,12 @@
         "layout_flat_name": "平铺",
         "layout_flat_desc": "水平类别标签，菜品排列。",
         "layout_drill_name": "深入查看",
-        "layout_drill_desc": "点击类别打开其菜品页面。"
+        "layout_drill_desc": "点击类别打开其菜品页面。",
+        "titleScaleLabel": "标题大小",
+        "titleScaleTip": "背景上方名称和描述的字体大小。",
+        "titleScale_small": "小",
+        "titleScale_medium": "中",
+        "titleScale_large": "大"
       },
       "general": {
         "title": "区域",

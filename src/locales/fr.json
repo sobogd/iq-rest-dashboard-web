@@ -492,7 +492,12 @@
         "layout_flat_name": "Plat",
         "layout_flat_desc": "Onglets de catégories horizontaux avec plats en ligne.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Touchez une catégorie pour ouvrir son écran avec les plats."
+        "layout_drill_desc": "Touchez une catégorie pour ouvrir son écran avec les plats.",
+        "titleScaleLabel": "Taille du titre",
+        "titleScaleTip": "Taille de police du nom et de la description sur l'arrière-plan.",
+        "titleScale_small": "Petit",
+        "titleScale_medium": "Moyen",
+        "titleScale_large": "Grand"
       },
       "general": {
         "title": "Localisation",

@@ -492,7 +492,12 @@
         "layout_flat_name": "Плоский",
         "layout_flat_desc": "Горизонтальні вкладки категорій зі стравами в лінію.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Торкніться категорії, щоб відкрити її екран зі стравами."
+        "layout_drill_desc": "Торкніться категорії, щоб відкрити її екран зі стравами.",
+        "titleScaleLabel": "Розмір заголовка",
+        "titleScaleTip": "Розмір шрифту назви та опису поверх фону.",
+        "titleScale_small": "Малий",
+        "titleScale_medium": "Середній",
+        "titleScale_large": "Великий"
       },
       "general": {
         "title": "Регіон",

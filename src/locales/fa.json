@@ -492,7 +492,12 @@
         "layout_flat_name": "تخت",
         "layout_flat_desc": "تب‌های افقی دسته‌بندی با غذاها در یک ردیف.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "برای باز کردن صفحه غذاهای دسته، روی آن بزنید."
+        "layout_drill_desc": "برای باز کردن صفحه غذاهای دسته، روی آن بزنید.",
+        "titleScaleLabel": "اندازه عنوان",
+        "titleScaleTip": "اندازه فونت نام و توضیحات روی پس‌زمینه.",
+        "titleScale_small": "کوچک",
+        "titleScale_medium": "متوسط",
+        "titleScale_large": "بزرگ"
       },
       "general": {
         "title": "منطقه و زبان",

@@ -492,7 +492,12 @@
         "layout_flat_name": "Pla",
         "layout_flat_desc": "Pestanyes horitzontals de categories amb plats en línia.",
         "layout_drill_name": "Desglossament",
-        "layout_drill_desc": "Toca una categoria per obrir la seva pantalla amb plats."
+        "layout_drill_desc": "Toca una categoria per obrir la seva pantalla amb plats.",
+        "titleScaleLabel": "Mida del títol",
+        "titleScaleTip": "Mida de la lletra del nom i la descripció sobre el fons.",
+        "titleScale_small": "Petit",
+        "titleScale_medium": "Mitjà",
+        "titleScale_large": "Gran"
       },
       "general": {
         "title": "Configuració regional",

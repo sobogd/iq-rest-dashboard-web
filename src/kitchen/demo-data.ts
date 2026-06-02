@@ -449,6 +449,7 @@ function buildDemoRestaurant(lang: string): Restaurant {
     subtitle: "",
     showTitleOnHomepage: false,
     menuLayout: "flat",
+    titleScale: "large",
     paymentMethods: [],
     slug: "love-eatery",
     currency: "EUR",

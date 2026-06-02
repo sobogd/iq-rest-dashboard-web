@@ -492,7 +492,12 @@
         "layout_flat_name": "Flach",
         "layout_flat_desc": "Horizontale Kategorie-Tabs mit Gerichten inline.",
         "layout_drill_name": "Drill-Down",
-        "layout_drill_desc": "Tippen Sie auf eine Kategorie, um ihren Bildschirm mit Gerichten zu öffnen."
+        "layout_drill_desc": "Tippen Sie auf eine Kategorie, um ihren Bildschirm mit Gerichten zu öffnen.",
+        "titleScaleLabel": "Titelgröße",
+        "titleScaleTip": "Schriftgröße von Name und Beschreibung über dem Hintergrund.",
+        "titleScale_small": "Klein",
+        "titleScale_medium": "Mittel",
+        "titleScale_large": "Groß"
       },
       "general": {
         "title": "Region",

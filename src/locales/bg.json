@@ -492,7 +492,12 @@
         "layout_flat_name": "Плоско",
         "layout_flat_desc": "Хоризонтални табове на категории с ястия в линия.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Докоснете категория, за да отворите нейния екран с ястия."
+        "layout_drill_desc": "Докоснете категория, за да отворите нейния екран с ястия.",
+        "titleScaleLabel": "Размер на заглавието",
+        "titleScaleTip": "Размер на шрифта на името и описанието върху фона.",
+        "titleScale_small": "Малък",
+        "titleScale_medium": "Среден",
+        "titleScale_large": "Голям"
       },
       "general": {
         "title": "Локализация",

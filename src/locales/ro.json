@@ -492,7 +492,12 @@
         "layout_flat_name": "Plat",
         "layout_flat_desc": "File orizontale de categorii cu preparate în linie.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Atinge o categorie pentru a deschide ecranul ei cu preparate."
+        "layout_drill_desc": "Atinge o categorie pentru a deschide ecranul ei cu preparate.",
+        "titleScaleLabel": "Dimensiunea titlului",
+        "titleScaleTip": "Dimensiunea fontului numelui și descrierii peste fundal.",
+        "titleScale_small": "Mic",
+        "titleScale_medium": "Mediu",
+        "titleScale_large": "Mare"
       },
       "general": {
         "title": "Regional",

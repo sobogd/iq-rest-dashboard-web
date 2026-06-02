@@ -492,7 +492,12 @@
         "layout_flat_name": "Cothrom",
         "layout_flat_desc": "Cluaisíní catagóire cothrománacha le miasa i ndiaidh a chéile.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Tapáil ar chatagóir chun a scáileán le miasa a oscailt."
+        "layout_drill_desc": "Tapáil ar chatagóir chun a scáileán le miasa a oscailt.",
+        "titleScaleLabel": "Méid an teidil",
+        "titleScaleTip": "Méid an chló don ainm agus don chur síos os cionn an chúlra.",
+        "titleScale_small": "Beag",
+        "titleScale_medium": "Meánach",
+        "titleScale_large": "Mór"
       },
       "general": {
         "title": "Áitiúil",

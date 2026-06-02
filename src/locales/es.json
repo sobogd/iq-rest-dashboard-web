@@ -492,7 +492,12 @@
         "layout_flat_name": "Plano",
         "layout_flat_desc": "Pestañas horizontales de categorías con platos en línea.",
         "layout_drill_name": "Desglose",
-        "layout_drill_desc": "Toca una categoría para abrir su pantalla con platos."
+        "layout_drill_desc": "Toca una categoría para abrir su pantalla con platos.",
+        "titleScaleLabel": "Tamaño del título",
+        "titleScaleTip": "Tamaño de fuente del nombre y la descripción sobre el fondo.",
+        "titleScale_small": "Pequeño",
+        "titleScale_medium": "Mediano",
+        "titleScale_large": "Grande"
       },
       "general": {
         "title": "Configuración regional",

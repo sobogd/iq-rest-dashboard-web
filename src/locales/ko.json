@@ -492,7 +492,12 @@
         "layout_flat_name": "평면",
         "layout_flat_desc": "요리가 일렬로 있는 가로 카테고리 탭.",
         "layout_drill_name": "드릴다운",
-        "layout_drill_desc": "카테고리를 탭하여 요리 화면을 엽니다."
+        "layout_drill_desc": "카테고리를 탭하여 요리 화면을 엽니다.",
+        "titleScaleLabel": "제목 크기",
+        "titleScaleTip": "배경 위에 표시되는 이름과 설명의 글꼴 크기.",
+        "titleScale_small": "작게",
+        "titleScale_medium": "중간",
+        "titleScale_large": "크게"
       },
       "general": {
         "title": "지역 설정",

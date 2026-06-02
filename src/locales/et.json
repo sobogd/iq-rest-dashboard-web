@@ -492,7 +492,12 @@
         "layout_flat_name": "Lame",
         "layout_flat_desc": "Horisontaalsed kategooriasakid roogadega real.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Puuduta kategooriat, et avada selle ekraan roogadega."
+        "layout_drill_desc": "Puuduta kategooriat, et avada selle ekraan roogadega.",
+        "titleScaleLabel": "Pealkirja suurus",
+        "titleScaleTip": "Nime ja kirjelduse fondi suurus tausta peal.",
+        "titleScale_small": "Väike",
+        "titleScale_medium": "Keskmine",
+        "titleScale_large": "Suur"
       },
       "general": {
         "title": "Lokaadi seaded",

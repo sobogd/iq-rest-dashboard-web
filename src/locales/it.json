@@ -492,7 +492,12 @@
         "layout_flat_name": "Piatto",
         "layout_flat_desc": "Tab categorie orizzontali con piatti in linea.",
         "layout_drill_name": "A cascata",
-        "layout_drill_desc": "Tocca una categoria per aprire la sua schermata con i piatti."
+        "layout_drill_desc": "Tocca una categoria per aprire la sua schermata con i piatti.",
+        "titleScaleLabel": "Dimensione del titolo",
+        "titleScaleTip": "Dimensione del carattere di nome e descrizione sopra lo sfondo.",
+        "titleScale_small": "Piccolo",
+        "titleScale_medium": "Medio",
+        "titleScale_large": "Grande"
       },
       "general": {
         "title": "Localizzazione",

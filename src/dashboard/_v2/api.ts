@@ -80,6 +80,7 @@ export interface ApiRestaurant {
  defaultLanguage: string;
  hideTitle: boolean;
  menuLayout: string;
+ titleScale: string;
  paymentMethods?: string[];
  reservationsEnabled: boolean;
  reservationMode: string;

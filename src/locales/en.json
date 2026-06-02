@@ -567,7 +567,12 @@
         "layout_flat_name": "Flat",
         "layout_flat_desc": "Horizontal category tabs with dishes scrolled inline.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Tap a category to open its own screen with dishes."
+        "layout_drill_desc": "Tap a category to open its own screen with dishes.",
+        "titleScaleLabel": "Title size",
+        "titleScaleTip": "Font size of the name and description over the background.",
+        "titleScale_small": "Small",
+        "titleScale_medium": "Medium",
+        "titleScale_large": "Large"
       },
       "general": {
         "title": "Locale",

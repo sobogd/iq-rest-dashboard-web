@@ -492,7 +492,12 @@
         "layout_flat_name": "Επίπεδη",
         "layout_flat_desc": "Οριζόντιες καρτέλες κατηγοριών με πιάτα σε σειρά.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Πατήστε σε μια κατηγορία για να ανοίξει η οθόνη της με τα πιάτα."
+        "layout_drill_desc": "Πατήστε σε μια κατηγορία για να ανοίξει η οθόνη της με τα πιάτα.",
+        "titleScaleLabel": "Μέγεθος τίτλου",
+        "titleScaleTip": "Μέγεθος γραμματοσειράς ονόματος και περιγραφής πάνω από το φόντο.",
+        "titleScale_small": "Μικρό",
+        "titleScale_medium": "Μεσαίο",
+        "titleScale_large": "Μεγάλο"
       },
       "general": {
         "title": "Τοπικές ρυθμίσεις",

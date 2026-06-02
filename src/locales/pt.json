@@ -492,7 +492,12 @@
         "layout_flat_name": "Plano",
         "layout_flat_desc": "Abas horizontais de categorias com pratos em linha.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Toque numa categoria para abrir o seu ecrã com pratos."
+        "layout_drill_desc": "Toque numa categoria para abrir o seu ecrã com pratos.",
+        "titleScaleLabel": "Tamanho do título",
+        "titleScaleTip": "Tamanho da fonte do nome e da descrição sobre o fundo.",
+        "titleScale_small": "Pequeno",
+        "titleScale_medium": "Médio",
+        "titleScale_large": "Grande"
       },
       "general": {
         "title": "Localização",

@@ -492,7 +492,12 @@
         "layout_flat_name": "フラット",
         "layout_flat_desc": "水平カテゴリータブと並んだ料理。",
         "layout_drill_name": "ドリルダウン",
-        "layout_drill_desc": "カテゴリーをタップして料理画面を開く。"
+        "layout_drill_desc": "カテゴリーをタップして料理画面を開く。",
+        "titleScaleLabel": "タイトルサイズ",
+        "titleScaleTip": "背景の上に表示される名前と説明の文字サイズ。",
+        "titleScale_small": "小",
+        "titleScale_medium": "中",
+        "titleScale_large": "大"
       },
       "general": {
         "title": "地域設定",

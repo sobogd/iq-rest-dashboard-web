@@ -334,6 +334,7 @@ export function BrandingSettingsPage({
  accentColor: restaurant.accentColor,
  showTitleOnHomepage: restaurant.showTitleOnHomepage,
  menuLayout: restaurant.menuLayout ?? "flat",
+ titleScale: restaurant.titleScale ?? "large",
  });
  const fileInputRef = useRef<HTMLInputElement | null>(null);
  const colorPickerRef = useRef<HTMLInputElement | null>(null);
@@ -375,6 +376,7 @@ export function BrandingSettingsPage({
  accentColor: draft.accentColor,
     hideTitle: !draft.showTitleOnHomepage,
     menuLayout: draft.menuLayout,
+    titleScale: draft.titleScale,
  });
  } catch {
  return;
@@ -389,6 +391,7 @@ export function BrandingSettingsPage({
  accentColor: draft.accentColor,
     showTitleOnHomepage: draft.showTitleOnHomepage,
     menuLayout: draft.menuLayout,
+    titleScale: draft.titleScale,
  }));
  onBack();
  }
@@ -625,6 +628,46 @@ export function BrandingSettingsPage({
  <p className="text-xs text-muted-foreground mt-2 leading-snug">
  {tb("backgroundTip")}
  </p>
+ </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6 md:col-span-2">
+ <div className="text-sm font-medium text-foreground mb-1">
+ {tb("titleScaleLabel", { defaultValue: "Title size" })}
+ </div>
+ <p className="text-xs text-muted-foreground mb-3 leading-snug">
+ {tb("titleScaleTip", { defaultValue: "Font size of the name and description over the background." })}
+ </p>
+ <div className="grid grid-cols-3 gap-3">
+ {(["small", "medium", "large"] as const).map((opt) => {
+ const selected = draft.titleScale === opt;
+ return (
+ <button
+ key={opt}
+ type="button"
+ onClick={() => {
+ track(`dash_settings_branding_title_scale_${opt}`);
+ setDraft((d) => ({ ...d, titleScale: opt }));
+ }}
+ className={
+ "flex items-center justify-center p-3 rounded-xl border-2 transition-colors " +
+ (selected
+ ? "border-foreground bg-foreground/5"
+ : "border-input hover:border-muted-foreground/50")
+ }
+ >
+ <span
+ className={
+ "font-black text-foreground leading-none " +
+ (opt === "small" ? "text-base" : opt === "medium" ? "text-xl" : "text-2xl")
+ }
+ >
+ {tb(`titleScale_${opt}`, {
+ defaultValue: opt === "small" ? "Small" : opt === "medium" ? "Medium" : "Large",
+ })}
+ </span>
+ </button>
+ );
+ })}
+ </div>
  </div>
  <div className="bg-card border border-border rounded-2xl p-5 md:p-6 md:col-span-2">
  <div className="text-sm font-medium text-foreground mb-1">

@@ -492,7 +492,12 @@
         "layout_flat_name": "Ravno",
         "layout_flat_desc": "Horizontalne kartice kategorija s jelima u liniji.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Dodirnite kategoriju da otvorite njen zaslon s jelima."
+        "layout_drill_desc": "Dodirnite kategoriju da otvorite njen zaslon s jelima.",
+        "titleScaleLabel": "Veličina naslova",
+        "titleScaleTip": "Veličina fonta naziva i opisa preko pozadine.",
+        "titleScale_small": "Malo",
+        "titleScale_medium": "Srednje",
+        "titleScale_large": "Veliko"
       },
       "general": {
         "title": "Lokalizacija",

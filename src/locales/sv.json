@@ -492,7 +492,12 @@
         "layout_flat_name": "Platt",
         "layout_flat_desc": "Horisontella kategoriflikar med rätter på rad.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Tryck på en kategori för att öppna dess skärm med rätter."
+        "layout_drill_desc": "Tryck på en kategori för att öppna dess skärm med rätter.",
+        "titleScaleLabel": "Titelstorlek",
+        "titleScaleTip": "Teckenstorlek för namn och beskrivning över bakgrunden.",
+        "titleScale_small": "Liten",
+        "titleScale_medium": "Medel",
+        "titleScale_large": "Stor"
       },
       "general": {
         "title": "Region",

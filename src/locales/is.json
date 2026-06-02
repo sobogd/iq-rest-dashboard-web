@@ -492,7 +492,12 @@
         "layout_flat_name": "Flat",
         "layout_flat_desc": "Láréttir flokkaflipar með réttum í röð.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Pikkaðu á flokk til að opna skjáinn hans með réttum."
+        "layout_drill_desc": "Pikkaðu á flokk til að opna skjáinn hans með réttum.",
+        "titleScaleLabel": "Stærð titils",
+        "titleScaleTip": "Leturstærð nafns og lýsingar yfir bakgrunninn.",
+        "titleScale_small": "Lítill",
+        "titleScale_medium": "Miðlungs",
+        "titleScale_large": "Stór"
       },
       "general": {
         "title": "Staðsetning",

@@ -492,7 +492,12 @@
         "layout_flat_name": "Ploché",
         "layout_flat_desc": "Vodorovné karty kategórií s pokrmami v rade.",
         "layout_drill_name": "Drill-down",
-        "layout_drill_desc": "Ťuknutím na kategóriu otvoríte jej obrazovku s pokrmami."
+        "layout_drill_desc": "Ťuknutím na kategóriu otvoríte jej obrazovku s pokrmami.",
+        "titleScaleLabel": "Veľkosť názvu",
+        "titleScaleTip": "Veľkosť písma názvu a popisu cez pozadie.",
+        "titleScale_small": "Malé",
+        "titleScale_medium": "Stredné",
+        "titleScale_large": "Veľké"
       },
       "general": {
         "title": "Miestne nastavenia",
