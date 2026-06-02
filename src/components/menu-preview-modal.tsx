@@ -54,7 +54,7 @@ export function MenuPreviewModal({ menuUrl, children, className, open: controlle
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute -top-7 -right-7 text-white hover:text-gray-300 transition-colors z-30"
+            className="fixed top-4 right-4 text-white hover:text-gray-300 transition-colors z-[60]"
           >
             <X className="w-8 h-8" />
           </button>
