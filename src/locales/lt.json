@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fiksuota",
       "discountValueLabel": "Reikšmė",
       "discountReasonLabel": "Priežastis (neprivaloma)",
-      "discountReasonPlaceholder": "pvz. Lojalus klientas"
+      "discountReasonPlaceholder": "pvz. Lojalus klientas",
+      "noTablesBody": "Pridėk stalus nustatymuose prieš priimdamas užsakymus.",
+      "noTablesCta": "Pridėti stalus"
     },
     "reservations": {
       "title": "Rezervacijos",

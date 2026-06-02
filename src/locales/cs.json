@@ -372,7 +372,9 @@
       "discountTypeFixed": "Pevná částka",
       "discountValueLabel": "Hodnota",
       "discountReasonLabel": "Důvod (volitelné)",
-      "discountReasonPlaceholder": "např. Stálý zákazník"
+      "discountReasonPlaceholder": "např. Stálý zákazník",
+      "noTablesBody": "Přidejte stoly v nastavení, než začnete přijímat objednávky.",
+      "noTablesCta": "Přidat stoly"
     },
     "reservations": {
       "title": "Rezervace",

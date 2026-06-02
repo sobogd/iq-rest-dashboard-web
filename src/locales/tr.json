@@ -372,7 +372,9 @@
       "discountTypeFixed": "Sabit",
       "discountValueLabel": "Değer",
       "discountReasonLabel": "Neden (isteğe bağlı)",
-      "discountReasonPlaceholder": "örn. Sadık müşteri"
+      "discountReasonPlaceholder": "örn. Sadık müşteri",
+      "noTablesBody": "Sipariş almadan önce masalarını ayarlardan ekle.",
+      "noTablesCta": "Masa ekle"
     },
     "reservations": {
       "title": "Rezervasyonlar",

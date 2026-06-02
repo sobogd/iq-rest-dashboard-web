@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fixe",
       "discountValueLabel": "Valeur",
       "discountReasonLabel": "Motif (facultatif)",
-      "discountReasonPlaceholder": "p. ex. Client fidèle"
+      "discountReasonPlaceholder": "p. ex. Client fidèle",
+      "noTablesBody": "Ajoute tes tables dans les paramètres avant de prendre des commandes.",
+      "noTablesCta": "Ajouter des tables"
     },
     "reservations": {
       "title": "Réservations",

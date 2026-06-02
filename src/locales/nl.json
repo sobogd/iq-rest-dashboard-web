@@ -372,7 +372,9 @@
       "discountTypeFixed": "Vast",
       "discountValueLabel": "Waarde",
       "discountReasonLabel": "Reden (optioneel)",
-      "discountReasonPlaceholder": "bijv. Vaste klant"
+      "discountReasonPlaceholder": "bijv. Vaste klant",
+      "noTablesBody": "Voeg je tafels toe in instellingen voordat je bestellingen aanneemt.",
+      "noTablesCta": "Tafels toevoegen"
     },
     "reservations": {
       "title": "Reserveringen",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "ثابت",
       "discountValueLabel": "القيمة",
       "discountReasonLabel": "السبب (اختياري)",
-      "discountReasonPlaceholder": "مثال: عميل دائم"
+      "discountReasonPlaceholder": "مثال: عميل دائم",
+      "noTablesBody": "أضف طاولاتك في الإعدادات قبل استقبال الطلبات.",
+      "noTablesCta": "إضافة طاولات"
     },
     "reservations": {
       "title": "الحجوزات",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "Stała kwota",
       "discountValueLabel": "Wartość",
       "discountReasonLabel": "Powód (opcjonalnie)",
-      "discountReasonPlaceholder": "np. Stały klient"
+      "discountReasonPlaceholder": "np. Stały klient",
+      "noTablesBody": "Dodaj stoliki w ustawieniach, zanim zaczniesz przyjmować zamówienia.",
+      "noTablesCta": "Dodaj stoliki"
     },
     "reservations": {
       "title": "Rezerwacje",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fixă",
       "discountValueLabel": "Valoare",
       "discountReasonLabel": "Motiv (opțional)",
-      "discountReasonPlaceholder": "ex. Client fidel"
+      "discountReasonPlaceholder": "ex. Client fidel",
+      "noTablesBody": "Adaugă mesele în setări înainte de a primi comenzi.",
+      "noTablesCta": "Adaugă mese"
     },
     "reservations": {
       "title": "Rezervări",

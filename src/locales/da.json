@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fast",
       "discountValueLabel": "Værdi",
       "discountReasonLabel": "Årsag (valgfri)",
-      "discountReasonPlaceholder": "f.eks. Loyal kunde"
+      "discountReasonPlaceholder": "f.eks. Loyal kunde",
+      "noTablesBody": "Tilføj dine borde i indstillinger, før du tager imod bestillinger.",
+      "noTablesCta": "Tilføj borde"
     },
     "reservations": {
       "title": "Reservationer",

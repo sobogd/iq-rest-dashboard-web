@@ -372,7 +372,9 @@
       "discountTypeFixed": "Kiinteä",
       "discountValueLabel": "Arvo",
       "discountReasonLabel": "Syy (valinnainen)",
-      "discountReasonPlaceholder": "esim. Kanta-asiakas"
+      "discountReasonPlaceholder": "esim. Kanta-asiakas",
+      "noTablesBody": "Lisää pöytäsi asetuksiin ennen tilausten vastaanottamista.",
+      "noTablesCta": "Lisää pöydät"
     },
     "reservations": {
       "title": "Varaukset",

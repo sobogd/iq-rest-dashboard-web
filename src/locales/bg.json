@@ -372,7 +372,9 @@
       "discountTypeFixed": "Фиксиран",
       "discountValueLabel": "Стойност",
       "discountReasonLabel": "Причина (по избор)",
-      "discountReasonPlaceholder": "напр. Постоянен клиент"
+      "discountReasonPlaceholder": "напр. Постоянен клиент",
+      "noTablesBody": "Добавете масите в настройките, преди да приемате поръчки.",
+      "noTablesCta": "Добавяне на маси"
     },
     "reservations": {
       "title": "Резервации",

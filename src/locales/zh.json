@@ -372,7 +372,9 @@
       "discountTypeFixed": "固定",
       "discountValueLabel": "数值",
       "discountReasonLabel": "原因(可选)",
-      "discountReasonPlaceholder": "例如:老客户"
+      "discountReasonPlaceholder": "例如:老客户",
+      "noTablesBody": "在接受订单前，请在设置中添加餐桌。",
+      "noTablesCta": "添加餐桌"
     },
     "reservations": {
       "title": "预订",

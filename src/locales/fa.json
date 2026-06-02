@@ -372,7 +372,9 @@
       "discountTypeFixed": "ثابت",
       "discountValueLabel": "مقدار",
       "discountReasonLabel": "دلیل (اختیاری)",
-      "discountReasonPlaceholder": "مثال: مشتری وفادار"
+      "discountReasonPlaceholder": "مثال: مشتری وفادار",
+      "noTablesBody": "قبل از دریافت سفارش، میزهای خود را در تنظیمات اضافه کنید.",
+      "noTablesCta": "افزودن میز"
     },
     "reservations": {
       "title": "رزروها",

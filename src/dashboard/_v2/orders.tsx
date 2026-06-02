@@ -21,6 +21,8 @@ import {
 import { ConfirmDialog, EmptyState, Modal, PageHeader } from "./ui";
 import { DiscountModal } from "./discount-modal";
 import { FloorMap } from "./tables";
+import { CtaState } from "./reservations";
+import { useDashboardRouter } from "../_spa/router";
 import {
  formatPrice,
  formatTimeShort,
@@ -109,6 +111,7 @@ export function OrdersPage({
  const t = useTranslations("dashboard.orders");
  const tc = useTranslations("dashboard.common");
  const restaurant = useRestaurant();
+ const router = useDashboardRouter();
  const currencySymbol = currencySymbolOf(currency);
 
  const NO_TABLE = "__no_table__";
@@ -723,6 +726,24 @@ export function OrdersPage({
  height:
  "calc(100dvh - var(--topbar-h, 0px) - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 6rem)",
  } as React.CSSProperties;
+
+ // No tables → replace the whole orders surface with the same "add a table"
+ // placeholder the bookings page uses. On the dashboard it offers a button to
+ // settings; on the waiter kiosk (no admin access) it's just a message.
+ if (!hasTables) {
+ const showCta = !kioskLayout && !demoMode;
+ return (
+ <div className={kioskLayout ? "h-full p-4 md:p-6" : "max-w-5xl mx-auto md:px-6"}>
+ {!kioskLayout ? <PageHeader title={t("title")} /> : null}
+ <CtaState
+ title={t("noTablesTitle")}
+ body={t("noTablesBody")}
+ cta={showCta ? t("noTablesCta") : undefined}
+ onClick={showCta ? () => router.push({ name: "settings.tables" }) : undefined}
+ />
+ </div>
+ );
+ }
 
  return (
  <>

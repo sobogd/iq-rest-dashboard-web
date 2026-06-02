@@ -372,7 +372,9 @@
       "discountTypeFixed": "Socraithe",
       "discountValueLabel": "Luach",
       "discountReasonLabel": "Cúis (roghnach)",
-      "discountReasonPlaceholder": "m.sh. Custaiméir dílis"
+      "discountReasonPlaceholder": "m.sh. Custaiméir dílis",
+      "noTablesBody": "Cuir do bhoird leis sna socruithe sula nglacann tú orduithe.",
+      "noTablesCta": "Cuir boird leis"
     },
     "reservations": {
       "title": "Áirithintí",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fiksno",
       "discountValueLabel": "Vrednost",
       "discountReasonLabel": "Razlog (neobvezno)",
-      "discountReasonPlaceholder": "npr. Stalna stranka"
+      "discountReasonPlaceholder": "npr. Stalna stranka",
+      "noTablesBody": "Dodaj mize v nastavitvah, preden začneš sprejemati naročila.",
+      "noTablesCta": "Dodaj mize"
     },
     "reservations": {
       "title": "Rezervacije",

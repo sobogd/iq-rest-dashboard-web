@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fisso",
       "discountValueLabel": "Valore",
       "discountReasonLabel": "Motivo (facoltativo)",
-      "discountReasonPlaceholder": "es. Cliente abituale"
+      "discountReasonPlaceholder": "es. Cliente abituale",
+      "noTablesBody": "Aggiungi i tuoi tavoli nelle impostazioni prima di ricevere ordini.",
+      "noTablesCta": "Aggiungi tavoli"
     },
     "reservations": {
       "title": "Prenotazioni",

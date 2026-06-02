@@ -372,7 +372,9 @@
       "discountTypeFixed": "定額",
       "discountValueLabel": "値",
       "discountReasonLabel": "理由 (任意)",
-      "discountReasonPlaceholder": "例: 常連客"
+      "discountReasonPlaceholder": "例: 常連客",
+      "noTablesBody": "注文を受ける前に、設定でテーブルを追加してください。",
+      "noTablesCta": "テーブルを追加"
     },
     "reservations": {
       "title": "予約",

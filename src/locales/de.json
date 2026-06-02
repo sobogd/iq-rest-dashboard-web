@@ -372,7 +372,9 @@
       "discountTypeFixed": "Festbetrag",
       "discountValueLabel": "Wert",
       "discountReasonLabel": "Grund (optional)",
-      "discountReasonPlaceholder": "z. B. Stammkunde"
+      "discountReasonPlaceholder": "z. B. Stammkunde",
+      "noTablesBody": "Füge deine Tische in den Einstellungen hinzu, bevor du Bestellungen annimmst.",
+      "noTablesCta": "Tische hinzufügen"
     },
     "reservations": {
       "title": "Reservierungen",

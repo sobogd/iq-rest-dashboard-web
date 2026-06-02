@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fast",
       "discountValueLabel": "Gildi",
       "discountReasonLabel": "Ástæða (valfrjálst)",
-      "discountReasonPlaceholder": "t.d. Tryggur viðskiptavinur"
+      "discountReasonPlaceholder": "t.d. Tryggur viðskiptavinur",
+      "noTablesBody": "Bættu við borðum í stillingum áður en þú tekur við pöntunum.",
+      "noTablesCta": "Bæta við borðum"
     },
     "reservations": {
       "title": "Bókanir",

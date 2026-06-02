@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fiksēts",
       "discountValueLabel": "Vērtība",
       "discountReasonLabel": "Iemesls (neobligāti)",
-      "discountReasonPlaceholder": "piem., Pastāvīgais klients"
+      "discountReasonPlaceholder": "piem., Pastāvīgais klients",
+      "noTablesBody": "Pievieno galdus iestatījumos, pirms pieņem pasūtījumus.",
+      "noTablesCta": "Pievienot galdus"
     },
     "reservations": {
       "title": "Rezervācijas",

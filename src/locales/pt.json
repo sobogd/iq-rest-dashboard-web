@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fixo",
       "discountValueLabel": "Valor",
       "discountReasonLabel": "Motivo (opcional)",
-      "discountReasonPlaceholder": "ex. Cliente fiel"
+      "discountReasonPlaceholder": "ex. Cliente fiel",
+      "noTablesBody": "Adiciona as tuas mesas nas definições antes de receber pedidos.",
+      "noTablesCta": "Adicionar mesas"
     },
     "reservations": {
       "title": "Reservas",

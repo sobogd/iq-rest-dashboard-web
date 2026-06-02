@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fix",
       "discountValueLabel": "Érték",
       "discountReasonLabel": "Indok (opcionális)",
-      "discountReasonPlaceholder": "pl. Törzsvásárló"
+      "discountReasonPlaceholder": "pl. Törzsvásárló",
+      "noTablesBody": "Add hozzá az asztalokat a beállításokban, mielőtt rendeléseket fogadsz.",
+      "noTablesCta": "Asztalok hozzáadása"
     },
     "reservations": {
       "title": "Foglalások",

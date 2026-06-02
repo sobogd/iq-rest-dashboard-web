@@ -372,7 +372,9 @@
       "discountTypeFixed": "Фиксированная",
       "discountValueLabel": "Значение",
       "discountReasonLabel": "Причина (необязательно)",
-      "discountReasonPlaceholder": "напр. Постоянный клиент"
+      "discountReasonPlaceholder": "напр. Постоянный клиент",
+      "noTablesBody": "Добавьте столики в настройках, прежде чем принимать заказы.",
+      "noTablesCta": "Добавить столы"
     },
     "reservations": {
       "title": "Бронирования",

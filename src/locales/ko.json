@@ -372,7 +372,9 @@
       "discountTypeFixed": "고정",
       "discountValueLabel": "값",
       "discountReasonLabel": "사유 (선택)",
-      "discountReasonPlaceholder": "예: 단골 고객"
+      "discountReasonPlaceholder": "예: 단골 고객",
+      "noTablesBody": "주문을 받기 전에 설정에서 테이블을 추가하세요.",
+      "noTablesCta": "테이블 추가"
     },
     "reservations": {
       "title": "예약",

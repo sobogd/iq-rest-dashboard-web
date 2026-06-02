@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fast",
       "discountValueLabel": "Värde",
       "discountReasonLabel": "Skäl (valfritt)",
-      "discountReasonPlaceholder": "t.ex. Stamkund"
+      "discountReasonPlaceholder": "t.ex. Stamkund",
+      "noTablesBody": "Lägg till dina bord i inställningarna innan du tar emot beställningar.",
+      "noTablesCta": "Lägg till bord"
     },
     "reservations": {
       "title": "Bokningar",

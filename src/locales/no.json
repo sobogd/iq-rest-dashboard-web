@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fast",
       "discountValueLabel": "Verdi",
       "discountReasonLabel": "Årsak (valgfritt)",
-      "discountReasonPlaceholder": "f.eks. Lojal kunde"
+      "discountReasonPlaceholder": "f.eks. Lojal kunde",
+      "noTablesBody": "Legg til bordene dine i innstillinger før du tar imot bestillinger.",
+      "noTablesCta": "Legg til bord"
     },
     "reservations": {
       "title": "Bookinger",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "Fix",
       "discountValueLabel": "Valor",
       "discountReasonLabel": "Motiu (opcional)",
-      "discountReasonPlaceholder": "p. ex. Client fidel"
+      "discountReasonPlaceholder": "p. ex. Client fidel",
+      "noTablesBody": "Afegeix les teves taules a la configuració abans de rebre comandes.",
+      "noTablesCta": "Afegir taules"
     },
     "reservations": {
       "title": "Reserves",

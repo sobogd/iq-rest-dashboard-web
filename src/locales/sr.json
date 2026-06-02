@@ -372,7 +372,9 @@
       "discountTypeFixed": "Фиксно",
       "discountValueLabel": "Вредност",
       "discountReasonLabel": "Разлог (необавезно)",
-      "discountReasonPlaceholder": "нпр. Стални купац"
+      "discountReasonPlaceholder": "нпр. Стални купац",
+      "noTablesBody": "Dodaj stolove u podešavanjima pre nego što počneš da primaš porudžbine.",
+      "noTablesCta": "Додај столове"
     },
     "reservations": {
       "title": "Rezervacije",

@@ -372,7 +372,9 @@
       "discountTypeFixed": "Σταθερό",
       "discountValueLabel": "Τιμή",
       "discountReasonLabel": "Λόγος (προαιρετικά)",
-      "discountReasonPlaceholder": "π.χ. Τακτικός πελάτης"
+      "discountReasonPlaceholder": "π.χ. Τακτικός πελάτης",
+      "noTablesBody": "Πρόσθεσε τα τραπέζια σου στις ρυθμίσεις πριν δεχτείς παραγγελίες.",
+      "noTablesCta": "Προσθήκη τραπεζιών"
     },
     "reservations": {
       "title": "Κρατήσεις",

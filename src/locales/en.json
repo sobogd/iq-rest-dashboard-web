@@ -447,7 +447,9 @@
       "discountTypeFixed": "Fixed",
       "discountValueLabel": "Value",
       "discountReasonLabel": "Reason (optional)",
-      "discountReasonPlaceholder": "e.g. Loyal customer"
+      "discountReasonPlaceholder": "e.g. Loyal customer",
+      "noTablesBody": "Add your tables in settings before taking orders.",
+      "noTablesCta": "Add tables"
     },
     "reservations": {
       "title": "Bookings",
