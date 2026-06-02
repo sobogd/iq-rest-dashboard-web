@@ -431,7 +431,12 @@ export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) 
         <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
       ) : (
         <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-          {rows.map((row) => (
+          {rows.map((row) => {
+            // Dashboard usage events are prefixed "dash_". For those we hide the
+            // email chip (it's the logged-in owner's email — saves space / noise);
+            // country + the session-coloured left border still identify the row.
+            const isDashboardEvent = row.event.startsWith("dash_");
+            return (
             <button
               key={row.id}
               type="button"
@@ -442,7 +447,9 @@ export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) 
                 }
                 setSelected(row);
               }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
+              className="w-full flex items-center gap-2 pl-2 pr-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors border-l-[3px]"
+              style={{ borderLeftColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
+              title={`Session: ${row.country} / ${row.device || "—"} / ${row.platform || "—"} / ${row.ip || "—"}`}
             >
               {selectMode ? (
                 <span
@@ -457,25 +464,17 @@ export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) 
                   {selectedIds.has(row.id) ? <Check className="w-2.5 h-2.5" /> : null}
                 </span>
               ) : null}
-              {row.label || row.restaurantId || row.userId ? (
+              <span className="text-base shrink-0" title={row.country}>
+                {countryToFlag(row.country)}
+              </span>
+              {!isDashboardEvent && (row.label || row.restaurantId || row.userId) ? (
                 <span
                   className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0"
                   title={row.label || row.restaurantId || row.userId || ""}
                 >
                   {truncate8(row.label || row.restaurantId || row.userId || "")}
                 </span>
-              ) : (
-                <>
-                  <span
-                    className="inline-block w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
-                    title={`Session group: ${row.country} / ${row.device || "—"} / ${row.platform || "—"} / ${row.ip || "—"}`}
-                  />
-                  <span className="text-base shrink-0" title={row.country}>
-                    {countryToFlag(row.country)}
-                  </span>
-                </>
-              )}
+              ) : null}
               <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
               {row.gclid ? (
                 <span
@@ -519,7 +518,8 @@ export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) 
                 {fmtAt(row.at)}
               </span>
             </button>
-          ))}
+            );
+          })}
         </div>
       )}
 
