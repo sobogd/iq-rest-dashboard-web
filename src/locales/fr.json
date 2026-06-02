@@ -499,7 +499,11 @@
         "titleScaleTip": "Taille de police du nom et de la description sur l'arrière-plan.",
         "titleScale_small": "Petit",
         "titleScale_medium": "Moyen",
-        "titleScale_large": "Grand"
+        "titleScale_large": "Grand",
+        "langSwitcherLabel": "Sélecteur de langue",
+        "langSwitcherTip": "Où les clients choisissent la langue du menu sur la page publique.",
+        "langSwitcher_inline": "Dans la liste",
+        "langSwitcher_top": "Icône de globe"
       },
       "general": {
         "title": "Localisation",

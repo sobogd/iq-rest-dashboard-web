@@ -499,7 +499,11 @@
         "titleScaleTip": "Skriftstørrelse for navn og beskrivelse over bakgrunnen.",
         "titleScale_small": "Liten",
         "titleScale_medium": "Middels",
-        "titleScale_large": "Stor"
+        "titleScale_large": "Stor",
+        "langSwitcherLabel": "Språkvelger",
+        "langSwitcherTip": "Hvor gjester velger menyspråk på den offentlige siden.",
+        "langSwitcher_inline": "I listen",
+        "langSwitcher_top": "Globusikon"
       },
       "general": {
         "title": "Regional",

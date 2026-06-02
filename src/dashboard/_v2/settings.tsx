@@ -335,6 +335,7 @@ export function BrandingSettingsPage({
  showTitleOnHomepage: restaurant.showTitleOnHomepage,
  menuLayout: restaurant.menuLayout ?? "flat",
  titleScale: restaurant.titleScale ?? "large",
+ languageSwitcher: restaurant.languageSwitcher ?? "inline",
  });
  const fileInputRef = useRef<HTMLInputElement | null>(null);
  const colorPickerRef = useRef<HTMLInputElement | null>(null);
@@ -377,6 +378,7 @@ export function BrandingSettingsPage({
     hideTitle: !draft.showTitleOnHomepage,
     menuLayout: draft.menuLayout,
     titleScale: draft.titleScale,
+    languageSwitcher: draft.languageSwitcher,
  });
  } catch {
  return;
@@ -392,6 +394,7 @@ export function BrandingSettingsPage({
     showTitleOnHomepage: draft.showTitleOnHomepage,
     menuLayout: draft.menuLayout,
     titleScale: draft.titleScale,
+    languageSwitcher: draft.languageSwitcher,
  }));
  onBack();
  }
@@ -664,6 +667,39 @@ export function BrandingSettingsPage({
  defaultValue: opt === "small" ? "Small" : opt === "medium" ? "Medium" : "Large",
  })}
  </span>
+ </button>
+ );
+ })}
+ </div>
+ </div>
+ <div className="bg-card border border-border rounded-2xl p-5 md:p-6 md:col-span-2">
+ <div className="text-sm font-medium text-foreground mb-1">
+ {tb("langSwitcherLabel", { defaultValue: "Language switcher" })}
+ </div>
+ <p className="text-xs text-muted-foreground mb-3 leading-snug">
+ {tb("langSwitcherTip", { defaultValue: "Where guests pick the menu language on the public page." })}
+ </p>
+ <div className="grid grid-cols-2 gap-3">
+ {(["inline", "top"] as const).map((opt) => {
+ const selected = draft.languageSwitcher === opt;
+ return (
+ <button
+ key={opt}
+ type="button"
+ onClick={() => {
+ track(`dash_settings_branding_lang_switcher_${opt}`);
+ setDraft((d) => ({ ...d, languageSwitcher: opt }));
+ }}
+ className={
+ "flex items-center justify-center p-3 rounded-xl border-2 transition-colors text-sm font-medium text-foreground " +
+ (selected
+ ? "border-foreground bg-foreground/5"
+ : "border-input hover:border-muted-foreground/50")
+ }
+ >
+ {tb(`langSwitcher_${opt}`, {
+ defaultValue: opt === "inline" ? "In the list" : "Globe icon",
+ })}
  </button>
  );
  })}

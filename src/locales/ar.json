@@ -499,7 +499,11 @@
         "titleScaleTip": "حجم خط الاسم والوصف فوق الخلفية.",
         "titleScale_small": "صغير",
         "titleScale_medium": "متوسط",
-        "titleScale_large": "كبير"
+        "titleScale_large": "كبير",
+        "langSwitcherLabel": "محوّل اللغة",
+        "langSwitcherTip": "حيث يختار الضيوف لغة القائمة في الصفحة العامة.",
+        "langSwitcher_inline": "في القائمة",
+        "langSwitcher_top": "أيقونة الكرة الأرضية"
       },
       "general": {
         "title": "اللغة والمنطقة",

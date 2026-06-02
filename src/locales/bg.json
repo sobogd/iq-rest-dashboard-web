@@ -499,7 +499,11 @@
         "titleScaleTip": "Размер на шрифта на името и описанието върху фона.",
         "titleScale_small": "Малък",
         "titleScale_medium": "Среден",
-        "titleScale_large": "Голям"
+        "titleScale_large": "Голям",
+        "langSwitcherLabel": "Превключвател за език",
+        "langSwitcherTip": "Къде гостите избират езика на менюто на публичната страница.",
+        "langSwitcher_inline": "В списъка",
+        "langSwitcher_top": "Икона глобус"
       },
       "general": {
         "title": "Локализация",

@@ -499,7 +499,11 @@
         "titleScaleTip": "Размер шрифта названия и описания поверх фона.",
         "titleScale_small": "Маленький",
         "titleScale_medium": "Средний",
-        "titleScale_large": "Большой"
+        "titleScale_large": "Большой",
+        "langSwitcherLabel": "Переключатель языка",
+        "langSwitcherTip": "Где гости выбирают язык меню на публичной странице.",
+        "langSwitcher_inline": "В списке",
+        "langSwitcher_top": "Иконка-глобус"
       },
       "general": {
         "title": "Регион",

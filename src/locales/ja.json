@@ -499,7 +499,11 @@
         "titleScaleTip": "背景の上に表示される名前と説明の文字サイズ。",
         "titleScale_small": "小",
         "titleScale_medium": "中",
-        "titleScale_large": "大"
+        "titleScale_large": "大",
+        "langSwitcherLabel": "言語切り替え",
+        "langSwitcherTip": "公開ページでゲストがメニューの言語を選ぶ場所。",
+        "langSwitcher_inline": "リスト内",
+        "langSwitcher_top": "地球儀アイコン"
       },
       "general": {
         "title": "地域設定",

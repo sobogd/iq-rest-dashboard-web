@@ -499,7 +499,11 @@
         "titleScaleTip": "Arka planın üzerindeki ad ve açıklamanın yazı tipi boyutu.",
         "titleScale_small": "Küçük",
         "titleScale_medium": "Orta",
-        "titleScale_large": "Büyük"
+        "titleScale_large": "Büyük",
+        "langSwitcherLabel": "Dil seçici",
+        "langSwitcherTip": "Misafirlerin herkese açık sayfada menü dilini seçtiği yer.",
+        "langSwitcher_inline": "Listede",
+        "langSwitcher_top": "Küre simgesi"
       },
       "general": {
         "title": "Bölge",

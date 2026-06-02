@@ -499,7 +499,11 @@
         "titleScaleTip": "Veľkosť písma názvu a popisu cez pozadie.",
         "titleScale_small": "Malé",
         "titleScale_medium": "Stredné",
-        "titleScale_large": "Veľké"
+        "titleScale_large": "Veľké",
+        "langSwitcherLabel": "Prepínač jazyka",
+        "langSwitcherTip": "Kde si hostia vyberajú jazyk menu na verejnej stránke.",
+        "langSwitcher_inline": "V zozname",
+        "langSwitcher_top": "Ikona zemegule"
       },
       "general": {
         "title": "Miestne nastavenia",

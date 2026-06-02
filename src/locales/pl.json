@@ -499,7 +499,11 @@
         "titleScaleTip": "Rozmiar czcionki nazwy i opisu na tle.",
         "titleScale_small": "Mały",
         "titleScale_medium": "Średni",
-        "titleScale_large": "Duży"
+        "titleScale_large": "Duży",
+        "langSwitcherLabel": "Przełącznik języka",
+        "langSwitcherTip": "Gdzie goście wybierają język menu na stronie publicznej.",
+        "langSwitcher_inline": "Na liście",
+        "langSwitcher_top": "Ikona globusa"
       },
       "general": {
         "title": "Lokalizacja",

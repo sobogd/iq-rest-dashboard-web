@@ -499,7 +499,11 @@
         "titleScaleTip": "Dimensiunea fontului numelui și descrierii peste fundal.",
         "titleScale_small": "Mic",
         "titleScale_medium": "Mediu",
-        "titleScale_large": "Mare"
+        "titleScale_large": "Mare",
+        "langSwitcherLabel": "Selector de limbă",
+        "langSwitcherTip": "Unde aleg clienții limba meniului pe pagina publică.",
+        "langSwitcher_inline": "În listă",
+        "langSwitcher_top": "Pictogramă glob"
       },
       "general": {
         "title": "Regional",

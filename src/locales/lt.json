@@ -499,7 +499,11 @@
         "titleScaleTip": "Pavadinimo ir aprašymo šrifto dydis virš fono.",
         "titleScale_small": "Mažas",
         "titleScale_medium": "Vidutinis",
-        "titleScale_large": "Didelis"
+        "titleScale_large": "Didelis",
+        "langSwitcherLabel": "Kalbos perjungiklis",
+        "langSwitcherTip": "Kur svečiai pasirenka meniu kalbą viešame puslapyje.",
+        "langSwitcher_inline": "Sąraše",
+        "langSwitcher_top": "Gaublio piktograma"
       },
       "general": {
         "title": "Regiono nustatymai",

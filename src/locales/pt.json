@@ -499,7 +499,11 @@
         "titleScaleTip": "Tamanho da fonte do nome e da descrição sobre o fundo.",
         "titleScale_small": "Pequeno",
         "titleScale_medium": "Médio",
-        "titleScale_large": "Grande"
+        "titleScale_large": "Grande",
+        "langSwitcherLabel": "Seletor de idioma",
+        "langSwitcherTip": "Onde os clientes escolhem o idioma do menu na página pública.",
+        "langSwitcher_inline": "Na lista",
+        "langSwitcher_top": "Ícone de globo"
       },
       "general": {
         "title": "Localização",

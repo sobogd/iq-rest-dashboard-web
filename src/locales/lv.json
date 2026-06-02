@@ -499,7 +499,11 @@
         "titleScaleTip": "Nosaukuma un apraksta fonta izmērs virs fona.",
         "titleScale_small": "Mazs",
         "titleScale_medium": "Vidējs",
-        "titleScale_large": "Liels"
+        "titleScale_large": "Liels",
+        "langSwitcherLabel": "Valodas pārslēdzējs",
+        "langSwitcherTip": "Kur viesi izvēlas izvēlnes valodu publiskajā lapā.",
+        "langSwitcher_inline": "Sarakstā",
+        "langSwitcher_top": "Globusa ikona"
       },
       "general": {
         "title": "Reģiona iestatījumi",

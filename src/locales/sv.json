@@ -499,7 +499,11 @@
         "titleScaleTip": "Teckenstorlek för namn och beskrivning över bakgrunden.",
         "titleScale_small": "Liten",
         "titleScale_medium": "Medel",
-        "titleScale_large": "Stor"
+        "titleScale_large": "Stor",
+        "langSwitcherLabel": "Språkväljare",
+        "langSwitcherTip": "Var gäster väljer menyspråk på den publika sidan.",
+        "langSwitcher_inline": "I listan",
+        "langSwitcher_top": "Jordglobsikon"
       },
       "general": {
         "title": "Region",

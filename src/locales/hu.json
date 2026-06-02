@@ -499,7 +499,11 @@
         "titleScaleTip": "A név és a leírás betűmérete a háttér felett.",
         "titleScale_small": "Kicsi",
         "titleScale_medium": "Közepes",
-        "titleScale_large": "Nagy"
+        "titleScale_large": "Nagy",
+        "langSwitcherLabel": "Nyelvválasztó",
+        "langSwitcherTip": "Hol választják a vendégek a menü nyelvét a nyilvános oldalon.",
+        "langSwitcher_inline": "A listában",
+        "langSwitcher_top": "Földgömb ikon"
       },
       "general": {
         "title": "Területi beállítások",

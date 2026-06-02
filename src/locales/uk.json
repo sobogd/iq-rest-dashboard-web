@@ -499,7 +499,11 @@
         "titleScaleTip": "Розмір шрифту назви та опису поверх фону.",
         "titleScale_small": "Малий",
         "titleScale_medium": "Середній",
-        "titleScale_large": "Великий"
+        "titleScale_large": "Великий",
+        "langSwitcherLabel": "Перемикач мови",
+        "langSwitcherTip": "Де гості обирають мову меню на публічній сторінці.",
+        "langSwitcher_inline": "У списку",
+        "langSwitcher_top": "Іконка-глобус"
       },
       "general": {
         "title": "Регіон",

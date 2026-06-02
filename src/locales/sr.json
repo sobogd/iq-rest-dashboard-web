@@ -499,7 +499,11 @@
         "titleScaleTip": "Veličina fonta naziva i opisa preko pozadine.",
         "titleScale_small": "Malo",
         "titleScale_medium": "Srednje",
-        "titleScale_large": "Veliko"
+        "titleScale_large": "Veliko",
+        "langSwitcherLabel": "Бирач језика",
+        "langSwitcherTip": "Где гости бирају језик менија на јавној страници.",
+        "langSwitcher_inline": "На листи",
+        "langSwitcher_top": "Икона глобуса"
       },
       "general": {
         "title": "Локализација",

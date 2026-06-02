@@ -499,7 +499,11 @@
         "titleScaleTip": "Schriftgröße von Name und Beschreibung über dem Hintergrund.",
         "titleScale_small": "Klein",
         "titleScale_medium": "Mittel",
-        "titleScale_large": "Groß"
+        "titleScale_large": "Groß",
+        "langSwitcherLabel": "Sprachauswahl",
+        "langSwitcherTip": "Wo Gäste auf der öffentlichen Seite die Menüsprache wählen.",
+        "langSwitcher_inline": "In der Liste",
+        "langSwitcher_top": "Globus-Symbol"
       },
       "general": {
         "title": "Region",

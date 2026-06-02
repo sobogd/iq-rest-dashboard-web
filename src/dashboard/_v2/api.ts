@@ -81,6 +81,7 @@ export interface ApiRestaurant {
  hideTitle: boolean;
  menuLayout: string;
  titleScale: string;
+ languageSwitcher: string;
  paymentMethods?: string[];
  reservationsEnabled: boolean;
  reservationMode: string;

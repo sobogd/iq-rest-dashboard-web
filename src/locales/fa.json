@@ -499,7 +499,11 @@
         "titleScaleTip": "اندازه فونت نام و توضیحات روی پس‌زمینه.",
         "titleScale_small": "کوچک",
         "titleScale_medium": "متوسط",
-        "titleScale_large": "بزرگ"
+        "titleScale_large": "بزرگ",
+        "langSwitcherLabel": "انتخاب‌گر زبان",
+        "langSwitcherTip": "جایی که مهمانان زبان منو را در صفحه عمومی انتخاب می‌کنند.",
+        "langSwitcher_inline": "در فهرست",
+        "langSwitcher_top": "نماد کره زمین"
       },
       "general": {
         "title": "منطقه و زبان",

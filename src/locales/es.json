@@ -499,7 +499,11 @@
         "titleScaleTip": "Tamaño de fuente del nombre y la descripción sobre el fondo.",
         "titleScale_small": "Pequeño",
         "titleScale_medium": "Mediano",
-        "titleScale_large": "Grande"
+        "titleScale_large": "Grande",
+        "langSwitcherLabel": "Selector de idioma",
+        "langSwitcherTip": "Dónde eligen los clientes el idioma del menú en la página pública.",
+        "langSwitcher_inline": "En la lista",
+        "langSwitcher_top": "Icono de globo"
       },
       "general": {
         "title": "Configuración regional",

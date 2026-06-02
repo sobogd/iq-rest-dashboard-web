@@ -499,7 +499,11 @@
         "titleScaleTip": "背景上方名称和描述的字体大小。",
         "titleScale_small": "小",
         "titleScale_medium": "中",
-        "titleScale_large": "大"
+        "titleScale_large": "大",
+        "langSwitcherLabel": "语言切换",
+        "langSwitcherTip": "顾客在公开页面选择菜单语言的位置。",
+        "langSwitcher_inline": "在列表中",
+        "langSwitcher_top": "地球图标"
       },
       "general": {
         "title": "区域",

@@ -499,7 +499,11 @@
         "titleScaleTip": "배경 위에 표시되는 이름과 설명의 글꼴 크기.",
         "titleScale_small": "작게",
         "titleScale_medium": "중간",
-        "titleScale_large": "크게"
+        "titleScale_large": "크게",
+        "langSwitcherLabel": "언어 전환",
+        "langSwitcherTip": "공개 페이지에서 손님이 메뉴 언어를 선택하는 위치.",
+        "langSwitcher_inline": "목록에",
+        "langSwitcher_top": "지구본 아이콘"
       },
       "general": {
         "title": "지역 설정",

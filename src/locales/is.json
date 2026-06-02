@@ -499,7 +499,11 @@
         "titleScaleTip": "Leturstærð nafns og lýsingar yfir bakgrunninn.",
         "titleScale_small": "Lítill",
         "titleScale_medium": "Miðlungs",
-        "titleScale_large": "Stór"
+        "titleScale_large": "Stór",
+        "langSwitcherLabel": "Tungumálaval",
+        "langSwitcherTip": "Hvar gestir velja tungumál matseðils á opinberu síðunni.",
+        "langSwitcher_inline": "Á listanum",
+        "langSwitcher_top": "Hnattartákn"
       },
       "general": {
         "title": "Staðsetning",

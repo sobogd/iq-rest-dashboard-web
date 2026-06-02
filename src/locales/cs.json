@@ -499,7 +499,11 @@
         "titleScaleTip": "Velikost písma názvu a popisu přes pozadí.",
         "titleScale_small": "Malé",
         "titleScale_medium": "Střední",
-        "titleScale_large": "Velké"
+        "titleScale_large": "Velké",
+        "langSwitcherLabel": "Přepínač jazyka",
+        "langSwitcherTip": "Kde hosté vybírají jazyk menu na veřejné stránce.",
+        "langSwitcher_inline": "V seznamu",
+        "langSwitcher_top": "Ikona zeměkoule"
       },
       "general": {
         "title": "Místní nastavení",

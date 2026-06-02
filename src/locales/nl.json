@@ -499,7 +499,11 @@
         "titleScaleTip": "Lettergrootte van de naam en beschrijving over de achtergrond.",
         "titleScale_small": "Klein",
         "titleScale_medium": "Gemiddeld",
-        "titleScale_large": "Groot"
+        "titleScale_large": "Groot",
+        "langSwitcherLabel": "Taalkeuze",
+        "langSwitcherTip": "Waar gasten de menutaal kiezen op de openbare pagina.",
+        "langSwitcher_inline": "In de lijst",
+        "langSwitcher_top": "Wereldbol-pictogram"
       },
       "general": {
         "title": "Regio",

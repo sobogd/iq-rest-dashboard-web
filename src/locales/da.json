@@ -499,7 +499,11 @@
         "titleScaleTip": "Skriftstørrelse for navn og beskrivelse over baggrunden.",
         "titleScale_small": "Lille",
         "titleScale_medium": "Mellem",
-        "titleScale_large": "Stor"
+        "titleScale_large": "Stor",
+        "langSwitcherLabel": "Sprogvælger",
+        "langSwitcherTip": "Hvor gæster vælger menusproget på den offentlige side.",
+        "langSwitcher_inline": "På listen",
+        "langSwitcher_top": "Globusikon"
       },
       "general": {
         "title": "Lokalisering",

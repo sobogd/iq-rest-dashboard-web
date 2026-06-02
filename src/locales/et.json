@@ -499,7 +499,11 @@
         "titleScaleTip": "Nime ja kirjelduse fondi suurus tausta peal.",
         "titleScale_small": "Väike",
         "titleScale_medium": "Keskmine",
-        "titleScale_large": "Suur"
+        "titleScale_large": "Suur",
+        "langSwitcherLabel": "Keelevalija",
+        "langSwitcherTip": "Kus külalised valivad avalikul lehel menüü keele.",
+        "langSwitcher_inline": "Loendis",
+        "langSwitcher_top": "Maakera ikoon"
       },
       "general": {
         "title": "Lokaadi seaded",

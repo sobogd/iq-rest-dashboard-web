@@ -499,7 +499,11 @@
         "titleScaleTip": "Μέγεθος γραμματοσειράς ονόματος και περιγραφής πάνω από το φόντο.",
         "titleScale_small": "Μικρό",
         "titleScale_medium": "Μεσαίο",
-        "titleScale_large": "Μεγάλο"
+        "titleScale_large": "Μεγάλο",
+        "langSwitcherLabel": "Επιλογέας γλώσσας",
+        "langSwitcherTip": "Πού επιλέγουν οι επισκέπτες τη γλώσσα του μενού στη δημόσια σελίδα.",
+        "langSwitcher_inline": "Στη λίστα",
+        "langSwitcher_top": "Εικονίδιο υδρογείου"
       },
       "general": {
         "title": "Τοπικές ρυθμίσεις",

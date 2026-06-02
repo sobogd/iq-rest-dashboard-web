@@ -499,7 +499,11 @@
         "titleScaleTip": "Nimen ja kuvauksen fonttikoko taustan päällä.",
         "titleScale_small": "Pieni",
         "titleScale_medium": "Keskikoko",
-        "titleScale_large": "Suuri"
+        "titleScale_large": "Suuri",
+        "langSwitcherLabel": "Kielenvalitsin",
+        "langSwitcherTip": "Missä asiakkaat valitsevat valikon kielen julkisella sivulla.",
+        "langSwitcher_inline": "Luettelossa",
+        "langSwitcher_top": "Maapallokuvake"
       },
       "general": {
         "title": "Aluekohtaiset",

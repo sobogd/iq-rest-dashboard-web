@@ -198,6 +198,7 @@ export function apiRestaurantToRestaurant(r: ApiRestaurant): Restaurant {
  showTitleOnHomepage: !r.hideTitle,
  menuLayout: (r.menuLayout === "drill" ? "drill" : "flat"),
  titleScale: (r.titleScale === "small" ? "small" : r.titleScale === "medium" ? "medium" : "large"),
+ languageSwitcher: (r.languageSwitcher === "top" ? "top" : "inline"),
  // Empty array is a meaningful user choice (skip the close-time selector).
  // Only fall back when the field is missing entirely (legacy rows).
  paymentMethods: Array.isArray(r.paymentMethods) ? r.paymentMethods : ["cash", "card"],

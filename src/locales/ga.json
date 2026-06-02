@@ -499,7 +499,11 @@
         "titleScaleTip": "Méid an chló don ainm agus don chur síos os cionn an chúlra.",
         "titleScale_small": "Beag",
         "titleScale_medium": "Meánach",
-        "titleScale_large": "Mór"
+        "titleScale_large": "Mór",
+        "langSwitcherLabel": "Roghnóir teanga",
+        "langSwitcherTip": "An áit a roghnaíonn aíonna teanga an bhiachláir ar an leathanach poiblí.",
+        "langSwitcher_inline": "Sa liosta",
+        "langSwitcher_top": "Deilbhín cruinneoige"
       },
       "general": {
         "title": "Áitiúil",

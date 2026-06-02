@@ -574,7 +574,11 @@
         "titleScaleTip": "Font size of the name and description over the background.",
         "titleScale_small": "Small",
         "titleScale_medium": "Medium",
-        "titleScale_large": "Large"
+        "titleScale_large": "Large",
+        "langSwitcherLabel": "Language switcher",
+        "langSwitcherTip": "Where guests pick the menu language on the public page.",
+        "langSwitcher_inline": "In the list",
+        "langSwitcher_top": "Globe icon"
       },
       "general": {
         "title": "Locale",

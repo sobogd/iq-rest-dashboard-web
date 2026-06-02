@@ -499,7 +499,11 @@
         "titleScaleTip": "Mida de la lletra del nom i la descripció sobre el fons.",
         "titleScale_small": "Petit",
         "titleScale_medium": "Mitjà",
-        "titleScale_large": "Gran"
+        "titleScale_large": "Gran",
+        "langSwitcherLabel": "Selector d'idioma",
+        "langSwitcherTip": "On els clients trien l'idioma del menú a la pàgina pública.",
+        "langSwitcher_inline": "A la llista",
+        "langSwitcher_top": "Icona de globus"
       },
       "general": {
         "title": "Configuració regional",

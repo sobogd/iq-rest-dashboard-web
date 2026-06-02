@@ -499,7 +499,11 @@
         "titleScaleTip": "Velikost pisave imena in opisa čez ozadje.",
         "titleScale_small": "Majhno",
         "titleScale_medium": "Srednje",
-        "titleScale_large": "Veliko"
+        "titleScale_large": "Veliko",
+        "langSwitcherLabel": "Izbirnik jezika",
+        "langSwitcherTip": "Kje gostje izberejo jezik menija na javni strani.",
+        "langSwitcher_inline": "Na seznamu",
+        "langSwitcher_top": "Ikona globusa"
       },
       "general": {
         "title": "Lokalne nastavitve",

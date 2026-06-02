@@ -166,6 +166,7 @@ export interface Restaurant {
  showTitleOnHomepage: boolean;
  menuLayout: "flat" | "drill";
  titleScale: "small" | "medium" | "large";
+ languageSwitcher: "inline" | "top";
  paymentMethods: string[];
  slug: string;
  currency: string;
