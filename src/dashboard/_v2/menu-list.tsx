@@ -31,6 +31,22 @@ import { track } from "@/lib/dashboard-events";
 import { MenuOnboarding } from "./menu-onboarding";
 import { ScanModal } from "./scan-modal";
 
+// Localized "Sample: " prefixes used to mark seeded demo dishes (mirrors the
+// SAMPLE_PREFIX map in dashboard-api). A dish whose name starts with any of
+// these is a seeded sample, not real owner content.
+const SAMPLE_PREFIXES = [
+ "Sample: ", "Muestra: ", "Beispiel: ", "Exemple: ", "Esempio: ", "Exemplo: ",
+ "Voorbeeld: ", "Przykład: ", "Образец: ", "Зразок: ", "Exempel: ", "Eksempel: ",
+ "Esimerkki: ", "Ukázka: ", "Δείγμα: ", "Örnek: ", "Exemplu: ", "Minta: ",
+ "Пример: ", "Primjer: ", "Ukážka: ", "Primer: ", "Näidis: ", "Paraugs: ",
+ "Pavyzdys: ", "Mostra: ", "Sampla: ", "Sýnishorn: ", "نمونه: ", "عينة: ",
+ "見本: ", "샘플: ", "示例: ",
+];
+
+function isSampleName(name: string): boolean {
+ return SAMPLE_PREFIXES.some((p) => name.startsWith(p));
+}
+
 interface SubData {
  plan: string | null;
  subscriptionStatus: string | null;
@@ -133,12 +149,12 @@ export function MenuList({
  setTrialDismissedUntil(until);
  }
 
- // Seeded sample dishes are named "Sample: …" — exclude them so the scan
- // modal only warns about real items the owner actually added.
+ // Seeded sample dishes are named with a localized "Sample: " prefix — exclude
+ // them so the scan modal only warns about real items the owner actually added.
  const existingRealItemsCount = scopedLeaves.reduce(
   (sum, c) =>
    sum +
-   c.dishes.filter((d) => !getMlWithFallback(d.name, defaultLang, defaultLang).startsWith("Sample: ")).length,
+   c.dishes.filter((d) => !isSampleName(getMlWithFallback(d.name, defaultLang, defaultLang))).length,
   0,
  );
 
