@@ -345,7 +345,6 @@ export interface ApiItem {
  options: DishOption[] | null;
  sortOrder: number;
  isActive: boolean;
- isExample?: boolean;
  // null = orphaned item (its category was deleted) — surfaced in the
  // synthetic "No category" bucket.
  categoryId: string | null;

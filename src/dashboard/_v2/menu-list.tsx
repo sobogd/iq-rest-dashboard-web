@@ -133,8 +133,12 @@ export function MenuList({
  setTrialDismissedUntil(until);
  }
 
+ // Seeded sample dishes are named "Sample: …" — exclude them so the scan
+ // modal only warns about real items the owner actually added.
  const existingRealItemsCount = scopedLeaves.reduce(
-  (sum, c) => sum + c.dishes.filter((d) => !d.isExample).length,
+  (sum, c) =>
+   sum +
+   c.dishes.filter((d) => !getMlWithFallback(d.name, defaultLang, defaultLang).startsWith("Sample: ")).length,
   0,
  );
 
@@ -978,7 +982,6 @@ function DishRow({
 }) {
  const t = useTranslations("dashboard.menu");
  const tc = useTranslations("dashboard.common");
- const tBadge = useTranslations("dashboard");
  const router = useDashboardRouter();
  const rowCls =
  "flex items-center gap-2.5 pl-2 pr-3 py-2 transition-colors cursor-pointer select-none";
@@ -1027,11 +1030,6 @@ function DishRow({
  <span className="text-sm font-medium text-foreground truncate">
  {getMlWithFallback(dish.name, defaultLang, defaultLang)}
  </span>
- {dish.isExample && (
- <span className="text-[10px] font-medium uppercase tracking-wide px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 shrink-0">
- {tBadge("exampleBadge")}
- </span>
- )}
  </div>
  {Number(dish.price) > 0 ? (
  <div className="text-sm text-muted-foreground tabular-nums shrink-0">{currencySymbol + dish.price}</div>

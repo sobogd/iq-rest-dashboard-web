@@ -142,7 +142,6 @@ export function apiItemToDish(item: ApiItem, defaultLang: string): Dish {
  photoUrl: item.imageUrl || null,
  sortOrder: item.sortOrder,
  categoryId: item.categoryId,
- isExample: item.isExample === true,
  };
 }
 

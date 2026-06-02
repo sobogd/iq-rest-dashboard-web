@@ -29,7 +29,6 @@ export interface Dish {
  photoUrl: string | null;
  sortOrder: number;
  categoryId: string | null;
- isExample?: boolean;
 }
 
 export interface Category {
