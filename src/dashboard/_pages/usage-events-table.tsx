@@ -2,19 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { ChevronLeft, ChevronRight, Trash2, X as XIcon, Check } from "lucide-react";
+import { Trash2, X as XIcon, Check } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 import {
   countryToFlag,
-  hm,
-  osName,
-  dayLabel,
-  todayLocal,
-  shiftDayLocal,
-  localDayWindow,
+  hmsDate,
   encodeSessionId,
   sessionKey,
   sessionDescriptor,
@@ -24,77 +19,48 @@ import {
 const RETURN_KEY = "usage_return";
 const LONG_PRESS_MS = 500;
 
-interface ReturnState {
-  day: string;
-  scrollY: number;
-}
-
-function readReturn(): ReturnState | null {
-  try {
-    const raw = sessionStorage.getItem(RETURN_KEY);
-    return raw ? (JSON.parse(raw) as ReturnState) : null;
-  } catch {
-    return null;
-  }
-}
-
 interface Props {
-  /** When provided, the toolbar (day navigator / selection actions) is portalled here. */
   toolbarHost?: HTMLElement | null;
 }
 
 export function UsageEventsTable({ toolbarHost }: Props) {
   const router = useDashboardRouter();
-  const ret = useRef<ReturnState | null>(readReturn());
-  const [day, setDay] = useState<string>(() => ret.current?.day ?? todayLocal());
+  // Fixed 30-day window, computed once.
+  const win = useRef({ from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() });
+  const returnScroll = useRef<number | null>(readReturnScroll());
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const atToday = day >= todayLocal();
-
-  const load = useCallback(async (d: string, mode: "full" | "soft" = "full") => {
-    if (mode === "full") setLoading(true);
-    else setRefreshing(true);
+  const load = useCallback(async () => {
+    setLoading(true);
     try {
-      const { from, to } = localDayWindow(d);
-      const qs = new URLSearchParams({ from, to });
-      const res = await fetch(apiUrl(`/api/admin/usage/sessions?${qs.toString()}`), {
-        credentials: "include",
-      });
+      const qs = new URLSearchParams({ from: win.current.from, to: win.current.to });
+      const res = await fetch(apiUrl(`/api/admin/usage/sessions?${qs.toString()}`), { credentials: "include" });
       const j = res.ok ? ((await res.json()) as { sessions: SessionRow[] }) : { sessions: [] };
       setSessions(j.sessions ?? []);
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   }, []);
 
   useEffect(() => {
-    void load(day);
-  }, [day, load]);
+    void load();
+  }, [load]);
 
-  // Restore scroll once, after the returning day's sessions have rendered.
+  // Restore scroll once after the list re-mounts (return from a session).
   useEffect(() => {
     if (loading) return;
-    const r = ret.current;
-    if (r && typeof r.scrollY === "number") {
-      window.scrollTo({ top: r.scrollY, behavior: "auto" });
+    if (returnScroll.current != null) {
+      window.scrollTo({ top: returnScroll.current, behavior: "auto" });
+      returnScroll.current = null;
+      try { sessionStorage.removeItem(RETURN_KEY); } catch { /* ignore */ }
     }
-    ret.current = null;
-    try { sessionStorage.removeItem(RETURN_KEY); } catch { /* ignore */ }
-    // run only when loading flips to false the first time
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
-
-  function changeDay(delta: number) {
-    exitSelect();
-    setDay((d) => shiftDayLocal(d, delta));
-  }
 
   function exitSelect() {
     setSelectMode(false);
@@ -112,15 +78,13 @@ export function UsageEventsTable({ toolbarHost }: Props) {
 
   function openSession(s: SessionRow) {
     try {
-      sessionStorage.setItem(RETURN_KEY, JSON.stringify({ day, scrollY: window.scrollY }));
+      sessionStorage.setItem(RETURN_KEY, JSON.stringify({ scrollY: window.scrollY }));
     } catch { /* ignore */ }
-    router.push({ name: "settings.admin.usageSession", id: encodeSessionId({ ...s, day }) });
+    router.push({ name: "settings.admin.usageSession", id: encodeSessionId({ ...s, from: win.current.from, to: win.current.to }) });
   }
 
   async function applyDelete() {
-    const descriptors = sessions
-      .filter((s) => selected.has(sessionKey(s)))
-      .map(sessionDescriptor);
+    const descriptors = sessions.filter((s) => selected.has(sessionKey(s))).map(sessionDescriptor);
     if (descriptors.length === 0) return;
     setDeleting(true);
     try {
@@ -128,39 +92,18 @@ export function UsageEventsTable({ toolbarHost }: Props) {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessions: descriptors }),
+        body: JSON.stringify({ from: win.current.from, to: win.current.to, sessions: descriptors }),
       });
       if (!res.ok) return;
       setConfirmOpen(false);
       exitSelect();
-      await load(day);
+      await load();
     } finally {
       setDeleting(false);
     }
   }
 
-  const navigatorBar = (
-    <div className="flex items-center gap-1">
-      <button type="button" onClick={() => changeDay(-1)} className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground" title="Previous day">
-        <ChevronLeft className="h-4 w-4" />
-      </button>
-      <button
-        type="button"
-        onClick={() => void load(day, "soft")}
-        disabled={loading || refreshing}
-        className="h-8 px-2.5 inline-flex items-center justify-center gap-1.5 min-w-[96px] text-xs font-medium text-foreground bg-secondary rounded-md hover:bg-muted disabled:opacity-70"
-        title="Refresh"
-      >
-        <RefreshIcon size={12} className={loading || refreshing ? "animate-spin" : ""} />
-        <span className="tabular-nums">{dayLabel(day)}</span>
-      </button>
-      <button type="button" onClick={() => !atToday && changeDay(1)} disabled={atToday} className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40" title="Next day">
-        <ChevronRight className="h-4 w-4" />
-      </button>
-    </div>
-  );
-
-  const selectionBar = (
+  const toolbar = selectMode ? (
     <div className="flex items-center gap-1">
       <button
         type="button"
@@ -175,9 +118,17 @@ export function UsageEventsTable({ toolbarHost }: Props) {
         <XIcon className="h-3.5 w-3.5" />
       </button>
     </div>
+  ) : (
+    <button
+      type="button"
+      onClick={() => void load()}
+      disabled={loading}
+      className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+      title="Refresh"
+    >
+      <RefreshIcon size={14} className={loading ? "animate-spin" : ""} />
+    </button>
   );
-
-  const toolbar = selectMode ? selectionBar : navigatorBar;
 
   return (
     <div className="space-y-3">
@@ -201,21 +152,31 @@ export function UsageEventsTable({ toolbarHost }: Props) {
                 setSelectMode(true);
                 setSelected(new Set([sessionKey(s)]));
               }}
+              onFb={() =>
+                s.latestFbclid &&
+                router.push({ name: "settings.admin.capiSend", fbclid: s.latestFbclid, clickTs: s.latestFbTs ?? undefined })
+              }
             />
           ))}
         </div>
       )}
 
       {confirmOpen ? (
-        <ConfirmDialog
-          count={selected.size}
-          busy={deleting}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={() => void applyDelete()}
-        />
+        <ConfirmDialog count={selected.size} busy={deleting} onCancel={() => setConfirmOpen(false)} onConfirm={() => void applyDelete()} />
       ) : null}
     </div>
   );
+}
+
+function readReturnScroll(): number | null {
+  try {
+    const raw = sessionStorage.getItem(RETURN_KEY);
+    if (!raw) return null;
+    const v = JSON.parse(raw) as { scrollY?: number };
+    return typeof v.scrollY === "number" ? v.scrollY : null;
+  } catch {
+    return null;
+  }
 }
 
 function SessionItem({
@@ -225,6 +186,7 @@ function SessionItem({
   onOpen,
   onToggle,
   onLongPress,
+  onFb,
 }: {
   session: SessionRow;
   selectMode: boolean;
@@ -232,26 +194,20 @@ function SessionItem({
   onOpen: () => void;
   onToggle: () => void;
   onLongPress: () => void;
+  onFb: () => void;
 }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longFired = useRef(false);
   const startPt = useRef<{ x: number; y: number } | null>(null);
 
   function clearTimer() {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
-    }
+    if (timer.current) { clearTimeout(timer.current); timer.current = null; }
   }
-
   function onPointerDown(e: React.PointerEvent) {
     longFired.current = false;
     startPt.current = { x: e.clientX, y: e.clientY };
     clearTimer();
-    timer.current = setTimeout(() => {
-      longFired.current = true;
-      onLongPress();
-    }, LONG_PRESS_MS);
+    timer.current = setTimeout(() => { longFired.current = true; onLongPress(); }, LONG_PRESS_MS);
   }
   function onPointerMove(e: React.PointerEvent) {
     const p = startPt.current;
@@ -259,16 +215,11 @@ function SessionItem({
   }
   function onClick() {
     clearTimer();
-    if (longFired.current) {
-      longFired.current = false;
-      return; // long-press already handled selection; swallow the click
-    }
+    if (longFired.current) { longFired.current = false; return; }
     if (selectMode) onToggle();
     else onOpen();
   }
 
-  // Restaurant name resolved server-side (falls back to the user's restaurant).
-  // Shown in full; CSS truncates only when it can't fit the remaining width.
   const label = s.restaurantLabel;
   const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
@@ -296,43 +247,38 @@ function SessionItem({
       ) : null}
 
       <span className="text-base shrink-0" title={s.country}>{countryToFlag(s.country)}</span>
-      <span className={`${chip} tabular-nums`}>{hm(s.lastAt)}</span>
       <span className={chip}>{s.eventCount}</span>
 
       <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
         {label ? (
-          <span
-            className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0"
-            title={label}
-          >
-            {label}
-          </span>
+          <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={label}>{label}</span>
         ) : s.region ? (
-          <span
-            className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0"
-            title={s.region}
-          >
-            {s.region}
-          </span>
+          <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={s.region}>{s.region}</span>
         ) : null}
-        <span className={chip}>{osName(s.platform, s.device)}</span>
         {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
-        {s.hasFacebook ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span> : null}
+        {s.latestFbclid ? (
+          <span
+            role="button"
+            tabIndex={-1}
+            onClick={(e) => { e.stopPropagation(); onFb(); }}
+            className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 cursor-pointer"
+            title="Send a Meta CAPI event"
+          >
+            FB
+          </span>
+        ) : s.hasFacebook ? (
+          <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span>
+        ) : null}
+        <span className={`${chip} tabular-nums`}>{hmsDate(s.lastAt)}</span>
       </span>
     </button>
   );
 }
 
 function ConfirmDialog({
-  count,
-  busy,
-  onCancel,
-  onConfirm,
+  count, busy, onCancel, onConfirm,
 }: {
-  count: number;
-  busy: boolean;
-  onCancel: () => void;
-  onConfirm: () => void;
+  count: number; busy: boolean; onCancel: () => void; onConfirm: () => void;
 }) {
   useScrollLock(true);
   return (
@@ -345,9 +291,7 @@ function ConfirmDialog({
           Delete {count} selected session{count === 1 ? "" : "s"} and all their events? This cannot be undone.
         </p>
         <div className="px-4 py-3 border-t border-border flex items-center gap-2">
-          <button type="button" onClick={onCancel} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
-            Cancel
-          </button>
+          <button type="button" onClick={onCancel} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">Cancel</button>
           <button type="button" onClick={onConfirm} disabled={busy} className="flex-1 h-9 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-60">
             {busy ? "…" : "Delete"}
           </button>

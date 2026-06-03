@@ -8,8 +8,8 @@ import { SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
 import {
   countryToFlag,
-  osName,
-  hm,
+  deviceLabel,
+  hmsDate,
   decodeSessionId,
   type SessionEvent,
 } from "./usage-shared";
@@ -50,18 +50,15 @@ export function UsageSessionPage({ id }: { id: string }) {
     if (mode === "full") setLoading(true);
     else setRefreshing(true);
     const qs = new URLSearchParams({
+      kind: session.kind,
+      rid: session.rid ?? "",
       ipkey: session.ipkey ?? "",
       hasIp: session.hasIp ? "1" : "0",
-      country: session.country,
-      device: session.device ?? "",
-      platform: session.platform ?? "",
-      from: session.firstAt,
-      to: session.lastAt,
+      from: session.from,
+      to: session.to,
     });
     try {
-      const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), {
-        credentials: "include",
-      });
+      const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" });
       const j = res.ok ? ((await res.json()) as { events: SessionEvent[] }) : { events: [] };
       setEvents(j.events ?? []);
     } finally {
@@ -74,31 +71,16 @@ export function UsageSessionPage({ id }: { id: string }) {
     void load("full");
   }, [load]);
 
-  // Click-id events surface in the info card; rest list newest-first.
-  const listEvents = events
-    .filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"))
-    .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0));
+  // Click-id events surface in the card; everything else lists newest-first.
+  const listEvents = events.filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"));
 
-  // Latest fbclid in the session (a session can carry several — newest wins).
-  let latestFb: { fbclid: string; clickTs: number } | null = null;
-  for (const e of events) {
-    const m = /^l_fbclid_(.+)$/.exec(e.event);
-    if (!m) continue;
-    const ts = new Date(e.at).getTime();
-    if (!latestFb || ts > latestFb.clickTs) latestFb = { fbclid: m[1], clickTs: ts };
-  }
-
-  // Distinct gclid values (gclid column or l_gclid_ event names).
   const gclids: string[] = [];
   const seenG = new Set<string>();
   for (const e of events) {
     let g: string | null = e.gclid || null;
     const m = /^l_gclid_(.+)$/.exec(e.event);
     if (m) g = m[1];
-    if (g && !seenG.has(g)) {
-      seenG.add(g);
-      gclids.push(g);
-    }
+    if (g && !seenG.has(g)) { seenG.add(g); gclids.push(g); }
   }
 
   const back = () => router.back();
@@ -133,15 +115,13 @@ export function UsageSessionPage({ id }: { id: string }) {
                   ) : region ? (
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}
-                  <span className={chip}>{osName(session.platform, session.device)}</span>
-                  {session.hasIp && session.ipkey ? <span className={`${chip} font-mono`}>{session.ipkey}</span> : null}
                   {session.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
-                  {latestFb ? (
+                  {session.latestFbclid ? (
                     <button
                       type="button"
-                      onClick={() => router.push({ name: "settings.admin.capiSend", fbclid: latestFb!.fbclid, clickTs: latestFb!.clickTs })}
+                      onClick={() => router.push({ name: "settings.admin.capiSend", fbclid: session.latestFbclid!, clickTs: session.latestFbTs ?? undefined })}
                       className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
-                      title="Send a Meta CAPI event for this click"
+                      title="Send a Meta CAPI event"
                     >
                       FB
                     </button>
@@ -175,9 +155,13 @@ export function UsageSessionPage({ id }: { id: string }) {
                 <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
               ) : (
                 listEvents.map((e) => (
-                  <div key={e.id} className="flex items-center gap-2 px-3 md:px-4 py-2 text-xs">
-                    <span className="font-mono text-foreground truncate flex-1">{e.event}</span>
-                    <span className={`${chip} tabular-nums`}>{hm(e.at)}</span>
+                  <div key={e.id} className="px-3 md:px-4 py-2 text-xs space-y-1">
+                    <div className="font-mono text-foreground break-all">{e.event}</div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
+                      <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground tabular-nums">{hmsDate(e.at)}</div>
                   </div>
                 ))
               )}
