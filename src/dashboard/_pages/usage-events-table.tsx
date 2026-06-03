@@ -19,6 +19,10 @@ import {
 const RETURN_KEY = "usage_return";
 const LONG_PRESS_MS = 500;
 
+// Module-level cache so navigating into a session and back doesn't re-fetch or
+// re-render the (potentially large) list. Refreshed only by the Update button.
+let sessionCache: SessionRow[] | null = null;
+
 interface Props {
   toolbarHost?: HTMLElement | null;
 }
@@ -28,8 +32,8 @@ export function UsageEventsTable({ toolbarHost }: Props) {
   // Fixed 30-day window, computed once.
   const win = useRef({ from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() });
   const returnScroll = useRef<number | null>(readReturnScroll());
-  const [sessions, setSessions] = useState<SessionRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [sessions, setSessions] = useState<SessionRow[]>(() => sessionCache ?? []);
+  const [loading, setLoading] = useState(() => sessionCache === null);
   const [selectMode, setSelectMode] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -41,14 +45,17 @@ export function UsageEventsTable({ toolbarHost }: Props) {
       const qs = new URLSearchParams({ from: win.current.from, to: win.current.to });
       const res = await fetch(apiUrl(`/api/admin/usage/sessions?${qs.toString()}`), { credentials: "include" });
       const j = res.ok ? ((await res.json()) as { sessions: SessionRow[] }) : { sessions: [] };
-      setSessions(j.sessions ?? []);
+      sessionCache = j.sessions ?? [];
+      setSessions(sessionCache);
     } finally {
       setLoading(false);
     }
   }, []);
 
+  // Fetch only when there's no cache; navigating back reuses it. The Update
+  // button (and a delete) call load() explicitly to refresh.
   useEffect(() => {
-    void load();
+    if (sessionCache === null) void load();
   }, [load]);
 
   // Restore scroll once after the list re-mounts (return from a session).

@@ -16,6 +16,10 @@ import {
 
 const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
+// Per-session events cache (by encoded id) so returning to a session is instant;
+// refreshed only by the Update button.
+const eventCache = new Map<string, SessionEvent[]>();
+
 function CopyButton({ text }: { text: string }) {
   const [done, setDone] = useState(false);
   return (
@@ -38,8 +42,8 @@ function CopyButton({ text }: { text: string }) {
 export function UsageSessionPage({ id }: { id: string }) {
   const router = useDashboardRouter();
   const session = decodeSessionId(id);
-  const [events, setEvents] = useState<SessionEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<SessionEvent[]>(() => eventCache.get(id) ?? []);
+  const [loading, setLoading] = useState(() => !eventCache.has(id));
   const [refreshing, setRefreshing] = useState(false);
 
   const load = useCallback(async (mode: "full" | "soft") => {
@@ -49,17 +53,20 @@ export function UsageSessionPage({ id }: { id: string }) {
     }
     if (mode === "full") setLoading(true);
     else setRefreshing(true);
+    // Fresh 30-day window (NOT the snapshot baked into the id) so refresh
+    // actually picks up events that arrived after the list was generated.
     const qs = new URLSearchParams({
       kind: session.kind,
       rid: session.rid ?? "",
       ipkey: session.ipkey ?? "",
       hasIp: session.hasIp ? "1" : "0",
-      from: session.from,
-      to: session.to,
+      from: new Date(Date.now() - 30 * 864e5).toISOString(),
+      to: new Date().toISOString(),
     });
     try {
       const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" });
       const j = res.ok ? ((await res.json()) as { events: SessionEvent[] }) : { events: [] };
+      eventCache.set(id, j.events ?? []);
       setEvents(j.events ?? []);
     } finally {
       setLoading(false);
@@ -67,9 +74,10 @@ export function UsageSessionPage({ id }: { id: string }) {
     }
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Fetch only when uncached; the Update button forces a refresh.
   useEffect(() => {
-    void load("full");
-  }, [load]);
+    if (!eventCache.has(id)) void load("full");
+  }, [id, load]);
 
   // Click-id events surface in the card; everything else lists newest-first.
   const listEvents = events.filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"));
