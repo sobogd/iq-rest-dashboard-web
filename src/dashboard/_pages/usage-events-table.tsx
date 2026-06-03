@@ -302,14 +302,14 @@ function SessionItem({
       <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
         {label ? (
           <span
-            className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0"
+            className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0"
             title={label}
           >
             {label}
           </span>
         ) : s.region ? (
           <span
-            className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0"
+            className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0"
             title={s.region}
           >
             {s.region}
