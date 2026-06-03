@@ -14,17 +14,7 @@ import {
   decodeSessionId,
   type SessionEvent,
 } from "./usage-shared";
-
-/** Meta CAPI events that can be sent manually from a fbclid landing event. */
-const FB_EVENTS: Array<{ name: string; desc: string }> = [
-  { name: "CompleteRegistration", desc: "Conversion — campaign optimization goal" },
-  { name: "Lead", desc: "Lead / sign-up intent" },
-  { name: "ViewContent", desc: "Viewed demo / content (learning)" },
-  { name: "InitiateCheckout", desc: "Started onboarding / checkout" },
-  { name: "Subscribe", desc: "Started a subscription" },
-  { name: "Purchase", desc: "Paid subscription (value)" },
-  { name: "PageView", desc: "Landing page view (top funnel)" },
-];
+import { CAPI_EVENTS } from "./capi-shared";
 
 const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
@@ -53,7 +43,9 @@ export function UsageSessionPage({ id }: { id: string }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [fbFor, setFbFor] = useState<SessionEvent | null>(null);
+  // fbclid → event_names already successfully sent (Meta CAPI dedup).
+  const [sentByClick, setSentByClick] = useState<Record<string, string[]>>({});
+  const [fbModal, setFbModal] = useState<{ fbclid: string; clickTs: number } | null>(null);
 
   const load = useCallback(async (mode: "full" | "soft") => {
     if (!session) {
@@ -87,24 +79,23 @@ export function UsageSessionPage({ id }: { id: string }) {
     void load("full");
   }, [load]);
 
-  // Click-id events are pulled OUT of the list and surfaced in the info card.
-  // Remaining events newest-first.
+  // Click-id events surface in the info card; rest list newest-first.
   const listEvents = events
     .filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"))
     .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0));
 
-  // Distinct fbclid values (+ their source event for the Meta CAPI send).
-  const fbItems: Array<{ fbclid: string; event: SessionEvent }> = [];
+  // Distinct fbclid values (+ click time for the CAPI fbc).
+  const fbItems: Array<{ fbclid: string; clickTs: number }> = [];
   const seenFb = new Set<string>();
   for (const e of events) {
     const m = /^l_fbclid_(.+)$/.exec(e.event);
     if (m && !seenFb.has(m[1])) {
       seenFb.add(m[1]);
-      fbItems.push({ fbclid: m[1], event: e });
+      fbItems.push({ fbclid: m[1], clickTs: new Date(e.at).getTime() });
     }
   }
 
-  // Distinct gclid values (from the gclid column and l_gclid_ event names).
+  // Distinct gclid values (gclid column or l_gclid_ event names).
   const gclids: string[] = [];
   const seenG = new Set<string>();
   for (const e of events) {
@@ -116,6 +107,35 @@ export function UsageSessionPage({ id }: { id: string }) {
       gclids.push(g);
     }
   }
+
+  // On load, check which CAPI events were already sent for each fbclid.
+  const fbKey = fbItems.map((f) => f.fbclid).join(",");
+  useEffect(() => {
+    const ids = fbKey ? fbKey.split(",") : [];
+    if (ids.length === 0) return;
+    let cancelled = false;
+    Promise.all(
+      ids.map((fbclid) =>
+        fetch(apiUrl(`/api/admin/capi/sent?fbclid=${encodeURIComponent(fbclid)}`), { credentials: "include" })
+          .then((r) => (r.ok ? r.json() : { sent: [] }))
+          .then((j: { sent: string[] }) => [fbclid, j.sent ?? []] as const)
+          .catch(() => [fbclid, [] as string[]] as const),
+      ),
+    ).then((pairs) => {
+      if (!cancelled) setSentByClick(Object.fromEntries(pairs));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [fbKey]);
+
+  const markSent = (fbclid: string, eventName: string) => {
+    setSentByClick((prev) => {
+      const cur = prev[fbclid] ?? [];
+      if (cur.includes(eventName)) return prev;
+      return { ...prev, [fbclid]: [...cur, eventName] };
+    });
+  };
 
   const back = () => router.back();
   const restaurant = session?.restaurantLabel ?? null;
@@ -139,7 +159,6 @@ export function UsageSessionPage({ id }: { id: string }) {
           <div className="text-xs text-muted-foreground py-8 text-center">Invalid session link</div>
         ) : (
           <>
-            {/* Info card — same chip design as the list row + IP + click-ids. */}
             <div className="bg-card border border-border rounded-xl p-3 md:p-4 space-y-2">
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-base shrink-0">{countryToFlag(session.country)}</span>
@@ -174,27 +193,40 @@ export function UsageSessionPage({ id }: { id: string }) {
               ) : null}
 
               {fbItems.length > 0 ? (
-                <div className="space-y-1">
-                  {fbItems.map(({ fbclid, event }) => (
-                    <div key={fbclid} className="flex items-center gap-2">
-                      <span className="text-[10px] text-muted-foreground shrink-0 w-12">fbclid</span>
-                      <span className="text-[11px] font-mono text-foreground break-all flex-1 min-w-0">{fbclid}</span>
-                      <button
-                        type="button"
-                        onClick={() => setFbFor(event)}
-                        className="text-[10px] font-medium rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
-                        title="Send a Meta CAPI event"
-                      >
-                        FB
-                      </button>
-                      <CopyButton text={fbclid} />
-                    </div>
-                  ))}
+                <div className="space-y-1.5">
+                  {fbItems.map(({ fbclid, clickTs }) => {
+                    const sent = sentByClick[fbclid] ?? [];
+                    return (
+                      <div key={fbclid}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-muted-foreground shrink-0 w-12">fbclid</span>
+                          <span className="text-[11px] font-mono text-foreground break-all flex-1 min-w-0">{fbclid}</span>
+                          <button
+                            type="button"
+                            onClick={() => setFbModal({ fbclid, clickTs })}
+                            className="text-[10px] font-medium rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
+                            title="Send a Meta CAPI event"
+                          >
+                            CAPI
+                          </button>
+                          <CopyButton text={fbclid} />
+                        </div>
+                        {sent.length > 0 ? (
+                          <div className="mt-0.5 ml-14 flex flex-wrap gap-1">
+                            {sent.map((n) => (
+                              <span key={n} className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded px-1.5 py-0.5">
+                                ✓ {n}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : null}
             </div>
 
-            {/* Events list (click-id events excluded). */}
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
               {loading ? (
                 <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
@@ -213,29 +245,53 @@ export function UsageSessionPage({ id }: { id: string }) {
         )}
       </div>
 
-      {fbFor ? <FbSendModal event={fbFor} onClose={() => setFbFor(null)} /> : null}
+      {fbModal ? (
+        <CapiSendModal
+          fbclid={fbModal.fbclid}
+          clickTs={fbModal.clickTs}
+          sent={sentByClick[fbModal.fbclid] ?? []}
+          onSent={(name) => markSent(fbModal.fbclid, name)}
+          onClose={() => setFbModal(null)}
+        />
+      ) : null}
     </div>
   );
 }
 
-function FbSendModal({ event, onClose }: { event: SessionEvent; onClose: () => void }) {
+function CapiSendModal({
+  fbclid,
+  clickTs,
+  sent,
+  onSent,
+  onClose,
+}: {
+  fbclid: string;
+  clickTs: number;
+  sent: string[];
+  onSent: (name: string) => void;
+  onClose: () => void;
+}) {
   useScrollLock(true);
   const [sending, setSending] = useState<string | null>(null);
-  const [sent, setSent] = useState<Set<string>>(() => new Set(event.fbSentEvents ?? []));
+  const [local, setLocal] = useState<Set<string>>(() => new Set(sent));
   const [result, setResult] = useState<{ name: string; ok: boolean; body: unknown } | null>(null);
 
   async function send(name: string) {
     setSending(name);
     try {
-      const res = await fetch(apiUrl(`/api/admin/usage-events/${event.id}/fb-send`), {
+      const res = await fetch(apiUrl("/api/admin/capi/send"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_name: name }),
+        body: JSON.stringify({ fbclid, eventName: name, clickTs }),
       });
       const json: unknown = await res.json().catch(() => ({}));
-      setResult({ name, ok: res.ok, body: json });
-      if (res.ok) setSent((prev) => new Set(prev).add(name));
+      const ok = res.ok;
+      setResult({ name, ok, body: json });
+      if (ok) {
+        setLocal((p) => new Set(p).add(name));
+        onSent(name);
+      }
     } catch (e) {
       setResult({ name, ok: false, body: { error: String(e) } });
     } finally {
@@ -253,16 +309,16 @@ function FbSendModal({ event, onClose }: { event: SessionEvent; onClose: () => v
           </button>
         </div>
         <div className="divide-y divide-border max-h-[50vh] overflow-y-auto">
-          {FB_EVENTS.map((fe) => {
-            const already = sent.has(fe.name);
+          {CAPI_EVENTS.map((fe) => {
+            const already = local.has(fe.name);
             const busy = sending === fe.name;
             return (
               <button
                 key={fe.name}
                 type="button"
-                onClick={() => void send(fe.name)}
-                disabled={Boolean(sending)}
-                className={"w-full text-left px-4 py-2.5 transition-colors disabled:opacity-50 " + (already ? "bg-emerald-500/5" : "hover:bg-muted/40")}
+                onClick={() => !already && void send(fe.name)}
+                disabled={Boolean(sending) || already}
+                className={"w-full text-left px-4 py-2.5 transition-colors disabled:opacity-60 " + (already ? "bg-emerald-500/5" : "hover:bg-muted/40")}
               >
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">{fe.name}</span>

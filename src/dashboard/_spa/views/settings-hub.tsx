@@ -67,6 +67,9 @@ function AdminToolbar({ router }: { router: ReturnType<typeof useDashboardRouter
       <button type="button" onClick={() => router.push({ name: "settings.admin.usage" })} className={btn}>
         Usage
       </button>
+      <button type="button" onClick={() => router.push({ name: "settings.admin.capi" })} className={btn}>
+        CAPI
+      </button>
       <button type="button" onClick={reloadAllTablets} disabled={reloading} className={btn} title="Reload every paired tablet system-wide">
         {reloading ? "Sending…" : "Reload tablets"}
       </button>

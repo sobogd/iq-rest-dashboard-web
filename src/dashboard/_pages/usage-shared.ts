@@ -27,7 +27,6 @@ export interface SessionEvent {
   event: string;
   gclid: string | null;
   isFacebookAds: boolean;
-  fbSentEvents: string[];
 }
 
 /** SessionRow + the local day it was listed under (so "back" returns to it). */
