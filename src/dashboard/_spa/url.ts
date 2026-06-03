@@ -69,8 +69,6 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/admin/capi";
     case "settings.admin.capiSend":
       return `/dashboard/settings/admin/capi/send/${encodeURIComponent(view.fbclid)}${view.clickTs ? `?ts=${view.clickTs}` : ""}`;
-    case "settings.admin.capiLog":
-      return `/dashboard/settings/admin/capi/log/${view.id}`;
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -148,8 +146,6 @@ export function pathToView(path: string): View {
       ? { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]), clickTs: n }
       : { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]) };
   }
-  const capiLogMatch = stripped.match(/^\/dashboard\/settings\/admin\/capi\/log\/([^/]+)$/);
-  if (capiLogMatch) return { name: "settings.admin.capiLog", id: capiLogMatch[1] };
   if (stripped === "/dashboard/settings/admin/capi") return { name: "settings.admin.capi" };
   // Legacy redirect: the old combined "Admin" tabs lived at this path.
   if (stripped === "/dashboard/settings/admin") return { name: "settings.admin.restaurants" };
