@@ -31,6 +31,7 @@ export type View =
   | { name: "settings.admin.users" }
   | { name: "settings.admin.restaurant"; id: string }
   | { name: "settings.admin.usage" }
+  | { name: "settings.admin.usageSession"; id: string }
   | { name: "category.new"; group?: string }
   | { name: "category.edit"; id: string }
   | { name: "group.new" }

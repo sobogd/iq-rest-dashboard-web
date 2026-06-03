@@ -34,6 +34,7 @@ import { AdminRestaurantsPage } from "../_pages/admin-restaurants";
 import { AdminUsersPage } from "../_pages/admin-users";
 import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
+import { UsageSessionPage } from "../_pages/usage-session";
 import { LandingRedirect } from "../../auth/landing-redirect";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -328,6 +329,8 @@ function ViewSwitch(p: SwitchProps) {
       return <AdminRestaurantPage restaurantId={view.id} />;
     case "settings.admin.usage":
       return <UsagePage />;
+    case "settings.admin.usageSession":
+      return <UsageSessionPage id={view.id} />;
 
     case "category.new":
       return (

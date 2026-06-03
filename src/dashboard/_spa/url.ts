@@ -63,6 +63,8 @@ export function viewToPath(view: View): string {
       return `/dashboard/settings/admin/restaurants/${view.id}`;
     case "settings.admin.usage":
       return "/dashboard/settings/admin/usage";
+    case "settings.admin.usageSession":
+      return `/dashboard/settings/admin/usage/session/${view.id}`;
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -129,6 +131,8 @@ export function pathToView(path: string): View {
   if (adminRestaurantMatch) return { name: "settings.admin.restaurant", id: adminRestaurantMatch[1] };
   if (stripped === "/dashboard/settings/admin/restaurants") return { name: "settings.admin.restaurants" };
   if (stripped === "/dashboard/settings/admin/users") return { name: "settings.admin.users" };
+  const usageSessionMatch = stripped.match(/^\/dashboard\/settings\/admin\/usage\/session\/([^/]+)$/);
+  if (usageSessionMatch) return { name: "settings.admin.usageSession", id: usageSessionMatch[1] };
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
   // Legacy redirect: the old combined "Admin" tabs lived at this path.
   if (stripped === "/dashboard/settings/admin") return { name: "settings.admin.restaurants" };
