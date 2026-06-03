@@ -95,6 +95,24 @@ export function UsageSessionPage({ id }: { id: string }) {
     if (g && !seenG.has(g)) { seenG.add(g); gclids.push(g); }
   }
 
+  // The id only carries a snapshot of the summary (and synthetic navigations —
+  // e.g. from a restaurant detail — bake in zeros). Derive the header from the
+  // freshly-loaded events, falling back to the baked descriptor.
+  let latestFbclid: string | null = session?.latestFbclid ?? null;
+  let latestFbTs: number | null = session?.latestFbTs ?? null;
+  let hasFb = session?.hasFacebook ?? false;
+  for (const e of events) {
+    if (e.isFacebookAds) hasFb = true;
+    const m = /^l_fbclid_(.+)$/.exec(e.event);
+    if (m) {
+      hasFb = true;
+      const ts = new Date(e.at).getTime();
+      if (latestFbTs === null || ts >= latestFbTs) { latestFbTs = ts; latestFbclid = m[1]; }
+    }
+  }
+  const eventCount = events.length || session?.eventCount || 0;
+  const hasGoogle = gclids.length > 0 || (session?.hasGoogle ?? false);
+
   const [pickerOpen, setPickerOpen] = useState(false);
 
   function onAssigned(rid: string, title: string) {
@@ -145,8 +163,8 @@ export function UsageSessionPage({ id }: { id: string }) {
           <>
             <div className="bg-card border border-border rounded-xl p-3 md:p-4 space-y-2">
               <div className="flex items-center gap-2 text-xs">
-                <span className="text-base shrink-0">{countryToFlag(session.country)}</span>
-                <span className={chip}>{session.eventCount}</span>
+                {session.country ? <span className="text-base shrink-0">{countryToFlag(session.country)}</span> : null}
+                <span className={chip}>{eventCount}</span>
                 <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
                   {restaurant ? (
                     session.kind === "r" && session.rid ? (
@@ -164,17 +182,17 @@ export function UsageSessionPage({ id }: { id: string }) {
                   ) : region ? (
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}
-                  {session.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
-                  {session.latestFbclid ? (
+                  {hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
+                  {latestFbclid ? (
                     <button
                       type="button"
-                      onClick={() => router.push({ name: "settings.admin.capiSend", fbclid: session.latestFbclid!, clickTs: session.latestFbTs ?? undefined })}
+                      onClick={() => router.push({ name: "settings.admin.capiSend", fbclid: latestFbclid!, clickTs: latestFbTs ?? undefined })}
                       className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
                       title="Send a Meta CAPI event"
                     >
                       FB
                     </button>
-                  ) : session.hasFacebook ? (
+                  ) : hasFb ? (
                     <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span>
                   ) : null}
                 </span>
