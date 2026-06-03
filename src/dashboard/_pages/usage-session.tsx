@@ -126,6 +126,19 @@ export function UsageSessionPage({ id }: { id: string }) {
   const eventCount = events.length || session?.eventCount || 0;
   const hasGoogle = gclids.length > 0 || (session?.hasGoogle ?? false);
 
+  // Funnel touchpoints derived from the session's event names (works for
+  // landing activity stitched onto a restaurant). Lets me decide which FB
+  // event to send for a given session.
+  let hasOnboarding = false;
+  let hasPricing = false;
+  let hasDemo = false;
+  for (const e of events) {
+    const n = e.event;
+    if (!hasOnboarding && (n.includes("onb") || n.includes("onboarding"))) hasOnboarding = true;
+    if (!hasPricing && n.includes("pricing")) hasPricing = true;
+    if (!hasDemo && n.includes("demo")) hasDemo = true;
+  }
+
   const [pickerOpen, setPickerOpen] = useState(false);
 
   function onAssigned(rid: string, title: string) {
@@ -216,6 +229,20 @@ export function UsageSessionPage({ id }: { id: string }) {
 
               {userLabel ? (
                 <div className="text-[11px] text-muted-foreground truncate">👤 {userLabel}</div>
+              ) : null}
+
+              {hasDemo || hasPricing || hasOnboarding ? (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {hasDemo ? (
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">Demo</span>
+                  ) : null}
+                  {hasPricing ? (
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-violet-500/10 text-violet-700 dark:text-violet-400">Pricing</span>
+                  ) : null}
+                  {hasOnboarding ? (
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-sky-500/10 text-sky-700 dark:text-sky-400">Onboarding</span>
+                  ) : null}
+                </div>
               ) : null}
 
               {gclids.length > 0 ? (

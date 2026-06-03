@@ -31,12 +31,11 @@ export function fmtAt(iso: string): string {
   return `${p(d.getDate())}.${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
-export const CAPI_EVENTS: Array<{ name: string; desc: string }> = [
-  { name: "CompleteRegistration", desc: "Conversion — campaign optimization goal" },
-  { name: "Lead", desc: "Lead / sign-up intent" },
-  { name: "ViewContent", desc: "Viewed demo / content (learning)" },
-  { name: "InitiateCheckout", desc: "Started onboarding / checkout" },
-  { name: "Subscribe", desc: "Started a subscription" },
-  { name: "Purchase", desc: "Paid subscription (value)" },
-  { name: "PageView", desc: "Landing page view (top funnel)" },
+export const CAPI_EVENTS: Array<{ name: string; short: string; desc: string }> = [
+  { name: "ViewContent", short: "View", desc: "Viewed demo / content (learning)" },
+  { name: "InitiateCheckout", short: "Checkout", desc: "Started onboarding / checkout" },
+  { name: "CompleteRegistration", short: "Register", desc: "Conversion — campaign optimization goal" },
+  { name: "Subscribe", short: "Subscribe", desc: "Started a subscription" },
 ];
+
+export const CAPI_SHORT = new Map(CAPI_EVENTS.map((e) => [e.name, e.short]));

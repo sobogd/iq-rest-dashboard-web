@@ -1,19 +1,21 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
+import { useScrollLock } from "../_v2/use-scroll-lock";
 import { useDashboardRouter } from "../_spa/router";
-import { CapiEventChips, availableEvents } from "./capi-event-select";
-import { fmtAt, type CapiHistoryRow } from "./capi-shared";
+import { availableEvents } from "./capi-event-select";
+import { fmtAt, CAPI_SHORT, type CapiHistoryRow } from "./capi-shared";
 
 export function CapiSendPage({ fbclid, clickTs }: { fbclid: string; clickTs?: number }) {
   const router = useDashboardRouter();
-  const [eventName, setEventName] = useState("");
   const [history, setHistory] = useState<CapiHistoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [confirm, setConfirm] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const loadHistory = useCallback(async () => {
@@ -36,12 +38,7 @@ export function CapiSendPage({ fbclid, clickTs }: { fbclid: string; clickTs?: nu
   const sentNames = history.filter((h) => h.status === "success").map((h) => h.eventName);
   const available = availableEvents(sentNames);
 
-  // Keep the selection on an available event.
-  useEffect(() => {
-    if (available.length > 0 && !available.includes(eventName)) setEventName(available[0]);
-  }, [available, eventName]);
-
-  async function send() {
+  async function send(eventName: string) {
     if (!eventName || sending) return;
     setSending(true);
     setMsg(null);
@@ -59,6 +56,7 @@ export function CapiSendPage({ fbclid, clickTs }: { fbclid: string; clickTs?: nu
       setMsg({ ok: false, text: String(e) });
     } finally {
       setSending(false);
+      setConfirm(null);
     }
   }
 
@@ -77,19 +75,21 @@ export function CapiSendPage({ fbclid, clickTs }: { fbclid: string; clickTs?: nu
       </SubpageStickyBar>
       <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 space-y-3">
         {available.length > 0 ? (
-          <div className="bg-card border border-border rounded-xl p-4 md:p-5 space-y-4">
-            <CapiEventChips events={available} value={eventName} onChange={setEventName} />
-            {msg ? <div className={"text-xs " + (msg.ok ? "text-emerald-500" : "text-red-500")}>{msg.text}</div> : null}
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={() => void send()}
-                disabled={!eventName || sending}
-                className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
-              >
-                {sending ? "Sending…" : "Send"}
-              </button>
+          <div className="bg-card border border-border rounded-xl p-4 md:p-5 space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {available.map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => setConfirm(name)}
+                  disabled={sending}
+                  className="flex-1 min-w-[72px] h-9 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
+                >
+                  {CAPI_SHORT.get(name) ?? name}
+                </button>
+              ))}
             </div>
+            {msg ? <div className={"text-xs " + (msg.ok ? "text-emerald-500" : "text-red-500")}>{msg.text}</div> : null}
           </div>
         ) : null}
 
@@ -119,6 +119,51 @@ export function CapiSendPage({ fbclid, clickTs }: { fbclid: string; clickTs?: nu
           )}
         </div>
       </div>
+
+      {confirm ? (
+        <ConfirmSend
+          eventName={confirm}
+          busy={sending}
+          onCancel={() => setConfirm(null)}
+          onConfirm={() => void send(confirm)}
+        />
+      ) : null}
     </div>
+  );
+}
+
+function ConfirmSend({
+  eventName, busy, onCancel, onConfirm,
+}: {
+  eventName: string; busy: boolean; onCancel: () => void; onConfirm: () => void;
+}) {
+  useScrollLock(true);
+  return createPortal(
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40" onClick={onCancel}>
+      <div className="w-full max-w-xs bg-card border border-border rounded-xl p-4 space-y-4" onClick={(e) => e.stopPropagation()}>
+        <div className="text-sm text-foreground">
+          Send <span className="font-semibold">{eventName}</span> to Meta?
+        </div>
+        <div className="flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={busy}
+            className="h-8 px-3 text-xs font-medium bg-secondary text-foreground rounded-lg hover:bg-muted disabled:opacity-60"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={busy}
+            className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
+          >
+            {busy ? "Sending…" : "Send"}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 }
