@@ -135,7 +135,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   for (const e of events) {
     const n = e.event;
     if (!hasOnboarding && (n.includes("onb") || n.includes("onboarding"))) hasOnboarding = true;
-    if (!hasPricing && n.includes("pricing")) hasPricing = true;
+    if (!hasPricing && n === "l_page_pricing") hasPricing = true;
     if (!hasDemo && n.includes("demo")) hasDemo = true;
   }
 
