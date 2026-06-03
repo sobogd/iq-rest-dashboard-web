@@ -1,29 +1,35 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { Trash2, Check, ListChecks, X as XIcon, UserX, Calendar, ArrowDownNarrowWide, ArrowUpNarrowWide } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Store, User as UserIcon } from "lucide-react";
 import { apiUrl } from "@/lib/api";
-import { RefreshIcon } from "../_v2/icons";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 
-export interface UsageRow {
+// ── Types ──
+
+interface SessionRow {
+  ipkey: string | null;
+  hasIp: boolean;
+  country: string;
+  device: string | null;
+  platform: string | null;
+  firstAt: string;
+  lastAt: string;
+  eventCount: number;
+  hasGoogle: boolean;
+  hasFacebook: boolean;
+  userId: string | null;
+  restaurantId: string | null;
+  userLabel: string | null;
+  restaurantLabel: string | null;
+}
+
+interface SessionEvent {
   id: string;
   at: string;
   event: string;
-  country: string;
-  region: string;
-  device: string | null;
-  platform: string | null;
   gclid: string | null;
-  adParams: string | null;
-  userId: string | null;
-  restaurantId: string | null;
-  /** Friendly label resolved server-side (restaurant title or user email). */
-  label: string | null;
-  ip: string | null;
-  isSearch: boolean;
-  isGoogleAds: boolean;
   isFacebookAds: boolean;
   fbSentEvents: string[];
 }
@@ -39,19 +45,7 @@ const FB_EVENTS: Array<{ name: string; desc: string }> = [
   { name: "PageView", desc: "Landing page view (top funnel)" },
 ];
 
-/** Stable hash → HSL hue. Group by country|device|platform|(ip or region).
- *  IP preferred when present (server-anonymized), region as legacy fallback. */
-function sessionHueFor(row: UsageRow): number {
-  const tail = row.ip || row.region || "";
-  const key = `${row.country}|${row.device || ""}|${row.platform || ""}|${tail}`;
-  let h = 5381;
-  for (let i = 0; i < key.length; i++) h = ((h << 5) + h + key.charCodeAt(i)) >>> 0;
-  return h % 360;
-}
-
-function truncate8(s: string): string {
-  return s.length <= 8 ? s : s.slice(0, 8) + "..";
-}
+// ── Helpers ──
 
 function countryToFlag(code: string): string {
   if (!code || code === "XX" || code.length !== 2) return "🌐";
@@ -60,854 +54,336 @@ function countryToFlag(code: string): string {
   return String.fromCodePoint(A + code.charCodeAt(0) - a, A + code.charCodeAt(1) - a);
 }
 
-function fmtAt(iso: string): string {
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** Local HH:MM:SS for an ISO timestamp. */
+function hms(iso: string): string {
   const d = new Date(iso);
-  return `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+function todayUTC(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function shiftDay(day: string, delta: number): string {
+  const d = new Date(`${day}T00:00:00.000Z`);
+  d.setUTCDate(d.getUTCDate() + delta);
+  return d.toISOString().slice(0, 10);
+}
+
+function dayLabel(day: string): string {
+  const t = todayUTC();
+  if (day === t) return "Today";
+  if (day === shiftDay(t, -1)) return "Yesterday";
+  const [y, m, d] = day.split("-");
+  return `${d}.${m}.${y}`;
 }
 
 interface Props {
-  /** When set, the table is scoped to a single user. */
-  userId?: string;
-  /** Reports the current row count to the parent so it can render it in its own header. */
-  onCountChange?: (count: number) => void;
-  /** When provided, the toolbar buttons are portalled into this host element. */
+  /** When provided, the day navigator is portalled into this host element. */
   toolbarHost?: HTMLElement | null;
 }
 
-export function UsageEventsTable({ userId, onCountChange, toolbarHost }: Props) {
-  const [rows, setRows] = useState<UsageRow[]>([]);
+export function UsageEventsTable({ toolbarHost }: Props) {
+  const [day, setDay] = useState<string>(() => todayUTC());
+  const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [selected, setSelected] = useState<UsageRow | null>(null);
-  const [selectMode, setSelectMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
-  const [shiftPending, setShiftPending] = useState(false);
-  const [pivotId, setPivotId] = useState<string | null>(null);
-  const [similarToId, setSimilarToId] = useState<string | null>(null);
-  const [similarToLabel, setSimilarToLabel] = useState<string | null>(null);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [bulkBusy, setBulkBusy] = useState(false);
-  const [filterFrom, setFilterFrom] = useState<string>("");
-  const [filterTo, setFilterTo] = useState<string>("");
-  const [filterOnlyAnonymous, setFilterOnlyAnonymous] = useState<boolean>(false);
-  const [filterModal, setFilterModal] = useState<"dates" | null>(null);
-  const [sortAsc, setSortAsc] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const selectedCount = selectedIds.size;
-  const dateFilterActive = Boolean(filterFrom || filterTo);
+  const [selected, setSelected] = useState<SessionRow | null>(null);
 
-  const fetchPage = useCallback(
-    async (cursorParam: string | null) => {
-      const qs = new URLSearchParams();
-      if (userId) qs.set("userId", userId);
-      else qs.set("scope", filterOnlyAnonymous ? "anonymous" : "all");
-      if (cursorParam) qs.set("cursor", cursorParam);
-      if (filterFrom) qs.set("from", new Date(filterFrom).toISOString());
-      if (filterTo) qs.set("to", new Date(filterTo).toISOString());
-      if (sortAsc) qs.set("sort", "asc");
-      if (similarToId) qs.set("similarTo", similarToId);
-      const res = await fetch(apiUrl(`/api/admin/usage/timeline?${qs.toString()}`), {
+  const atToday = day >= todayUTC();
+
+  const load = useCallback(async (d: string) => {
+    setLoading(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/usage/sessions?day=${d}`), {
         credentials: "include",
       });
-      if (!res.ok) return null;
-      return (await res.json()) as {
-        events: UsageRow[];
-        hasMore: boolean;
-        nextCursor: string | null;
-        total?: number;
-      };
-    },
-    [userId, filterOnlyAnonymous, filterFrom, filterTo, sortAsc, similarToId],
-  );
-
-  const load = useCallback(
-    async (mode: "initial" | "refresh") => {
-      if (mode === "initial") setLoading(true);
-      else setRefreshing(true);
-      try {
-        const j = await fetchPage(null);
-        if (j) {
-          setRows(j.events);
-          setHasMore(j.hasMore);
-          setCursor(j.nextCursor);
-          onCountChange?.(j.total ?? j.events.length);
-        } else {
-          setRows([]);
-          setHasMore(false);
-          setCursor(null);
-          onCountChange?.(0);
-        }
-      } finally {
-        setLoading(false);
-        setRefreshing(false);
+      if (!res.ok) {
+        setSessions([]);
+        return;
       }
-      // Chain: page may be short — if sentinel still in view, keep loading.
-      setTimeout(() => {
-        const el = sentinelRef.current;
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight + 200 && r.bottom > -200) void loadMore();
-      }, 0);
-    },
-    [fetchPage, onCountChange],
-  );
-
-  // Stable loadMore via refs — observer attaches once and reads latest state
-  // without identity churn that would re-render the rows during click events.
-  const stateRef = useRef({ cursor, hasMore, loadingMore, fetchPage });
-  stateRef.current = { cursor, hasMore, loadingMore, fetchPage };
-
-  const loadMore = useCallback(async () => {
-    const s = stateRef.current;
-    if (!s.cursor || !s.hasMore || s.loadingMore) return;
-    setLoadingMore(true);
-    try {
-      const j = await s.fetchPage(s.cursor);
-      if (j) {
-        setRows((prev) => [...prev, ...j.events]);
-        setHasMore(j.hasMore);
-        setCursor(j.nextCursor);
-      }
+      const j = (await res.json()) as { sessions: SessionRow[] };
+      setSessions(j.sessions ?? []);
     } finally {
-      setLoadingMore(false);
+      setLoading(false);
     }
-    // Chain: if sentinel still in view after this load, trigger another.
-    setTimeout(() => {
-      const el = sentinelRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight + 200 && r.bottom > -200) void loadMore();
-    }, 0);
   }, []);
 
   useEffect(() => {
-    // Refresh / page reload / scope change resets bulk mode and selection.
-    setSelectMode(false);
-    setSelectedIds(new Set());
-    setShiftPending(false);
-    setPivotId(null);
-    void load("initial");
-  }, [load]);
+    void load(day);
+  }, [day, load]);
 
-  function toggleSelect(id: string) {
-    // Shift-range path — when the shift button is armed and there's a pivot
-    // (anything previously toggled), select every row between pivot and the
-    // current click inclusive. The pivot stays where it was so the user can
-    // re-arm shift and grow the range further.
-    if (shiftPending && pivotId && pivotId !== id) {
-      const a = rows.findIndex((r) => r.id === pivotId);
-      const b = rows.findIndex((r) => r.id === id);
-      if (a !== -1 && b !== -1) {
-        const [lo, hi] = a < b ? [a, b] : [b, a];
-        setSelectedIds((prev) => {
-          const next = new Set(prev);
-          for (let i = lo; i <= hi; i++) next.add(rows[i].id);
-          return next;
-        });
-        setShiftPending(false);
-        setPivotId(id);
-        return;
-      }
-    }
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-    setPivotId(id);
-  }
-
-  function resetListAndScrollTop() {
-    setRows([]);
-    setCursor(null);
-    setHasMore(false);
-    if (typeof window !== "undefined") window.scrollTo({ top: 0 });
-  }
-
-  async function applyDelete() {
-    if (selectedIds.size === 0) return;
-    setBulkBusy(true);
-    try {
-      const res = await fetch(apiUrl("/api/admin/usage/events/delete"), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: [...selectedIds] }),
-      });
-      if (!res.ok) return;
-      setSelectedIds(new Set());
-      setSelectMode(false);
-      resetListAndScrollTop();
-      void load("initial");
-    } finally {
-      setBulkBusy(false);
-      setConfirmDelete(false);
-    }
-  }
-
-  // IntersectionObserver — fires loadMore when sentinel scrolls into view.
-  // Attaches once per hasMore transition; loadMore is stable via stateRef.
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el || !hasMore) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) void loadMore();
-      },
-      { rootMargin: "200px" },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [hasMore, loadMore]);
-
-  const selectToggle = (
-    <button
-      type="button"
-      onClick={() => {
-        setSelectMode(true);
-        setSelectedIds(new Set());
-      }}
-      className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
-      title="Select events"
-    >
-      <ListChecks className="h-3.5 w-3.5" />
-    </button>
-  );
-
-  const anonButton = (
-    <button
-      type="button"
-      onClick={() => setFilterOnlyAnonymous((v) => !v)}
-      className={
-        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-        (filterOnlyAnonymous
-          ? "bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40"
-          : "bg-secondary text-muted-foreground hover:text-foreground")
-      }
-      title={filterOnlyAnonymous ? "Anonymous only — on" : "Show anonymous only"}
-    >
-      <UserX className="h-3.5 w-3.5" />
-    </button>
-  );
-
-  const sortButton = (
-    <button
-      type="button"
-      onClick={() => setSortAsc((v) => !v)}
-      className={
-        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-        (sortAsc
-          ? "bg-primary/15 text-primary hover:bg-primary/25"
-          : "bg-secondary text-muted-foreground hover:text-foreground")
-      }
-      title={sortAsc ? "Oldest first (asc)" : "Newest first (desc)"}
-    >
-      {sortAsc ? <ArrowUpNarrowWide className="h-3.5 w-3.5" /> : <ArrowDownNarrowWide className="h-3.5 w-3.5" />}
-    </button>
-  );
-
-  const dateButton = (
-    <button
-      type="button"
-      onClick={() => setFilterModal("dates")}
-      className={
-        "h-8 w-8 inline-flex items-center justify-center rounded-md " +
-        (dateFilterActive
-          ? "bg-primary/15 text-primary hover:bg-primary/25"
-          : "bg-secondary text-muted-foreground hover:text-foreground")
-      }
-      title={dateFilterActive ? "Date filter active" : "Date filter"}
-    >
-      <Calendar className="h-3.5 w-3.5" />
-    </button>
-  );
-  const similarPill = similarToId ? (
-    <button
-      type="button"
-      onClick={() => {
-        setSimilarToId(null);
-        setSimilarToLabel(null);
-      }}
-      className="h-8 inline-flex items-center gap-1.5 px-2 rounded-md bg-primary/15 text-primary hover:bg-primary/25 transition-colors text-[11px] font-medium"
-      title="Clear similar-events filter"
-    >
-      <span className="font-mono truncate max-w-[140px]">~ {similarToLabel ?? "event"}</span>
-      <XIcon className="h-3 w-3" />
-    </button>
-  ) : null;
-
-  const refreshButton = (
-    <button
-      type="button"
-      onClick={() => void load("refresh")}
-      disabled={refreshing || loading}
-      className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-      title="Refresh"
-    >
-      <RefreshIcon size={14} className={refreshing ? "animate-spin" : ""} />
-    </button>
-  );
-
-  const selectionActions = (
-    <>
+  const navigator = (
+    <div className="flex items-center gap-1">
       <button
         type="button"
-        onClick={() => setShiftPending((v) => !v)}
-        disabled={selectedCount === 0}
-        className={
-          "h-8 w-8 inline-flex items-center justify-center rounded-md text-sm font-bold disabled:opacity-40 " +
-          (shiftPending
-            ? "bg-primary-gradient text-primary-foreground"
-            : "bg-secondary text-muted-foreground hover:text-foreground")
-        }
-        title={shiftPending ? "Click any event to select the range to it" : "Arm Shift: next click selects the range"}
+        onClick={() => setDay((d) => shiftDay(d, -1))}
+        className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+        title="Previous day"
       >
-        ⇧
+        <ChevronLeft className="h-4 w-4" />
       </button>
+      <span className="min-w-[92px] text-center text-xs font-medium text-foreground tabular-nums">
+        {dayLabel(day)}
+      </span>
       <button
         type="button"
-        onClick={() => selectedCount > 0 && setConfirmDelete(true)}
-        disabled={selectedCount === 0 || bulkBusy}
-        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 disabled:opacity-40"
-        title={`Delete ${selectedCount}`}
+        onClick={() => !atToday && setDay((d) => shiftDay(d, 1))}
+        disabled={atToday}
+        className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40"
+        title="Next day"
       >
-        <Trash2 className="h-3.5 w-3.5" />
+        <ChevronRight className="h-4 w-4" />
       </button>
-      <button
-        type="button"
-        onClick={() => {
-          setSelectMode(false);
-          setSelectedIds(new Set());
-        }}
-        className="h-8 w-8 inline-flex items-center justify-center rounded-md bg-secondary text-muted-foreground hover:text-foreground"
-        title="Clear"
-      >
-        <XIcon className="h-3.5 w-3.5" />
-      </button>
-    </>
-  );
-
-  const toolbarPortalContent = selectMode ? (
-    selectionActions
-  ) : (
-    <>
-      {selectToggle}
-      {anonButton}
-      {dateButton}
-      {similarPill}
-      {sortButton}
-      {refreshButton}
-    </>
+    </div>
   );
 
   return (
     <div className="space-y-3">
-      {toolbarHost
-        ? createPortal(toolbarPortalContent, toolbarHost)
-        : (
-          <div
-            className="sticky z-10 bg-background py-2 flex items-center gap-1 flex-wrap"
-            style={{ top: "var(--events-sticky-top, 0px)" }}
-          >
-            {selectMode ? selectionActions : (
-              <>
-                {selectToggle}
-                {anonButton}
-                {dateButton}
-                {similarPill}
-                {refreshButton}
-              </>
-            )}
-          </div>
-        )}
+      {toolbarHost ? createPortal(navigator, toolbarHost) : <div className="flex">{navigator}</div>}
 
       {loading ? (
         <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-      ) : rows.length === 0 ? (
-        <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
+      ) : sessions.length === 0 ? (
+        <div className="text-xs text-muted-foreground py-8 text-center">No sessions</div>
       ) : (
         <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-          {rows.map((row) => {
-            // Dashboard usage events are prefixed "dash_". For those we hide the
-            // email chip (it's the logged-in owner's email — saves space / noise);
-            // country + the session-coloured left border still identify the row.
-            const isDashboardEvent = row.event.startsWith("dash_");
-            return (
+          {sessions.map((s, i) => (
             <button
-              key={row.id}
+              key={`${s.ipkey}-${s.country}-${s.device}-${s.platform}-${i}`}
               type="button"
-              onClick={() => {
-                if (selectMode) {
-                  toggleSelect(row.id);
-                  return;
-                }
-                setSelected(row);
-              }}
-              className="w-full flex items-center gap-2 pl-2 pr-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors border-l-[3px]"
-              style={{ borderLeftColor: `hsl(${sessionHueFor(row)} 70% 55%)` }}
-              title={`Session: ${row.country} / ${row.device || "—"} / ${row.platform || "—"} / ${row.ip || "—"}`}
+              onClick={() => setSelected(s)}
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs text-left hover:bg-muted/40 transition-colors"
             >
-              {selectMode ? (
-                <span
-                  className={
-                    "shrink-0 inline-flex items-center justify-center w-3.5 h-3.5 rounded border " +
-                    (selectedIds.has(row.id)
-                      ? "bg-primary border-primary text-primary-foreground"
-                      : "border-border bg-card")
-                  }
-                  aria-hidden
-                >
-                  {selectedIds.has(row.id) ? <Check className="w-2.5 h-2.5" /> : null}
-                </span>
-              ) : null}
-              <span className="text-base shrink-0" title={row.country}>
-                {countryToFlag(row.country)}
+              <span className="text-base shrink-0" title={s.country}>
+                {countryToFlag(s.country)}
               </span>
-              {!isDashboardEvent && (row.label || row.restaurantId || row.userId) ? (
+              <span className="text-foreground tabular-nums shrink-0">
+                {hms(s.firstAt)}–{hms(s.lastAt)}
+              </span>
+              <span className="text-[10px] text-muted-foreground shrink-0">{s.eventCount}</span>
+
+              {s.userLabel ? (
                 <span
-                  className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0"
-                  title={row.label || row.restaurantId || row.userId || ""}
+                  className="inline-flex items-center gap-1 text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0 max-w-[160px] truncate"
+                  title={s.userLabel}
                 >
-                  {truncate8(row.label || row.restaurantId || row.userId || "")}
+                  <UserIcon className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{s.userLabel}</span>
                 </span>
               ) : null}
-              <span className="font-mono text-foreground truncate flex-1">{row.event}</span>
-              {row.gclid ? (
+              {s.restaurantLabel ? (
                 <span
-                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#34A853] text-[8px] font-bold text-white shrink-0"
-                  title={row.gclid}
-                  aria-hidden
+                  className="inline-flex items-center gap-1 text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0 max-w-[160px] truncate"
+                  title={s.restaurantLabel}
                 >
-                  G
+                  <Store className="h-3 w-3 shrink-0" />
+                  <span className="truncate">{s.restaurantLabel}</span>
                 </span>
-              ) : row.isGoogleAds ? (
+              ) : null}
+
+              <span className="flex-1" />
+
+              {s.hasGoogle ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white shrink-0"
-                  title="Google Ads (flag, no gclid on this row)"
+                  title="Google Ads (gclid) in this session"
                   aria-hidden
                 >
                   G
                 </span>
-              ) : row.isFacebookAds ? (
+              ) : null}
+              {s.hasFacebook ? (
                 <span
                   className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#1877F2] text-[8px] font-bold text-white shrink-0"
-                  title="Facebook/Instagram Ads (fbclid)"
+                  title="Facebook/Instagram Ads (fbclid) in this session"
                   aria-hidden
                 >
                   F
                 </span>
-              ) : row.isSearch ? (
-                <span
-                  className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-500 text-[8px] font-bold text-white shrink-0"
-                  title="Arrived from a search engine"
-                  aria-hidden
-                >
-                  S
+              ) : null}
+              {s.device ? (
+                <span className="text-[10px] text-muted-foreground shrink-0" title={`${s.device} / ${s.platform || "—"}`}>
+                  {s.device === "mobile" ? "📱" : s.device === "tablet" ? "📋" : "🖥"}
                 </span>
               ) : null}
-              {row.device && !row.userId && !row.restaurantId && (
-                <span className="text-[10px] text-muted-foreground shrink-0" title={`${row.device} / ${row.platform || "—"}`}>
-                  {row.device === "mobile" ? "📱" : row.device === "tablet" ? "📋" : "🖥"}
-                </span>
-              )}
-              <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
-                {fmtAt(row.at)}
-              </span>
             </button>
-            );
-          })}
+          ))}
         </div>
       )}
 
-      {hasMore && (
-        <div ref={sentinelRef} className="text-xs text-muted-foreground py-4 text-center">
-          {loadingMore ? "Loading more…" : ""}
-        </div>
-      )}
-
-      <UsageEventDetail
-        event={selected}
-        onClose={() => setSelected(null)}
-        onShowSimilar={(ev) => {
-          setSimilarToId(ev.id);
-          setSimilarToLabel(ev.event);
-          setSelected(null);
-        }}
-      />
-
-      {confirmDelete ? (
-        <ConfirmDialogInline
-          title="Delete events"
-          message={`Delete ${selectedCount} selected event${selectedCount === 1 ? "" : "s"}? This cannot be undone.`}
-          onCancel={() => setConfirmDelete(false)}
-          onConfirm={() => void applyDelete()}
-          busy={bulkBusy}
-        />
-      ) : null}
-
-      {filterModal === "dates" ? (
-        <FilterModal
-          from={filterFrom}
-          to={filterTo}
-          onClose={() => setFilterModal(null)}
-          onApply={(f, t) => {
-            setFilterFrom(f);
-            setFilterTo(t);
-            setFilterModal(null);
-          }}
-          onClear={() => {
-            setFilterFrom("");
-            setFilterTo("");
-            setFilterModal(null);
-          }}
-        />
-      ) : null}
-
+      <SessionDetail session={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
 
-function todayRangeDefaults(): { from: string; to: string } {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return { from: `${y}-${m}-${day}T00:00`, to: `${y}-${m}-${day}T23:59` };
-}
+// ── Session detail modal ──
 
-function FilterModal({
-  from,
-  to,
-  onClose,
-  onApply,
-  onClear,
-}: {
-  from: string;
-  to: string;
-  onClose: () => void;
-  onApply: (from: string, to: string) => void;
-  onClear: () => void;
-}) {
-  useScrollLock(true);
-  const defaults = todayRangeDefaults();
-  const [draftFrom, setDraftFrom] = useState(from || defaults.from);
-  const [draftTo, setDraftTo] = useState(to || defaults.to);
-  const [datesTouched, setDatesTouched] = useState(Boolean(from || to));
-  return (
-    <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
-        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-foreground">Date filter</h3>
-          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground">
-            ✕
-          </button>
-        </div>
-        <div className="p-4 space-y-3">
-          <label className="block">
-            <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">From</span>
-            <input
-              type="datetime-local"
-              value={draftFrom}
-              onChange={(e) => { setDraftFrom(e.target.value); setDatesTouched(true); }}
-              className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
-            />
-          </label>
-          <label className="block">
-            <span className="block text-[11px] text-muted-foreground uppercase tracking-wider mb-1">To</span>
-            <input
-              type="datetime-local"
-              value={draftTo}
-              onChange={(e) => { setDraftTo(e.target.value); setDatesTouched(true); }}
-              className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
-            />
-          </label>
-        </div>
-        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
-          <button type="button" onClick={onClear} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
-            Clear
-          </button>
-          <button
-            type="button"
-            onClick={() => onApply(
-              datesTouched ? draftFrom : "",
-              datesTouched ? draftTo : "",
-            )}
-            className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90"
-          >
-            Apply
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+function SessionDetail({ session, onClose }: { session: SessionRow | null; onClose: () => void }) {
+  useScrollLock(Boolean(session));
+  const [events, setEvents] = useState<SessionEvent[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [fbFor, setFbFor] = useState<SessionEvent | null>(null);
 
-function ConfirmDialogInline({
-  title,
-  message,
-  onCancel,
-  onConfirm,
-  busy,
-}: {
-  title: string;
-  message: string;
-  onCancel: () => void;
-  onConfirm: () => void;
-  busy?: boolean;
-}) {
-  useScrollLock(true);
-  return (
-    <div onClick={onCancel} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-sm bg-card border border-border rounded-xl shadow-xl">
-        <div className="px-4 py-3 border-b border-border">
-          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-        </div>
-        <p className="px-4 py-3 text-sm text-muted-foreground">{message}</p>
-        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
-          <button type="button" onClick={onCancel} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            disabled={busy}
-            className="flex-1 h-9 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 disabled:opacity-60"
-          >
-            {busy ? "…" : "Delete"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function UsageEventDetail({
-  event,
-  onClose,
-  onShowSimilar,
-}: {
-  event: UsageRow | null;
-  onClose: () => void;
-  onShowSimilar: (event: UsageRow) => void;
-}) {
-  useScrollLock(Boolean(event));
-  const [fbOpen, setFbOpen] = useState(false);
-  const [fbSending, setFbSending] = useState<string | null>(null);
-  const [fbResult, setFbResult] = useState<
-    { name: string; ok: boolean; status?: number; body: unknown; error?: string } | null
-  >(null);
-  const [fbSent, setFbSent] = useState<Set<string>>(() => new Set());
-
-  // Reset the FB panel whenever a different event opens.
   useEffect(() => {
-    setFbOpen(false);
-    setFbResult(null);
-    setFbSending(null);
-    setFbSent(new Set(event?.fbSentEvents ?? []));
-  }, [event?.id]);
+    if (!session) {
+      setEvents([]);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    const qs = new URLSearchParams({
+      ipkey: session.ipkey ?? "",
+      hasIp: session.hasIp ? "1" : "0",
+      country: session.country,
+      device: session.device ?? "",
+      platform: session.platform ?? "",
+      from: session.firstAt,
+      to: session.lastAt,
+    });
+    fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : { events: [] }))
+      .then((j: { events: SessionEvent[] }) => {
+        if (!cancelled) setEvents(j.events ?? []);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
 
-  const isFbEvent = Boolean(event && (event.isFacebookAds || event.event.startsWith("l_fbclid_")));
+  if (!session) return null;
 
-  async function sendFbEvent(eventId: string, name: string) {
-    setFbSending(name);
+  return (
+    <>
+      <div onClick={onClose} className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl max-h-[85vh] flex flex-col">
+          <div className="px-4 py-3 border-b border-border flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <span>{countryToFlag(session.country)}</span>
+                <span className="tabular-nums">{hms(session.firstAt)}–{hms(session.lastAt)}</span>
+                <span className="text-[11px] text-muted-foreground">{session.eventCount} events</span>
+              </h3>
+              <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                {[session.restaurantLabel, session.userLabel].filter(Boolean).join(" · ") || "anonymous"}
+              </div>
+            </div>
+            <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0" title="Close">
+              ✕
+            </button>
+          </div>
+          <div className="overflow-y-auto divide-y divide-border">
+            {loading ? (
+              <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
+            ) : events.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
+            ) : (
+              events.map((e) => {
+                const isFb = e.isFacebookAds || e.event.startsWith("l_fbclid_");
+                return (
+                  <div key={e.id} className="flex items-center gap-2 px-4 py-2 text-xs">
+                    <span className="font-mono text-foreground truncate flex-1">{e.event}</span>
+                    {isFb ? (
+                      <button
+                        type="button"
+                        onClick={() => setFbFor(e)}
+                        className="text-[10px] font-medium rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
+                        title="Send a Meta CAPI event"
+                      >
+                        FB
+                      </button>
+                    ) : null}
+                    <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">{hms(e.at)}</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
+      {fbFor ? <FbSendModal event={fbFor} onClose={() => setFbFor(null)} /> : null}
+    </>
+  );
+}
+
+// ── Meta CAPI send (single event) ──
+
+function FbSendModal({ event, onClose }: { event: SessionEvent; onClose: () => void }) {
+  useScrollLock(true);
+  const [sending, setSending] = useState<string | null>(null);
+  const [sent, setSent] = useState<Set<string>>(() => new Set(event.fbSentEvents ?? []));
+  const [result, setResult] = useState<{ name: string; ok: boolean; body: unknown } | null>(null);
+
+  async function send(name: string) {
+    setSending(name);
     try {
-      const res = await fetch(apiUrl(`/api/admin/usage-events/${eventId}/fb-send`), {
+      const res = await fetch(apiUrl(`/api/admin/usage-events/${event.id}/fb-send`), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ event_name: name }),
       });
       const json: unknown = await res.json().catch(() => ({}));
-      setFbResult({
-        name,
-        ok: res.ok,
-        status: res.status,
-        body: json,
-        error: res.ok ? undefined : `Error ${res.status}`,
-      });
-      if (res.ok) setFbSent((prev) => new Set(prev).add(name));
+      setResult({ name, ok: res.ok, body: json });
+      if (res.ok) setSent((prev) => new Set(prev).add(name));
     } catch (e) {
-      setFbResult({ name, ok: false, body: { error: String(e) }, error: String(e) });
+      setResult({ name, ok: false, body: { error: String(e) } });
     } finally {
-      setFbSending(null);
+      setSending(null);
     }
   }
 
-  if (!event) return null;
-  const at = new Date(event.at);
-  const dt = `${at.getFullYear()}-${String(at.getMonth() + 1).padStart(2, "0")}-${String(at.getDate()).padStart(2, "0")} ${String(at.getHours()).padStart(2, "0")}:${String(at.getMinutes()).padStart(2, "0")}:${String(at.getSeconds()).padStart(2, "0")}`;
-  const email = event.label && event.label.includes("@") ? event.label : null;
-  const fields: Array<[string, string | null]> = [
-    ["Event", event.event],
-    ["When", dt],
-    ["Country", event.country || "—"],
-    ["Region", event.region || "—"],
-    ["IP", event.ip || "—"],
-    ["Device", event.device || "—"],
-    ["Platform", event.platform || "—"],
-    ...(email ? [["Email", email] as [string, string]] : []),
-  ];
-
   return (
-    <>
-      <div
-        onClick={onClose}
-        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-      >
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl"
-        >
-          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-foreground font-mono truncate pr-3">{event.event}</h3>
-            <button
-              type="button"
-              onClick={onClose}
-              className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-              title="Close"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="divide-y divide-border">
-            {fields.map(([label, value]) => (
-              <div key={label} className="flex items-start gap-3 px-4 py-2">
-                <span className="text-[11px] text-muted-foreground shrink-0 w-20">{label}</span>
-                <span className="text-xs text-foreground font-mono break-all flex-1">
-                  {value || "—"}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="px-4 py-3 border-t border-border flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onShowSimilar(event)}
-              className="flex-1 h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
-            >
-              Show similar events
-            </button>
-            {isFbEvent ? (
-              <button
-                type="button"
-                onClick={() => setFbOpen(true)}
-                className="h-9 px-3 text-sm font-medium rounded-md transition-colors shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
-              >
-                FB-events
-              </button>
-            ) : null}
-          </div>
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Meta CAPI — send (live)</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0" title="Close">
+            ✕
+          </button>
         </div>
+        <div className="divide-y divide-border max-h-[50vh] overflow-y-auto">
+          {FB_EVENTS.map((fe) => {
+            const already = sent.has(fe.name);
+            const busy = sending === fe.name;
+            return (
+              <button
+                key={fe.name}
+                type="button"
+                onClick={() => void send(fe.name)}
+                disabled={Boolean(sending)}
+                className={"w-full text-left px-4 py-2.5 transition-colors disabled:opacity-50 " + (already ? "bg-emerald-500/5" : "hover:bg-muted/40")}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground">{fe.name}</span>
+                  {already ? (
+                    <span className="text-[10px] text-emerald-500 inline-flex items-center gap-0.5">
+                      <Check className="w-3 h-3" /> sent
+                    </span>
+                  ) : null}
+                  {busy ? <span className="text-[10px] text-muted-foreground">sending…</span> : null}
+                </div>
+                <div className="text-[11px] text-muted-foreground mt-0.5">{fe.desc}</div>
+              </button>
+            );
+          })}
+        </div>
+        {result ? (
+          <div className="px-4 py-3 border-t border-border">
+            <div className={"text-[11px] mb-1 " + (result.ok ? "text-emerald-500" : "text-red-500")}>
+              {result.name}: {result.ok ? "sent" : "failed"}
+            </div>
+            <pre className="p-2 text-[10px] font-mono bg-secondary rounded-md text-foreground overflow-auto max-h-40 whitespace-pre-wrap break-all">
+              {JSON.stringify(result.body, null, 2)}
+            </pre>
+          </div>
+        ) : null}
       </div>
-
-      {isFbEvent && fbOpen ? (
-        <div
-          onClick={() => setFbOpen(false)}
-          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl"
-          >
-            <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground">Meta CAPI — send (live)</h3>
-              <button
-                type="button"
-                onClick={() => setFbOpen(false)}
-                className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-                title="Close"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="divide-y divide-border max-h-[50vh] overflow-y-auto">
-              {FB_EVENTS.map((fe) => {
-                const alreadySent = fbSent.has(fe.name);
-                const busy = fbSending === fe.name;
-                return (
-                  <button
-                    key={fe.name}
-                    type="button"
-                    onClick={() => void sendFbEvent(event.id, fe.name)}
-                    disabled={Boolean(fbSending)}
-                    className={
-                      "w-full text-left px-4 py-2.5 transition-colors disabled:opacity-50 " +
-                      (alreadySent ? "bg-emerald-500/5" : "hover:bg-muted/40")
-                    }
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-foreground">{fe.name}</span>
-                      {alreadySent ? (
-                        <span className="text-[10px] text-emerald-500 inline-flex items-center gap-0.5">
-                          <Check className="w-3 h-3" /> sent
-                        </span>
-                      ) : null}
-                      {busy ? <span className="text-[10px] text-muted-foreground">sending…</span> : null}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">{fe.desc}</div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {fbResult ? (
-        <div
-          onClick={() => setFbResult(null)}
-          className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl"
-          >
-            <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <span className="font-mono">{fbResult.name}</span>
-                {fbResult.ok ? (
-                  <span className="text-[10px] text-emerald-500 inline-flex items-center gap-0.5">
-                    <Check className="w-3 h-3" /> sent
-                  </span>
-                ) : (
-                  <span className="text-[10px] text-red-500">failed</span>
-                )}
-              </h3>
-              <button
-                type="button"
-                onClick={() => setFbResult(null)}
-                className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-                title="Close"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="px-4 py-3">
-              {fbResult.error ? (
-                <div className="mb-2 text-[11px] text-red-500 break-all">{fbResult.error}</div>
-              ) : null}
-              <pre className="p-2 text-[10px] font-mono bg-secondary rounded-md text-foreground overflow-auto max-h-72 whitespace-pre-wrap break-all">
-                {JSON.stringify(fbResult.body, null, 2)}
-              </pre>
-            </div>
-            <div className="px-4 py-3 border-t border-border">
-              <button
-                type="button"
-                onClick={() => setFbResult(null)}
-                className="w-full h-9 text-sm font-medium bg-secondary hover:bg-muted rounded-md transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </>
+    </div>
   );
 }
-
