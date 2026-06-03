@@ -18,7 +18,7 @@ export interface SessionRow {
   hasFacebook: boolean;
   latestFbclid: string | null; // newest fbclid in the group (for CAPI)
   latestFbTs: number | null;
-  fbSent?: boolean;            // a Meta CAPI event was already sent for latestFbclid
+  fbStage?: "reg" | "checkout" | "view" | null; // deepest CAPI event sent for latestFbclid
   userLabel: string | null;
   restaurantLabel: string | null;
 }

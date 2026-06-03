@@ -19,6 +19,32 @@ import {
 const RETURN_KEY = "usage_return";
 const LONG_PRESS_MS = 500;
 
+// FB chip colour by the deepest CAPI milestone already sent for the session.
+function fbStageClass(stage: SessionRow["fbStage"]): string {
+  switch (stage) {
+    case "reg":
+      return "bg-pink-500/10 text-pink-700 dark:text-pink-400 hover:bg-pink-500/20";
+    case "checkout":
+      return "bg-amber-500/15 text-amber-700 dark:text-amber-400 hover:bg-amber-500/25";
+    case "view":
+      return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20";
+    default:
+      return "text-muted-foreground bg-secondary hover:bg-muted";
+  }
+}
+function fbStageTitle(stage: SessionRow["fbStage"]): string {
+  switch (stage) {
+    case "reg":
+      return "CompleteRegistration sent — send again";
+    case "checkout":
+      return "InitiateCheckout sent — send again";
+    case "view":
+      return "ViewContent sent — send again";
+    default:
+      return "Send a Meta CAPI event";
+  }
+}
+
 // Module-level cache so navigating into a session and back doesn't re-fetch or
 // re-render the (potentially large) list. Refreshed only by the Update button.
 let sessionCache: SessionRow[] | null = null;
@@ -275,13 +301,8 @@ function SessionItem({
             role="button"
             tabIndex={-1}
             onClick={(e) => { e.stopPropagation(); onFb(); }}
-            className={
-              "text-[10px] rounded px-1.5 py-0.5 shrink-0 cursor-pointer " +
-              (s.fbSent
-                ? "bg-pink-500/10 text-pink-700 dark:text-pink-400 hover:bg-pink-500/20"
-                : "text-muted-foreground bg-secondary hover:bg-muted")
-            }
-            title={s.fbSent ? "Meta CAPI event already sent — send again" : "Send a Meta CAPI event"}
+            className={"text-[10px] rounded px-1.5 py-0.5 shrink-0 cursor-pointer " + fbStageClass(s.fbStage)}
+            title={fbStageTitle(s.fbStage)}
           >
             FB
           </span>
