@@ -20,9 +20,17 @@ import {
 
 const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
+interface SessionSummary {
+  country: string;
+  region: string | null;
+  userLabel: string | null;
+  restaurantLabel: string | null;
+}
+
 // Per-session events cache (by encoded id) so returning to a session is instant;
 // refreshed only by the Update button.
 const eventCache = new Map<string, SessionEvent[]>();
+const summaryCache = new Map<string, SessionSummary>();
 
 function CopyButton({ text }: { text: string }) {
   const [done, setDone] = useState(false);
@@ -47,6 +55,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   const router = useDashboardRouter();
   const session = decodeSessionId(id);
   const [events, setEvents] = useState<SessionEvent[]>(() => eventCache.get(id) ?? []);
+  const [summary, setSummary] = useState<SessionSummary | null>(() => summaryCache.get(id) ?? null);
   const [loading, setLoading] = useState(() => !eventCache.has(id));
   const [refreshing, setRefreshing] = useState(false);
 
@@ -69,9 +78,13 @@ export function UsageSessionPage({ id }: { id: string }) {
     });
     try {
       const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" });
-      const j = res.ok ? ((await res.json()) as { events: SessionEvent[] }) : { events: [] };
+      const j = res.ok ? ((await res.json()) as { events: SessionEvent[]; summary?: SessionSummary }) : { events: [], summary: undefined };
       eventCache.set(id, j.events ?? []);
       setEvents(j.events ?? []);
+      if (j.summary) {
+        summaryCache.set(id, j.summary);
+        setSummary(j.summary);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -80,7 +93,7 @@ export function UsageSessionPage({ id }: { id: string }) {
 
   // Fetch only when uncached; the Update button forces a refresh.
   useEffect(() => {
-    if (!eventCache.has(id)) void load("full");
+    if (!eventCache.has(id) || !summaryCache.has(id)) void load(eventCache.has(id) ? "soft" : "full");
   }, [id, load]);
 
   // Click-id events surface in the card; everything else lists newest-first.
@@ -120,6 +133,7 @@ export function UsageSessionPage({ id }: { id: string }) {
     // restaurant. Drop caches and open the restaurant's session.
     invalidateUsageCache();
     eventCache.clear();
+    summaryCache.clear();
     const win = { from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() };
     const data: SessionData = {
       kind: "r", rid, ipkey: null, hasIp: false, country: session?.country ?? "", region: null,
@@ -132,8 +146,10 @@ export function UsageSessionPage({ id }: { id: string }) {
   }
 
   const back = () => router.back();
-  const restaurant = session?.restaurantLabel ?? null;
-  const region = session?.region ?? null;
+  const restaurant = summary?.restaurantLabel ?? session?.restaurantLabel ?? null;
+  const region = summary?.region ?? session?.region ?? null;
+  const country = summary?.country || session?.country || "";
+  const userLabel = summary?.userLabel ?? session?.userLabel ?? null;
 
   return (
     <div>
@@ -163,7 +179,7 @@ export function UsageSessionPage({ id }: { id: string }) {
           <>
             <div className="bg-card border border-border rounded-xl p-3 md:p-4 space-y-2">
               <div className="flex items-center gap-2 text-xs">
-                {session.country ? <span className="text-base shrink-0">{countryToFlag(session.country)}</span> : null}
+                {country ? <span className="text-base shrink-0">{countryToFlag(country)}</span> : null}
                 <span className={chip}>{eventCount}</span>
                 <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
                   {restaurant ? (
@@ -198,8 +214,8 @@ export function UsageSessionPage({ id }: { id: string }) {
                 </span>
               </div>
 
-              {session.userLabel ? (
-                <div className="text-[11px] text-muted-foreground truncate">👤 {session.userLabel}</div>
+              {userLabel ? (
+                <div className="text-[11px] text-muted-foreground truncate">👤 {userLabel}</div>
               ) : null}
 
               {gclids.length > 0 ? (
