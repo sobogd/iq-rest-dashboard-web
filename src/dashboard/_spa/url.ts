@@ -65,14 +65,12 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/admin/usage";
     case "settings.admin.usageSession":
       return `/dashboard/settings/admin/usage/session/${view.id}`;
-    case "settings.admin.capi":
-      return "/dashboard/settings/admin/capi";
+    case "settings.admin.capiSend":
+      return `/dashboard/settings/admin/capi/send/${encodeURIComponent(view.fbclid)}${view.clickTs ? `?ts=${view.clickTs}` : ""}`;
     case "settings.admin.messages":
       return "/dashboard/settings/admin/messages";
     case "settings.admin.messageThread":
       return `/dashboard/settings/admin/messages/${view.id}`;
-    case "settings.admin.capiSend":
-      return `/dashboard/settings/admin/capi/send/${encodeURIComponent(view.fbclid)}${view.clickTs ? `?ts=${view.clickTs}` : ""}`;
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -150,7 +148,6 @@ export function pathToView(path: string): View {
       ? { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]), clickTs: n }
       : { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]) };
   }
-  if (stripped === "/dashboard/settings/admin/capi") return { name: "settings.admin.capi" };
   const msgThreadMatch = stripped.match(/^\/dashboard\/settings\/admin\/messages\/([^/]+)$/);
   if (msgThreadMatch) return { name: "settings.admin.messageThread", id: msgThreadMatch[1] };
   if (stripped === "/dashboard/settings/admin/messages") return { name: "settings.admin.messages" };

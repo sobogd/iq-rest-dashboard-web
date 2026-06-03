@@ -149,7 +149,18 @@ export function UsageSessionPage({ id }: { id: string }) {
                 <span className={chip}>{session.eventCount}</span>
                 <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
                   {restaurant ? (
-                    <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={restaurant}>{restaurant}</span>
+                    session.kind === "r" && session.rid ? (
+                      <button
+                        type="button"
+                        onClick={() => router.push({ name: "settings.admin.restaurant", id: session.rid! })}
+                        className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0 hover:bg-pink-500/20"
+                        title={restaurant}
+                      >
+                        {restaurant}
+                      </button>
+                    ) : (
+                      <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={restaurant}>{restaurant}</span>
+                    )
                   ) : region ? (
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}

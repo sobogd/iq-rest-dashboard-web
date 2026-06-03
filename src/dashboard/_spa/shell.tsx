@@ -35,7 +35,6 @@ import { AdminUsersPage } from "../_pages/admin-users";
 import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
 import { UsageSessionPage } from "../_pages/usage-session";
-import { CapiPage } from "../_pages/capi-page";
 import { CapiSendPage } from "../_pages/capi-send-page";
 import { AdminMessagesPage } from "../_pages/admin-messages";
 import { AdminMessageThreadPage } from "../_pages/admin-message-thread";
@@ -335,14 +334,12 @@ function ViewSwitch(p: SwitchProps) {
       return <UsagePage />;
     case "settings.admin.usageSession":
       return <UsageSessionPage id={view.id} />;
-    case "settings.admin.capi":
-      return <CapiPage />;
+    case "settings.admin.capiSend":
+      return <CapiSendPage fbclid={view.fbclid} clickTs={view.clickTs} />;
     case "settings.admin.messages":
       return <AdminMessagesPage onBack={backToSettings} />;
     case "settings.admin.messageThread":
       return <AdminMessageThreadPage restaurantId={view.id} />;
-    case "settings.admin.capiSend":
-      return <CapiSendPage fbclid={view.fbclid} clickTs={view.clickTs} />;
 
     case "category.new":
       return (
