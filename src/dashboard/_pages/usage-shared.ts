@@ -16,6 +16,8 @@ export interface SessionRow {
   eventCount: number;
   hasGoogle: boolean;
   hasFacebook: boolean;
+  hasOnboarding?: boolean;     // any onboarding event in the session
+  hasContent?: boolean;        // any pricing/demo event in the session
   latestFbclid: string | null; // newest fbclid in the group (for CAPI)
   latestFbTs: number | null;
   fbStage?: "reg" | "checkout" | "view" | null; // deepest CAPI event sent for latestFbclid

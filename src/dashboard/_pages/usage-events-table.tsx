@@ -295,6 +295,12 @@ function SessionItem({
       </span>
 
       <span className="shrink-0 flex items-center gap-2">
+        {s.hasContent || s.hasOnboarding ? (
+          <span className="shrink-0 flex flex-col items-center justify-center gap-0.5">
+            {s.hasContent ? <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" title="Pricing / Demo" /> : null}
+            {s.hasOnboarding ? <span className="w-1.5 h-1.5 rounded-full bg-amber-500" title="Onboarding" /> : null}
+          </span>
+        ) : null}
         {s.hasGoogle ? <span className={chip}>G</span> : null}
         {s.latestFbclid ? (
           <span
