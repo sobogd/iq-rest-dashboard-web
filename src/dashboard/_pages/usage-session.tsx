@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Check } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Check, Copy } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 import {
   countryToFlag,
-  deviceLabel,
-  hms,
+  osName,
+  hm,
   decodeSessionId,
   type SessionEvent,
 } from "./usage-shared";
@@ -25,20 +26,42 @@ const FB_EVENTS: Array<{ name: string; desc: string }> = [
   { name: "PageView", desc: "Landing page view (top funnel)" },
 ];
 
+const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
+
+function CopyButton({ text }: { text: string }) {
+  const [done, setDone] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        navigator.clipboard?.writeText(text).then(() => {
+          setDone(true);
+          setTimeout(() => setDone(false), 1200);
+        }).catch(() => undefined);
+      }}
+      className="h-6 w-6 inline-flex items-center justify-center bg-secondary rounded text-muted-foreground hover:text-foreground shrink-0"
+      title="Copy"
+    >
+      {done ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+    </button>
+  );
+}
+
 export function UsageSessionPage({ id }: { id: string }) {
   const router = useDashboardRouter();
   const session = decodeSessionId(id);
   const [events, setEvents] = useState<SessionEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [fbFor, setFbFor] = useState<SessionEvent | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(async (mode: "full" | "soft") => {
     if (!session) {
       setLoading(false);
       return;
     }
-    let cancelled = false;
-    setLoading(true);
+    if (mode === "full") setLoading(true);
+    else setRefreshing(true);
     const qs = new URLSearchParams({
       ipkey: session.ipkey ?? "",
       hasIp: session.hasIp ? "1" : "0",
@@ -48,74 +71,142 @@ export function UsageSessionPage({ id }: { id: string }) {
       from: session.firstAt,
       to: session.lastAt,
     });
-    fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : { events: [] }))
-      .then((j: { events: SessionEvent[] }) => {
-        if (!cancelled) setEvents(j.events ?? []);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), {
+        credentials: "include",
       });
-    return () => {
-      cancelled = true;
-    };
+      const j = res.ok ? ((await res.json()) as { events: SessionEvent[] }) : { events: [] };
+      setEvents(j.events ?? []);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    void load("full");
+  }, [load]);
+
+  // Click-id events are pulled OUT of the list and surfaced in the info card.
+  // Remaining events newest-first.
+  const listEvents = events
+    .filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"))
+    .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0));
+
+  // Distinct fbclid values (+ their source event for the Meta CAPI send).
+  const fbItems: Array<{ fbclid: string; event: SessionEvent }> = [];
+  const seenFb = new Set<string>();
+  for (const e of events) {
+    const m = /^l_fbclid_(.+)$/.exec(e.event);
+    if (m && !seenFb.has(m[1])) {
+      seenFb.add(m[1]);
+      fbItems.push({ fbclid: m[1], event: e });
+    }
+  }
+
+  // Distinct gclid values (from the gclid column and l_gclid_ event names).
+  const gclids: string[] = [];
+  const seenG = new Set<string>();
+  for (const e of events) {
+    let g: string | null = e.gclid || null;
+    const m = /^l_gclid_(.+)$/.exec(e.event);
+    if (m) g = m[1];
+    if (g && !seenG.has(g)) {
+      seenG.add(g);
+      gclids.push(g);
+    }
+  }
+
   const back = () => router.back();
+  const restaurant = session?.restaurantLabel ?? null;
+  const region = session?.region ?? null;
 
   return (
     <div>
-      <SubpageStickyBar onBack={back} hideSave />
-      <div className="max-w-3xl mx-auto px-4 md:px-6 pt-5 md:pt-4 space-y-3">
+      <SubpageStickyBar onBack={back} hideSave>
+        <button
+          type="button"
+          onClick={() => void load("soft")}
+          disabled={loading || refreshing}
+          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+          title="Refresh"
+        >
+          <RefreshIcon size={14} className={loading || refreshing ? "animate-spin" : ""} />
+        </button>
+      </SubpageStickyBar>
+      <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 space-y-3">
         {!session ? (
           <div className="text-xs text-muted-foreground py-8 text-center">Invalid session link</div>
         ) : (
           <>
-            <div className="bg-card border border-border rounded-xl p-4">
-              <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <span className="text-base">{countryToFlag(session.country)}</span>
-                <span className="tabular-nums">{hms(session.firstAt)}–{hms(session.lastAt)}</span>
-                <span className="text-[11px] text-muted-foreground font-normal">{session.eventCount} events</span>
-                {session.hasGoogle ? (
-                  <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white" aria-hidden>G</span>
-                ) : null}
-                {session.hasFacebook ? (
-                  <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#1877F2] text-[8px] font-bold text-white" aria-hidden>F</span>
-                ) : null}
+            {/* Info card — same chip design as the list row + IP + click-ids. */}
+            <div className="bg-card border border-border rounded-xl p-3 md:p-4 space-y-2">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-base shrink-0">{countryToFlag(session.country)}</span>
+                <span className={`${chip} tabular-nums`}>{hm(session.firstAt)}–{hm(session.lastAt)}</span>
+                <span className={chip}>{session.eventCount}</span>
+                <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
+                  {restaurant ? (
+                    <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={restaurant}>{restaurant}</span>
+                  ) : region ? (
+                    <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
+                  ) : null}
+                  <span className={chip}>{osName(session.platform, session.device)}</span>
+                  {session.hasIp && session.ipkey ? <span className={`${chip} font-mono`}>{session.ipkey}</span> : null}
+                  {session.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
+                  {session.hasFacebook ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span> : null}
+                </span>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                {session.restaurantLabel ? <span>🏪 {session.restaurantLabel}</span> : null}
-                {session.userLabel ? <span>👤 {session.userLabel}</span> : null}
-                <span>{deviceLabel(session.device, session.platform)}</span>
-                {session.hasIp && session.ipkey ? <span className="font-mono">{session.ipkey}</span> : null}
-              </div>
+
+              {session.userLabel ? (
+                <div className="text-[11px] text-muted-foreground truncate">👤 {session.userLabel}</div>
+              ) : null}
+
+              {gclids.length > 0 ? (
+                <div className="space-y-1">
+                  {gclids.map((g) => (
+                    <div key={g} className="flex items-center gap-2">
+                      <span className="text-[10px] text-muted-foreground shrink-0 w-12">gclid</span>
+                      <span className="text-[11px] font-mono text-foreground break-all flex-1 min-w-0">{g}</span>
+                      <CopyButton text={g} />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              {fbItems.length > 0 ? (
+                <div className="space-y-1">
+                  {fbItems.map(({ fbclid, event }) => (
+                    <div key={fbclid} className="flex items-center gap-2">
+                      <span className="text-[10px] text-muted-foreground shrink-0 w-12">fbclid</span>
+                      <span className="text-[11px] font-mono text-foreground break-all flex-1 min-w-0">{fbclid}</span>
+                      <button
+                        type="button"
+                        onClick={() => setFbFor(event)}
+                        className="text-[10px] font-medium rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
+                        title="Send a Meta CAPI event"
+                      >
+                        FB
+                      </button>
+                      <CopyButton text={fbclid} />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
 
+            {/* Events list (click-id events excluded). */}
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
               {loading ? (
                 <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-              ) : events.length === 0 ? (
+              ) : listEvents.length === 0 ? (
                 <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
               ) : (
-                events.map((e) => {
-                  const isFb = e.isFacebookAds || e.event.startsWith("l_fbclid_");
-                  return (
-                    <div key={e.id} className="flex items-center gap-2 px-4 py-2 text-xs">
-                      <span className="font-mono text-foreground truncate flex-1">{e.event}</span>
-                      {isFb ? (
-                        <button
-                          type="button"
-                          onClick={() => setFbFor(e)}
-                          className="text-[10px] font-medium rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
-                          title="Send a Meta CAPI event"
-                        >
-                          FB
-                        </button>
-                      ) : null}
-                      <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">{hms(e.at)}</span>
-                    </div>
-                  );
-                })
+                listEvents.map((e) => (
+                  <div key={e.id} className="flex items-center gap-2 px-3 md:px-4 py-2 text-xs">
+                    <span className="font-mono text-foreground truncate flex-1">{e.event}</span>
+                  </div>
+                ))
               )}
             </div>
           </>
