@@ -267,10 +267,9 @@ function SessionItem({
     else onOpen();
   }
 
-  // Always surface a name: restaurant title, else the user's email. Clipped to
-  // 10 chars + ellipsis.
-  const label = s.restaurantLabel || s.userLabel;
-  const labelShort = label ? (label.length > 10 ? label.slice(0, 10) + "…" : label) : null;
+  // Restaurant name resolved server-side (falls back to the user's restaurant).
+  // Shown in full; CSS truncates only when it can't fit the remaining width.
+  const label = s.restaurantLabel;
   const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
   return (
@@ -300,12 +299,19 @@ function SessionItem({
       <span className={`${chip} tabular-nums`}>{hm(s.lastAt)}</span>
       <span className={chip}>{s.eventCount}</span>
 
-      <span className="flex-1" />
-
-      {labelShort ? <span className={chip} title={label ?? undefined}>{labelShort}</span> : null}
-      <span className={chip}>{osName(s.platform, s.device)}</span>
-      {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
-      {s.hasFacebook ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span> : null}
+      <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
+        {label ? (
+          <span
+            className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0"
+            title={label}
+          >
+            {label}
+          </span>
+        ) : null}
+        <span className={chip}>{osName(s.platform, s.device)}</span>
+        {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
+        {s.hasFacebook ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span> : null}
+      </span>
     </button>
   );
 }
