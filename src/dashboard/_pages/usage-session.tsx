@@ -1,17 +1,21 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, Building2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
+import { useScrollLock } from "../_v2/use-scroll-lock";
 import { useDashboardRouter } from "../_spa/router";
+import { invalidateUsageCache } from "./usage-events-table";
 import {
   countryToFlag,
   deviceLabel,
   hmsDate,
   decodeSessionId,
+  encodeSessionId,
   type SessionEvent,
+  type SessionData,
 } from "./usage-shared";
 
 const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
@@ -91,6 +95,24 @@ export function UsageSessionPage({ id }: { id: string }) {
     if (g && !seenG.has(g)) { seenG.add(g); gclids.push(g); }
   }
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+
+  function onAssigned(rid: string, title: string) {
+    // The session's events now carry manualRestaurantId → regroup under the
+    // restaurant. Drop caches and open the restaurant's session.
+    invalidateUsageCache();
+    eventCache.clear();
+    const win = { from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() };
+    const data: SessionData = {
+      kind: "r", rid, ipkey: null, hasIp: false, country: session?.country ?? "", region: null,
+      firstAt: win.from, lastAt: win.to, eventCount: 0, hasGoogle: false, hasFacebook: false,
+      latestFbclid: null, latestFbTs: null, userLabel: null, restaurantLabel: title,
+      from: win.from, to: win.to,
+    };
+    setPickerOpen(false);
+    router.push({ name: "settings.admin.usageSession", id: encodeSessionId(data) });
+  }
+
   const back = () => router.back();
   const restaurant = session?.restaurantLabel ?? null;
   const region = session?.region ?? null;
@@ -98,6 +120,14 @@ export function UsageSessionPage({ id }: { id: string }) {
   return (
     <div>
       <SubpageStickyBar onBack={back} hideSave>
+        <button
+          type="button"
+          onClick={() => setPickerOpen(true)}
+          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+          title="Assign to a restaurant"
+        >
+          <Building2 className="h-4 w-4" />
+        </button>
         <button
           type="button"
           onClick={() => void load("soft")}
@@ -176,6 +206,113 @@ export function UsageSessionPage({ id }: { id: string }) {
             </div>
           </>
         )}
+      </div>
+
+      {pickerOpen && session ? (
+        <RestaurantPickerModal
+          descriptor={{ kind: session.kind, rid: session.rid, ipkey: session.ipkey, hasIp: session.hasIp }}
+          onClose={() => setPickerOpen(false)}
+          onAssigned={onAssigned}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function RestaurantPickerModal({
+  descriptor,
+  onClose,
+  onAssigned,
+}: {
+  descriptor: { kind: "r" | "a"; rid: string | null; ipkey: string | null; hasIp: boolean };
+  onClose: () => void;
+  onAssigned: (rid: string, title: string) => void;
+}) {
+  useScrollLock(true);
+  const [restaurants, setRestaurants] = useState<Array<{ id: string; title: string }>>([]);
+  const [q, setQ] = useState("");
+  const [selected, setSelected] = useState<{ id: string; title: string } | null>(null);
+  const [assigning, setAssigning] = useState(false);
+
+  useEffect(() => {
+    fetch(apiUrl("/api/admin/usage/restaurants"), { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : { restaurants: [] }))
+      .then((j: { restaurants: Array<{ id: string; title: string }> }) => setRestaurants(j.restaurants ?? []))
+      .catch(() => undefined);
+  }, []);
+
+  const filtered = q.trim()
+    ? restaurants.filter((r) => r.title.toLowerCase().includes(q.trim().toLowerCase()))
+    : restaurants;
+
+  async function continueAssign() {
+    if (!selected || assigning) return;
+    setAssigning(true);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/sessions/assign"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: descriptor.kind,
+          rid: descriptor.rid,
+          ipkey: descriptor.ipkey,
+          hasIp: descriptor.hasIp,
+          from: new Date(Date.now() - 30 * 864e5).toISOString(),
+          to: new Date().toISOString(),
+          restaurantId: selected.id,
+        }),
+      });
+      if (res.ok) onAssigned(selected.id, selected.title);
+    } finally {
+      setAssigning(false);
+    }
+  }
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[80vh]">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-foreground">Assign to a restaurant</h3>
+          <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0" title="Close">✕</button>
+        </div>
+        <div className="p-3 border-b border-border">
+          <input
+            type="text"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search…"
+            className="w-full h-9 px-3 bg-secondary rounded-md text-sm text-foreground focus:outline-none"
+          />
+        </div>
+        <div className="overflow-y-auto divide-y divide-border flex-1">
+          {filtered.length === 0 ? (
+            <div className="text-xs text-muted-foreground py-6 text-center">No restaurants</div>
+          ) : (
+            filtered.map((r) => (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => setSelected(r)}
+                className={"w-full flex items-center gap-2 px-4 py-2.5 text-sm text-left transition-colors " + (selected?.id === r.id ? "bg-primary/10" : "hover:bg-muted/40")}
+              >
+                <span className="flex-1 truncate text-foreground">{r.title}</span>
+                {selected?.id === r.id ? <Check className="w-4 h-4 text-primary shrink-0" /> : null}
+              </button>
+            ))
+          )}
+        </div>
+        <div className="px-4 py-3 border-t border-border flex items-center gap-2">
+          <button type="button" onClick={onClose} className="flex-1 h-9 text-sm font-medium text-foreground bg-secondary rounded-md hover:bg-muted">Cancel</button>
+          <button
+            type="button"
+            onClick={() => void continueAssign()}
+            disabled={!selected || assigning}
+            className="flex-1 h-9 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90 disabled:opacity-50"
+          >
+            {assigning ? "…" : "Continue"}
+          </button>
+        </div>
       </div>
     </div>
   );

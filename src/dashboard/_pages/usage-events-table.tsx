@@ -23,6 +23,11 @@ const LONG_PRESS_MS = 500;
 // re-render the (potentially large) list. Refreshed only by the Update button.
 let sessionCache: SessionRow[] | null = null;
 
+/** Drop the cached session list (e.g. after a manual assign regroups data). */
+export function invalidateUsageCache() {
+  sessionCache = null;
+}
+
 interface Props {
   toolbarHost?: HTMLElement | null;
 }
