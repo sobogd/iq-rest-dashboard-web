@@ -238,13 +238,13 @@ export function UsageSessionPage({ id }: { id: string }) {
                 <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
               ) : (
                 listEvents.map((e) => (
-                  <div key={e.id} className="px-3 md:px-4 py-2 text-xs space-y-1">
-                    <div className="font-mono text-foreground break-all">{e.event}</div>
-                    <div className="flex flex-wrap items-center gap-1.5">
+                  <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
+                    <div className="font-mono text-foreground break-all md:flex-1 md:min-w-0">{e.event}</div>
+                    <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
                       {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
                       <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
+                      <span className={`${chip} tabular-nums`}>{hmsDate(e.at)}</span>
                     </div>
-                    <div className="text-[10px] text-muted-foreground tabular-nums">{hmsDate(e.at)}</div>
                   </div>
                 ))
               )}

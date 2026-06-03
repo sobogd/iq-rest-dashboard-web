@@ -259,28 +259,36 @@ function SessionItem({
       ) : null}
 
       <span className="text-base shrink-0" title={s.country}>{countryToFlag(s.country)}</span>
-      <span className={chip}>{s.eventCount}</span>
 
-      <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
+      <span className="flex-1 min-w-0 flex items-center gap-2">
         {label ? (
           <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={label}>{label}</span>
         ) : s.region ? (
-          <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={s.region}>{s.region}</span>
+          <span className={`${chip} truncate min-w-0`} title={s.region}>{s.region}</span>
         ) : null}
-        {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
+      </span>
+
+      <span className="shrink-0 flex items-center gap-2">
+        {s.hasGoogle ? <span className={chip}>G</span> : null}
         {s.latestFbclid ? (
           <span
             role="button"
             tabIndex={-1}
             onClick={(e) => { e.stopPropagation(); onFb(); }}
-            className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 cursor-pointer"
-            title="Send a Meta CAPI event"
+            className={
+              "text-[10px] rounded px-1.5 py-0.5 shrink-0 cursor-pointer " +
+              (s.fbSent
+                ? "bg-pink-500/10 text-pink-700 dark:text-pink-400 hover:bg-pink-500/20"
+                : "text-muted-foreground bg-secondary hover:bg-muted")
+            }
+            title={s.fbSent ? "Meta CAPI event already sent — send again" : "Send a Meta CAPI event"}
           >
             FB
           </span>
         ) : s.hasFacebook ? (
-          <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span>
+          <span className={chip}>FB</span>
         ) : null}
+        <span className={chip}>{s.eventCount}</span>
         <span className={`${chip} tabular-nums`}>{hmsDate(s.lastAt)}</span>
       </span>
     </button>
