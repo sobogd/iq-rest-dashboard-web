@@ -89,21 +89,18 @@ export function CapiPage() {
       <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 space-y-3">
         {showForm ? (
           <div className="bg-card border border-border rounded-xl p-4 md:p-5 space-y-4">
-            <div className="text-sm font-semibold text-foreground">Meta CAPI — send to latest click</div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-muted-foreground shrink-0 w-12">fbclid</span>
-              <span className="text-[11px] font-mono text-foreground break-all">{latest.fbclid}</span>
-            </div>
             <CapiEventChips events={available} value={eventName} onChange={setEventName} />
             {msg ? <div className={"text-xs " + (msg.ok ? "text-emerald-500" : "text-red-500")}>{msg.text}</div> : null}
-            <button
-              type="button"
-              onClick={() => void send()}
-              disabled={!eventName || sending}
-              className="h-10 px-5 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-md hover:opacity-90 disabled:opacity-50"
-            >
-              {sending ? "Sending…" : "Send"}
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => void send()}
+                disabled={!eventName || sending}
+                className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
+              >
+                {sending ? "Sending…" : "Send"}
+              </button>
+            </div>
           </div>
         ) : null}
 
