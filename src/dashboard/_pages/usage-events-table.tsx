@@ -307,6 +307,13 @@ function SessionItem({
           >
             {label}
           </span>
+        ) : s.region ? (
+          <span
+            className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0"
+            title={s.region}
+          >
+            {s.region}
+          </span>
         ) : null}
         <span className={chip}>{osName(s.platform, s.device)}</span>
         {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}

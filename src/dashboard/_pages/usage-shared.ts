@@ -7,6 +7,7 @@ export interface SessionRow {
   ipkey: string | null;
   hasIp: boolean;
   country: string;
+  region: string | null;
   device: string | null;
   platform: string | null;
   firstAt: string;
