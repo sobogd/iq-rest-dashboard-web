@@ -72,6 +72,9 @@ export function UsageEventsTable({ toolbarHost }: Props) {
 
   const load = useCallback(async () => {
     setLoading(true);
+    // Recompute the 30-day window on every fetch so a refresh picks up sessions
+    // newer than the initial mount (the API filters at < to).
+    win.current = { from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() };
     try {
       const qs = new URLSearchParams({ from: win.current.from, to: win.current.to });
       const res = await fetch(apiUrl(`/api/admin/usage/sessions?${qs.toString()}`), { credentials: "include" });
