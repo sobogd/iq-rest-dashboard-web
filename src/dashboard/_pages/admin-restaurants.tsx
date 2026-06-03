@@ -1,21 +1,23 @@
 "use client";
 
 // Admin: flat list of every restaurant in the system. Per-restaurant billing
-// model — primary admin view. Clicking a row opens the AdminRestaurantPage
-// modal with chat, send-email and delete actions.
+// model — primary admin view. Clicking a row opens the restaurant detail page.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { EyeIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
 import { formatDateShort } from "./_admin-helpers";
-import { useScrollLock } from "../_v2/use-scroll-lock";
-import { AdminRestaurantPage } from "./admin-restaurant";
+import { useDashboardRouter } from "../_spa/router";
+import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
+
+const LANG_FLAG = new Map(AVAILABLE_LANGUAGES.map((l) => [l.code, l.flag]));
 
 interface RestaurantRow {
   id: string;
   title: string;
   slug: string | null;
+  defaultLanguage: string | null;
   plan: string | null;
   subscriptionStatus: string;
   trialEndsAt: string | null;
@@ -28,11 +30,10 @@ interface RestaurantRow {
 type Filter = "all" | "subscribed";
 
 export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
+  const router = useDashboardRouter();
   const [rows, setRows] = useState<RestaurantRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
-  const [modalRestaurantId, setModalRestaurantId] = useState<string | null>(null);
-  useScrollLock(Boolean(modalRestaurantId));
 
   const fetchRows = useCallback(async () => {
     setLoading(true);
@@ -47,11 +48,6 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
   }, []);
 
   useEffect(() => {
-    void fetchRows();
-  }, [fetchRows]);
-
-  const closeModal = useCallback(() => {
-    setModalRestaurantId(null);
     void fetchRows();
   }, [fetchRows]);
 
@@ -79,9 +75,7 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
               onClick={() => setFilter(f.id)}
               className={
                 "h-7 px-2.5 text-xs font-medium rounded transition-colors " +
-                (filter === f.id
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground")
+                (filter === f.id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")
               }
             >
               {f.label}
@@ -126,15 +120,14 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                 <button
                   key={r.id}
                   type="button"
-                  onClick={() => setModalRestaurantId(r.id)}
-                  className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-muted/40 transition-colors"
+                  onClick={() => router.push({ name: "settings.admin.restaurant", id: r.id })}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs text-left hover:bg-muted/40 transition-colors"
                 >
+                  <span className="text-base shrink-0" title={r.defaultLanguage || ""}>
+                    {LANG_FLAG.get(r.defaultLanguage || "") || "🌐"}
+                  </span>
                   {r.hasAdminComment ? (
-                    <span
-                      className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"
-                      title="Has admin note"
-                      aria-label="Has admin note"
-                    />
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" title="Has admin note" />
                   ) : null}
                   <span
                     className={"font-medium truncate flex-1 " + (r.title ? nameColor : "text-muted-foreground italic")}
@@ -153,9 +146,7 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                       {r.scansToday}
                     </span>
                     {r.lastVisit ? (
-                      <span className="tabular-nums" title="Last visit">
-                        {formatDateShort(r.lastVisit)}
-                      </span>
+                      <span className="tabular-nums" title="Last visit">{formatDateShort(r.lastVisit)}</span>
                     ) : (
                       <span className="tabular-nums" title="No visits yet">—</span>
                     )}
@@ -166,20 +157,6 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
           </div>
         )}
       </div>
-
-      {modalRestaurantId ? (
-        <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => closeModal()}
-        >
-          <div
-            className="w-full max-w-md bg-background border border-border rounded-2xl shadow-xl flex flex-col max-h-[85dvh] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AdminRestaurantPage restaurantId={modalRestaurantId} onClose={() => closeModal()} />
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

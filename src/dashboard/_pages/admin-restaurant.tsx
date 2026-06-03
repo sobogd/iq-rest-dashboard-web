@@ -15,6 +15,7 @@ import { SendIcon } from "../_v2/icons";
 import { Select } from "../_v2/ui";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
+import { useDashboardRouter } from "../_spa/router";
 
 interface RestaurantUser {
   id: string;
@@ -122,6 +123,9 @@ function formatDate(iso: string, withTime = false): string {
 }
 
 export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
+  const router = useDashboardRouter();
+  // Modal mode passes onClose; page mode (route) falls back to router nav.
+  const close = onClose ?? (() => router.push({ name: "settings.admin.restaurants" }));
   const [nested, setNested] = useState<NestedView>(null);
   const [restaurant, setRestaurant] = useState<RestaurantDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -237,7 +241,7 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
       });
       if (res.ok) {
         setConfirmDelete(false);
-        onClose?.();
+        close();
       } else {
         const j = await res.json().catch(() => ({}));
         setAlert({ title: "Delete failed", message: j.message || j.error || "Could not delete." });
@@ -424,16 +428,14 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
     <>
       <div className="shrink-0 px-5 py-3 border-b border-border flex items-center justify-between gap-3">
         <h3 className="text-sm font-semibold text-foreground truncate">{title}</h3>
-        {onClose ? (
-          <button
-            type="button"
-            onClick={onClose}
-            className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
-            title="Close"
-          >
-            <CloseIcon className="h-4 w-4" />
-          </button>
-        ) : null}
+        <button
+          type="button"
+          onClick={close}
+          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0"
+          title={onClose ? "Close" : "Back"}
+        >
+          <CloseIcon className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-5">
