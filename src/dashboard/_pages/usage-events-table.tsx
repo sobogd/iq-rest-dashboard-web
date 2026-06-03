@@ -9,8 +9,8 @@ import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
 import {
   countryToFlag,
-  deviceLabel,
-  hms,
+  hm,
+  osName,
   dayLabel,
   todayLocal,
   shiftDayLocal,
@@ -147,22 +147,15 @@ export function UsageEventsTable({ toolbarHost }: Props) {
       <button
         type="button"
         onClick={() => void load(day, "soft")}
-        className="min-w-[92px] h-8 px-2 text-center text-xs font-medium text-foreground tabular-nums bg-secondary rounded-md hover:bg-muted"
+        disabled={loading || refreshing}
+        className="h-8 px-2.5 inline-flex items-center justify-center gap-1.5 min-w-[96px] text-xs font-medium text-foreground bg-secondary rounded-md hover:bg-muted disabled:opacity-70"
         title="Refresh"
       >
-        {dayLabel(day)}
+        <RefreshIcon size={12} className={loading || refreshing ? "animate-spin" : ""} />
+        <span className="tabular-nums">{dayLabel(day)}</span>
       </button>
       <button type="button" onClick={() => !atToday && changeDay(1)} disabled={atToday} className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-40" title="Next day">
         <ChevronRight className="h-4 w-4" />
-      </button>
-      <button
-        type="button"
-        onClick={() => void load(day, "soft")}
-        disabled={loading || refreshing}
-        className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
-        title="Refresh"
-      >
-        <RefreshIcon size={14} className={loading || refreshing ? "animate-spin" : ""} />
       </button>
     </div>
   );
@@ -274,6 +267,12 @@ function SessionItem({
     else onOpen();
   }
 
+  // Always surface a name: restaurant title, else the user's email. Clipped to
+  // 10 chars + ellipsis.
+  const label = s.restaurantLabel || s.userLabel;
+  const labelShort = label ? (label.length > 10 ? label.slice(0, 10) + "…" : label) : null;
+  const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
+
   return (
     <button
       type="button"
@@ -283,12 +282,12 @@ function SessionItem({
       onPointerUp={clearTimer}
       onPointerLeave={clearTimer}
       onContextMenu={(e) => e.preventDefault()}
-      className="w-full flex items-start gap-2 px-3 py-2 text-xs text-left hover:bg-muted/40 transition-colors"
+      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-left hover:bg-muted/40 transition-colors"
     >
       {selectMode ? (
         <span
           className={
-            "mt-0.5 shrink-0 inline-flex items-center justify-center w-4 h-4 rounded border " +
+            "shrink-0 inline-flex items-center justify-center w-4 h-4 rounded border " +
             (selected ? "bg-primary border-primary text-primary-foreground" : "border-border bg-card")
           }
           aria-hidden
@@ -297,27 +296,16 @@ function SessionItem({
         </span>
       ) : null}
 
-      <span className="flex-1 min-w-0">
-        {/* Line 1: country + time + count */}
-        <span className="flex items-center gap-2">
-          <span className="text-base shrink-0" title={s.country}>{countryToFlag(s.country)}</span>
-          <span className="text-foreground tabular-nums">{hms(s.firstAt)}–{hms(s.lastAt)}</span>
-          <span className="text-[10px] text-muted-foreground">{s.eventCount}</span>
-        </span>
-        {/* Line 2: restaurant + user + device + ip + ad badges */}
-        <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] text-muted-foreground">
-          {s.restaurantLabel ? <span className="truncate max-w-[180px]">🏪 {s.restaurantLabel}</span> : null}
-          {s.userLabel ? <span className="truncate max-w-[180px]">👤 {s.userLabel}</span> : null}
-          <span>{deviceLabel(s.device, s.platform)}</span>
-          {s.hasIp && s.ipkey ? <span className="font-mono">{s.ipkey}</span> : null}
-          {s.hasGoogle ? (
-            <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#4285f4] text-[8px] font-bold text-white" title="Google Ads" aria-hidden>G</span>
-          ) : null}
-          {s.hasFacebook ? (
-            <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-[#1877F2] text-[8px] font-bold text-white" title="Facebook/Instagram Ads" aria-hidden>F</span>
-          ) : null}
-        </span>
-      </span>
+      <span className="text-base shrink-0" title={s.country}>{countryToFlag(s.country)}</span>
+      <span className={`${chip} tabular-nums`}>{hm(s.lastAt)}</span>
+      <span className={chip}>{s.eventCount}</span>
+
+      <span className="flex-1" />
+
+      {labelShort ? <span className={chip} title={label ?? undefined}>{labelShort}</span> : null}
+      <span className={chip}>{osName(s.platform, s.device)}</span>
+      {s.hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
+      {s.hasFacebook ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span> : null}
     </button>
   );
 }

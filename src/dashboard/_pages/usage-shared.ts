@@ -40,6 +40,23 @@ export function hms(iso: string): string {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
+/** Local HH:MM (no seconds). */
+export function hm(iso: string): string {
+  const d = new Date(iso);
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/** OS name only, no emoji. */
+export function osName(platform: string | null, device: string | null): string {
+  const p = (platform || "").toLowerCase();
+  if (p === "ios") return "iOS";
+  if (p === "android") return "Android";
+  if (p === "windows") return "Windows";
+  if (p === "macos") return "macOS";
+  if (p === "linux") return "Linux";
+  return platform || device || "—";
+}
+
 export function countryToFlag(code: string): string {
   if (!code || code === "XX" || code.length !== 2) return "🌐";
   const A = 0x1f1e6;
@@ -72,12 +89,14 @@ export function shiftDayLocal(day: string, delta: number): string {
   return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export function dayLabel(day: string): string {
   const t = todayLocal();
   if (day === t) return "Today";
   if (day === shiftDayLocal(t, -1)) return "Yesterday";
-  const [y, m, d] = day.split("-");
-  return `${d}.${m}.${y}`;
+  const [, m, d] = day.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
 }
 
 /** Absolute [from, to) instants for the admin's local day. */
