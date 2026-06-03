@@ -143,7 +143,6 @@ export function UsageSessionPage({ id }: { id: string }) {
             <div className="bg-card border border-border rounded-xl p-3 md:p-4 space-y-2">
               <div className="flex items-center gap-2 text-xs">
                 <span className="text-base shrink-0">{countryToFlag(session.country)}</span>
-                <span className={`${chip} tabular-nums`}>{hm(session.firstAt)}–{hm(session.lastAt)}</span>
                 <span className={chip}>{session.eventCount}</span>
                 <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
                   {restaurant ? (
@@ -205,6 +204,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                 listEvents.map((e) => (
                   <div key={e.id} className="flex items-center gap-2 px-3 md:px-4 py-2 text-xs">
                     <span className="font-mono text-foreground truncate flex-1">{e.event}</span>
+                    <span className={`${chip} tabular-nums`}>{hm(e.at)}</span>
                   </div>
                 ))
               )}
