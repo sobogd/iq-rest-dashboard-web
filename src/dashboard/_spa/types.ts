@@ -33,6 +33,8 @@ export type View =
   | { name: "settings.admin.usage" }
   | { name: "settings.admin.usageSession"; id: string }
   | { name: "settings.admin.capi" }
+  | { name: "settings.admin.capiSend"; fbclid: string; clickTs?: number }
+  | { name: "settings.admin.capiLog"; id: string }
   | { name: "category.new"; group?: string }
   | { name: "category.edit"; id: string }
   | { name: "group.new" }

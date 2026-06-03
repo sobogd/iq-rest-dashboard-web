@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Check } from "lucide-react";
 import { apiUrl } from "@/lib/api";
+import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
 import { useDashboardRouter } from "../_spa/router";
 import { useScrollLock } from "../_v2/use-scroll-lock";
-import { CAPI_EVENTS } from "./capi-shared";
+import { CAPI_EVENTS, fmtAt, type CapiLogRow } from "./capi-shared";
 
 export function CapiPage() {
   const router = useDashboardRouter();
@@ -15,6 +16,23 @@ export function CapiPage() {
   const [sent, setSent] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<{ ok: boolean; name: string; body: unknown } | null>(null);
+  const [log, setLog] = useState<CapiLogRow[]>([]);
+  const [logLoading, setLogLoading] = useState(true);
+
+  const loadLog = useCallback(async () => {
+    setLogLoading(true);
+    try {
+      const r = await fetch(apiUrl("/api/admin/capi/log?limit=200"), { credentials: "include" });
+      const j = r.ok ? ((await r.json()) as { log: CapiLogRow[] }) : { log: [] };
+      setLog(j.log ?? []);
+    } finally {
+      setLogLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadLog();
+  }, [loadLog]);
 
   // Look up what's already been sent for the entered fbclid (debounced).
   useEffect(() => {
@@ -55,6 +73,7 @@ export function CapiPage() {
       const ok = res.ok;
       setResult({ ok, name: eventName, body: json });
       if (ok) setSent((p) => Array.from(new Set([...p, eventName])));
+      void loadLog();
     } catch (e) {
       setResult({ ok: false, name: eventName, body: { error: String(e) } });
     } finally {
@@ -119,6 +138,51 @@ export function CapiPage() {
           >
             {sending ? "Sending…" : already ? "Already sent" : "Send"}
           </button>
+        </div>
+
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-border flex items-center justify-between">
+            <span className="text-sm font-semibold text-foreground">Sent log</span>
+            <button
+              type="button"
+              onClick={() => void loadLog()}
+              disabled={logLoading}
+              className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+              title="Refresh"
+            >
+              <RefreshIcon size={13} className={logLoading ? "animate-spin" : ""} />
+            </button>
+          </div>
+          <div className="divide-y divide-border max-h-[60vh] overflow-y-auto">
+            {logLoading && log.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-6 text-center">Loading…</div>
+            ) : log.length === 0 ? (
+              <div className="text-xs text-muted-foreground py-6 text-center">No sends yet</div>
+            ) : (
+              log.map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => router.push({ name: "settings.admin.capiLog", id: r.id })}
+                  className="w-full flex items-center gap-2 px-3 md:px-4 py-2 text-xs text-left hover:bg-muted/40 transition-colors"
+                >
+                  <span
+                    className={
+                      "shrink-0 text-[10px] font-semibold rounded px-1.5 py-0.5 " +
+                      (r.status === "success"
+                        ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                        : "bg-red-500/10 text-red-600 dark:text-red-400")
+                    }
+                  >
+                    {r.status === "success" ? "OK" : "ERR"}
+                  </span>
+                  <span className="shrink-0 font-medium text-foreground">{r.eventName}</span>
+                  <span className="flex-1 min-w-0 font-mono text-muted-foreground truncate" title={r.fbclid}>{r.fbclid}</span>
+                  <span className="shrink-0 text-[10px] text-muted-foreground tabular-nums">{fmtAt(r.createdAt)}</span>
+                </button>
+              ))
+            )}
+          </div>
         </div>
       </div>
 

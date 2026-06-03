@@ -67,6 +67,10 @@ export function viewToPath(view: View): string {
       return `/dashboard/settings/admin/usage/session/${view.id}`;
     case "settings.admin.capi":
       return "/dashboard/settings/admin/capi";
+    case "settings.admin.capiSend":
+      return `/dashboard/settings/admin/capi/send/${encodeURIComponent(view.fbclid)}${view.clickTs ? `?ts=${view.clickTs}` : ""}`;
+    case "settings.admin.capiLog":
+      return `/dashboard/settings/admin/capi/log/${view.id}`;
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -136,6 +140,16 @@ export function pathToView(path: string): View {
   const usageSessionMatch = stripped.match(/^\/dashboard\/settings\/admin\/usage\/session\/([^/]+)$/);
   if (usageSessionMatch) return { name: "settings.admin.usageSession", id: usageSessionMatch[1] };
   if (stripped === "/dashboard/settings/admin/usage") return { name: "settings.admin.usage" };
+  const capiSendMatch = stripped.match(/^\/dashboard\/settings\/admin\/capi\/send\/([^/]+)$/);
+  if (capiSendMatch) {
+    const ts = params.get("ts");
+    const n = ts ? Number(ts) : NaN;
+    return Number.isFinite(n)
+      ? { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]), clickTs: n }
+      : { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]) };
+  }
+  const capiLogMatch = stripped.match(/^\/dashboard\/settings\/admin\/capi\/log\/([^/]+)$/);
+  if (capiLogMatch) return { name: "settings.admin.capiLog", id: capiLogMatch[1] };
   if (stripped === "/dashboard/settings/admin/capi") return { name: "settings.admin.capi" };
   // Legacy redirect: the old combined "Admin" tabs lived at this path.
   if (stripped === "/dashboard/settings/admin") return { name: "settings.admin.restaurants" };

@@ -36,6 +36,8 @@ import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
 import { UsageSessionPage } from "../_pages/usage-session";
 import { CapiPage } from "../_pages/capi-page";
+import { CapiSendPage } from "../_pages/capi-send-page";
+import { CapiLogPage } from "../_pages/capi-log-page";
 import { LandingRedirect } from "../../auth/landing-redirect";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -334,6 +336,10 @@ function ViewSwitch(p: SwitchProps) {
       return <UsageSessionPage id={view.id} />;
     case "settings.admin.capi":
       return <CapiPage />;
+    case "settings.admin.capiSend":
+      return <CapiSendPage fbclid={view.fbclid} clickTs={view.clickTs} />;
+    case "settings.admin.capiLog":
+      return <CapiLogPage id={view.id} />;
 
     case "category.new":
       return (
