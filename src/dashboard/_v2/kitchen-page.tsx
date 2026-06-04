@@ -420,7 +420,9 @@ function KitchenOrderCard({
   fullHeight?: boolean;
 }) {
   const t = useTranslations("dashboard.orders");
-  const tableNumber = table ? table.number : tableNumberFallback ?? "?";
+  // Tableless orders (delivery/takeaway) → don't render any table text at all.
+  const hasTable = table != null || tableNumberFallback != null;
+  const tableNumber = table ? table.number : tableNumberFallback;
 
   // Order-level status = the least-advanced item (so the chip shows the stage
   // the whole order is still waiting on). Drives the dot + label next to the
@@ -465,13 +467,17 @@ function KitchenOrderCard({
                   {t(ITEM_STATUS_KEYS[orderStatus] || ITEM_STATUS_KEYS.pending)}
                 </span>
               </span>
-              <span aria-hidden className="shrink-0">·</span>
-              <span className="truncate">
-                <span style={table?.color ? { color: table.color } : undefined}>
-                  {t("tableLabel", { number: tableNumber })}
-                </span>
-                {table?.name ? " · " + table.name : ""}
-              </span>
+              {hasTable ? (
+                <>
+                  <span aria-hidden className="shrink-0">·</span>
+                  <span className="truncate">
+                    <span style={table?.color ? { color: table.color } : undefined}>
+                      {t("tableLabel", { number: tableNumber })}
+                    </span>
+                    {table?.name ? " · " + table.name : ""}
+                  </span>
+                </>
+              ) : null}
             </div>
           </div>
           <div className="text-xs font-medium tabular-nums shrink-0 mt-0.5 text-muted-foreground">
