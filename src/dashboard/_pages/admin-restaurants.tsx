@@ -5,7 +5,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
-import { EyeIcon, MessageIcon, RefreshIcon } from "../_v2/icons";
+import { EyeIcon, RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
 import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
@@ -108,14 +108,19 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                   ? Math.max(1, Math.ceil((trialEndMs - Date.now()) / 86_400_000))
                   : null;
               const active = r.subscriptionStatus === "ACTIVE";
-              const nameColor =
-                active && r.plan === "PRO"
-                  ? "text-emerald-600"
-                  : active && r.plan === "BASIC"
-                  ? "text-blue-500"
+              const subChipColor =
+                active && r.plan === "BASIC"
+                  ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  : active
+                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
                   : trialActive
-                  ? "text-orange-500"
-                  : "text-muted-foreground";
+                  ? "bg-orange-500/10 text-orange-600 dark:text-orange-400"
+                  : "bg-secondary text-muted-foreground";
+              const subLabel = active ? r.plan || "Active" : trialActive ? "Trial" : r.subscriptionStatus;
+              const scansChipColor =
+                r.scansToday > 0
+                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                  : "text-muted-foreground bg-secondary";
               return (
                 <button
                   key={r.id}
@@ -129,27 +134,39 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                   {r.hasAdminComment ? (
                     <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" title="Has admin note" />
                   ) : null}
-                  <span
-                    className={"font-medium truncate flex-1 " + (r.title ? nameColor : "text-muted-foreground italic")}
-                    title={r.slug || ""}
-                  >
-                    {r.title}
-                    {trialDaysLeft !== null ? ` (${trialDaysLeft}d)` : ""}
-                  </span>
-                  <span className="inline-flex items-center gap-2 text-[10px] text-muted-foreground tabular-nums shrink-0">
-                    <span className="inline-flex items-center gap-0.5" title="Support messages — total (admin + restaurant)">
-                      <MessageIcon size={10} />
-                      {r.messagesCount}
+                  <span className="flex-1 min-w-0 flex items-center gap-1.5">
+                    <span
+                      className={
+                        "text-[10px] rounded px-1.5 py-0.5 truncate min-w-0 bg-secondary " +
+                        (r.title ? "text-foreground" : "text-muted-foreground italic")
+                      }
+                      title={r.slug || ""}
+                    >
+                      {r.title || "untitled"}
                     </span>
-                    <span className="inline-flex items-center gap-0.5" title="Scans today">
+                    <span className={"text-[10px] rounded px-1.5 py-0.5 shrink-0 " + subChipColor}>
+                      {subLabel}
+                    </span>
+                    {trialDaysLeft !== null ? (
+                      <span className="text-[10px] rounded px-1.5 py-0.5 shrink-0 tabular-nums bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                        {trialDaysLeft}d
+                      </span>
+                    ) : null}
+                  </span>
+                  <span className="shrink-0 flex items-center gap-2">
+                    <span
+                      className={"inline-flex items-center gap-0.5 text-[10px] rounded px-1.5 py-0.5 tabular-nums " + scansChipColor}
+                      title="Scans today"
+                    >
                       <EyeIcon size={10} />
                       {r.scansToday}
                     </span>
-                    {r.lastVisit ? (
-                      <span className="tabular-nums" title="Last visit">{formatDateShort(r.lastVisit)}</span>
-                    ) : (
-                      <span className="tabular-nums" title="No visits yet">—</span>
-                    )}
+                    <span
+                      className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 tabular-nums"
+                      title={r.lastVisit ? "Last visit" : "No visits yet"}
+                    >
+                      {r.lastVisit ? formatDateShort(r.lastVisit) : "—"}
+                    </span>
                   </span>
                 </button>
               );
