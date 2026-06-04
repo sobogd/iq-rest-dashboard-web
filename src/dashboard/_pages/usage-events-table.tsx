@@ -175,7 +175,7 @@ export function UsageEventsTable({ toolbarHost }: Props) {
     <div className="space-y-3">
       {toolbarHost ? createPortal(toolbar, toolbarHost) : <div className="flex">{toolbar}</div>}
 
-      {loading ? (
+      {loading && sessions.length === 0 ? (
         <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
       ) : sessions.length === 0 ? (
         <div className="text-xs text-muted-foreground py-8 text-center">No sessions</div>

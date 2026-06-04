@@ -5,14 +5,10 @@ import {
   Activity,
   ExternalLink,
   LogIn,
-  Mail,
-  MessageSquare,
-  StickyNote,
   X as CloseIcon,
   Trash2,
 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
-import { SendIcon } from "../_v2/icons";
 import { Select, SubpageStickyBar } from "../_v2/ui";
 import { MenuPreviewModal } from "@/components/menu-preview-modal";
 import { getMenuUrl } from "@/lib/menu-url";
@@ -90,16 +86,6 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
   },
 ];
 
-interface Message {
-  id: string;
-  message: string;
-  isAdmin: boolean;
-  createdAt: string;
-  user: { email: string };
-}
-
-type NestedView = "messages" | "email" | "comment" | null;
-
 interface Props {
   restaurantId: string;
   /** When provided, used instead of the router-based back nav (modal mode). */
@@ -128,7 +114,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   const router = useDashboardRouter();
   // Modal mode passes onClose; page mode (route) falls back to router nav.
   const close = onClose ?? (() => router.push({ name: "settings.admin.restaurants" }));
-  const [nested, setNested] = useState<NestedView>(null);
   const [restaurant, setRestaurant] = useState<RestaurantDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -137,10 +122,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [alert, setAlert] = useState<{ title: string; message: string } | null>(null);
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loadingMessages, setLoadingMessages] = useState(false);
-  const [newMessage, setNewMessage] = useState("");
-  const [sending, setSending] = useState(false);
   const [sendingTemplate, setSendingTemplate] = useState<string | null>(null);
   const [confirmTemplate, setConfirmTemplate] = useState<EmailTemplate | null>(null);
   // Admin-picked locale for outgoing emails + support replies. Empty = auto
@@ -150,9 +131,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   const [deleting, setDeleting] = useState(false);
   const [commentDraft, setCommentDraft] = useState("");
   const [savingComment, setSavingComment] = useState(false);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const lastIdRef = useRef<string | null>(null);
-  const taRef = useRef<HTMLTextAreaElement>(null);
 
   const fetchRestaurant = useCallback(async () => {
     try {
@@ -177,37 +155,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
   useEffect(() => {
     fetchRestaurant();
   }, [fetchRestaurant]);
-
-  const fetchMessages = useCallback(async (silent = false) => {
-    if (!silent) setLoadingMessages(true);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}/messages`), { credentials: "include" });
-      if (res.ok) {
-        const data = (await res.json()) as Message[];
-        setMessages((prev) => {
-          const lastNew = data[data.length - 1];
-          const lastPrev = prev[prev.length - 1];
-          if (lastNew && lastPrev && lastNew.id === lastPrev.id && data.length === prev.length) {
-            return prev;
-          }
-          return data;
-        });
-      }
-    } finally {
-      if (!silent) setLoadingMessages(false);
-    }
-  }, [restaurantId]);
-
-  useEffect(() => {
-    if (nested === "messages" && messages.length === 0) {
-      fetchMessages();
-    }
-  }, [nested, messages.length, fetchMessages]);
-
-  function openCommentModal() {
-    setCommentDraft(restaurant?.adminComment ?? "");
-    setNested("comment");
-  }
 
   async function saveComment() {
     if (savingComment) return;
@@ -254,24 +201,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
       setDeleting(false);
     }
   }
-
-  useEffect(() => {
-    if (nested !== "messages") return;
-    const id = setInterval(() => {
-      fetchMessages(true);
-    }, 15000);
-    return () => clearInterval(id);
-  }, [nested, fetchMessages]);
-
-  useEffect(() => {
-    const lastMsg = messages[messages.length - 1];
-    if (lastMsg && lastMsg.id !== lastIdRef.current) {
-      lastIdRef.current = lastMsg.id;
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      }
-    }
-  }, [messages]);
 
   async function handleImpersonate() {
     if (!restaurant || impersonating) return;
@@ -335,46 +264,6 @@ export function AdminRestaurantPage({ restaurantId, onClose }: Props) {
       setSendingTemplate(null);
       setConfirmTemplate(null);
     }
-  }
-
-  async function sendMessage() {
-    const text = newMessage.trim();
-    if (!text || sending) return;
-    setSending(true);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/restaurants/${restaurantId}/messages`), {
-        credentials: "include",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, ...(adminLocale ? { locale: adminLocale } : {}) }),
-      });
-      if (res.ok) {
-        const sent = await res.json();
-        setMessages((prev) => [...prev, sent]);
-        setNewMessage("");
-        if (taRef.current) taRef.current.style.height = "";
-        taRef.current?.focus();
-      } else {
-        setAlert({ title: "Send failed", message: "Could not send message." });
-      }
-    } catch {
-      setAlert({ title: "Send failed", message: "Network error" });
-    } finally {
-      setSending(false);
-    }
-  }
-
-  function handleKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  }
-
-  function autoresize(el: HTMLTextAreaElement) {
-    el.style.height = "auto";
-    const next = Math.min(Math.max(el.scrollHeight, 40), 70);
-    el.style.height = next + "px";
   }
 
   if (loading && !restaurant) {
@@ -743,67 +632,3 @@ function AutoGrowTextarea({
   );
 }
 
-function FooterIconButton({
-  title,
-  onClick,
-  disabled,
-  badge,
-  variant = "default",
-  children,
-}: {
-  title: string;
-  onClick: () => void;
-  disabled?: boolean;
-  badge?: number;
-  variant?: "default" | "danger";
-  children: React.ReactNode;
-}) {
-  const base =
-    "relative h-9 w-9 inline-flex items-center justify-center rounded-md transition-colors disabled:opacity-50";
-  const cls =
-    variant === "danger"
-      ? `${base} bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40`
-      : `${base} bg-secondary text-muted-foreground hover:text-foreground`;
-  return (
-    <button type="button" onClick={onClick} disabled={disabled} title={title} className={cls}>
-      {children}
-      {badge && badge > 0 ? (
-        <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 inline-flex items-center justify-center rounded-full bg-primary-gradient text-primary-foreground text-[10px] font-semibold tabular-nums">
-          {badge}
-        </span>
-      ) : null}
-    </button>
-  );
-}
-
-function MessageBubble({ message }: { message: Message }) {
-  const isAdmin = message.isAdmin;
-  const time = new Date(message.createdAt).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-  const cls = isAdmin
-    ? "bg-primary-gradient text-primary-foreground rounded-tr-sm"
-    : "bg-secondary text-foreground rounded-tl-sm";
-
-  return (
-    <div className={"flex " + (isAdmin ? "justify-end" : "justify-start")}>
-      <div className="max-w-[75%]">
-        <div
-          className={
-            "px-3.5 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words " + cls
-          }
-        >
-          {!isAdmin ? (
-            <div className="text-[10px] font-medium mb-1 opacity-70">{message.user.email}</div>
-          ) : null}
-          {message.message}
-        </div>
-        <div className={"text-[10px] text-muted-foreground mt-1 px-1 " + (isAdmin ? "text-right" : "text-left")}>
-          {time}
-        </div>
-      </div>
-    </div>
-  );
-}

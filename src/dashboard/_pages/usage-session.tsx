@@ -25,12 +25,24 @@ interface SessionSummary {
   region: string | null;
   userLabel: string | null;
   restaurantLabel: string | null;
+  eventCount?: number;
+  truncated?: boolean;
 }
 
 // Per-session events cache (by encoded id) so returning to a session is instant;
-// refreshed only by the Update button.
+// refreshed only by the Update button. Capped so a long-lived tab can't grow it
+// without bound.
+const CACHE_MAX = 50;
 const eventCache = new Map<string, SessionEvent[]>();
 const summaryCache = new Map<string, SessionSummary>();
+
+function cacheSet<V>(map: Map<string, V>, key: string, value: V) {
+  if (map.size >= CACHE_MAX && !map.has(key)) {
+    const oldest = map.keys().next().value;
+    if (oldest !== undefined) map.delete(oldest);
+  }
+  map.set(key, value);
+}
 
 function CopyButton({ text }: { text: string }) {
   const [done, setDone] = useState(false);
@@ -79,10 +91,10 @@ export function UsageSessionPage({ id }: { id: string }) {
     try {
       const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" });
       const j = res.ok ? ((await res.json()) as { events: SessionEvent[]; summary?: SessionSummary }) : { events: [], summary: undefined };
-      eventCache.set(id, j.events ?? []);
+      cacheSet(eventCache, id, j.events ?? []);
       setEvents(j.events ?? []);
       if (j.summary) {
-        summaryCache.set(id, j.summary);
+        cacheSet(summaryCache, id, j.summary);
         setSummary(j.summary);
       }
     } finally {
@@ -123,7 +135,8 @@ export function UsageSessionPage({ id }: { id: string }) {
       if (latestFbTs === null || ts >= latestFbTs) { latestFbTs = ts; latestFbclid = m[1]; }
     }
   }
-  const eventCount = events.length || session?.eventCount || 0;
+  // Prefer the server's true total (the events list itself is capped at 2000).
+  const eventCount = summary?.eventCount ?? session?.eventCount ?? events.length;
   const hasGoogle = gclids.length > 0 || (session?.hasGoogle ?? false);
 
   // Funnel touchpoints derived from the session's event names (works for
@@ -257,6 +270,12 @@ export function UsageSessionPage({ id }: { id: string }) {
                 </div>
               ) : null}
             </div>
+
+            {summary?.truncated ? (
+              <div className="text-[11px] text-muted-foreground px-1">
+                Showing the latest {events.length.toLocaleString()} of {eventCount.toLocaleString()} events.
+              </div>
+            ) : null}
 
             <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
               {loading ? (
