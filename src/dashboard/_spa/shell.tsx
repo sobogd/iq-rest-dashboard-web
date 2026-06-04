@@ -253,14 +253,26 @@ function ViewSwitch(p: SwitchProps) {
     case "reservations":
       return <ReservationsPage restaurant={restaurant} bookings={bookings} setBookings={setBookings} tables={tables} />;
     case "kitchen":
+      // Fixed-height kanban inside the document-scroll dashboard: cancel the
+      // <main> padding (top + sides + the inline bottom-nav clearance) and pin
+      // the board to the viewport below the sticky topbar (desktop) / above the
+      // bottom nav (mobile, where --topbar-h is 0). Only the columns scroll
+      // internally — the page itself doesn't.
       return (
-        <KitchenPage
-          orders={orders}
-          setOrders={setOrders}
-          tables={tables}
-          categories={categories}
-          defaultLang={restaurant.defaultLang}
-        />
+        <div
+          className="-mx-4 md:-mx-6 -mt-5 md:-mt-4 h-[calc(100dvh-5rem-env(safe-area-inset-bottom))] md:h-[calc(100dvh-var(--topbar-h,0px))]"
+          style={{ marginBottom: "calc(-5rem - env(safe-area-inset-bottom))" }}
+        >
+          <KitchenPage
+            orders={orders}
+            setOrders={setOrders}
+            tables={tables}
+            categories={categories}
+            defaultLang={restaurant.defaultLang}
+            kioskLayout
+            fullWidthFilterBar
+          />
+        </div>
       );
     case "analytics":
       return <AnalyticsClient />;

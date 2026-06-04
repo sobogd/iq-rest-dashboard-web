@@ -365,6 +365,14 @@ export function buildKitchenDemoSnapshot(lang: string): KitchenDemoSnapshot {
         opt(OPTION_GROUP.size, VARIANTS.doubleShot, 2),
       ]),
     ]),
+    // Second open order on table 1 — demonstrates one table → two columns,
+    // both tinted with the same table colour.
+    order("demo-order-5", "demo-table-1", 1, 5, 4, [
+      item(DISHES.fries, NAMES.fries, "4.50", "pending", 4, [
+        opt(OPTION_GROUP.size, VARIANTS.large),
+      ]),
+      item(DISHES.espresso, NAMES.espresso, "2.50", "cooking", 4),
+    ]),
   ];
 
   return {
@@ -402,6 +410,15 @@ const TABLE_POS: Record<number, { x: number; y: number }> = {
   8: { x: 74, y: 70 },
 };
 
+// Demo table colours so the kitchen board's colour-tinted headers are visible
+// in the public/local demo (real tables carry whatever colour admin set).
+const TABLE_COLOR: Record<number, string> = {
+  1: "#ef4444",
+  3: "#3b82f6",
+  5: "#22c55e",
+  8: "#a855f7",
+};
+
 function table(number: number, id: string): TableEntity {
   const pos = TABLE_POS[number] ?? { x: 50, y: 50 };
   return {
@@ -413,7 +430,7 @@ function table(number: number, id: string): TableEntity {
     x: pos.x,
     y: pos.y,
     photoUrl: null,
-    color: null,
+    color: TABLE_COLOR[number] ?? null,
     sortOrder: number,
   };
 }

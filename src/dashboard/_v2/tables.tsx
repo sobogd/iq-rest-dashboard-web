@@ -205,8 +205,12 @@ export function FloorMap({
  <span className="absolute inset-0 rounded-full overflow-hidden">
  <img src={t.photoUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
  </span>
- ) : null}
- <span className={(t.color || t.photoUrl) ? "relative z-10 text-white" : ""}>
+ ) : (
+ // No colour/photo → fill with the theme's opposite so the table still
+ // reads as a solid marker (dark in light theme, light in dark theme).
+ <span className="absolute inset-0 rounded-full bg-foreground" />
+ )}
+ <span className={"relative z-10 " + (t.color || t.photoUrl ? "text-white" : "text-background")}>
  {t.number}
  </span>
  {badge && badge > 0 ? (

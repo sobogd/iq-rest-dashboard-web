@@ -15,11 +15,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { showApiError } from "@/lib/show-api-error";
-import { CheckIcon } from "./icons";
-import { EmptyState, Modal } from "./ui";
+import { EmptyState } from "./ui";
 import { formatElapsedHMS } from "./helpers";
 import { getMlWithFallback } from "./i18n";
 import { patchOrder } from "./api";
+import { useFlip } from "./use-flip";
 import type {
   Category,
   Order,
@@ -107,7 +107,6 @@ export function KitchenPage({
   const [, setTick] = useState(0);
   const [statusFilter, setStatusFilter] = useState<OrderItemStatus[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
-  const [openFilter, setOpenFilter] = useState<null | "status" | "category">(null);
 
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 1000);
@@ -243,34 +242,32 @@ export function KitchenPage({
     });
   }
 
-  type TableGroup = {
-    key: string;
+  // One column per ORDER (not per table). A table with two open orders shows
+  // as two separate columns, both tinted with the same table colour.
+  type OrderColumn = {
+    orderId: string;
+    dailyNumber: number;
     tableId: string | null;
     tableNumber: number | string | null;
-    items: { item: OrderItem; orderId: string }[];
-    oldestCreatedAt: string;
+    items: OrderItem[];
+    createdAt: string;
   };
-  const groupsMap = new Map<string, TableGroup>();
+  const columns: OrderColumn[] = [];
   for (const o of orders) {
     if (o.status !== "active") continue;
     const its = filterItems(o.items);
     if (its.length === 0) continue;
-    const key = o.tableId ?? (o.tableNumber != null ? `n:${o.tableNumber}` : `o:${o.id}`);
-    const g = groupsMap.get(key) ?? {
-      key,
+    columns.push({
+      orderId: o.id,
+      dailyNumber: o.dailyNumber,
       tableId: o.tableId ?? null,
       tableNumber: o.tableNumber ?? null,
-      items: [],
-      oldestCreatedAt: o.createdAt,
-    };
-    for (const it of its) g.items.push({ item: it, orderId: o.id });
-    if (new Date(o.createdAt).getTime() < new Date(g.oldestCreatedAt).getTime()) {
-      g.oldestCreatedAt = o.createdAt;
-    }
-    groupsMap.set(key, g);
+      items: its,
+      createdAt: o.createdAt,
+    });
   }
-  const visibleGroups = [...groupsMap.values()].sort(
-    (a, b) => new Date(a.oldestCreatedAt).getTime() - new Date(b.oldestCreatedAt).getTime(),
+  const visibleGroups = columns.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
 
   const STATUS_FILTERS: {
@@ -301,68 +298,52 @@ export function KitchenPage({
         <div
           className={
             (fullWidthFilterBar ? "" : "max-w-5xl mx-auto md:px-6 ") +
-            "flex items-center gap-2 px-4 py-2"
+            "flex items-center flex-wrap gap-2 px-4 py-2"
           }
         >
-          <button
-            type="button"
-            onClick={() => setOpenFilter("status")}
-            className={filterBtnBase + " " + (statusFilter.length > 0 ? filterBtnOn : filterBtnOff)}
-          >
-            {t("filterByStatus")}
-            {statusFilter.length > 0 ? ` (${statusFilter.length})` : ""}
-          </button>
+          {STATUS_FILTERS.map((s) => {
+            const on = statusFilter.includes(s.id);
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() =>
+                  setStatusFilter((cur) =>
+                    cur.includes(s.id) ? cur.filter((x) => x !== s.id) : [...cur, s.id],
+                  )
+                }
+                className={filterBtnBase + " " + (on ? filterBtnOn : filterBtnOff)}
+              >
+                <span className={"w-1.5 h-1.5 rounded-full shrink-0 " + STATUS_DOT_CLS[s.id]} aria-hidden />
+                {t(s.labelKey)}
+              </button>
+            );
+          })}
           {categories.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => setOpenFilter("category")}
-              className={filterBtnBase + " " + (categoryFilter.length > 0 ? filterBtnOn : filterBtnOff)}
-            >
-              {t("filterByCategory")}
-              {categoryFilter.length > 0 ? ` (${categoryFilter.length})` : ""}
-            </button>
+            <>
+              <span className="w-px h-5 bg-border shrink-0 mx-0.5" aria-hidden />
+              {categories.map((c) => {
+                const on = categoryFilter.includes(c.id);
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() =>
+                      setCategoryFilter((cur) =>
+                        cur.includes(c.id) ? cur.filter((x) => x !== c.id) : [...cur, c.id],
+                      )
+                    }
+                    className={filterBtnBase + " " + (on ? filterBtnOn : filterBtnOff)}
+                  >
+                    {getMlWithFallback(c.name, defaultLang, defaultLang)}
+                  </button>
+                );
+              })}
+            </>
           ) : null}
           {filterBarExtras ? <div className="ml-auto flex items-center gap-1.5">{filterBarExtras}</div> : null}
         </div>
       </div>
-
-      <FilterModal
-        open={openFilter === "status"}
-        title={t("filterStatus")}
-        onClose={() => setOpenFilter(null)}
-        applyLabel={t("apply")}
-        resetLabel={t("reset")}
-        options={STATUS_FILTERS.map((s) => ({ id: s.id, label: t(s.labelKey) }))}
-        selected={statusFilter}
-        onApply={(ids) => {
-          setStatusFilter(ids as OrderItemStatus[]);
-          setOpenFilter(null);
-        }}
-        onReset={() => {
-          setStatusFilter([]);
-          setOpenFilter(null);
-        }}
-      />
-      <FilterModal
-        open={openFilter === "category"}
-        title={t("filterCategory")}
-        onClose={() => setOpenFilter(null)}
-        applyLabel={t("apply")}
-        resetLabel={t("reset")}
-        options={categories.map((c) => ({
-          id: c.id,
-          label: getMlWithFallback(c.name, defaultLang, defaultLang),
-        }))}
-        selected={categoryFilter}
-        onApply={(ids) => {
-          setCategoryFilter(ids);
-          setOpenFilter(null);
-        }}
-        onReset={() => {
-          setCategoryFilter([]);
-          setOpenFilter(null);
-        }}
-      />
 
       {visibleGroups.length === 0 ? (
         <div className={kioskLayout ? "flex-1 min-h-0 flex items-center justify-center" : "max-w-5xl mx-auto md:px-6 pt-7 md:pt-6"}>
@@ -372,11 +353,14 @@ export function KitchenPage({
         <div className="flex-1 min-h-0 overflow-x-auto pb-1 px-4 md:px-6 mt-3">
           <div className="flex items-start gap-3 h-full" style={{ width: "max-content" }}>
             {visibleGroups.map((g) => (
-              <KitchenTableCard
-                key={g.key}
-                entries={g.items}
+              <KitchenOrderCard
+                key={g.orderId}
+                orderId={g.orderId}
+                dailyNumber={g.dailyNumber}
+                items={g.items}
                 table={g.tableId ? tables.find((t) => t.id === g.tableId) || null : null}
                 tableNumberFallback={g.tableNumber}
+                createdAt={g.createdAt}
                 defaultLang={defaultLang}
                 onItemAdvance={advanceItemStatus}
                 fullHeight
@@ -389,11 +373,14 @@ export function KitchenPage({
           <div className="overflow-x-auto pb-1 px-4 md:px-6">
             <div className="flex items-start gap-3" style={{ width: "max-content" }}>
               {visibleGroups.map((g) => (
-                <KitchenTableCard
-                  key={g.key}
-                  entries={g.items}
+                <KitchenOrderCard
+                  key={g.orderId}
+                  orderId={g.orderId}
+                  dailyNumber={g.dailyNumber}
+                  items={g.items}
                   table={g.tableId ? tables.find((t) => t.id === g.tableId) || null : null}
                   tableNumberFallback={g.tableNumber}
+                  createdAt={g.createdAt}
                   defaultLang={defaultLang}
                   onItemAdvance={advanceItemStatus}
                 />
@@ -406,69 +393,124 @@ export function KitchenPage({
   );
 }
 
-function KitchenTableCard({
-  entries,
+function KitchenOrderCard({
+  orderId,
+  dailyNumber,
+  items,
   table,
   tableNumberFallback,
+  createdAt,
   defaultLang,
   onItemAdvance,
   fullHeight,
 }: {
-  entries: { item: OrderItem; orderId: string }[];
+  orderId: string;
+  dailyNumber: number;
+  items: OrderItem[];
   table: TableEntity | null;
   tableNumberFallback: number | string | null;
+  createdAt: string;
   defaultLang: string;
   onItemAdvance: (orderId: string, itemId: string) => void;
   fullHeight?: boolean;
 }) {
   const t = useTranslations("dashboard.orders");
-  const allReady = entries.length > 0 && entries.every((e) => e.item.status === "ready");
-  const cardCls = allReady
-    ? "bg-emerald-50 border-emerald-300 dark:bg-emerald-950/40 dark:border-emerald-700/60"
-    : "bg-card border-border";
   const tableNumber = table ? table.number : tableNumberFallback ?? "?";
 
+  // Order-level status = the least-advanced item (so the chip shows the stage
+  // the whole order is still waiting on). Drives the dot + label next to the
+  // table number.
+  const orderStatus = items.reduce<OrderItemStatus>(
+    (acc, it) => (STATUS_PRIORITY[it.status] < STATUS_PRIORITY[acc] ? it.status : acc),
+    items[0]?.status ?? "pending",
+  );
+
+  // Column header chip tinted with the table's admin colour, semi-transparent
+  // so the hue reads clearly while white text stays legible (text-shadow
+  // guards against light colours). No colour → neutral card chip. There's no
+  // outer card box around the column anymore; the cards stand free in a
+  // column, the chip is the only chrome identifying the order/table.
+  // Header reads as a plain column TITLE — no card box, no rule.
+  const headerCls = "shrink-0 px-1 mb-3";
+
+  // Served items sink to the bottom; within a status group keep oldest-first.
+  const sorted = [...items].sort((a, b) => {
+    const sa = a.status === "served" ? 1 : 0;
+    const sb = b.status === "served" ? 1 : 0;
+    if (sa !== sb) return sa - sb;
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+  // FLIP: animate cards sliding to their new slot when the sort order changes
+  // (e.g. an item tapped to "served" glides down to the bottom). Re-runs
+  // whenever the ordered id+status signature changes.
+  const flipRef = useFlip<HTMLDivElement>([sorted.map((i) => i.id + i.status).join(",")]);
+
   return (
-    <div
-      className={
-        "w-72 shrink-0 rounded-xl border overflow-hidden " +
-        cardCls +
-        " flex flex-col" +
-        (fullHeight ? " max-h-full" : "")
-      }
-    >
-      <div className="px-3.5 py-3 border-b border-border/60 bg-subheader rounded-t-xl shrink-0">
-        <div className="text-base font-medium text-foreground">
-          {t("tableLabel", { number: tableNumber })}
+    <div className={"w-72 shrink-0 flex flex-col" + (fullHeight ? " max-h-full" : "")}>
+      <div className={headerCls}>
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <div className="text-base font-semibold leading-tight">
+              {t("orderLabel", { number: dailyNumber })}
+            </div>
+            <div className="flex items-center gap-1.5 text-xs mt-1.5 text-muted-foreground">
+              <span className="inline-flex items-center gap-1 shrink-0">
+                <span className={"w-1.5 h-1.5 rounded-full shrink-0 " + STATUS_DOT_CLS[orderStatus]} aria-hidden />
+                <span className={"font-medium " + STATUS_TEXT_CLS[orderStatus]}>
+                  {t(ITEM_STATUS_KEYS[orderStatus] || ITEM_STATUS_KEYS.pending)}
+                </span>
+              </span>
+              <span aria-hidden className="shrink-0">·</span>
+              <span className="truncate">
+                <span style={table?.color ? { color: table.color } : undefined}>
+                  {t("tableLabel", { number: tableNumber })}
+                </span>
+                {table?.name ? " · " + table.name : ""}
+              </span>
+            </div>
+          </div>
+          <div className="text-xs font-medium tabular-nums shrink-0 mt-0.5 text-muted-foreground">
+            {formatElapsedHMS(createdAt)}
+          </div>
         </div>
-        {table?.name ? <div className="text-xs text-muted-foreground mt-0.5">{table.name}</div> : null}
       </div>
 
       <div
+        ref={flipRef}
         className={
-          "divide-y divide-border " +
-          (fullHeight ? "min-h-0 overflow-y-auto" : "flex-1")
+          "flex flex-col gap-2 " +
+          (fullHeight ? "flex-1 min-h-0 overflow-y-auto pb-1" : "flex-1")
         }
       >
-        {[...entries]
-          .sort((a, b) => {
-            const sa = a.item.status === "served" ? 1 : 0;
-            const sb = b.item.status === "served" ? 1 : 0;
-            if (sa !== sb) return sa - sb;
-            return new Date(a.item.createdAt).getTime() - new Date(b.item.createdAt).getTime();
-          })
-          .map(({ item, orderId }) => (
-            <KitchenItem
-              key={`${orderId}:${item.id}`}
-              item={item}
-              defaultLang={defaultLang}
-              onAdvance={() => onItemAdvance(orderId, item.id)}
-            />
-          ))}
+        {sorted.map((item) => (
+          <KitchenItem
+            key={`${orderId}:${item.id}`}
+            item={item}
+            defaultLang={defaultLang}
+            onAdvance={() => onItemAdvance(orderId, item.id)}
+          />
+        ))}
       </div>
     </div>
   );
 }
+
+// Ordering of item statuses by kitchen stage — used to derive the order-level
+// status (the least-advanced item).
+const STATUS_PRIORITY: Record<OrderItemStatus, number> = {
+  pending: 0,
+  cooking: 1,
+  ready: 2,
+  served: 3,
+};
+
+// Per-status left accent on each dish card, matching the dot/text palette.
+const STATUS_ACCENT_CLS: Record<OrderItemStatus, string> = {
+  pending: "border-l-slate-700 dark:border-l-slate-400",
+  cooking: "border-l-amber-500 dark:border-l-amber-400",
+  ready: "border-l-blue-600 dark:border-l-blue-500",
+  served: "border-l-emerald-600 dark:border-l-emerald-500",
+};
 
 function KitchenItem({
   item,
@@ -485,11 +527,22 @@ function KitchenItem({
   return (
     <button
       type="button"
+      data-flip-id={item.id}
       onClick={onAdvance}
-      className={"w-full text-left px-3.5 py-2.5 transition-colors " + (isServed ? "opacity-50" : "")}
+      className={
+        "w-full text-left rounded-lg border border-border border-l-4 bg-card px-3 py-2.5 shadow-sm " +
+        "transition-[opacity,box-shadow] hover:shadow-md active:scale-[0.99] " +
+        STATUS_ACCENT_CLS[item.status] +
+        (isServed ? " opacity-55" : "")
+      }
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5">
+        {/* key=status remounts on every transition so the badge re-runs the
+            slide-in — only the status animates, the card stays put. */}
+        <div
+          key={item.status}
+          className="flex items-center gap-1.5 animate-in fade-in slide-in-from-left-4 duration-300"
+        >
           <span
             className={"shrink-0 w-2 h-2 rounded-full " + STATUS_DOT_CLS[item.status]}
             aria-hidden="true"
@@ -540,85 +593,3 @@ function KitchenItem({
   );
 }
 
-function FilterModal({
-  open,
-  title,
-  onClose,
-  options,
-  selected,
-  onApply,
-  onReset,
-  applyLabel,
-  resetLabel,
-}: {
-  open: boolean;
-  title: string;
-  onClose: () => void;
-  options: { id: string; label: string }[];
-  selected: string[];
-  onApply: (ids: string[]) => void;
-  onReset: () => void;
-  applyLabel: string;
-  resetLabel: string;
-}) {
-  const [draft, setDraft] = useState<string[]>(selected);
-  useEffect(() => {
-    if (open) setDraft(selected);
-  }, [open, selected]);
-  function toggle(id: string) {
-    setDraft((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]));
-  }
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={title}
-      size="sm"
-      footer={
-        <div className="flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={onReset}
-            className="h-8 px-3 text-xs font-medium text-foreground bg-card border border-border rounded-lg transition-colors"
-          >
-            {resetLabel}
-          </button>
-          <button
-            type="button"
-            onClick={() => onApply(draft)}
-            className="inline-flex items-center gap-1.5 h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg transition-colors"
-          >
-            {applyLabel}
-          </button>
-        </div>
-      }
-    >
-      <div className="-m-5 divide-y divide-border">
-        {options.map((o) => {
-          const on = draft.includes(o.id);
-          return (
-            <button
-              key={o.id}
-              type="button"
-              onClick={() => toggle(o.id)}
-              className={
-                "w-full flex items-center gap-3 px-5 py-3 text-left transition-colors " +
-                (on ? "bg-primary/5" : "")
-              }
-            >
-              <span
-                className={
-                  "w-4 h-4 rounded border inline-flex items-center justify-center shrink-0 " +
-                  (on ? "bg-primary border-primary text-primary-foreground" : "border-input")
-                }
-              >
-                {on ? <CheckIcon size={10} /> : null}
-              </span>
-              <span className="min-w-0 flex-1 text-sm text-foreground truncate">{o.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </Modal>
-  );
-}
