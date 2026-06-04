@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Star, EyeOff, Trash2, MessageCircle } from "lucide-react";
+import { Star, Eye, EyeOff, Trash2, MessageCircle } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -10,7 +10,7 @@ import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
 
 const LANG_FLAG = new Map(AVAILABLE_LANGUAGES.map((l) => [l.code, l.flag]));
 
-type Filter = "all" | "watched" | "new";
+type Filter = "all" | "watched" | "new" | "muted";
 
 interface Thread {
   id: string;
@@ -123,6 +123,7 @@ export function AdminInboxPage({ onBack }: { onBack: () => void }) {
           {chip("all", "All")}
           {chip("watched", "Watched")}
           {chip("new", "New")}
+          {chip("muted", "Muted")}
         </div>
 
         {loading && threads.length === 0 ? (
@@ -163,11 +164,11 @@ export function AdminInboxPage({ onBack }: { onBack: () => void }) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setFlag(t.contactId!, { muted: true })}
-                      className="h-7 w-7 inline-flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
-                      title="Mute (hide)"
+                      onClick={() => setFlag(t.contactId!, { muted: !t.muted })}
+                      className={"h-7 w-7 inline-flex items-center justify-center rounded " + (t.muted ? "text-primary" : "text-muted-foreground hover:text-foreground")}
+                      title={t.muted ? "Unmute" : "Mute (hide)"}
                     >
-                      <EyeOff className="w-3.5 h-3.5" />
+                      {t.muted ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                     </button>
                     <button
                       type="button"

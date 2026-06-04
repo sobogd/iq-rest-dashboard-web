@@ -36,6 +36,8 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [preparing, setPreparing] = useState(false);
+  const [preview, setPreview] = useState<{ ru: string; lang: string; text: string } | null>(null);
   const [showOriginal, setShowOriginal] = useState<Set<string>>(new Set());
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
@@ -78,26 +80,50 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
     el.style.height = Math.min(Math.max(el.scrollHeight, 40), 120) + "px";
   }
 
-  async function send() {
+  // Step 1: translate (no send) so the admin can verify the outgoing text.
+  async function requestPreview() {
     const ru = input.trim();
-    if (!ru || sending) return;
-    setSending(true);
-    setInput("");
-    if (taRef.current) taRef.current.style.height = "";
+    if (!ru || preparing || sending) return;
+    setPreparing(true);
     try {
-      const res = await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}/send`), {
+      const res = await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}/preview`), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ru }),
       });
       if (res.ok) {
+        const j = (await res.json()) as { lang: string; text: string };
+        setPreview({ ru, lang: j.lang, text: j.text });
+      } else {
+        const j = await res.json().catch(() => ({}));
+        window.alert(j.message || "Preview failed");
+      }
+    } finally {
+      setPreparing(false);
+    }
+  }
+
+  // Step 2: send the approved (possibly edited) translation verbatim.
+  async function confirmSend() {
+    if (!preview || sending) return;
+    setSending(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}/send`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ru: preview.ru, text: preview.text }),
+      });
+      if (res.ok) {
         const sent = (await res.json()) as Msg;
         setMessages((m) => [...m, sent]);
+        setInput("");
+        if (taRef.current) taRef.current.style.height = "";
+        setPreview(null);
       } else {
         const j = await res.json().catch(() => ({}));
         window.alert(j.message || "Send failed");
-        setInput(ru);
       }
     } finally {
       setSending(false);
@@ -107,7 +133,7 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
   function onKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      void send();
+      void requestPreview();
     }
   }
 
@@ -198,15 +224,54 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
           />
           <button
             type="button"
-            onClick={() => void send()}
-            disabled={!input.trim() || sending}
+            onClick={() => void requestPreview()}
+            disabled={!input.trim() || preparing || sending}
             className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
           >
-            {sending ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
+            {preparing ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
             Send
           </button>
         </div>
       </div>
+
+      {preview ? (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40" onClick={() => setPreview(null)}>
+          <div className="w-full max-w-md bg-card border border-border rounded-xl p-4 space-y-3" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+              <span className="text-base">{LANG_FLAG.get(preview.lang) || "🌐"}</span>
+              Preview — will be sent in {preview.lang.toUpperCase()}
+            </div>
+            <textarea
+              value={preview.text}
+              onChange={(e) => setPreview((p) => (p ? { ...p, text: e.target.value } : p))}
+              rows={4}
+              className="w-full px-3 py-2 text-sm leading-5 text-foreground bg-secondary border border-input rounded-lg focus:outline-none resize-none"
+            />
+            <div className="text-[11px] text-muted-foreground">
+              <span className="opacity-70">Your text (RU):</span> {preview.ru}
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setPreview(null)}
+                disabled={sending}
+                className="h-8 px-3 text-xs font-medium bg-secondary text-foreground rounded-lg hover:bg-muted disabled:opacity-60"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => void confirmSend()}
+                disabled={sending || !preview.text.trim()}
+                className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60 inline-flex items-center gap-1.5"
+              >
+                {sending ? <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={12} />}
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
