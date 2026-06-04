@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Star, EyeOff } from "lucide-react";
+import { Star, EyeOff, Pencil, Trash2 } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { SendIcon, RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -12,7 +12,10 @@ const LANG_FLAG = new Map(AVAILABLE_LANGUAGES.map((l) => [l.code, l.flag]));
 
 interface Contact {
   id: string;
-  name: string;
+  name: string;          // resolved display name
+  customName: string | null;
+  profileName: string | null;
+  note: string | null;
   externalId: string;
   lang: string | null;
   watched: boolean;
@@ -39,6 +42,8 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
   const [preparing, setPreparing] = useState(false);
   const [preview, setPreview] = useState<{ ru: string; lang: string; text: string } | null>(null);
   const [showOriginal, setShowOriginal] = useState<Set<string>>(new Set());
+  const [editing, setEditing] = useState<{ customName: string; note: string } | null>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -148,6 +153,34 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
     void load(true);
   }
 
+  async function saveEdit() {
+    if (!contact || !editing || savingEdit) return;
+    setSavingEdit(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/inbox/contacts/${contact.id}/flags`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customName: editing.customName, note: editing.note }),
+      });
+      if (res.ok) {
+        setEditing(null);
+        void load(true);
+      }
+    } finally {
+      setSavingEdit(false);
+    }
+  }
+
+  async function removeThread() {
+    if (!window.confirm("Delete this conversation? This cannot be undone.")) return;
+    await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}`), {
+      method: "DELETE",
+      credentials: "include",
+    });
+    router.push({ name: "settings.admin.inbox" });
+  }
+
   function toggleOriginal(id: string) {
     setShowOriginal((prev) => {
       const next = new Set(prev);
@@ -173,10 +206,18 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
             <button
               type="button"
               onClick={() => setFlag({ muted: !contact.muted })}
-              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground"
+              className={"h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md " + (contact.muted ? "text-primary" : "text-muted-foreground hover:text-foreground")}
               title={contact.muted ? "Unmute" : "Mute"}
             >
               <EyeOff className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={removeThread}
+              className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-red-500 hover:bg-red-500/10"
+              title="Delete conversation"
+            >
+              <Trash2 className="w-4 h-4" />
             </button>
           </>
         ) : null}
@@ -193,10 +234,21 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
 
       <div className="flex-1 min-h-0 w-full max-w-3xl mx-auto flex flex-col">
         {contact ? (
-          <div className="shrink-0 px-4 pt-4 pb-2 flex items-center gap-2">
-            <span className="text-base" title={contact.lang || ""}>{LANG_FLAG.get(contact.lang || "") || "🌐"}</span>
-            <span className="text-sm font-medium text-foreground truncate">{contact.name}</span>
-            <span className="text-[11px] text-muted-foreground">{contact.externalId}</span>
+          <div className="shrink-0 px-4 pt-4 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-base" title={contact.lang || ""}>{LANG_FLAG.get(contact.lang || "") || "🌐"}</span>
+              <span className="text-sm font-medium text-foreground truncate">{contact.name}</span>
+              <span className="text-[11px] text-muted-foreground">{contact.externalId}</span>
+              <button
+                type="button"
+                onClick={() => setEditing({ customName: contact.customName ?? "", note: contact.note ?? "" })}
+                className="h-6 w-6 inline-flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
+                title="Edit name / note"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            {contact.note ? <div className="text-[11px] text-muted-foreground mt-1 italic">{contact.note}</div> : null}
           </div>
         ) : null}
 
@@ -233,6 +285,36 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
           </button>
         </div>
       </div>
+
+      {editing ? (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40" onClick={() => setEditing(null)}>
+          <div className="w-full max-w-md bg-card border border-border rounded-xl p-4 space-y-3" onClick={(e) => e.stopPropagation()}>
+            <div className="text-sm font-medium text-foreground">Edit contact</div>
+            <div className="space-y-1">
+              <label className="text-[11px] text-muted-foreground">Internal name</label>
+              <input
+                value={editing.customName}
+                onChange={(e) => setEditing((p) => (p ? { ...p, customName: e.target.value } : p))}
+                placeholder={contact?.profileName || contact?.externalId || ""}
+                className="w-full h-9 px-3 text-sm text-foreground bg-secondary border border-input rounded-lg focus:outline-none"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] text-muted-foreground">Note</label>
+              <textarea
+                value={editing.note}
+                onChange={(e) => setEditing((p) => (p ? { ...p, note: e.target.value } : p))}
+                rows={3}
+                className="w-full px-3 py-2 text-sm text-foreground bg-secondary border border-input rounded-lg focus:outline-none resize-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button type="button" onClick={() => setEditing(null)} disabled={savingEdit} className="h-8 px-3 text-xs font-medium bg-secondary text-foreground rounded-lg hover:bg-muted disabled:opacity-60">Cancel</button>
+              <button type="button" onClick={() => void saveEdit()} disabled={savingEdit} className="h-8 px-3 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60">{savingEdit ? "Saving…" : "Save"}</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {preview ? (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40" onClick={() => setPreview(null)}>
