@@ -71,6 +71,10 @@ export function viewToPath(view: View): string {
       return "/dashboard/settings/admin/messages";
     case "settings.admin.messageThread":
       return `/dashboard/settings/admin/messages/${view.id}`;
+    case "settings.admin.inbox":
+      return "/dashboard/settings/admin/inbox";
+    case "settings.admin.inboxThread":
+      return `/dashboard/settings/admin/inbox/${encodeURIComponent(view.id)}`;
     case "category.new":
       return view.group
         ? `/dashboard/categories/new?group=${view.group}`
@@ -151,6 +155,9 @@ export function pathToView(path: string): View {
   const msgThreadMatch = stripped.match(/^\/dashboard\/settings\/admin\/messages\/([^/]+)$/);
   if (msgThreadMatch) return { name: "settings.admin.messageThread", id: msgThreadMatch[1] };
   if (stripped === "/dashboard/settings/admin/messages") return { name: "settings.admin.messages" };
+  const inboxThreadMatch = stripped.match(/^\/dashboard\/settings\/admin\/inbox\/([^/]+)$/);
+  if (inboxThreadMatch) return { name: "settings.admin.inboxThread", id: decodeURIComponent(inboxThreadMatch[1]) };
+  if (stripped === "/dashboard/settings/admin/inbox") return { name: "settings.admin.inbox" };
   // Legacy redirect: the old combined "Admin" tabs lived at this path.
   if (stripped === "/dashboard/settings/admin") return { name: "settings.admin.restaurants" };
 

@@ -38,6 +38,8 @@ import { UsageSessionPage } from "../_pages/usage-session";
 import { CapiSendPage } from "../_pages/capi-send-page";
 import { AdminMessagesPage } from "../_pages/admin-messages";
 import { AdminMessageThreadPage } from "../_pages/admin-message-thread";
+import { AdminInboxPage } from "../_pages/admin-inbox";
+import { AdminInboxThreadPage } from "../_pages/admin-inbox-thread";
 import { LandingRedirect } from "../../auth/landing-redirect";
 
 import type { Booking, Category, Dish, DishOption, Order, Restaurant, Restaurant as UIRestaurant, TableEntity } from "../_v2/types";
@@ -340,6 +342,10 @@ function ViewSwitch(p: SwitchProps) {
       return <AdminMessagesPage onBack={backToSettings} />;
     case "settings.admin.messageThread":
       return <AdminMessageThreadPage restaurantId={view.id} />;
+    case "settings.admin.inbox":
+      return <AdminInboxPage onBack={backToSettings} />;
+    case "settings.admin.inboxThread":
+      return <AdminInboxThreadPage threadId={view.id} />;
 
     case "category.new":
       return (
