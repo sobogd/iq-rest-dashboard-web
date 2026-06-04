@@ -298,9 +298,10 @@ export function KitchenPage({
         <div
           className={
             (fullWidthFilterBar ? "" : "max-w-5xl mx-auto md:px-6 ") +
-            "flex items-center flex-wrap gap-2 px-4 py-2"
+            "flex items-center gap-2 px-4 py-2"
           }
         >
+          <div className="flex items-center gap-2 flex-nowrap overflow-x-auto min-w-0 flex-1">
           {STATUS_FILTERS.map((s) => {
             const on = statusFilter.includes(s.id);
             return (
@@ -341,7 +342,11 @@ export function KitchenPage({
               })}
             </>
           ) : null}
-          {filterBarExtras ? <div className="ml-auto flex items-center gap-1.5">{filterBarExtras}</div> : null}
+          {/* Phone: zoom rides inside the scrolling chip row. */}
+          {filterBarExtras ? <div className="md:hidden shrink-0 flex items-center gap-1.5">{filterBarExtras}</div> : null}
+          </div>
+          {/* Tablet/desktop: zoom pinned to the right, outside the scroll. */}
+          {filterBarExtras ? <div className="hidden md:flex shrink-0 items-center gap-1.5 pl-2">{filterBarExtras}</div> : null}
         </div>
       </div>
 
