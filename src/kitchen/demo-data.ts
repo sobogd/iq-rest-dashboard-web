@@ -424,7 +424,7 @@ function table(number: number, id: string): TableEntity {
   return {
     id,
     number,
-    name: `Table ${number}`,
+    name: "",
     description: "",
     capacity: 4,
     x: pos.x,
