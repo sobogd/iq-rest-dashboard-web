@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, Copy, Building2 } from "lucide-react";
+import { Check, Copy, Building2, Sparkles } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -35,6 +35,7 @@ interface SessionSummary {
 const CACHE_MAX = 50;
 const eventCache = new Map<string, SessionEvent[]>();
 const summaryCache = new Map<string, SessionSummary>();
+const analysisCache = new Map<string, string>();
 
 function cacheSet<V>(map: Map<string, V>, key: string, value: V) {
   if (map.size >= CACHE_MAX && !map.has(key)) {
@@ -153,6 +154,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   }
 
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [analyzeOpen, setAnalyzeOpen] = useState(false);
 
   function onAssigned(rid: string, title: string) {
     // The session's events now carry manualRestaurantId → regroup under the
@@ -180,6 +182,15 @@ export function UsageSessionPage({ id }: { id: string }) {
   return (
     <div>
       <SubpageStickyBar onBack={back} hideSave>
+        <button
+          type="button"
+          onClick={() => setAnalyzeOpen(true)}
+          disabled={loading || events.length === 0}
+          className="h-8 w-8 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground disabled:opacity-60"
+          title="AI session analysis"
+        >
+          <Sparkles className="h-4 w-4" />
+        </button>
         <button
           type="button"
           onClick={() => setPickerOpen(true)}
@@ -306,6 +317,120 @@ export function UsageSessionPage({ id }: { id: string }) {
           onAssigned={onAssigned}
         />
       ) : null}
+
+      {analyzeOpen && session ? (
+        <AnalyzeModal id={id} session={session} onClose={() => setAnalyzeOpen(false)} />
+      ) : null}
+    </div>
+  );
+}
+
+// AI behavioural analysis of the current session. Posts the session descriptor
+// over a fresh 30-day window to the API, which feeds the event transcript +
+// product/event-vocabulary context to Gemini and returns a Russian narrative.
+function AnalyzeModal({
+  id,
+  session,
+  onClose,
+}: {
+  id: string;
+  session: SessionData;
+  onClose: () => void;
+}) {
+  useScrollLock(true);
+  const [text, setText] = useState<string | null>(() => analysisCache.get(id) ?? null);
+  const [loading, setLoading] = useState(() => !analysisCache.has(id));
+  const [error, setError] = useState<string | null>(null);
+
+  const run = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(apiUrl("/api/admin/usage/sessions/analyze"), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: session.kind,
+          rid: session.rid,
+          ipkey: session.ipkey,
+          hasIp: session.hasIp,
+          from: new Date(Date.now() - 30 * 864e5).toISOString(),
+          to: new Date().toISOString(),
+        }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const j = (await res.json()) as { analysis?: string };
+      const analysis = j.analysis?.trim() || "Анализ недоступен.";
+      cacheSet(analysisCache, id, analysis);
+      setText(analysis);
+    } catch {
+      setError("Не удалось получить анализ. Попробуйте ещё раз.");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, session]);
+
+  useEffect(() => {
+    if (!analysisCache.has(id)) void run();
+  }, [id, run]);
+
+  return (
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg bg-card border border-border rounded-xl shadow-xl flex flex-col max-h-[85vh]">
+        <div className="px-4 py-3 border-b border-border flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" /> AI session analysis
+          </h3>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void run()}
+              disabled={loading}
+              className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0 disabled:opacity-60"
+              title="Regenerate"
+            >
+              <RefreshIcon size={13} className={loading ? "animate-spin" : ""} />
+            </button>
+            <button type="button" onClick={onClose} className="h-7 w-7 inline-flex items-center justify-center bg-secondary rounded-md text-muted-foreground hover:text-foreground shrink-0" title="Close">✕</button>
+          </div>
+        </div>
+        <div className="overflow-y-auto p-4 text-[13px] leading-relaxed text-foreground">
+          {loading ? (
+            <div className="text-xs text-muted-foreground py-8 text-center">Анализирую сессию…</div>
+          ) : error ? (
+            <div className="text-xs text-red-500 py-8 text-center">{error}</div>
+          ) : (
+            <AnalysisText text={text ?? ""} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Lightweight renderer for Gemini's plain-text output: numbered "1." lines
+// become bold headings, dash lines become list items, blanks become spacing.
+function AnalysisText({ text }: { text: string }) {
+  const lines = text.split("\n");
+  return (
+    <div className="space-y-1.5">
+      {lines.map((raw, i) => {
+        const line = raw.trim();
+        if (!line) return <div key={i} className="h-1.5" />;
+        if (/^\d+\.\s/.test(line)) {
+          return <div key={i} className="font-semibold text-foreground pt-1.5">{line}</div>;
+        }
+        if (/^[-•]\s/.test(line)) {
+          return (
+            <div key={i} className="flex gap-2 pl-1">
+              <span className="text-muted-foreground shrink-0">•</span>
+              <span>{line.replace(/^[-•]\s/, "")}</span>
+            </div>
+          );
+        }
+        return <div key={i}>{line}</div>;
+      })}
     </div>
   );
 }
