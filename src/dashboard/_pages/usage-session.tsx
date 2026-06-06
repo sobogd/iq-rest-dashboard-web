@@ -11,6 +11,7 @@ import { invalidateUsageCache } from "./usage-events-table";
 import {
   countryToFlag,
   deviceLabel,
+  hmsDate,
   pad,
   decodeSessionId,
   encodeSessionId,
@@ -448,7 +449,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                           <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
                             {pc ? pc.label : g.token ?? "Pre-visit"}
                           </span>
-                          <span className="text-muted-foreground tabular-nums">{hms(g.startAt)}</span>
+                          <span className="text-muted-foreground tabular-nums">{hmsDate(g.startAt)}</span>
                           <span className="text-muted-foreground tabular-nums">· {fmtDur(g.durationMs)}</span>
                           <span className="ml-auto text-muted-foreground tabular-nums">{g.events.length}</span>
                           <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
