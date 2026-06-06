@@ -67,10 +67,6 @@ export function viewToPath(view: View): string {
       return `/dashboard/settings/admin/usage/session/${view.id}`;
     case "settings.admin.capiSend":
       return `/dashboard/settings/admin/capi/send/${encodeURIComponent(view.fbclid)}${view.clickTs ? `?ts=${view.clickTs}` : ""}`;
-    case "settings.admin.messages":
-      return "/dashboard/settings/admin/messages";
-    case "settings.admin.messageThread":
-      return `/dashboard/settings/admin/messages/${view.id}`;
     case "settings.admin.inbox":
       return "/dashboard/settings/admin/inbox";
     case "settings.admin.inboxThread":
@@ -152,9 +148,11 @@ export function pathToView(path: string): View {
       ? { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]), clickTs: n }
       : { name: "settings.admin.capiSend", fbclid: decodeURIComponent(capiSendMatch[1]) };
   }
+  // Legacy "/messages" admin paths now live under the unified inbox; redirect
+  // the old per-restaurant thread to its inbox thread id.
   const msgThreadMatch = stripped.match(/^\/dashboard\/settings\/admin\/messages\/([^/]+)$/);
-  if (msgThreadMatch) return { name: "settings.admin.messageThread", id: msgThreadMatch[1] };
-  if (stripped === "/dashboard/settings/admin/messages") return { name: "settings.admin.messages" };
+  if (msgThreadMatch) return { name: "settings.admin.inboxThread", id: `int:${msgThreadMatch[1]}` };
+  if (stripped === "/dashboard/settings/admin/messages") return { name: "settings.admin.inbox" };
   const inboxThreadMatch = stripped.match(/^\/dashboard\/settings\/admin\/inbox\/([^/]+)$/);
   if (inboxThreadMatch) return { name: "settings.admin.inboxThread", id: decodeURIComponent(inboxThreadMatch[1]) };
   if (stripped === "/dashboard/settings/admin/inbox") return { name: "settings.admin.inbox" };

@@ -12,6 +12,7 @@ const LANG_FLAG = new Map(AVAILABLE_LANGUAGES.map((l) => [l.code, l.flag]));
 
 interface Contact {
   id: string;
+  channel?: "whatsapp" | "internal";
   name: string;          // resolved display name
   customName: string | null;
   profileName: string | null;
@@ -34,6 +35,9 @@ interface Msg {
 
 export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
   const router = useDashboardRouter();
+  // Internal support threads (id "int:<restaurantId>") skip the WhatsApp
+  // translation/preview flow and the contact curation controls.
+  const isInternal = threadId.startsWith("int:");
   const [contact, setContact] = useState<Contact | null>(null);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(true);
@@ -135,10 +139,37 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
     }
   }
 
+  // Internal threads: send the typed text verbatim, no translation step.
+  async function sendDirect() {
+    const ru = input.trim();
+    if (!ru || sending) return;
+    setSending(true);
+    try {
+      const res = await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}/send`), {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ru }),
+      });
+      if (res.ok) {
+        const sent = (await res.json()) as Msg;
+        setMessages((m) => [...m, sent]);
+        setInput("");
+        if (taRef.current) taRef.current.style.height = "";
+      } else {
+        const j = await res.json().catch(() => ({}));
+        window.alert(j.message || "Send failed");
+      }
+    } finally {
+      setSending(false);
+    }
+  }
+
   function onKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      void requestPreview();
+      if (isInternal) void sendDirect();
+      else void requestPreview();
     }
   }
 
@@ -193,7 +224,7 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
   return (
     <div className="flex flex-col h-[calc(100dvh-var(--topbar-h,0px))]">
       <SubpageStickyBar onBack={() => router.push({ name: "settings.admin.inbox" })} hideSave>
-        {contact ? (
+        {contact && !isInternal ? (
           <>
             <button
               type="button"
@@ -238,15 +269,19 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
             <div className="flex items-center gap-2">
               <span className="text-base" title={contact.lang || ""}>{LANG_FLAG.get(contact.lang || "") || "🌐"}</span>
               <span className="text-sm font-medium text-foreground truncate">{contact.name}</span>
-              <span className="text-[11px] text-muted-foreground">{contact.externalId}</span>
-              <button
-                type="button"
-                onClick={() => setEditing({ customName: contact.customName ?? "", note: contact.note ?? "" })}
-                className="h-6 w-6 inline-flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
-                title="Edit name / note"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-              </button>
+              {!isInternal ? (
+                <>
+                  <span className="text-[11px] text-muted-foreground">{contact.externalId}</span>
+                  <button
+                    type="button"
+                    onClick={() => setEditing({ customName: contact.customName ?? "", note: contact.note ?? "" })}
+                    className="h-6 w-6 inline-flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
+                    title="Edit name / note"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </>
+              ) : null}
             </div>
             {contact.note ? <div className="text-[11px] text-muted-foreground mt-1 italic">{contact.note}</div> : null}
           </div>
@@ -270,17 +305,17 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
             value={input}
             onChange={(e) => { setInput(e.target.value); autoresize(e.currentTarget); }}
             onKeyDown={onKey}
-            placeholder="Напишите по-русски…"
+            placeholder={isInternal ? "Type a message…" : "Напишите по-русски…"}
             rows={1}
             className="flex-1 h-[40px] min-h-[40px] max-h-[120px] px-3 py-2 text-sm leading-5 text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none resize-none box-border"
           />
           <button
             type="button"
-            onClick={() => void requestPreview()}
+            onClick={() => (isInternal ? void sendDirect() : void requestPreview())}
             disabled={!input.trim() || preparing || sending}
             className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
           >
-            {preparing ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
+            {preparing || sending ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
             Send
           </button>
         </div>

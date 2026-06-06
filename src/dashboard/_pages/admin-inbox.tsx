@@ -24,6 +24,7 @@ interface Thread {
   lang: string | null;
   watched: boolean;
   muted: boolean;
+  unread: boolean;
   lastAt: string;
   lastPreview: string;
   lastFromMe: boolean;
@@ -66,8 +67,9 @@ export function AdminInboxPage({ onBack }: { onBack: () => void }) {
   }, []);
 
   function openThread(t: Thread) {
-    if (t.channel === "whatsapp") router.push({ name: "settings.admin.inboxThread", id: t.id });
-    else if (t.restaurantId) router.push({ name: "settings.admin.messageThread", id: t.restaurantId });
+    // Both channels open in the unified inbox thread view (id carries the
+    // channel prefix: "wa:<contactId>" or "int:<restaurantId>").
+    router.push({ name: "settings.admin.inboxThread", id: t.id });
   }
 
   const filterChip = (f: Filter, label: string) => (
@@ -132,7 +134,8 @@ export function AdminInboxPage({ onBack }: { onBack: () => void }) {
                     {countryFlag || (t.channel === "internal" ? <MessageCircle className="w-3.5 h-3.5 text-muted-foreground" /> : "🌐")}
                   </span>
                   {showLang ? <span className="text-base shrink-0" title={t.lang || ""}>{langFlag}</span> : null}
-                  <span className={chip + " truncate min-w-0 max-w-[60%]"} title={t.name}>{t.name}</span>
+                  {t.unread ? <span className="w-2 h-2 rounded-full bg-primary shrink-0" title="Unread" /> : null}
+                  <span className={(t.unread ? "font-semibold text-foreground " : "") + chip + " truncate min-w-0 max-w-[60%]"} title={t.name}>{t.name}</span>
                   <span className="flex-1" />
                   <span className={chip + " tabular-nums shrink-0"}>{fmtAt(t.lastAt)}</span>
                 </button>
