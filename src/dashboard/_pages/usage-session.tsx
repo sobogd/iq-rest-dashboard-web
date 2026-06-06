@@ -143,7 +143,8 @@ export function UsageSessionPage({ id }: { id: string }) {
     for (const e of chrono) {
       const m = /^l_page_(\w+)$/.exec(e.event);
       if (m) current = m[1];
-      if (current) pageByEventId.set(e.id, current);
+      // Only landing (l_*) events belong to a page; dashboard events don't.
+      if (current && e.event.startsWith("l_")) pageByEventId.set(e.id, current);
     }
   }
 
