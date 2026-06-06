@@ -139,37 +139,10 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
     }
   }
 
-  // Internal threads: send the typed text verbatim, no translation step.
-  async function sendDirect() {
-    const ru = input.trim();
-    if (!ru || sending) return;
-    setSending(true);
-    try {
-      const res = await fetch(apiUrl(`/api/admin/inbox/threads/${encodeURIComponent(threadId)}/send`), {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ru }),
-      });
-      if (res.ok) {
-        const sent = (await res.json()) as Msg;
-        setMessages((m) => [...m, sent]);
-        setInput("");
-        if (taRef.current) taRef.current.style.height = "";
-      } else {
-        const j = await res.json().catch(() => ({}));
-        window.alert(j.message || "Send failed");
-      }
-    } finally {
-      setSending(false);
-    }
-  }
-
   function onKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (isInternal) void sendDirect();
-      else void requestPreview();
+      void requestPreview();
     }
   }
 
@@ -305,17 +278,17 @@ export function AdminInboxThreadPage({ threadId }: { threadId: string }) {
             value={input}
             onChange={(e) => { setInput(e.target.value); autoresize(e.currentTarget); }}
             onKeyDown={onKey}
-            placeholder={isInternal ? "Type a message…" : "Напишите по-русски…"}
+            placeholder="Напишите по-русски…"
             rows={1}
             className="flex-1 h-[40px] min-h-[40px] max-h-[120px] px-3 py-2 text-sm leading-5 text-foreground bg-card border border-input rounded-lg placeholder:text-muted-foreground focus:outline-none resize-none box-border"
           />
           <button
             type="button"
-            onClick={() => (isInternal ? void sendDirect() : void requestPreview())}
+            onClick={() => void requestPreview()}
             disabled={!input.trim() || preparing || sending}
             className="shrink-0 inline-flex items-center gap-1.5 h-10 px-4 text-sm font-medium text-primary-foreground bg-primary-gradient rounded-lg disabled:opacity-60"
           >
-            {preparing || sending ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
+            {preparing ? <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" /> : <SendIcon size={14} />}
             Send
           </button>
         </div>
