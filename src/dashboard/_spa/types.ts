@@ -32,7 +32,6 @@ export type View =
   | { name: "settings.admin.restaurant"; id: string }
   | { name: "settings.admin.usage" }
   | { name: "settings.admin.usageSession"; id: string }
-  | { name: "settings.admin.capiSend"; fbclid: string; clickTs?: number }
   | { name: "settings.admin.inbox" }
   | { name: "settings.admin.inboxThread"; id: string }
   | { name: "category.new"; group?: string }

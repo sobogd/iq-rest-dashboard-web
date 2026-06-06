@@ -236,16 +236,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}
                   {hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
-                  {latestFbclid ? (
-                    <button
-                      type="button"
-                      onClick={() => router.push({ name: "settings.admin.capiSend", fbclid: latestFbclid!, clickTs: latestFbTs ?? undefined })}
-                      className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20"
-                      title="Send a Meta CAPI event"
-                    >
-                      FB
-                    </button>
-                  ) : hasFb ? (
+                  {latestFbclid || hasFb ? (
                     <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span>
                   ) : null}
                 </span>

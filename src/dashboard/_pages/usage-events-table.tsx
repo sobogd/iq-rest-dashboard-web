@@ -193,10 +193,6 @@ export function UsageEventsTable({ toolbarHost }: Props) {
                 setSelectMode(true);
                 setSelected(new Set([sessionKey(s)]));
               }}
-              onFb={() =>
-                s.latestFbclid &&
-                router.push({ name: "settings.admin.capiSend", fbclid: s.latestFbclid, clickTs: s.latestFbTs ?? undefined })
-              }
             />
           ))}
         </div>
@@ -227,7 +223,6 @@ function SessionItem({
   onOpen,
   onToggle,
   onLongPress,
-  onFb,
 }: {
   session: SessionRow;
   selectMode: boolean;
@@ -235,7 +230,6 @@ function SessionItem({
   onOpen: () => void;
   onToggle: () => void;
   onLongPress: () => void;
-  onFb: () => void;
 }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longFired = useRef(false);
@@ -307,10 +301,7 @@ function SessionItem({
         {s.hasGoogle ? <span className={chip}>G</span> : null}
         {s.latestFbclid ? (
           <span
-            role="button"
-            tabIndex={-1}
-            onClick={(e) => { e.stopPropagation(); onFb(); }}
-            className={"text-[10px] rounded px-1.5 py-0.5 shrink-0 cursor-pointer " + fbStageClass(s.fbStage)}
+            className={"text-[10px] rounded px-1.5 py-0.5 shrink-0 " + fbStageClass(s.fbStage)}
             title={fbStageTitle(s.fbStage)}
           >
             FB

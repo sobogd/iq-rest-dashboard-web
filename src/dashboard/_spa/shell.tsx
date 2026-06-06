@@ -35,7 +35,6 @@ import { AdminUsersPage } from "../_pages/admin-users";
 import { AdminRestaurantPage } from "../_pages/admin-restaurant";
 import { UsagePage } from "../_pages/usage";
 import { UsageSessionPage } from "../_pages/usage-session";
-import { CapiSendPage } from "../_pages/capi-send-page";
 import { AdminInboxPage } from "../_pages/admin-inbox";
 import { AdminInboxThreadPage } from "../_pages/admin-inbox-thread";
 import { LandingRedirect } from "../../auth/landing-redirect";
@@ -346,8 +345,6 @@ function ViewSwitch(p: SwitchProps) {
       return <UsagePage />;
     case "settings.admin.usageSession":
       return <UsageSessionPage id={view.id} />;
-    case "settings.admin.capiSend":
-      return <CapiSendPage fbclid={view.fbclid} clickTs={view.clickTs} />;
     case "settings.admin.inbox":
       return <AdminInboxPage onBack={backToSettings} />;
     case "settings.admin.inboxThread":
