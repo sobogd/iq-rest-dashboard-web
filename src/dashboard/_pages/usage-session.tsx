@@ -45,39 +45,6 @@ function displayName(name: string): string {
   return name.startsWith("l_") ? name.slice(2) : name;
 }
 
-interface DeviceGroup {
-  id: string;                  // first event id (React key)
-  ip: string | null;
-  device: string | null;
-  platform: string | null;
-  events: SessionEvent[];      // already in the incoming (newest-first) order
-}
-
-// A 30-day "session" of one IP is usually several visits on the same device, so
-// device alone yields one giant group. Start a new group on a device/ip switch
-// OR a > GAP gap between consecutive events — each group is one visit.
-const VISIT_GAP_MS = 30 * 60 * 1000;
-
-function buildDeviceGroups(rows: SessionEvent[]): DeviceGroup[] {
-  const out: DeviceGroup[] = [];
-  let prevSig: string | null = null;
-  let prevAt = 0;
-  let cur: DeviceGroup | null = null;
-  for (const e of rows) {
-    const sig = `${e.ip ?? ""}|${e.device ?? ""}|${e.platform ?? ""}`;
-    const at = new Date(e.at).getTime();
-    const gap = cur ? Math.abs(prevAt - at) > VISIT_GAP_MS : false;
-    if (!cur || sig !== prevSig || gap) {
-      cur = { id: e.id, ip: e.ip, device: e.device, platform: e.platform, events: [] };
-      out.push(cur);
-    }
-    cur.events.push(e);
-    prevSig = sig;
-    prevAt = at;
-  }
-  return out;
-}
-
 interface SessionSummary {
   country: string;
   region: string | null;
@@ -180,11 +147,10 @@ export function UsageSessionPage({ id }: { id: string }) {
     }
   }
 
-  // Flat list, newest-first, minus the noise; then sliced into device groups.
+  // Flat list, newest-first, minus the noise.
   const rows = events
     .filter((e) => !isHiddenEvent(e.event))
     .sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
-  const deviceGroups = buildDeviceGroups(rows);
 
   const gclids: string[] = [];
   const seenG = new Set<string>();
@@ -362,34 +328,28 @@ export function UsageSessionPage({ id }: { id: string }) {
             ) : rows.length === 0 ? (
               <div className="bg-card border border-border rounded-xl text-xs text-muted-foreground py-8 text-center">No events</div>
             ) : (
-              <div className="space-y-3">
-                {deviceGroups.map((g) => (
-                  <div key={g.id} className="space-y-1.5">
-                    {/* Device/IP header — outside the card */}
-                    <div className="flex flex-wrap items-center gap-1.5 px-1">
-                      <span className={chip}>{deviceLabel(g.device, g.platform)}</span>
-                      {g.ip ? <span className={`${chip} font-mono`}>{g.ip}</span> : null}
+              <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
+                {rows.map((e) => {
+                  const tok = pageByEventId.get(e.id);
+                  const pc = tok ? PAGE_CHIPS[tok] : undefined;
+                  return (
+                    <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
+                      <div className="flex items-center gap-2 md:flex-1 md:min-w-0">
+                        {tok ? (
+                          <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
+                            {pc ? pc.label : tok}
+                          </span>
+                        ) : null}
+                        <span className="font-mono text-foreground break-all min-w-0">{displayName(e.event)}</span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
+                        {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
+                        <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
+                        <span className={`${chip} tabular-nums`}>{hmsDate(e.at)}</span>
+                      </div>
                     </div>
-                    {/* Flat list, one row per event */}
-                    <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-                      {g.events.map((e) => {
-                        const tok = pageByEventId.get(e.id);
-                        const pc = tok ? PAGE_CHIPS[tok] : undefined;
-                        return (
-                          <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex items-center gap-2">
-                            {tok ? (
-                              <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
-                                {pc ? pc.label : tok}
-                              </span>
-                            ) : null}
-                            <span className="font-mono text-foreground break-all flex-1 min-w-0">{displayName(e.event)}</span>
-                            <span className={`${chip} tabular-nums`}>{hmsDate(e.at)}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </>
