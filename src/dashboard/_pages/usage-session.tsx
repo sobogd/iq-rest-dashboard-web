@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Check, Copy, Building2, Sparkles } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Check, Copy, Building2, Sparkles, ChevronDown } from "lucide-react";
 import { apiUrl } from "@/lib/api";
 import { RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
@@ -11,7 +11,7 @@ import { invalidateUsageCache } from "./usage-events-table";
 import {
   countryToFlag,
   deviceLabel,
-  hmsDate,
+  pad,
   decodeSessionId,
   encodeSessionId,
   type SessionEvent,
@@ -22,18 +22,80 @@ const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0
 
 // Landing pages: `l_page_<token>` marks which page the following `l_*` events
 // fired on. Each landing event gets a coloured chip naming its page.
-const PAGE_CHIPS: Record<string, { label: string; cls: string }> = {
-  home: { label: "Главная", cls: "bg-blue-500/10 text-blue-700 dark:text-blue-400" },
-  digital: { label: "Диджитал", cls: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" },
-  pricing: { label: "Прайсинг", cls: "bg-violet-500/10 text-violet-700 dark:text-violet-400" },
-  kds: { label: "КДС", cls: "bg-amber-500/10 text-amber-700 dark:text-amber-400" },
-  orders: { label: "Ордерс", cls: "bg-orange-500/10 text-orange-700 dark:text-orange-400" },
-  bookings: { label: "Резервация", cls: "bg-pink-500/10 text-pink-700 dark:text-pink-400" },
-  qr: { label: "QR", cls: "bg-teal-500/10 text-teal-700 dark:text-teal-400" },
-  help: { label: "Помощь", cls: "bg-slate-500/10 text-slate-700 dark:text-slate-400" },
+const PAGE_CHIPS: Record<string, { label: string; cls: string; bar: string }> = {
+  home: { label: "Home", cls: "bg-blue-500/10 text-blue-700 dark:text-blue-400", bar: "bg-blue-500" },
+  digital: { label: "Digital", cls: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400", bar: "bg-emerald-500" },
+  pricing: { label: "Pricing", cls: "bg-violet-500/10 text-violet-700 dark:text-violet-400", bar: "bg-violet-500" },
+  kds: { label: "KDS", cls: "bg-amber-500/10 text-amber-700 dark:text-amber-400", bar: "bg-amber-500" },
+  orders: { label: "Orders", cls: "bg-orange-500/10 text-orange-700 dark:text-orange-400", bar: "bg-orange-500" },
+  bookings: { label: "Bookings", cls: "bg-pink-500/10 text-pink-700 dark:text-pink-400", bar: "bg-pink-500" },
+  qr: { label: "QR", cls: "bg-teal-500/10 text-teal-700 dark:text-teal-400", bar: "bg-teal-500" },
+  help: { label: "Help", cls: "bg-slate-500/10 text-slate-700 dark:text-slate-400", bar: "bg-slate-500" },
 };
 
 const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
+
+// Time-only "12:13:14" for rows inside a group (date is in the group header).
+const hms = (iso: string) => { const d = new Date(iso); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
+
+// "10m 12s" / "45s" / "1h 3m" — compact, no zero-padding.
+function fmtDur(ms: number): string {
+  if (ms < 1000) return "0s";
+  const s = Math.round(ms / 1000);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ${s % 60}s`;
+  const h = Math.floor(m / 60);
+  return `${h}h ${m % 60}m`;
+}
+
+interface PageGroup {
+  key: string;
+  token: string | null;        // null = events before the first l_page_ marker
+  startAt: string;
+  durationMs: number;          // until the next group's start (last group: span of its own events)
+  events: SessionEvent[];      // chronological
+  sectionCounts: Array<[string, number]>;
+}
+
+// Walk events oldest→newest, slicing a new group at each l_page_ marker so all
+// activity that happened on a page lands in one group.
+function buildPageGroups(events: SessionEvent[]): PageGroup[] {
+  const chrono = [...events].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+  const groups: PageGroup[] = [];
+  let cur: PageGroup | null = null;
+  for (const e of chrono) {
+    const m = /^l_page_(\w+)$/.exec(e.event);
+    if (m || !cur) {
+      cur = { key: e.id, token: m ? m[1] : null, startAt: e.at, durationMs: 0, events: [], sectionCounts: [] };
+      groups.push(cur);
+    }
+    cur.events.push(e);
+  }
+  for (let i = 0; i < groups.length; i++) {
+    const g = groups[i];
+    const next = groups[i + 1];
+    const last = g.events[g.events.length - 1];
+    const endMs = next ? new Date(next.startAt).getTime() : new Date(last.at).getTime();
+    g.durationMs = Math.max(0, endMs - new Date(g.startAt).getTime());
+    const sc = new Map<string, number>();
+    for (const e of g.events) {
+      const sm = /^l_section_view_(\w+)$/.exec(e.event);
+      if (sm) sc.set(sm[1], (sc.get(sm[1]) ?? 0) + 1);
+    }
+    g.sectionCounts = [...sc.entries()].sort((a, b) => b[1] - a[1]);
+  }
+  return groups;
+}
+
+// Rows shown inside an expanded group: drop the page marker (it's the header)
+// and section views (they're the heatmap), strip the l_ prefix for display.
+function rowEvents(g: PageGroup): SessionEvent[] {
+  return g.events.filter((e) => !/^l_page_/.test(e.event) && !/^l_section_view_/.test(e.event));
+}
+function displayName(name: string): string {
+  return name.startsWith("l_") ? name.slice(2) : name;
+}
 
 interface SessionSummary {
   country: string;
@@ -124,22 +186,26 @@ export function UsageSessionPage({ id }: { id: string }) {
     if (!eventCache.has(id) || !summaryCache.has(id)) void load(eventCache.has(id) ? "soft" : "full");
   }, [id, load]);
 
-  // Click-id events surface in the card; everything else lists newest-first.
+  // Click-id events surface in the card; everything else feeds the timeline.
   const listEvents = events.filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"));
 
-  // Tie every landing (l_*) event to the page it fired on: walk chronologically,
-  // remembering the latest `l_page_<token>`. Display-only — the newest-first list
-  // order below is untouched; this just colours each row with its page chip.
-  const pageByEventId = new Map<string, string>();
-  {
-    const chrono = [...listEvents].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
-    let current: string | null = null;
-    for (const e of chrono) {
-      const m = /^l_page_(\w+)$/.exec(e.event);
-      if (m) current = m[1];
-      if (e.event.startsWith("l_") && current) pageByEventId.set(e.id, current);
-    }
-  }
+  // Oldest→newest journey, grouped by the page each run of events fired on.
+  const groups = buildPageGroups(listEvents);
+  const sessionMs = groups.length
+    ? new Date(groups[groups.length - 1].events[groups[groups.length - 1].events.length - 1].at).getTime() -
+      new Date(groups[0].startAt).getTime()
+    : 0;
+  const pageCount = groups.filter((g) => g.token).length;
+  const barTotalMs = Math.max(1, groups.reduce((sum, g) => sum + g.durationMs, 0));
+
+  // Collapsible groups + tap-to-scroll from the journey bar.
+  const [open, setOpen] = useState<Set<string>>(() => new Set());
+  const groupRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const toggleGroup = (k: string) => setOpen((prev) => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n; });
+  const jumpToGroup = (k: string) => {
+    setOpen((prev) => { const n = new Set(prev); n.add(k); return n; });
+    groupRefs.current[k]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const gclids: string[] = [];
   const seenG = new Set<string>();
@@ -308,35 +374,115 @@ export function UsageSessionPage({ id }: { id: string }) {
               </div>
             ) : null}
 
-            <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
-              {loading ? (
-                <div className="text-xs text-muted-foreground py-8 text-center">Loading…</div>
-              ) : listEvents.length === 0 ? (
-                <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
-              ) : (
-                listEvents.map((e) => {
-                  const pageTok = pageByEventId.get(e.id);
-                  const pc = pageTok ? PAGE_CHIPS[pageTok] : undefined;
-                  return (
-                  <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
-                    <div className="flex items-center gap-2 md:flex-1 md:min-w-0">
-                      {pageTok ? (
-                        <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
-                          {pc ? pc.label : pageTok}
-                        </span>
-                      ) : null}
-                      <span className="font-mono text-foreground break-all min-w-0">{e.event.startsWith("l_") ? e.event.slice(2) : e.event}</span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
-                      {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
-                      <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
-                      <span className={`${chip} tabular-nums`}>{hmsDate(e.at)}</span>
+            {loading ? (
+              <div className="bg-card border border-border rounded-xl text-xs text-muted-foreground py-8 text-center">Loading…</div>
+            ) : listEvents.length === 0 ? (
+              <div className="bg-card border border-border rounded-xl text-xs text-muted-foreground py-8 text-center">No events</div>
+            ) : (
+              <>
+                {/* Metrics */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Duration</div>
+                    <div className="text-base font-semibold text-foreground tabular-nums">{fmtDur(sessionMs)}</div>
+                  </div>
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Pages</div>
+                    <div className="text-base font-semibold text-foreground tabular-nums">{pageCount}</div>
+                  </div>
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Events</div>
+                    <div className="text-base font-semibold text-foreground tabular-nums">{eventCount}</div>
+                  </div>
+                  <div className="bg-card border border-border rounded-xl p-3">
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Source</div>
+                    <div className="text-base font-semibold text-foreground">{hasGoogle ? "Google" : hasFb ? "Meta" : "Organic"}</div>
+                  </div>
+                </div>
+
+                {/* Journey bar — proportional segments per page, tap to jump */}
+                {groups.some((g) => g.token) ? (
+                  <div className="bg-card border border-border rounded-xl p-3 space-y-2">
+                    <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Journey</div>
+                    <div className="flex w-full h-2.5 rounded-full overflow-hidden bg-secondary">
+                      {groups.map((g) => {
+                        const pc = g.token ? PAGE_CHIPS[g.token] : undefined;
+                        return (
+                          <button
+                            key={g.key}
+                            type="button"
+                            onClick={() => jumpToGroup(g.key)}
+                            title={`${pc?.label ?? g.token ?? "—"} · ${fmtDur(g.durationMs)}`}
+                            className={`${pc ? pc.bar : "bg-muted-foreground/40"} h-full hover:opacity-80`}
+                            style={{ flexGrow: Math.max(g.durationMs, barTotalMs * 0.02) }}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
-                  );
-                })
-              )}
-            </div>
+                ) : null}
+
+                {/* Timeline — collapsible group per page */}
+                <div className="space-y-2">
+                  {groups.map((g) => {
+                    const pc = g.token ? PAGE_CHIPS[g.token] : undefined;
+                    const isOpen = open.has(g.key);
+                    const rows = rowEvents(g);
+                    return (
+                      <div
+                        key={g.key}
+                        ref={(el) => { groupRefs.current[g.key] = el; }}
+                        className="bg-card border border-border rounded-xl overflow-hidden scroll-mt-16"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => toggleGroup(g.key)}
+                          className="w-full flex items-center gap-2 px-3 md:px-4 py-2.5 text-xs text-left hover:bg-muted/40"
+                        >
+                          <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
+                            {pc ? pc.label : g.token ?? "Pre-visit"}
+                          </span>
+                          <span className="text-muted-foreground tabular-nums">{hms(g.startAt)}</span>
+                          <span className="text-muted-foreground tabular-nums">· {fmtDur(g.durationMs)}</span>
+                          <span className="ml-auto text-muted-foreground tabular-nums">{g.events.length}</span>
+                          <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                        </button>
+
+                        {/* Section heatmap — always visible when present */}
+                        {g.sectionCounts.length > 0 ? (
+                          <div className="flex flex-wrap gap-1.5 px-3 md:px-4 pb-2.5">
+                            {g.sectionCounts.map(([name, n]) => (
+                              <span key={name} className="text-[10px] rounded px-1.5 py-0.5 bg-secondary text-muted-foreground tabular-nums">
+                                {name}{n > 1 ? ` ×${n}` : ""}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+
+                        {isOpen ? (
+                          <div className="border-t border-border divide-y divide-border">
+                            {rows.length === 0 ? (
+                              <div className="px-3 md:px-4 py-2 text-[11px] text-muted-foreground">No other events</div>
+                            ) : (
+                              rows.map((e) => (
+                                <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
+                                  <span className="font-mono text-foreground break-all md:flex-1 md:min-w-0">{displayName(e.event)}</span>
+                                  <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
+                                    {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
+                                    <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
+                                    <span className={`${chip} tabular-nums`}>{hms(e.at)}</span>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </>
         )}
       </div>
