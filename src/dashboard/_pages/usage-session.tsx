@@ -20,6 +20,21 @@ import {
 
 const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
+// Landing pages: `l_page_<token>` marks which page the following `l_*` events
+// fired on. Each landing event gets a coloured chip naming its page.
+const PAGE_CHIPS: Record<string, { label: string; cls: string }> = {
+  home: { label: "Главная", cls: "bg-blue-500/10 text-blue-700 dark:text-blue-400" },
+  digital: { label: "Диджитал", cls: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" },
+  pricing: { label: "Прайсинг", cls: "bg-violet-500/10 text-violet-700 dark:text-violet-400" },
+  kds: { label: "КДС", cls: "bg-amber-500/10 text-amber-700 dark:text-amber-400" },
+  orders: { label: "Ордерс", cls: "bg-orange-500/10 text-orange-700 dark:text-orange-400" },
+  bookings: { label: "Резервация", cls: "bg-pink-500/10 text-pink-700 dark:text-pink-400" },
+  qr: { label: "QR", cls: "bg-teal-500/10 text-teal-700 dark:text-teal-400" },
+  help: { label: "Помощь", cls: "bg-slate-500/10 text-slate-700 dark:text-slate-400" },
+};
+
+const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
+
 interface SessionSummary {
   country: string;
   region: string | null;
@@ -111,6 +126,20 @@ export function UsageSessionPage({ id }: { id: string }) {
 
   // Click-id events surface in the card; everything else lists newest-first.
   const listEvents = events.filter((e) => !e.event.startsWith("l_gclid_") && !e.event.startsWith("l_fbclid_"));
+
+  // Tie every landing (l_*) event to the page it fired on: walk chronologically,
+  // remembering the latest `l_page_<token>`. Display-only — the newest-first list
+  // order below is untouched; this just colours each row with its page chip.
+  const pageByEventId = new Map<string, string>();
+  {
+    const chrono = [...listEvents].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+    let current: string | null = null;
+    for (const e of chrono) {
+      const m = /^l_page_(\w+)$/.exec(e.event);
+      if (m) current = m[1];
+      if (e.event.startsWith("l_") && current) pageByEventId.set(e.id, current);
+    }
+  }
 
   const gclids: string[] = [];
   const seenG = new Set<string>();
@@ -285,16 +314,27 @@ export function UsageSessionPage({ id }: { id: string }) {
               ) : listEvents.length === 0 ? (
                 <div className="text-xs text-muted-foreground py-8 text-center">No events</div>
               ) : (
-                listEvents.map((e) => (
+                listEvents.map((e) => {
+                  const pageTok = pageByEventId.get(e.id);
+                  const pc = pageTok ? PAGE_CHIPS[pageTok] : undefined;
+                  return (
                   <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
-                    <div className="font-mono text-foreground break-all md:flex-1 md:min-w-0">{e.event}</div>
+                    <div className="flex items-center gap-2 md:flex-1 md:min-w-0">
+                      {pageTok ? (
+                        <span className={`${pageChipBase} ${pc ? pc.cls : "bg-secondary text-muted-foreground"}`}>
+                          {pc ? pc.label : pageTok}
+                        </span>
+                      ) : null}
+                      <span className="font-mono text-foreground break-all min-w-0">{e.event.startsWith("l_") ? e.event.slice(2) : e.event}</span>
+                    </div>
                     <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
                       {e.ip ? <span className={`${chip} font-mono`}>{e.ip}</span> : null}
                       <span className={chip}>{deviceLabel(e.device, e.platform)}</span>
                       <span className={`${chip} tabular-nums`}>{hmsDate(e.at)}</span>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
             </div>
           </>
