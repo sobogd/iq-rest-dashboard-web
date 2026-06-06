@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import { EyeIcon, RefreshIcon } from "../_v2/icons";
 import { SubpageStickyBar } from "../_v2/ui";
-import { formatDateShort } from "./_admin-helpers";
 import { useDashboardRouter } from "../_spa/router";
 import { AVAILABLE_LANGUAGES } from "../_v2/i18n";
 
@@ -23,7 +22,8 @@ interface RestaurantRow {
   trialEndsAt: string | null;
   scansToday: number;
   messagesCount: number;
-  lastVisit: string | null;
+  emailsSentCount: number;
+  emailTemplatesTotal: number;
   hasAdminComment: boolean;
 }
 
@@ -163,9 +163,9 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                     </span>
                     <span
                       className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 tabular-nums"
-                      title={r.lastVisit ? "Last visit" : "No visits yet"}
+                      title="Unique lifecycle emails sent to owner"
                     >
-                      {r.lastVisit ? formatDateShort(r.lastVisit) : "—"}
+                      {r.emailsSentCount}/{r.emailTemplatesTotal}
                     </span>
                   </span>
                 </button>
