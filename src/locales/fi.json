@@ -609,7 +609,8 @@
         "title": "Tuki",
         "noMessages": "Ei viestejä vielä. Sano hei!",
         "placeholder": "Kirjoita viesti...",
-        "send": "Lähetä"
+        "send": "Lähetä",
+        "whatsapp": "Kirjoita WhatsAppissa"
       }
     },
     "allLangsModal": {

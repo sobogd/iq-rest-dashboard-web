@@ -609,7 +609,8 @@
         "title": "支持",
         "noMessages": "尚无消息。打个招呼吧！",
         "placeholder": "输入消息...",
-        "send": "发送"
+        "send": "发送",
+        "whatsapp": "通过 WhatsApp 联系"
       }
     },
     "allLangsModal": {

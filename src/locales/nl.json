@@ -609,7 +609,8 @@
         "title": "Ondersteuning",
         "noMessages": "Nog geen berichten. Zeg hallo!",
         "placeholder": "Typ een bericht...",
-        "send": "Verzenden"
+        "send": "Verzenden",
+        "whatsapp": "Chat via WhatsApp"
       }
     },
     "allLangsModal": {

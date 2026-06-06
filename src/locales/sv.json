@@ -609,7 +609,8 @@
         "title": "Support",
         "noMessages": "Inga meddelanden än. Säg hej!",
         "placeholder": "Skriv ett meddelande...",
-        "send": "Skicka"
+        "send": "Skicka",
+        "whatsapp": "Chatta på WhatsApp"
       }
     },
     "allLangsModal": {

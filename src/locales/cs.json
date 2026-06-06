@@ -609,7 +609,8 @@
         "title": "Podpora",
         "noMessages": "Žádné zprávy. Pozdravte!",
         "placeholder": "Napište zprávu...",
-        "send": "Odeslat"
+        "send": "Odeslat",
+        "whatsapp": "Napsat na WhatsApp"
       }
     },
     "allLangsModal": {

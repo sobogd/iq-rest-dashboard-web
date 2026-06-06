@@ -609,7 +609,8 @@
         "title": "Pagalba",
         "noMessages": "Dar nėra pranešimų. Pasisveikinkite!",
         "placeholder": "Įveskite pranešimą...",
-        "send": "Siųsti"
+        "send": "Siųsti",
+        "whatsapp": "Rašyti WhatsApp"
       }
     },
     "allLangsModal": {

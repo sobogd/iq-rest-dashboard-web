@@ -609,7 +609,8 @@
         "title": "Suport",
         "noMessages": "Niciun mesaj. Salută!",
         "placeholder": "Scrie un mesaj...",
-        "send": "Trimite"
+        "send": "Trimite",
+        "whatsapp": "Scrie pe WhatsApp"
       }
     },
     "allLangsModal": {

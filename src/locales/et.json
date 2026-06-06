@@ -609,7 +609,8 @@
         "title": "Tugi",
         "noMessages": "Sõnumeid pole veel. Tervita!",
         "placeholder": "Kirjuta sõnum...",
-        "send": "Saada"
+        "send": "Saada",
+        "whatsapp": "Kirjuta WhatsAppis"
       }
     },
     "allLangsModal": {

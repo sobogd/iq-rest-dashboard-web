@@ -684,7 +684,8 @@
         "title": "Support",
         "noMessages": "No messages yet. Say hi!",
         "placeholder": "Type a message...",
-        "send": "Send message"
+        "send": "Send message",
+        "whatsapp": "Chat on WhatsApp"
       }
     },
     "allLangsModal": {

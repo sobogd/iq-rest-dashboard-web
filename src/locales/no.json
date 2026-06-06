@@ -609,7 +609,8 @@
         "title": "Support",
         "noMessages": "Ingen meldinger ennå. Si hei!",
         "placeholder": "Skriv en melding...",
-        "send": "Send"
+        "send": "Send",
+        "whatsapp": "Skriv på WhatsApp"
       }
     },
     "allLangsModal": {

@@ -609,7 +609,8 @@
         "title": "Wsparcie",
         "noMessages": "Brak wiadomości. Przywitaj się!",
         "placeholder": "Wpisz wiadomość...",
-        "send": "Wyślij"
+        "send": "Wyślij",
+        "whatsapp": "Napisz na WhatsApp"
       }
     },
     "allLangsModal": {

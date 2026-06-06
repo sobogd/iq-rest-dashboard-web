@@ -609,7 +609,8 @@
         "title": "Destek",
         "noMessages": "Henüz mesaj yok. Merhaba deyin!",
         "placeholder": "Bir mesaj yazın...",
-        "send": "Gönder"
+        "send": "Gönder",
+        "whatsapp": "WhatsApp’tan yazın"
       }
     },
     "allLangsModal": {

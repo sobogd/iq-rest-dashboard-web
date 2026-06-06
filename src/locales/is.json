@@ -609,7 +609,8 @@
         "title": "Stuðningur",
         "noMessages": "Engin skilaboð enn. Heilsaðu!",
         "placeholder": "Sláðu inn skilaboð...",
-        "send": "Senda"
+        "send": "Senda",
+        "whatsapp": "Skrifa á WhatsApp"
       }
     },
     "allLangsModal": {

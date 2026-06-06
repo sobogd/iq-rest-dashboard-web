@@ -609,7 +609,8 @@
         "title": "Podrška",
         "noMessages": "Još nema poruka. Pozdravite!",
         "placeholder": "Ukucajte poruku...",
-        "send": "Pošalji"
+        "send": "Pošalji",
+        "whatsapp": "Пишите на WhatsApp"
       }
     },
     "allLangsModal": {

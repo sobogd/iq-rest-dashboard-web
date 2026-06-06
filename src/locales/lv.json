@@ -609,7 +609,8 @@
         "title": "Atbalsts",
         "noMessages": "Vēl nav ziņojumu. Sasveicinieties!",
         "placeholder": "Ievadiet ziņojumu...",
-        "send": "Sūtīt"
+        "send": "Sūtīt",
+        "whatsapp": "Rakstīt WhatsApp"
       }
     },
     "allLangsModal": {

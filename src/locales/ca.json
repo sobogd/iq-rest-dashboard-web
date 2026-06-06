@@ -609,7 +609,8 @@
         "title": "Suport",
         "noMessages": "Encara no hi ha missatges. Saluda!",
         "placeholder": "Escriu un missatge...",
-        "send": "Envia"
+        "send": "Envia",
+        "whatsapp": "Escriure per WhatsApp"
       }
     },
     "allLangsModal": {

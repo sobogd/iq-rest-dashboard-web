@@ -609,7 +609,8 @@
         "title": "Support",
         "noMessages": "Aucun message pour l'instant. Dites bonjour !",
         "placeholder": "Écrivez un message...",
-        "send": "Envoyer"
+        "send": "Envoyer",
+        "whatsapp": "Écrire sur WhatsApp"
       }
     },
     "allLangsModal": {

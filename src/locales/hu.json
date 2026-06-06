@@ -609,7 +609,8 @@
         "title": "Támogatás",
         "noMessages": "Még nincs üzenet. Köszönj!",
         "placeholder": "Írj üzenetet...",
-        "send": "Küldés"
+        "send": "Küldés",
+        "whatsapp": "Írás WhatsAppon"
       }
     },
     "allLangsModal": {

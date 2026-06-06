@@ -609,7 +609,8 @@
         "title": "サポート",
         "noMessages": "メッセージはまだありません。挨拶しよう！",
         "placeholder": "メッセージを入力...",
-        "send": "送信"
+        "send": "送信",
+        "whatsapp": "WhatsAppで連絡"
       }
     },
     "allLangsModal": {

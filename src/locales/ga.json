@@ -609,7 +609,8 @@
         "title": "Tacaíocht",
         "noMessages": "Gan teachtaireachtaí fós. Abair haigh!",
         "placeholder": "Clóscríobh teachtaireacht...",
-        "send": "Seol"
+        "send": "Seol",
+        "whatsapp": "Comhrá ar WhatsApp"
       }
     },
     "allLangsModal": {

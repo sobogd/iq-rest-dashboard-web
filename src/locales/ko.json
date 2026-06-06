@@ -609,7 +609,8 @@
         "title": "지원",
         "noMessages": "아직 메시지가 없습니다. 인사하세요!",
         "placeholder": "메시지 입력...",
-        "send": "보내기"
+        "send": "보내기",
+        "whatsapp": "WhatsApp으로 문의"
       }
     },
     "allLangsModal": {

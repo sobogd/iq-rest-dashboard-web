@@ -609,7 +609,8 @@
         "title": "Soporte",
         "noMessages": "Aún no hay mensajes. ¡Saluda!",
         "placeholder": "Escribe un mensaje...",
-        "send": "Enviar mensaje"
+        "send": "Enviar mensaje",
+        "whatsapp": "Escribir por WhatsApp"
       }
     },
     "allLangsModal": {

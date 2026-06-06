@@ -609,7 +609,8 @@
         "title": "Support",
         "noMessages": "Noch keine Nachrichten. Sagen Sie Hallo!",
         "placeholder": "Nachricht schreiben...",
-        "send": "Senden"
+        "send": "Senden",
+        "whatsapp": "Über WhatsApp schreiben"
       }
     },
     "allLangsModal": {

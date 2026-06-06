@@ -609,7 +609,8 @@
         "title": "Поддръжка",
         "noMessages": "Все още няма съобщения. Кажете здрасти!",
         "placeholder": "Напишете съобщение...",
-        "send": "Изпрати"
+        "send": "Изпрати",
+        "whatsapp": "Пишете в WhatsApp"
       }
     },
     "allLangsModal": {
