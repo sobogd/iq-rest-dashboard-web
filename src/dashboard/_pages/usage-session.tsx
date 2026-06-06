@@ -91,7 +91,9 @@ function buildPageGroups(events: SessionEvent[]): PageGroup[] {
 // Rows shown inside an expanded group: drop the page marker (it's the header)
 // and section views (they're the heatmap), strip the l_ prefix for display.
 function rowEvents(g: PageGroup): SessionEvent[] {
-  return g.events.filter((e) => !/^l_page_/.test(e.event) && !/^l_section_view_/.test(e.event));
+  return g.events.filter(
+    (e) => !/^l_page_/.test(e.event) && !/^l_section_view_/.test(e.event) && !/^l_currency_/.test(e.event),
+  );
 }
 function displayName(name: string): string {
   return name.startsWith("l_") ? name.slice(2) : name;
@@ -241,11 +243,14 @@ export function UsageSessionPage({ id }: { id: string }) {
   let hasOnboarding = false;
   let hasPricing = false;
   let hasDemo = false;
+  let currency: string | null = null;
   for (const e of events) {
     const n = e.event;
     if (!hasOnboarding && (n.includes("onb") || n.includes("onboarding"))) hasOnboarding = true;
     if (!hasPricing && n === "l_page_pricing") hasPricing = true;
     if (!hasDemo && n.includes("demo")) hasDemo = true;
+    const cm = /^l_currency_([a-z]{3})$/.exec(n);
+    if (cm) currency = cm[1].toUpperCase();
   }
 
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -330,6 +335,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                   ) : region ? (
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}
+                  {currency ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-secondary text-muted-foreground">{currency}</span> : null}
                   {hasGoogle ? <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#4285f4]/10 text-[#4285f4]">G</span> : null}
                   {latestFbclid || hasFb ? (
                     <span className="text-[10px] font-semibold rounded px-1.5 py-0.5 shrink-0 bg-[#1877F2]/10 text-[#1877F2]">FB</span>
