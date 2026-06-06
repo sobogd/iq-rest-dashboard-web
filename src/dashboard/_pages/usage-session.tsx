@@ -36,9 +36,10 @@ const PAGE_CHIPS: Record<string, { label: string; cls: string; bar: string }> = 
 const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
 
 // Noise hidden from the flat list: page markers (shown as a per-row page chip),
-// section views, geo currency (header chip), and click ids (header card).
+// geo currency (header chip), and click ids (header card). Section views stay —
+// they're the scroll path.
 function isHiddenEvent(name: string): boolean {
-  return /^l_page_/.test(name) || /^l_section_view_/.test(name) || /^l_currency_/.test(name) || /^l_gclid_/.test(name) || /^l_fbclid_/.test(name);
+  return /^l_page_/.test(name) || /^l_currency_/.test(name) || /^l_gclid_/.test(name) || /^l_fbclid_/.test(name);
 }
 function displayName(name: string): string {
   return name.startsWith("l_") ? name.slice(2) : name;
