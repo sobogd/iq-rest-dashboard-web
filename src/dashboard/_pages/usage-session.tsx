@@ -53,20 +53,27 @@ interface DeviceGroup {
   events: SessionEvent[];      // already in the incoming (newest-first) order
 }
 
-// Slice the newest-first list into runs that share the same ip/device/platform,
-// so a device switch starts a fresh group.
+// A 30-day "session" of one IP is usually several visits on the same device, so
+// device alone yields one giant group. Start a new group on a device/ip switch
+// OR a > GAP gap between consecutive events — each group is one visit.
+const VISIT_GAP_MS = 30 * 60 * 1000;
+
 function buildDeviceGroups(rows: SessionEvent[]): DeviceGroup[] {
   const out: DeviceGroup[] = [];
   let prevSig: string | null = null;
+  let prevAt = 0;
   let cur: DeviceGroup | null = null;
   for (const e of rows) {
     const sig = `${e.ip ?? ""}|${e.device ?? ""}|${e.platform ?? ""}`;
-    if (!cur || sig !== prevSig) {
+    const at = new Date(e.at).getTime();
+    const gap = cur ? Math.abs(prevAt - at) > VISIT_GAP_MS : false;
+    if (!cur || sig !== prevSig || gap) {
       cur = { id: e.id, ip: e.ip, device: e.device, platform: e.platform, events: [] };
       out.push(cur);
-      prevSig = sig;
     }
     cur.events.push(e);
+    prevSig = sig;
+    prevAt = at;
   }
   return out;
 }
