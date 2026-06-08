@@ -324,8 +324,11 @@ export function buildKitchenDemoSnapshot(lang: string): KitchenDemoSnapshot {
 
   const tables: TableEntity[] = [
     table(1, "demo-table-1"),
+    table(2, "demo-table-2"),
     table(3, "demo-table-3"),
     table(5, "demo-table-5"),
+    table(6, "demo-table-6"),
+    table(7, "demo-table-7"),
     table(8, "demo-table-8"),
   ];
   const tablesByNumber = new Map(tables.map((t) => [t.number, t.id]));
@@ -401,13 +404,19 @@ function dish(id: string, name: Ml, categoryId: string, sortOrder: number) {
   };
 }
 
-// x/y are percentages on the floor map (left/top). The demo spreads the four
-// tables across the canvas instead of letting them stack at the default 50/50.
-const TABLE_POS: Record<number, { x: number; y: number }> = {
-  1: { x: 26, y: 30 },
-  3: { x: 72, y: 28 },
-  5: { x: 28, y: 72 },
-  8: { x: 74, y: 70 },
+// Per-table layout for the demo floor: varied positions, shapes, sizes (percent
+// of the map) and rotations so the preview shows off the floor-plan editor.
+const TABLE_SPEC: Record<
+  number,
+  { x: number; y: number; shape: "circle" | "rect"; width: number; height: number; capacity: number; rotation: number }
+> = {
+  1: { x: 16, y: 22, shape: "circle", width: 13, height: 13, capacity: 2, rotation: 0 },
+  2: { x: 45, y: 19, shape: "rect", width: 24, height: 13, capacity: 4, rotation: 0 },
+  3: { x: 81, y: 23, shape: "circle", width: 20, height: 20, capacity: 6, rotation: 0 },
+  5: { x: 46, y: 52, shape: "rect", width: 27, height: 15, capacity: 8, rotation: 0 },
+  6: { x: 82, y: 54, shape: "circle", width: 17, height: 17, capacity: 4, rotation: 0 },
+  7: { x: 20, y: 79, shape: "rect", width: 21, height: 12, capacity: 4, rotation: 14 },
+  8: { x: 55, y: 80, shape: "rect", width: 23, height: 16, capacity: 6, rotation: -12 },
 };
 
 // Demo table colours so the kitchen board's colour-tinted headers are visible
@@ -420,19 +429,19 @@ const TABLE_COLOR: Record<number, string> = {
 };
 
 function table(number: number, id: string): TableEntity {
-  const pos = TABLE_POS[number] ?? { x: 50, y: 50 };
+  const s = TABLE_SPEC[number] ?? { x: 50, y: 50, shape: "circle" as const, width: 14, height: 14, capacity: 4, rotation: 0 };
   return {
     id,
     number,
     name: "",
     description: "",
-    capacity: 4,
-    x: pos.x,
-    y: pos.y,
-    shape: "circle",
-    rotation: 0,
-    width: null,
-    height: null,
+    capacity: s.capacity,
+    x: s.x,
+    y: s.y,
+    shape: s.shape,
+    rotation: s.rotation,
+    width: s.width,
+    height: s.height,
     photoUrl: null,
     color: TABLE_COLOR[number] ?? null,
     sortOrder: number,
@@ -560,8 +569,11 @@ export function buildReservationsDemoSnapshot(lang: string): ReservationsDemoSna
 
   const tables: TableEntity[] = [
     table(1, "demo-table-1"),
+    table(2, "demo-table-2"),
     table(3, "demo-table-3"),
     table(5, "demo-table-5"),
+    table(6, "demo-table-6"),
+    table(7, "demo-table-7"),
     table(8, "demo-table-8"),
   ];
 
