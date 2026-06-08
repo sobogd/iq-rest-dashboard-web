@@ -413,7 +413,7 @@
       "number": "Numeris",
       "seats": "Vietos",
       "seatsShort": "{n} vietos",
-      "formTip": "Bakstelėkite bet kur plane, kad padėtumėte stalą. Sureguliuokite vietas ir numerį, tada išsaugokite.",
+      "formTip": "Vilkite stalą, kad jį padėtumėte, ir naudokite rankenėles pasukti bei keisti dydį. Žemiau nustatykite vietas, numerį ir formą, tada išsaugokite.",
       "photo": "Nuotrauka",
       "qrModalTitle": "Stalas {number}{label}",
       "qrForTable": "QR stalui {number}",

@@ -413,7 +413,7 @@
       "number": "Numero",
       "seats": "Paikat",
       "seatsShort": "{n} paikkaa",
-      "formTip": "Napauta mihin tahansa kartalla sijoittaaksesi pöydän. Säädä paikat ja numero, sitten tallenna.",
+      "formTip": "Vedä pöytä paikalleen ja käytä kahvoja kiertämiseen ja koon muuttamiseen. Aseta paikat, numero ja muoto alta ja tallenna.",
       "photo": "Kuva",
       "qrModalTitle": "Pöytä {number}{label}",
       "qrForTable": "QR pöydälle {number}",

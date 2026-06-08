@@ -413,7 +413,7 @@
       "number": "Númer",
       "seats": "Sæti",
       "seatsShort": "{n} sæti",
-      "formTip": "Smelltu hvar sem er á áætluninni til að setja borðið. Stilltu sæti og númer og vistaðu.",
+      "formTip": "Dragðu borðið til að staðsetja það og notaðu handföngin til að snúa og breyta stærð. Stilltu sæti, númer og lögun fyrir neðan og vistaðu.",
       "photo": "Mynd",
       "qrModalTitle": "Borð {number}{label}",
       "qrForTable": "QR fyrir borð {number}",

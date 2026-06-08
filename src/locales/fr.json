@@ -413,7 +413,7 @@
       "number": "Numéro",
       "seats": "Places",
       "seatsShort": "{n} places",
-      "formTip": "Appuyez n'importe où sur le plan pour placer cette table. Ajustez les places et le numéro avec les boutons puis enregistrez.",
+      "formTip": "Faites glisser la table pour la positionner et utilisez les poignées pour la pivoter et la redimensionner. Réglez places, numéro et forme ci-dessous, puis enregistrez.",
       "photo": "Photo",
       "qrModalTitle": "Table {number}{label}",
       "qrForTable": "QR pour la table {number}",

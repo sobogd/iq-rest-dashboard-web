@@ -413,7 +413,7 @@
       "number": "Numara",
       "seats": "Koltuk",
       "seatsShort": "{n} koltuk",
-      "formTip": "Masayı yerleştirmek için plana herhangi bir yere dokunun. Koltuk ve numarayı ayarlayıp kaydedin.",
+      "formTip": "Masayı yerleştirmek için sürükleyin, döndürmek ve yeniden boyutlandırmak için tutamaçları kullanın. Aşağıdan koltuk, numara ve şekli ayarlayıp kaydedin.",
       "photo": "Fotoğraf",
       "qrModalTitle": "Masa {number}{label}",
       "qrForTable": "Masa {number} için QR",

@@ -413,7 +413,7 @@
       "number": "Číslo",
       "seats": "Místa",
       "seatsShort": "{n} míst",
-      "formTip": "Klepněte kamkoliv na plánku, abyste umístili stůl. Upravte místa a číslo a uložte.",
+      "formTip": "Přetáhněte stůl pro umístění a pomocí úchytů jej otočte a změňte velikost. Níže nastavte místa, číslo a tvar a uložte.",
       "photo": "Fotka",
       "qrModalTitle": "Stůl {number}{label}",
       "qrForTable": "QR pro stůl {number}",

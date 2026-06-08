@@ -413,7 +413,7 @@
       "number": "号码",
       "seats": "座位",
       "seatsShort": "{n} 座",
-      "formTip": "点击平面图任意位置放置桌台。调整座位和号码后保存。",
+      "formTip": "拖动桌子进行摆放，用控制点旋转和调整大小。在下方设置座位、编号和形状，然后保存。",
       "photo": "照片",
       "qrModalTitle": "桌 {number}{label}",
       "qrForTable": "桌 {number} 的二维码",

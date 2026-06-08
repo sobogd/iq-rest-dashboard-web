@@ -413,7 +413,7 @@
       "number": "번호",
       "seats": "좌석",
       "seatsShort": "{n}석",
-      "formTip": "테이블을 배치하려면 평면도 어디든 탭하세요. 좌석과 번호를 조정한 후 저장합니다.",
+      "formTip": "테이블을 드래그해 배치하고 핸들로 회전과 크기를 조절하세요. 아래에서 좌석, 번호, 모양을 설정한 뒤 저장하세요.",
       "photo": "사진",
       "qrModalTitle": "테이블 {number}{label}",
       "qrForTable": "테이블 {number}용 QR",

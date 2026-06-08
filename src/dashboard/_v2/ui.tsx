@@ -1024,12 +1024,14 @@ export function SubpageStickyBar({
  onSave,
  canSave,
  hideSave,
+ title,
  children,
 }: {
  onBack: () => void;
  onSave?: () => void | Promise<void>;
  canSave?: boolean;
  hideSave?: boolean;
+ title?: ReactNode;
  children?: ReactNode;
 }) {
  const tc = useTranslations("dashboard.common");
@@ -1049,14 +1051,17 @@ export function SubpageStickyBar({
  style={{ top: "var(--topbar-h, 0px)" }}
  >
  <div className="w-full max-w-5xl mx-auto md:px-6 flex items-center justify-between gap-3">
+ <div className="flex items-center gap-2.5 min-w-0">
  <button
  type="button"
  onClick={onBack}
- className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md"
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-muted-foreground bg-secondary rounded-md shrink-0"
  >
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
  {tc("back")}
  </button>
+ {title ? <span className="text-base font-medium text-foreground truncate min-w-0">{title}</span> : null}
+ </div>
  <div className="flex items-center gap-2">
  {children}
  {!hideSave ? (

@@ -413,7 +413,7 @@
       "number": "Number",
       "seats": "Kohad",
       "seatsShort": "{n} kohta",
-      "formTip": "Vajuta plaanil kuhugi, et laud paigutada. Kohanda kohti ja numbrit, seejärel salvesta.",
+      "formTip": "Lohista laud paika ja kasuta käepidemeid pööramiseks ja suuruse muutmiseks. Määra kohad, number ja kuju allpool ning salvesta.",
       "photo": "Foto",
       "qrModalTitle": "Laud {number}{label}",
       "qrForTable": "QR lauale {number}",

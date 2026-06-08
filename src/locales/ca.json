@@ -413,7 +413,7 @@
       "number": "Número",
       "seats": "Places",
       "seatsShort": "{n} places",
-      "formTip": "Toca qualsevol punt del plànol per col·locar la taula. Ajusta places i número, i desa.",
+      "formTip": "Arrossega la taula per col·locar-la i fes servir els controls per girar-la i redimensionar-la. Configura les places, el número i la forma a sota i desa.",
       "photo": "Foto",
       "qrModalTitle": "Taula {number}{label}",
       "qrForTable": "QR per a la taula {number}",

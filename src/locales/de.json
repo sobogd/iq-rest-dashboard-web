@@ -413,7 +413,7 @@
       "number": "Nummer",
       "seats": "Plätze",
       "seatsShort": "{n} Plätze",
-      "formTip": "Tippen Sie irgendwo auf den Plan, um den Tisch zu platzieren. Plätze und Nummer mit den Steppern anpassen, dann speichern.",
+      "formTip": "Ziehe den Tisch zum Positionieren und nutze die Griffe zum Drehen und Skalieren. Sitzplätze, Nummer und Form unten festlegen, dann speichern.",
       "photo": "Foto",
       "qrModalTitle": "Tisch {number}{label}",
       "qrForTable": "QR für Tisch {number}",

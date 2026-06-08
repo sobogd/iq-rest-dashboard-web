@@ -413,7 +413,7 @@
       "number": "Nummer",
       "seats": "Plasser",
       "seatsShort": "{n} plasser",
-      "formTip": "Trykk hvor som helst på planen for å plassere bordet. Juster plasser og nummer, og lagre.",
+      "formTip": "Dra bordet for å plassere det, og bruk håndtakene til å rotere og endre størrelse. Angi plasser, nummer og form nedenfor, og lagre.",
       "photo": "Bilde",
       "qrModalTitle": "Bord {number}{label}",
       "qrForTable": "QR for bord {number}",

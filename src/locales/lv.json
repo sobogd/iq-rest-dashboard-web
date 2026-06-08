@@ -413,7 +413,7 @@
       "number": "Numurs",
       "seats": "Vietas",
       "seatsShort": "{n} vietas",
-      "formTip": "Pieskarieties jebkur uz plāna, lai novietotu galdu. Pielāgojiet vietas un numuru, pēc tam saglabājiet.",
+      "formTip": "Velciet galdu, lai to novietotu, un izmantojiet rokturus, lai pagrieztu un mainītu izmēru. Iestatiet vietas, numuru un formu zemāk un saglabājiet.",
       "photo": "Fotoattēls",
       "qrModalTitle": "Galds {number}{label}",
       "qrForTable": "QR galdam {number}",

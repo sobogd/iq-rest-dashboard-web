@@ -15,9 +15,9 @@ import {
 import { inputClass } from "./tokens";
 import { newId } from "./helpers";
 import { createTable, deleteTable, updateTable } from "./api";
+import { apiTableToTable } from "./mappers";
 import type { Booking, Order, TableEntity } from "./types";
 import { track } from "@/lib/dashboard-events";
-import { useDashboardRouter } from "../_spa/router";
 
 function Stepper({
  value,
@@ -172,7 +172,13 @@ export function FloorMap({
    return () => ro?.disconnect();
  }, []);
 
+ // Invisible alignment grid: positions + sizes snap to GRID_STEP% cells and
+ // rotation snaps to ROT_STEP° so tables line up evenly with little effort.
+ const GRID_STEP = 4;
+ const SIZE_STEP = 2; // finer step for resize so smaller tables are possible
+ const ROT_STEP = 15;
  const clampPct = (v: number) => Math.max(0, Math.min(100, v));
+ const snapPct = (v: number) => Math.round(v / GRID_STEP) * GRID_STEP;
  const posFromEvent = (e: { clientX: number; clientY: number }) => {
    const rect = mapRef.current?.getBoundingClientRect();
    if (!rect) return null;
@@ -186,6 +192,9 @@ export function FloorMap({
  <style>{`
  .floor-map {
  position: relative;
+ /* Own stacking context so the table markers + handles (high z-index) can't
+    paint over the sticky page header when scrolled. */
+ isolation: isolate;
  width: 100%;
  aspect-ratio: 1 / 1;
  background-color: hsl(var(--card));
@@ -244,7 +253,7 @@ export function FloorMap({
  : "bg-card text-foreground";
  const ringCls = isSelected || ringAll ? " ring-4 ring-foreground/20" : "";
  const badge = badgeFor ? badgeFor(t.id) : null;
- const dimCls = dimUnselected && !isSelected ? " opacity-30" : "";
+ const dimCls = dimUnselected && !isSelected ? " opacity-45" : "";
  const draggable = !!onMove && isSelected;
  // Font scales with the marker's smaller side so small tables get small text
  // and big tables larger — capacity line is a touch smaller than the number.
@@ -252,6 +261,18 @@ export function FloorMap({
  const capFont = Math.max(8, Math.round(numFont * 0.62));
  return (
  <Fragment key={t.id}>
+ {/* rotate connector — rendered BEFORE the table so it sits UNDER it. */}
+ {draggable && onRotate ? (
+ <div
+ className="absolute pointer-events-none"
+ style={{ left: x + "%", top: y + "%", width: 0, height: 0, transform: "rotate(" + t.rotation + "deg)" }}
+ >
+ <div
+ className="absolute bg-foreground/50"
+ style={{ left: 0, top: -(h / 2 + 26), width: 2, height: 26 + 8, transform: "translateX(-50%)" }}
+ />
+ </div>
+ ) : null}
  <button
  type="button"
  onClick={(e) => { e.stopPropagation(); onSelectTable(t.id); }}
@@ -268,7 +289,7 @@ export function FloorMap({
  const p = posFromEvent(e);
  if (!p) return;
  movedRef.current = true;
- onMove!(clampPct(p.x - grabOffsetRef.current.dx), clampPct(p.y - grabOffsetRef.current.dy));
+ onMove!(clampPct(snapPct(p.x - grabOffsetRef.current.dx)), clampPct(snapPct(p.y - grabOffsetRef.current.dy)));
  } : undefined}
  onPointerUp={draggable ? (e) => {
  draggingRef.current = false;
@@ -399,6 +420,11 @@ export function FloorMap({
  if (axisY) newHpx = Math.max(MIN, dy * (vx * uy.x + vy * uy.y) - OFF);
  newWpx = Math.min(newWpx, rect.width);
  newHpx = Math.min(newHpx, rect.height);
+ // Snap size to the grid (one cell minimum) so tables match each other.
+ const stepW = (SIZE_STEP / 100) * rect.width;
+ const stepH = (SIZE_STEP / 100) * rect.height;
+ if (axisX) newWpx = Math.min(rect.width, Math.max(stepW, Math.round(newWpx / stepW) * stepW));
+ if (axisY) newHpx = Math.min(rect.height, Math.max(stepH, Math.round(newHpx / stepH) * stepH));
  // New center sits half a (new) extent away from the fixed anchor.
  const ncx = ax + dx * (newWpx / 2) * ux.x + dy * (newHpx / 2) * uy.x;
  const ncy = ay + dx * (newWpx / 2) * ux.y + dy * (newHpx / 2) * uy.y;
@@ -417,14 +443,9 @@ export function FloorMap({
  );
  }) : null}
 
- {/* rotate handle above the box */}
+ {/* rotate handle above the box (connector line is rendered under the table) */}
  {onRotate ? (
  <>
- {/* connector from the top edge (with a slight inward overlap) up to the handle */}
- <div
- className="absolute bg-foreground/50"
- style={{ left: 0, top: -(h / 2 + 26), width: 2, height: 26 + 8, transform: "translateX(-50%)" }}
- />
  <div
  className="absolute w-5 h-5 rounded-full bg-white border border-foreground/40 ring-4 ring-foreground/20 flex items-center justify-center text-neutral-700 cursor-grab active:cursor-grabbing pointer-events-auto"
  style={{ left: 0, top: -(h / 2 + 26), transform: "translate(-50%,-50%)", touchAction: "none" }}
@@ -441,7 +462,8 @@ export function FloorMap({
  const cx = rect.left + (x / 100) * rect.width;
  const cy = rect.top + (y / 100) * rect.height;
  let deg = (Math.atan2(e.clientY - cy, e.clientX - cx) * 180) / Math.PI + 90;
- deg = ((Math.round(deg) % 360) + 360) % 360;
+ deg = Math.round(deg / ROT_STEP) * ROT_STEP;
+ deg = ((deg % 360) + 360) % 360;
  onRotate(deg);
  }}
  onPointerUp={(e) => {
@@ -468,6 +490,10 @@ export function FloorMap({
 
 export function TablesPage({
  tables,
+ setTables,
+ orders,
+ bookings,
+ menuUrl,
  onBack,
 }: {
  tables: TableEntity[];
@@ -478,77 +504,192 @@ export function TablesPage({
  onBack: () => void;
 }) {
  const t = useTranslations("dashboard.tables");
- const router = useDashboardRouter();
+ const qc = useQueryClient();
 
+ const [selectedId, setSelectedId] = useState<string | null>(null);
+ const [qrOpen, setQrOpen] = useState(false);
+ const [confirmState, setConfirmState] = useState<{
+ open: boolean; title?: string; message?: string; singleButton?: boolean; onConfirm?: (() => void) | null;
+ }>({ open: false });
+
+ useEffect(() => { window.scrollTo({ top: 0, behavior: "auto" }); }, []);
+
+ // Keep a valid selection — default to the lowest-numbered table.
  useEffect(() => {
- window.scrollTo({ top: 0, behavior: "auto" });
- }, []);
+ if (selectedId && tables.some((x) => x.id === selectedId)) return;
+ const first = [...tables].sort((a, b) => a.number - b.number)[0];
+ setSelectedId(first ? first.id : null);
+ }, [tables, selectedId]);
 
- function openNew() {
+ const selected = tables.find((x) => x.id === selectedId) || null;
+
+ // Debounced per-table save: continuous edits (drag / steppers) coalesce into
+ // one PATCH ~600ms after the last change. Flushed on back.
+ const pendingRef = useRef<Map<string, TableEntity>>(new Map());
+ const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+ const payloadOf = (tbl: TableEntity) => ({
+ number: tbl.number, capacity: tbl.capacity, zone: tbl.name || null,
+ imageUrl: tbl.photoUrl, color: tbl.color, x: tbl.x, y: tbl.y,
+ shape: tbl.shape, rotation: tbl.rotation, width: tbl.width, height: tbl.height,
+ });
+ const flush = () => {
+ if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+ const items = Array.from(pendingRef.current.values());
+ pendingRef.current.clear();
+ if (items.length === 0) return;
+ Promise.all(items.map((tbl) => updateTable(tbl.id, payloadOf(tbl)).catch(() => undefined)))
+ .then(() => qc.invalidateQueries({ queryKey: ["tables"] }).catch(() => undefined));
+ };
+ const scheduleSave = (tbl: TableEntity) => {
+ pendingRef.current.set(tbl.id, tbl);
+ if (timerRef.current) clearTimeout(timerRef.current);
+ timerRef.current = setTimeout(flush, 600);
+ };
+ // Flush any pending save on unmount.
+ useEffect(() => () => { flush(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+ function patchSelected(patch: Partial<TableEntity>) {
+ // Functional update so back-to-back calls in one event (resize fires both
+ // onResize + onMove) merge onto the latest state instead of clobbering it.
+ setTables((prev) => prev.map((x) => {
+ if (x.id !== selectedId) return x;
+ const next = { ...x, ...patch };
+ scheduleSave(next);
+ return next;
+ }));
+ }
+
+ async function addTable() {
  track("dash_settings_tables_click_add");
- router.push({ name: "settings.tables.new" });
+ const number = tables.reduce((m, tbl) => Math.max(m, tbl.number || 0), 0) + 1;
+ try {
+ const created = await createTable({
+ number, capacity: 2, zone: null, imageUrl: null, color: null,
+ x: 50, y: 50, shape: "circle", rotation: 0, width: null, height: null,
+ });
+ const entity = apiTableToTable(created);
+ setTables((prev) => [...prev, entity]);
+ setSelectedId(entity.id);
+ qc.invalidateQueries({ queryKey: ["tables"] }).catch(() => undefined);
+ } catch { /* ignore */ }
  }
 
- function openEdit(id: string) {
- track("dash_settings_tables_click_table");
- router.push({ name: "settings.tables.edit", id });
+ const usedIds = new Set<string>([
+ ...orders.filter((o) => o.status === "active").map((o) => o.tableId).filter((v): v is string => !!v),
+ ...bookings.filter((b) => b.status === "pending" || b.status === "confirmed").map((b) => b.tableId).filter((v): v is string => !!v),
+ ]);
+
+ function handleDelete() {
+ if (!selected) return;
+ if (usedIds.has(selected.id)) {
+ setConfirmState({ open: true, title: t("cantDeleteTitle"), message: t("cantDeleteMessage", { number: selected.number }), singleButton: true, onConfirm: null });
+ return;
  }
+ setConfirmState({
+ open: true,
+ title: t("deleteTitle"),
+ message: t("deleteMessage", { number: selected.number, label: selected.name ? " · " + selected.name : "" }),
+ onConfirm: async () => {
+ setConfirmState({ open: false });
+ const id = selected.id;
+ try {
+ await deleteTable(id);
+ setTables((prev) => prev.filter((x) => x.id !== id));
+ setSelectedId(null);
+ await qc.invalidateQueries({ queryKey: ["tables"] });
+ } catch { /* ignore */ }
+ },
+ });
+ }
+
+ const goBack = () => { flush(); track("dash_settings_tables_click_back"); onBack(); };
 
  return (
  <div>
- <SubpageStickyBar onBack={() => { track("dash_settings_tables_click_back"); onBack(); }} hideSave />
-
- <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4">
- <div className="mb-5">
- <div className="text-xs text-muted-foreground">{t("settingsBreadcrumb")}</div>
- <h2 className="text-xl font-medium text-foreground mt-1">{t("title")}</h2>
- </div>
-
- {tables.length === 0 ? (
-      <>
-       <EmptyState title={t("emptyTitle")} subtitle={t("emptySubtitle")} />
-       <button
-        type="button"
-        onClick={openNew}
-        className="w-full mt-2.5 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
-       >
-        <PlusIcon size={14} />
-        {t("addFirstTable")}
-       </button>
-      </>
-     ) : (
- <div>
- <div className="bg-card border border-border rounded-xl overflow-hidden divide-y divide-border">
- {tables
- .slice()
- .sort((a, b) => a.number - b.number)
- .map((tbl) => (
+ <SubpageStickyBar onBack={goBack} hideSave>
+ {selected ? (
+ <>
  <button
- key={tbl.id}
  type="button"
- onClick={() => openEdit(tbl.id)}
- className="w-full flex items-center justify-between gap-3 px-4 h-12 text-left"
+ onClick={handleDelete}
+ aria-label={t("deleteTable")}
+ className="h-8 w-8 inline-flex items-center justify-center text-red-600 bg-secondary rounded-md"
  >
- <span className="text-sm font-medium text-foreground shrink-0">
- {t("number")} {tbl.number}
- </span>
- <span className="text-xs text-muted-foreground truncate text-right">
- {t("seatsShort", { n: tbl.capacity })}
- </span>
+ <TrashIcon size={15} />
  </button>
- ))}
- </div>
  <button
  type="button"
- onClick={openNew}
- className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ onClick={() => setQrOpen(true)}
+ aria-label={t("showQr")}
+ className="h-8 w-8 inline-flex items-center justify-center text-muted-foreground bg-secondary rounded-md"
+ >
+ <QrIcon size={15} />
+ </button>
+ </>
+ ) : null}
+ <button
+ type="button"
+ onClick={addTable}
+ className="inline-flex items-center gap-1 h-8 px-2.5 text-xs font-medium text-primary-foreground bg-primary-gradient rounded-md transition-colors"
  >
  <PlusIcon size={14} />
  {t("table")}
  </button>
+ </SubpageStickyBar>
+
+ <div className="max-w-5xl mx-auto md:px-6 pt-5 md:pt-4 min-w-0">
+ {tables.length === 0 ? (
+ <>
+ <EmptyState title={t("emptyTitle")} subtitle={t("emptySubtitle")} />
+ <button
+ type="button"
+ onClick={addTable}
+ className="w-full mt-2.5 h-12 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
+ >
+ <PlusIcon size={14} />
+ {t("addFirstTable")}
+ </button>
+ </>
+ ) : (
+ <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6 md:gap-8">
+ <div className="min-w-0">
+ <FloorMap
+ tables={tables}
+ selectedId={selectedId}
+ onSelectTable={(id) => { if (id) { track("dash_settings_tables_click_table"); setSelectedId(id); } }}
+ onMove={(x, y) => patchSelected({ x, y })}
+ onRotate={(deg) => patchSelected({ rotation: deg })}
+ onResize={(width, height) => patchSelected({ width, height })}
+ wide
+ dimUnselected
+ />
+ </div>
+
+ <div className="min-w-0">
+ {selected ? <TableSettings table={selected} onChange={patchSelected} /> : null}
+ </div>
  </div>
  )}
  </div>
+
+ <ConfirmDialog
+ open={confirmState.open}
+ title={confirmState.title}
+ message={confirmState.message}
+ singleButton={confirmState.singleButton}
+ onConfirm={confirmState.onConfirm ?? undefined}
+ onCancel={() => setConfirmState({ open: false })}
+ />
+
+ {selected ? (
+ <TableQrModal
+ open={qrOpen}
+ onClose={() => setQrOpen(false)}
+ tableNumber={selected.number}
+ tableLabel={selected.name}
+ menuUrl={menuUrl}
+ />
+ ) : null}
  </div>
  );
 }
@@ -745,7 +886,7 @@ export function TableFormPage({
  </div>
 
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+ <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6 md:gap-8">
  <div className="min-w-0">
  <FloorMap
  tables={mode === "edit"
@@ -821,15 +962,15 @@ function TableSettings({
  return (
  <div className="bg-card border border-border rounded-xl p-4 space-y-3">
  <div>
- <label className="block text-sm font-medium text-foreground mb-2.5">{t("name")}</label>
- <input
- type="text"
- value={table.name}
- onChange={(e) => onChange({ name: e.target.value })}
- onFocus={() => track("dash_settings_table_focus_name")}
- placeholder={t("namePlaceholder")}
- className={inputClass}
- />
+ <label className="block text-sm font-medium text-foreground mb-2.5">{t("shapeLabel")}</label>
+ <div className="inline-flex w-full items-center rounded-lg border border-border bg-card overflow-hidden">
+ <ShapeBtn active={table.shape === "circle"} onClick={() => onChange({ shape: "circle" })}>
+ {t("shapeCircle")}
+ </ShapeBtn>
+ <ShapeBtn active={table.shape === "rect"} onClick={() => onChange({ shape: "rect" })}>
+ {t("shapeRect")}
+ </ShapeBtn>
+ </div>
  </div>
 
  <div className="flex gap-3">
@@ -856,22 +997,22 @@ function TableSettings({
  </div>
  </div>
 
- <div>
- <label className="block text-sm font-medium text-foreground mb-2.5">{t("shapeLabel")}</label>
- <div className="inline-flex w-full items-center rounded-lg border border-border bg-card overflow-hidden">
- <ShapeBtn active={table.shape === "circle"} onClick={() => onChange({ shape: "circle" })}>
- {t("shapeCircle")}
- </ShapeBtn>
- <ShapeBtn active={table.shape === "rect"} onClick={() => onChange({ shape: "rect" })}>
- {t("shapeRect")}
- </ShapeBtn>
- </div>
- </div>
-
  <TableColorPicker
  value={table.color}
  onChange={(color) => onChange({ color })}
  />
+
+ <div>
+ <label className="block text-sm font-medium text-foreground mb-2.5">{t("name")}</label>
+ <input
+ type="text"
+ value={table.name}
+ onChange={(e) => onChange({ name: e.target.value })}
+ onFocus={() => track("dash_settings_table_focus_name")}
+ placeholder={t("namePlaceholder")}
+ className={inputClass}
+ />
+ </div>
 
  <div>
  <label className="block text-sm font-medium text-foreground mb-2.5">{t("photo")}</label>
@@ -882,6 +1023,7 @@ function TableSettings({
  onRemoveClick={() => track("dash_settings_table_delete_photo")}
  inputId={"table-photo-" + table.id}
  width="w-full"
+ height="h-32"
  />
  </div>
  </div>
@@ -934,7 +1076,7 @@ function TableColorPicker({
  ) : null}
  </div>
  <p className="text-xs text-muted-foreground mb-3 leading-snug">{t("colorTip")}</p>
- <div className="grid grid-cols-8 gap-2 relative">
+ <div className="grid grid-cols-7 gap-2 relative">
  {TABLE_COLORS.map((c) => {
  const selected = c.toLowerCase() === normalized;
  return (

@@ -413,7 +413,7 @@
       "number": "Număr",
       "seats": "Locuri",
       "seatsShort": "{n} locuri",
-      "formTip": "Atinge oriunde pe plan pentru a poziționa masa. Ajustează locurile și numărul, apoi salvează.",
+      "formTip": "Trage masa pentru a o poziționa și folosește mânerele pentru rotire și redimensionare. Setează locurile, numărul și forma mai jos, apoi salvează.",
       "photo": "Poză",
       "qrModalTitle": "Masa {number}{label}",
       "qrForTable": "QR pentru masa {number}",

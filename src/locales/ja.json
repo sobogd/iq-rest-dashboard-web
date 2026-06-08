@@ -413,7 +413,7 @@
       "number": "番号",
       "seats": "席数",
       "seatsShort": "{n} 席",
-      "formTip": "プランの任意の場所をタップしてテーブルを配置します。席数と番号を調整して保存します。",
+      "formTip": "テーブルをドラッグして配置し、ハンドルで回転・サイズ変更します。下で席数・番号・形を設定して保存してください。",
       "photo": "写真",
       "qrModalTitle": "テーブル {number}{label}",
       "qrForTable": "テーブル {number} のQR",

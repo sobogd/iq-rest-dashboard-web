@@ -488,7 +488,7 @@
       "number": "Number",
       "seats": "Seats",
       "seatsShort": "{n} seats",
-      "formTip": "Tap anywhere on the floor plan to place this table. Adjust seats and number with the steppers, then save.",
+      "formTip": "Drag the table to position it, and use the handles to rotate and resize it. Set seats, number and shape below, then save.",
       "photo": "Photo",
       "qrModalTitle": "Table {number}{label}",
       "qrForTable": "QR for table {number}",

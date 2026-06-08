@@ -413,7 +413,7 @@
       "number": "Szám",
       "seats": "Helyek",
       "seatsShort": "{n} hely",
-      "formTip": "Érints meg bárhol a tervrajzon az asztal elhelyezéséhez. Állítsd be a helyeket és a számot, majd ments.",
+      "formTip": "Húzd az asztalt a helyére, és a fogantyúkkal forgasd és méretezd át. Állítsd be a helyeket, a számot és az alakot lent, majd ments.",
       "photo": "Fotó",
       "qrModalTitle": "{number}. asztal{label}",
       "qrForTable": "QR a {number}. asztalhoz",

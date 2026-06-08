@@ -413,7 +413,7 @@
       "number": "Numer",
       "seats": "Miejsca",
       "seatsShort": "{n} miejsc",
-      "formTip": "Stuknij dowolne miejsce na planie, aby umieścić stolik. Dostosuj miejsca i numer, potem zapisz.",
+      "formTip": "Przeciągnij stolik, aby go ustawić, i użyj uchwytów do obracania i zmiany rozmiaru. Ustaw miejsca, numer i kształt poniżej, a następnie zapisz.",
       "photo": "Zdjęcie",
       "qrModalTitle": "Stolik {number}{label}",
       "qrForTable": "QR dla stolika {number}",

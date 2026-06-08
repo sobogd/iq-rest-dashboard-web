@@ -413,7 +413,7 @@
       "number": "Uimhir",
       "seats": "Suíocháin",
       "seatsShort": "{n} suíochán",
-      "formTip": "Tapáil áit ar bith ar an bplean chun an bord seo a chur. Coigeartaigh suíocháin agus uimhir, ansin sábháil.",
+      "formTip": "Tarraing an bord chun é a chur in áit agus úsáid na hanlaí chun é a rothlú agus a athmhéadú. Socraigh suíocháin, uimhir agus cruth thíos, ansin sábháil.",
       "photo": "Grianghraf",
       "qrModalTitle": "Bord {number}{label}",
       "qrForTable": "QR le haghaidh bord {number}",

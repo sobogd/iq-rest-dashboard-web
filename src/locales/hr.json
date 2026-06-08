@@ -413,7 +413,7 @@
       "number": "Broj",
       "seats": "Mjesta",
       "seatsShort": "{n} mjesta",
-      "formTip": "Dodirnite bilo gdje na planu za postavljanje stola. Prilagodite mjesta i broj te spremite.",
+      "formTip": "Povucite stol da ga postavite i koristite ručke za rotaciju i promjenu veličine. Postavite mjesta, broj i oblik ispod, zatim spremite.",
       "photo": "Fotografija",
       "qrModalTitle": "Stol {number}{label}",
       "qrForTable": "QR za stol {number}",

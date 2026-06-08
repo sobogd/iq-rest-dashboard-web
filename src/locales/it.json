@@ -413,7 +413,7 @@
       "number": "Numero",
       "seats": "Posti",
       "seatsShort": "{n} posti",
-      "formTip": "Tocca un punto qualsiasi della mappa per posizionare il tavolo. Regola posti e numero con i pulsanti, poi salva.",
+      "formTip": "Trascina il tavolo per posizionarlo e usa le maniglie per ruotarlo e ridimensionarlo. Imposta posti, numero e forma qui sotto, poi salva.",
       "photo": "Foto",
       "qrModalTitle": "Tavolo {number}{label}",
       "qrForTable": "QR per il tavolo {number}",

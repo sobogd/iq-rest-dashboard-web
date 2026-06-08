@@ -413,7 +413,7 @@
       "number": "Nummer",
       "seats": "Plaatsen",
       "seatsShort": "{n} plaatsen",
-      "formTip": "Tik ergens op de plattegrond om deze tafel te plaatsen. Pas plaatsen en nummer aan en sla op.",
+      "formTip": "Sleep de tafel om te plaatsen en gebruik de handvatten om te draaien en het formaat te wijzigen. Stel zitplaatsen, nummer en vorm hieronder in en sla op.",
       "photo": "Foto",
       "qrModalTitle": "Tafel {number}{label}",
       "qrForTable": "QR voor tafel {number}",

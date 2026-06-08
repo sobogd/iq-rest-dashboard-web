@@ -413,7 +413,7 @@
       "number": "Número",
       "seats": "Sillas",
       "seatsShort": "{n} sillas",
-      "formTip": "Toca cualquier punto del plano para colocar esta mesa. Ajusta sillas y número con los selectores y guarda.",
+      "formTip": "Arrastra la mesa para colocarla y usa los controles para girarla y redimensionarla. Configura plazas, número y forma abajo y guarda.",
       "photo": "Foto",
       "qrModalTitle": "Mesa {number}{label}",
       "qrForTable": "QR para la mesa {number}",

@@ -413,7 +413,7 @@
       "number": "Številka",
       "seats": "Sedeži",
       "seatsShort": "{n} sedežev",
-      "formTip": "Tapnite kjer koli na načrtu, da postavite mizo. Prilagodite sedeže in številko, nato shranite.",
+      "formTip": "Povlecite mizo, da jo postavite, in z ročicami jo zavrtite ter spremenite velikost. Spodaj nastavite sedeže, številko in obliko ter shranite.",
       "photo": "Fotografija",
       "qrModalTitle": "Miza {number}{label}",
       "qrForTable": "QR za mizo {number}",
