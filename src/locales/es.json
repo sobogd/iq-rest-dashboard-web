@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Una nota breve sobre esta mesa",
       "shapeLabel": "Forma",
       "shapeCircle": "Círculo",
-      "shapeRect": "Rectángulo"
+      "shapeRect": "Rectángulo",
+      "resetRotation": "Restablecer rotación",
+      "resetSize": "Restablecer tamaño"
     },
     "settings": {
       "breadcrumb": "Ajustes",

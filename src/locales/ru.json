@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Краткая заметка об этом столике",
       "shapeLabel": "Форма",
       "shapeCircle": "Круг",
-      "shapeRect": "Прямоугольник"
+      "shapeRect": "Прямоугольник",
+      "resetRotation": "Сбросить поворот",
+      "resetSize": "Сбросить размер"
     },
     "settings": {
       "breadcrumb": "Настройки",

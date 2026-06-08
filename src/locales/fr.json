@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Une courte note sur cette table",
       "shapeLabel": "Forme",
       "shapeCircle": "Cercle",
-      "shapeRect": "Rectangle"
+      "shapeRect": "Rectangle",
+      "resetRotation": "Réinitialiser la rotation",
+      "resetSize": "Réinitialiser la taille"
     },
     "settings": {
       "breadcrumb": "Paramètres",

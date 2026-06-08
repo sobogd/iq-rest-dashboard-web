@@ -508,7 +508,9 @@
       "descriptionPlaceholder": "A short note about this table",
       "shapeLabel": "Shape",
       "shapeCircle": "Circle",
-      "shapeRect": "Rectangle"
+      "shapeRect": "Rectangle",
+      "resetRotation": "Reset rotation",
+      "resetSize": "Reset size"
     },
     "settings": {
       "breadcrumb": "Settings",

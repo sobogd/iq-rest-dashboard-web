@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Stutt athugasemd um þetta borð",
       "shapeLabel": "Lögun",
       "shapeCircle": "Hringur",
-      "shapeRect": "Rétthyrningur"
+      "shapeRect": "Rétthyrningur",
+      "resetRotation": "Endurstilla snúning",
+      "resetSize": "Endurstilla stærð"
     },
     "settings": {
       "breadcrumb": "Stillingar",

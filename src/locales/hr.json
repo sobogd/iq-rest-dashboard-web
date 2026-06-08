@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Kratka bilješka o ovom stolu",
       "shapeLabel": "Oblik",
       "shapeCircle": "Krug",
-      "shapeRect": "Pravokutnik"
+      "shapeRect": "Pravokutnik",
+      "resetRotation": "Poništi rotaciju",
+      "resetSize": "Poništi veličinu"
     },
     "settings": {
       "breadcrumb": "Postavke",

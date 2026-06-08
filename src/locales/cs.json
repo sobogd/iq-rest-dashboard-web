@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Krátká poznámka o tomto stole",
       "shapeLabel": "Tvar",
       "shapeCircle": "Kruh",
-      "shapeRect": "Obdélník"
+      "shapeRect": "Obdélník",
+      "resetRotation": "Obnovit otočení",
+      "resetSize": "Obnovit velikost"
     },
     "settings": {
       "breadcrumb": "Nastavení",

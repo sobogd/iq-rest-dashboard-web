@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { RotateCw, MoveDiagonal2 } from "lucide-react";
+import { RotateCw, MoveDiagonal2, MoreVertical } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, QrIcon, TrashIcon, UsersIcon } from "./icons";
@@ -121,6 +121,7 @@ export function FloorMap({
  wide,
  dimUnselected,
  ringAll,
+ menuActions,
 }: {
  tables: TableEntity[];
  selectedId: string | null;
@@ -146,6 +147,9 @@ export function FloorMap({
  // When true, EVERY table gets the selection ring (used on the orders page so
  // all tables read as interactive); otherwise only the selected one does.
  ringAll?: boolean;
+ // When set, a context menu (⋮) appears next to the selected table with these
+ // quick actions. Used on the edit form.
+ menuActions?: { id: string; label: string; onClick: () => void; danger?: boolean }[];
 }) {
  const tt = useTranslations("dashboard.tables");
  const occupied = occupiedIds || new Set<string>();
@@ -159,6 +163,10 @@ export function FloorMap({
  // from anywhere on the table doesn't snap its center to the cursor.
  const grabOffsetRef = useRef({ dx: 0, dy: 0 });
  const [mapSize, setMapSize] = useState({ w: 0, h: 0 });
+ const [menuOpen, setMenuOpen] = useState(false);
+
+ // Close the ⋮ menu whenever the selection changes.
+ useEffect(() => { setMenuOpen(false); }, [selectedId]);
 
  useEffect(() => {
    const el = mapRef.current;
@@ -207,6 +215,7 @@ export function FloorMap({
  // A drag that moved the selected table must not also re-place it via the
  // map tap handler — swallow the click that follows a real drag.
  if (movedRef.current) { movedRef.current = false; return; }
+ setMenuOpen(false);
  if (onPickPosition) {
  const p = posFromEvent(e);
  if (p) onPickPosition(p.x, p.y);
@@ -454,6 +463,43 @@ export function FloorMap({
  <RotateCw size={12} />
  </div>
  </>
+ ) : null}
+ </div>
+ ) : null}
+
+ {/* context menu (⋮) — upright, to the right of the selected table */}
+ {draggable && menuActions && menuActions.length > 0 ? (
+ <div
+ className="absolute z-30"
+ style={{ left: "calc(" + x + "% + " + (w / 2 + 16) + "px)", top: y + "%", transform: "translateY(-50%)" }}
+ >
+ <button
+ type="button"
+ onClick={(e) => { e.stopPropagation(); setMenuOpen((o) => !o); }}
+ className="w-7 h-7 rounded-full bg-white border border-foreground/40 ring-4 ring-foreground/20 flex items-center justify-center text-neutral-700"
+ aria-label="Table options"
+ >
+ <MoreVertical size={15} />
+ </button>
+ {menuOpen ? (
+ <div
+ className="absolute left-8 top-0 min-w-[160px] bg-card border border-border rounded-xl shadow-2xl py-1.5 z-40"
+ onClick={(e) => e.stopPropagation()}
+ >
+ {menuActions.map((a) => (
+ <button
+ key={a.id}
+ type="button"
+ onClick={() => { a.onClick(); setMenuOpen(false); }}
+ className={
+ "w-full text-left px-3 py-2 text-sm transition-colors hover:bg-muted " +
+ (a.danger ? "text-red-600" : "text-foreground")
+ }
+ >
+ {a.label}
+ </button>
+ ))}
+ </div>
  ) : null}
  </div>
  ) : null}
@@ -758,6 +804,13 @@ export function TableFormPage({
  onMove={(x, y) => setDraft((d) => ({ ...d, x, y }))}
  onRotate={(deg) => setDraft((d) => ({ ...d, rotation: deg }))}
  onResize={(width, height) => setDraft((d) => ({ ...d, width, height }))}
+ menuActions={[
+ { id: "circle", label: t("shapeCircle"), onClick: () => setDraft((d) => ({ ...d, shape: "circle" })) },
+ { id: "rect", label: t("shapeRect"), onClick: () => setDraft((d) => ({ ...d, shape: "rect" })) },
+ { id: "resetRotation", label: t("resetRotation"), onClick: () => setDraft((d) => ({ ...d, rotation: 0 })) },
+ { id: "resetSize", label: t("resetSize"), onClick: () => setDraft((d) => ({ ...d, width: null, height: null })) },
+ ...(mode === "edit" ? [{ id: "delete", label: t("deleteTable"), danger: true, onClick: handleDelete }] : []),
+ ]}
  wide
  dimUnselected
  />

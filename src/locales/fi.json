@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Lyhyt huomautus tästä pöydästä",
       "shapeLabel": "Muoto",
       "shapeCircle": "Ympyrä",
-      "shapeRect": "Suorakulmio"
+      "shapeRect": "Suorakulmio",
+      "resetRotation": "Nollaa kierto",
+      "resetSize": "Nollaa koko"
     },
     "settings": {
       "breadcrumb": "Asetukset",

@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Lühike märkus selle laua kohta",
       "shapeLabel": "Kuju",
       "shapeCircle": "Ring",
-      "shapeRect": "Ristkülik"
+      "shapeRect": "Ristkülik",
+      "resetRotation": "Lähtesta pööramine",
+      "resetSize": "Lähtesta suurus"
     },
     "settings": {
       "breadcrumb": "Seaded",

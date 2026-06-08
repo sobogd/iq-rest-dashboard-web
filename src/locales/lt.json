@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Trumpa pastaba apie šį stalą",
       "shapeLabel": "Forma",
       "shapeCircle": "Apskritimas",
-      "shapeRect": "Stačiakampis"
+      "shapeRect": "Stačiakampis",
+      "resetRotation": "Atstatyti pasukimą",
+      "resetSize": "Atstatyti dydį"
     },
     "settings": {
       "breadcrumb": "Nustatymai",

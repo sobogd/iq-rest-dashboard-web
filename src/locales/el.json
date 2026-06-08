@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Μια σύντομη σημείωση για αυτό το τραπέζι",
       "shapeLabel": "Σχήμα",
       "shapeCircle": "Κύκλος",
-      "shapeRect": "Ορθογώνιο"
+      "shapeRect": "Ορθογώνιο",
+      "resetRotation": "Επαναφορά περιστροφής",
+      "resetSize": "Επαναφορά μεγέθους"
     },
     "settings": {
       "breadcrumb": "Ρυθμίσεις",

@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Una nota breu sobre aquesta taula",
       "shapeLabel": "Forma",
       "shapeCircle": "Cercle",
-      "shapeRect": "Rectangle"
+      "shapeRect": "Rectangle",
+      "resetRotation": "Restableix la rotació",
+      "resetSize": "Restableix la mida"
     },
     "settings": {
       "breadcrumb": "Configuració",

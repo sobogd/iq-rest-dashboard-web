@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Rövid megjegyzés erről az asztalról",
       "shapeLabel": "Forma",
       "shapeCircle": "Kör",
-      "shapeRect": "Téglalap"
+      "shapeRect": "Téglalap",
+      "resetRotation": "Forgatás visszaállítása",
+      "resetSize": "Méret visszaállítása"
     },
     "settings": {
       "breadcrumb": "Beállítások",

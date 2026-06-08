@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "Een korte notitie over deze tafel",
       "shapeLabel": "Vorm",
       "shapeCircle": "Cirkel",
-      "shapeRect": "Rechthoek"
+      "shapeRect": "Rechthoek",
+      "resetRotation": "Rotatie resetten",
+      "resetSize": "Grootte resetten"
     },
     "settings": {
       "breadcrumb": "Instellingen",

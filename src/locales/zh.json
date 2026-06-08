@@ -433,7 +433,9 @@
       "descriptionPlaceholder": "关于这张桌子的简短说明",
       "shapeLabel": "形状",
       "shapeCircle": "圆形",
-      "shapeRect": "矩形"
+      "shapeRect": "矩形",
+      "resetRotation": "重置旋转",
+      "resetSize": "重置大小"
     },
     "settings": {
       "breadcrumb": "设置",
