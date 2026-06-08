@@ -804,13 +804,6 @@ export function TableFormPage({
  onMove={(x, y) => setDraft((d) => ({ ...d, x, y }))}
  onRotate={(deg) => setDraft((d) => ({ ...d, rotation: deg }))}
  onResize={(width, height) => setDraft((d) => ({ ...d, width, height }))}
- menuActions={[
- { id: "circle", label: t("shapeCircle"), onClick: () => setDraft((d) => ({ ...d, shape: "circle" })) },
- { id: "rect", label: t("shapeRect"), onClick: () => setDraft((d) => ({ ...d, shape: "rect" })) },
- { id: "resetRotation", label: t("resetRotation"), onClick: () => setDraft((d) => ({ ...d, rotation: 0 })) },
- { id: "resetSize", label: t("resetSize"), onClick: () => setDraft((d) => ({ ...d, width: null, height: null })) },
- ...(mode === "edit" ? [{ id: "delete", label: t("deleteTable"), danger: true, onClick: handleDelete }] : []),
- ]}
  wide
  dimUnselected
  />
