@@ -292,14 +292,14 @@ function SessionItem({
       </span>
 
       <span className="shrink-0 flex items-center gap-2">
-        {s.isDemo ? (
-          <span className="text-[10px] rounded px-1.5 py-0.5 shrink-0 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400" title="Demo account">demo</span>
-        ) : null}
-        {s.hasContent || s.hasOnboarding || s.hasRegistered ? (
+        {s.hasContent || s.isDemo || s.hasRegistered ? (
+          // Dots mirror the Meta CAPI funnel colours (view=emerald, demo/
+          // checkout=amber, registration=pink). Onboarding is intentionally
+          // not shown here.
           <span className="shrink-0 flex flex-col items-center justify-center gap-0.5">
-            {s.hasContent ? <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" title="Pricing / Demo" /> : null}
-            {s.hasOnboarding ? <span className="w-1.5 h-1.5 rounded-full bg-amber-500" title="Onboarding" /> : null}
-            {s.hasRegistered ? <span className="w-1.5 h-1.5 rounded-full bg-sky-500" title="Registered" /> : null}
+            {s.hasContent ? <span className="w-[5px] h-[5px] rounded-full bg-emerald-500" title="ViewContent" /> : null}
+            {s.isDemo ? <span className="w-[5px] h-[5px] rounded-full bg-amber-500" title="Demo (InitiateCheckout)" /> : null}
+            {s.hasRegistered ? <span className="w-[5px] h-[5px] rounded-full bg-pink-500" title="Registered (CompleteRegistration)" /> : null}
           </span>
         ) : null}
         {s.hasGoogle ? <span className={chip}>G</span> : null}
