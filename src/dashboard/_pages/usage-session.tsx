@@ -192,7 +192,7 @@ export function UsageSessionPage({ id }: { id: string }) {
     const n = e.event;
     if (!hasOnboarding && (n.includes("onb") || n.includes("onboarding"))) hasOnboarding = true;
     if (!hasPricing && n === "l_page_pricing") hasPricing = true;
-    if (!hasDemo && n.includes("demo")) hasDemo = true;
+    if (!hasDemo && n.startsWith("l_demo")) hasDemo = true;
     const cm = /^l_currency_([a-z]{3})$/.exec(n);
     if (cm) currency = cm[1].toUpperCase();
   }
