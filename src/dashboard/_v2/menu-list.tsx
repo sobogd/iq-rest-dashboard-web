@@ -25,10 +25,11 @@ import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
 import { currencySymbolOf, moveItem } from "./helpers";
 import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItemsBulk } from "./api";
+import { DemoSaveBanner } from "./demo-save-banner";
+
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
 import { track } from "@/lib/dashboard-events";
-import { MenuOnboarding } from "./menu-onboarding";
 import { ScanModal } from "./scan-modal";
 
 // Localized "Sample: " prefixes used to mark seeded demo dishes (mirrors the
@@ -56,12 +57,14 @@ interface SubData {
 export function MenuList({
  initialCategories,
  initialSub = null,
+ isDemo = false,
  onPersisted,
  scanBannerDismissed = false,
  currentGroupId = null,
 }: {
  initialCategories: Category[];
  initialSub?: SubData | null;
+ isDemo?: boolean;
  onPersisted?: () => void;
  scanBannerDismissed?: boolean;
  currentGroupId?: string | null;
@@ -427,7 +430,6 @@ export function MenuList({
  <PreviewButton
  url={menuUrl}
  onOpen={() => track("dash_menu_preview_open")}
- onboardingTarget="preview"
  />
  ) : null}
  {menuUrl ? (
@@ -436,7 +438,6 @@ export function MenuList({
  track("dash_menu_share_open");
  setShareOpen(true);
  }}
- onboardingTarget="share"
  />
  ) : null}
  </>
@@ -463,6 +464,7 @@ export function MenuList({
  </div>
 
  <div className="max-w-5xl mx-auto md:px-6 pt-4">
+ {isDemo && !currentGroupId && <DemoSaveBanner />}
  {(() => {
  const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
  if (isPaid) return null;
@@ -590,7 +592,6 @@ export function MenuList({
  track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
- data-onboarding-target="add-category"
  className={primaryBtn + " inline-flex items-center gap-1.5"}
  >
  <PlusIcon size={14} />
@@ -613,7 +614,6 @@ export function MenuList({
  onToggle={() => toggleCategory(cat.id)}
  isFirst={idx === 0}
  isLast={idx === ungroupedCategories.length - 1}
- isFirstCategory={idx === 0}
  onMoveUp={() => moveCategory(ungroupedCategories, idx, -1)}
  onMoveDown={() => moveCategory(ungroupedCategories, idx, 1)}
  onMoveDish={moveDish}
@@ -666,7 +666,6 @@ export function MenuList({
  track("dash_menu_add_category");
  router.push({ name: "category.new" });
  }}
- data-onboarding-target="add-category"
  className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
  >
  <PlusIcon size={14} />
@@ -703,8 +702,6 @@ export function MenuList({
  onPersisted?.();
  }}
  />
- {/* Guided menu tour for first-time owners (re-enabled). */}
- {scopedLeaves.length > 0 ? <MenuOnboarding onActive={expandAll} /> : null}
  </>
  );
 }
@@ -813,7 +810,6 @@ function GroupBlock({
  onToggle={() => toggleCategory(cat.id)}
  isFirst={ci === 0}
  isLast={ci === kids.length - 1}
- isFirstCategory={false}
  onMoveUp={() => moveCategory(kids, ci, -1)}
  onMoveDown={() => moveCategory(kids, ci, 1)}
  onMoveDish={moveDish}
@@ -835,7 +831,6 @@ function CategoryAccordion({
  onToggle,
  isFirst,
  isLast,
- isFirstCategory = false,
  onMoveUp,
  onMoveDown,
  onMoveDish,
@@ -848,7 +843,6 @@ function CategoryAccordion({
  onToggle: () => void;
  isFirst: boolean;
  isLast: boolean;
- isFirstCategory?: boolean;
  onMoveUp: () => void;
  onMoveDown: () => void;
  onMoveDish: (categoryId: string, idx: number, dir: number) => void;
@@ -892,7 +886,6 @@ function CategoryAccordion({
  <div className="flex items-center gap-0.5 shrink-0">
  <span
  className="inline-flex items-center gap-0"
- data-onboarding-target={isFirstCategory ? "sort" : undefined}
  >
  <button
  type="button"
@@ -920,7 +913,6 @@ function CategoryAccordion({
  track("dash_menu_category_edit");
  router.push({ name: "category.edit", id: category.id });
  }}
- data-onboarding-target={isFirstCategory ? "edit" : undefined}
  className={iconBtn}
  aria-label={t("editCategory")}
  >
@@ -945,7 +937,6 @@ function CategoryAccordion({
  currencySymbol={currencySymbol}
  isFirst={idx === 0}
  isLast={idx === category.dishes.length - 1}
- isFirstDishOfFirstCategory={isFirstCategory && idx === 0}
  onMoveUp={() => onMoveDish(category.id, idx, -1)}
  onMoveDown={() => onMoveDish(category.id, idx, 1)}
  onToggleVisible={() => onToggleDishVisible(category.id, dish.id)}
@@ -961,7 +952,6 @@ function CategoryAccordion({
  track("dash_menu_add_item");
  router.push({ name: "item.new", categoryId: category.id });
  }}
- data-onboarding-target={isFirstCategory ? "add-dish" : undefined}
  className="w-full flex items-center gap-2 pl-2 pr-3 py-2 text-sm text-muted-foreground/60 transition-colors border-t border-border"
  >
  <span className="w-8 h-8 flex items-center justify-center shrink-0">
@@ -981,7 +971,6 @@ function DishRow({
  currencySymbol,
  isFirst,
  isLast,
- isFirstDishOfFirstCategory = false,
  onMoveUp,
  onMoveDown,
  onToggleVisible,
@@ -991,7 +980,6 @@ function DishRow({
  currencySymbol: string;
  isFirst: boolean;
  isLast: boolean;
- isFirstDishOfFirstCategory?: boolean;
  onMoveUp: () => void;
  onMoveDown: () => void;
  onToggleVisible: () => void;
@@ -1056,7 +1044,6 @@ function DishRow({
  <button
  type="button"
  onClick={(e) => { e.stopPropagation(); onToggleVisible(); }}
- data-onboarding-target={isFirstDishOfFirstCategory ? "toggle-dish" : undefined}
  className={iconBtn}
  aria-label={dish.visible ? t("hideDish") : t("showDish")}
  >

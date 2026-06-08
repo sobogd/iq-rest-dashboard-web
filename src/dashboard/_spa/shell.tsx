@@ -48,6 +48,7 @@ export interface ShellInitialData {
   initialTables: TableEntity[];
   initialSub: { plan: string | null; subscriptionStatus: string | null; trialEndsAt: string | null } | null;
   isAdmin: boolean;
+  isDemo?: boolean;
   impersonatedBy?: string | null;
   userEmail?: string;
   scanBannerDismissed?: boolean;
@@ -182,6 +183,7 @@ function ShellBody(props: ShellInitialData) {
       setTables={setTables}
       sub={props.initialSub}
       isAdmin={props.isAdmin}
+      isDemo={!!props.isDemo}
       impersonatedBy={props.impersonatedBy ?? null}
       scanBannerDismissed={!!props.scanBannerDismissed}
       backToSettings={backToSettings}
@@ -203,6 +205,7 @@ interface SwitchProps {
   setTables: React.Dispatch<React.SetStateAction<TableEntity[]>>;
   sub: ShellInitialData["initialSub"];
   isAdmin: boolean;
+  isDemo: boolean;
   impersonatedBy: string | null;
   scanBannerDismissed: boolean;
   backToSettings: () => void;
@@ -211,7 +214,7 @@ interface SwitchProps {
 }
 
 function ViewSwitch(p: SwitchProps) {
-  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, impersonatedBy, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
+  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, isDemo, impersonatedBy, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
   const router = useDashboardRouter();
 
   const onSavedMenu = async () => {
@@ -229,6 +232,7 @@ function ViewSwitch(p: SwitchProps) {
         <MenuList
           initialCategories={categories}
           initialSub={sub}
+          isDemo={isDemo}
           onPersisted={refreshMenu}
           scanBannerDismissed={scanBannerDismissed}
           currentGroupId={view.group ?? null}

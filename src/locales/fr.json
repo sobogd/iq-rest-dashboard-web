@@ -105,24 +105,6 @@
       "editDish": "Modifier le plat",
       "hideDish": "Masquer le plat",
       "showDish": "Afficher le plat",
-      "onboarding": {
-        "step": {
-          "addCategory": "En appuyant sur ce bouton, vous ajouterez une nouvelle catégorie (par exemple : Desserts, Boissons, Plats).",
-          "addDish": "En appuyant sur ce bouton, vous ajouterez un plat à une catégorie.",
-          "edit": "En appuyant sur ce crayon, vous ouvrirez l'éditeur. Pour une catégorie — renommer. Pour un plat — nom, prix, photo, description, allergènes, traductions.",
-          "toggleDish": "En appuyant sur cet œil, vous masquerez ou afficherez un plat aux clients. Le plat lui-même n'est pas supprimé.",
-          "sort": "En appuyant sur ces flèches, vous changerez l'ordre des catégories et des plats. Ce qui est en haut est vu en premier par les clients.",
-          "preview": "En appuyant sur ce bouton, vous ouvrirez un aperçu du menu — ce que voit un client en scannant le QR.",
-          "share": "En appuyant sur ce bouton, vous obtiendrez le lien et le QR code de votre menu, prêts à imprimer."
-        },
-        "button": {
-          "continue": "Continuer",
-          "done": "Terminé",
-          "back": "Retour",
-          "close": "Fermer l'introduction",
-          "skip": "Passer"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Téléchargez votre carte papier",
@@ -448,7 +430,10 @@
       "colorClear": "Effacer la couleur",
       "colorCustom": "Personnalisé",
       "descriptionLabel": "Description",
-      "descriptionPlaceholder": "Une courte note sur cette table"
+      "descriptionPlaceholder": "Une courte note sur cette table",
+      "shapeLabel": "Forme",
+      "shapeCircle": "Cercle",
+      "shapeRect": "Rectangle"
     },
     "settings": {
       "breadcrumb": "Paramètres",
@@ -917,5 +902,33 @@
       "requiresPaid": "Les appareils nécessitent un abonnement payant ou un essai actif.",
       "createFailed": "Impossible de créer l'appareil"
     }
+  },
+  "demo": {
+    "bannerText": "Enregistrez votre menu avant de le perdre.",
+    "bannerCta": "Enregistrer mon menu",
+    "modalTitle": "Enregistrez votre menu",
+    "modalSubtitle": "Saisissez votre e-mail — nous enverrons un code et transformerons cette démo en votre compte.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Envoyer le code",
+    "codeTitle": "Saisissez le code",
+    "codeSubtitle": "Nous avons envoyé un code à 6 chiffres à {email}.",
+    "codeLabel": "Code de vérification",
+    "verify": "Enregistrer et continuer",
+    "success": "Votre menu est enregistré !",
+    "changeEmail": "Utiliser un autre e-mail",
+    "keepData": "Garder mes données",
+    "startClean": "Repartir de zéro",
+    "keepDataHint": "Vos tables et votre menu sont conservés. Les commandes et réservations d'exemple sont supprimées.",
+    "startCleanHint": "Commencez avec un restaurant vide. Le menu, les tables, les commandes et les réservations d'exemple sont supprimés.",
+    "errors": {
+      "emailInvalid": "Veuillez saisir une adresse e-mail valide.",
+      "sendFailed": "Impossible d'envoyer le code. Réessayez.",
+      "verifyFailed": "Impossible de vérifier le code. Réessayez.",
+      "invalidCode": "Code incorrect. Réessayez.",
+      "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
+      "tooManyAttempts": "Trop de tentatives. Attendez et réessayez plus tard."
+    },
+    "bannerSubtitle": "Vous testez une démo, vos modifications ne sont donc pas enregistrées. Ajoutez votre e-mail pour conserver ce menu comme votre propre compte."
   }
 }

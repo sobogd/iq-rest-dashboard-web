@@ -105,24 +105,6 @@
       "editDish": "Editar prato",
       "hideDish": "Ocultar prato",
       "showDish": "Mostrar prato",
-      "onboarding": {
-        "step": {
-          "addCategory": "Ao tocar neste botão, irá adicionar uma nova categoria (por exemplo: Sobremesas, Bebidas, Pratos principais).",
-          "addDish": "Ao tocar neste botão, irá adicionar um prato a uma categoria.",
-          "edit": "Ao tocar neste lápis, irá abrir o editor. Numa categoria — renomear. Num prato — nome, preço, foto, descrição, alérgenos, traduções.",
-          "toggleDish": "Ao tocar neste olho, irá ocultar ou mostrar um prato aos clientes. O prato em si não é eliminado.",
-          "sort": "Ao tocar nestas setas, irá mudar a ordem das categorias e pratos. O que está no topo é visto primeiro pelos clientes.",
-          "preview": "Ao tocar neste botão, irá abrir uma pré-visualização do menu — o que o cliente vê após digitalizar o QR.",
-          "share": "Ao tocar neste botão, irá obter o link e o código QR do seu menu, prontos para imprimir."
-        },
-        "button": {
-          "continue": "Continuar",
-          "done": "Concluído",
-          "back": "Voltar",
-          "close": "Fechar a introdução",
-          "skip": "Pular"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Carrega o teu menu em papel",
@@ -448,7 +430,10 @@
       "colorClear": "Limpar cor",
       "colorCustom": "Personalizado",
       "descriptionLabel": "Descrição",
-      "descriptionPlaceholder": "Uma nota breve sobre esta mesa"
+      "descriptionPlaceholder": "Uma nota breve sobre esta mesa",
+      "shapeLabel": "Forma",
+      "shapeCircle": "Círculo",
+      "shapeRect": "Retângulo"
     },
     "settings": {
       "breadcrumb": "Configurações",
@@ -917,5 +902,33 @@
       "requiresPaid": "Os dispositivos requerem um plano pago ou um período de teste ativo.",
       "createFailed": "Não foi possível criar o dispositivo"
     }
+  },
+  "demo": {
+    "bannerText": "Guarde o seu menu antes de o perder.",
+    "bannerCta": "Guardar o meu menu",
+    "modalTitle": "Guarde o seu menu",
+    "modalSubtitle": "Introduza o seu email — enviaremos um código e tornaremos esta demo na sua conta.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Enviar código",
+    "codeTitle": "Introduza o código",
+    "codeSubtitle": "Enviámos um código de 6 dígitos para {email}.",
+    "codeLabel": "Código de verificação",
+    "verify": "Guardar e continuar",
+    "success": "O seu menu está guardado!",
+    "changeEmail": "Usar outro email",
+    "keepData": "Manter os meus dados",
+    "startClean": "Começar do zero",
+    "keepDataHint": "As suas mesas e o menu mantêm-se. Pedidos e reservas de exemplo são removidos.",
+    "startCleanHint": "Comece com um restaurante vazio. Menu, mesas, pedidos e reservas de exemplo são removidos.",
+    "errors": {
+      "emailInvalid": "Introduza um endereço de email válido.",
+      "sendFailed": "Não foi possível enviar o código. Tente novamente.",
+      "verifyFailed": "Não foi possível verificar o código. Tente novamente.",
+      "invalidCode": "Código errado. Tente novamente.",
+      "codeExpired": "Este código expirou. Peça um novo.",
+      "tooManyAttempts": "Demasiadas tentativas. Aguarde e tente mais tarde."
+    },
+    "bannerSubtitle": "Está a testar uma demo, por isso as suas alterações não são guardadas. Adicione o seu email para manter este menu como a sua conta."
   }
 }

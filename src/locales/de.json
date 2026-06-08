@@ -105,24 +105,6 @@
       "editDish": "Gericht bearbeiten",
       "hideDish": "Gericht ausblenden",
       "showDish": "Gericht einblenden",
-      "onboarding": {
-        "step": {
-          "addCategory": "Mit einem Tipp auf diese Schaltfläche fügen Sie eine neue Kategorie hinzu (z. B. Desserts, Getränke, Hauptgerichte).",
-          "addDish": "Mit einem Tipp auf diese Schaltfläche fügen Sie ein Gericht zu einer Kategorie hinzu.",
-          "edit": "Mit einem Tipp auf diesen Stift öffnen Sie den Editor. Bei einer Kategorie — Umbenennen. Bei einem Gericht — Name, Preis, Foto, Beschreibung, Allergene, Übersetzungen.",
-          "toggleDish": "Mit einem Tipp auf dieses Auge blenden Sie ein Gericht für Gäste aus oder ein. Das Gericht selbst wird nicht gelöscht.",
-          "sort": "Mit einem Tipp auf diese Pfeile ändern Sie die Reihenfolge der Kategorien und Gerichte. Was oben steht, sehen Gäste zuerst.",
-          "preview": "Mit einem Tipp auf diese Schaltfläche öffnen Sie eine Vorschau der Speisekarte — das, was ein Gast nach dem Scannen des QR sieht.",
-          "share": "Mit einem Tipp auf diese Schaltfläche erhalten Sie den Link und den QR-Code Ihrer Speisekarte zum Drucken."
-        },
-        "button": {
-          "continue": "Weiter",
-          "done": "Fertig",
-          "back": "Zurück",
-          "close": "Onboarding schließen",
-          "skip": "Überspringen"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Lade deine Papierkarte hoch",
@@ -448,7 +430,10 @@
       "colorClear": "Farbe entfernen",
       "colorCustom": "Eigene",
       "descriptionLabel": "Beschreibung",
-      "descriptionPlaceholder": "Eine kurze Notiz zu diesem Tisch"
+      "descriptionPlaceholder": "Eine kurze Notiz zu diesem Tisch",
+      "shapeLabel": "Form",
+      "shapeCircle": "Kreis",
+      "shapeRect": "Rechteck"
     },
     "settings": {
       "breadcrumb": "Einstellungen",
@@ -917,5 +902,33 @@
       "requiresPaid": "Geräte erfordern einen kostenpflichtigen Tarif oder eine aktive Testphase.",
       "createFailed": "Gerät konnte nicht erstellt werden"
     }
+  },
+  "demo": {
+    "bannerText": "Speichere dein Menü, bevor es verloren geht.",
+    "bannerCta": "Menü speichern",
+    "modalTitle": "Menü speichern",
+    "modalSubtitle": "Gib deine E-Mail ein — wir senden einen Code und machen aus dieser Demo dein Konto.",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Code senden",
+    "codeTitle": "Code eingeben",
+    "codeSubtitle": "Wir haben einen 6-stelligen Code an {email} gesendet.",
+    "codeLabel": "Bestätigungscode",
+    "verify": "Speichern und fortfahren",
+    "success": "Dein Menü ist gespeichert!",
+    "changeEmail": "Andere E-Mail verwenden",
+    "keepData": "Daten behalten",
+    "startClean": "Neu anfangen",
+    "keepDataHint": "Deine Tische und dein Menü bleiben. Beispielbestellungen und -reservierungen werden entfernt.",
+    "startCleanHint": "Mit einem leeren Restaurant starten. Beispielmenü, Tische, Bestellungen und Reservierungen werden entfernt.",
+    "errors": {
+      "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+      "sendFailed": "Code konnte nicht gesendet werden. Erneut versuchen.",
+      "verifyFailed": "Code konnte nicht überprüft werden. Erneut versuchen.",
+      "invalidCode": "Falscher Code. Erneut versuchen.",
+      "codeExpired": "Dieser Code ist abgelaufen. Fordere einen neuen an.",
+      "tooManyAttempts": "Zu viele Versuche. Warte und versuche es später erneut."
+    },
+    "bannerSubtitle": "Du testest eine Demo, deine Änderungen werden also nicht gespeichert. Gib deine E-Mail ein, um dieses Menü als eigenes Konto zu behalten."
   }
 }

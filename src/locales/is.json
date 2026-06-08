@@ -105,24 +105,6 @@
       "editDish": "Breyta rétti",
       "hideDish": "Fela rétt",
       "showDish": "Sýna rétt",
-      "onboarding": {
-        "step": {
-          "addCategory": "Með því að ýta á þennan hnapp bætir þú við nýjum flokki (til dæmis: Eftirréttir, Drykkir, Aðalréttir).",
-          "addDish": "Með því að ýta á þennan hnapp bætir þú rétti við flokk.",
-          "edit": "Með því að ýta á þennan blýant opnar þú ritilinn. Á flokki — endurnefning. Á rétti — nafn, verð, mynd, lýsing, ofnæmisvaldar, þýðingar.",
-          "toggleDish": "Með því að ýta á þetta auga felur þú eða birtir rétt fyrir gestum. Rétturinn sjálfur er ekki eytt.",
-          "sort": "Með því að ýta á þessar örvar breytir þú röð flokka og rétta. Það efsta sjá gestir fyrst.",
-          "preview": "Með því að ýta á þennan hnapp opnar þú forskoðun matseðils — það sem gestur sér eftir að hafa skannað QR-kóðann.",
-          "share": "Með því að ýta á þennan hnapp færðu tengil og QR-kóða matseðils, tilbúna til prentunar."
-        },
-        "button": {
-          "continue": "Áfram",
-          "done": "Lokið",
-          "back": "Til baka",
-          "close": "Loka kynningu",
-          "skip": "Sleppa"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Hladdu upp pappírsmatseðlinum",
@@ -448,7 +430,10 @@
       "colorClear": "Hreinsa lit",
       "colorCustom": "Sérsniðinn",
       "descriptionLabel": "Lýsing",
-      "descriptionPlaceholder": "Stutt athugasemd um þetta borð"
+      "descriptionPlaceholder": "Stutt athugasemd um þetta borð",
+      "shapeLabel": "Lögun",
+      "shapeCircle": "Hringur",
+      "shapeRect": "Rétthyrningur"
     },
     "settings": {
       "breadcrumb": "Stillingar",
@@ -917,5 +902,33 @@
       "requiresPaid": "Tæki krefjast greidds áskriftarpakka eða virkrar prufuáskriftar.",
       "createFailed": "Tókst ekki að búa til tækið"
     }
+  },
+  "demo": {
+    "bannerText": "Vistaðu matseðilinn áður en hann hverfur.",
+    "bannerCta": "Vista matseðilinn",
+    "modalTitle": "Vistaðu matseðilinn",
+    "modalSubtitle": "Sláðu inn netfangið þitt — við sendum kóða og breytum þessari kynningu í reikninginn þinn.",
+    "emailLabel": "Netfang",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Senda kóða",
+    "codeTitle": "Sláðu inn kóðann",
+    "codeSubtitle": "Við sendum 6 stafa kóða á {email}.",
+    "codeLabel": "Staðfestingarkóði",
+    "verify": "Vista og halda áfram",
+    "success": "Matseðillinn þinn er vistaður!",
+    "changeEmail": "Nota annað netfang",
+    "keepData": "Halda gögnunum mínum",
+    "startClean": "Byrja upp á nýtt",
+    "keepDataHint": "Borðin þín og matseðillinn haldast. Sýnipantanir og -bókanir eru fjarlægðar.",
+    "startCleanHint": "Byrjaðu með tóman veitingastað. Sýnimatseðill, borð, pantanir og bókanir eru fjarlægð.",
+    "errors": {
+      "emailInvalid": "Sláðu inn gilt netfang.",
+      "sendFailed": "Ekki tókst að senda kóðann. Reyndu aftur.",
+      "verifyFailed": "Ekki tókst að staðfesta kóðann. Reyndu aftur.",
+      "invalidCode": "Rangur kóði. Reyndu aftur.",
+      "codeExpired": "Þessi kóði er útrunninn. Biddu um nýjan.",
+      "tooManyAttempts": "Of margar tilraunir. Bíddu og reyndu aftur síðar."
+    },
+    "bannerSubtitle": "Þú ert að prófa kynningu, svo breytingarnar þínar vistast ekki. Bættu við netfanginu þínu til að halda þessum matseðli sem þínum eigin reikningi."
   }
 }

@@ -105,24 +105,6 @@
       "editDish": "Rediger rett",
       "hideDish": "Skjul rett",
       "showDish": "Vis rett",
-      "onboarding": {
-        "step": {
-          "addCategory": "Ved å trykke på denne knappen legger du til en ny kategori (for eksempel: Desserter, Drikker, Hovedretter).",
-          "addDish": "Ved å trykke på denne knappen legger du til en rett i en kategori.",
-          "edit": "Ved å trykke på denne blyanten åpner du redigeringen. På en kategori — endre navn. På en rett — navn, pris, bilde, beskrivelse, allergener, oversettelser.",
-          "toggleDish": "Ved å trykke på dette øyet skjuler eller viser du en rett for gjester. Selve retten slettes ikke.",
-          "sort": "Ved å trykke på disse pilene endrer du rekkefølgen på kategorier og retter. Det som er øverst ser gjestene først.",
-          "preview": "Ved å trykke på denne knappen åpner du en forhåndsvisning av menyen — det gjesten ser etter å ha skannet QR-en.",
-          "share": "Ved å trykke på denne knappen får du lenken og QR-koden til menyen, klar til utskrift."
-        },
-        "button": {
-          "continue": "Fortsett",
-          "done": "Ferdig",
-          "back": "Tilbake",
-          "close": "Lukk introduksjonen",
-          "skip": "Hopp over"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Last opp papirmenyen din",
@@ -448,7 +430,10 @@
       "colorClear": "Fjern farge",
       "colorCustom": "Tilpasset",
       "descriptionLabel": "Beskrivelse",
-      "descriptionPlaceholder": "En kort notis om dette bordet"
+      "descriptionPlaceholder": "En kort notis om dette bordet",
+      "shapeLabel": "Form",
+      "shapeCircle": "Sirkel",
+      "shapeRect": "Rektangel"
     },
     "settings": {
       "breadcrumb": "Innstillinger",
@@ -917,5 +902,33 @@
       "requiresPaid": "Enheter krever et betalt abonnement eller en aktiv prøveperiode.",
       "createFailed": "Kunne ikke opprette enheten"
     }
+  },
+  "demo": {
+    "bannerText": "Lagre menyen før den forsvinner.",
+    "bannerCta": "Lagre menyen min",
+    "modalTitle": "Lagre menyen din",
+    "modalSubtitle": "Skriv inn e-posten din — vi sender en kode og gjør denne demoen til kontoen din.",
+    "emailLabel": "E-post",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Send kode",
+    "codeTitle": "Skriv inn koden",
+    "codeSubtitle": "Vi sendte en 6-sifret kode til {email}.",
+    "codeLabel": "Bekreftelseskode",
+    "verify": "Lagre og fortsett",
+    "success": "Menyen din er lagret!",
+    "changeEmail": "Bruk en annen e-post",
+    "keepData": "Behold dataene mine",
+    "startClean": "Start på nytt",
+    "keepDataHint": "Bordene og menyen din beholdes. Eksempelordrer og -reservasjoner fjernes.",
+    "startCleanHint": "Start med en tom restaurant. Eksempelmeny, bord, ordrer og reservasjoner fjernes.",
+    "errors": {
+      "emailInvalid": "Skriv inn en gyldig e-postadresse.",
+      "sendFailed": "Kunne ikke sende koden. Prøv igjen.",
+      "verifyFailed": "Kunne ikke bekrefte koden. Prøv igjen.",
+      "invalidCode": "Feil kode. Prøv igjen.",
+      "codeExpired": "Denne koden er utløpt. Be om en ny.",
+      "tooManyAttempts": "For mange forsøk. Vent og prøv igjen senere."
+    },
+    "bannerSubtitle": "Du tester en demo, så endringene dine lagres ikke. Legg til e-posten din for å beholde menyen som din egen konto."
   }
 }

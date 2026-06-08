@@ -105,24 +105,6 @@
       "editDish": "Gerecht bewerken",
       "hideDish": "Gerecht verbergen",
       "showDish": "Gerecht tonen",
-      "onboarding": {
-        "step": {
-          "addCategory": "Door op deze knop te tikken, voeg je een nieuwe categorie toe (bijvoorbeeld: Desserts, Drankjes, Hoofdgerechten).",
-          "addDish": "Door op deze knop te tikken, voeg je een gerecht toe aan een categorie.",
-          "edit": "Door op dit potlood te tikken, open je de editor. Bij een categorie — hernoemen. Bij een gerecht — naam, prijs, foto, beschrijving, allergenen, vertalingen.",
-          "toggleDish": "Door op dit oog te tikken, verberg of toon je een gerecht aan gasten. Het gerecht zelf wordt niet verwijderd.",
-          "sort": "Door op deze pijlen te tikken, verander je de volgorde van categorieën en gerechten. Wat bovenaan staat, zien gasten eerst.",
-          "preview": "Door op deze knop te tikken, open je een voorbeeld van het menu — wat een gast ziet na het scannen van de QR.",
-          "share": "Door op deze knop te tikken, krijg je de link en de QR-code van je menu, klaar om af te drukken."
-        },
-        "button": {
-          "continue": "Doorgaan",
-          "done": "Klaar",
-          "back": "Terug",
-          "close": "Onboarding sluiten",
-          "skip": "Overslaan"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Upload je papieren menu",
@@ -448,7 +430,10 @@
       "colorClear": "Kleur wissen",
       "colorCustom": "Aangepast",
       "descriptionLabel": "Beschrijving",
-      "descriptionPlaceholder": "Een korte notitie over deze tafel"
+      "descriptionPlaceholder": "Een korte notitie over deze tafel",
+      "shapeLabel": "Vorm",
+      "shapeCircle": "Cirkel",
+      "shapeRect": "Rechthoek"
     },
     "settings": {
       "breadcrumb": "Instellingen",
@@ -917,5 +902,33 @@
       "requiresPaid": "Apparaten vereisen een betaald abonnement of een actieve proefperiode.",
       "createFailed": "Apparaat kon niet worden aangemaakt"
     }
+  },
+  "demo": {
+    "bannerText": "Bewaar je menu voordat het verdwijnt.",
+    "bannerCta": "Mijn menu opslaan",
+    "modalTitle": "Bewaar je menu",
+    "modalSubtitle": "Voer je e-mail in — we sturen een code en maken van deze demo jouw account.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Code versturen",
+    "codeTitle": "Voer de code in",
+    "codeSubtitle": "We hebben een 6-cijferige code naar {email} gestuurd.",
+    "codeLabel": "Verificatiecode",
+    "verify": "Opslaan en doorgaan",
+    "success": "Je menu is opgeslagen!",
+    "changeEmail": "Ander e-mailadres gebruiken",
+    "keepData": "Mijn gegevens behouden",
+    "startClean": "Opnieuw beginnen",
+    "keepDataHint": "Je tafels en menu blijven. Voorbeeldbestellingen en -reserveringen worden verwijderd.",
+    "startCleanHint": "Begin met een leeg restaurant. Voorbeeldmenu, tafels, bestellingen en reserveringen worden verwijderd.",
+    "errors": {
+      "emailInvalid": "Voer een geldig e-mailadres in.",
+      "sendFailed": "Kan de code niet versturen. Probeer opnieuw.",
+      "verifyFailed": "Kan de code niet verifiëren. Probeer opnieuw.",
+      "invalidCode": "Verkeerde code. Probeer opnieuw.",
+      "codeExpired": "Deze code is verlopen. Vraag een nieuwe aan.",
+      "tooManyAttempts": "Te veel pogingen. Wacht en probeer het later opnieuw."
+    },
+    "bannerSubtitle": "Je test een demo, dus je wijzigingen worden niet opgeslagen. Voeg je e-mail toe om dit menu als je eigen account te behouden."
   }
 }

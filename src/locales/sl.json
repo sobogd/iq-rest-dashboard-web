@@ -105,24 +105,6 @@
       "editDish": "Uredi jed",
       "hideDish": "Skrij jed",
       "showDish": "Prikaži jed",
-      "onboarding": {
-        "step": {
-          "addCategory": "S klikom na ta gumb boste dodali novo kategorijo (na primer: Sladice, Pijače, Glavne jedi).",
-          "addDish": "S klikom na ta gumb boste dodali jed v kategorijo.",
-          "edit": "S klikom na ta svinčnik boste odprli urejevalnik. Pri kategoriji — preimenovanje. Pri jedi — ime, cena, fotografija, opis, alergeni, prevodi.",
-          "toggleDish": "S klikom na to oko boste skrili ali prikazali jed gostom. Sama jed se ne izbriše.",
-          "sort": "S klikom na te puščice boste spremenili vrstni red kategorij in jedi. Tisto, kar je na vrhu, gostje vidijo najprej.",
-          "preview": "S klikom na ta gumb boste odprli predogled jedilnika — tisto, kar gost vidi po skeniranju QR kode.",
-          "share": "S klikom na ta gumb boste pridobili povezavo in QR kodo jedilnika, pripravljene za tisk."
-        },
-        "button": {
-          "continue": "Naprej",
-          "done": "Končano",
-          "back": "Nazaj",
-          "close": "Zapri uvod",
-          "skip": "Preskoči"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Naloži svoj papirnati meni",
@@ -448,7 +430,10 @@
       "colorClear": "Odstrani barvo",
       "colorCustom": "Po meri",
       "descriptionLabel": "Opis",
-      "descriptionPlaceholder": "Kratka opomba o tej mizi"
+      "descriptionPlaceholder": "Kratka opomba o tej mizi",
+      "shapeLabel": "Oblika",
+      "shapeCircle": "Krog",
+      "shapeRect": "Pravokotnik"
     },
     "settings": {
       "breadcrumb": "Nastavitve",
@@ -917,5 +902,33 @@
       "requiresPaid": "Naprave zahtevajo plačan paket ali aktivno preizkusno obdobje.",
       "createFailed": "Naprave ni bilo mogoče ustvariti"
     }
+  },
+  "demo": {
+    "bannerText": "Shranite jedilnik, preden izgine.",
+    "bannerCta": "Shrani jedilnik",
+    "modalTitle": "Shranite jedilnik",
+    "modalSubtitle": "Vnesite e-pošto — poslali bomo kodo in to predstavitev spremenili v vaš račun.",
+    "emailLabel": "E-pošta",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Pošlji kodo",
+    "codeTitle": "Vnesite kodo",
+    "codeSubtitle": "Poslali smo 6-mestno kodo na {email}.",
+    "codeLabel": "Potrditvena koda",
+    "verify": "Shrani in nadaljuj",
+    "success": "Vaš jedilnik je shranjen!",
+    "changeEmail": "Uporabi drugo e-pošto",
+    "keepData": "Ohrani moje podatke",
+    "startClean": "Začni znova",
+    "keepDataHint": "Vaše mize in jedilnik ostanejo. Vzorčna naročila in rezervacije se izbrišejo.",
+    "startCleanHint": "Začnite s prazno restavracijo. Vzorčni jedilnik, mize, naročila in rezervacije se izbrišejo.",
+    "errors": {
+      "emailInvalid": "Vnesite veljaven e-poštni naslov.",
+      "sendFailed": "Kode ni bilo mogoče poslati. Poskusite znova.",
+      "verifyFailed": "Kode ni bilo mogoče preveriti. Poskusite znova.",
+      "invalidCode": "Napačna koda. Poskusite znova.",
+      "codeExpired": "Ta koda je potekla. Zahtevajte novo.",
+      "tooManyAttempts": "Preveč poskusov. Počakajte in poskusite pozneje."
+    },
+    "bannerSubtitle": "Preizkušate predstavitev, zato se spremembe ne shranijo. Dodajte e-pošto, da obdržite ta jedilnik kot svoj račun."
   }
 }

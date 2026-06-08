@@ -675,6 +675,7 @@ export function OrdersPage({
  readyIds={readyIds}
  badgeFor={tileBadge}
  wide
+ ringAll
  />
  ) : null;
 
@@ -1772,6 +1773,7 @@ function ChangeTableModal({
  onSelectTable={(id) => setSelectedId(id)}
  occupiedIds={occupiedIds}
  wide
+ ringAll
  />
  </div>
  </Modal>

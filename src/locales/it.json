@@ -105,24 +105,6 @@
       "editDish": "Modifica piatto",
       "hideDish": "Nascondi piatto",
       "showDish": "Mostra piatto",
-      "onboarding": {
-        "step": {
-          "addCategory": "Toccando questo pulsante, aggiungerai una nuova categoria (per esempio: Dolci, Bevande, Primi).",
-          "addDish": "Toccando questo pulsante, aggiungerai un piatto a una categoria.",
-          "edit": "Toccando questa matita, aprirai l'editor. Per una categoria — rinominare. Per un piatto — nome, prezzo, foto, descrizione, allergeni, traduzioni.",
-          "toggleDish": "Toccando questo occhio, nasconderai o mostrerai un piatto agli ospiti. Il piatto non viene eliminato.",
-          "sort": "Toccando queste frecce, cambierai l'ordine di categorie e piatti. Ciò che sta in cima viene visto per primo dagli ospiti.",
-          "preview": "Toccando questo pulsante, aprirai un'anteprima del menu — quello che vede un ospite scansionando il QR.",
-          "share": "Toccando questo pulsante, otterrai il link e il QR code del tuo menu, pronti per la stampa."
-        },
-        "button": {
-          "continue": "Continua",
-          "done": "Fatto",
-          "back": "Indietro",
-          "close": "Chiudi onboarding",
-          "skip": "Salta"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Carica il tuo menù cartaceo",
@@ -448,7 +430,10 @@
       "colorClear": "Rimuovi colore",
       "colorCustom": "Personalizzato",
       "descriptionLabel": "Descrizione",
-      "descriptionPlaceholder": "Una breve nota su questo tavolo"
+      "descriptionPlaceholder": "Una breve nota su questo tavolo",
+      "shapeLabel": "Forma",
+      "shapeCircle": "Cerchio",
+      "shapeRect": "Rettangolo"
     },
     "settings": {
       "breadcrumb": "Impostazioni",
@@ -917,5 +902,33 @@
       "requiresPaid": "I dispositivi richiedono un piano a pagamento o un periodo di prova attivo.",
       "createFailed": "Impossibile creare il dispositivo"
     }
+  },
+  "demo": {
+    "bannerText": "Salva il tuo menù prima di perderlo.",
+    "bannerCta": "Salva il mio menù",
+    "modalTitle": "Salva il tuo menù",
+    "modalSubtitle": "Inserisci la tua email — invieremo un codice e trasformeremo questa demo nel tuo account.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Invia codice",
+    "codeTitle": "Inserisci il codice",
+    "codeSubtitle": "Abbiamo inviato un codice di 6 cifre a {email}.",
+    "codeLabel": "Codice di verifica",
+    "verify": "Salva e continua",
+    "success": "Il tuo menù è salvato!",
+    "changeEmail": "Usa un'altra email",
+    "keepData": "Mantieni i miei dati",
+    "startClean": "Ricomincia da zero",
+    "keepDataHint": "I tuoi tavoli e il menù restano. Ordini e prenotazioni di esempio vengono rimossi.",
+    "startCleanHint": "Inizia con un ristorante vuoto. Menù, tavoli, ordini e prenotazioni di esempio vengono rimossi.",
+    "errors": {
+      "emailInvalid": "Inserisci un indirizzo email valido.",
+      "sendFailed": "Impossibile inviare il codice. Riprova.",
+      "verifyFailed": "Impossibile verificare il codice. Riprova.",
+      "invalidCode": "Codice errato. Riprova.",
+      "codeExpired": "Questo codice è scaduto. Richiedine uno nuovo.",
+      "tooManyAttempts": "Troppi tentativi. Attendi e riprova più tardi."
+    },
+    "bannerSubtitle": "Stai provando una demo, quindi le modifiche non vengono salvate. Aggiungi la tua email per conservare questo menù come tuo account."
   }
 }

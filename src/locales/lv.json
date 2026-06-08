@@ -105,24 +105,6 @@
       "editDish": "Rediģēt ēdienu",
       "hideDish": "Slēpt ēdienu",
       "showDish": "Rādīt ēdienu",
-      "onboarding": {
-        "step": {
-          "addCategory": "Nospiežot šo pogu, jūs pievienosiet jaunu kategoriju (piemēram: Deserti, Dzērieni, Pamatēdieni).",
-          "addDish": "Nospiežot šo pogu, jūs pievienosiet ēdienu kategorijai.",
-          "edit": "Nospiežot šo zīmuli, jūs atvērsiet redaktoru. Kategorijai — pārdēvēšana. Ēdienam — nosaukums, cena, foto, apraksts, alergēni, tulkojumi.",
-          "toggleDish": "Nospiežot šo aci, jūs slēpsiet vai parādīsiet ēdienu viesiem. Pats ēdiens netiek dzēsts.",
-          "sort": "Nospiežot šīs bultiņas, jūs mainīsiet kategoriju un ēdienu secību. To, kas atrodas augšā, viesi redz pirmo.",
-          "preview": "Nospiežot šo pogu, jūs atvērsiet ēdienkartes priekšskatījumu — to, ko viesis redz pēc QR koda skenēšanas.",
-          "share": "Nospiežot šo pogu, jūs iegūsiet ēdienkartes saiti un QR kodu, gatavus drukāšanai."
-        },
-        "button": {
-          "continue": "Turpināt",
-          "done": "Gatavs",
-          "back": "Atpakaļ",
-          "close": "Aizvērt ievadu",
-          "skip": "Izlaist"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Augšupielādē savu papīra ēdienkarti",
@@ -448,7 +430,10 @@
       "colorClear": "Notīrīt krāsu",
       "colorCustom": "Pielāgota",
       "descriptionLabel": "Apraksts",
-      "descriptionPlaceholder": "Īsa piezīme par šo galdu"
+      "descriptionPlaceholder": "Īsa piezīme par šo galdu",
+      "shapeLabel": "Forma",
+      "shapeCircle": "Aplis",
+      "shapeRect": "Taisnstūris"
     },
     "settings": {
       "breadcrumb": "Iestatījumi",
@@ -917,5 +902,33 @@
       "requiresPaid": "Ierīcēm nepieciešams maksas plāns vai aktīvs izmēģinājuma periods.",
       "createFailed": "Neizdevās izveidot ierīci"
     }
+  },
+  "demo": {
+    "bannerText": "Saglabājiet ēdienkarti, pirms tā pazūd.",
+    "bannerCta": "Saglabāt ēdienkarti",
+    "modalTitle": "Saglabājiet ēdienkarti",
+    "modalSubtitle": "Ievadiet e-pastu — nosūtīsim kodu un pārvērtīsim šo demo par jūsu kontu.",
+    "emailLabel": "E-pasts",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Nosūtīt kodu",
+    "codeTitle": "Ievadiet kodu",
+    "codeSubtitle": "Nosūtījām 6 ciparu kodu uz {email}.",
+    "codeLabel": "Verifikācijas kods",
+    "verify": "Saglabāt un turpināt",
+    "success": "Jūsu ēdienkarte ir saglabāta!",
+    "changeEmail": "Izmantot citu e-pastu",
+    "keepData": "Saglabāt manus datus",
+    "startClean": "Sākt no jauna",
+    "keepDataHint": "Jūsu galdiņi un ēdienkarte paliek. Parauga pasūtījumi un rezervācijas tiek dzēstas.",
+    "startCleanHint": "Sāciet ar tukšu restorānu. Parauga ēdienkarte, galdiņi, pasūtījumi un rezervācijas tiek dzēstas.",
+    "errors": {
+      "emailInvalid": "Ievadiet derīgu e-pasta adresi.",
+      "sendFailed": "Kodu neizdevās nosūtīt. Mēģiniet vēlreiz.",
+      "verifyFailed": "Kodu neizdevās verificēt. Mēģiniet vēlreiz.",
+      "invalidCode": "Nepareizs kods. Mēģiniet vēlreiz.",
+      "codeExpired": "Šī koda derīguma termiņš ir beidzies. Pieprasiet jaunu.",
+      "tooManyAttempts": "Pārāk daudz mēģinājumu. Uzgaidiet un mēģiniet vēlāk."
+    },
+    "bannerSubtitle": "Jūs izmēģināt demo, tāpēc izmaiņas netiek saglabātas. Pievienojiet e-pastu, lai paturētu šo ēdienkarti kā savu kontu."
   }
 }

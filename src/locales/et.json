@@ -105,24 +105,6 @@
       "editDish": "Muuda roogi",
       "hideDish": "Peida roog",
       "showDish": "Näita roogi",
-      "onboarding": {
-        "step": {
-          "addCategory": "Sellele nupule vajutades lisate uue kategooria (näiteks: Magustoidud, Joogid, Põhiroad).",
-          "addDish": "Sellele nupule vajutades lisate roa kategooriasse.",
-          "edit": "Sellele pliiatsile vajutades avate redaktori. Kategoorial — ümbernimetamine. Roal — nimi, hind, foto, kirjeldus, allergeenid, tõlked.",
-          "toggleDish": "Sellele silmale vajutades peidate või näitate rooga külalistele. Roog ise ei kustu.",
-          "sort": "Nendele nooltele vajutades muudate kategooriate ja roogade järjekorda. Ülal olev nähakse külaliste poolt esimesena.",
-          "preview": "Sellele nupule vajutades avate menüü eelvaate — selle, mida külaline näeb pärast QR-koodi skannimist.",
-          "share": "Sellele nupule vajutades saate menüü lingi ja QR-koodi, valmis trükkimiseks."
-        },
-        "button": {
-          "continue": "Edasi",
-          "done": "Valmis",
-          "back": "Tagasi",
-          "close": "Sulge tutvustus",
-          "skip": "Jäta vahele"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Lae üles paber-menüü",
@@ -448,7 +430,10 @@
       "colorClear": "Eemalda värv",
       "colorCustom": "Kohandatud",
       "descriptionLabel": "Kirjeldus",
-      "descriptionPlaceholder": "Lühike märkus selle laua kohta"
+      "descriptionPlaceholder": "Lühike märkus selle laua kohta",
+      "shapeLabel": "Kuju",
+      "shapeCircle": "Ring",
+      "shapeRect": "Ristkülik"
     },
     "settings": {
       "breadcrumb": "Seaded",
@@ -917,5 +902,33 @@
       "requiresPaid": "Seadmed nõuavad tasulist plaani või aktiivset prooviperioodi.",
       "createFailed": "Seadet ei õnnestunud luua"
     }
+  },
+  "demo": {
+    "bannerText": "Salvesta menüü, enne kui see kaob.",
+    "bannerCta": "Salvesta menüü",
+    "modalTitle": "Salvesta oma menüü",
+    "modalSubtitle": "Sisesta oma e-post — saadame koodi ja muudame selle demo sinu kontoks.",
+    "emailLabel": "E-post",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Saada kood",
+    "codeTitle": "Sisesta kood",
+    "codeSubtitle": "Saatsime 6-kohalise koodi aadressile {email}.",
+    "codeLabel": "Kinnituskood",
+    "verify": "Salvesta ja jätka",
+    "success": "Sinu menüü on salvestatud!",
+    "changeEmail": "Kasuta teist e-posti",
+    "keepData": "Säilita mu andmed",
+    "startClean": "Alusta nullist",
+    "keepDataHint": "Sinu lauad ja menüü jäävad alles. Näidistellimused ja -broneeringud eemaldatakse.",
+    "startCleanHint": "Alusta tühja restoraniga. Näidismenüü, lauad, tellimused ja broneeringud eemaldatakse.",
+    "errors": {
+      "emailInvalid": "Sisesta kehtiv e-posti aadress.",
+      "sendFailed": "Koodi saatmine ebaõnnestus. Proovi uuesti.",
+      "verifyFailed": "Koodi kinnitamine ebaõnnestus. Proovi uuesti.",
+      "invalidCode": "Vale kood. Proovi uuesti.",
+      "codeExpired": "See kood on aegunud. Telli uus.",
+      "tooManyAttempts": "Liiga palju katseid. Oota ja proovi hiljem uuesti."
+    },
+    "bannerSubtitle": "Katsetad demo, seega muudatusi ei salvestata. Lisa oma e-post, et hoida see menüü oma kontona alles."
   }
 }

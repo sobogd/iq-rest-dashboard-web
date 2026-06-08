@@ -105,24 +105,6 @@
       "editDish": "Izmeni jelo",
       "hideDish": "Sakrij jelo",
       "showDish": "Prikaži jelo",
-      "onboarding": {
-        "step": {
-          "addCategory": "Pritiskom na ovo dugme, dodaćete novu kategoriju (na primer: Deserti, Pića, Glavna jela).",
-          "addDish": "Pritiskom na ovo dugme, dodaćete jelo u kategoriju.",
-          "edit": "Pritiskom na ovu olovku, otvorićete uređivač. Za kategoriju — preimenovanje. Za jelo — ime, cena, fotografija, opis, alergeni, prevodi.",
-          "toggleDish": "Pritiskom na ovo oko, sakrićete ili prikazaćete jelo gostima. Jelo se ne briše.",
-          "sort": "Pritiskom na ove strelice, menjate redosled kategorija i jela. Ono što je na vrhu, gosti vide prvo.",
-          "preview": "Pritiskom na ovo dugme, otvorićete pregled menija — ono što gost vidi nakon skeniranja QR-a.",
-          "share": "Pritiskom na ovo dugme, dobićete link i QR kod menija, spremne za štampu."
-        },
-        "button": {
-          "continue": "Nastavi",
-          "done": "Gotovo",
-          "back": "Nazad",
-          "close": "Zatvori uvod",
-          "skip": "Прескочи"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Otpremi papirni meni",
@@ -448,7 +430,10 @@
       "colorClear": "Уклони боју",
       "colorCustom": "Прилагођено",
       "descriptionLabel": "Опис",
-      "descriptionPlaceholder": "Кратка белешка о овом столу"
+      "descriptionPlaceholder": "Кратка белешка о овом столу",
+      "shapeLabel": "Облик",
+      "shapeCircle": "Круг",
+      "shapeRect": "Правоугаоник"
     },
     "settings": {
       "breadcrumb": "Podešavanja",
@@ -917,5 +902,33 @@
       "requiresPaid": "Уређаји захтевају плаћени план или активни пробни период.",
       "createFailed": "Уређај није могуће креирати"
     }
+  },
+  "demo": {
+    "bannerText": "Сачувајте мени пре него што нестане.",
+    "bannerCta": "Сачувај мени",
+    "modalTitle": "Сачувајте мени",
+    "modalSubtitle": "Унесите имејл — послаћемо код и претворити овај демо у ваш налог.",
+    "emailLabel": "Имејл",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Пошаљи код",
+    "codeTitle": "Унесите код",
+    "codeSubtitle": "Послали смо 6-цифрени код на {email}.",
+    "codeLabel": "Код за потврду",
+    "verify": "Сачувај и настави",
+    "success": "Ваш мени је сачуван!",
+    "changeEmail": "Користи други имејл",
+    "keepData": "Задржи моје податке",
+    "startClean": "Почни испочетка",
+    "keepDataHint": "Ваши столови и мени остају. Огледне поруџбине и резервације се бришу.",
+    "startCleanHint": "Почните са празним рестораном. Огледни мени, столови, поруџбине и резервације се бришу.",
+    "errors": {
+      "emailInvalid": "Унесите важећу имејл адресу.",
+      "sendFailed": "Слање кода није успело. Покушајте поново.",
+      "verifyFailed": "Провера кода није успела. Покушајте поново.",
+      "invalidCode": "Погрешан код. Покушајте поново.",
+      "codeExpired": "Овај код је истекао. Затражите нови.",
+      "tooManyAttempts": "Превише покушаја. Сачекајте и покушајте касније."
+    },
+    "bannerSubtitle": "Испробавате демо, па се измене не чувају. Додајте имејл да задржите овај мени као сопствени налог."
   }
 }

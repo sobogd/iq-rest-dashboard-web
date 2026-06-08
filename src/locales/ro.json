@@ -105,24 +105,6 @@
       "editDish": "Editează preparatul",
       "hideDish": "Ascunde preparatul",
       "showDish": "Afișează preparatul",
-      "onboarding": {
-        "step": {
-          "addCategory": "Apăsând pe acest buton, vei adăuga o categorie nouă (de exemplu: Deserturi, Băuturi, Feluri principale).",
-          "addDish": "Apăsând pe acest buton, vei adăuga un preparat într-o categorie.",
-          "edit": "Apăsând pe acest creion, vei deschide editorul. La categorie — redenumire. La preparat — nume, preț, fotografie, descriere, alergeni, traduceri.",
-          "toggleDish": "Apăsând pe acest ochi, vei ascunde sau afișa un preparat oaspeților. Preparatul în sine nu se șterge.",
-          "sort": "Apăsând pe aceste săgeți, schimbi ordinea categoriilor și preparatelor. Ce este sus este văzut primul de oaspeți.",
-          "preview": "Apăsând pe acest buton, vei deschide o previzualizare a meniului — ce vede oaspetele după scanarea QR.",
-          "share": "Apăsând pe acest buton, vei primi linkul și codul QR al meniului, gata de printat."
-        },
-        "button": {
-          "continue": "Continuă",
-          "done": "Gata",
-          "back": "Înapoi",
-          "close": "Închide ghidul",
-          "skip": "Sari peste"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Încarcă meniul tău pe hârtie",
@@ -448,7 +430,10 @@
       "colorClear": "Șterge culoarea",
       "colorCustom": "Personalizat",
       "descriptionLabel": "Descriere",
-      "descriptionPlaceholder": "O scurtă notă despre această masă"
+      "descriptionPlaceholder": "O scurtă notă despre această masă",
+      "shapeLabel": "Formă",
+      "shapeCircle": "Cerc",
+      "shapeRect": "Dreptunghi"
     },
     "settings": {
       "breadcrumb": "Setări",
@@ -917,5 +902,33 @@
       "requiresPaid": "Dispozitivele necesită un plan plătit sau o perioadă de probă activă.",
       "createFailed": "Dispozitivul nu a putut fi creat"
     }
+  },
+  "demo": {
+    "bannerText": "Salvează-ți meniul înainte să dispară.",
+    "bannerCta": "Salvează meniul meu",
+    "modalTitle": "Salvează-ți meniul",
+    "modalSubtitle": "Introdu emailul — îți trimitem un cod și transformăm această demonstrație în contul tău.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Trimite codul",
+    "codeTitle": "Introdu codul",
+    "codeSubtitle": "Am trimis un cod de 6 cifre la {email}.",
+    "codeLabel": "Cod de verificare",
+    "verify": "Salvează și continuă",
+    "success": "Meniul tău a fost salvat!",
+    "changeEmail": "Folosește alt email",
+    "keepData": "Păstrează datele",
+    "startClean": "Începe de la zero",
+    "keepDataHint": "Mesele și meniul tău rămân. Comenzile și rezervările de exemplu se șterg.",
+    "startCleanHint": "Începe cu un restaurant gol. Meniul, mesele, comenzile și rezervările de exemplu se șterg.",
+    "errors": {
+      "emailInvalid": "Introdu o adresă de email validă.",
+      "sendFailed": "Codul nu a putut fi trimis. Încearcă din nou.",
+      "verifyFailed": "Codul nu a putut fi verificat. Încearcă din nou.",
+      "invalidCode": "Cod greșit. Încearcă din nou.",
+      "codeExpired": "Acest cod a expirat. Solicită unul nou.",
+      "tooManyAttempts": "Prea multe încercări. Așteaptă și încearcă mai târziu."
+    },
+    "bannerSubtitle": "Testezi o demonstrație, așa că modificările nu se salvează. Adaugă emailul pentru a păstra acest meniu drept contul tău."
   }
 }

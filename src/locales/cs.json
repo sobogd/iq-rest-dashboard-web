@@ -105,24 +105,6 @@
       "editDish": "Upravit jídlo",
       "hideDish": "Skrýt jídlo",
       "showDish": "Zobrazit jídlo",
-      "onboarding": {
-        "step": {
-          "addCategory": "Kliknutím na toto tlačítko přidáte novou kategorii (například: Dezerty, Nápoje, Hlavní jídla).",
-          "addDish": "Kliknutím na toto tlačítko přidáte pokrm do kategorie.",
-          "edit": "Kliknutím na tuto tužku otevřete editor. U kategorie — přejmenování. U pokrmu — název, cena, foto, popis, alergeny, překlady.",
-          "toggleDish": "Kliknutím na toto oko skryjete nebo zobrazíte pokrm hostům. Pokrm samotný se nesmaže.",
-          "sort": "Kliknutím na tyto šipky změníte pořadí kategorií a pokrmů. Co je nahoře, hosté vidí jako první.",
-          "preview": "Kliknutím na toto tlačítko otevřete náhled menu — to, co host vidí po naskenování QR.",
-          "share": "Kliknutím na toto tlačítko získáte odkaz a QR kód menu, připravené k tisku."
-        },
-        "button": {
-          "continue": "Pokračovat",
-          "done": "Hotovo",
-          "back": "Zpět",
-          "close": "Zavřít onboarding",
-          "skip": "Přeskočit"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Nahrajte papírové menu",
@@ -448,7 +430,10 @@
       "colorClear": "Odstranit barvu",
       "colorCustom": "Vlastní",
       "descriptionLabel": "Popis",
-      "descriptionPlaceholder": "Krátká poznámka o tomto stole"
+      "descriptionPlaceholder": "Krátká poznámka o tomto stole",
+      "shapeLabel": "Tvar",
+      "shapeCircle": "Kruh",
+      "shapeRect": "Obdélník"
     },
     "settings": {
       "breadcrumb": "Nastavení",
@@ -917,5 +902,33 @@
       "requiresPaid": "Zařízení vyžadují placený tarif nebo aktivní zkušební období.",
       "createFailed": "Zařízení nelze vytvořit"
     }
+  },
+  "demo": {
+    "bannerText": "Uložte si menu, než zmizí.",
+    "bannerCta": "Uložit menu",
+    "modalTitle": "Uložte si menu",
+    "modalSubtitle": "Zadejte e-mail — pošleme kód a změníme tuto ukázku na váš účet.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Odeslat kód",
+    "codeTitle": "Zadejte kód",
+    "codeSubtitle": "Poslali jsme 6místný kód na {email}.",
+    "codeLabel": "Ověřovací kód",
+    "verify": "Uložit a pokračovat",
+    "success": "Vaše menu je uloženo!",
+    "changeEmail": "Použít jiný e-mail",
+    "keepData": "Zachovat má data",
+    "startClean": "Začít znovu",
+    "keepDataHint": "Vaše stoly a menu zůstávají. Ukázkové objednávky a rezervace se odstraní.",
+    "startCleanHint": "Začněte s prázdnou restaurací. Ukázkové menu, stoly, objednávky a rezervace se odstraní.",
+    "errors": {
+      "emailInvalid": "Zadejte platnou e-mailovou adresu.",
+      "sendFailed": "Kód se nepodařilo odeslat. Zkuste to znovu.",
+      "verifyFailed": "Kód se nepodařilo ověřit. Zkuste to znovu.",
+      "invalidCode": "Špatný kód. Zkuste to znovu.",
+      "codeExpired": "Tento kód vypršel. Vyžádejte si nový.",
+      "tooManyAttempts": "Příliš mnoho pokusů. Počkejte a zkuste to později."
+    },
+    "bannerSubtitle": "Procházíte ukázku, takže se vaše změny neukládají. Přidejte e-mail, abyste si toto menu ponechali jako vlastní účet."
   }
 }

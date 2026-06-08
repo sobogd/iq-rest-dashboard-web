@@ -105,24 +105,6 @@
       "editDish": "Edytuj danie",
       "hideDish": "Ukryj danie",
       "showDish": "Pokaż danie",
-      "onboarding": {
-        "step": {
-          "addCategory": "Klikając ten przycisk, dodasz nową kategorię (na przykład: Desery, Napoje, Dania główne).",
-          "addDish": "Klikając ten przycisk, dodasz danie do kategorii.",
-          "edit": "Klikając ten ołówek, otworzysz edytor. Dla kategorii — zmiana nazwy. Dla dania — nazwa, cena, zdjęcie, opis, alergeny, tłumaczenia.",
-          "toggleDish": "Klikając to oko, ukryjesz lub pokażesz danie gościom. Danie samo nie zostanie usunięte.",
-          "sort": "Klikając te strzałki, zmienisz kolejność kategorii i dań. To, co jest na górze, goście widzą pierwsze.",
-          "preview": "Klikając ten przycisk, otworzysz podgląd menu — to, co widzi gość po zeskanowaniu QR.",
-          "share": "Klikając ten przycisk, otrzymasz link i kod QR menu, gotowe do druku."
-        },
-        "button": {
-          "continue": "Dalej",
-          "done": "Gotowe",
-          "back": "Wstecz",
-          "close": "Zamknij wprowadzenie",
-          "skip": "Pomiń"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Wgraj swoje menu z papieru",
@@ -448,7 +430,10 @@
       "colorClear": "Wyczyść kolor",
       "colorCustom": "Niestandardowy",
       "descriptionLabel": "Opis",
-      "descriptionPlaceholder": "Krótka notatka o tym stoliku"
+      "descriptionPlaceholder": "Krótka notatka o tym stoliku",
+      "shapeLabel": "Kształt",
+      "shapeCircle": "Koło",
+      "shapeRect": "Prostokąt"
     },
     "settings": {
       "breadcrumb": "Ustawienia",
@@ -917,5 +902,33 @@
       "requiresPaid": "Urządzenia wymagają płatnego planu lub aktywnego okresu próbnego.",
       "createFailed": "Nie udało się utworzyć urządzenia"
     }
+  },
+  "demo": {
+    "bannerText": "Zapisz menu, zanim zniknie.",
+    "bannerCta": "Zapisz moje menu",
+    "modalTitle": "Zapisz swoje menu",
+    "modalSubtitle": "Podaj swój e-mail — wyślemy kod i zamienimy to demo w Twoje konto.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Wyślij kod",
+    "codeTitle": "Wpisz kod",
+    "codeSubtitle": "Wysłaliśmy 6-cyfrowy kod na {email}.",
+    "codeLabel": "Kod weryfikacyjny",
+    "verify": "Zapisz i kontynuuj",
+    "success": "Twoje menu zostało zapisane!",
+    "changeEmail": "Użyj innego e-maila",
+    "keepData": "Zachowaj moje dane",
+    "startClean": "Zacznij od nowa",
+    "keepDataHint": "Twoje stoliki i menu pozostają. Przykładowe zamówienia i rezerwacje są usuwane.",
+    "startCleanHint": "Zacznij z pustą restauracją. Przykładowe menu, stoliki, zamówienia i rezerwacje są usuwane.",
+    "errors": {
+      "emailInvalid": "Podaj prawidłowy adres e-mail.",
+      "sendFailed": "Nie udało się wysłać kodu. Spróbuj ponownie.",
+      "verifyFailed": "Nie udało się zweryfikować kodu. Spróbuj ponownie.",
+      "invalidCode": "Błędny kod. Spróbuj ponownie.",
+      "codeExpired": "Ten kod wygasł. Poproś o nowy.",
+      "tooManyAttempts": "Zbyt wiele prób. Odczekaj i spróbuj później."
+    },
+    "bannerSubtitle": "Korzystasz z wersji demo, więc zmiany nie są zapisywane. Dodaj e-mail, aby zachować to menu jako własne konto."
   }
 }

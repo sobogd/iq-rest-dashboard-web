@@ -105,24 +105,6 @@
       "editDish": "Yemeği düzenle",
       "hideDish": "Yemeği gizle",
       "showDish": "Yemeği göster",
-      "onboarding": {
-        "step": {
-          "addCategory": "Bu düğmeye dokunarak yeni bir kategori eklersiniz (örneğin: Tatlılar, İçecekler, Ana Yemekler).",
-          "addDish": "Bu düğmeye dokunarak bir kategoriye yemek eklersiniz.",
-          "edit": "Bu kaleme dokunarak düzenleyiciyi açarsınız. Kategoride — yeniden adlandırma. Yemekte — ad, fiyat, fotoğraf, açıklama, alerjenler, çeviriler.",
-          "toggleDish": "Bu göze dokunarak bir yemeği müşterilerden gizler veya gösterirsiniz. Yemeğin kendisi silinmez.",
-          "sort": "Bu oklara dokunarak kategorilerin ve yemeklerin sırasını değiştirirsiniz. Üstte olanı müşteriler önce görür.",
-          "preview": "Bu düğmeye dokunarak menünün önizlemesini açarsınız — QR'ı taradıktan sonra müşterinin gördüğü görünüm.",
-          "share": "Bu düğmeye dokunarak menünün bağlantısını ve QR kodunu yazdırmaya hazır şekilde alırsınız."
-        },
-        "button": {
-          "continue": "Devam",
-          "done": "Bitti",
-          "back": "Geri",
-          "close": "Tanıtımı kapat",
-          "skip": "Atla"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Kâğıt menünü yükle",
@@ -448,7 +430,10 @@
       "colorClear": "Rengi temizle",
       "colorCustom": "Özel",
       "descriptionLabel": "Açıklama",
-      "descriptionPlaceholder": "Bu masa hakkında kısa bir not"
+      "descriptionPlaceholder": "Bu masa hakkında kısa bir not",
+      "shapeLabel": "Şekil",
+      "shapeCircle": "Daire",
+      "shapeRect": "Dikdörtgen"
     },
     "settings": {
       "breadcrumb": "Ayarlar",
@@ -917,5 +902,33 @@
       "requiresPaid": "Cihazlar ücretli bir plan veya aktif deneme süresi gerektirir.",
       "createFailed": "Cihaz oluşturulamadı"
     }
+  },
+  "demo": {
+    "bannerText": "Menünüzü kaybolmadan kaydedin.",
+    "bannerCta": "Menümü kaydet",
+    "modalTitle": "Menünüzü kaydedin",
+    "modalSubtitle": "E-postanızı girin — bir kod gönderip bu demoyu hesabınıza dönüştüreceğiz.",
+    "emailLabel": "E-posta",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Kod gönder",
+    "codeTitle": "Kodu girin",
+    "codeSubtitle": "{email} adresine 6 haneli bir kod gönderdik.",
+    "codeLabel": "Doğrulama kodu",
+    "verify": "Kaydet ve devam et",
+    "success": "Menünüz kaydedildi!",
+    "changeEmail": "Başka bir e-posta kullan",
+    "keepData": "Verilerimi koru",
+    "startClean": "Sıfırdan başla",
+    "keepDataHint": "Masalarınız ve menünüz kalır. Örnek siparişler ve rezervasyonlar silinir.",
+    "startCleanHint": "Boş bir restoranla başlayın. Örnek menü, masalar, siparişler ve rezervasyonlar silinir.",
+    "errors": {
+      "emailInvalid": "Geçerli bir e-posta adresi girin.",
+      "sendFailed": "Kod gönderilemedi. Tekrar deneyin.",
+      "verifyFailed": "Kod doğrulanamadı. Tekrar deneyin.",
+      "invalidCode": "Yanlış kod. Tekrar deneyin.",
+      "codeExpired": "Bu kodun süresi doldu. Yeni bir tane isteyin.",
+      "tooManyAttempts": "Çok fazla deneme. Bekleyip daha sonra tekrar deneyin."
+    },
+    "bannerSubtitle": "Bir demoyu deniyorsunuz, bu yüzden değişiklikleriniz kaydedilmez. Bu menüyü kendi hesabınız olarak tutmak için e-postanızı ekleyin."
   }
 }

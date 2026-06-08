@@ -105,24 +105,6 @@
       "editDish": "Uredi jelo",
       "hideDish": "Sakrij jelo",
       "showDish": "Prikaži jelo",
-      "onboarding": {
-        "step": {
-          "addCategory": "Pritiskom na ovaj gumb, dodat ćete novu kategoriju (na primjer: Deserti, Pića, Glavna jela).",
-          "addDish": "Pritiskom na ovaj gumb, dodat ćete jelo u kategoriju.",
-          "edit": "Pritiskom na ovu olovku, otvorit ćete uređivač. Za kategoriju — preimenovanje. Za jelo — naziv, cijena, fotografija, opis, alergeni, prijevodi.",
-          "toggleDish": "Pritiskom na ovo oko, sakrit ćete ili prikazati jelo gostima. Jelo se ne briše.",
-          "sort": "Pritiskom na ove strelice, mijenjate redoslijed kategorija i jela. Ono što je na vrhu, gosti vide prvo.",
-          "preview": "Pritiskom na ovaj gumb, otvorit ćete pregled jelovnika — ono što gost vidi nakon skeniranja QR-a.",
-          "share": "Pritiskom na ovaj gumb, dobit ćete poveznicu i QR kod jelovnika, spremne za ispis."
-        },
-        "button": {
-          "continue": "Nastavi",
-          "done": "Gotovo",
-          "back": "Natrag",
-          "close": "Zatvori uvod",
-          "skip": "Preskoči"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Učitaj svoj papirnati jelovnik",
@@ -448,7 +430,10 @@
       "colorClear": "Ukloni boju",
       "colorCustom": "Prilagođeno",
       "descriptionLabel": "Opis",
-      "descriptionPlaceholder": "Kratka bilješka o ovom stolu"
+      "descriptionPlaceholder": "Kratka bilješka o ovom stolu",
+      "shapeLabel": "Oblik",
+      "shapeCircle": "Krug",
+      "shapeRect": "Pravokutnik"
     },
     "settings": {
       "breadcrumb": "Postavke",
@@ -917,5 +902,33 @@
       "requiresPaid": "Uređaji zahtijevaju plaćeni plan ili aktivno probno razdoblje.",
       "createFailed": "Nije moguće stvoriti uređaj"
     }
+  },
+  "demo": {
+    "bannerText": "Spremite jelovnik prije nego nestane.",
+    "bannerCta": "Spremi jelovnik",
+    "modalTitle": "Spremite jelovnik",
+    "modalSubtitle": "Unesite e-poštu — poslat ćemo kod i pretvoriti ovaj demo u vaš račun.",
+    "emailLabel": "E-pošta",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Pošalji kod",
+    "codeTitle": "Unesite kod",
+    "codeSubtitle": "Poslali smo 6-znamenkasti kod na {email}.",
+    "codeLabel": "Kod za potvrdu",
+    "verify": "Spremi i nastavi",
+    "success": "Vaš jelovnik je spremljen!",
+    "changeEmail": "Koristi drugu e-poštu",
+    "keepData": "Zadrži moje podatke",
+    "startClean": "Počni iznova",
+    "keepDataHint": "Vaši stolovi i jelovnik ostaju. Ogledne narudžbe i rezervacije se brišu.",
+    "startCleanHint": "Počnite s praznim restoranom. Ogledni jelovnik, stolovi, narudžbe i rezervacije se brišu.",
+    "errors": {
+      "emailInvalid": "Unesite valjanu e-adresu.",
+      "sendFailed": "Slanje koda nije uspjelo. Pokušajte ponovno.",
+      "verifyFailed": "Provjera koda nije uspjela. Pokušajte ponovno.",
+      "invalidCode": "Pogrešan kod. Pokušajte ponovno.",
+      "codeExpired": "Ovaj kod je istekao. Zatražite novi.",
+      "tooManyAttempts": "Previše pokušaja. Pričekajte i pokušajte kasnije."
+    },
+    "bannerSubtitle": "Isprobavate demo, pa se vaše promjene ne spremaju. Dodajte e-poštu da zadržite ovaj jelovnik kao vlastiti račun."
   }
 }

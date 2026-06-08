@@ -483,6 +483,10 @@ export interface ApiTable {
  color: string | null;
  x: number | null;
  y: number | null;
+ shape: string;
+ rotation: number;
+ width: number | null;
+ height: number | null;
  isActive: boolean;
  sortOrder: number;
 }
@@ -503,6 +507,10 @@ export async function createTable(payload: {
  color?: string | null;
  x?: number | null;
  y?: number | null;
+ shape?: string;
+ rotation?: number;
+ width?: number | null;
+ height?: number | null;
 }): Promise<ApiTable> {
  const res = await apiFetch("/api/tables", {
         credentials: "include",

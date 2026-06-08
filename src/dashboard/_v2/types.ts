@@ -49,6 +49,10 @@ export interface TableEntity {
  capacity: number;
  x: number | null;
  y: number | null;
+ shape: "circle" | "rect";
+ rotation: number;
+ width: number | null;
+ height: number | null;
  photoUrl: string | null;
  color: string | null;
  sortOrder: number;

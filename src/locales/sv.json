@@ -105,24 +105,6 @@
       "editDish": "Redigera rätt",
       "hideDish": "Dölj rätt",
       "showDish": "Visa rätt",
-      "onboarding": {
-        "step": {
-          "addCategory": "Genom att trycka på den här knappen lägger du till en ny kategori (till exempel: Desserter, Drycker, Huvudrätter).",
-          "addDish": "Genom att trycka på den här knappen lägger du till en rätt i en kategori.",
-          "edit": "Genom att trycka på den här pennan öppnar du redigeraren. På en kategori — namnändring. På en rätt — namn, pris, foto, beskrivning, allergener, översättningar.",
-          "toggleDish": "Genom att trycka på det här ögat döljer eller visar du en rätt för gäster. Själva rätten tas inte bort.",
-          "sort": "Genom att trycka på dessa pilar ändrar du ordningen på kategorier och rätter. Det överst ser gäster först.",
-          "preview": "Genom att trycka på den här knappen öppnar du en förhandsvisning av menyn — det som gästen ser efter att ha skannat QR-koden.",
-          "share": "Genom att trycka på den här knappen får du länken och QR-koden för menyn, redo att skrivas ut."
-        },
-        "button": {
-          "continue": "Fortsätt",
-          "done": "Klart",
-          "back": "Tillbaka",
-          "close": "Stäng introduktionen",
-          "skip": "Hoppa över"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Ladda upp din pappersmeny",
@@ -448,7 +430,10 @@
       "colorClear": "Ta bort färg",
       "colorCustom": "Anpassad",
       "descriptionLabel": "Beskrivning",
-      "descriptionPlaceholder": "En kort anteckning om detta bord"
+      "descriptionPlaceholder": "En kort anteckning om detta bord",
+      "shapeLabel": "Form",
+      "shapeCircle": "Cirkel",
+      "shapeRect": "Rektangel"
     },
     "settings": {
       "breadcrumb": "Inställningar",
@@ -917,5 +902,33 @@
       "requiresPaid": "Enheter kräver ett betalt abonnemang eller aktiv provperiod.",
       "createFailed": "Det gick inte att skapa enheten"
     }
+  },
+  "demo": {
+    "bannerText": "Spara din meny innan den försvinner.",
+    "bannerCta": "Spara min meny",
+    "modalTitle": "Spara din meny",
+    "modalSubtitle": "Ange din e-post — vi skickar en kod och gör den här demon till ditt konto.",
+    "emailLabel": "E-post",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Skicka kod",
+    "codeTitle": "Ange koden",
+    "codeSubtitle": "Vi skickade en 6-siffrig kod till {email}.",
+    "codeLabel": "Verifieringskod",
+    "verify": "Spara och fortsätt",
+    "success": "Din meny är sparad!",
+    "changeEmail": "Använd en annan e-post",
+    "keepData": "Behåll mina data",
+    "startClean": "Börja om",
+    "keepDataHint": "Dina bord och din meny finns kvar. Exempelordrar och -bokningar tas bort.",
+    "startCleanHint": "Börja med en tom restaurang. Exempelmeny, bord, ordrar och bokningar tas bort.",
+    "errors": {
+      "emailInvalid": "Ange en giltig e-postadress.",
+      "sendFailed": "Kunde inte skicka koden. Försök igen.",
+      "verifyFailed": "Kunde inte verifiera koden. Försök igen.",
+      "invalidCode": "Fel kod. Försök igen.",
+      "codeExpired": "Koden har gått ut. Begär en ny.",
+      "tooManyAttempts": "För många försök. Vänta och försök igen senare."
+    },
+    "bannerSubtitle": "Du testar en demo, så dina ändringar sparas inte. Lägg till din e-post för att behålla menyn som ett eget konto."
   }
 }

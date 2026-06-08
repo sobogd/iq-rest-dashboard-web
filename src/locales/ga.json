@@ -105,24 +105,6 @@
       "editDish": "Cuir mias in eagar",
       "hideDish": "Folaigh mias",
       "showDish": "Taispeáin mias",
-      "onboarding": {
-        "step": {
-          "addCategory": "Le brú ar an gcnaipe seo, cuirfidh tú catagóir nua leis (mar shampla: Mílseoga, Deochanna, Príomhchúrsaí).",
-          "addDish": "Le brú ar an gcnaipe seo, cuirfidh tú mias le catagóir.",
-          "edit": "Le brú ar an bpeann luaidhe seo, osclóidh tú an t-eagarthóir. Ar chatagóir — athainmniú. Ar mhias — ainm, praghas, grianghraf, cur síos, ailléirgíní, aistriúcháin.",
-          "toggleDish": "Le brú ar an tsúil seo, ceilfidh tú nó taispeánfaidh tú mias do na haíonna. Ní scriostar an mias féin.",
-          "sort": "Le brú ar na saigheada seo, athraíonn tú ord na gcatagóirí agus na miasa. An rud atá ar bharr feiceann aíonna ar dtús é.",
-          "preview": "Le brú ar an gcnaipe seo, osclóidh tú réamhamharc den bhiachlár — an rud a fheiceann aoi tar éis dó an QR a scanadh.",
-          "share": "Le brú ar an gcnaipe seo, gheobhaidh tú an nasc agus an cód QR den bhiachlár, réidh le priontáil."
-        },
-        "button": {
-          "continue": "Ar aghaidh",
-          "done": "Críochnaithe",
-          "back": "Ar ais",
-          "close": "Dún an tabhairt isteach",
-          "skip": "Scipeáil"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Uaslódáil do bhiachlár páipéir",
@@ -448,7 +430,10 @@
       "colorClear": "Glan an dath",
       "colorCustom": "Saincheaptha",
       "descriptionLabel": "Cur síos",
-      "descriptionPlaceholder": "Nóta gairid faoin mbord seo"
+      "descriptionPlaceholder": "Nóta gairid faoin mbord seo",
+      "shapeLabel": "Cruth",
+      "shapeCircle": "Ciorcal",
+      "shapeRect": "Dronuilleog"
     },
     "settings": {
       "breadcrumb": "Socruithe",
@@ -917,5 +902,33 @@
       "requiresPaid": "Éilíonn na gléasanna plean íoctha nó tréimhse trialach gníomhach.",
       "createFailed": "Níorbh fhéidir an gléas a chruthú"
     }
+  },
+  "demo": {
+    "bannerText": "Sábháil do bhiachlár sula n-imíonn sé.",
+    "bannerCta": "Sábháil mo bhiachlár",
+    "modalTitle": "Sábháil do bhiachlár",
+    "modalSubtitle": "Cuir isteach do ríomhphost — seolfaimid cód agus déanfaimid an taispeántas seo i do chuntas.",
+    "emailLabel": "Ríomhphost",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Seol cód",
+    "codeTitle": "Cuir isteach an cód",
+    "codeSubtitle": "Sheolamar cód 6 dhigit chuig {email}.",
+    "codeLabel": "Cód fíoraithe",
+    "verify": "Sábháil agus lean ar aghaidh",
+    "success": "Tá do bhiachlár sábháilte!",
+    "changeEmail": "Úsáid ríomhphost eile",
+    "keepData": "Coinnigh mo shonraí",
+    "startClean": "Tosaigh as an nua",
+    "keepDataHint": "Fanann do bhoird agus do bhiachlár. Baintear orduithe agus áirithintí samplacha.",
+    "startCleanHint": "Tosaigh le bialann fholamh. Baintear an biachlár, na boird, na horduithe agus na háirithintí samplacha.",
+    "errors": {
+      "emailInvalid": "Cuir isteach seoladh ríomhphoist bailí.",
+      "sendFailed": "Níorbh fhéidir an cód a sheoladh. Bain triail eile.",
+      "verifyFailed": "Níorbh fhéidir an cód a fhíorú. Bain triail eile.",
+      "invalidCode": "Cód mícheart. Bain triail eile.",
+      "codeExpired": "Tá an cód seo imithe in éag. Iarr ceann nua.",
+      "tooManyAttempts": "An iomarca iarrachtaí. Fan agus bain triail níos déanaí."
+    },
+    "bannerSubtitle": "Tá tú ag triail taispeántais, mar sin ní shábháiltear do chuid athruithe. Cuir do ríomhphost leis chun an biachlár seo a choinneáil mar do chuntas féin."
   }
 }

@@ -105,24 +105,6 @@
       "editDish": "Edit dish",
       "hideDish": "Hide dish",
       "showDish": "Show dish",
-      "onboarding": {
-        "step": {
-          "addCategory": "By tapping this button, you'll add a new category (for example: Desserts, Drinks, Mains).",
-          "addDish": "By tapping this button, you'll add a dish to a category.",
-          "edit": "By tapping this pencil, you'll open the editor. For a category — rename. For a dish — name, price, photo, description, allergens, translations.",
-          "toggleDish": "By tapping this eye, you'll hide or show a dish to guests. The dish itself is not deleted.",
-          "sort": "By tapping these arrows, you'll change the order of categories and dishes. What's on top is seen by guests first.",
-          "preview": "By tapping this button, you'll open a preview of the menu — what a guest sees after scanning the QR.",
-          "share": "By tapping this button, you'll get the link and the QR code of your menu, ready to print."
-        },
-        "button": {
-          "continue": "Continue",
-          "done": "Done",
-          "back": "Back",
-          "close": "Close onboarding",
-          "skip": "Skip"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Upload your paper menu",
@@ -523,7 +505,10 @@
       "colorClear": "Clear color",
       "colorCustom": "Custom",
       "descriptionLabel": "Description",
-      "descriptionPlaceholder": "A short note about this table"
+      "descriptionPlaceholder": "A short note about this table",
+      "shapeLabel": "Shape",
+      "shapeCircle": "Circle",
+      "shapeRect": "Rectangle"
     },
     "settings": {
       "breadcrumb": "Settings",
@@ -917,5 +902,33 @@
       "completed": "Completed",
       "cancelled": "Cancelled"
     }
+  },
+  "demo": {
+    "bannerText": "Save your menu before it's gone.",
+    "bannerCta": "Save my menu",
+    "modalTitle": "Save your menu",
+    "modalSubtitle": "Enter your email — we'll send a code and turn this demo into your account.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Send code",
+    "codeTitle": "Enter the code",
+    "codeSubtitle": "We sent a 6-digit code to {email}.",
+    "codeLabel": "Verification code",
+    "verify": "Save and continue",
+    "success": "Your menu is saved!",
+    "changeEmail": "Use a different email",
+    "keepData": "Keep my data",
+    "startClean": "Start clean",
+    "keepDataHint": "Your tables and menu stay. Sample orders and bookings are cleared.",
+    "startCleanHint": "Start with an empty restaurant. Sample menu, tables, orders and bookings are removed.",
+    "errors": {
+      "emailInvalid": "Please enter a valid email address.",
+      "sendFailed": "Couldn't send the code. Try again.",
+      "verifyFailed": "Couldn't verify the code. Try again.",
+      "invalidCode": "Wrong code. Try again.",
+      "codeExpired": "This code expired. Request a new one.",
+      "tooManyAttempts": "Too many attempts. Wait and try again later."
+    },
+    "bannerSubtitle": "You're exploring a demo, so your changes aren't saved. Add your email to keep this menu as your own account."
   }
 }

@@ -105,24 +105,6 @@
       "editDish": "Muokkaa annosta",
       "hideDish": "Piilota annos",
       "showDish": "Näytä annos",
-      "onboarding": {
-        "step": {
-          "addCategory": "Tätä painiketta painamalla lisäät uuden kategorian (esimerkiksi: Jälkiruoat, Juomat, Pääruoat).",
-          "addDish": "Tätä painiketta painamalla lisäät ruoan kategoriaan.",
-          "edit": "Tätä kynää painamalla avaat editorin. Kategorialla — uudelleennimeäminen. Ruoalla — nimi, hinta, kuva, kuvaus, allergeenit, käännökset.",
-          "toggleDish": "Tätä silmää painamalla piilotat tai näytät ruoan asiakkaille. Itse ruoka ei poistu.",
-          "sort": "Näitä nuolia painamalla muutat kategorioiden ja ruokien järjestystä. Ylimpänä oleva näkyy asiakkaalle ensin.",
-          "preview": "Tätä painiketta painamalla avaat ruokalistan esikatselun — sen, mitä asiakas näkee QR:n skannauksen jälkeen.",
-          "share": "Tätä painiketta painamalla saat ruokalistan linkin ja QR-koodin tulostusvalmiina."
-        },
-        "button": {
-          "continue": "Jatka",
-          "done": "Valmis",
-          "back": "Takaisin",
-          "close": "Sulje opastus",
-          "skip": "Ohita"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Lataa paperinen ruokalistasi",
@@ -448,7 +430,10 @@
       "colorClear": "Poista väri",
       "colorCustom": "Mukautettu",
       "descriptionLabel": "Kuvaus",
-      "descriptionPlaceholder": "Lyhyt huomautus tästä pöydästä"
+      "descriptionPlaceholder": "Lyhyt huomautus tästä pöydästä",
+      "shapeLabel": "Muoto",
+      "shapeCircle": "Ympyrä",
+      "shapeRect": "Suorakulmio"
     },
     "settings": {
       "breadcrumb": "Asetukset",
@@ -917,5 +902,33 @@
       "requiresPaid": "Laitteet vaativat maksullisen tilauksen tai aktiivisen kokeilujakson.",
       "createFailed": "Laitetta ei voitu luoda"
     }
+  },
+  "demo": {
+    "bannerText": "Tallenna menusi ennen kuin se katoaa.",
+    "bannerCta": "Tallenna menuni",
+    "modalTitle": "Tallenna menusi",
+    "modalSubtitle": "Anna sähköpostisi — lähetämme koodin ja muutamme tämän demon tiliksesi.",
+    "emailLabel": "Sähköposti",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Lähetä koodi",
+    "codeTitle": "Anna koodi",
+    "codeSubtitle": "Lähetimme 6-numeroisen koodin osoitteeseen {email}.",
+    "codeLabel": "Vahvistuskoodi",
+    "verify": "Tallenna ja jatka",
+    "success": "Menusi on tallennettu!",
+    "changeEmail": "Käytä toista sähköpostia",
+    "keepData": "Säilytä tietoni",
+    "startClean": "Aloita alusta",
+    "keepDataHint": "Pöytäsi ja menusi säilyvät. Esimerkkitilaukset ja -varaukset poistetaan.",
+    "startCleanHint": "Aloita tyhjällä ravintolalla. Esimerkkimenu, pöydät, tilaukset ja varaukset poistetaan.",
+    "errors": {
+      "emailInvalid": "Anna kelvollinen sähköpostiosoite.",
+      "sendFailed": "Koodin lähetys epäonnistui. Yritä uudelleen.",
+      "verifyFailed": "Koodin vahvistus epäonnistui. Yritä uudelleen.",
+      "invalidCode": "Väärä koodi. Yritä uudelleen.",
+      "codeExpired": "Tämä koodi on vanhentunut. Pyydä uusi.",
+      "tooManyAttempts": "Liikaa yrityksiä. Odota ja yritä myöhemmin uudelleen."
+    },
+    "bannerSubtitle": "Käytät demoa, joten muutoksiasi ei tallenneta. Lisää sähköpostisi säilyttääksesi tämän menun omana tilinäsi."
   }
 }

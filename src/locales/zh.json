@@ -105,24 +105,6 @@
       "editDish": "编辑菜品",
       "hideDish": "隐藏菜品",
       "showDish": "显示菜品",
-      "onboarding": {
-        "step": {
-          "addCategory": "点击此按钮，您将添加新类别（例如：甜点、饮品、主菜）。",
-          "addDish": "点击此按钮，您将向类别中添加菜品。",
-          "edit": "点击此铅笔，您将打开编辑器。类别 — 重命名。菜品 — 名称、价格、照片、描述、过敏原、翻译。",
-          "toggleDish": "点击此眼睛，您将对客人隐藏或显示菜品。菜品本身不会被删除。",
-          "sort": "点击这些箭头，您将更改类别和菜品的顺序。最上方的客人最先看到。",
-          "preview": "点击此按钮，您将打开菜单预览 — 客人扫描二维码后看到的内容。",
-          "share": "点击此按钮，您将获得菜单的链接和二维码，可直接打印。"
-        },
-        "button": {
-          "continue": "继续",
-          "done": "完成",
-          "back": "返回",
-          "close": "关闭引导",
-          "skip": "跳过"
-        }
-      },
       "scan": {
         "banner": {
           "title": "上传你的纸质菜单",
@@ -448,7 +430,10 @@
       "colorClear": "清除颜色",
       "colorCustom": "自定义",
       "descriptionLabel": "描述",
-      "descriptionPlaceholder": "关于这张桌子的简短说明"
+      "descriptionPlaceholder": "关于这张桌子的简短说明",
+      "shapeLabel": "形状",
+      "shapeCircle": "圆形",
+      "shapeRect": "矩形"
     },
     "settings": {
       "breadcrumb": "设置",
@@ -917,5 +902,33 @@
       "requiresPaid": "设备功能需要付费套餐或有效的试用期。",
       "createFailed": "无法创建设备"
     }
+  },
+  "demo": {
+    "bannerText": "在菜单消失前保存它。",
+    "bannerCta": "保存我的菜单",
+    "modalTitle": "保存您的菜单",
+    "modalSubtitle": "输入您的邮箱 — 我们将发送验证码并把此演示变成您的账户。",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "发送验证码",
+    "codeTitle": "输入验证码",
+    "codeSubtitle": "我们已向 {email} 发送 6 位验证码。",
+    "codeLabel": "验证码",
+    "verify": "保存并继续",
+    "success": "您的菜单已保存！",
+    "changeEmail": "使用其他邮箱",
+    "keepData": "保留我的数据",
+    "startClean": "从头开始",
+    "keepDataHint": "您的桌台和菜单将保留。示例订单和预订将被清除。",
+    "startCleanHint": "从空餐厅开始。示例菜单、桌台、订单和预订将被移除。",
+    "errors": {
+      "emailInvalid": "请输入有效的邮箱地址。",
+      "sendFailed": "无法发送验证码，请重试。",
+      "verifyFailed": "无法验证验证码，请重试。",
+      "invalidCode": "验证码错误，请重试。",
+      "codeExpired": "此验证码已过期，请重新获取。",
+      "tooManyAttempts": "尝试次数过多，请稍后再试。"
+    },
+    "bannerSubtitle": "您正在体验演示，因此更改不会保存。添加邮箱即可将此菜单保留为您的账户。"
   }
 }

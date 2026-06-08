@@ -105,24 +105,6 @@
       "editDish": "Edita plat",
       "hideDish": "Amaga plat",
       "showDish": "Mostra plat",
-      "onboarding": {
-        "step": {
-          "addCategory": "En tocar aquest botó, afegireu una nova categoria (per exemple: Postres, Begudes, Plats principals).",
-          "addDish": "En tocar aquest botó, afegireu un plat a una categoria.",
-          "edit": "En tocar aquest llapis, obrireu l'editor. En una categoria — canvi de nom. En un plat — nom, preu, foto, descripció, al·lèrgens, traduccions.",
-          "toggleDish": "En tocar aquest ull, amagareu o mostrareu un plat als clients. El plat en si no s'elimina.",
-          "sort": "En tocar aquestes fletxes, canviareu l'ordre de categories i plats. El que està a dalt els clients ho veuen primer.",
-          "preview": "En tocar aquest botó, obrireu una vista prèvia del menú — el que veu un client després d'escanejar el QR.",
-          "share": "En tocar aquest botó, obtindreu l'enllaç i el codi QR del menú, llestos per imprimir."
-        },
-        "button": {
-          "continue": "Continuar",
-          "done": "Fet",
-          "back": "Enrere",
-          "close": "Tancar la introducció",
-          "skip": "Omet"
-        }
-      },
       "scan": {
         "banner": {
           "title": "Puja la teva carta en paper",
@@ -448,7 +430,10 @@
       "colorClear": "Treu el color",
       "colorCustom": "Personalitzat",
       "descriptionLabel": "Descripció",
-      "descriptionPlaceholder": "Una nota breu sobre aquesta taula"
+      "descriptionPlaceholder": "Una nota breu sobre aquesta taula",
+      "shapeLabel": "Forma",
+      "shapeCircle": "Cercle",
+      "shapeRect": "Rectangle"
     },
     "settings": {
       "breadcrumb": "Configuració",
@@ -917,5 +902,33 @@
       "requiresPaid": "Els dispositius requereixen un pla de pagament o un període de prova actiu.",
       "createFailed": "No s'ha pogut crear el dispositiu"
     }
+  },
+  "demo": {
+    "bannerText": "Desa el teu menú abans que desaparegui.",
+    "bannerCta": "Desa el meu menú",
+    "modalTitle": "Desa el teu menú",
+    "modalSubtitle": "Introdueix el teu correu — enviarem un codi i convertirem aquesta demo en el teu compte.",
+    "emailLabel": "Correu",
+    "emailPlaceholder": "you@restaurant.com",
+    "sendCode": "Envia el codi",
+    "codeTitle": "Introdueix el codi",
+    "codeSubtitle": "Hem enviat un codi de 6 dígits a {email}.",
+    "codeLabel": "Codi de verificació",
+    "verify": "Desa i continua",
+    "success": "El teu menú s'ha desat!",
+    "changeEmail": "Usa un altre correu",
+    "keepData": "Conserva les meves dades",
+    "startClean": "Comença de zero",
+    "keepDataHint": "Les teves taules i el menú es mantenen. Les comandes i reserves d'exemple s'eliminen.",
+    "startCleanHint": "Comença amb un restaurant buit. El menú, taules, comandes i reserves d'exemple s'eliminen.",
+    "errors": {
+      "emailInvalid": "Introdueix una adreça de correu vàlida.",
+      "sendFailed": "No s'ha pogut enviar el codi. Torna-ho a provar.",
+      "verifyFailed": "No s'ha pogut verificar el codi. Torna-ho a provar.",
+      "invalidCode": "Codi incorrecte. Torna-ho a provar.",
+      "codeExpired": "Aquest codi ha caducat. Sol·licita'n un de nou.",
+      "tooManyAttempts": "Massa intents. Espera i torna-ho a provar més tard."
+    },
+    "bannerSubtitle": "Estàs provant una demo, així que els teus canvis no es desen. Afegeix el teu correu per conservar aquest menú com el teu compte."
   }
 }
