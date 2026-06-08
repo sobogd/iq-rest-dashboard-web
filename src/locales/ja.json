@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "このテーブルについての短いメモ",
       "shapeLabel": "形",
       "shapeCircle": "円",
-      "shapeRect": "長方形",
-      "resetRotation": "回転をリセット",
-      "resetSize": "サイズをリセット"
+      "shapeRect": "長方形"
     },
     "settings": {
       "breadcrumb": "設定",

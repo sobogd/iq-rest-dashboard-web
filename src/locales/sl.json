@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Kratka opomba o tej mizi",
       "shapeLabel": "Oblika",
       "shapeCircle": "Krog",
-      "shapeRect": "Pravokotnik",
-      "resetRotation": "Ponastavi vrtenje",
-      "resetSize": "Ponastavi velikost"
+      "shapeRect": "Pravokotnik"
     },
     "settings": {
       "breadcrumb": "Nastavitve",

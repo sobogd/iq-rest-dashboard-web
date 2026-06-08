@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Кратка бележка за тази маса",
       "shapeLabel": "Форма",
       "shapeCircle": "Кръг",
-      "shapeRect": "Правоъгълник",
-      "resetRotation": "Нулиране на завъртането",
-      "resetSize": "Нулиране на размера"
+      "shapeRect": "Правоъгълник"
     },
     "settings": {
       "breadcrumb": "Настройки",

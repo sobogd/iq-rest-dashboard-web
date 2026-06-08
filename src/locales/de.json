@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Eine kurze Notiz zu diesem Tisch",
       "shapeLabel": "Form",
       "shapeCircle": "Kreis",
-      "shapeRect": "Rechteck",
-      "resetRotation": "Drehung zurücksetzen",
-      "resetSize": "Größe zurücksetzen"
+      "shapeRect": "Rechteck"
     },
     "settings": {
       "breadcrumb": "Einstellungen",

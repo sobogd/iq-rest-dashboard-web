@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Nóta gairid faoin mbord seo",
       "shapeLabel": "Cruth",
       "shapeCircle": "Ciorcal",
-      "shapeRect": "Dronuilleog",
-      "resetRotation": "Athshocraigh rothlú",
-      "resetSize": "Athshocraigh méid"
+      "shapeRect": "Dronuilleog"
     },
     "settings": {
       "breadcrumb": "Socruithe",

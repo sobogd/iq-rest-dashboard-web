@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "이 테이블에 대한 짧은 메모",
       "shapeLabel": "모양",
       "shapeCircle": "원",
-      "shapeRect": "사각형",
-      "resetRotation": "회전 초기화",
-      "resetSize": "크기 초기화"
+      "shapeRect": "사각형"
     },
     "settings": {
       "breadcrumb": "설정",

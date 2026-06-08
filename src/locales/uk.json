@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Коротка нотатка про цей столик",
       "shapeLabel": "Форма",
       "shapeCircle": "Коло",
-      "shapeRect": "Прямокутник",
-      "resetRotation": "Скинути поворот",
-      "resetSize": "Скинути розмір"
+      "shapeRect": "Прямокутник"
     },
     "settings": {
       "breadcrumb": "Налаштування",

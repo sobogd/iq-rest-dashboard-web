@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Īsa piezīme par šo galdu",
       "shapeLabel": "Forma",
       "shapeCircle": "Aplis",
-      "shapeRect": "Taisnstūris",
-      "resetRotation": "Atiestatīt pagriešanu",
-      "resetSize": "Atiestatīt izmēru"
+      "shapeRect": "Taisnstūris"
     },
     "settings": {
       "breadcrumb": "Iestatījumi",

@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "O scurtă notă despre această masă",
       "shapeLabel": "Formă",
       "shapeCircle": "Cerc",
-      "shapeRect": "Dreptunghi",
-      "resetRotation": "Resetează rotația",
-      "resetSize": "Resetează dimensiunea"
+      "shapeRect": "Dreptunghi"
     },
     "settings": {
       "breadcrumb": "Setări",

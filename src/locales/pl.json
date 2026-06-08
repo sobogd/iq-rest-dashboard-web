@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Krótka notatka o tym stoliku",
       "shapeLabel": "Kształt",
       "shapeCircle": "Koło",
-      "shapeRect": "Prostokąt",
-      "resetRotation": "Resetuj obrót",
-      "resetSize": "Resetuj rozmiar"
+      "shapeRect": "Prostokąt"
     },
     "settings": {
       "breadcrumb": "Ustawienia",

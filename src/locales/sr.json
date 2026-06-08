@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Кратка белешка о овом столу",
       "shapeLabel": "Облик",
       "shapeCircle": "Круг",
-      "shapeRect": "Правоугаоник",
-      "resetRotation": "Поништи ротацију",
-      "resetSize": "Поништи величину"
+      "shapeRect": "Правоугаоник"
     },
     "settings": {
       "breadcrumb": "Podešavanja",

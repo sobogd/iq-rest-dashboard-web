@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "یادداشتی کوتاه درباره این میز",
       "shapeLabel": "شکل",
       "shapeCircle": "دایره",
-      "shapeRect": "مستطیل",
-      "resetRotation": "بازنشانی چرخش",
-      "resetSize": "بازنشانی اندازه"
+      "shapeRect": "مستطیل"
     },
     "settings": {
       "breadcrumb": "تنظیمات",

@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Una breve nota su questo tavolo",
       "shapeLabel": "Forma",
       "shapeCircle": "Cerchio",
-      "shapeRect": "Rettangolo",
-      "resetRotation": "Reimposta rotazione",
-      "resetSize": "Reimposta dimensione"
+      "shapeRect": "Rettangolo"
     },
     "settings": {
       "breadcrumb": "Impostazioni",

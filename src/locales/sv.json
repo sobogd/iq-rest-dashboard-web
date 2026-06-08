@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "En kort anteckning om detta bord",
       "shapeLabel": "Form",
       "shapeCircle": "Cirkel",
-      "shapeRect": "Rektangel",
-      "resetRotation": "Återställ rotation",
-      "resetSize": "Återställ storlek"
+      "shapeRect": "Rektangel"
     },
     "settings": {
       "breadcrumb": "Inställningar",

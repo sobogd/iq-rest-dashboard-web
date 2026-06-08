@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "En kort notis om dette bordet",
       "shapeLabel": "Form",
       "shapeCircle": "Sirkel",
-      "shapeRect": "Rektangel",
-      "resetRotation": "Tilbakestill rotasjon",
-      "resetSize": "Tilbakestill størrelse"
+      "shapeRect": "Rektangel"
     },
     "settings": {
       "breadcrumb": "Innstillinger",

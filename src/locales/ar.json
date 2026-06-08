@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "ملاحظة قصيرة عن هذه الطاولة",
       "shapeLabel": "الشكل",
       "shapeCircle": "دائرة",
-      "shapeRect": "مستطيل",
-      "resetRotation": "إعادة تعيين الدوران",
-      "resetSize": "إعادة تعيين الحجم"
+      "shapeRect": "مستطيل"
     },
     "settings": {
       "breadcrumb": "الإعدادات",

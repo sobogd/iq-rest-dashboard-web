@@ -433,9 +433,7 @@
       "descriptionPlaceholder": "Bu masa hakkında kısa bir not",
       "shapeLabel": "Şekil",
       "shapeCircle": "Daire",
-      "shapeRect": "Dikdörtgen",
-      "resetRotation": "Döndürmeyi sıfırla",
-      "resetSize": "Boyutu sıfırla"
+      "shapeRect": "Dikdörtgen"
     },
     "settings": {
       "breadcrumb": "Ayarlar",
