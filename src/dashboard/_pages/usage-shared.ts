@@ -18,6 +18,8 @@ export interface SessionRow {
   hasFacebook: boolean;
   hasOnboarding?: boolean;     // any onboarding event in the session
   hasContent?: boolean;        // any pricing/demo event in the session
+  hasRegistered?: boolean;     // real registration (verify/dashboard, excl. demo accounts)
+  isDemo?: boolean;            // session belongs to an ephemeral demo account
   latestFbclid: string | null; // newest fbclid in the group (for CAPI)
   latestFbTs: number | null;
   fbStage?: "reg" | "checkout" | "view" | null; // deepest CAPI event sent for latestFbclid

@@ -291,8 +291,11 @@ export function UsageSessionPage({ id }: { id: string }) {
                 <div className="text-[11px] text-muted-foreground truncate">👤 {userLabel}</div>
               ) : null}
 
-              {hasDemo || hasPricing || hasOnboarding ? (
+              {hasDemo || hasPricing || hasOnboarding || session?.hasRegistered || session?.isDemo ? (
                 <div className="flex flex-wrap items-center gap-1.5">
+                  {session?.isDemo ? (
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-semibold">Demo account</span>
+                  ) : null}
                   {hasDemo ? (
                     <span className="text-[10px] rounded px-1.5 py-0.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-400">Demo</span>
                   ) : null}
@@ -300,7 +303,10 @@ export function UsageSessionPage({ id }: { id: string }) {
                     <span className="text-[10px] rounded px-1.5 py-0.5 bg-violet-500/10 text-violet-700 dark:text-violet-400">Pricing</span>
                   ) : null}
                   {hasOnboarding ? (
-                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-sky-500/10 text-sky-700 dark:text-sky-400">Onboarding</span>
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-amber-500/10 text-amber-700 dark:text-amber-400">Onboarding</span>
+                  ) : null}
+                  {session?.hasRegistered ? (
+                    <span className="text-[10px] rounded px-1.5 py-0.5 bg-sky-500/10 text-sky-700 dark:text-sky-400">Registered</span>
                   ) : null}
                 </div>
               ) : null}
