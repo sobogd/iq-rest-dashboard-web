@@ -340,7 +340,7 @@ export function FloorMap({
  {badge && badge > 0 ? (
  <span
  className={
- "absolute -top-1 -right-1 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full ring-4 ring-foreground/20 " +
+ "absolute -top-2.5 -right-2.5 z-20 min-w-[18px] h-[18px] px-1 inline-flex items-center justify-center text-[10px] font-semibold rounded-full ring-4 ring-foreground/20 " +
  (isReady ? "bg-emerald-500 text-white" : "bg-primary-gradient text-primary-foreground")
  }
  >
@@ -562,10 +562,28 @@ export function TablesPage({
  async function addTable() {
  track("dash_settings_tables_click_add");
  const number = tables.reduce((m, tbl) => Math.max(m, tbl.number || 0), 0) + 1;
+ // New table = a copy of the currently selected one (shape/size/color/seats),
+ // nudged ~12% so it doesn't sit exactly on top of the original.
+ const src = selected;
+ const OFF = 5;
+ const nudge = (v: number | null) => {
+ const base = v ?? 50;
+ const n = base + OFF;
+ return Math.max(0, Math.min(100, n > 100 ? base - OFF : n));
+ };
  try {
  const created = await createTable({
- number, capacity: 2, zone: null, imageUrl: null, color: null,
- x: 50, y: 50, shape: "circle", rotation: 0, width: null, height: null,
+ number,
+ capacity: src ? src.capacity : 2,
+ zone: null,
+ imageUrl: null,
+ color: src ? src.color : null,
+ x: src ? nudge(src.x) : 50,
+ y: src ? nudge(src.y) : 50,
+ shape: src ? src.shape : "circle",
+ rotation: src ? src.rotation : 0,
+ width: src ? src.width : null,
+ height: src ? src.height : null,
  });
  const entity = apiTableToTable(created);
  setTables((prev) => [...prev, entity]);
@@ -651,7 +669,7 @@ export function TablesPage({
  </button>
  </>
  ) : (
- <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-6 md:gap-8">
+ <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-5 md:gap-4">
  <div className="min-w-0">
  <FloorMap
  tables={tables}
