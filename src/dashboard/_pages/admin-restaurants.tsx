@@ -162,7 +162,16 @@ export function AdminRestaurantsPage({ onBack }: { onBack: () => void }) {
                       {r.scansToday}
                     </span>
                     <span
-                      className="text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 tabular-nums"
+                      className={
+                        "text-[10px] rounded px-1.5 py-0.5 tabular-nums " +
+                        (r.emailsSentCount >= r.emailTemplatesTotal
+                          ? "text-muted-foreground bg-secondary"
+                          : r.emailsSentCount === 0
+                            ? "text-red-700 dark:text-red-400 bg-red-500/10"
+                            : r.emailsSentCount === 1
+                              ? "text-amber-700 dark:text-amber-400 bg-amber-500/10"
+                              : "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10")
+                      }
                       title="Unique lifecycle emails sent to owner"
                     >
                       {r.emailsSentCount}/{r.emailTemplatesTotal}
