@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, QrIcon, TrashIcon, UsersIcon } from "./icons";
 import {
- AutoGrowTextarea,
  ConfirmDialog,
  EmptyState,
  PhotoPicker,
@@ -830,16 +829,6 @@ function TableSettings({
  onFocus={() => track("dash_settings_table_focus_name")}
  placeholder={t("namePlaceholder")}
  className={inputClass}
- />
- </div>
-
- <div>
- <label className="block text-sm font-medium text-foreground mb-2.5">{t("descriptionLabel")}</label>
- <AutoGrowTextarea
- value={table.description}
- onChange={(e) => onChange({ description: e.target.value })}
- onFocus={() => track("dash_settings_table_focus_description")}
- placeholder={t("descriptionPlaceholder")}
  />
  </div>
 
