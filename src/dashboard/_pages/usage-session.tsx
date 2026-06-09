@@ -35,11 +35,19 @@ const PAGE_CHIPS: Record<string, { label: string; cls: string; bar: string }> = 
 
 const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
 
-// Noise hidden from the flat list: page markers (shown as a per-row page chip),
-// geo currency (header chip), and click ids (header card). Section views stay —
-// they're the scroll path.
+// Noise hidden from the flat list: page markers (shown as a per-row page chip)
+// and geo currency (header chip). Click ids (l_gclid_/l_fbclid_) stay visible
+// in the timeline — they mark the actual paid-ad click moment. Section views
+// stay too — they're the scroll path.
 function isHiddenEvent(name: string): boolean {
-  return /^l_page_/.test(name) || /^l_currency_/.test(name) || /^l_gclid_/.test(name) || /^l_fbclid_/.test(name);
+  return /^l_page_/.test(name) || /^l_currency_/.test(name);
+}
+
+// Paid-ad click rows get a source chip so the click moment stands out.
+function adChip(name: string): { label: string; cls: string } | null {
+  if (/^l_gclid_/.test(name)) return { label: "Google", cls: "bg-blue-500/15 text-blue-600 dark:text-blue-400" };
+  if (/^l_fbclid_/.test(name)) return { label: "Meta", cls: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-400" };
+  return null;
 }
 function displayName(name: string): string {
   return name.startsWith("l_") ? name.slice(2) : name;
@@ -339,6 +347,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                 {rows.map((e) => {
                   const tok = pageByEventId.get(e.id);
                   const pc = tok ? PAGE_CHIPS[tok] : undefined;
+                  const ad = adChip(e.event);
                   return (
                     <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
                       <div className="flex items-center gap-2 md:flex-1 md:min-w-0">
@@ -347,6 +356,7 @@ export function UsageSessionPage({ id }: { id: string }) {
                             {pc ? pc.label : tok}
                           </span>
                         ) : null}
+                        {ad ? <span className={`${pageChipBase} ${ad.cls}`}>{ad.label}</span> : null}
                         <span className="font-mono text-foreground break-all min-w-0">{displayName(e.event)}</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
