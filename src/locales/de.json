@@ -929,6 +929,9 @@
       "codeExpired": "Dieser Code ist abgelaufen. Fordere einen neuen an.",
       "tooManyAttempts": "Zu viele Versuche. Warte und versuche es später erneut."
     },
-    "bannerSubtitle": "Du testest eine Demo, deine Änderungen werden also nicht gespeichert. Gib deine E-Mail ein, um dieses Menü als eigenes Konto zu behalten."
+    "bannerSubtitle": "Du testest eine Demo, deine Änderungen werden also nicht gespeichert. Gib deine E-Mail ein, um dieses Menü als eigenes Konto zu behalten.",
+    "continueGoogle": "Weiter mit Google",
+    "continueApple": "Weiter mit Apple",
+    "or": "oder"
   }
 }

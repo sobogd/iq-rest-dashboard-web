@@ -929,6 +929,9 @@
       "codeExpired": "Aquest codi ha caducat. Sol·licita'n un de nou.",
       "tooManyAttempts": "Massa intents. Espera i torna-ho a provar més tard."
     },
-    "bannerSubtitle": "Estàs provant una demo, així que els teus canvis no es desen. Afegeix el teu correu per conservar aquest menú com el teu compte."
+    "bannerSubtitle": "Estàs provant una demo, així que els teus canvis no es desen. Afegeix el teu correu per conservar aquest menú com el teu compte.",
+    "continueGoogle": "Continua amb Google",
+    "continueApple": "Continua amb Apple",
+    "or": "o"
   }
 }

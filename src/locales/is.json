@@ -929,6 +929,9 @@
       "codeExpired": "Þessi kóði er útrunninn. Biddu um nýjan.",
       "tooManyAttempts": "Of margar tilraunir. Bíddu og reyndu aftur síðar."
     },
-    "bannerSubtitle": "Þú ert að prófa kynningu, svo breytingarnar þínar vistast ekki. Bættu við netfanginu þínu til að halda þessum matseðli sem þínum eigin reikningi."
+    "bannerSubtitle": "Þú ert að prófa kynningu, svo breytingarnar þínar vistast ekki. Bættu við netfanginu þínu til að halda þessum matseðli sem þínum eigin reikningi.",
+    "continueGoogle": "Halda áfram með Google",
+    "continueApple": "Halda áfram með Apple",
+    "or": "eða"
   }
 }

@@ -929,6 +929,9 @@
       "codeExpired": "Ez a kód lejárt. Kérj újat.",
       "tooManyAttempts": "Túl sok próbálkozás. Várj, és próbáld később."
     },
-    "bannerSubtitle": "Egy demót próbálsz ki, ezért a módosításaid nem mentődnek. Add meg az e-mailed, hogy megtartsd ezt az étlapot saját fiókként."
+    "bannerSubtitle": "Egy demót próbálsz ki, ezért a módosításaid nem mentődnek. Add meg az e-mailed, hogy megtartsd ezt az étlapot saját fiókként.",
+    "continueGoogle": "Folytatás Google-lel",
+    "continueApple": "Folytatás Apple-lel",
+    "or": "vagy"
   }
 }

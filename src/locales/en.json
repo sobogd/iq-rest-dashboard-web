@@ -929,6 +929,9 @@
       "codeExpired": "This code expired. Request a new one.",
       "tooManyAttempts": "Too many attempts. Wait and try again later."
     },
-    "bannerSubtitle": "You're exploring a demo, so your changes aren't saved. Add your email to keep this menu as your own account."
+    "bannerSubtitle": "You're exploring a demo, so your changes aren't saved. Add your email to keep this menu as your own account.",
+    "continueGoogle": "Continue with Google",
+    "continueApple": "Continue with Apple",
+    "or": "or"
   }
 }

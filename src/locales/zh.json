@@ -929,6 +929,9 @@
       "codeExpired": "此验证码已过期，请重新获取。",
       "tooManyAttempts": "尝试次数过多，请稍后再试。"
     },
-    "bannerSubtitle": "您正在体验演示，因此更改不会保存。添加邮箱即可将此菜单保留为您的账户。"
+    "bannerSubtitle": "您正在体验演示，因此更改不会保存。添加邮箱即可将此菜单保留为您的账户。",
+    "continueGoogle": "使用 Google 继续",
+    "continueApple": "使用 Apple 继续",
+    "or": "或"
   }
 }

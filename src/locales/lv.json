@@ -929,6 +929,9 @@
       "codeExpired": "Šī koda derīguma termiņš ir beidzies. Pieprasiet jaunu.",
       "tooManyAttempts": "Pārāk daudz mēģinājumu. Uzgaidiet un mēģiniet vēlāk."
     },
-    "bannerSubtitle": "Jūs izmēģināt demo, tāpēc izmaiņas netiek saglabātas. Pievienojiet e-pastu, lai paturētu šo ēdienkarti kā savu kontu."
+    "bannerSubtitle": "Jūs izmēģināt demo, tāpēc izmaiņas netiek saglabātas. Pievienojiet e-pastu, lai paturētu šo ēdienkarti kā savu kontu.",
+    "continueGoogle": "Turpināt ar Google",
+    "continueApple": "Turpināt ar Apple",
+    "or": "vai"
   }
 }

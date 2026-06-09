@@ -929,6 +929,9 @@
       "codeExpired": "Ce code a expiré. Demandez-en un nouveau.",
       "tooManyAttempts": "Trop de tentatives. Attendez et réessayez plus tard."
     },
-    "bannerSubtitle": "Vous testez une démo, vos modifications ne sont donc pas enregistrées. Ajoutez votre e-mail pour conserver ce menu comme votre propre compte."
+    "bannerSubtitle": "Vous testez une démo, vos modifications ne sont donc pas enregistrées. Ajoutez votre e-mail pour conserver ce menu comme votre propre compte.",
+    "continueGoogle": "Continuer avec Google",
+    "continueApple": "Continuer avec Apple",
+    "or": "ou"
   }
 }

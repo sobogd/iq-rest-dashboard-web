@@ -929,6 +929,9 @@
       "codeExpired": "Tämä koodi on vanhentunut. Pyydä uusi.",
       "tooManyAttempts": "Liikaa yrityksiä. Odota ja yritä myöhemmin uudelleen."
     },
-    "bannerSubtitle": "Käytät demoa, joten muutoksiasi ei tallenneta. Lisää sähköpostisi säilyttääksesi tämän menun omana tilinäsi."
+    "bannerSubtitle": "Käytät demoa, joten muutoksiasi ei tallenneta. Lisää sähköpostisi säilyttääksesi tämän menun omana tilinäsi.",
+    "continueGoogle": "Jatka Googlella",
+    "continueApple": "Jatka Applella",
+    "or": "tai"
   }
 }

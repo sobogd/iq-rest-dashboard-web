@@ -929,6 +929,9 @@
       "codeExpired": "See kood on aegunud. Telli uus.",
       "tooManyAttempts": "Liiga palju katseid. Oota ja proovi hiljem uuesti."
     },
-    "bannerSubtitle": "Katsetad demo, seega muudatusi ei salvestata. Lisa oma e-post, et hoida see menüü oma kontona alles."
+    "bannerSubtitle": "Katsetad demo, seega muudatusi ei salvestata. Lisa oma e-post, et hoida see menüü oma kontona alles.",
+    "continueGoogle": "Jätka Google'iga",
+    "continueApple": "Jätka Apple'iga",
+    "or": "või"
   }
 }

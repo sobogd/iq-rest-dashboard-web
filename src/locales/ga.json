@@ -929,6 +929,9 @@
       "codeExpired": "Tá an cód seo imithe in éag. Iarr ceann nua.",
       "tooManyAttempts": "An iomarca iarrachtaí. Fan agus bain triail níos déanaí."
     },
-    "bannerSubtitle": "Tá tú ag triail taispeántais, mar sin ní shábháiltear do chuid athruithe. Cuir do ríomhphost leis chun an biachlár seo a choinneáil mar do chuntas féin."
+    "bannerSubtitle": "Tá tú ag triail taispeántais, mar sin ní shábháiltear do chuid athruithe. Cuir do ríomhphost leis chun an biachlár seo a choinneáil mar do chuntas féin.",
+    "continueGoogle": "Lean ar aghaidh le Google",
+    "continueApple": "Lean ar aghaidh le Apple",
+    "or": "nó"
   }
 }

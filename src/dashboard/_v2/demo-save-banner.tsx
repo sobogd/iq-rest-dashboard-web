@@ -10,6 +10,35 @@ import { inputClass, primaryBtn } from "./tokens";
 const CODE_LENGTH = 6;
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
+// OAuth for the demo "save my menu" claim — full-page redirect to the same
+// callbacks the landing uses (redirect_uri must byte-match what's registered).
+const GOOGLE_CLIENT_ID =
+  (import.meta.env.VITE_GOOGLE_CLIENT_ID as string) ||
+  "576149678945-vjqlc4sce6bsne3p0n63bqdvf33k43s0.apps.googleusercontent.com";
+const APPLE_SERVICES_ID = (import.meta.env.VITE_APPLE_SERVICES_ID as string) || "com.iqrest.web";
+const API_PUBLIC = (import.meta.env.VITE_API_PUBLIC_URL as string) || "https://dashboard-api.iq-rest.com";
+
+const b64url = (s: string) => btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+function GoogleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    </svg>
+  );
+}
+function AppleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="fill-foreground">
+      <path d="M17.05 12.54c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.1-2.01-3.77-2.04-1.6-.16-3.13.94-3.94.94-.81 0-2.07-.92-3.41-.9-1.75.03-3.37 1.02-4.27 2.59-1.82 3.16-.47 7.84 1.31 10.41.87 1.26 1.9 2.67 3.25 2.62 1.31-.05 1.8-.84 3.38-.84 1.58 0 2.02.84 3.4.82 1.41-.03 2.3-1.28 3.16-2.55.99-1.46 1.4-2.87 1.42-2.94-.03-.01-2.73-1.05-2.76-4.15z" />
+      <path d="M14.46 4.84c.72-.87 1.21-2.08 1.07-3.29-1.04.04-2.29.69-3.03 1.56-.66.77-1.24 2-1.09 3.18 1.16.09 2.34-.59 3.05-1.45z" />
+    </svg>
+  );
+}
+
 const ERROR_MAP: Record<string, string> = {
   CODE_EXPIRED: "errors.codeExpired",
   NO_CODE: "errors.sendFailed",
@@ -73,6 +102,34 @@ function ClaimModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [keepData, setKeepData] = useState(true);
 
   const busy = status === "loading";
+
+  // OAuth claim (full-page redirect). State carries the demo claim intent +
+  // keep/clean choice; the demo session cookie identifies the account server-side.
+  const oauthState = () => b64url(JSON.stringify({ locale, claim: true, keepData }));
+  const goGoogle = () => {
+    const params = new URLSearchParams({
+      client_id: GOOGLE_CLIENT_ID,
+      redirect_uri: `${API_PUBLIC}/api/auth/google/callback`,
+      response_type: "code",
+      scope: "openid email profile",
+      access_type: "online",
+      prompt: "select_account",
+      include_granted_scopes: "true",
+      state: oauthState(),
+    });
+    window.location.assign(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`);
+  };
+  const goApple = () => {
+    const params = new URLSearchParams({
+      client_id: APPLE_SERVICES_ID,
+      redirect_uri: `${API_PUBLIC}/api/auth/apple/callback`,
+      response_type: "code",
+      response_mode: "form_post",
+      scope: "name email",
+      state: oauthState(),
+    });
+    window.location.assign(`https://appleid.apple.com/auth/authorize?${params.toString()}`);
+  };
 
   const sendCode = async () => {
     const trimmed = email.trim().toLowerCase();
@@ -179,6 +236,31 @@ function ClaimModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             <p className="mt-2 text-xs text-muted-foreground leading-snug">
               {keepData ? t("keepDataHint") : t("startCleanHint")}
             </p>
+          </div>
+
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={goGoogle}
+              className="w-full h-11 text-sm font-medium text-foreground bg-card border border-border rounded-xl hover:border-foreground active:scale-[0.99] transition-all flex items-center justify-center gap-3"
+            >
+              <GoogleIcon />
+              {t("continueGoogle")}
+            </button>
+            <button
+              type="button"
+              onClick={goApple}
+              className="w-full h-11 text-sm font-medium text-foreground bg-card border border-border rounded-xl hover:border-foreground active:scale-[0.99] transition-all flex items-center justify-center gap-3"
+            >
+              <AppleIcon />
+              {t("continueApple")}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-border" />
+            <span className="text-xs text-muted-foreground">{t("or")}</span>
+            <span className="h-px flex-1 bg-border" />
           </div>
 
           <div>

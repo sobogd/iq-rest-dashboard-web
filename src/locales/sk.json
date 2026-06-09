@@ -929,6 +929,9 @@
       "codeExpired": "Tento kód vypršal. Vyžiadajte si nový.",
       "tooManyAttempts": "Príliš veľa pokusov. Počkajte a skúste neskôr."
     },
-    "bannerSubtitle": "Prezeráte si ukážku, takže sa vaše zmeny neukladajú. Pridajte e-mail, aby ste si toto menu ponechali ako vlastný účet."
+    "bannerSubtitle": "Prezeráte si ukážku, takže sa vaše zmeny neukladajú. Pridajte e-mail, aby ste si toto menu ponechali ako vlastný účet.",
+    "continueGoogle": "Pokračovať s Google",
+    "continueApple": "Pokračovať s Apple",
+    "or": "alebo"
   }
 }

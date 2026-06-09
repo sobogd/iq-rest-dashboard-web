@@ -929,6 +929,9 @@
       "codeExpired": "Ovaj kod je istekao. Zatražite novi.",
       "tooManyAttempts": "Previše pokušaja. Pričekajte i pokušajte kasnije."
     },
-    "bannerSubtitle": "Isprobavate demo, pa se vaše promjene ne spremaju. Dodajte e-poštu da zadržite ovaj jelovnik kao vlastiti račun."
+    "bannerSubtitle": "Isprobavate demo, pa se vaše promjene ne spremaju. Dodajte e-poštu da zadržite ovaj jelovnik kao vlastiti račun.",
+    "continueGoogle": "Nastavi s Google",
+    "continueApple": "Nastavi s Apple",
+    "or": "ili"
   }
 }

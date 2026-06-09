@@ -929,6 +929,9 @@
       "codeExpired": "Bu kodun süresi doldu. Yeni bir tane isteyin.",
       "tooManyAttempts": "Çok fazla deneme. Bekleyip daha sonra tekrar deneyin."
     },
-    "bannerSubtitle": "Bir demoyu deniyorsunuz, bu yüzden değişiklikleriniz kaydedilmez. Bu menüyü kendi hesabınız olarak tutmak için e-postanızı ekleyin."
+    "bannerSubtitle": "Bir demoyu deniyorsunuz, bu yüzden değişiklikleriniz kaydedilmez. Bu menüyü kendi hesabınız olarak tutmak için e-postanızı ekleyin.",
+    "continueGoogle": "Google ile devam et",
+    "continueApple": "Apple ile devam et",
+    "or": "veya"
   }
 }

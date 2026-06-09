@@ -929,6 +929,9 @@
       "codeExpired": "Ta koda je potekla. Zahtevajte novo.",
       "tooManyAttempts": "Preveč poskusov. Počakajte in poskusite pozneje."
     },
-    "bannerSubtitle": "Preizkušate predstavitev, zato se spremembe ne shranijo. Dodajte e-pošto, da obdržite ta jedilnik kot svoj račun."
+    "bannerSubtitle": "Preizkušate predstavitev, zato se spremembe ne shranijo. Dodajte e-pošto, da obdržite ta jedilnik kot svoj račun.",
+    "continueGoogle": "Nadaljuj z Google",
+    "continueApple": "Nadaljuj z Apple",
+    "or": "ali"
   }
 }

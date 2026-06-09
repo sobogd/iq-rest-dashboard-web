@@ -929,6 +929,9 @@
       "codeExpired": "Koden har gått ut. Begär en ny.",
       "tooManyAttempts": "För många försök. Vänta och försök igen senare."
     },
-    "bannerSubtitle": "Du testar en demo, så dina ändringar sparas inte. Lägg till din e-post för att behålla menyn som ett eget konto."
+    "bannerSubtitle": "Du testar en demo, så dina ändringar sparas inte. Lägg till din e-post för att behålla menyn som ett eget konto.",
+    "continueGoogle": "Fortsätt med Google",
+    "continueApple": "Fortsätt med Apple",
+    "or": "eller"
   }
 }

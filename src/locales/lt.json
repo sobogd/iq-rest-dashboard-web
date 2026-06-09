@@ -929,6 +929,9 @@
       "codeExpired": "Šis kodas nebegalioja. Užsisakykite naują.",
       "tooManyAttempts": "Per daug bandymų. Palaukite ir bandykite vėliau."
     },
-    "bannerSubtitle": "Bandote demonstracinę versiją, todėl pakeitimai neišsaugomi. Pridėkite el. paštą, kad išsaugotumėte šį meniu kaip savo paskyrą."
+    "bannerSubtitle": "Bandote demonstracinę versiją, todėl pakeitimai neišsaugomi. Pridėkite el. paštą, kad išsaugotumėte šį meniu kaip savo paskyrą.",
+    "continueGoogle": "Tęsti su Google",
+    "continueApple": "Tęsti su Apple",
+    "or": "arba"
   }
 }

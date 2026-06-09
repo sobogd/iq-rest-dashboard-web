@@ -929,6 +929,9 @@
       "codeExpired": "Acest cod a expirat. Solicită unul nou.",
       "tooManyAttempts": "Prea multe încercări. Așteaptă și încearcă mai târziu."
     },
-    "bannerSubtitle": "Testezi o demonstrație, așa că modificările nu se salvează. Adaugă emailul pentru a păstra acest meniu drept contul tău."
+    "bannerSubtitle": "Testezi o demonstrație, așa că modificările nu se salvează. Adaugă emailul pentru a păstra acest meniu drept contul tău.",
+    "continueGoogle": "Continuă cu Google",
+    "continueApple": "Continuă cu Apple",
+    "or": "sau"
   }
 }

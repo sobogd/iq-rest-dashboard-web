@@ -929,6 +929,9 @@
       "codeExpired": "Ten kod wygasł. Poproś o nowy.",
       "tooManyAttempts": "Zbyt wiele prób. Odczekaj i spróbuj później."
     },
-    "bannerSubtitle": "Korzystasz z wersji demo, więc zmiany nie są zapisywane. Dodaj e-mail, aby zachować to menu jako własne konto."
+    "bannerSubtitle": "Korzystasz z wersji demo, więc zmiany nie są zapisywane. Dodaj e-mail, aby zachować to menu jako własne konto.",
+    "continueGoogle": "Kontynuuj z Google",
+    "continueApple": "Kontynuuj z Apple",
+    "or": "lub"
   }
 }

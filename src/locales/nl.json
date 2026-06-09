@@ -929,6 +929,9 @@
       "codeExpired": "Deze code is verlopen. Vraag een nieuwe aan.",
       "tooManyAttempts": "Te veel pogingen. Wacht en probeer het later opnieuw."
     },
-    "bannerSubtitle": "Je test een demo, dus je wijzigingen worden niet opgeslagen. Voeg je e-mail toe om dit menu als je eigen account te behouden."
+    "bannerSubtitle": "Je test een demo, dus je wijzigingen worden niet opgeslagen. Voeg je e-mail toe om dit menu als je eigen account te behouden.",
+    "continueGoogle": "Doorgaan met Google",
+    "continueApple": "Doorgaan met Apple",
+    "or": "of"
   }
 }
