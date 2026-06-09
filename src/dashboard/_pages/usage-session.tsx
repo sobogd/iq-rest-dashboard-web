@@ -154,12 +154,22 @@ export function UsageSessionPage({ id }: { id: string }) {
   const pageByEventId = new Map<string, string>();
   {
     const chrono = [...events].sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime());
+    // The very first events of a page-load batch can fire a few ms BEFORE the
+    // batch's own l_page_ (e.g. l_locale_*), leaving them with no preceding
+    // page. Back-fill those leading l_* events with the FIRST page the session
+    // ever shows — they belong to that same initial load.
+    let firstPage: string | null = null;
+    for (const e of chrono) {
+      const m = /^l_page_(\w+)$/.exec(e.event);
+      if (m) { firstPage = m[1]; break; }
+    }
     let current: string | null = null;
     for (const e of chrono) {
       const m = /^l_page_(\w+)$/.exec(e.event);
       if (m) current = m[1];
       // Only landing (l_*) events belong to a page; dashboard events don't.
-      if (current && e.event.startsWith("l_")) pageByEventId.set(e.id, current);
+      const page = current ?? firstPage;
+      if (page && e.event.startsWith("l_")) pageByEventId.set(e.id, page);
     }
   }
 
