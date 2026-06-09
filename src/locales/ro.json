@@ -933,5 +933,34 @@
     "continueGoogle": "Continuă cu Google",
     "continueApple": "Continuă cu Apple",
     "or": "sau"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Cum se numește restaurantul tău?",
+      "subtitle": "Îl vom folosi pentru a crea meniul digital. Apare pe pagina publică și codul QR — îl poți schimba oricând.",
+      "label": "Numele restaurantului",
+      "placeholder": "ex. La Trattoria",
+      "skip": "Omite",
+      "continue": "Continuă"
+    },
+    "fill": {
+      "title": "Cum vrei să începi?",
+      "subtitle": "Configurează-ți restaurantul: meniu, mese, rezervări și comenzi. Alege o opțiune.",
+      "demo": "Completează cu date demo",
+      "demoHint": "Adaugă un meniu exemplu, mese și comenzi pentru a explora panoul.",
+      "scan": "Scanează un meniu pe hârtie",
+      "scanHint": "Încarcă poze cu meniul tău și îl construim pentru tine.",
+      "scratch": "Începe de la zero",
+      "scratchHint": "Adaugă singur categorii și preparate."
+    }
+  },
+  "trialModal": {
+    "title": "Perioada de probă gratuită",
+    "titleExpired": "Perioada de probă s-a încheiat",
+    "daysLeft": "Au mai rămas {days} zile de probă",
+    "expiredHeadline": "Perioada de probă gratuită s-a încheiat",
+    "body": "Alege un plan pentru a păstra comenzile, ecranul de bucătărie și rezervările.",
+    "hide": "Ascunde",
+    "viewPlans": "Vezi planurile"
   }
 }

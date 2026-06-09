@@ -35,6 +35,8 @@ interface AuthCheck {
   // True for accounts created on/after the dark-default cutoff — the dashboard
   // defaults to dark for them (older accounts keep system-follow).
   defaultDark?: boolean;
+  // Account creation time (ISO) — gates the daily trial reminder modal.
+  accountCreatedAt?: string | null;
   impersonatedBy?: string | null;
 }
 
@@ -168,7 +170,9 @@ export function DashboardHost() {
           isAdmin={isAdminEmail(authData.email)}
           isDemo={!!authData.isDemo}
           impersonatedBy={authData.impersonatedBy ?? null}
-          scanBannerDismissed={!!restaurant.scanBannerDismissed}
+          accountCreatedAt={authData.accountCreatedAt ?? null}
+          onboardingNameDone={restaurant.onboardingNameDone ?? true}
+          onboardingFillDone={restaurant.onboardingFillDone ?? true}
         />
       </DashboardChrome>
     </DashboardSpaWrapper>

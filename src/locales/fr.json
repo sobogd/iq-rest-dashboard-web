@@ -933,5 +933,34 @@
     "continueGoogle": "Continuer avec Google",
     "continueApple": "Continuer avec Apple",
     "or": "ou"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Comment s'appelle votre restaurant ?",
+      "subtitle": "Nous l'utiliserons pour créer votre menu numérique. Il apparaît sur votre page publique et votre QR code — modifiable à tout moment.",
+      "label": "Nom du restaurant",
+      "placeholder": "ex. La Trattoria",
+      "skip": "Ignorer",
+      "continue": "Continuer"
+    },
+    "fill": {
+      "title": "Comment voulez-vous commencer ?",
+      "subtitle": "Configurez votre restaurant : menu, tables, réservations et commandes. Choisissez une option.",
+      "demo": "Remplir avec des données de démo",
+      "demoHint": "Ajoutez un menu d'exemple, des tables et des commandes pour explorer le tableau de bord.",
+      "scan": "Scanner un menu papier",
+      "scanHint": "Téléversez des photos de votre menu et nous le créons pour vous.",
+      "scratch": "Partir de zéro",
+      "scratchHint": "Ajoutez vous-même catégories et plats."
+    }
+  },
+  "trialModal": {
+    "title": "Votre essai gratuit",
+    "titleExpired": "Votre essai est terminé",
+    "daysLeft": "Il vous reste {days} jours d'essai",
+    "expiredHeadline": "Votre essai gratuit est terminé",
+    "body": "Choisissez une formule pour garder commandes, écran cuisine et réservations.",
+    "hide": "Masquer",
+    "viewPlans": "Voir les formules"
   }
 }

@@ -933,5 +933,34 @@
     "continueGoogle": "使用 Google 继续",
     "continueApple": "使用 Apple 继续",
     "or": "或"
+  },
+  "onboarding": {
+    "name": {
+      "title": "您的餐厅叫什么名字？",
+      "subtitle": "我们将用它创建你的数字菜单。它会显示在你的公开页面和二维码上，随时可以更改。",
+      "label": "餐厅名称",
+      "placeholder": "例如 La Trattoria",
+      "skip": "跳过",
+      "continue": "继续"
+    },
+    "fill": {
+      "title": "您想如何开始？",
+      "subtitle": "设置你的餐厅：菜单、餐桌、预订和订单。请选择下面的一个选项。",
+      "demo": "用演示数据填充",
+      "demoHint": "添加示例菜单、餐桌和订单，体验仪表盘。",
+      "scan": "扫描纸质菜单",
+      "scanHint": "上传菜单照片，我们为你创建。",
+      "scratch": "从零开始",
+      "scratchHint": "自己添加分类和菜品。"
+    }
+  },
+  "trialModal": {
+    "title": "免费试用",
+    "titleExpired": "试用已结束",
+    "daysLeft": "试用还剩 {days} 天",
+    "expiredHeadline": "你的免费试用已结束",
+    "body": "选择套餐以继续使用订单、厨房显示和预订。",
+    "hide": "隐藏",
+    "viewPlans": "查看套餐"
   }
 }

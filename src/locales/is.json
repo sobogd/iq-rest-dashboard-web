@@ -933,5 +933,34 @@
     "continueGoogle": "Halda áfram með Google",
     "continueApple": "Halda áfram með Apple",
     "or": "eða"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Hvað heitir veitingastaðurinn þinn?",
+      "subtitle": "Við notum það til að búa til stafræna matseðilinn þinn. Það birtist á opinberu síðunni þinni og QR-kóða — hægt að breyta hvenær sem er.",
+      "label": "Nafn veitingastaðar",
+      "placeholder": "t.d. La Trattoria",
+      "skip": "Sleppa",
+      "continue": "Áfram"
+    },
+    "fill": {
+      "title": "Hvernig viltu byrja?",
+      "subtitle": "Settu upp veitingastaðinn þinn: matseðill, borð, bókanir og pantanir. Veldu valkost.",
+      "demo": "Fylla með sýnigögnum",
+      "demoHint": "Bættu við sýnimatseðli, borðum og pöntunum til að skoða stjórnborðið.",
+      "scan": "Skanna pappírsmatseðil",
+      "scanHint": "Hladdu upp myndum af matseðlinum og við búum hann til fyrir þig.",
+      "scratch": "Byrja frá grunni",
+      "scratchHint": "Bættu sjálf við flokkum og réttum."
+    }
+  },
+  "trialModal": {
+    "title": "Ókeypis prufutímabilið þitt",
+    "titleExpired": "Prufutímabilinu er lokið",
+    "daysLeft": "{days} dagar eftir af prufunni",
+    "expiredHeadline": "Ókeypis prufutímabilinu þínu er lokið",
+    "body": "Veldu áskrift til að halda pöntunum, eldhússkjá og bókunum.",
+    "hide": "Fela",
+    "viewPlans": "Skoða áskriftir"
   }
 }

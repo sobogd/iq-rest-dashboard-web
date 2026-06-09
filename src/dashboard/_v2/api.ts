@@ -96,6 +96,9 @@ export interface ApiRestaurant {
  orderAddressEnabled: boolean;
  orderMode: string;
  scanBannerDismissed?: boolean;
+ // First-login onboarding step flags. false → the matching modal still shows.
+ onboardingNameDone?: boolean;
+ onboardingFillDone?: boolean;
  // Present only in the switcher list (GET /restaurants): false = managed for
  // another company via grant (hide delete/billing affordances).
  owned?: boolean;
@@ -140,6 +143,30 @@ export async function dismissScanBanner(): Promise<void> {
   credentials: "include",
   method: "POST",
  });
+}
+
+/** Onboarding "fill with demo data" choice — seeds the active restaurant with
+ *  demo data (menu + tables + bookings + orders) and marks the fill step done.
+ *  Idempotent server-side. */
+export async function fillDemoData(): Promise<void> {
+ const res = await apiFetch("/api/onboarding/fill-demo", {
+  credentials: "include",
+  method: "POST",
+ });
+ if (!res.ok) throw new Error("Failed to fill demo data");
+}
+
+/** Mark a first-login onboarding step as handled (persisted) so its modal never
+ *  reappears. `name` → name entered/skipped; `fill` → scan or start-from-scratch
+ *  chosen (the demo choice marks it via fillDemoData). */
+export async function markOnboardingStep(step: "name" | "fill"): Promise<void> {
+ const res = await apiFetch("/api/onboarding/step", {
+  credentials: "include",
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ step }),
+ });
+ if (!res.ok) throw new Error("Failed to mark onboarding step");
 }
 
 // ── Multi-restaurant: list, switch, create, delete ──

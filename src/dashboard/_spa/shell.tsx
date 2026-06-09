@@ -30,6 +30,7 @@ import { AnalyticsClient } from "../analytics/analytics-client";
 import { SettingsHubView } from "./views/settings-hub";
 import { DevicesSettingsPage } from "../_v2/devices-settings";
 import { RestaurantsListPage, RestaurantNewPage } from "../_v2/restaurants-page";
+import { FirstRunModals } from "../_v2/first-run-modals";
 import { AdminRestaurantsPage } from "../_pages/admin-restaurants";
 import { AdminUsersPage } from "../_pages/admin-users";
 import { AdminRestaurantPage } from "../_pages/admin-restaurant";
@@ -51,7 +52,9 @@ export interface ShellInitialData {
   isDemo?: boolean;
   impersonatedBy?: string | null;
   userEmail?: string;
-  scanBannerDismissed?: boolean;
+  accountCreatedAt?: string | null;
+  onboardingNameDone?: boolean;
+  onboardingFillDone?: boolean;
 }
 
 export function Shell(props: ShellInitialData) {
@@ -170,26 +173,41 @@ function ShellBody(props: ShellInitialData) {
   }
   if (!restaurant) return null;
 
+  const realItemsCount = categories.reduce((n, c) => n + (c.dishes?.length ?? 0), 0);
+
   return (
-    <ViewSwitch
-      view={view}
-      restaurant={restaurant}
-      categories={categories}
-      orders={orders}
-      setOrders={setOrders}
-      bookings={bookings}
-      setBookings={setBookings}
-      tables={tables}
-      setTables={setTables}
-      sub={props.initialSub}
-      isAdmin={props.isAdmin}
-      isDemo={!!props.isDemo}
-      impersonatedBy={props.impersonatedBy ?? null}
-      scanBannerDismissed={!!props.scanBannerDismissed}
-      backToSettings={backToSettings}
-      backToMenu={backToMenu}
-      refreshMenu={refreshMenu}
-    />
+    <>
+      <ViewSwitch
+        view={view}
+        restaurant={restaurant}
+        categories={categories}
+        orders={orders}
+        setOrders={setOrders}
+        bookings={bookings}
+        setBookings={setBookings}
+        tables={tables}
+        setTables={setTables}
+        sub={props.initialSub}
+        isAdmin={props.isAdmin}
+        isDemo={!!props.isDemo}
+        impersonatedBy={props.impersonatedBy ?? null}
+        backToSettings={backToSettings}
+        backToMenu={backToMenu}
+        refreshMenu={refreshMenu}
+      />
+      {/* First-run modals: onboarding (name → fill → scan), then the daily
+          trial reminder — sequenced so the trial modal is always last. */}
+      <FirstRunModals
+        key={restaurant.id}
+        restaurantName={restaurant.name}
+        onboardingNameDone={props.onboardingNameDone ?? true}
+        onboardingFillDone={props.onboardingFillDone ?? true}
+        existingRealItemsCount={realItemsCount}
+        onRefresh={refreshMenu}
+        sub={props.initialSub}
+        accountCreatedAt={props.accountCreatedAt ?? null}
+      />
+    </>
   );
 }
 
@@ -207,14 +225,13 @@ interface SwitchProps {
   isAdmin: boolean;
   isDemo: boolean;
   impersonatedBy: string | null;
-  scanBannerDismissed: boolean;
   backToSettings: () => void;
   backToMenu: () => void;
   refreshMenu: () => Promise<void>;
 }
 
 function ViewSwitch(p: SwitchProps) {
-  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, isDemo, impersonatedBy, scanBannerDismissed, backToSettings, backToMenu, refreshMenu } = p;
+  const { view, restaurant, categories, orders, setOrders, bookings, setBookings, tables, setTables, sub, isAdmin, isDemo, impersonatedBy, backToSettings, backToMenu, refreshMenu } = p;
   const router = useDashboardRouter();
 
   const onSavedMenu = async () => {
@@ -232,9 +249,7 @@ function ViewSwitch(p: SwitchProps) {
         <MenuList
           initialCategories={categories}
           initialSub={sub}
-          isDemo={isDemo}
           onPersisted={refreshMenu}
-          scanBannerDismissed={scanBannerDismissed}
           currentGroupId={view.group ?? null}
         />
       );

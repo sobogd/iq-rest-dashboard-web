@@ -933,5 +933,34 @@
     "continueGoogle": "Jatka Googlella",
     "continueApple": "Jatka Applella",
     "or": "tai"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Mikä on ravintolasi nimi?",
+      "subtitle": "Luomme sen avulla digitaalisen ruokalistasi. Se näkyy julkisella sivullasi ja QR-koodissa — voit muuttaa sen milloin tahansa.",
+      "label": "Ravintolan nimi",
+      "placeholder": "esim. La Trattoria",
+      "skip": "Ohita",
+      "continue": "Jatka"
+    },
+    "fill": {
+      "title": "Miten haluat aloittaa?",
+      "subtitle": "Määritä ravintolasi: ruokalista, pöydät, varaukset ja tilaukset. Valitse vaihtoehto.",
+      "demo": "Täytä demotiedoilla",
+      "demoHint": "Lisää esimerkkilista, pöydät ja tilaukset tutustuaksesi hallintapaneeliin.",
+      "scan": "Skannaa paperinen lista",
+      "scanHint": "Lataa kuvat listastasi, niin luomme sen puolestasi.",
+      "scratch": "Aloita tyhjästä",
+      "scratchHint": "Lisää luokat ja annokset itse."
+    }
+  },
+  "trialModal": {
+    "title": "Ilmainen kokeilujaksosi",
+    "titleExpired": "Kokeilujaksosi on päättynyt",
+    "daysLeft": "Kokeilua jäljellä {days} päivää",
+    "expiredHeadline": "Ilmainen kokeilujaksosi on päättynyt",
+    "body": "Valitse tilaus, jotta tilaukset, keittiönäyttö ja varaukset pysyvät käytössä.",
+    "hide": "Piilota",
+    "viewPlans": "Näytä tilaukset"
   }
 }

@@ -933,5 +933,34 @@
     "continueGoogle": "Doorgaan met Google",
     "continueApple": "Doorgaan met Apple",
     "or": "of"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Hoe heet je restaurant?",
+      "subtitle": "We gebruiken het om je digitale menu te maken. Het verschijnt op je openbare pagina en QR-code — altijd aanpasbaar.",
+      "label": "Restaurantnaam",
+      "placeholder": "bijv. La Trattoria",
+      "skip": "Overslaan",
+      "continue": "Doorgaan"
+    },
+    "fill": {
+      "title": "Hoe wil je beginnen?",
+      "subtitle": "Stel je restaurant in: menu, tafels, reserveringen en bestellingen. Kies een optie.",
+      "demo": "Vullen met demogegevens",
+      "demoHint": "Voeg een voorbeeldmenu, tafels en bestellingen toe om het dashboard te verkennen.",
+      "scan": "Een papieren menu scannen",
+      "scanHint": "Upload foto's van je menu en wij maken het voor je.",
+      "scratch": "Vanaf nul beginnen",
+      "scratchHint": "Voeg zelf categorieën en gerechten toe."
+    }
+  },
+  "trialModal": {
+    "title": "Je gratis proefperiode",
+    "titleExpired": "Je proefperiode is afgelopen",
+    "daysLeft": "Nog {days} dagen in je proefperiode",
+    "expiredHeadline": "Je gratis proefperiode is afgelopen",
+    "body": "Kies een abonnement om bestellingen, keukendisplay en reserveringen te behouden.",
+    "hide": "Verbergen",
+    "viewPlans": "Bekijk abonnementen"
   }
 }

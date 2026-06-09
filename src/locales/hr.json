@@ -933,5 +933,34 @@
     "continueGoogle": "Nastavi s Google",
     "continueApple": "Nastavi s Apple",
     "or": "ili"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Kako se zove vaš restoran?",
+      "subtitle": "Upotrijebit ćemo ga za izradu digitalnog jelovnika. Prikazuje se na javnoj stranici i QR kodu — možete ga promijeniti bilo kada.",
+      "label": "Naziv restorana",
+      "placeholder": "npr. La Trattoria",
+      "skip": "Preskoči",
+      "continue": "Nastavi"
+    },
+    "fill": {
+      "title": "Kako želite započeti?",
+      "subtitle": "Postavite svoj restoran: jelovnik, stolovi, rezervacije i narudžbe. Odaberite opciju.",
+      "demo": "Ispuni demo podacima",
+      "demoHint": "Dodajte ogledni jelovnik, stolove i narudžbe za istraživanje nadzorne ploče.",
+      "scan": "Skeniraj papirnati jelovnik",
+      "scanHint": "Učitajte fotografije jelovnika i izradit ćemo ga za vas.",
+      "scratch": "Počni od nule",
+      "scratchHint": "Sami dodajte kategorije i jela."
+    }
+  },
+  "trialModal": {
+    "title": "Vaše besplatno probno razdoblje",
+    "titleExpired": "Probno razdoblje je završilo",
+    "daysLeft": "Još {days} dana probnog razdoblja",
+    "expiredHeadline": "Vaše besplatno probno razdoblje je završilo",
+    "body": "Odaberite plan kako biste zadržali narudžbe, kuhinjski zaslon i rezervacije.",
+    "hide": "Sakrij",
+    "viewPlans": "Pogledaj planove"
   }
 }

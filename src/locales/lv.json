@@ -933,5 +933,34 @@
     "continueGoogle": "Turpināt ar Google",
     "continueApple": "Turpināt ar Apple",
     "or": "vai"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Kā sauc jūsu restorānu?",
+      "subtitle": "Izmantosim to digitālās ēdienkartes izveidei. Tas redzams jūsu publiskajā lapā un QR kodā — varat to mainīt jebkurā laikā.",
+      "label": "Restorāna nosaukums",
+      "placeholder": "piem. La Trattoria",
+      "skip": "Izlaist",
+      "continue": "Turpināt"
+    },
+    "fill": {
+      "title": "Kā vēlaties sākt?",
+      "subtitle": "Iestatiet savu restorānu: ēdienkarte, galdiņi, rezervācijas un pasūtījumi. Izvēlieties opciju.",
+      "demo": "Aizpildīt ar demo datiem",
+      "demoHint": "Pievienojiet parauga ēdienkarti, galdiņus un pasūtījumus, lai izpētītu paneli.",
+      "scan": "Skenēt papīra ēdienkarti",
+      "scanHint": "Augšupielādējiet ēdienkartes fotoattēlus, un mēs to izveidosim jūsu vietā.",
+      "scratch": "Sākt no nulles",
+      "scratchHint": "Pievienojiet kategorijas un ēdienus pats."
+    }
+  },
+  "trialModal": {
+    "title": "Jūsu bezmaksas izmēģinājums",
+    "titleExpired": "Jūsu izmēģinājums ir beidzies",
+    "daysLeft": "Atlikušas {days} izmēģinājuma dienas",
+    "expiredHeadline": "Jūsu bezmaksas izmēģinājums ir beidzies",
+    "body": "Izvēlieties plānu, lai saglabātu pasūtījumus, virtuves ekrānu un rezervācijas.",
+    "hide": "Slēpt",
+    "viewPlans": "Skatīt plānus"
   }
 }

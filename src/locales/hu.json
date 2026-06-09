@@ -933,5 +933,34 @@
     "continueGoogle": "Folytatás Google-lel",
     "continueApple": "Folytatás Apple-lel",
     "or": "vagy"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Hogy hívják az éttermed?",
+      "subtitle": "Ezzel hozzuk létre a digitális étlapod. Megjelenik a nyilvános oldaladon és a QR-kódon — bármikor módosítható.",
+      "label": "Étterem neve",
+      "placeholder": "pl. La Trattoria",
+      "skip": "Kihagyás",
+      "continue": "Tovább"
+    },
+    "fill": {
+      "title": "Hogyan szeretnél kezdeni?",
+      "subtitle": "Állítsd be az éttermed: étlap, asztalok, foglalások és rendelések. Válassz egy lehetőséget.",
+      "demo": "Feltöltés demoadatokkal",
+      "demoHint": "Adj hozzá mintaétlapot, asztalokat és rendeléseket a vezérlőpult felfedezéséhez.",
+      "scan": "Papíralapú étlap beolvasása",
+      "scanHint": "Tölts fel fotókat az étlapodról, és elkészítjük helyetted.",
+      "scratch": "Kezdés a nulláról",
+      "scratchHint": "Add hozzá magad a kategóriákat és ételeket."
+    }
+  },
+  "trialModal": {
+    "title": "Ingyenes próbaidőszak",
+    "titleExpired": "A próbaidőszak véget ért",
+    "daysLeft": "{days} nap van hátra a próbából",
+    "expiredHeadline": "Az ingyenes próbaidőszak véget ért",
+    "body": "Válassz csomagot, hogy megtartsd a rendeléseket, a konyhai kijelzőt és a foglalásokat.",
+    "hide": "Elrejtés",
+    "viewPlans": "Csomagok megtekintése"
   }
 }

@@ -933,5 +933,34 @@
     "continueGoogle": "Continua amb Google",
     "continueApple": "Continua amb Apple",
     "or": "o"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Com es diu el teu restaurant?",
+      "subtitle": "L'usarem per crear la teva carta digital. Apareix a la teva pàgina pública i codi QR; el pots canviar quan vulguis.",
+      "label": "Nom del restaurant",
+      "placeholder": "p. ex. La Trattoria",
+      "skip": "Omet",
+      "continue": "Continua"
+    },
+    "fill": {
+      "title": "Com vols començar?",
+      "subtitle": "Configura el teu restaurant: carta, taules, reserves i comandes. Tria una opció.",
+      "demo": "Omplir amb dades de demostració",
+      "demoHint": "Afegeix un menú d'exemple, taules i comandes per explorar el tauler.",
+      "scan": "Escaneja un menú de paper",
+      "scanHint": "Penja fotos del teu menú i el crearem per tu.",
+      "scratch": "Comença de zero",
+      "scratchHint": "Afegeix categories i plats tu mateix."
+    }
+  },
+  "trialModal": {
+    "title": "La teva prova gratuïta",
+    "titleExpired": "La teva prova ha acabat",
+    "daysLeft": "Et queden {days} dies de prova",
+    "expiredHeadline": "La teva prova gratuïta ha acabat",
+    "body": "Tria un pla per mantenir comandes, pantalla de cuina i reserves.",
+    "hide": "Amaga",
+    "viewPlans": "Veure plans"
   }
 }

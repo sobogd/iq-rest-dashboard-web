@@ -933,5 +933,34 @@
     "continueGoogle": "Fortsätt med Google",
     "continueApple": "Fortsätt med Apple",
     "or": "eller"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Vad heter din restaurang?",
+      "subtitle": "Vi använder det för att skapa din digitala meny. Det visas på din offentliga sida och QR-kod — kan ändras när som helst.",
+      "label": "Restaurangnamn",
+      "placeholder": "t.ex. La Trattoria",
+      "skip": "Hoppa över",
+      "continue": "Fortsätt"
+    },
+    "fill": {
+      "title": "Hur vill du börja?",
+      "subtitle": "Konfigurera din restaurang – meny, bord, bokningar och beställningar. Välj ett alternativ.",
+      "demo": "Fyll med demodata",
+      "demoHint": "Lägg till en exempelmeny, bord och beställningar för att utforska panelen.",
+      "scan": "Skanna en pappersmeny",
+      "scanHint": "Ladda upp foton av din meny så bygger vi den åt dig.",
+      "scratch": "Börja från noll",
+      "scratchHint": "Lägg till kategorier och rätter själv."
+    }
+  },
+  "trialModal": {
+    "title": "Din gratis provperiod",
+    "titleExpired": "Din provperiod har upphört",
+    "daysLeft": "{days} dagar kvar av provperioden",
+    "expiredHeadline": "Din gratis provperiod har upphört",
+    "body": "Välj ett abonnemang för att behålla beställningar, köksdisplay och bokningar.",
+    "hide": "Dölj",
+    "viewPlans": "Visa abonnemang"
   }
 }

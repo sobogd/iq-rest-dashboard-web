@@ -933,5 +933,34 @@
     "continueGoogle": "Tęsti su Google",
     "continueApple": "Tęsti su Apple",
     "or": "arba"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Koks jūsų restorano pavadinimas?",
+      "subtitle": "Naudosime jį jūsų skaitmeniniam meniu sukurti. Jis rodomas viešame puslapyje ir QR kode — galite pakeisti bet kada.",
+      "label": "Restorano pavadinimas",
+      "placeholder": "pvz. La Trattoria",
+      "skip": "Praleisti",
+      "continue": "Tęsti"
+    },
+    "fill": {
+      "title": "Nuo ko norite pradėti?",
+      "subtitle": "Sukonfigūruokite savo restoraną: meniu, stalai, rezervacijos ir užsakymai. Pasirinkite parinktį.",
+      "demo": "Užpildyti demo duomenimis",
+      "demoHint": "Pridėkite pavyzdinį meniu, stalus ir užsakymus, kad susipažintumėte su skydeliu.",
+      "scan": "Nuskaityti popierinį meniu",
+      "scanHint": "Įkelkite savo meniu nuotraukas ir mes jį sukursime už jus.",
+      "scratch": "Pradėti nuo nulio",
+      "scratchHint": "Patys pridėkite kategorijas ir patiekalus."
+    }
+  },
+  "trialModal": {
+    "title": "Jūsų nemokamas bandymas",
+    "titleExpired": "Jūsų bandomasis laikotarpis baigėsi",
+    "daysLeft": "Liko {days} bandymo dienų",
+    "expiredHeadline": "Jūsų nemokamas bandomasis laikotarpis baigėsi",
+    "body": "Pasirinkite planą, kad išlaikytumėte užsakymus, virtuvės ekraną ir rezervacijas.",
+    "hide": "Slėpti",
+    "viewPlans": "Žiūrėti planus"
   }
 }

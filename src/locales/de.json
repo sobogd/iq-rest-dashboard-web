@@ -933,5 +933,34 @@
     "continueGoogle": "Weiter mit Google",
     "continueApple": "Weiter mit Apple",
     "or": "oder"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Wie heißt dein Restaurant?",
+      "subtitle": "Damit erstellen wir deine digitale Speisekarte. Der Name erscheint auf deiner öffentlichen Seite und im QR-Code – jederzeit änderbar.",
+      "label": "Restaurantname",
+      "placeholder": "z. B. La Trattoria",
+      "skip": "Überspringen",
+      "continue": "Weiter"
+    },
+    "fill": {
+      "title": "Wie möchtest du starten?",
+      "subtitle": "Richte dein Restaurant ein – Speisekarte, Tische, Reservierungen und Bestellungen. Wähle eine Option.",
+      "demo": "Mit Demodaten füllen",
+      "demoHint": "Füge eine Beispielkarte, Tische und Bestellungen hinzu, um das Dashboard zu erkunden.",
+      "scan": "Papierkarte scannen",
+      "scanHint": "Lade Fotos deiner Karte hoch, wir erstellen sie für dich.",
+      "scratch": "Bei null anfangen",
+      "scratchHint": "Füge Kategorien und Gerichte selbst hinzu."
+    }
+  },
+  "trialModal": {
+    "title": "Deine kostenlose Testphase",
+    "titleExpired": "Deine Testphase ist beendet",
+    "daysLeft": "Noch {days} Tage in deiner Testphase",
+    "expiredHeadline": "Deine kostenlose Testphase ist beendet",
+    "body": "Wähle einen Tarif, um Bestellungen, Küchenanzeige und Reservierungen zu behalten.",
+    "hide": "Ausblenden",
+    "viewPlans": "Tarife ansehen"
   }
 }

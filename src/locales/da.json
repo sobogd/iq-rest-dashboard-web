@@ -933,5 +933,34 @@
     "continueGoogle": "Fortsæt med Google",
     "continueApple": "Fortsæt med Apple",
     "or": "eller"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Hvad hedder din restaurant?",
+      "subtitle": "Vi bruger det til at oprette din digitale menu. Det vises på din offentlige side og QR-kode — kan ændres når som helst.",
+      "label": "Restaurantnavn",
+      "placeholder": "f.eks. La Trattoria",
+      "skip": "Spring over",
+      "continue": "Fortsæt"
+    },
+    "fill": {
+      "title": "Hvordan vil du starte?",
+      "subtitle": "Konfigurer din restaurant – menu, borde, reservationer og ordrer. Vælg en mulighed.",
+      "demo": "Udfyld med demodata",
+      "demoHint": "Tilføj en eksempelmenu, borde og ordrer for at udforske kontrolpanelet.",
+      "scan": "Scan en papirmenu",
+      "scanHint": "Upload billeder af din menu, så bygger vi den for dig.",
+      "scratch": "Start fra bunden",
+      "scratchHint": "Tilføj selv kategorier og retter."
+    }
+  },
+  "trialModal": {
+    "title": "Din gratis prøveperiode",
+    "titleExpired": "Din prøveperiode er udløbet",
+    "daysLeft": "{days} dage tilbage af prøveperioden",
+    "expiredHeadline": "Din gratis prøveperiode er udløbet",
+    "body": "Vælg et abonnement for at beholde ordrer, køkkenskærm og reservationer.",
+    "hide": "Skjul",
+    "viewPlans": "Se abonnementer"
   }
 }

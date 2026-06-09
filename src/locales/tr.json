@@ -933,5 +933,34 @@
     "continueGoogle": "Google ile devam et",
     "continueApple": "Apple ile devam et",
     "or": "veya"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Restoranınızın adı nedir?",
+      "subtitle": "Dijital menünüzü oluşturmak için kullanacağız. Herkese açık sayfanızda ve QR kodunda görünür — istediğiniz zaman değiştirebilirsiniz.",
+      "label": "Restoran adı",
+      "placeholder": "örn. La Trattoria",
+      "skip": "Atla",
+      "continue": "Devam"
+    },
+    "fill": {
+      "title": "Nasıl başlamak istersiniz?",
+      "subtitle": "Restoranınızı kurun: menü, masalar, rezervasyonlar ve siparişler. Bir seçenek seçin.",
+      "demo": "Demo verileriyle doldur",
+      "demoHint": "Paneli keşfetmek için örnek menü, masalar ve siparişler ekleyin.",
+      "scan": "Kağıt menüyü tara",
+      "scanHint": "Menünüzün fotoğraflarını yükleyin, sizin için oluşturalım.",
+      "scratch": "Sıfırdan başla",
+      "scratchHint": "Kategorileri ve yemekleri kendiniz ekleyin."
+    }
+  },
+  "trialModal": {
+    "title": "Ücretsiz denemeniz",
+    "titleExpired": "Denemeniz sona erdi",
+    "daysLeft": "Denemenizde {days} gün kaldı",
+    "expiredHeadline": "Ücretsiz denemeniz sona erdi",
+    "body": "Siparişleri, mutfak ekranını ve rezervasyonları sürdürmek için bir plan seçin.",
+    "hide": "Gizle",
+    "viewPlans": "Planları gör"
   }
 }

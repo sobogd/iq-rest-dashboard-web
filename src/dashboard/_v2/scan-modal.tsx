@@ -250,10 +250,15 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
 
  const footer =
   stage === "upload" ? (
-   <div className="flex justify-end">
+   <div className="flex items-center justify-between gap-3">
+    {photoPool.length < MAX_FILES ? (
+     <p className="text-xs text-muted-foreground/70 leading-snug min-w-0 flex-1">{t("upload.hint")}</p>
+    ) : (
+     <span className="flex-1" />
+    )}
     <button
      type="button"
-     className={primaryBtn + " disabled:cursor-not-allowed"}
+     className={primaryBtn + " shrink-0 disabled:cursor-not-allowed"}
      disabled={photoPool.length === 0}
      onClick={() => void handleStartScan()}
     >
@@ -274,7 +279,7 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
   ) : null;
 
  return (
-  <Modal open={open} onClose={handleClose} title={title} subtitle={subtitle} size="md" footer={footer}>
+  <Modal open={open} onClose={handleClose} title={title} subtitle={subtitle} size="sm" footer={footer}>
    {stage === "upload" && (
     <div className="flex flex-col gap-3">
      <input
@@ -314,18 +319,13 @@ export function ScanModal({ open, onClose, existingRealItemsCount, onSaved }: Sc
        <button
         type="button"
         onClick={() => fileInputRef.current?.click()}
-        className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border-2 border-dashed border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/40 px-4 transition-all"
+        className="flex items-center justify-center gap-2 w-full h-12 rounded-xl border border-dashed border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/40 px-4 transition-all"
        >
         <ImagePlus className="w-5 h-5 text-muted-foreground/70" strokeWidth={1.5} />
         <span className="text-sm font-medium text-foreground/80">{t("upload.addFile")}</span>
        </button>
       )}
      </div>
-     {photoPool.length < MAX_FILES && (
-      <p className="text-xs text-muted-foreground/70 text-center leading-relaxed px-2">
-       {t("upload.hint")}
-      </p>
-     )}
      {error && <p className="text-sm text-destructive font-medium text-center">{error}</p>}
     </div>
    )}

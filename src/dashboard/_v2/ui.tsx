@@ -42,6 +42,7 @@ export function Modal({
  footer,
  closeOnBackdrop = true,
  hideHeader = false,
+ hideClose = false,
 }: {
  open: boolean;
  onClose: () => void;
@@ -53,6 +54,7 @@ export function Modal({
  footer?: ReactNode;
  closeOnBackdrop?: boolean;
  hideHeader?: boolean;
+ hideClose?: boolean;
 }) {
  useEffect(() => {
  if (!open) return;
@@ -99,6 +101,7 @@ export function Modal({
  <div className="text-xs text-muted-foreground mt-0.5">{subtitle}</div>
  ) : null}
  </div>
+ {hideClose ? null : (
  <button
  type="button"
  onClick={onClose}
@@ -107,6 +110,7 @@ export function Modal({
  >
  <CloseIcon size={16} />
  </button>
+ )}
  </div>
  )}
  {children != null && children !== false ? (

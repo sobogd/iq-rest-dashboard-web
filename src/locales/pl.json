@@ -933,5 +933,34 @@
     "continueGoogle": "Kontynuuj z Google",
     "continueApple": "Kontynuuj z Apple",
     "or": "lub"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Jak nazywa się Twoja restauracja?",
+      "subtitle": "Użyjemy jej do utworzenia cyfrowego menu. Pojawia się na Twojej stronie publicznej i kodzie QR — możesz ją zmienić w każdej chwili.",
+      "label": "Nazwa restauracji",
+      "placeholder": "np. La Trattoria",
+      "skip": "Pomiń",
+      "continue": "Kontynuuj"
+    },
+    "fill": {
+      "title": "Jak chcesz zacząć?",
+      "subtitle": "Skonfiguruj swoją restaurację: menu, stoliki, rezerwacje i zamówienia. Wybierz jedną z opcji.",
+      "demo": "Wypełnij danymi demo",
+      "demoHint": "Dodaj przykładowe menu, stoliki i zamówienia, aby poznać panel.",
+      "scan": "Zeskanuj papierowe menu",
+      "scanHint": "Prześlij zdjęcia menu, a my je dla Ciebie utworzymy.",
+      "scratch": "Zacznij od zera",
+      "scratchHint": "Dodaj kategorie i dania samodzielnie."
+    }
+  },
+  "trialModal": {
+    "title": "Twój darmowy okres próbny",
+    "titleExpired": "Twój okres próbny się zakończył",
+    "daysLeft": "Pozostało {days} dni okresu próbnego",
+    "expiredHeadline": "Twój darmowy okres próbny się zakończył",
+    "body": "Wybierz plan, aby zachować zamówienia, ekran kuchni i rezerwacje.",
+    "hide": "Ukryj",
+    "viewPlans": "Zobacz plany"
   }
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useFlip } from "./use-flip";
 import { Collapsible } from "./collapsible";
@@ -11,42 +10,22 @@ import {
  ArrowLeftIcon,
  ArrowUpIcon,
  ChevronDownIcon,
- ClockIcon,
  CollapseIcon,
  EditIcon,
  ExpandIcon,
  EyeIcon,
  EyeOffIcon,
  PlusIcon,
- SparklesIcon,
 } from "./icons";
 import { EmptyState, PreviewButton, ShareButton, ShareModal, SubscriptionChip } from "./ui";
 import { iconBtn, primaryBtn } from "./tokens";
 import { getMlWithFallback } from "./i18n";
 import { currencySymbolOf, moveItem } from "./helpers";
-import { dismissScanBanner, fetchSubscriptionStatus, patchItem, reorderCategories, reorderItemsBulk } from "./api";
-import { DemoSaveBanner } from "./demo-save-banner";
+import { fetchSubscriptionStatus, patchItem, reorderCategories, reorderItemsBulk } from "./api";
 
 import { useRestaurant } from "./restaurant-context";
 import type { Category, Dish } from "./types";
 import { track } from "@/lib/dashboard-events";
-import { ScanModal } from "./scan-modal";
-
-// Localized "Sample: " prefixes used to mark seeded demo dishes (mirrors the
-// SAMPLE_PREFIX map in dashboard-api). A dish whose name starts with any of
-// these is a seeded sample, not real owner content.
-const SAMPLE_PREFIXES = [
- "Sample: ", "Muestra: ", "Beispiel: ", "Exemple: ", "Esempio: ", "Exemplo: ",
- "Voorbeeld: ", "Przykład: ", "Образец: ", "Зразок: ", "Exempel: ", "Eksempel: ",
- "Esimerkki: ", "Ukázka: ", "Δείγμα: ", "Örnek: ", "Exemplu: ", "Minta: ",
- "Пример: ", "Primjer: ", "Ukážka: ", "Primer: ", "Näidis: ", "Paraugs: ",
- "Pavyzdys: ", "Mostra: ", "Sampla: ", "Sýnishorn: ", "نمونه: ", "عينة: ",
- "見本: ", "샘플: ", "示例: ",
-];
-
-function isSampleName(name: string): boolean {
- return SAMPLE_PREFIXES.some((p) => name.startsWith(p));
-}
 
 interface SubData {
  plan: string | null;
@@ -57,24 +36,17 @@ interface SubData {
 export function MenuList({
  initialCategories,
  initialSub = null,
- isDemo = false,
  onPersisted,
- scanBannerDismissed = false,
  currentGroupId = null,
 }: {
  initialCategories: Category[];
  initialSub?: SubData | null;
- isDemo?: boolean;
  onPersisted?: () => void;
- scanBannerDismissed?: boolean;
  currentGroupId?: string | null;
 }) {
  const t = useTranslations("dashboard.menu");
- const tsub = useTranslations("dashboard.subscriptionChip");
- const tBilling = useTranslations("dashboard.settings.billing");
  const restaurant = useRestaurant();
  const router = useDashboardRouter();
- const qc = useQueryClient();
  const { defaultLang, currency, menuUrl } = restaurant;
  const currencySymbol = currencySymbolOf(currency);
 
@@ -134,52 +106,9 @@ export function MenuList({
  });
  const [shareOpen, setShareOpen] = useState(false);
  const [sub, setSub] = useState<SubData | null>(initialSub);
- const [bannerLocallyDismissed, setBannerLocallyDismissed] = useState(scanBannerDismissed);
- const [scanModalOpen, setScanModalOpen] = useState(false);
- const TRIAL_DISMISS_KEY = "dash_trial_banner_dismissed_until";
- const [trialDismissedUntil, setTrialDismissedUntil] = useState<number>(() => {
- try {
- const raw = localStorage.getItem(TRIAL_DISMISS_KEY);
- return raw ? Number(raw) || 0 : 0;
- } catch {
- return 0;
- }
- });
- function dismissTrialBanner() {
- track("dash_trial_banner_dismiss");
- const until = Date.now() + 86400_000;
- try { localStorage.setItem(TRIAL_DISMISS_KEY, String(until)); } catch { /* ignore */ }
- setTrialDismissedUntil(until);
- }
 
- // Seeded sample dishes are named with a localized "Sample: " prefix — exclude
- // them so the scan modal only warns about real items the owner actually added.
- const existingRealItemsCount = scopedLeaves.reduce(
-  (sum, c) =>
-   sum +
-   c.dishes.filter((d) => !isSampleName(getMlWithFallback(d.name, defaultLang, defaultLang))).length,
-  0,
- );
-
- // "Empty" depends on the current depth: at top-level, count leaves + groups;
- // inside a group, just leaves of that group.
- // Empty layout: no categories and no groups anywhere.
+ // Empty layout: no categories and no groups anywhere (drives the empty state).
  const noCategories = scopedLeaves.length === 0 && topLevelGroups.length === 0;
- const scanBannerVisible = noCategories || !bannerLocallyDismissed;
-
- async function handleDismissBanner() {
-  track("dash_scan_banner_dismiss");
-  setBannerLocallyDismissed(true);
-  try {
-   await dismissScanBanner();
-   // Refresh the restaurant cache so the dismissed flag survives a
-   // route round-trip (menu → form → back) without the banner popping
-   // back via the old initialSub / scanBannerDismissed prop.
-   await qc.invalidateQueries({ queryKey: ["restaurant"] });
-  } catch {
-   // ignore — UI already hidden
-  }
- }
 
  useEffect(() => {
  if (!initialSub) {
@@ -464,122 +393,6 @@ export function MenuList({
  </div>
 
  <div className="max-w-5xl mx-auto md:px-6 pt-4">
- {isDemo && !currentGroupId && <DemoSaveBanner />}
- {(() => {
- const isPaid = !!(sub && sub.subscriptionStatus === "ACTIVE" && sub.plan && sub.plan !== "FREE");
- if (isPaid) return null;
- const trialEndsAt = sub?.trialEndsAt ? new Date(sub.trialEndsAt) : null;
- const trialing = !isPaid && trialEndsAt !== null && trialEndsAt > new Date();
- const trialExpired = !isPaid && trialEndsAt !== null && trialEndsAt <= new Date();
- if (!trialing && !trialExpired) return null;
- // Expired banner cannot be dismissed (menu blocked).
- if (trialing && trialDismissedUntil > Date.now()) return null;
- const daysLeft = trialing && trialEndsAt
- ? Math.max(1, Math.ceil((trialEndsAt.getTime() - Date.now()) / 86400000))
- : 0;
- const goBilling = () => {
- track("dash_menu_plan");
- router.push({ name: "settings.billing", from: "menu" });
- };
- return (
- <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5">
- <div className="flex items-start gap-3 md:items-center">
- <ClockIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
- <div className="flex-1 min-w-0">
- <p className="text-sm font-semibold">
- {trialExpired ? tsub("trialExpired") : tsub("trialDays", { days: daysLeft })}
- </p>
- <p className="text-xs text-muted-foreground mt-0.5">
- {trialExpired ? tBilling("menuUnavailableTip") : tBilling("trialEnds", { date: trialEndsAt!.toLocaleDateString() })}
- </p>
- <div className="mt-3 flex gap-2 md:hidden">
- <button
- type="button"
- onClick={goBilling}
- className={primaryBtn + " inline-flex items-center gap-1.5"}
- >
- {tBilling("manage")}
- </button>
- {trialing && (
- <button
- type="button"
- onClick={dismissTrialBanner}
- className="h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors inline-flex items-center"
- >
- {t("scan.banner.dismiss")}
- </button>
- )}
- </div>
- </div>
- {trialing && (
- <button
- type="button"
- onClick={dismissTrialBanner}
- className="hidden md:inline-flex h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors items-center shrink-0"
- >
- {t("scan.banner.dismiss")}
- </button>
- )}
- <button
- type="button"
- onClick={goBilling}
- className={primaryBtn + " hidden md:inline-flex items-center gap-1.5 shrink-0"}
- >
- {tBilling("manage")}
- </button>
- </div>
- </div>
- );
- })()}
-
- {scanBannerVisible && !currentGroupId && (
- <div className="relative rounded-xl border border-border bg-gradient-to-br from-orange-500/10 to-amber-500/5 p-4 mb-2.5">
- <div className="flex items-start gap-3 md:items-center">
- <SparklesIcon size={20} className="shrink-0 mt-0.5 md:mt-0 text-primary" />
- <div className="flex-1 min-w-0">
- <p className="text-sm font-semibold">{t("scan.banner.title")}</p>
- <p className="text-xs text-muted-foreground mt-0.5">{t("scan.banner.subtitle")}</p>
- <div className="mt-3 flex gap-2 md:hidden">
- <button
- type="button"
- onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
- className={primaryBtn + " inline-flex items-center gap-1.5"}
- >
- <SparklesIcon size={14} />
- {t("scan.banner.cta")}
- </button>
- {!noCategories && (
- <button
- type="button"
- onClick={() => void handleDismissBanner()}
- className="h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors inline-flex items-center"
- >
- {t("scan.banner.dismiss")}
- </button>
- )}
- </div>
- </div>
- {!noCategories && (
- <button
- type="button"
- onClick={() => void handleDismissBanner()}
- className="hidden md:inline-flex h-8 px-3 text-xs font-medium text-foreground bg-transparent border border-border rounded-lg transition-colors items-center shrink-0"
- >
- {t("scan.banner.dismiss")}
- </button>
- )}
- <button
- type="button"
- onClick={() => { track("dash_scan_banner_cta"); setScanModalOpen(true); }}
- className={primaryBtn + " hidden md:inline-flex items-center gap-1.5 shrink-0"}
- >
- <SparklesIcon size={14} />
- {t("scan.banner.cta")}
- </button>
- </div>
- </div>
- )}
-
 
  {noCategories ? (
  <EmptyState
@@ -692,15 +505,6 @@ export function MenuList({
  onClose={() => setShareOpen(false)}
  url={menuUrl}
  restaurantName={restaurant.name}
- />
- <ScanModal
- open={scanModalOpen}
- onClose={() => setScanModalOpen(false)}
- existingRealItemsCount={existingRealItemsCount}
- onSaved={() => {
- setBannerLocallyDismissed(true);
- onPersisted?.();
- }}
  />
  </>
  );

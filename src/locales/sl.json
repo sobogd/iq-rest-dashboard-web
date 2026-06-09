@@ -933,5 +933,34 @@
     "continueGoogle": "Nadaljuj z Google",
     "continueApple": "Nadaljuj z Apple",
     "or": "ali"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Kako je ime vaši restavraciji?",
+      "subtitle": "Uporabili ga bomo za izdelavo digitalnega menija. Prikaže se na javni strani in QR kodi — kadar koli ga lahko spremenite.",
+      "label": "Ime restavracije",
+      "placeholder": "npr. La Trattoria",
+      "skip": "Preskoči",
+      "continue": "Nadaljuj"
+    },
+    "fill": {
+      "title": "Kako želite začeti?",
+      "subtitle": "Nastavite svojo restavracijo: meni, mize, rezervacije in naročila. Izberite možnost.",
+      "demo": "Napolni z demo podatki",
+      "demoHint": "Dodajte vzorčni meni, mize in naročila za raziskovanje nadzorne plošče.",
+      "scan": "Skeniraj papirnati meni",
+      "scanHint": "Naložite fotografije menija in ustvarili ga bomo za vas.",
+      "scratch": "Začni iz nič",
+      "scratchHint": "Sami dodajte kategorije in jedi."
+    }
+  },
+  "trialModal": {
+    "title": "Vaše brezplačno preizkusno obdobje",
+    "titleExpired": "Preizkusno obdobje se je končalo",
+    "daysLeft": "Še {days} dni preizkusnega obdobja",
+    "expiredHeadline": "Vaše brezplačno preizkusno obdobje se je končalo",
+    "body": "Izberite paket, da ohranite naročila, kuhinjski zaslon in rezervacije.",
+    "hide": "Skrij",
+    "viewPlans": "Ogled paketov"
   }
 }

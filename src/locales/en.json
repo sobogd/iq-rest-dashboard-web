@@ -933,5 +933,34 @@
     "continueGoogle": "Continue with Google",
     "continueApple": "Continue with Apple",
     "or": "or"
+  },
+  "onboarding": {
+    "name": {
+      "title": "What's your restaurant called?",
+      "subtitle": "We'll use it to set up your digital menu. It shows on your public page and QR code — you can change it anytime.",
+      "label": "Restaurant name",
+      "placeholder": "e.g. La Trattoria",
+      "skip": "Skip",
+      "continue": "Continue"
+    },
+    "fill": {
+      "title": "How would you like to start?",
+      "subtitle": "Set up your restaurant — menu, tables, bookings and orders. Pick one of the options below.",
+      "demo": "Fill with demo data",
+      "demoHint": "Add a sample menu, tables and orders to explore the dashboard.",
+      "scan": "Scan a paper menu",
+      "scanHint": "Upload photos of your menu and we'll build it for you.",
+      "scratch": "Start from scratch",
+      "scratchHint": "Add categories and dishes yourself."
+    }
+  },
+  "trialModal": {
+    "title": "Your free trial",
+    "titleExpired": "Your trial has ended",
+    "daysLeft": "{days} days left in your trial",
+    "expiredHeadline": "Your free trial has ended",
+    "body": "Choose a plan to keep orders, kitchen display and reservations running.",
+    "hide": "Hide",
+    "viewPlans": "View plans"
   }
 }

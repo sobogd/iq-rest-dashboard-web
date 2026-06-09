@@ -933,5 +933,34 @@
     "continueGoogle": "Googleで続行",
     "continueApple": "Appleで続行",
     "or": "または"
+  },
+  "onboarding": {
+    "name": {
+      "title": "レストランの名前は？",
+      "subtitle": "デジタルメニューの作成に使います。公開ページとQRコードに表示され、いつでも変更できます。",
+      "label": "レストラン名",
+      "placeholder": "例: La Trattoria",
+      "skip": "スキップ",
+      "continue": "続ける"
+    },
+    "fill": {
+      "title": "どのように始めますか？",
+      "subtitle": "レストランを設定しましょう：メニュー、テーブル、予約、注文。下のオプションから選んでください。",
+      "demo": "デモデータで埋める",
+      "demoHint": "サンプルメニュー、テーブル、注文を追加してダッシュボードを試せます。",
+      "scan": "紙のメニューをスキャン",
+      "scanHint": "メニューの写真をアップロードすると、こちらで作成します。",
+      "scratch": "ゼロから始める",
+      "scratchHint": "カテゴリーと料理を自分で追加します。"
+    }
+  },
+  "trialModal": {
+    "title": "無料トライアル",
+    "titleExpired": "トライアルが終了しました",
+    "daysLeft": "トライアル残り{days}日",
+    "expiredHeadline": "無料トライアルが終了しました",
+    "body": "注文、キッチンディスプレイ、予約を継続するにはプランを選択してください。",
+    "hide": "非表示",
+    "viewPlans": "プランを見る"
   }
 }

@@ -933,5 +933,34 @@
     "continueGoogle": "Continuar com Google",
     "continueApple": "Continuar com Apple",
     "or": "ou"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Como se chama o seu restaurante?",
+      "subtitle": "Vamos usá-lo para criar o seu menu digital. Aparece na página pública e no código QR — pode alterar quando quiser.",
+      "label": "Nome do restaurante",
+      "placeholder": "ex. La Trattoria",
+      "skip": "Ignorar",
+      "continue": "Continuar"
+    },
+    "fill": {
+      "title": "Como quer começar?",
+      "subtitle": "Configure o seu restaurante: menu, mesas, reservas e pedidos. Escolha uma opção.",
+      "demo": "Preencher com dados de demo",
+      "demoHint": "Adicione um menu de exemplo, mesas e pedidos para explorar o painel.",
+      "scan": "Digitalizar um menu em papel",
+      "scanHint": "Envie fotos do seu menu e nós criamo-lo por si.",
+      "scratch": "Começar do zero",
+      "scratchHint": "Adicione categorias e pratos você mesmo."
+    }
+  },
+  "trialModal": {
+    "title": "O seu teste gratuito",
+    "titleExpired": "O seu teste terminou",
+    "daysLeft": "Faltam {days} dias do seu teste",
+    "expiredHeadline": "O seu teste gratuito terminou",
+    "body": "Escolha um plano para manter pedidos, ecrã de cozinha e reservas.",
+    "hide": "Ocultar",
+    "viewPlans": "Ver planos"
   }
 }

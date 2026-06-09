@@ -933,5 +933,34 @@
     "continueGoogle": "Pokračovat s Google",
     "continueApple": "Pokračovat s Apple",
     "or": "nebo"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Jak se jmenuje vaše restaurace?",
+      "subtitle": "Použijeme ho k vytvoření digitálního menu. Zobrazuje se na veřejné stránce a QR kódu — kdykoli ho můžete změnit.",
+      "label": "Název restaurace",
+      "placeholder": "např. La Trattoria",
+      "skip": "Přeskočit",
+      "continue": "Pokračovat"
+    },
+    "fill": {
+      "title": "Jak chcete začít?",
+      "subtitle": "Nastavte svou restauraci: menu, stoly, rezervace a objednávky. Vyberte jednu z možností.",
+      "demo": "Vyplnit demo daty",
+      "demoHint": "Přidejte ukázkové menu, stoly a objednávky a prozkoumejte panel.",
+      "scan": "Naskenovat papírové menu",
+      "scanHint": "Nahrajte fotky svého menu a my ho vytvoříme za vás.",
+      "scratch": "Začít od nuly",
+      "scratchHint": "Přidejte kategorie a jídla sami."
+    }
+  },
+  "trialModal": {
+    "title": "Vaše bezplatná zkušební verze",
+    "titleExpired": "Vaše zkušební verze skončila",
+    "daysLeft": "Zbývá {days} dní zkušební verze",
+    "expiredHeadline": "Vaše bezplatná zkušební verze skončila",
+    "body": "Vyberte plán, abyste zachovali objednávky, kuchyňský displej a rezervace.",
+    "hide": "Skrýt",
+    "viewPlans": "Zobrazit plány"
   }
 }

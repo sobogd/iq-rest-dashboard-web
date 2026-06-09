@@ -933,5 +933,34 @@
     "continueGoogle": "Lean ar aghaidh le Google",
     "continueApple": "Lean ar aghaidh le Apple",
     "or": "nó"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Cad is ainm do do bhialann?",
+      "subtitle": "Úsáidfimid é chun do bhiachlár digiteach a chruthú. Taispeántar é ar do leathanach poiblí agus cód QR — is féidir é a athrú am ar bith.",
+      "label": "Ainm na bialainne",
+      "placeholder": "m.sh. La Trattoria",
+      "skip": "Scipeáil",
+      "continue": "Lean ar aghaidh"
+    },
+    "fill": {
+      "title": "Conas ar mhaith leat tosú?",
+      "subtitle": "Socraigh do bhialann: biachlár, boird, áirithintí agus orduithe. Roghnaigh ceann de na roghanna.",
+      "demo": "Líon le sonraí taispeána",
+      "demoHint": "Cuir biachlár samplach, boird agus orduithe leis chun an deais a iniúchadh.",
+      "scan": "Scan biachlár páipéir",
+      "scanHint": "Uaslódáil grianghraif de do bhiachlár agus tógfaimid duit é.",
+      "scratch": "Tosaigh ón tús",
+      "scratchHint": "Cuir catagóirí agus miasa leis tú féin."
+    }
+  },
+  "trialModal": {
+    "title": "Do thriail saor in aisce",
+    "titleExpired": "Tá do thriail thart",
+    "daysLeft": "{days} lá fágtha i do thriail",
+    "expiredHeadline": "Tá do thriail saor in aisce thart",
+    "body": "Roghnaigh plean chun orduithe, taispeáint chistine agus áirithintí a choinneáil.",
+    "hide": "Folaigh",
+    "viewPlans": "Féach ar phleananna"
   }
 }

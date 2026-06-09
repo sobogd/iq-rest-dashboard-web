@@ -933,5 +933,34 @@
     "continueGoogle": "Jätka Google'iga",
     "continueApple": "Jätka Apple'iga",
     "or": "või"
+  },
+  "onboarding": {
+    "name": {
+      "title": "Mis on teie restorani nimi?",
+      "subtitle": "Kasutame seda teie digitaalse menüü loomiseks. See kuvatakse avalikul lehel ja QR-koodil — saate seda igal ajal muuta.",
+      "label": "Restorani nimi",
+      "placeholder": "nt La Trattoria",
+      "skip": "Jäta vahele",
+      "continue": "Jätka"
+    },
+    "fill": {
+      "title": "Kuidas soovite alustada?",
+      "subtitle": "Seadistage oma restoran: menüü, lauad, broneeringud ja tellimused. Valige variant.",
+      "demo": "Täida demoandmetega",
+      "demoHint": "Lisage näidismenüü, lauad ja tellimused, et töölauda avastada.",
+      "scan": "Skanni pabermenüü",
+      "scanHint": "Laadige üles menüü fotod ja loome selle teie eest.",
+      "scratch": "Alusta nullist",
+      "scratchHint": "Lisage kategooriad ja road ise."
+    }
+  },
+  "trialModal": {
+    "title": "Teie tasuta prooviperiood",
+    "titleExpired": "Teie prooviperiood on lõppenud",
+    "daysLeft": "Prooviperioodi on jäänud {days} päeva",
+    "expiredHeadline": "Teie tasuta prooviperiood on lõppenud",
+    "body": "Valige pakett, et säilitada tellimused, köögiekraan ja broneeringud.",
+    "hide": "Peida",
+    "viewPlans": "Vaata pakette"
   }
 }
