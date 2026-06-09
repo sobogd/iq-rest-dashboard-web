@@ -255,7 +255,9 @@ function SessionItem({
     else onOpen();
   }
 
-  const label = s.restaurantLabel;
+  // Sessions are user-centric now: show the email (identity), not a restaurant.
+  // demo/registered is conveyed by the coloured dots on the right.
+  const label = s.userLabel;
   const chip = "text-[10px] text-muted-foreground bg-secondary rounded px-1.5 py-0.5 shrink-0";
 
   return (
@@ -312,6 +314,9 @@ function SessionItem({
           </span>
         ) : s.hasFacebook ? (
           <span className={chip}>FB</span>
+        ) : null}
+        {s.restaurantCount && s.restaurantCount > 1 ? (
+          <span className={chip} title={`${s.restaurantCount} restaurants`}>🏠{s.restaurantCount}</span>
         ) : null}
         <span className={chip}>{s.eventCount}</span>
         <span className={`${chip} tabular-nums`}>{hmsDate(s.lastAt)}</span>

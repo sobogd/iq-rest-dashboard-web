@@ -8,6 +8,7 @@ import { Modal, SubpageStickyBar } from "./ui";
 import { CheckIcon, PlusIcon } from "./icons";
 import { createRestaurant, deleteRestaurant, previewRestaurantSlug } from "./api";
 import { useDashboardRouter } from "../_spa/router";
+import { track } from "@/lib/dashboard-events";
 
 function slugify(s: string): string {
   return s
@@ -60,7 +61,7 @@ function ModeCard({
   );
 }
 
-export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
+export function RestaurantsListPage({ onBack, isDemo = false }: { onBack: () => void; isDemo?: boolean }) {
   const t = useTranslations("dashboard.restaurants");
   const tc = useTranslations("dashboard.common");
   const { list, activeId, isPaid, switching, setActive, refresh } = useRestaurants();
@@ -71,6 +72,12 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  // Demo accounts can't add restaurants — record that one reached the place
+  // where the "+ Add restaurant" button would be (upsell-intent signal).
+  useEffect(() => {
+    if (isDemo) track("dash_restaurants_add_blocked_demo");
+  }, [isDemo]);
 
   const onSwitch = async (id: string) => {
     if (id === activeId || switching) return;
@@ -159,10 +166,15 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
             );
           })}
 
-          {isPaid ? (
+          {/* Demo accounts can't create restaurants — hide the add affordance
+              entirely (the route is also guarded in RestaurantNewPage). */}
+          {isDemo ? null : isPaid ? (
             <button
               type="button"
-              onClick={() => router.push({ name: "settings.restaurants.new" })}
+              onClick={() => {
+                track("dash_restaurant_add_click");
+                router.push({ name: "settings.restaurants.new" });
+              }}
               className="w-full mt-2.5 h-11 text-sm font-medium text-muted-foreground/60 border border-dashed border-input rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
               <PlusIcon size={14} />
@@ -218,7 +230,7 @@ export function RestaurantsListPage({ onBack }: { onBack: () => void }) {
   );
 }
 
-export function RestaurantNewPage({ onBack }: { onBack: () => void }) {
+export function RestaurantNewPage({ onBack, isDemo = false }: { onBack: () => void; isDemo?: boolean }) {
   const t = useTranslations("dashboard.restaurants");
   const router = useDashboardRouter();
   const qc = useQueryClient();
@@ -236,6 +248,13 @@ export function RestaurantNewPage({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  // Demo accounts can't create restaurants. If one reaches this page by URL,
+  // bounce back to the list (the server also 403s the create call).
+  useEffect(() => {
+    if (isDemo) router.push({ name: "settings.restaurants" });
+  }, [isDemo, router]);
+  if (isDemo) return null;
 
   // Debounce slug-preview API calls. Loading flag flips on the first keystroke
   // and back off only when the server responds (or the field is cleared).
@@ -275,6 +294,7 @@ export function RestaurantNewPage({ onBack }: { onBack: () => void }) {
         name: name.trim(),
         duplicateFromId: mode === "duplicate" && current ? current.id : null,
       });
+      track(mode === "duplicate" ? "dash_restaurant_create_duplicate" : "dash_restaurant_create_blank");
       // Backend set cookie + auto-switched active restaurant. Invalidate every
       // restaurant-scoped query so subsequent fetches use the new id, then
       // refetch the restaurants list and navigate back to it.

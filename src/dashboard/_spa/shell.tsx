@@ -335,9 +335,9 @@ function ViewSwitch(p: SwitchProps) {
     case "settings.devices":
       return <DevicesSettingsPage onBack={backToSettings} />;
     case "settings.restaurants":
-      return <RestaurantsListPage onBack={backToSettings} />;
+      return <RestaurantsListPage onBack={backToSettings} isDemo={isDemo} />;
     case "settings.restaurants.new":
-      return <RestaurantNewPage onBack={() => router.push({ name: "settings.restaurants" })} />;
+      return <RestaurantNewPage onBack={() => router.push({ name: "settings.restaurants" })} isDemo={isDemo} />;
 
     case "settings.admin.restaurants":
       return <AdminRestaurantsPage onBack={backToSettings} />;

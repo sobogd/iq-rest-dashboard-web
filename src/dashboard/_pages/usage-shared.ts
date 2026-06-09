@@ -5,8 +5,12 @@
 // descriptor (see encodeSessionId / decodeSessionId).
 
 export interface SessionRow {
-  kind: "r" | "a";
-  rid: string | null;          // restaurantId for kind "r"
+  // "u" = one user (own + stitched anonymous events, across all their
+  // restaurants). "a" = a never-identified ip/region fingerprint.
+  // "r" is LEGACY (old restaurant-keyed bookmarks) — still decodable.
+  kind: "u" | "a" | "r";
+  uid?: string | null;         // userId for kind "u"
+  rid?: string | null;         // LEGACY restaurantId for kind "r"
   ipkey: string | null;        // ip/region (anon key for kind "a")
   hasIp: boolean;
   country: string;
@@ -14,6 +18,7 @@ export interface SessionRow {
   firstAt: string;
   lastAt: string;
   eventCount: number;
+  restaurantCount?: number;    // distinct restaurants the user touched (kind "u")
   hasGoogle: boolean;
   hasFacebook: boolean;
   hasOnboarding?: boolean;     // any onboarding event in the session
@@ -24,7 +29,7 @@ export interface SessionRow {
   latestFbTs: number | null;
   fbStage?: "reg" | "checkout" | "view" | null; // deepest CAPI event sent for latestFbclid
   userLabel: string | null;
-  restaurantLabel: string | null;
+  restaurantLabel?: string | null; // LEGACY (kind "r"); user sessions show email
 }
 
 export interface SessionEvent {
@@ -36,6 +41,7 @@ export interface SessionEvent {
   platform: string | null;
   gclid: string | null;
   isFacebookAds: boolean;
+  restaurantId?: string | null; // which venue a dash_* event belongs to
 }
 
 /** SessionRow + the [from,to] window it was listed under (for events fetch). */
@@ -93,10 +99,10 @@ export function decodeSessionId(id: string): SessionData | null {
 
 /** Stable per-session key for selection sets. */
 export function sessionKey(s: SessionRow): string {
-  return `${s.kind}:${s.rid ?? s.ipkey}`;
+  return `${s.kind}:${s.uid ?? s.rid ?? s.ipkey}`;
 }
 
 /** Descriptor the events/delete endpoints need for one session group. */
 export function sessionDescriptor(s: SessionRow) {
-  return { kind: s.kind, rid: s.rid, ipkey: s.ipkey, hasIp: s.hasIp };
+  return { kind: s.kind, uid: s.uid, rid: s.rid, ipkey: s.ipkey, hasIp: s.hasIp };
 }

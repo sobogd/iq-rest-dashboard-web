@@ -13,7 +13,6 @@ import {
   deviceLabel,
   hmsDate,
   decodeSessionId,
-  encodeSessionId,
   type SessionEvent,
   type SessionData,
 } from "./usage-shared";
@@ -68,6 +67,7 @@ interface SessionSummary {
 const CACHE_MAX = 50;
 const eventCache = new Map<string, SessionEvent[]>();
 const summaryCache = new Map<string, SessionSummary>();
+const restaurantsCache = new Map<string, Record<string, string>>();
 const analysisCache = new Map<string, string>();
 
 function cacheSet<V>(map: Map<string, V>, key: string, value: V) {
@@ -102,6 +102,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   const session = decodeSessionId(id);
   const [events, setEvents] = useState<SessionEvent[]>(() => eventCache.get(id) ?? []);
   const [summary, setSummary] = useState<SessionSummary | null>(() => summaryCache.get(id) ?? null);
+  const [restaurantTitles, setRestaurantTitles] = useState<Record<string, string>>(() => restaurantsCache.get(id) ?? {});
   const [loading, setLoading] = useState(() => !eventCache.has(id));
   const [refreshing, setRefreshing] = useState(false);
 
@@ -116,6 +117,7 @@ export function UsageSessionPage({ id }: { id: string }) {
     // actually picks up events that arrived after the list was generated.
     const qs = new URLSearchParams({
       kind: session.kind,
+      uid: session.uid ?? "",
       rid: session.rid ?? "",
       ipkey: session.ipkey ?? "",
       hasIp: session.hasIp ? "1" : "0",
@@ -124,13 +126,18 @@ export function UsageSessionPage({ id }: { id: string }) {
     });
     try {
       const res = await fetch(apiUrl(`/api/admin/usage/sessions/events?${qs.toString()}`), { credentials: "include" });
-      const j = res.ok ? ((await res.json()) as { events: SessionEvent[]; summary?: SessionSummary }) : { events: [], summary: undefined };
+      const j = res.ok
+        ? ((await res.json()) as { events: SessionEvent[]; summary?: SessionSummary; restaurants?: Record<string, string> })
+        : { events: [], summary: undefined, restaurants: {} };
       cacheSet(eventCache, id, j.events ?? []);
       setEvents(j.events ?? []);
       if (j.summary) {
         cacheSet(summaryCache, id, j.summary);
         setSummary(j.summary);
       }
+      const rmap = j.restaurants ?? {};
+      cacheSet(restaurantsCache, id, rmap);
+      setRestaurantTitles(rmap);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -208,21 +215,16 @@ export function UsageSessionPage({ id }: { id: string }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [analyzeOpen, setAnalyzeOpen] = useState(false);
 
-  function onAssigned(rid: string, title: string) {
-    // The session's events now carry manualRestaurantId → regroup under the
-    // restaurant. Drop caches and open the restaurant's session.
+  function onAssigned() {
+    // The session's events now carry manualRestaurantId — sessions group by
+    // user, so the session itself doesn't move; just relabel its events with
+    // the chosen venue. Drop caches and reload the current session.
     invalidateUsageCache();
-    eventCache.clear();
-    summaryCache.clear();
-    const win = { from: new Date(Date.now() - 30 * 864e5).toISOString(), to: new Date().toISOString() };
-    const data: SessionData = {
-      kind: "r", rid, ipkey: null, hasIp: false, country: session?.country ?? "", region: null,
-      firstAt: win.from, lastAt: win.to, eventCount: 0, hasGoogle: false, hasFacebook: false,
-      latestFbclid: null, latestFbTs: null, userLabel: null, restaurantLabel: title,
-      from: win.from, to: win.to,
-    };
+    eventCache.delete(id);
+    summaryCache.delete(id);
+    restaurantsCache.delete(id);
     setPickerOpen(false);
-    router.push({ name: "settings.admin.usageSession", id: encodeSessionId(data) });
+    void load("full");
   }
 
   const back = () => router.back();
@@ -271,19 +273,16 @@ export function UsageSessionPage({ id }: { id: string }) {
                 {country ? <span className="text-base shrink-0">{countryToFlag(country)}</span> : null}
                 <span className={chip}>{eventCount}</span>
                 <span className="flex-1 min-w-0 flex items-center justify-end gap-2">
-                  {restaurant ? (
-                    session.kind === "r" && session.rid ? (
-                      <button
-                        type="button"
-                        onClick={() => router.push({ name: "settings.admin.restaurant", id: session.rid! })}
-                        className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0 hover:bg-pink-500/20"
-                        title={restaurant}
-                      >
-                        {restaurant}
-                      </button>
-                    ) : (
-                      <span className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0" title={restaurant}>{restaurant}</span>
-                    )
+                  {session.kind === "r" && session.rid && restaurant ? (
+                    // LEGACY restaurant-keyed session — link to the venue.
+                    <button
+                      type="button"
+                      onClick={() => router.push({ name: "settings.admin.restaurant", id: session.rid! })}
+                      className="text-[10px] bg-pink-500/10 text-pink-700 dark:text-pink-400 rounded px-1.5 py-0.5 truncate min-w-0 hover:bg-pink-500/20"
+                      title={restaurant}
+                    >
+                      {restaurant}
+                    </button>
                   ) : region ? (
                     <span className="text-[10px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded px-1.5 py-0.5 truncate min-w-0" title={region}>{region}</span>
                   ) : null}
@@ -348,6 +347,9 @@ export function UsageSessionPage({ id }: { id: string }) {
                   const tok = pageByEventId.get(e.id);
                   const pc = tok ? PAGE_CHIPS[tok] : undefined;
                   const ad = adChip(e.event);
+                  // Which restaurant a dashboard event belongs to (active venue
+                  // at the time). Landing l_* events have no restaurant.
+                  const rTitle = e.restaurantId ? restaurantTitles[e.restaurantId] : undefined;
                   return (
                     <div key={e.id} className="px-3 md:px-4 py-2 text-xs flex flex-col gap-1 md:flex-row md:items-center md:justify-between md:gap-3">
                       <div className="flex items-center gap-2 md:flex-1 md:min-w-0">
@@ -357,6 +359,11 @@ export function UsageSessionPage({ id }: { id: string }) {
                           </span>
                         ) : null}
                         {ad ? <span className={`${pageChipBase} ${ad.cls}`}>{ad.label}</span> : null}
+                        {rTitle ? (
+                          <span className={`${pageChipBase} bg-pink-500/10 text-pink-700 dark:text-pink-400 truncate max-w-[40%]`} title={rTitle}>
+                            {rTitle}
+                          </span>
+                        ) : null}
                         <span className="font-mono text-foreground break-all min-w-0">{displayName(e.event)}</span>
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 md:shrink-0 md:justify-end">
@@ -375,7 +382,7 @@ export function UsageSessionPage({ id }: { id: string }) {
 
       {pickerOpen && session ? (
         <RestaurantPickerModal
-          descriptor={{ kind: session.kind, rid: session.rid, ipkey: session.ipkey, hasIp: session.hasIp }}
+          descriptor={{ kind: session.kind, uid: session.uid ?? null, rid: session.rid ?? null, ipkey: session.ipkey, hasIp: session.hasIp }}
           onClose={() => setPickerOpen(false)}
           onAssigned={onAssigned}
         />
@@ -415,6 +422,7 @@ function AnalyzeModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           kind: session.kind,
+          uid: session.uid,
           rid: session.rid,
           ipkey: session.ipkey,
           hasIp: session.hasIp,
@@ -503,9 +511,9 @@ function RestaurantPickerModal({
   onClose,
   onAssigned,
 }: {
-  descriptor: { kind: "r" | "a"; rid: string | null; ipkey: string | null; hasIp: boolean };
+  descriptor: { kind: "u" | "a" | "r"; uid: string | null; rid: string | null; ipkey: string | null; hasIp: boolean };
   onClose: () => void;
-  onAssigned: (rid: string, title: string) => void;
+  onAssigned: () => void;
 }) {
   useScrollLock(true);
   const [restaurants, setRestaurants] = useState<Array<{ id: string; title: string }>>([]);
@@ -534,6 +542,7 @@ function RestaurantPickerModal({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           kind: descriptor.kind,
+          uid: descriptor.uid,
           rid: descriptor.rid,
           ipkey: descriptor.ipkey,
           hasIp: descriptor.hasIp,
@@ -542,7 +551,7 @@ function RestaurantPickerModal({
           restaurantId: selected.id,
         }),
       });
-      if (res.ok) onAssigned(selected.id, selected.title);
+      if (res.ok) onAssigned();
     } finally {
       setAssigning(false);
     }
