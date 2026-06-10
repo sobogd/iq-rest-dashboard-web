@@ -39,8 +39,15 @@ const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
 // in the timeline — they mark the actual paid-ad click moment. Section views
 // stay too — they're the scroll path.
 function isHiddenEvent(name: string): boolean {
-  // l_param_* are surfaced as header chips, so hide them from the flat list.
-  return /^l_page_/.test(name) || /^l_currency_/.test(name) || /^l_param_/.test(name);
+  // l_param_*, l_from_* and the paid click ids (l_gclid_/l_fbclid_/...) are all
+  // surfaced as header chips, so hide them from the flat list.
+  return (
+    /^l_page_/.test(name) ||
+    /^l_currency_/.test(name) ||
+    /^l_param_/.test(name) ||
+    /^l_from_/.test(name) ||
+    /^l_(gclid|gbraid|wbraid|fbclid)_/.test(name)
+  );
 }
 
 // "utm_source" → "Utm Source". Used to render l_param_<name>__<value> chips.
@@ -192,7 +199,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   const seenG = new Set<string>();
   for (const e of events) {
     let g: string | null = e.gclid || null;
-    const m = /^l_gclid_(.+)$/.exec(e.event);
+    const m = /^(?:l_gclid_|l_param_gclid__)(.+)$/.exec(e.event);
     if (m) g = m[1];
     if (g && !seenG.has(g)) { seenG.add(g); gclids.push(g); }
   }
@@ -205,7 +212,7 @@ export function UsageSessionPage({ id }: { id: string }) {
   let hasFb = session?.hasFacebook ?? false;
   for (const e of events) {
     if (e.isFacebookAds) hasFb = true;
-    const m = /^l_fbclid_(.+)$/.exec(e.event);
+    const m = /^(?:l_fbclid_|l_param_fbclid__)(.+)$/.exec(e.event);
     if (m) {
       hasFb = true;
       const ts = new Date(e.at).getTime();
@@ -238,10 +245,21 @@ export function UsageSessionPage({ id }: { id: string }) {
   {
     const seen = new Set<string>();
     for (const e of events) {
+      if (seen.has(e.event)) continue;
+      // Paid click ids ride l_param_ too but are shown via the G/FB chips and
+      // the gclid id block — keep them out of the generic name:value chips.
+      if (/^l_param_(?:gclid|fbclid)__/.test(e.event)) continue;
       const m = /^l_param_(.+?)__(.+)$/.exec(e.event);
-      if (!m || seen.has(e.event)) continue;
-      seen.add(e.event);
-      paramChips.push({ key: e.event, label: `${titleizeSeg(m[1])}: ${titleizeSeg(m[2])}` });
+      if (m) {
+        seen.add(e.event);
+        paramChips.push({ key: e.event, label: `${titleizeSeg(m[1])}: ${titleizeSeg(m[2])}` });
+        continue;
+      }
+      const f = /^l_from_(.+)$/.exec(e.event);
+      if (f) {
+        seen.add(e.event);
+        paramChips.push({ key: e.event, label: `From: ${titleizeSeg(f[1])}` });
+      }
     }
   }
 
