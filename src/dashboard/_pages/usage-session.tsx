@@ -39,7 +39,17 @@ const pageChipBase = "text-[10px] rounded px-1.5 py-0.5 shrink-0";
 // in the timeline — they mark the actual paid-ad click moment. Section views
 // stay too — they're the scroll path.
 function isHiddenEvent(name: string): boolean {
-  return /^l_page_/.test(name) || /^l_currency_/.test(name);
+  // l_param_* are surfaced as header chips, so hide them from the flat list.
+  return /^l_page_/.test(name) || /^l_currency_/.test(name) || /^l_param_/.test(name);
+}
+
+// "utm_source" → "Utm Source". Used to render l_param_<name>__<value> chips.
+function titleizeSeg(seg: string): string {
+  return seg
+    .split("_")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 
 // Paid-ad click rows get a source chip so the click moment stands out.
@@ -222,6 +232,19 @@ export function UsageSessionPage({ id }: { id: string }) {
     if (cm) currency = cm[1].toUpperCase();
   }
 
+  // URL params captured on the landing as l_param_<name>__<value> events —
+  // surfaced as "Name: Value" chips (deduped, keeps first seen).
+  const paramChips: Array<{ key: string; label: string }> = [];
+  {
+    const seen = new Set<string>();
+    for (const e of events) {
+      const m = /^l_param_(.+?)__(.+)$/.exec(e.event);
+      if (!m || seen.has(e.event)) continue;
+      seen.add(e.event);
+      paramChips.push({ key: e.event, label: `${titleizeSeg(m[1])}: ${titleizeSeg(m[2])}` });
+    }
+  }
+
   const [pickerOpen, setPickerOpen] = useState(false);
   const [analyzeOpen, setAnalyzeOpen] = useState(false);
 
@@ -325,6 +348,20 @@ export function UsageSessionPage({ id }: { id: string }) {
                   {session?.hasRegistered ? (
                     <span className="text-[10px] rounded px-1.5 py-0.5 bg-sky-500/10 text-sky-700 dark:text-sky-400">Registered</span>
                   ) : null}
+                </div>
+              ) : null}
+
+              {paramChips.length > 0 ? (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {paramChips.map((p) => (
+                    <span
+                      key={p.key}
+                      className="text-[10px] rounded px-1.5 py-0.5 bg-slate-500/10 text-slate-700 dark:text-slate-300"
+                      title={p.label}
+                    >
+                      {p.label}
+                    </span>
+                  ))}
                 </div>
               ) : null}
 
